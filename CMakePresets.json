@@ -25,7 +25,7 @@
             },
             "cacheVariables": {
                 "CMAKE_C_COMPILER":"cl",
-                "CMAKE_MSVC_RUNTIME_LIBRARY":"MultiThreaded$<$<CONFIG:Debug>:Debug>",
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/windows.cmake",
                 "VCPKG_TARGET_TRIPLET":"x86-windows-static",
                 "VCPKG_TARGET_ARCHITECTURE":"x86",
                 "VCPKG_CRT_LINKAGE":"static",
@@ -42,7 +42,7 @@
             },
             "cacheVariables": {
                 "CMAKE_C_COMPILER":"cl",
-                "CMAKE_MSVC_RUNTIME_LIBRARY":"MultiThreaded$<$<CONFIG:Debug>:Debug>",
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/windows.cmake",
                 "VCPKG_TARGET_TRIPLET":"x64-windows-static",
                 "VCPKG_TARGET_ARCHITECTURE":"x64",
                 "VCPKG_CRT_LINKAGE":"static",
@@ -68,6 +68,7 @@
                 "strategy": "external"
             },
             "cacheVariables": {
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/linux.cmake",
                 "VCPKG_TARGET_TRIPLET":"x64-linux",
                 "VCPKG_TARGET_ARCHITECTURE":"x64",
                 "VCPKG_CRT_LINKAGE":"dynamic",
@@ -81,6 +82,7 @@
             "displayName": "for osx",
             "inherits": "default",
             "cacheVariables": {
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/osx.cmake",
                 "VCPKG_CRT_LINKAGE":"dynamic",
                 "VCPKG_LIBRARY_LINKAGE":"static",
                 "BUILD_SDL":"ON",
