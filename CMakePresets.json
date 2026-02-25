@@ -29,7 +29,8 @@
                 "VCPKG_TARGET_TRIPLET":"x86-windows-static",
                 "VCPKG_TARGET_ARCHITECTURE":"x86",
                 "VCPKG_CRT_LINKAGE":"static",
-                "VCPKG_LIBRARY_LINKAGE":"static"
+                "VCPKG_LIBRARY_LINKAGE":"static",
+                "BUILD_WINVER":"ON"
             }
         },
         {
@@ -46,7 +47,8 @@
                 "VCPKG_TARGET_TRIPLET":"x64-windows-static",
                 "VCPKG_TARGET_ARCHITECTURE":"x64",
                 "VCPKG_CRT_LINKAGE":"static",
-                "VCPKG_LIBRARY_LINKAGE":"static"
+                "VCPKG_LIBRARY_LINKAGE":"static",
+                "BUILD_WINVER":"ON"
             }
         },
         {
@@ -54,8 +56,7 @@
             "description": "windows x64 build with sdl",
             "inherits": "x64-windows",
             "cacheVariables": {
-                "BUILD_SDL":"ON",
-                "VCPKG_MANIFEST_DIR":"src/core/sdl3"
+                "BUILD_WINVER":"OFF"
             }
         },
         {
@@ -72,9 +73,7 @@
                 "VCPKG_TARGET_TRIPLET":"x64-linux",
                 "VCPKG_TARGET_ARCHITECTURE":"x64",
                 "VCPKG_CRT_LINKAGE":"dynamic",
-                "VCPKG_LIBRARY_LINKAGE":"static",
-                "BUILD_SDL":"ON",
-                "VCPKG_MANIFEST_DIR":"src/core/sdl3"
+                "VCPKG_LIBRARY_LINKAGE":"static"
             }
         },
         {
@@ -85,8 +84,7 @@
                 "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/osx.cmake",
                 "VCPKG_CRT_LINKAGE":"dynamic",
                 "VCPKG_LIBRARY_LINKAGE":"static",
-                "BUILD_SDL":"ON",
-                "VCPKG_MANIFEST_DIR":"src/core/sdl3"
+                "USE_OPENGL":"OFF"
             }
         },
         {
@@ -116,14 +114,8 @@
             "cacheVariables": {
                 "CMAKE_SIZEOF_VOID_P_OVERRIDE":"8",
                 "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/android.cmake",
-                "VCPKG_CRT_LINKAGE":"static",
-                "VCPKG_LIBRARY_LINKAGE":"static",
-                "CMAKE_SHARED_LINKER_FLAGS":"-Wl,--gc-sections",
-                "SDL3_DYNAMIC":"ON",
                 "ANDROID_PLATFORM":"android-29",
-                "ANDROID_STL":"c++_static",
-                "BUILD_SDL":"ON",
-                "VCPKG_MANIFEST_DIR":"src/core/sdl3"
+                "ANDROID_STL":"c++_shared"
             }
         },
         {
@@ -132,11 +124,7 @@
             "description": "android arm64 build",
             "inherits": "android",
             "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET":"arm64-android",
-                "VCPKG_TARGET_ARCHITECTURE":"arm64",
-                "ANDROID_ABI":"arm64-v8a",
-                "BUILD_SDL":"ON",
-                "VCPKG_MANIFEST_DIR":"src/core/sdl3"
+                "ANDROID_ABI":"arm64-v8a"
             }
         },
         {
@@ -145,11 +133,7 @@
             "description": "android x64 build",
             "inherits": "android",
             "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET":"x64-android",
-                "VCPKG_TARGET_ARCHITECTURE":"x64",
-                "ANDROID_ABI":"x86_64",
-                "BUILD_SDL":"ON",
-                "VCPKG_MANIFEST_DIR":"src/core/sdl3"
+                "ANDROID_ABI":"x86_64"
             }
         }
     ],

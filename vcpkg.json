@@ -42,7 +42,7 @@
       "$comment": "プラグイン用: src/plugins/win32/minizip"
     }
   ],
-  "builtin-baseline": "f26ec398c25c4980f33a50391f00a75f7ad62ef7",
+  "builtin-baseline": "ceaa2404d370c7a40fcfb11d747a71c9fd1df044",
   "overrides": [
     {
       "name": "minizip-ng",
