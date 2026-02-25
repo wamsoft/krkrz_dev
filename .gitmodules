@@ -25,9 +25,6 @@
 [submodule "src/tools/win32/debugger"]
 	path = src/tools/win32/debugger
 	url = https://github.com/krkrz/debugger.git
-[submodule "src/core"]
-	path = src/core
-	url = https://github.com/wamsoft/krkrz.git
 [submodule "src/plugins/KAGParserEx"]
 	path = src/plugins/KAGParserEx
 	url = https://github.com/wamsoft/KAGParserEx.git
@@ -163,3 +160,6 @@
 [submodule "src/plugins/gamepad"]
 	path = src/plugins/gamepad
 	url = https://github.com/wamsoft/gamepad.git
+[submodule "src/core"]
+	path = src/core
+	url = https://github.com/wamsoft/krkrz_develop.git
