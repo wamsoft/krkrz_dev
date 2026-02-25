@@ -1,165 +1,165 @@
 [submodule "script/Sample"]
 	path = script/Sample
-	url = ../../krkrz/SampleScript.git
+	url = https://github.com/krkrz/SampleScript.git
 [submodule "script/Krkr2Compat"]
 	path = script/Krkr2Compat
-	url = ../../krkrz/Krkr2Compat.git
+	url = https://github.com/krkrz/Krkr2Compat.git
 [submodule "script/test"]
 	path = script/test
-	url = ../../krkrz/test_scripts.git
+	url = https://github.com/krkrz/test_scripts.git
 [submodule "script/KAG3_Ham"]
 	path = script/KAG3_Ham
-	url = ../../krkrz/kag3_ham.git
+	url = https://github.com/krkrz/kag3_ham.git
 [submodule "script/KAG3"]
 	path = script/KAG3
-	url = ../../krkrz/kag3.git
+	url = https://github.com/krkrz/kag3.git
 [submodule "document/kirikiriz"]
 	path = document/kirikiriz
-	url = ../../krkrz/krkrz-documents.git
+	url = https://github.com/krkrz/krkrz-documents.git
 [submodule "document/misc_markdown"]
 	path = document/misc_markdown
-	url = ../../krkrz/documents.git
+	url = https://github.com/krkrz/documents.git
 [submodule "src/tools/dotNet/tjs2doc"]
 	path = src/tools/dotNet/tjs2doc
-	url = ../../krkrz/tjs2doc.git
+	url = https://github.com/krkrz/tjs2doc.git
 [submodule "src/tools/win32/debugger"]
 	path = src/tools/win32/debugger
-	url = ../../krkrz/debugger.git
+	url = https://github.com/krkrz/debugger.git
 [submodule "src/core"]
 	path = src/core
-	url = ../krkrz_develop.git
+	url = https://github.com/wamsoft/krkrz.git
 [submodule "src/plugins/KAGParserEx"]
 	path = src/plugins/KAGParserEx
-	url = ../../wamsoft/KAGParserEx.git
+	url = https://github.com/wamsoft/KAGParserEx.git
 [submodule "src/plugins/addFont"]
 	path = src/plugins/addFont
-	url = ../../wamsoft/addFont.git
+	url = https://github.com/wamsoft/addFont.git
 [submodule "src/plugins/binaryStream"]
 	path = src/plugins/binaryStream
-	url = ../../wamsoft/binaryStream.git
+	url = https://github.com/wamsoft/binaryStream.git
 [submodule "src/plugins/csvParser"]
 	path = src/plugins/csvParser
-	url = ../../wamsoft/csvParser.git
+	url = https://github.com/wamsoft/csvParser.git
 [submodule "src/plugins/fpslimit"]
 	path = src/plugins/fpslimit
-	url = ../../wamsoft/fpslimit.git
+	url = https://github.com/wamsoft/fpslimit.git
 [submodule "src/plugins/fstat"]
 	path = src/plugins/fstat
-	url = ../../wamsoft/fstat.git
+	url = https://github.com/wamsoft/fstat.git
 [submodule "src/plugins/getSample"]
 	path = src/plugins/getSample
-	url = ../../wamsoft/getSample.git
+	url = https://github.com/wamsoft/getSample.git
 [submodule "src/plugins/httprequest"]
 	path = src/plugins/httprequest
-	url = ../../wamsoft/httprequest.git
+	url = https://github.com/wamsoft/httprequest.git
 [submodule "src/plugins/httpserv"]
 	path = src/plugins/httpserv
-	url = ../../wamsoft/httpserv.git
+	url = https://github.com/wamsoft/httpserv.git
 [submodule "src/plugins/json"]
 	path = src/plugins/json
-	url = ../../wamsoft/json.git
+	url = https://github.com/wamsoft/json.git
 [submodule "src/plugins/layerEx"]
 	path = src/plugins/layerEx
-	url = ../../wamsoft/layerEx.git
+	url = https://github.com/wamsoft/layerEx.git
 [submodule "src/plugins/layerExAreaAverage"]
 	path = src/plugins/layerExAreaAverage
-	url = ../../wamsoft/layerExAreaAverage.git
+	url = https://github.com/wamsoft/layerExAreaAverage.git
 [submodule "src/plugins/layerExBTOA"]
 	path = src/plugins/layerExBTOA
-	url = ../../wamsoft/layerExBTOA.git
+	url = https://github.com/wamsoft/layerExBTOA.git
 [submodule "src/plugins/layerExDraw"]
 	path = src/plugins/layerExDraw
-	url = ../../wamsoft/layerExDraw.git
+	url = https://github.com/wamsoft/layerExDraw.git
 [submodule "src/plugins/layerExImage"]
 	path = src/plugins/layerExImage
-	url = ../../wamsoft/layerExImage.git
+	url = https://github.com/wamsoft/layerExImage.git
 [submodule "src/plugins/layerExLongExposure"]
 	path = src/plugins/layerExLongExposure
-	url = ../../wamsoft/layerExLongExposure.git
+	url = https://github.com/wamsoft/layerExLongExposure.git
 [submodule "src/plugins/layerExRaster"]
 	path = src/plugins/layerExRaster
-	url = ../../wamsoft/layerExRaster.git
+	url = https://github.com/wamsoft/layerExRaster.git
 [submodule "src/plugins/layerExSave"]
 	path = src/plugins/layerExSave
-	url = ../../wamsoft/layerExSave.git
+	url = https://github.com/wamsoft/layerExSave.git
 [submodule "src/plugins/lineParser"]
 	path = src/plugins/lineParser
-	url = ../../wamsoft/lineParser.git
+	url = https://github.com/wamsoft/lineParser.git
 [submodule "src/plugins/memfile"]
 	path = src/plugins/memfile
-	url = ../../wamsoft/memfile.git
+	url = https://github.com/wamsoft/memfile.git
 [submodule "src/plugins/messenger"]
 	path = src/plugins/messenger
-	url = ../../wamsoft/messenger.git
+	url = https://github.com/wamsoft/messenger.git
 [submodule "src/plugins/minizip"]
 	path = src/plugins/minizip
-	url = ../../wamsoft/minizip.git
+	url = https://github.com/wamsoft/minizip.git
 [submodule "src/plugins/msgreceiver"]
 	path = src/plugins/msgreceiver
-	url = ../../wamsoft/msgreceiver.git
+	url = https://github.com/wamsoft/msgreceiver.git
 [submodule "src/plugins/ncbind"]
 	path = src/plugins/ncbind
-	url = ../../wamsoft/ncbind.git
+	url = https://github.com/wamsoft/ncbind.git
 [submodule "src/plugins/process"]
 	path = src/plugins/process
-	url = ../../wamsoft/process.git
+	url = https://github.com/wamsoft/process.git
 [submodule "src/plugins/psdfile"]
 	path = src/plugins/psdfile
-	url = ../../wamsoft/psdfile.git
+	url = https://github.com/wamsoft/psdfile.git
 [submodule "src/plugins/resourceRW"]
 	path = src/plugins/resourceRW
-	url = ../../wamsoft/resourceRW.git
+	url = https://github.com/wamsoft/resourceRW.git
 [submodule "src/plugins/saveStruct"]
 	path = src/plugins/saveStruct
-	url = ../../wamsoft/saveStruct.git
+	url = https://github.com/wamsoft/saveStruct.git
 [submodule "src/plugins/scriptsEx"]
 	path = src/plugins/scriptsEx
-	url = ../../wamsoft/scriptsEx.git
+	url = https://github.com/wamsoft/scriptsEx.git
 [submodule "src/plugins/shellExecute"]
 	path = src/plugins/shellExecute
-	url = ../../wamsoft/shellExecute.git
+	url = https://github.com/wamsoft/shellExecute.git
 [submodule "src/plugins/shrinkCopy"]
 	path = src/plugins/shrinkCopy
-	url = ../../wamsoft/shrinkCopy.git
+	url = https://github.com/wamsoft/shrinkCopy.git
 [submodule "src/plugins/sigcheck"]
 	path = src/plugins/sigcheck
-	url = ../../wamsoft/sigcheck.git
+	url = https://github.com/wamsoft/sigcheck.git
 [submodule "src/plugins/stdio"]
 	path = src/plugins/stdio
-	url = ../../wamsoft/stdio.git
+	url = https://github.com/wamsoft/stdio.git
 [submodule "src/plugins/steam"]
 	path = src/plugins/steam
-	url = ../../wamsoft/steam.git
+	url = https://github.com/wamsoft/steam.git
 [submodule "src/plugins/systemEx"]
 	path = src/plugins/systemEx
-	url = ../../wamsoft/systemEx.git
+	url = https://github.com/wamsoft/systemEx.git
 [submodule "src/plugins/tftSave"]
 	path = src/plugins/tftSave
-	url = ../../wamsoft/tftSave.git
+	url = https://github.com/wamsoft/tftSave.git
 [submodule "src/plugins/varfile"]
 	path = src/plugins/varfile
-	url = ../../wamsoft/varfile.git
+	url = https://github.com/wamsoft/varfile.git
 [submodule "src/plugins/win32dialog"]
 	path = src/plugins/win32dialog
-	url = ../../wamsoft/win32dialog.git
+	url = https://github.com/wamsoft/win32dialog.git
 [submodule "src/plugins/win32ole"]
 	path = src/plugins/win32ole
-	url = ../../wamsoft/win32ole.git
+	url = https://github.com/wamsoft/win32ole.git
 [submodule "src/plugins/windowEx"]
 	path = src/plugins/windowEx
-	url = ../../wamsoft/windowEx.git
+	url = https://github.com/wamsoft/windowEx.git
 [submodule "src/plugins/windowExProgress"]
 	path = src/plugins/windowExProgress
-	url = ../../wamsoft/windowExProgress.git
+	url = https://github.com/wamsoft/windowExProgress.git
 [submodule "src/plugins/tp_stub"]
 	path = src/plugins/tp_stub
-	url = ../../wamsoft/tp_stub.git
+	url = https://github.com/wamsoft/tp_stub.git
 [submodule "src/plugins/menu"]
 	path = src/plugins/menu
-	url = ../../wamsoft/menu.git
+	url = https://github.com/wamsoft/menu.git
 [submodule "src/plugins/simplebinder"]
 	path = src/plugins/simplebinder
-	url = ../../wamsoft/simplebinder.git
+	url = https://github.com/wamsoft/simplebinder.git
 [submodule "src/plugins/gamepad"]
 	path = src/plugins/gamepad
 	url = https://github.com/wamsoft/gamepad.git
