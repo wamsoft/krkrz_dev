@@ -5,32 +5,35 @@ set(PROJECT_VERSION 1.0)
 
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 
+# 共通プラグインフォルダ
+set(PLUGINS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/plugins)
+
 # プラグイン対象フォルダ
-list(APPEND TVP_PLUGIN_FOLDERS ${CMAKE_CURRENT_SOURCE_DIR}/src/plugins)
+LIST(APPEND TVP_PLUGIN_FOLDERS
+    ${PLUGINS_DIR}
+)
+
+set(TPSTUB_DIR ${PLUGINS_DIR}/tp_stub)
+set(NCBIND_DIR ${PLUGINS_DIR}/ncbind)
+set(SIMPLEBIND_DIR ${PLUGINS_DIR}/simplebinder)
 
 # プラグイン一覧
 list(APPEND TVP_PLUGINS
 KAGParserEx
-binaryStream
 csvParser
-fpslimit
 getSample
 json
 layerExAreaAverage
 layerExBTOA
-layerExDraw
 layerExImage
 layerExLongExposure
 layerExRaster
-layerExSave
 lineParser
 #minizip
 saveStruct
 scriptsEx
 shrinkCopy
 #sigcheck
-systemEx
-tftSave
 #krkrlua
 )
 
@@ -39,11 +42,15 @@ if (WIN32)
 list(APPEND TVP_PLUGINS
 # WIN32固有機能をつかっていて現時点でWIN専用。要改修
 addFont
+binaryStream
+fpslimit
 memfile
 #psdfile
 varfile
 fstat
 gamepad
+layerExDraw
+layerExSave
 menu
 msgreceiver
 stdio
@@ -52,6 +59,8 @@ win32dialog
 windowEx
 httprequest
 shellExecute
+systemEx
+tftSave
 #httpserv
 process
 messenger

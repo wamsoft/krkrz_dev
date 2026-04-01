@@ -34,7 +34,7 @@ else
 endif
 
 BUILD_TYPE?=Release
-CMAKEOPT?="-DUSE_SJIS=ON"
+CMAKEOPT?=
 INSTALL_PREFIX=bin/$(PRESET)/$(BUILD_TYPE)
 
 DATAPATH?=src/core/data

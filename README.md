@@ -4,55 +4,66 @@
 ドキュメント等開発関係のもの全てが入ったリポジトリ。
 各種ファイルはサブモジュールで参照されています。
 
-## 前準備
+## ビルド手順
+
+Win32 版を作成する場合は、Visual Studio のコマンドラインの x86 版を
+起動してそのコンソールから作業するようにしてください。x86 用の設定に
+なってないと vcpkg が誤動作します
+
+cygwin や msys2 などを導入して make が利用可能な場合は、定義済み Makefile が利用できます
+
+### 前準備
 
 vcpkg を導入して外部ライブラリ参照を準備します
 
 https://github.com/microsoft/vcpkg
 https://learn.microsoft.com/vcpkg/get_started/get-started
 
-cygwin や msys2 などを導入して make が利用可能な場合は、定義済み Makefile が利用できます
+環境変数 VCPKG_ROOT に vcpkg 導入先フォルダを設定してください
 
-## 作業手順
+例:
+```
+export VCPKG_ROOT=d:/vcpkg
+```
 
-1. git clone
-2. git submodule update --init --recursive
+### ソース取得
 
-これでサブモジュール部分が展開されるので、全体の構成で作業できます。
+```
+git clone --recursive https://github.com/wamsoft/krkrz_dev.git
+```
 
-## ビルド手順
+サブモジュールもすべて再帰的に取得してください
+
+### cmake によるビルド
 
 cmake による構築になります。
 
 環境別定義は、CMakePresets.json にあらかじめ定義されているので、
 それを利用してビルドできます。
 
-Visual Studio のコマンドラインで以下でビルドできます
+※build/プリセット名 がビルドフォルダ設定されています
 
 ```
 # ビルドの準備
 cmake --preset=x64-windows
 
 # ビルド
-cmake --build --preset=x64-windows
+cmake --build build/x64-windows
 
 # ビルドタイプ指定してビルド
-cmake --build --preset=x64-windows --config Debug
+cmake --build build/x64-windows --config Debug
 
 # インストール処理
-# 未設定
+cmake --install build/x64-windows --config Release --prefix bin
 ```
 
-ビルド作業用の Makefile が準備されています
-
-    環境変数
-    PRESET          cmakeのプリセット名を指定
-    BUILD_TYPE      ビルド対象の config 指定 Debug/RelWithDebInfo/Release
-
-    ビルドルール
-    prebuild        cmake の構築呼び出し
-    build           cmake のビルド呼び出し
-    install         cmake のインストール呼び出し
+| 種類         | 名前         | 説明                                      |
+|--------------|--------------|-------------------------------------------|
+| 環境変数     | PRESET       | cmake のプリセット名を指定                |
+|              | BUILD_TYPE   | ビルド対象の config 指定<br>Debug/RelWithDebInfo/Release |
+| ビルドルール | prebuild     | cmake の構築呼び出し                      |
+|              | build        | cmake のビルド呼び出し                    |
+|              | install      | cmake のインストール呼び出し              |
 
 win32版（SJIS対応）で作成する
 
