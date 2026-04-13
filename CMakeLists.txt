@@ -78,4 +78,5 @@ list(APPEND PLUGINS
 endif()
 
 # KRKRZ 本体
+option(KRKRZ_BUILD_TESTS "build SIMD parity tests" OFF)
 add_subdirectory(src/core ${CMAKE_CURRENT_BINARY_DIR}/core)
