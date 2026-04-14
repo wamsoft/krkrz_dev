@@ -38,7 +38,7 @@ shrinkCopy
 )
 
 
-if (WIN32)
+if (KRKRZ_VARIANT STREQUAL "WIN")
 list(APPEND TVP_PLUGINS
 # WIN32固有機能をつかっていて現時点でWIN専用。要改修
 addFont
@@ -78,4 +78,5 @@ list(APPEND PLUGINS
 endif()
 
 # KRKRZ 本体
+option(KRKRZ_BUILD_TESTS "build SIMD parity tests" OFF)
 add_subdirectory(src/core ${CMAKE_CURRENT_BINARY_DIR}/core)

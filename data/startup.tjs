@@ -1,0 +1,7 @@
+var dm = Debug.message;
+Plugins.link("csvParser.dll");
+
+dm(@"class CSVParser:${CSVParser} loaded");
+
+dm("startup.tjs loaded");
+
