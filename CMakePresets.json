@@ -30,7 +30,7 @@
                 "VCPKG_TARGET_ARCHITECTURE":"x86",
                 "VCPKG_CRT_LINKAGE":"static",
                 "VCPKG_LIBRARY_LINKAGE":"static",
-                "BUILD_WINVER":"ON"
+                "KRKRZ_VARIANT":"WIN"
             }
         },
         {
@@ -48,7 +48,7 @@
                 "VCPKG_TARGET_ARCHITECTURE":"x64",
                 "VCPKG_CRT_LINKAGE":"static",
                 "VCPKG_LIBRARY_LINKAGE":"static",
-                "BUILD_WINVER":"ON"
+                "KRKRZ_VARIANT":"WIN"
             }
         },
         {
@@ -56,7 +56,7 @@
             "description": "windows x64 build with sdl",
             "inherits": "x64-windows",
             "cacheVariables": {
-                "BUILD_WINVER":"OFF"
+                "KRKRZ_VARIANT":"SDL"
             }
         },
         {

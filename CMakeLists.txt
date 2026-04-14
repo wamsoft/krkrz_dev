@@ -38,7 +38,7 @@ shrinkCopy
 )
 
 
-if (BUILD_WINVER)
+if (KRKRZ_VARIANT STREQUAL "WIN")
 list(APPEND TVP_PLUGINS
 # WIN32固有機能をつかっていて現時点でWIN専用。要改修
 addFont
