@@ -34,7 +34,7 @@ else
 endif
 
 BUILD_TYPE?=Release
-CMAKEOPT?=
+CMAKEOPT?="-DKRKRZ_USE_SJIS=YES"
 INSTALL_PREFIX=bin/$(PRESET)/$(BUILD_TYPE)
 
 DATAPATH?=src/core/data
@@ -43,7 +43,7 @@ DATAPATH_ABS=$(shell $(FIXPATH) "$(DATAPATH)")
 
 BUILD_PATH=$(shell cmake --preset $(PRESET) -N | grep BUILD_DIR | sed 's/.*BUILD_DIR="\(.*\)"/\1/')
 
-.PHONY: build prebuild install clean
+.PHONY: build prebuild install clean docs docs-scan docs-diff docs-convert docs-wiki-test
 
 all: build
 
@@ -61,6 +61,49 @@ install:
 
 clean:
 	cmake --build $(BUILD_PATH) --config $(BUILD_TYPE) --target clean
+
+# ===== ドキュメント生成（doc/ 配下） =====
+# いずれのターゲットも .venv の python を使用する前提。
+# 仮想環境が無い場合は以下で作成:
+#   python -m venv .venv
+# stdlib のみ使用しているので追加 pip install は不要。
+#
+# Windows と Unix 系で python 実行パスが異なるので自動判定。
+ifeq ($(OS),Windows_NT)
+VENV_PY=.venv/Scripts/python.exe
+else
+VENV_PY=.venv/bin/python
+endif
+
+# src/core のバインドと doc/reference/*.md の差分を更新する通常フロー。
+# 1) scan_tjs.py で TJS ネイティブクラスのメンバー一覧を _inventory.json に抽出
+# 2) diff_docs.py で _missing.md（未記載 / 廃止メンバー一覧）を再生成
+# 実行後に doc/_missing.md を見て doc/reference/<Class>.md を手編集し、
+# 再度 `make docs` を走らせてレポートが空に近づくまで繰り返す。
+docs: docs-scan docs-diff
+
+# src/core から TJS メンバー一覧を抽出 -> doc/_inventory.json
+docs-scan:
+	$(VENV_PY) tools/docgen/scan_tjs.py
+
+# _inventory.json と doc/reference/*.md を突き合わせて doc/_missing.md を再生成
+docs-diff:
+	$(VENV_PY) tools/docgen/diff_docs.py
+
+# 旧 document/kirikiriz/j_in の XML を Markdown へ一括変換（初回移行用）。
+# 通常運用では使わない。実行すると doc/reference/ / doc/guide/ /
+# doc/_assets/ が旧 XML から上書き再生成されるので、手編集済みの内容が
+# 消える点に注意。
+docs-convert:
+	$(VENV_PY) tools/docgen/xml2md.py
+
+# Wiki 同期処理のローカル確認。出力先ディレクトリを指定して実行:
+#   make docs-wiki-test DST=/tmp/wiki_test
+# 実際の push は .github/workflows/docs-wiki.yml が自動で行うので、
+# このターゲットはリンク書き換え結果の目視確認だけが目的。
+DST?=build/wiki_preview
+docs-wiki-test:
+	$(VENV_PY) tools/docgen/sync_wiki.py $(DST)
 
 # WIN版用ルール
 ifeq (windows,$(findstring windows,$(PRESET)))
