@@ -163,3 +163,6 @@
 [submodule "src/core"]
 	path = src/core
 	url = https://github.com/wamsoft/krkrz_develop.git
+[submodule "src/plugins/layerExVector"]
+	path = src/plugins/layerExVector
+	url = https://github.com/wamsoft/layerExVector.git

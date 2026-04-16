@@ -28,6 +28,7 @@ layerExBTOA
 layerExImage
 layerExLongExposure
 layerExRaster
+layerExVector
 lineParser
 #minizip
 saveStruct
