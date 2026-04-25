@@ -28,6 +28,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [exceptionHandler](#exceptionhandler)
 - [onActivate](#onactivate)
 - [onDeactivate](#ondeactivate)
+- [onJoypadChange](#onjoypadchange)
 - [drawThreadNum](#drawthreadnum)
 - [savedGamesPath](#savedgamespath)
 - [exeBits](#exebits)
@@ -502,6 +503,22 @@ null を指定すると関数は呼び出されません。
 このイベントは、メインウィンドウが既に非アクティブの場合にも発生する可能性があるので注意してください (完全に onActivate → onDeactivate → onActivate → …… の順に発生する保証がない )。
 
 **関連:** [System.onActivate](System.md#onactivate) / [Window.onActivate](Window.md#onactivate) / [Window.onDeactivate](Window.md#ondeactivate)
+
+---
+
+### onJoypadChange
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ジョイパッド構成変更時に呼び出されるイベント
+
+ジョイパッドの接続・切断などで構成が変化したときに呼び出されるイベント関数を表します。
+
+null を指定すると関数は呼び出されません。
+
+通常のイベントハンドラと異なり、このイベントを受け取りたい場合は、呼び出したい関数をこのプロパティに設定してください。
 
 ---
 

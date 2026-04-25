@@ -19,35 +19,6 @@
 ## サマリー
 
 - クラス未作成: 0
-- 未記載メンバー合計: 1
-- コードに無いメンバー合計: 5
-
-## BasicDrawDevice
-
-- manual: `doc/manual/Window.BasicDrawDevice.manual.tjs`
-- code: `src/core/win32/visual/BasicDrawDevice.cpp`
-
-### コードに存在しないメンバー（要確認）
-- [ ] `onDisplayRotate`
-
-## System
-
-- manual: `doc/manual/System.manual.tjs`
-- code: `src/core/common/base/SystemIntf.cpp`
-
-### 未記載メンバー
-- [ ] `isAndroid` (property)
-
-### コードに存在しないメンバー（要確認）
-- [ ] `exceptionHandler`
-- [ ] `onActivate`
-- [ ] `onDeactivate`
-
-## Window
-
-- manual: `doc/manual/Window.manual.tjs`
-- code: `src/core/common/visual/WindowIntf.cpp`
-
-### コードに存在しないメンバー（要確認）
-- [ ] `onHintChanged`
+- 未記載メンバー合計: 0
+- コードに無いメンバー合計: 0
 

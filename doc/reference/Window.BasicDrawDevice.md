@@ -16,10 +16,6 @@ Window.BasicDrawDevice クラスは、このインスタンスを [Window.drawDe
 
 - [recreate](#recreate)
 
-### イベント
-
-- [onDisplayRotate](#ondisplayrotate)
-
 ---
 
 ### BasicDrawDevice
@@ -59,29 +55,5 @@ Window.BasicDrawDevice クラスのオブジェクトを構築します。
 内部デバイスの再生成を行います。
 
 通常使用することはありません。
-
----
-
-### onDisplayRotate
-
-イベント
-
-**引数**
-
-| 引数 | 既定値 | 説明 |
-| --- | --- | --- |
-| `orientation` | `&nbsp;` | 画面の向き( orientation ) です。<br>以下のいずれかの値になります。<br>oriUnknown (取得失敗/不明), oriPortrait(縦向き), oriLandscape(横向き) |
-| `angle` | `&nbsp;` | 角度です。<br>角度 ( angle ) は、0、90、180、270、-1 のいずれかで、取得できなかった時は-1となります。<br>角度は、そのデバイスデフォルトからの回転角なので、縦向きのデバイスでは縦向きで0となります。<br>通常のデバイスだと、横向きで0が多ようです。<br>縦向きが0になるのは最近の8インチタブレットなどで、縦向きが標準の向きとなっているものです。 |
-| `bpp` | `&nbsp;` | bits per pixel です。 |
-| `width` | `&nbsp;` | 画面の幅です。 |
-| `height` | `&nbsp;` | 画面の高さです。 |
-
-**解説**
-
-画面が回転されたとき(1.1.0以降)
-
-画面が回転されたときに呼び出されるイベント関数を表します。
-
-**関連:** [Window.onDisplayRotate](Window.md#ondisplayrotate) / [Window.displayOrientation](Window.md#displayorientation) / [Window.displayRotate](Window.md#displayrotate)
 
 ---

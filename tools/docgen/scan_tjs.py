@@ -6,9 +6,24 @@ Scans C++ sources under src/core/common (plus optional --extra paths) for:
   - TJS_BEGIN_NATIVE_PROP_DECL(foo)                        -> property
   - TJS_BEGIN_NATIVE_EVENT_DECL(foo)                       -> event
 
-Each member is assigned to the *most recently opened* tTJSNC_X constructor
-above it in the same file. The classes-of-interest list below filters noise
-(tjs2 internals like tTJSNC_Array are excluded by default).
+Macro-based decls are assigned to the *most recently opened* tTJSNC_X
+constructor above them in the same file.
+
+Additionally, two runtime-registration patterns are detected and assigned
+to the file's *primary* tTJSNC_X (when there's exactly one class-of-interest
+constructor in the file):
+
+  - PropSet(TJS_MEMBERENSURE, TJS_W("name"), ...)  -> property/event
+        Used in Initialize() bodies to register members at construction time
+        (e.g. System::exceptionHandler, System::onActivate). Names matching
+        ^on[A-Z] are categorized as events, else as properties.
+  - static ttstr eventname(TJS_W("name"))          -> event
+        The standard pattern for TVPPostEvent dispatch (e.g. Window::onClick,
+        Window::onHintChanged, Window::onDisplayRotate). Always categorized
+        as an event.
+
+The classes-of-interest list below filters noise (tjs2 internals like
+tTJSNC_Array are excluded by default).
 
 Writes doc/_inventory.json with shape:
   {
@@ -43,15 +58,43 @@ CLASSES = {
     "TextWriteStream", "TextReadStream", "BinaryStream",
 }
 
+# Members present in the C++ binding but intentionally excluded from the
+# documented surface — typically platform-specific things that the project
+# decided not to advertise. Keyed as "Class.member".
+EXCLUDED_MEMBERS = {
+    # Android はビルド対象外（multi_platform_design 由来の C++ は残るが
+    # ドキュメントには載せない方針）
+    "System.isAndroid",
+}
+
 CTOR_RE = re.compile(
     r"tTJSNC_(\w+)\s*::\s*tTJSNC_\1\s*\("
-    r"|TVPCreateNativeClass_(\w+)\s*\("
+    # require return-type prefix so we don't match factory CALLS
+    # (e.g. `BitmapClass = TVPCreateNativeClass_Bitmap();` in
+    # BitmapDrawDevice.cpp would otherwise misattribute Show()'s onDraw to
+    # Bitmap).
+    r"|tTJSNativeClass\s*\*\s*TVPCreateNativeClass_(\w+)\s*\("
 )
 DECL_RES = {
     "method":  re.compile(r"TJS_BEGIN_NATIVE_METHOD_DECL\(\s*(?:/\*[^*]*\*/\s*)?(\w+)\s*\)"),
     "property": re.compile(r"TJS_BEGIN_NATIVE_PROP_DECL\(\s*(?:/\*[^*]*\*/\s*)?(\w+)\s*\)"),
     "event":   re.compile(r"TJS_BEGIN_NATIVE_EVENT_DECL\(\s*(?:/\*[^*]*\*/\s*)?(\w+)\s*\)"),
 }
+
+# Runtime-registration patterns. Both produce member names that must be
+# attributed to the file's primary tTJSNC class (ctor proximity does not
+# work — these calls live in Initialize() bodies or free functions outside
+# any ctor span).
+PROPSET_RE = re.compile(
+    # require bare `PropSet(...)` (implicit `this->`) — exclude
+    # `dict->PropSet(...)` which populates a returned dictionary, not the
+    # class itself.
+    r'(?<![\w.>])PropSet\s*\(\s*TJS_MEMBERENSURE\s*,\s*TJS_W\(\s*"(\w+)"\s*\)'
+)
+EVENTNAME_RE = re.compile(
+    r'static\s+ttstr\s+eventname\s*\(\s*TJS_W\(\s*"(\w+)"\s*\)\s*\)'
+)
+EVENT_NAME_PREFIX_RE = re.compile(r"^on[A-Z]")
 
 def scan_file(path: Path) -> dict[str, dict]:
     try:
@@ -78,21 +121,41 @@ def scan_file(path: Path) -> dict[str, dict]:
         return last
 
     classes: dict[str, dict] = {}
+
+    def add(cls: str, key: str, name: str):
+        if f"{cls}.{name}" in EXCLUDED_MEMBERS:
+            return
+        bucket = classes.setdefault(cls, {
+            "file": None,
+            "methods": [],
+            "properties": [],
+            "events": [],
+        })
+        if name not in bucket[key]:
+            bucket[key].append(name)
+
     for kind, rx in DECL_RES.items():
         for m in rx.finditer(text):
             cls = class_at(m.start())
             if cls is None or cls not in CLASSES:
                 continue
-            bucket = classes.setdefault(cls, {
-                "file": None,
-                "methods": [],
-                "properties": [],
-                "events": [],
-            })
-            name = m.group(1)
             key = {"method": "methods", "property": "properties", "event": "events"}[kind]
-            if name not in bucket[key]:
-                bucket[key].append(name)
+            add(cls, key, m.group(1))
+
+    # Runtime-registration patterns are tied to the file as a whole, since
+    # PropSet / TVPPostEvent calls usually sit in Initialize() bodies or free
+    # helper functions that are outside any tTJSNC_X constructor span. Only
+    # apply them when the file has exactly one class-of-interest constructor
+    # — otherwise we'd guess wrong on multi-class binding files.
+    cls_in_file = [n for _, n in ctor_spans if n in CLASSES]
+    primary = cls_in_file[0] if len(set(cls_in_file)) == 1 else None
+    if primary:
+        for m in PROPSET_RE.finditer(text):
+            name = m.group(1)
+            key = "events" if EVENT_NAME_PREFIX_RE.match(name) else "properties"
+            add(primary, key, name)
+        for m in EVENTNAME_RE.finditer(text):
+            add(primary, "events", m.group(1))
 
     return classes
 

@@ -1,6 +1,8 @@
 {
   "AsyncTrigger": {
-    "events": [],
+    "events": [
+      "onFire"
+    ],
     "file": "src/core/common/base/EventIntf.cpp",
     "methods": [
       "cancel",
@@ -50,7 +52,19 @@
     ]
   },
   "BitmapLayerTreeOwner": {
-    "events": [],
+    "events": [
+      "onChangeLayerImage",
+      "onDisableAttentionPoint",
+      "onGetCursorPos",
+      "onReleaseMouseCapture",
+      "onResetImeMode",
+      "onResizeLayer",
+      "onSetAttentionPoint",
+      "onSetCursorPos",
+      "onSetHintText",
+      "onSetImeMode",
+      "onSetMouseCursor"
+    ],
     "file": "src/core/common/visual/BitmapLayerTreeOwner.cpp",
     "methods": [
       "clearDirtyRect",
@@ -430,7 +444,11 @@
     "properties": []
   },
   "System": {
-    "events": [],
+    "events": [
+      "onActivate",
+      "onDeactivate",
+      "onJoypadChange"
+    ],
     "file": "src/core/common/base/SystemIntf.cpp",
     "methods": [
       "addContinuousHandler",
@@ -467,13 +485,13 @@
       "desktopWidth",
       "drawThreadNum",
       "eventDisabled",
+      "exceptionHandler",
       "exeBits",
       "exeName",
       "exePath",
       "exitOnNoWindowStartup",
       "exitOnWindowClose",
       "graphicCacheLimit",
-      "isAndroid",
       "isGeneric",
       "isWindows",
       "licenseText",
@@ -493,7 +511,9 @@
     ]
   },
   "Timer": {
-    "events": [],
+    "events": [
+      "onTimer"
+    ],
     "file": "src/core/common/utils/TimerIntf.cpp",
     "methods": [
       "onTimer"
@@ -506,7 +526,12 @@
     ]
   },
   "VideoOverlay": {
-    "events": [],
+    "events": [
+      "onCallbackCommand",
+      "onFrameUpdate",
+      "onPeriod",
+      "onStatusChanged"
+    ],
     "file": "src/core/common/visual/VideoOvlIntf.cpp",
     "methods": [
       "cancelPeriodEvent",
@@ -625,7 +650,34 @@
     ]
   },
   "Window": {
-    "events": [],
+    "events": [
+      "onClick",
+      "onCloseQuery",
+      "onDisplayRotate",
+      "onDoubleClick",
+      "onFileDrop",
+      "onHintChanged",
+      "onKeyDown",
+      "onKeyPress",
+      "onKeyUp",
+      "onMouseDown",
+      "onMouseEnter",
+      "onMouseLeave",
+      "onMouseMove",
+      "onMouseUp",
+      "onMouseWheel",
+      "onMultiTouch",
+      "onPointerDown",
+      "onPointerMove",
+      "onPointerUp",
+      "onPopupHide",
+      "onResize",
+      "onTouchDown",
+      "onTouchMove",
+      "onTouchRotate",
+      "onTouchScaling",
+      "onTouchUp"
+    ],
     "file": "src/core/common/visual/WindowIntf.cpp",
     "methods": [
       "add",
