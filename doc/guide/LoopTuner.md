@@ -21,7 +21,7 @@
 
 
 
-![](lt_seamless_loop.png)
+![](../_assets/lt_seamless_loop.png)
 
 
 
@@ -79,7 +79,7 @@
 
 ループチューナ (krkrlt.exe) を起動すると、以下の画面が表示されます (以下の画面は、実際にファイルを読み込んだところ)
 
-![](lt_main_window.png)
+![](../_assets/lt_main_window.png)
 
 - **縮小波形表示部分**  
   ここには、サウンドの全体を縮小した波形が表示されます。赤い横線はリンク、緑の縦線はラベルを表しています。

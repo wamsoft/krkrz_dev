@@ -1,79 +1,136 @@
 # tools/docgen — 吉里吉里Z リファレンス生成
 
-旧 `document/kirikiriz/j_in/*.xml` を **Markdown** に変換し、
-`doc/` 配下で管理するためのツール一式。Wiki 反映は
-`.github/workflows/docs-wiki.yml` が担当する。
+`manual.tjs` (TJS擬似コード + javadoc) を SSOT (Single Source of Truth) として、
+Markdown リファレンスと mkdocs サイトを自動生成するツール一式。
 
-`document/kirikiriz` は別リポジトリからの submodule 参照で、最終的には
-破棄される予定。一度 `xml2md.py` を走らせて `doc/reference/` に変換すれば
-以後は Markdown だけをメンテすればよい（旧 XML は参照しなくなる）。
+## パイプライン
 
-## 構成
-
-| 生成物                         | 元データ                                           | 生成ツール                    |
-|-------------------------------|---------------------------------------------------|-------------------------------|
-| `doc/reference/<Class>.md`    | `document/kirikiriz/j_in/classes/f_*.xml`         | `xml2md.py` *(初回のみ)*      |
-| `doc/guide/<Topic>.md`        | `document/kirikiriz/j_in/*.xml`                   | `xml2md.py` *(初回のみ)*      |
-| `doc/_assets/*`               | `document/kirikiriz/j_in/imgsrc/*`                | `xml2md.py` *(初回のみ)*      |
-| `doc/_index.md`               | ファイル一覧                                      | `xml2md.py` *(初回のみ)*      |
-| `doc/_inventory.json`         | `src/core/**/*.cpp` のバインド情報                | `scan_tjs.py`                 |
-| `doc/_missing.md`             | 上2つの突合                                       | `diff_docs.py`                |
-
-Python は `.venv`（Python 3.12）にあるものを使用する。追加依存は無し
-（stdlib のみ）。
-
-## 初回移行フロー（旧 XML → Markdown）
-
-```bash
-.venv/Scripts/python.exe tools/docgen/xml2md.py
+```
+document/kirikiriz/j_in/classes/f_*.xml ──[xml2manual.py]──┐
+                                                           ├──> doc/manual/<Class>.manual.tjs ──┐
+src/plugins/<plugin>/manual.tjs (手書き or 既存) ─────────┘                                     ├──[tjsdoc.py]──> doc/reference/<Class>.md ──[mkdocs]──> Pages
+                                                                                                 │
+src/core/**/*.cpp + src/plugins/**/*.cpp ──[scan_tjs.py]──> doc/_inventory.json ──[diff_docs.py]─┘──> doc/_missing.md
 ```
 
-これで `doc/reference/`, `doc/guide/`, `doc/_assets/`, `doc/_index.md`
-が生成される。旧レイアウトの `<doc>/<member>/...` スキーマを以下の
-Markdown 形式にマップしている:
+## ツール
 
-- `<title>` → `# タイトル`
-- トップ `<desc>` → クラス冒頭の解説
-- `<member>` → `### <name>` 見出し
-- `<type>` → 見出し直下のメタ行（プロパティ/メソッド/イベント/コンストラクタ）
-- `<access>` → 同上のメタ行（r, r/w）
-- `<shortdesc>` → 見出し直下の1行要約
-- `<arg>/<argitem>` → 引数表（Markdown テーブル）
-- `<result>` → **戻り値** セクション
-- `<desc>` → **解説** セクション（`<bq>`/`<example>` はフェンスドコード化）
-- `<ref>` → 相互リンク（クラス名を認識して `[Class.member](Class.md#member)` 化）
-- `<at href="f_Foo.html">` → `[label](Foo.md)`
-- `<at href="f_Foo_bar.html">` → `[label](Foo.md#bar)`
-- `<img src="imgsrc/x.png"/>` → `![](../_assets/x.png)`
-- `<kw>` / `<b>` → `**...**`, `<tt>` → `` `...` ``, `<i>` → `*...*`
-- `<note>` → GFM Blockquote (`> **Note:**`)
-- `<bq>` / `<example>` → ```` ``` ```` フェンスドコード
+| ツール             | 入力                                              | 出力                              |
+|-------------------|--------------------------------------------------|-----------------------------------|
+| `xml2manual.py`   | `document/kirikiriz/j_in/classes/f_*.xml`        | `doc/manual/<Class>.manual.tjs`   |
+| `xml2md.py`       | `document/kirikiriz/j_in/*.xml` (ガイド/imgsrc)  | `doc/guide/`, `doc/_assets/`      |
+| `tjsdoc.py`       | `*.manual.tjs` (複数ディレクトリ集約可)          | `doc/reference/<Class>.md`        |
+| `fix_props.py`    | `src/plugins/<plugin>/*.cpp`                     | `manual.tjs` の bare property 書き換え |
+| `scan_tjs.py`     | `src/core/**/*.cpp` のバインド情報               | `doc/_inventory.json`             |
+| `diff_docs.py`    | `_inventory.json` + `doc/manual/*.manual.tjs`    | `doc/_missing.md`                 |
 
-既存 XML の癖（全角 `　` でのインデント、`<r/>` 強制改行）は `xml2md.py`
-側で吸収済み。コードブロック内だけはインデントを保持する。
+Python は 3.12 系。追加依存はサイト構築時のみ (`requirements.txt`)。
 
-## 運用フロー（src/core 側で新メソッドが増えたとき）
+## 通常の運用フロー
+
+### 1. core クラスのドキュメント追加・更新
 
 ```bash
-# 1. src/core のバインドからメンバー一覧を抽出
-.venv/Scripts/python.exe tools/docgen/scan_tjs.py
-# 2. 既存 Markdown と突き合わせ
-.venv/Scripts/python.exe tools/docgen/diff_docs.py
+# 旧 XML から manual.tjs を初期生成（初回のみ）
+python tools/docgen/xml2manual.py
+
+# 以後、`doc/manual/<Class>.manual.tjs` を直接編集する
+# （TJS の擬似コード + javadoc 形式で記述）
 ```
 
-`doc/_missing.md` に以下3種類の差分が列挙される:
+### 2. C++ バインドが増減したとき
 
-- **ドキュメント未作成クラス** — `doc/reference/<Class>.md` を新規追加する
-- **未記載メンバー** — クラスの `.md` に `### <name>` 節を追記する
-- **コードに無いメンバー** — バインドから消えた節を `.md` から削除する
+```bash
+# C++ 側のバインドを抽出
+python tools/docgen/scan_tjs.py
 
-`diff_docs.py` を再実行してレポートが空に近づくまで繰り返し、
-最後に `git commit` → push すると GitHub Actions が Wiki に自動反映される。
+# manual.tjs と突合
+python tools/docgen/diff_docs.py
 
-`_missing.md` 自体もコミットしておく（Wiki にも転送されるのでレビュワーが
-進捗を確認しやすい）。
+# `doc/_missing.md` を見て manual.tjs を編集
+# 再度 diff_docs.py を実行してレポートが空になるまで繰り返す
+```
 
-### scan_tjs.py の検出範囲
+### 3. プラグインの property を C++ から自動修正
+
+```bash
+# C++ で readonly な property に対して manual.tjs の bare 宣言を
+# `{ getter; }` に書き換え
+python tools/docgen/fix_props.py --dry-run
+python tools/docgen/fix_props.py
+```
+
+### 4. Markdown と mkdocs サイトの再生成
+
+```bash
+# core (doc/manual/) と plugins (src/plugins/) を統合して md を再生成
+python tools/docgen/tjsdoc.py --in doc/manual --in src/plugins
+
+# ローカルでサイトプレビュー
+pip install -r tools/docgen/requirements.txt
+mkdocs serve
+```
+
+## manual.tjs の書式
+
+```tjs
+/**
+ * クラスの説明（要約）
+ *
+ * 詳細説明（任意・複数行可）
+ */
+class Foo {
+    /**
+     * メソッドの要約
+     *
+     * 詳細説明
+     * @param x 引数x の説明
+     * @param y = 0 引数y の説明（既定値あり）
+     * @return 戻り値の説明
+     * @see Foo.bar
+     */
+    function method(x, y = 0);
+
+    /**
+     * プロパティの要約
+     */
+    property name { getter; setter; }    // r/w
+    property readOnly { getter; }        // r
+    property writeOnly { setter; }       // w
+
+    /**
+     * イベントの要約
+     * @kind event
+     */
+    function onSomething(arg);
+
+    /**
+     * 定数の要約
+     */
+    const KIND_FOO = 0;
+}
+```
+
+主な javadoc タグ:
+
+- `@param NAME desc` — 引数の説明
+- `@return desc` / `@returns desc` — 戻り値の説明
+- `@description desc` — 詳細説明（要約と分離したい場合）
+- `@type T` — プロパティの型ヒント
+- `@kind event` — メソッドをイベントとして分類
+- `@see X.Y` — 関連メンバーへのリンク
+
+## tjsdoc.py のマージ仕様
+
+- `doc/manual/Layer.manual.tjs`（core）と `src/plugins/layerExSave/manual.tjs`
+  などが同一クラス `Layer` を含む場合、core を主・plugin を「## プラグイン拡張: <name>」
+  セクションとして 1 つの `Layer.md` にまとめる。
+- core が無く plugin のみの場合は、`# Layer` のスタブ + 全 plugin を拡張節として配置。
+- ネストクラス（`class GdiPlus { class Font { ... } }`）は `GdiPlus.Font.md` として
+  独立した md ファイルに展開。
+- 単一ファイルにつき複数ファイル名: `manual.tjs` および `*.manual.tjs` をどちらも対象。
+
+## scan_tjs.py の検出範囲
 
 `TJS_BEGIN_NATIVE_METHOD_DECL` / `TJS_BEGIN_NATIVE_PROP_DECL` /
 `TJS_BEGIN_NATIVE_EVENT_DECL` を、直前にある以下のいずれかのブロックに
@@ -84,44 +141,33 @@ Markdown 形式にマップしている:
 
 検出対象クラスは `CLASSES` セットで限定している（内部クラスや
 `tTJSNC_Array` など TJS ランタイム自身のクラスを除外するため）。新しい
-公開クラスを追加するときは、`scan_tjs.py` の `CLASSES` にも追記すること。
+公開クラスを追加するときは `scan_tjs.py` の `CLASSES` にも追記すること。
 
 コンストラクタ／ファクトリは `TJS_BEGIN_NATIVE_*_DECL` マクロ越しでは
 登録されないため、scan_tjs は「クラス名と同名のメンバー」を検出できない。
 `diff_docs.py` 側で `stale` 一覧からクラス名自身を除外済み。
 
-## Wiki 同期の仕組み
+## fix_props.py の検出範囲
 
-GitHub Wiki は **サブディレクトリを持てない** ため、`tools/docgen/sync_wiki.py`
-が次の命名でフラット化する:
+各 `src/plugins/<name>/` 直下の `*.cpp` `*.h` を走査。検出パターン:
 
-```
-doc/reference/Layer.md             -> Class.Layer.md
-doc/reference/Window.BasicDrawDevice.md -> Class.Window.BasicDrawDevice.md
-doc/guide/EventSystem.md           -> Guide.EventSystem.md
-doc/_assets/foo.png                -> foo.png
-doc/_index.md                      -> Home.md
-doc/_missing.md                    -> _Docs-Diff-Report.md
-```
+- `Property(TJS_W("name"), getter, setter)` — NCB 形式（3引数 = property）
+- `RawCallback(TJS_W("name"), getter, setter, flags)` — 4引数形式（= property）
+- `NCB_PROPERTY_RO(name, get)` / `NCB_PROPERTY(name, get, set)` 等のマクロ
+- `NCB_GDIP_PROPERTY[_RO](...)`（layerExDraw 専用マクロ）
+- `INTPROP(name)`（psdfile 専用マクロ）
 
-同時に Markdown 中の相対リンク（`(Layer.md#visible)`、`(../_assets/foo.png)`
-等）を Wiki のフラット名前空間に書き換える（`(Class.Layer#visible)` 等）。
+setter が `0` / `(int)0` / `nullptr` のいずれかなら readonly と判定し、
+manual.tjs 側の `property NAME;` を `property NAME { getter; }` に書き換え。
+read-write のものは bare 宣言のまま据え置き（bare = rw が規約）。
 
-`.github/workflows/docs-wiki.yml` が `develop` / `master` への push 時に:
+## サイト公開（GitHub Pages）
 
-1. 本リポジトリをチェックアウト
-2. `<repo>.wiki.git` を `.wiki/` にチェックアウト
-3. `Class.*.md` / `Guide.*.md` / `Home.md` / `_Docs-Diff-Report.md` を削除
-4. `sync_wiki.py .wiki` でフラット化出力
-5. 差分があればコミット & push
+`.github/workflows/docs-pages.yml` が `develop` / `master` への push 時に:
 
-Wiki に手動で追加した他の Markdown（`Class.` / `Guide.` / `Home` prefix を
-持たないもの）は保持される。
+1. mkdocs-material をインストール
+2. `mkdocs build` で `site/` を生成
+3. `actions/deploy-pages` で公開
 
-## MkDocs Pages 対応（今後）
-
-`doc/` 配下はそのまま MkDocs Material に載せられるレイアウトにしてある
-（`doc/reference/` と `doc/guide/` のサブディレクトリ構成、`doc/_assets/`
-の画像）。将来 Pages も有効化する場合は `mkdocs.yml` を `doc/` 直上に
-追加し、`nav:` で `_index.md` → `reference/*`, `guide/*` を指す設定に
-するだけでよい。
+mkdocs の設定は `mkdocs.yml`（リポジトリ直下）。検索は組み込み plugin
+（lunr.js ベース、日本語対応の separator 設定済み）。

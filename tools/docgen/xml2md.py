@@ -159,8 +159,10 @@ def render_inline_tag(e: ET.Element, ctx: "Ctx") -> str:
     if tag == "img":
         src = e.get("src", "")
         alt = e.get("alt", "")
-        # map imgsrc/foo.png -> ../_assets/foo.png
+        # map imgsrc/foo.png -> ../_assets/foo.png; bare names too
         src = re.sub(r"^(?:\./)?imgsrc/", "../_assets/", src)
+        if not src.startswith(("http", "../", "/", "_assets/")):
+            src = "../_assets/" + src
         return f"![{alt}]({src})"
     # unknown inline -> fall back to inner
     return inner

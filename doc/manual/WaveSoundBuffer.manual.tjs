@@ -1,0 +1,154 @@
+/**
+ * WaveSoundBuffer クラスは、PCMの再生を管理するクラスです。
+ *
+ * WaveSoundBuffer クラスでは、[](LoopTuner) で作成した .sli ファイルを読み込み、処理することができます。詳しくはループチューナの説明をご覧ください。
+ */
+class WaveSoundBuffer {
+	/**
+	 * WaveSoundBuffer オブジェクトの構築
+	 *
+	 * WaveSoundBuffer クラスのオブジェクトを構築します。
+	 *
+	 * イベントが発生すると owner で指定したオブジェクトの action メソッドを呼び出します。owner に null を指定すると action メソッドは呼ばれません。通常は [Window](Window.md) クラスのオブジェクトを owner に指定します。
+	 * @param owner イベントの発生先を指定します。
+	 */
+	function WaveSoundBuffer(owner);
+
+	/**
+	 * ステータスが変更された
+	 *
+	 * 再生のステータス ( 状態 ) が変わった時に発生します。
+	 * @param status 新しいステータスです。
+	 *
+	 * [WaveSoundBuffer.status](WaveSoundBuffer.md#status) プロパティを参照してください。
+	 * @kind event
+	 */
+	function onStatusChanged(status);
+
+	/**
+	 * フェードが終了した
+	 *
+	 * [WaveSoundBuffer.fade](WaveSoundBuffer.md#fade) メソッドで開始したフェードが終了したときに発生します。
+	 * @kind event
+	 */
+	function onFadeCompleted();
+
+	/**
+	 * メディアを開く
+	 *
+	 * 指定されたメディアを開きます。このメソッドは再生を開始しません。
+	 *
+	 * 指定されたストレージ名に .sli を付加したファイル名があれば、サウンドループ情報として読み込みます。
+	 * @param storage 再生したいストレージを指定します。
+	 */
+	function open(storage);
+
+	/**
+	 * メディアを再生する
+	 *
+	 * メディアの再生を開始します。
+	 */
+	function play();
+
+	/**
+	 * メディアを停止する
+	 *
+	 * メディアを停止します。
+	 */
+	function stop();
+
+	/**
+	 * フェードを開始する
+	 *
+	 * フェード ( 連続的な音量の変化 ) を開始します。
+	 * @param to 到達させる音量を指定します。
+	 *
+	 * 音量の指定については [WaveSoundBuffer.volume](WaveSoundBuffer.md#volume) プロパティを参照して
+	 * ください。
+	 * @param time フェードにかける時間を ms 単位で指定します。
+	 * @param delay フェード開始までの待ち時間を ms 単位で指定します。
+	 */
+	function fade(to, time, delay = 0);
+
+	/**
+	 * フェードを停止する
+	 *
+	 * [WaveSoundBuffer.fade](WaveSoundBuffer.md#fade) メソッドで開始したフェードを強制的に停止します。
+	 *
+	 * 音量は停止させた時点のままになります。
+	 */
+	function stopFade();
+
+	/**
+	 * 再生位置
+	 *
+	 * 再生位置を ms 単位で表します。値を設定するとその位置に移動します。
+	 */
+	property position;
+
+	/**
+	 * 一時停止状態かどうか
+	 *
+	 * 一時停止状態かどうかを表します。値を設定することもできます。
+	 *
+	 * 真の場合は一時停止状態です。
+	 */
+	property paused;
+
+	/**
+	 * メディアの再生時間
+	 *
+	 * メディアの総再生時間を ms 単位で表します。
+	 */
+	property totalTime { getter; }
+
+	/**
+	 * ループ再生を行うかどうか
+	 *
+	 * ループ再生を行うかどうかを表します。値を設定することもできます。
+	 *
+	 * 真を指定するとループ再生がされます。
+	 *
+	 * 偽を指定しても、再生しているメディアにループ情報があれば、ループ情報が利用されます。
+	 */
+	property looping;
+
+	/**
+	 * 音量
+	 *
+	 * 再生する音量を表します。値を設定することもできます。
+	 *
+	 * 0 ～ 100000 の数値で指定し、 0 が完全ミュート、100000 が 100% の音量となります。
+	 */
+	property volume;
+
+	/**
+	 * 第２音量
+	 *
+	 * 再生する音量を表します。値を設定することができます。
+	 *
+	 * [WaveSoundBuffer.volume](WaveSoundBuffer.md#volume) プロパティと違うのは、このプロパティは
+	 * [WaveSoundBuffer.fade](WaveSoundBuffer.md#fade) メソッドでも変化しないということです。
+	 *
+	 * 最終的な音量は、volume プロパティとこのプロパティの積で決定されます。volume プロパティが
+	 * 100000 ( 100% ) で volume2 プロパティも 100000 ( 100% ) ならば 100% × 100% = 100% で
+	 * 100% の音量で再生されます。volume プロパティが 50000 ( 50% ) で volume2 プロパティが 75000 ( 75% ) ならば
+	 * 50% × 75% = 37.5% で 37.5 % の音量で再生されます。
+	 */
+	property volume2;
+
+	/**
+	 * ステータス
+	 *
+	 * 現在の状態を表します。
+	 *
+	 * 状態は文字列で表され、以下の値をとります。
+	 *
+	 * `"**unload**"   : ` メディアが開かれてない
+	 *
+	 * `"**play**"     : ` メディアは再生中である
+	 *
+	 * `"**stop**"     : ` メディアは停止中である
+	 */
+	property status { getter; }
+}

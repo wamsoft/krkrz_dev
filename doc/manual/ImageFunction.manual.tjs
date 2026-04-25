@@ -1,0 +1,617 @@
+/**
+ * ImageFunction クラスは、画像を操作するクラスです。
+ *
+ * このクラスからオブジェクトを作成することはできません。
+ */
+class ImageFunction {
+	/**
+	 * アフィン変換演算合成
+	 *
+	 * 指定された重ね合わせ元 Bitmap の矩形を、重ね合わせ先にアフィン変換を行いながら演算合成します。
+	 * @param dst 重ね合わせ先の Bitmap オブジェクトを指定します。
+	 * @param src 重ね合わせ元の Bitmap オブジェクトを指定します。
+	 * @param A A パラメータです。affine 引数によって解釈が変わります。
+	 * @param B B パラメータです。affine 引数によって解釈が変わります。
+	 * @param C C パラメータです。affine 引数によって解釈が変わります。
+	 * @param D D パラメータです。affine 引数によって解釈が変わります。
+	 * @param E E パラメータです。affine 引数によって解釈が変わります。
+	 * @param F F パラメータです。affine 引数によって解釈が変わります。
+	 * @param srcrect 重ね合わせる矩形を ( 重ね合わせ元 Bitmap の画像位置における ) ピクセル単位で Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 * @param cliprect クリッピング矩形を ( 重ね合わせ先 Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時クリッピングは行われません。
+	 * @param affine 続く６つの引数 (A ～ F パラメータ)をどのように扱うかを指定します。
+	 *
+	 * 真を指定すると、６つのパラメータはそれぞれ以下のように解釈されます。
+	 *
+	 * `A   : 2Dアフィン変換行列の a`
+	 *
+	 * `B   : 2Dアフィン変換行列の b`
+	 *
+	 * `C   : 2Dアフィン変換行列の c`
+	 *
+	 * `D   : 2Dアフィン変換行列の d`
+	 *
+	 * `E   : 2Dアフィン変換行列の tx`
+	 *
+	 * `F   : 2Dアフィン変換行列の ty`
+	 *
+	 * アフィン変換により、重ね合わせ元の画像位置 (x, y) ( ただし、重ね合わせ元矩形の左上隅を (0, 0) とする ) は以下の式により、重ね合わせ先の画像位置 (x', y')に変換されます。
+	 *
+	 * x' =  a*x + c*y + tx
+	 *
+	 * y' =  b*x + d*y + ty
+	 *
+	 * 偽を指定すると、６つのパラメータはそれぞれ以下のように解釈されます。
+	 *
+	 * `A   : コピー元矩形の左上隅の点の、コピー先での画像位置における X 座標位置(x0)`
+	 *
+	 * `B   : コピー元矩形の左上隅の点の、コピー先での画像位置における Y 座標位置(y0)`
+	 *
+	 * `C   : コピー元矩形の右上隅の点の、コピー先での画像位置における X 座標位置(x1)`
+	 *
+	 * `D   : コピー元矩形の右上隅の点の、コピー先での画像位置における Y 座標位置(y1)`
+	 *
+	 * `E   : コピー元矩形の左下隅の点の、コピー先での画像位置における X 座標位置(x2)`
+	 *
+	 * `F   : コピー元矩形の左下隅の点の、コピー先での画像位置における Y 座標位置(y2)`
+	 *
+	 * 偽を指定した場合、重ね合わせ元の右下隅に対応する、重ね合わせ先位置(x3, y3)は自動的に以下の式によって計算されます。
+	 *
+	 * x3 = x1 - x0 + x2
+	 *
+	 * y3 = y1 - y0 + y2
+	 * @param mode 演算のモードを指定します。
+	 *
+	 * `**omPsNormal**` が指定された場合はPhotoshop互換のアルファ合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsAdditive**` が指定された場合はPhotoshop互換の覆い焼き(リニア)合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsSubtractive**` が指定された場合はPhotoshop互換の焼き込み(リニア)合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsMultiplicative**` が指定された場合はPhotoshop互換の乗算合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsScreen**` が指定された場合はPhotoshop互換のスクリーン合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsOverlay**` が指定された場合はPhotoshop互換のオーバーレイ合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsHardLight**` が指定された場合はPhotoshop互換のハードライト合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsSoftLight**` が指定された場合はPhotoshop互換のソフトライト合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsColorDodge**` が指定された場合はPhotoshop互換の覆い焼きカラー合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsColorDodge5**` が指定された場合はPhotoshopのバージョン5.x 以下と互換の覆い焼きカラー合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsColorBurn**` が指定された場合はPhotoshop互換の焼き込みカラー合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsLighten**` が指定された場合はPhotoshop互換の比較(明)合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsDarken**` が指定された場合はPhotoshop互換の比較(暗)合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsDifference**` が指定された場合はPhotoshop互換の差の絶対値合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsDifference5**` が指定された場合はPhotoshopのバージョン 5.x 以下と互換の差の絶対値合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omPsExclusion**` が指定された場合はPhotoshop互換の除外合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omAdditive**` が指定された場合は加算合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omSubtractive**` が指定された場合は減算合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omMultiplicative**` が指定された場合は乗算合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omDodge**` が指定された場合は覆い焼き合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omDarken**` が指定された場合は比較(暗)合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omLighten**` が指定された場合は比較(明)合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omScreen**` が指定された場合はスクリーン乗算合成が行われます(現バージョンでは未実装です)。
+	 *
+	 * `**omAlpha**` が指定された場合はアルファ合成が行われます。
+	 *
+	 * `**omAddAlpha**` が指定された場合は加算アルファ合成が行われます。この場合は、face が dfOpaque かつ hda が偽のとき、type 引数に stFastLinear を指定することにより線形補間が可能です。
+	 *
+	 * `**omOpaque**` が指定された場合は src のアルファ情報は無視され、src は常に完全不透明であると見なされます。この場合は、face が dfOpaque かつ hda が偽のとき、type 引数に stFastLinear を指定することにより線形補間が可能です。
+	 * @param face 描画方式を指定します。
+	 *
+	 * `**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。
+	 *
+	 * `**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。
+	 *
+	 * `**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。
+	 * @param opa 重ね合わせの不透明度 ( 0 ～ 255 ) を指定します。
+	 * @param type アフィン変換のタイプを指定します。
+	 *
+	 * `**stNearest**    ` : 最近傍点法が用いられます
+	 *
+	 * `**stFastLinear** ` : 低精度の線形補間が用いられます(一部実装)
+	 *
+	 * `**stLinear**     ` : 線形補間が用いられます(未実装)
+	 *
+	 * `**stCubic**      ` : ３次元補間が用いられます(未実装)
+	 *
+	 * 速度は stNearest > stFastLinear > stLinear > stCubic の順に高速ですが、画質は速度が
+	 * 速ければ速いモードほど低画質になります。
+	 *
+	 * stFastLinear や stLinear, stCubic に対しては、stRefNoClip をビット論理和で追加指定
+	 * することができ、この場合は、コピーするビットマップの領域外を参照して色を合成することを
+	 * 許可します。これを指定しない場合は、転送元ビットマップの周囲に余裕があったとしても、
+	 * 転送元ビットマップの範囲外を参照することはありません(範囲外の色はもっとも近い位置にある
+	 * 範囲内のピクセルの色と見なされます)。
+	 * @param hda アルファチャンネルを保護するかどうかを指定します。
+	 */
+	function operateAffine(dst, src, A, B, C, D, E, F, srcrect = null, cliprect = null, affine, mode = omAlpha, face = dfAlpha, opa = 255, type = stNearest, hda = false);
+
+	/**
+	 * 矩形演算合成
+	 *
+	 * 指定された演算元 Bitmap の矩形部分を演算先の Bitmap の指定位置に指定のモードで演算合成します。
+	 * @param dst 重ね合わせ先の Bitmap オブジェクトを指定します。
+	 * @param dleft 演算先の矩形の左端位置を ( 演算先 Bitmap の画像位置における ) ピクセル単位で指定します。
+	 * @param dtop 演算先の矩形の上端位置を ( 演算先 Bitmap の画像位置における ) ピクセル単位で指定します。
+	 * @param src 演算元の Bitmap オブジェクトを指定します。
+	 *
+	 * 未指定時全体が対象になります。
+	 * @param srcrect 演算する矩形を ( 演算元 Bitmap の画像位置における ) ピクセル単位で Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象になります。
+	 * @param cliprect クリッピング矩形を ( 重ね合わせ先 Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時クリッピングは行われません。
+	 * @param mode 演算のモードを指定します。
+	 *
+	 * `**omPsNormal**` が指定された場合はPhotoshop互換のアルファ合成が行われます。
+	 *
+	 * `**omPsAdditive**` が指定された場合はPhotoshop互換の覆い焼き(リニア)合成が行われます。
+	 *
+	 * `**omPsSubtractive**` が指定された場合はPhotoshop互換の焼き込み(リニア)合成が行われます。
+	 *
+	 * `**omPsMultiplicative**` が指定された場合はPhotoshop互換の乗算合成が行われます。
+	 *
+	 * `**omPsScreen**` が指定された場合はPhotoshop互換のスクリーン合成が行われます。
+	 *
+	 * `**omPsOverlay**` が指定された場合はPhotoshop互換のオーバーレイ合成が行われます。
+	 *
+	 * `**omPsHardLight**` が指定された場合はPhotoshop互換のハードライト合成が行われます。
+	 *
+	 * `**omPsSoftLight**` が指定された場合はPhotoshop互換のソフトライト合成が行われます。
+	 *
+	 * `**omPsColorDodge**` が指定された場合はPhotoshop互換の覆い焼きカラー合成が行われます。
+	 *
+	 * `**omPsColorDodge5**` が指定された場合はPhotoshopのバージョン5.x 以下と互換の覆い焼きカラー合成が行われます。
+	 *
+	 * `**omPsColorBurn**` が指定された場合はPhotoshop互換の焼き込みカラー合成が行われます。
+	 *
+	 * `**omPsLighten**` が指定された場合はPhotoshop互換の比較(明)合成が行われます。
+	 *
+	 * `**omPsDarken**` が指定された場合はPhotoshop互換の比較(暗)合成が行われます。
+	 *
+	 * `**omPsDifference**` が指定された場合はPhotoshop互換の差の絶対値合成が行われます。
+	 *
+	 * `**omPsDifference5**` が指定された場合はPhotoshopのバージョン 5.x 以下と互換の差の絶対値合成が行われます。
+	 *
+	 * `**omPsExclusion**` が指定された場合はPhotoshop互換の除外合成が行われます。
+	 *
+	 * `**omAdditive**` が指定された場合は加算合成が行われます。
+	 *
+	 * `**omSubtractive**` が指定された場合は減算合成が行われます。
+	 *
+	 * `**omMultiplicative**` が指定された場合は乗算合成が行われます。
+	 *
+	 * `**omDodge**` が指定された場合は覆い焼き合成が行われます。
+	 *
+	 * `**omDarken**` が指定された場合は比較(暗)合成が行われます。
+	 *
+	 * `**omLighten**` が指定された場合は比較(明)合成が行われます。
+	 *
+	 * `**omScreen**` が指定された場合はスクリーン乗算合成が行われます。
+	 *
+	 * `**omAlpha**` が指定された場合はアルファ合成が行われます。
+	 *
+	 * `**omAddAlpha**` が指定された場合は加算アルファ合成が行われます。
+	 *
+	 * `**omOpaque**` が指定された場合は src のアルファ情報は無視され、src は常に完全不透明であると見なされます。
+	 * @param face 描画方式を指定します。
+	 *
+	 * `**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。
+	 *
+	 * `**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。
+	 *
+	 * `**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。
+	 * @param opa 演算の強度 ( 0 ～ 255 ) を指定します。
+	 * @param hda アルファチャンネルを保護するかどうかを指定します。
+	 */
+	function operateRect(dst, dleft, dtop, src, srcrect = null, cliprect = null, mode = omAuto, face = dfAlpha, opa = 255, hda = false);
+
+	/**
+	 * 拡大縮小演算合成
+	 *
+	 * 指定された重ね合わせ元 Bitmap の矩形を、重ね合わせ先 Bitmap の矩形に演算合成します。
+	 *
+	 * 重ね合わせ元矩形と重ね合わせ先矩形のサイズが異なる場合は拡大または縮小が行われます。
+	 * @param dst 重ね合わせ先の Bitmap オブジェクトを指定します。
+	 * @param src 重ね合わせ元の Bitmap オブジェクトを指定します。
+	 * @param dstrect 重ね合わせ先の矩形を ( 重ね合わせ先 Bitmap の画像位置における ) ピクセル単位で Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 * @param srcrect 重ね合わせる矩形を ( 重ね合わる Bitmap の画像位置における ) ピクセル単位で Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 * @param cliprect クリッピング矩形を ( 重ね合わせ先 Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時クリッピングは行われません。
+	 * @param mode 演算のモードを指定します。
+	 *
+	 * `**omPsNormal**` が指定された場合はPhotoshop互換のアルファ合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsAdditive**` が指定された場合はPhotoshop互換の覆い焼き(リニア)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsSubtractive**` が指定された場合はPhotoshop互換の焼き込み(リニア)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsMultiplicative**` が指定された場合はPhotoshop互換の乗算合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsScreen**` が指定された場合はPhotoshop互換のスクリーン合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsOverlay**` が指定された場合はPhotoshop互換のオーバーレイ合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsHardLight**` が指定された場合はPhotoshop互換のハードライト合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsSoftLight**` が指定された場合はPhotoshop互換のソフトライト合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsColorDodge**` が指定された場合はPhotoshop互換の覆い焼きカラー合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsColorDodge5**` が指定された場合はPhotoshopのバージョン5.x 以下と互換の覆い焼きカラー合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsColorBurn**` が指定された場合はPhotoshop互換の焼き込みカラー合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsLighten**` が指定された場合はPhotoshop互換の比較(明)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsDarken**` が指定された場合はPhotoshop互換の比較(暗)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsDifference**` が指定された場合はPhotoshop互換の差の絶対値合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsDifference5**` が指定された場合はPhotoshopのバージョン 5.x 以下と互換の差の絶対値合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omPsExclusion**` が指定された場合はPhotoshop互換の除外合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omAdditive**` が指定された場合は加算合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omSubtractive**` が指定された場合は減算合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omMultiplicative**` が指定された場合は乗算合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omDodge**` が指定された場合は覆い焼き合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omDarken**` が指定された場合は比較(暗)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omLighten**` が指定された場合は比較(明)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omScreen**` が指定された場合はスクリーン乗算合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。
+	 *
+	 * `**omAlpha**` が指定された場合はアルファ合成が行われます。
+	 *
+	 * `**omAddAlpha**` が指定された場合は加算アルファ合成が行われます。この場合は、face が dfOpaque かつ hda が偽のとき、type 引数に stFastLinear を指定することにより線形補間が可能です。
+	 *
+	 * `**omOpaque**` が指定された場合は src のアルファ情報は無視され、src は常に完全不透明であると見なされます。この場合は、face が dfOpaque かつ hda が偽のとき、type 引数に stFastLinear を指定することにより線形補間が可能です。
+	 * @param face 描画方式を指定します。
+	 *
+	 * `**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。
+	 *
+	 * `**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。
+	 *
+	 * `**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。
+	 * @param opa 演算の強度 ( 0 ～ 255 ) を指定します。
+	 * @param type 拡大縮小のタイプを指定します。
+	 *
+	 * `**stNearest**          ` : 最近傍点法が用いられます
+	 *
+	 * `**stFastLinear**       ` : 低精度の線形補間が用いられます(一部実装)
+	 *
+	 * `**stSemiFastLinear**   ` : 固定小数線形補間が用いられます(1.3以降)
+	 *
+	 * `**stLinear**           ` : 線形補間が用いられます(1.3以降実装変更)
+	 *
+	 * `**stFastCubic**        ` : 固定小数３次元補間が用いられます(1.3以降)
+	 *
+	 * `**stCubic**            ` : ３次元補間が用いられます(1.3以降実装変更)
+	 *
+	 * `**stFastLanczos2**     ` : 固定小数Lanczos補間の範囲4x4が用いられます(1.3以降)
+	 *
+	 * `**stLanczos2**         ` : Lanczos補間の範囲4x4が用いられます(1.3以降)
+	 *
+	 * `**stFastLanczos3**     ` : 固定小数Lanczos補間の範囲6x6が用いられます(1.3以降)
+	 *
+	 * `**stLanczos3**         ` : Lanczos補間の範囲6x6が用いられます(1.3以降)
+	 *
+	 * `**stFastSpline16**     ` : 固定小数スプライン補間4x4が用いられます(1.3以降)
+	 *
+	 * `**stSpline16**         ` : スプライン補間4x4が用いられます(1.3以降)
+	 *
+	 * `**stFastSpline36**     ` : 固定小数スプライン補間6x6が用いられます(1.3以降)
+	 *
+	 * `**stSpline36**         ` : スプライン補間6x6が用いられます(1.3以降)
+	 *
+	 * `**stFastAreaAvg**      ` : 固定小数面積平均縮小が用いられます。拡大は出来ません(1.3以降)
+	 *
+	 * `**stAreaAvg**          ` : 面積平均縮小が用いられます。拡大は出来ません(1.3以降)
+	 *
+	 * `**stFastGaussian**     ` : 固定小数ガウス補間4x4が用いられます(1.3以降)
+	 *
+	 * `**stGaussian**         ` : ガウス補間4x4が用いられます(1.3以降)
+	 *
+	 * `**stFastBlackmanSinc** ` : 固定小数Blackman-Sinc補間8x8が用いられます(1.3以降)
+	 *
+	 * `**stBlackmanSinc**     ` : Blackman-Sinc補間8x8が用いられます(1.3以降)
+	 *
+	 * 速度は stNearest > stFastLinear > stLinear > stCubic の順に高速ですが、画質は速度が
+	 * 速ければ速いタイプほど低画質になります。
+	 *
+	 * stCubic 以降の補間方法は十分高画質で好みの差とも言えます。
+	 *
+	 * ただし、ガウス補間についてはぼやけたような画質になります。
+	 *
+	 * stFastLinear と他の線形補間(stSemiFastLinear と stLinear)の差は縮小時に大きく出ます。
+	 *
+	 * stFastLinear は、常に周囲4画素を参照するのに対して、stSemiFastLinear、stLinear は、縮小時は
+	 * 等倍時の影響範囲が4画素となるような範囲、つまりより広い範囲の画素を参照し補間するためより高画質です
+	 * (アルゴリズム的には本来の線形補間です)。
+	 *
+	 * stFastLinear に対しては、stRefNoClip をビット論理和で追加指定することができ、この場合は、
+	 * コピーするビットマップの領域外を参照して色を合成することを許可します。これを指定しない場合は、
+	 * 転送元ビットマップの周囲に余裕があったとしても、転送元ビットマップの範囲外を参照することは
+	 * ありません(範囲外の色はもっとも近い位置にある範囲内のピクセルの色と見なされます)。
+	 * @param hda アルファチャンネルを保護するかどうかを指定します。
+	 * @param option 1.3以降で追加されました。
+	 *
+	 * ３次元補間時のシャープネスです。他の補間方法では現在のところ意味を持ちません。
+	 *
+	 * シャープネスの値をプラス方向に大きくするとぼやけていき、マイナス方向に大きくしていくとシャープになっていきます。
+	 */
+	function operateStretch(dst, src, dstrect = null, srcrect = null, cliprect = null, mode = omAuto, face = dfAlpha, opa = 255, type = stNearest, hda = false, option = -1.0);
+
+	/**
+	 * 左右反転
+	 *
+	 * 画像の左右反転を行います。
+	 * @param bmp 反転する Bitmap オブジェクトを指定します。
+	 * @param rect 反転する領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 */
+	function flipLR(bmp, rect = null);
+
+	/**
+	 * 上下反転
+	 *
+	 * 画像の上下反転を行います。
+	 * @param bmp 反転する Bitmap オブジェクトを指定します。
+	 * @param rect 反転する領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 */
+	function flipUD(bmp, rect = null);
+
+	/**
+	 * ガンマ補正
+	 *
+	 * 画像に対してガンマ補正を実行します。
+	 *
+	 * ガンマ値には 1.0 を指定するとガンマ曲線が直線になります。
+	 *
+	 * 出力最低値と出力最高値は各成分の輝度の最低値と最高値を指定するものです。
+	 *
+	 * 最高値に最低値よりも低い値を設定すると画像を反転させることができます。
+	 *
+	 * isaddalpha が true の場合、このメソッドは加算アルファ合成用の特別なガンマ補正ルーチンを用います。
+	 *
+	 * このルーチンは加算アルファ合成のうち、アルファ合成に相当する成分に対してはガンマ補正を行いますが、加算合成に相当する成分に対してはガンマ補正を行いません。
+	 * @param bmp ガンマ補正する Bitmap オブジェクトを指定します。
+	 * @param rgamma 赤成分のガンマ値 ( 0.0 ～ 1.0 ～ 9.0 ) を指定します。
+	 * @param rfloor 赤成分の出力最低値 ( 0 ～ 255 ) を指定します。
+	 * @param rceil 赤成分の出力最大値 ( 0 ～ 255 ) を指定します。
+	 * @param ggamma 緑成分のガンマ値 ( 0.0 ～ 1.0 ～ 9.0 ) を指定します。
+	 * @param gfloor 緑成分の出力最低値 ( 0 ～ 255 ) を指定します。
+	 * @param gceil 緑成分の出力最大値 ( 0 ～ 255 ) を指定します。
+	 * @param bgamma 青成分のガンマ値 ( 0.0 ～ 1.0 ～ 9.0 ) を指定します。
+	 * @param bfloor 青成分の出力最低値 ( 0 ～ 255 ) を指定します。
+	 * @param bceil 青成分の出力最大値 ( 0 ～ 255 ) を指定します。
+	 * @param cliprect クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 * @param isaddalpha 加算合成アルファ形式かどうかを指定します。
+	 */
+	function adjustGamma(bmp, rgamma = 1.0, rfloor = 0, rceil = 255, ggamma = 1.0, gfloor = 0, gceil = 255, bgamma = 1.0, bfloor = 0, bceil = 255, cliprect = null, isaddalpha = false);
+
+	/**
+	 * 矩形ブラーをかける
+	 *
+	 * ブラー(ぼかし)をかけます。アルゴリズムは「矩形ブラー」(box blur)です。
+	 *
+	 * 矩形ブラーは、xblurとyblurの２つのパラメータによって表現される「範囲」中のピクセルの輝度の平均値をとる物です。たとえば xblur=10 yblur=2 の場合は、対象のピクセルを中心に、横方向は -10～10、縦方向は -2～2 の矩形範囲のピクセルの輝度の平均をとり、それが最終的なそのピクセルの輝度となります。
+	 *
+	 * 範囲の面積は (xblur×2+1) × (yblur×2+1) で計算することができます。現バージョンではこの面積が 256 未満 の場合は、面積が256以上の場合よりも高速なアルゴリズムが採用されます。
+	 *
+	 * isalpha が true の場合は、アルファ合成用の特別なアルゴリズムを使用しますので、少々遅くなります。
+	 *
+	 * false の場合は、より高速なアルゴリズムとなります。
+	 * @param bmp 矩形ブラーをかける Bitmap オブジェクトを指定します。
+	 * @param xblur 横方向のブラーの範囲を指定します。
+	 * @param yblur 縦方向のブラーの範囲を指定します。
+	 * @param cliprect クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 * @param isalpha アルファチャンネルを持つかどうかを指定します。
+	 */
+	function doBoxBlur(bmp, xblur = 1, yblur = 1, cliprect = null, isalpha = true);
+
+	/**
+	 * グレースケール変換
+	 *
+	 * 画像をグレースケールに変換します。
+	 * @param bmp グレースケール変換する Bitmap オブジェクトを指定します。
+	 * @param cliprect クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 */
+	function doGrayScale(bmp, cliprect = null);
+
+	/**
+	 * 矩形半透明塗りつぶし
+	 *
+	 * 指定された Bitmap 画像の矩形を指定された方法で塗りつぶします。
+	 *
+	 * [ImageFunction.fillRect](ImageFunction.md#fillrect) と異なり、透明度を指定して半透明で塗りつぶすことができます。
+	 * @param bmp 塗り潰す Bitmap オブジェクトを指定します。
+	 * @param value 塗りつぶす色や値を指定します。
+	 *
+	 * この値は、face 引数の値によって意味が変わります。
+	 *
+	 * `**dfAlpha**    ` : 0xRRGGBB 形式で色を指定してください
+	 *
+	 * `**dfAddAlpha** ` : 0xRRGGBB 形式で色を指定してください
+	 *
+	 * `**dfOpaque**   ` : 0xRRGGBB 形式で色を指定してください
+	 *
+	 * `**dfMask**     ` : マスク(不透明度)の値 ( 0 ～ 255 ) を指定してください
+	 *
+	 * dfOpaque を指定した場合は、マスク情報は無視されます。また、dfMask を指定した場合は、色の情報はそのままになります。
+	 *
+	 * dfAlpha の場合でかつ opa が負の場合はこの引数は無視されます。
+	 * @param opa 塗りつぶす不透明度 ( -255 ～ 0 ～ 255 ) を指定します。
+	 *
+	 * この引数は、face の値が dfMask や dfProvince の場合は無視されます ( 常に完全不透明 )。
+	 *
+	 * 負の数の指定は face が dfAlpha の場合のみに有効で、
+	 * この場合は value 引数は無視され、画像から不透明度が取り除かれます (
+	 * -255 を指定すると矩形は完全に透明になります )。
+	 * @param rect 塗りつぶす矩形を ( 画像位置における ) ピクセル単位で Rect オブジェクトで指定します。
+	 *
+	 * 未指定の場合全体が対象となります。
+	 * @param face 描画方式を指定します。
+	 *
+	 * `**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。
+	 *
+	 * `**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。
+	 *
+	 * `**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。
+	 * @param cliprect クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 */
+	function colorRect(bmp, value, opa = 255, rect = null, face = dfAlpha, cliprect = null);
+
+	/**
+	 * 文字描画
+	 *
+	 * Bitmap に文字を描画します。
+	 *
+	 * face に dfOpaque を指定した場合、描画先のマスクが破壊されるか保護されるかは hda によります。
+	 * @param bmp 文字描画する Bitmap オブジェクトを指定します。
+	 * @param font 描画するフォントを Font オブジェクトで指定します。
+	 * @param x 文字描画を開始する原点の ( 画像位置における ) x 座標をピクセル単位で指定します。
+	 * @param y 文字描画を開始する原点の ( 画像位置における ) y 座標をピクセル単位で指定します。
+	 * @param text 描画する文字を指定します。
+	 * @param color 描画する文字の色を 0xRRGGBB 形式で指定します。
+	 * @param opa 描画する文字の不透明度 ( -255 ～ 0 ～ 255 ) を指定します。
+	 *
+	 * 負の数の指定は face が dfAlpha の場合のみに有効で、
+	 * この場合は文字の形に不透明度が取り除かれる事になります ( 値が小さいほど
+	 * 効果が大きくなります )。
+	 * @param aa アンチエイリアスを行うかどうかを指定します。
+	 *
+	 * 真を指定するとアンチエイリアスが行われます。偽を指定すると行われません。
+	 * @param face 描画方式を指定します。
+	 *
+	 * `**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。
+	 *
+	 * `**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。
+	 *
+	 * `**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。
+	 * @param shadowlevel 影の不透明度を指定します。shadowwidth 引数の値によって適切な値は変動します。
+	 *
+	 * 0 を指定すると影は描画されません。
+	 * @param shadowcolor 影の色を 0xRRGGBB 形式で指定します。
+	 * @param shadowwidth 影の幅 ( ぼけ ) を指定します。 0 がもっともシャープ ( ぼけない ) で、値を大きく
+	 * すると影をぼかすことができます。
+	 * @param shadowofsx 影の位置の x 座標の値をピクセル単位で指定します。 0 を指定すると影は真下に描画されます。
+	 * @param shadowofsy 影の位置の y 座標の値をピクセル単位で指定します。 0 を指定すると影は真下に描画されます。
+	 * @param hda アルファチャンネルを保護するかどうかを指定します。
+	 * @param cliprect クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 * @return 描画領域 ( Rect オブジェクト )
+	 */
+	function drawText(bmp, font, x, y, text, color, opa = 255, aa = true, face = dfAlpha, shadowlevel = 0, shadowcolor = 0x000000, shadowwidth = 0, shadowofsx = 0, shadowofsy = 0, hda = false, cliprect = null);
+
+	/**
+	 * 文字描画
+	 *
+	 * Bitmap にグリフを描画します。
+	 *
+	 * face に dfOpaque を指定した場合、描画先のマスクが破壊されるか保護されるかは hda によります。
+	 *
+	 * グリフは、glyph : Array[9] = [ width, height, originx, originy, incx, incy, inc, bitmap(Octet), colors ] の様な形式の配列を指定します。
+	 *
+	 * グリフの colors が省略された場合は、256階調であると判断されます。
+	 * @param bmp 文字描画する Bitmap オブジェクトを指定します。
+	 * @param x 文字描画を開始する原点の ( 画像位置における ) x 座標をピクセル単位で指定します。
+	 * @param y 文字描画を開始する原点の ( 画像位置における ) y 座標をピクセル単位で指定します。
+	 * @param glyph 描画するグリフを指定します。
+	 * @param color 描画する文字の色を 0xRRGGBB 形式で指定します。
+	 * @param opa 描画する文字の不透明度 ( -255 ～ 0 ～ 255 ) を指定します。
+	 *
+	 * 負の数の指定は face が dfAlpha の場合のみに有効で、
+	 * この場合は文字の形に不透明度が取り除かれる事になります ( 値が小さいほど
+	 * 効果が大きくなります )。
+	 * @param aa アンチエイリアスを行うかどうかを指定します。
+	 *
+	 * 真を指定するとアンチエイリアスが行われます。偽を指定すると行われません。
+	 * @param face 描画方式を指定します。
+	 *
+	 * `**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。
+	 *
+	 * `**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。
+	 *
+	 * `**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。
+	 * @param shadowlevel 影の不透明度を指定します。shadowwidth 引数の値によって適切な値は変動します。
+	 *
+	 * 0 を指定すると影は描画されません。
+	 * @param shadowcolor 影の色を 0xRRGGBB 形式で指定します。
+	 * @param shadowwidth 影の幅 ( ぼけ ) を指定します。 0 がもっともシャープ ( ぼけない ) で、値を大きく
+	 * すると影をぼかすことができます。
+	 * @param shadowofsx 影の位置の x 座標の値をピクセル単位で指定します。 0 を指定すると影は真下に描画されます。
+	 * @param shadowofsy 影の位置の y 座標の値をピクセル単位で指定します。 0 を指定すると影は真下に描画されます。
+	 * @param hda アルファチャンネルを保護するかどうかを指定します。
+	 * @param cliprect クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 * @return 描画領域 ( Rect オブジェクト )
+	 */
+	function drawGlyph(bmp, x, y, glyph, color, opa = 255, aa = true, face = dfAlpha, shadowlevel = 0, shadowcolor = 0x000000, shadowwidth = 0, shadowofsx = 0, shadowofsy = 0, hda = false, cliprect = null);
+
+	/**
+	 * 矩形塗りつぶし
+	 *
+	 * 指定された Bitmap 画像の矩形を指定された方法で塗りつぶします。
+	 * @param bmp 塗り潰す Bitmap オブジェクトを指定します。
+	 * @param value 塗りつぶす色や値を指定します。
+	 *
+	 * この値は、isalpha の値によって意味が変わります。
+	 *
+	 * `**true**  ` : 0xAARRGGBB 形式で不透明度と色を指定してください。メインとマスクの両方が塗りつぶされます。
+	 *
+	 * `**false** ` : 0xRRGGBB 形式で色を指定してください。
+	 * @param rect 塗りつぶす矩形を ( 画像位置における ) ピクセル単位で Rect オブジェクトで指定します。
+	 *
+	 * 未指定の場合全体が対象となります。
+	 * @param isalpha アルファチャンネルを持つかどうかを指定します。
+	 * @param cliprect クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。
+	 *
+	 * 未指定時全体が対象となります。
+	 */
+	function fillRect(bmp, value, rect = null, isalpha = true, cliprect = null);
+}

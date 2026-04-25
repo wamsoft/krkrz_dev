@@ -7,6 +7,7 @@ Layer クラスのコンストラクタの第一引数に window の代わりに
 ## メンバー一覧
 
 ### コンストラクタ
+
 - [BitmapLayerTreeOwner](#bitmaplayertreeowner)
 
 ---
@@ -16,6 +17,8 @@ Layer クラスのコンストラクタの第一引数に window の代わりに
 コンストラクタ
 
 **解説**
+
+BitmapLayerTreeOwner オブジェクトの構築
 
 BitmapLayerTreeOwner クラスのオブジェクトを構築します。
 

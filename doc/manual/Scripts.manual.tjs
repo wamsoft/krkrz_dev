@@ -1,0 +1,134 @@
+/**
+ * Scripts クラスは TJS2 に関するメソッドやプロパティを管理します。このクラスからオブジェクトを作成することはできません。
+ */
+class Scripts {
+	/**
+	 * ストレージ上のスクリプトの実行
+	 *
+	 * 指定されたストレージを読み込み、その内容を TJS2 スクリプトとして実行します。
+	 *
+	 * スクリプトを実行中に発生した例外はこのメソッド内では捕捉されませんので、このメソッドの
+	 * 呼び出し側で捕捉することができます。
+	 * @param storage 実行するストレージを指定します。
+	 * @param mode ファイルを読み込む際のモード文字列を指定します。"o" に続いてオフセットを10進で指定するとファイルのそのバイト位置からの読み込みになります。
+	 * @param context 実行コンテキストを指定します。
+	 * @return スクリプトを実行した結果が戻ります。
+	 * @see Scripts.evalStorage
+	 */
+	function execStorage(storage, mode = '', context = global);
+
+	/**
+	 * ストレージ上の式の評価
+	 *
+	 * 指定されたストレージを読み込み、その内容を TJS2 式として評価します。
+	 *
+	 * スクリプトを実行中に発生した例外はこのメソッド内では捕捉されませんので、このメソッドの
+	 * 呼び出し側で捕捉することができます。
+	 * @param storage 評価するストレージを指定します。
+	 * @param mode ファイルを読み込む際のモード文字列を指定します。"o" に続いてオフセットを10進で指定するとファイルのそのバイト位置からの読み込みになります。
+	 * @param context 実行コンテキストを指定します。
+	 * @return 式を評価した結果が戻ります。
+	 * @see Scripts.execStorage
+	 */
+	function evalStorage(storage, mode = '', context = global);
+
+	/**
+	 * ストレージ上のスクリプトのコンパイル
+	 *
+	 * 指定されたストレージを読み込み、その内容をコンパイルしてバイトコードファイルとして出力します。
+	 *
+	 * コンパイルされたバイトコードファイルは execStorage もしくは、evalStorage で通常のスクリプトと同じように実行できます。
+	 * @param inputfile コンパイル対象ストレージを指定します。
+	 * @param outputfile 出力バイトコードストレージを指定します。
+	 * @param isresult 戻り値が必要かどうかを指定します。
+	 * @param outputdebug デバッグ情報を含めるかどうかを指定します。
+	 * @param isexpression 式かどうかを指定します。
+	 * @see Scripts.execStorage
+	 * @see Scripts.evalStorage
+	 */
+	function compileStorage(inputfile, outputfile, isresult = false, outputdebug = false, isexpression = false);
+
+	/**
+	 * スクリプトの実行
+	 *
+	 * script で指定された文字列を TJS2 スクリプトとして実行します。
+	 *
+	 * スクリプトを実行中に発生した例外はこのメソッド内では捕捉されませんので、このメソッドの
+	 * 呼び出し側で捕捉することができます。
+	 * @param script 実行するスクリプトを文字列で指定します。
+	 * @param name エラーメッセージ用ファイル名の指定
+	 * @param linesof エラーメッセージ用行番号の指定
+	 * @param context 実行コンテキストを指定します。
+	 * @return スクリプトを実行した結果が戻ります。
+	 * @see Scripts.execStorage
+	 * @see Scripts.eval
+	 */
+	function exec(script, name = '', linesof = 0, context = global);
+
+	/**
+	 * 式の評価
+	 *
+	 * expression で指定された文字列を TJS2 式として実行します。
+	 *
+	 * スクリプトを実行中に発生した例外はこのメソッド内では捕捉されませんので、このメソッドの
+	 * 呼び出し側で捕捉することができます。
+	 * @param expression 実行する式を文字列で指定します。
+	 * @param name エラーメッセージ用ファイル名の指定
+	 * @param linesof エラーメッセージ用行番号の指定
+	 * @param context 実行コンテキストを指定します。
+	 * @return 式を評価した結果が戻ります。
+	 * @see Scripts.execStorage
+	 * @see Scripts.exec
+	 */
+	function eval(expression, name = '', linesof = 0, context = global);
+
+	/**
+	 * コンテキストのダンプ
+	 *
+	 * 現時点で TJS2 に読み込まれているスクリプトブロック内の各コンテキストの内容の詳細を
+	 * ローカルファイルに出力します。主に VM コードの逆アセンブル結果が出力されます。
+	 *
+	 * 出力ファイルは、吉里吉里の実行可能ファイルと同じフォルダに出力され、そのファイル名は
+	 * 吉里吉里の実行可能ファイルに .dump.txt が付加されたものになります。
+	 */
+	function dump();
+
+	/**
+	 * 呼び出し履歴の取得
+	 *
+	 * メソッドの呼び出し履歴を文字列として取得します。このメソッドが呼ばれた時点での履歴を取得することができます。
+	 *
+	 * このメソッドを使用するには、コマンドラインオプションで -debug (デバッグモード) が有効になっていなければなりません。デバッグモードが無効の場合はこのメソッドは空文字列を返します。
+	 *
+	 * 返される文字列はたとえば 'messagelayer.tjs(1561)[(function) addButton] <-- mainwindow.tjs(4463)[(function expression) (anonymous)] <-- conductor.tjs(427)[(function) onTag] <-- conductor.tjs(95)[(function) timerCallback]' のような物です。
+	 * @param limit 履歴を取得する最大呼び出し深さを指定します。この引数を省略するか 0 を指定すると、取得できる限りの履歴を取得します。
+	 * @return 呼び出し履歴を文字列化した物
+	 */
+	function getTraceString(limit = 0);
+
+	/**
+	 * メンバが見つからない時に呼び出されるハンドラの登録
+	 *
+	 * メンバが見つからない時に呼び出されるハンドラを登録します。
+	 * @param missing メンバが見つからない時に呼び出されるハンドラ。
+	 */
+	function setCallMissing(missing);
+
+	/**
+	 * クラス名を取得
+	 *
+	 * オブジェクトからクラス名を取得します。
+	 * @param obect クラス名を取得するオブジェクト。
+	 * @return クラス名の配列
+	 */
+	function getClassNames(obect);
+
+	/**
+	 * スクリプトを読み込む時に使用するテキストエンコーディングを指定
+	 *
+	 * スクリプトを読み込む時に使用するテキストエンコーディングを指定します。
+	 *
+	 * 現在指定できるのは"UTF-8"か"Shift_JIS"のどちらかです。
+	 */
+	property textEncoding;
+}

@@ -1,0 +1,116 @@
+site_name: 吉里吉里Z ドキュメント
+site_description: 吉里吉里Z (Kirikiri Z) の TJS2 リファレンス・ガイド・仕様書
+site_url: https://wamsoft.github.io/krkrz_dev/
+repo_url: https://github.com/wamsoft/krkrz_dev
+repo_name: wamsoft/krkrz_dev
+edit_uri: edit/develop/doc/
+
+docs_dir: doc
+
+theme:
+  name: material
+  language: ja
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: ダークモードに切替
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: ライトモードに切替
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+
+plugins:
+  - search:
+      lang: ja
+      separator: '[\s\-,:!=\[\]()"/]+|\.(?!\d)|&[lg]t;'
+
+markdown_extensions:
+  - admonition
+  - tables
+  - attr_list
+  - md_in_html
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.details
+
+# 自動生成のメタファイル類はサイト内に出さない
+exclude_docs: |
+  _index.md
+  _missing.md
+  _inventory.json
+
+nav:
+  - 吉里吉里Z:
+    - guide/about.md
+    - ガイド:
+      - 起動: guide/Startup.md
+      - コマンドラインオプション: guide/CommandLine.md
+      - 吉里吉里設定: guide/Configure.md
+      - コンソール: guide/Console.md
+      - デバッグ: guide/Debug.md
+      - 環境依存の不具合: guide/ComputerDependentProblems.md
+      - イベントシステム: guide/EventSystem.md
+      - グラフィックシステム: guide/GraphicSystem.md
+      - サウンドシステム: guide/SoundSystem.md
+      - ストレージシステム: guide/StorageSystem.md
+      - トランジション: guide/Transition.md
+      - プラグイン: guide/Plugins.md
+      - 著作権など: guide/Copyrights.md
+      - ファイル一覧: guide/Files.md
+      - ファイル破損チェックツール: guide/FileChkTool.md
+      - レンダリング済みフォントデータ作成ツール: guide/FontMaker.md
+      - ループチューナ: guide/LoopTuner.md
+      - Releaser: guide/Releaser.md
+      - キー・署名ツール: guide/SignTool.md
+      - 画像フォーマットコンバータ: guide/TPC.md
+      - 仮想キーコード一覧: guide/KeyCodes.md
+      - マウスカーソル定数一覧: guide/MouseCursors.md
+      - 色定数一覧: guide/ColorCodes.md
+    - クラスリファレンス:
+      - reference/AsyncTrigger.md
+      - reference/Bitmap.md
+      - reference/BitmapLayerTreeOwner.md
+      - reference/Clipboard.md
+      - reference/Console.md
+      - reference/Controller.md
+      - reference/Debug.md
+      - reference/Font.md
+      - reference/ImageFunction.md
+      - reference/Layer.md
+      - reference/Plugins.md
+      - reference/Rect.md
+      - reference/Scripts.md
+      - reference/SoundBuffer.md
+      - reference/Storages.md
+      - reference/System.md
+      - reference/Timer.md
+      - reference/VideoOverlay.md
+      - reference/WaveSoundBuffer.md
+      - reference/WaveSoundBuffer.PhaseVocoder.md
+      - reference/Window.md
+      - reference/Window.BasicDrawDevice.md
+  - TJS2言語リファレンス:
+    - tjs2/index.md
+  - 仕様書:
+    - specification/index.md

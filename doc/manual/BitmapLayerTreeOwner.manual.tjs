@@ -1,0 +1,13 @@
+/**
+ * BitmapLayerTreeOwner クラスは、レイヤーツリーを保持し、描画結果を Bitmap クラスで取得できるクラスです。(1.1.0以降)
+ *
+ * Layer クラスのコンストラクタの第一引数に window の代わりに渡すことで、それら Layer の描画結果を Bitmap クラスとして画像で取得できます。
+ */
+class BitmapLayerTreeOwner {
+	/**
+	 * BitmapLayerTreeOwner オブジェクトの構築
+	 *
+	 * BitmapLayerTreeOwner クラスのオブジェクトを構築します。
+	 */
+	function BitmapLayerTreeOwner();
+}

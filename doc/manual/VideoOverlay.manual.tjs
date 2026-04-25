@@ -1,0 +1,692 @@
+/**
+ * VideoOverlay クラスは、MPEG I や WMV、H.264、theora などを表示するため表示領域を作成するクラスです。吉里吉里のレイヤに表示を行うこともできます。
+ *
+ * 1.3.0以前は WMV/MPEG I を再生するときは、吉里吉里実行可能ファイルと同じ場所に、krmovie.dll が必要になります。
+ *
+ * 1.3.0以降は krmovie.dll が本体に統合されたため、別途添付する必要はなくなりました。theora を再生するには krdstheora.dll が必要になります。
+ *
+ * レイヤでの再生を除き、オーバーレイによる再生では、VideoOverlay クラスの表示領域は、すべてのレイヤよりも手前に表示され、透過することはできません。
+ *
+ * レイヤでの再生は、オーバーレイでの再生に比べ、再生時のプロセッサの負荷は高くなる傾向にあります。
+ */
+class VideoOverlay {
+	/**
+	 * VideoOverlay オブジェクトの構築
+	 *
+	 * VideoOverlay クラスのオブジェクトを構築します。
+	 * @param window このレイヤを保有することになるウィンドウ ( [Window](Window.md) クラスの
+	 * オブジェクト ) を指定します。
+	 */
+	function VideoOverlay(window);
+
+	/**
+	 * ステータスが変更された
+	 *
+	 * このオブジェクトのステータスが変更されたときに発生します。
+	 *
+	 * ready は、vomMFEVR モードの時のみ発生します。
+	 * @param status ステータス文字列を表します。
+	 *
+	 * 以下のいずれかです。
+	 *
+	 * `"**unload**"   : ` メディアが開かれてない
+	 *
+	 * `"**ready**"    : ` メディアの準備が完了している
+	 *
+	 * `"**play**"     : ` メディアは再生中である
+	 *
+	 * `"**stop**"     : ` メディアは停止中である
+	 *
+	 * `"**pause**"    : ` メディアは一時停止中である
+	 * @kind event
+	 */
+	function onStatusChanged(status);
+
+	/**
+	 * Periodイベントが発生した
+	 *
+	 * ループの終端や、 setPeriodEventによって指定されたフレームに達した場合、または prepare メソッドにより再生準備が完了した場合に呼び出されるメソッドです。
+	 *
+	 * ループの終端や、 setPeriodEvent によって指定されたフレームに達した場合にこのイベントが呼ばれる時点では、再生状況によっては、すでに再生位置が指定された位置を超えている場合があります。現在の実際の再生位置を取得するには frame プロパティを参照してください。
+	 * @param type Periodイベントのタイプを表します。
+	 *
+	 * 以下のいずれかです。
+	 *
+	 * `**perLoop**    : ` (通常の)ループの終端に達した
+	 *
+	 * `**perSegLoop** : ` セグメントループの終端に達した
+	 *
+	 * `**perPeriod**  : ` setPeriodEvent メソッドで指定されたフレームに達した
+	 *
+	 * `**perPrepare** : ` prepare メソッドによる再生準備が完了した
+	 * @kind event
+	 * @see VideoOverlay.setPeriodEvent
+	 * @see VideoOverlay.prepare
+	 * @see VideoOverlay.frame
+	 */
+	function onPeriod(type);
+
+	/**
+	 * ビデオフレームが更新された
+	 *
+	 * ビデオフレームが更新された後に呼び出されるメソッドです。
+	 *
+	 * 引数であるframeは現在表示されているビデオフレームと完全に一致しているとは限りません。
+	 *
+	 * レイヤ描画モード、ミキサーモード時のみ利用可能です。
+	 * @param frame ビデオのフレーム番号
+	 * @kind event
+	 */
+	function onFrameUpdate(frame);
+
+	/**
+	 * メディアを開く
+	 *
+	 * 指定されたメディアを開きます。
+	 *
+	 * 現バージョンで再生可能なのは MPEG I (拡張子 .mpeg または .mpg または .mpv)、WMVです。
+	 *
+	 * ビデオのみの (オーディオとマルチプレクシングされていない) MPEG I ストリームの拡張子は .mpv にしてください。
+	 * @param storage 指定されたメディアを開きます。
+	 */
+	function open(storage);
+
+	/**
+	 * 再生開始
+	 *
+	 * メディアの再生を開始します。
+	 */
+	function play();
+
+	/**
+	 * 再生停止
+	 *
+	 * メディアの再生を停止します。
+	 */
+	function stop();
+
+	/**
+	 * 一時停止
+	 *
+	 * メディアの再生を一時停止します。
+	 */
+	function pause();
+
+	/**
+	 * 巻き戻し
+	 *
+	 * メディアの再生位置を先頭に移動します。
+	 */
+	function rewind();
+
+	/**
+	 * 再生準備
+	 *
+	 * メディアの1フレーム目を指定されているレイヤーに描画し、描画終了時にonPeriodイベントを発生させます。
+	 * prepareメソッド コール後の再生は、onPeriodイベントを待機してから行ってください。
+	 * @see VideoOverlay.onPeriod
+	 */
+	function prepare();
+
+	/**
+	 * フレーム間ループの設定
+	 *
+	 * 指定されたフレーム間でループ処理を行います。
+	 *
+	 * ループ終端(goFrame)では、onPeriodイベントが発生します。
+	 *
+	 * comeFrameのフレームにはムービーファイルにキーフレームを設定しておく必要があります。
+	 *
+	 * 設定されていない場合は、
+	 * ループ終点から始点へ移動時に指定されたフレームに最も近いキーフレームへ再生位置が移動することになります。
+	 * @param comeFrame ループ移動先フレーム(ループの始端フレーム)。再生がgoFrameに達したとき、再生ヘッドはこのフレームに移動します。
+	 * @param goFrame ループ終点フレーム(ループの終端フレーム)。このフレームの1つ前のフレームの表示が終了した時、再生ヘッドはcomeFrameへ移動します。
+	 * @see VideoOverlay.cancelSegmentLoop
+	 * @see VideoOverlay.onPeriod
+	 * @see VideoOverlay.segmentLoopStartFrame
+	 * @see VideoOverlay.segmentLoopEndFrame
+	 */
+	function setSegmentLoop(comeFrame, goFrame);
+
+	/**
+	 * フレーム間ループの解除
+	 *
+	 * setSegmentLoopメソッドで指定したセグメント間ループを解除します。
+	 * @see VideoOverlay.setSegmentLoop
+	 */
+	function cancelSegmentLoop();
+
+	/**
+	 * メディアを閉じる
+	 *
+	 * メディアを閉じます。
+	 *
+	 * メディアを再生するために確保されていたリソースなどもすべて解放します。
+	 * @see VideoOverlay.setSegmentLoop
+	 */
+	function close();
+
+	/**
+	 * 指定フレームでのイベント発生の指定
+	 *
+	 * 指定したフレームでonPeriodイベントを発生させます。
+	 *
+	 * onPeriodイベントは、一度発生すると解除されます。再び発生させたい場合は再度このメソッドで設定してください。
+	 * @param eventFrame onPeriodイベントを発生させるフレームを指定します。
+	 * @see VideoOverlay.cancelPeriodEvent
+	 * @see VideoOverlay.onPeriod
+	 */
+	function setPeriodEvent(eventFrame);
+
+	/**
+	 * 指定フレームでのイベント発生の解除
+	 *
+	 * setPeriodEventメソッドで設定したイベント発生を解除します。
+	 * @see VideoOverlay.setPeriodEvent
+	 */
+	function cancelPeriodEvent();
+
+	/**
+	 * 再生矩形の左上位置を指定
+	 *
+	 * メディアを再生するための矩形領域の左上位置を指定します。
+	 *
+	 * 座標は、ウィンドウのクライアント ( レイヤを表示可能な領域 ) 内での座標で、ピクセル単位で
+	 * 指定します。
+	 * @param left メディアを再生するための矩形領域の左端位置を指定します。
+	 * @param top メディアを再生するための矩形領域の上端位置を指定します。
+	 */
+	function setPos(left, top);
+
+	/**
+	 * 再生矩形のサイズを指定
+	 *
+	 * メディアを再生するための矩形領域のサイズをピクセル単位で指定します。
+	 *
+	 * 現バージョンでは、レイヤ再生時にはこのメソッドを使用することはできません。
+	 * @param width メディアを再生するための矩形領域の横幅を指定します。
+	 * @param height メディアを再生するための矩形領域の縦幅を指定します。
+	 */
+	function setSize(width, height);
+
+	/**
+	 * 再生矩形の位置とサイズを指定
+	 *
+	 * メディアを再生するための矩形領域の位置とサイズを指定します。
+	 *
+	 * 座標は、ウィンドウのクライアント ( レイヤを表示可能な領域 ) 内での座標で、ピクセル単位で
+	 * 指定します。
+	 *
+	 * 現バージョンでは、レイヤ再生時にはこのメソッドで指定できるのは位置だけで、サイズは無視されます。
+	 * @param left メディアを再生するための矩形領域の左端位置を指定します。
+	 * @param top メディアを再生するための矩形領域の上端位置を指定します。
+	 * @param width メディアを再生するための矩形領域の横幅を指定します。
+	 * @param height メディアを再生するための矩形領域の縦幅を指定します。
+	 */
+	function setBounds(left, top, width, height);
+
+	/**
+	 * 音声ストリームの選択
+	 *
+	 * 指定した音声ストリーム番号を有効にします。
+	 *
+	 * 音声ストリームを複数含まないビデオでは使用できません。
+	 * @param streamNumber 音声ストリーム番号を指定します。
+	 * @see VideoOverlay.numberOfAudioStream
+	 * @see VideoOverlay.enabledAudioStream
+	 */
+	function selectAudioStream(streamNumber);
+
+	/**
+	 * ミキシング対象レイヤの設定
+	 *
+	 * 指定したレイヤーとビデオのミキシングを行います。
+	 *
+	 * ミキシングはこのメソッドが呼び出された時のレイヤー画像と行われます。
+	 *
+	 * レイヤー画像の更新を反映するには、再度このメソッドを呼び出す必要があります。
+	 *
+	 * VideOverlay.OnFrameUpdate を使用して、
+	 * レイヤー画像が更新されたことを調べてこのメソッドを呼び出すようにすれば、自動的に更新が反映されるようになります。
+	 * onFrameUpdateで毎フレームこのメソッドを呼び出した場合、かなり負荷がかかりますのでそれは避けた方が良いです。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 * @param layer レイヤー
+	 */
+	function setMixingLayer(layer);
+
+	/**
+	 * ミキシング対象レイヤの設定解除
+	 *
+	 * ビデオとレイヤーのミキシングを解除します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	function resetMixingLayer();
+
+	/**
+	 * 再生位置
+	 *
+	 * メディアの再生位置を ms 単位で表します。値を設定することもできます。
+	 * @see VideoOverlay.frame
+	 * @see VideoOverlay.totalTime
+	 */
+	property position;
+
+	/**
+	 * 現在のフレーム
+	 *
+	 * メディアの再生位置をフレーム単位で表します。値を設定することもできます。
+	 * @see VideoOverlay.position
+	 * @see VideoOverlay.numberOfFrame
+	 */
+	property frame;
+
+	/**
+	 * ループ再生をするかどうか
+	 *
+	 * ループ再生の有効無効を表します。値を設定することもできます。
+	 *
+	 * 真ならばループ、偽ならば非ループです。
+	 */
+	property loop;
+
+	/**
+	 * 再生矩形の横幅
+	 *
+	 * 再生矩形の横幅を表します。値を設定することもできます。
+	 *
+	 * このプロパティは、現バージョンではレイヤ再生時は使用できません(常にサイズはビデオのサイズと同じになります)。
+	 * @see VideoOverlay.height
+	 * @see VideoOverlay.setSize
+	 */
+	property width;
+
+	/**
+	 * 再生矩形の縦幅
+	 *
+	 * 再生矩形の縦幅を表します。値を設定することもできます。
+	 *
+	 * このプロパティは、現バージョンではレイヤ再生時は使用できません(常にサイズはビデオのサイズと同じになります)。
+	 * @see VideoOverlay.width
+	 * @see VideoOverlay.setSize
+	 */
+	property height;
+
+	/**
+	 * 再生矩形の左端位置
+	 *
+	 * 再生矩形の左端位置を表します。値を設定することもできます。
+	 * @see VideoOverlay.top
+	 * @see VideoOverlay.setPos
+	 */
+	property left;
+
+	/**
+	 * 再生矩形の上端位置
+	 *
+	 * 再生矩形の上端位置を表します。値を設定することもできます。
+	 * @see VideoOverlay.left
+	 * @see VideoOverlay.setPos
+	 */
+	property top;
+
+	/**
+	 * 可視かどうか
+	 *
+	 * 再生領域が可視かどうかを指定します。値を設定することもできます。
+	 *
+	 * 真ならば可視、偽ならば不可視です。
+	 */
+	property visible;
+
+	/**
+	 * フレームレート
+	 *
+	 * フレームレート(フレーム/秒)を表します。
+	 */
+	property fps { getter; }
+
+	/**
+	 * 全フレーム数
+	 *
+	 * 全フレーム数を表します。
+	 */
+	property numberOfFrame { getter; }
+
+	/**
+	 * 合計時間
+	 *
+	 * 合計時間をms単位で表します。
+	 */
+	property totalTime { getter; }
+
+	/**
+	 * 描画レイヤ指定1
+	 *
+	 * レイヤ描画モード時、描画するレイヤを表します。値を設定することもできます。
+	 *
+	 * layer1 プロパティと layer2 プロパティを異なるレイヤに設定することにより、同時に２つのレイヤに同じ動画を表示させることができます。
+	 */
+	property layer1;
+
+	/**
+	 * 描画レイヤ指定2
+	 *
+	 * レイヤ描画モード時、描画するレイヤを表します。値を設定することもできます。
+	 */
+	property layer2;
+
+	/**
+	 * オーバーレイorレイヤ描画の指定
+	 *
+	 * オーバーレイモードであるか、レイヤ描画モードであるか、ミキサーモードであるかを表します。値を設定することもできます。
+	 *
+	 * オーバーレイモードの場合は **vomOverlay**、レイヤ描画モードの場合は **vomLayer** 、ミキサーモードの場合は **vomMixer**、Media Foundation モードの場合は **vomMFEVR** となります。
+	 *
+	 * vomMFEVR モードは 1.2.0 以降でのみ使用できます。
+	 */
+	property mode;
+
+	/**
+	 * 再生速度
+	 *
+	 * メディアの再生速度を設定します。
+	 *
+	 * 1.0 を指定すると通常の再生速度、0.5 では半分の再生速度、2では2倍の再生速度となります。
+	 *
+	 * 設定可能値はDirectShowのフィルタによって決まります。
+	 *
+	 * 参考 : 音声付のMPEGファイルの場合、0.0より大きい値から2.0までの値が設定可能です。音声なしのMPEGファイルの場合、0.0より大きい値からdoubleの範囲内(たぶん)で設定可能ですが、実際の再生速度は処理速度によって上限が決まります。
+	 */
+	property playRate;
+
+	/**
+	 * セグメントループの開始フレーム
+	 *
+	 * セグメントループの始端フレームです。
+	 * @see VideoOverlay.setSegmentLoop
+	 * @see VideoOverlay.cancelSegmentLoop
+	 */
+	property segmentLoopStartFrame { getter; }
+
+	/**
+	 * セグメントループの開始フレーム
+	 *
+	 * セグメントループの始端フレームです。
+	 * @see VideoOverlay.setSegmentLoop
+	 */
+	property segmentLoopEndFrame { getter; }
+
+	/**
+	 * ピリオドイベントフレーム
+	 *
+	 * periodイベントを発生させるフレームです。
+	 *
+	 * 未設定の場合は負の値となります。
+	 */
+	property periodEventFrame;
+
+	/**
+	 * 音声バランス(パニング)
+	 *
+	 * パン (音像位置) を表します。値を設定することもできます。
+	 *
+	 * 音の聞こえる左右の位置を指定することができます。
+	 *
+	 * -100000 ～ 0 ～ 100000 の数値で指定し、 -100000 が 完全に左、0 が中央、100000 が完全に右になります。
+	 *
+	 * ステレオのソースを再生する場合は、パンは、左右どちらかのチャンネルを減衰させることで実現されます(0を指定すると両チャンネルが出力され、-100000を指定すると左チャンネルのみが出力される)。
+	 */
+	property audioBalance;
+
+	/**
+	 * 音声ボリューム
+	 *
+	 * 再生する音量を表します。値を設定することもできます。
+	 *
+	 * 0 ～ 100000 の数値で指定し、 0 が完全ミュート、100000 が 100% の音量となります。
+	 */
+	property audioVolume;
+
+	/**
+	 * 音声ストリーム数
+	 *
+	 * MPEGファイルのみで利用可能です。
+	 * オーディオストリーム数を取得できます。
+	 * @see VideoOverlay.selectAudioStream
+	 * @see VideoOverlay.enabledAudioStream
+	 */
+	property numberOfAudioStream { getter; }
+
+	/**
+	 * 再生対象音声ストリーム番号
+	 *
+	 * MPEGファイルのみで利用可能です。
+	 * 再生対象のオーディオストリーム番号を取得できます。
+	 * オーディオストリームが見付からない場合は-1を返します。
+	 * @see VideoOverlay.selectAudioStream
+	 * @see VideoOverlay.numberOfAudioStream
+	 */
+	property enabledAudioStream { getter; }
+
+	/**
+	 * ビデオの透明度
+	 *
+	 * 0.0(完全に透明)～1.0(完全に不透明)の範囲でビデオの透明度を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property mixingMovieAlpha;
+
+	/**
+	 * ビデオの背景色
+	 *
+	 * ビデオの背景色を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property mixingMovieBGColor;
+
+	/**
+	 * ビデオのコントラストレンジ最小値
+	 *
+	 * コントラストの幅の最小値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property contrastRangeMin { getter; }
+
+	/**
+	 * ビデオのコントラストレンジ最大値
+	 *
+	 * コントラストの幅の最大値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property contrastRangeMax { getter; }
+
+	/**
+	 * ビデオのコントラスト既定値
+	 *
+	 * コントラストの既定値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property contrastDefaultValue { getter; }
+
+	/**
+	 * ビデオのコントラスト増減ステップ値
+	 *
+	 * contrastRangeMin から contrastRangeMax への有効な増分を表します。
+	 *
+	 * この値の単位でコントラストを変更できます。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property contrastStepSize { getter; }
+
+	/**
+	 * ビデオのコントラスト
+	 *
+	 * ビデオのコントラストを表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property contrast;
+
+	/**
+	 * ビデオの輝度レンジ最小値
+	 *
+	 * 輝度の幅の最小値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property brightnessRangeMin { getter; }
+
+	/**
+	 * ビデオの輝度レンジ最大値
+	 *
+	 * 輝度の幅の最大値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property brightnessRangeMax { getter; }
+
+	/**
+	 * ビデオの輝度既定値
+	 *
+	 * 輝度の既定値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property brightnessDefaultValue { getter; }
+
+	/**
+	 * ビデオの輝度増減ステップ値
+	 *
+	 * brightnessRangeMin から brightnessRangeMax への有効な増分を表します。
+	 *
+	 * この値の単位で輝度を変更できます。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property brightnessStepSize { getter; }
+
+	/**
+	 * ビデオの輝度
+	 *
+	 * ビデオの輝度を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property brightness;
+
+	/**
+	 * ビデオの色相レンジ最小値
+	 *
+	 * 色相の幅の最小値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property hueRangeMin { getter; }
+
+	/**
+	 * ビデオの色相レンジ最大値
+	 *
+	 * 色相の幅の最大値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property hueRangeMax { getter; }
+
+	/**
+	 * ビデオの色相既定値
+	 *
+	 * 色相の既定値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property hueDefaultValue { getter; }
+
+	/**
+	 * ビデオの色相増減ステップ値
+	 *
+	 * hueRangeMin から hueRangeMax への有効な増分を表します。
+	 *
+	 * この値の単位で色相を変更できます。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property hueStepSize { getter; }
+
+	/**
+	 * ビデオの色相
+	 *
+	 * ビデオの色相を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property hue;
+
+	/**
+	 * ビデオの彩度レンジ最小値
+	 *
+	 * 彩度の幅の最小値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property saturationRangeMin { getter; }
+
+	/**
+	 * ビデオの彩度レンジ最大値
+	 *
+	 * 彩度の幅の最大値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property saturationRangeMax { getter; }
+
+	/**
+	 * ビデオの彩度既定値
+	 *
+	 * 彩度の既定値を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property saturationDefaultValue { getter; }
+
+	/**
+	 * ビデオの彩度増減ステップ値
+	 *
+	 * saturationRangeMin から saturationRangeMax への有効な増分を表します。
+	 *
+	 * この値の単位で彩度を変更できます。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property saturationStepSize { getter; }
+
+	/**
+	 * ビデオの彩度
+	 *
+	 * ビデオの彩度を表します。
+	 *
+	 * ミキサーモードでのみ利用可能です。
+	 */
+	property saturation;
+
+	/**
+	 * ビデオの実際の幅
+	 *
+	 * 格納されているビデオの幅です。
+	 */
+	property originalWidth { getter; }
+
+	/**
+	 * ビデオの実際の高さ
+	 *
+	 * 格納されているビデオの高さです。
+	 */
+	property originalHeight { getter; }
+}
