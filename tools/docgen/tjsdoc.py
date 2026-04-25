@@ -364,6 +364,7 @@ def parse_doc_block(comment_block):
 
 CLASS_RE = re.compile(r"class\s+([\w.]+)(?:\s+extends\s+([\w.]+))?\s*\{")
 FUNCTION_RE = re.compile(r"function\s+(\w+)\s*\(")
+EVENT_RE = re.compile(r"event\s+(\w+)\s*\(")
 PROPERTY_RE = re.compile(r"property\s+(\w+)\s*(\{|;)")
 CONST_RE = re.compile(r"const\s+(\w+)(?:\s*=\s*([^,;\n]*?))?\s*(?:[,;]|(?=\n))")
 
@@ -397,7 +398,14 @@ def parse_class_body(body, nested_out=None, parent_name=""):
             pos = end + 1
             continue
 
+        # `event NAME(args)` is sugar for a function with kind=event
+        is_event_kw = False
         m = FUNCTION_RE.match(body, pos)
+        if not m:
+            m_evt = EVENT_RE.match(body, pos)
+            if m_evt:
+                m = m_evt
+                is_event_kw = True
         if m:
             name = m.group(1)
             paren = m.end() - 1
@@ -426,6 +434,8 @@ def parse_class_body(body, nested_out=None, parent_name=""):
             doc = parse_doc_block(comment_block)
             if trailing and not doc.summary:
                 doc.summary = trailing.lstrip("<").strip()
+            if is_event_kw and not doc.kind_hint:
+                doc.kind_hint = "event"
             members.append(Member(kind="function", name=name, args=args, doc=doc))
             pos = p
             continue
