@@ -117,4 +117,9 @@ class Debug {
 	 * @see Debug.logToFileOnError
 	 */
 	property clearLogFileOnError;
+
+	/**
+	 * TODO: prettyPrint の説明
+	 */
+	function prettyPrint();
 }

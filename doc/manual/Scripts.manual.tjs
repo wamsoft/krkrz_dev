@@ -131,4 +131,9 @@ class Scripts {
 	 * 現在指定できるのは"UTF-8"か"Shift_JIS"のどちらかです。
 	 */
 	property textEncoding;
+
+	/**
+	 * TODO: dumpStringHeap の説明
+	 */
+	function dumpStringHeap();
 }

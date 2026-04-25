@@ -242,4 +242,99 @@ class Storages {
 	 * @return ユーザがファイルを選択して OK ボタンを押せば真、キャンセルボタンを押せば偽が戻ります。
 	 */
 	function selectFile(params);
+
+	/**
+	 * TODO: addCacheTargetExtension の説明
+	 */
+	function addCacheTargetExtension();
+
+	/**
+	 * TODO: clearArchiveCache の説明
+	 */
+	function clearArchiveCache();
+
+	/**
+	 * TODO: clearCache の説明
+	 */
+	function clearCache();
+
+	/**
+	 * TODO: clearFastCache の説明
+	 */
+	function clearFastCache();
+
+	/**
+	 * TODO: clearOldCache の説明
+	 */
+	function clearOldCache();
+
+	/**
+	 * TODO: commitSavedata の説明
+	 */
+	function commitSavedata();
+
+	/**
+	 * TODO: deleteFile の説明
+	 */
+	function deleteFile();
+
+	/**
+	 * TODO: dirlist の説明
+	 */
+	function dirlist();
+
+	/**
+	 * TODO: dirtree の説明
+	 */
+	function dirtree();
+
+	/**
+	 * TODO: getFileProperty の説明
+	 */
+	function getFileProperty();
+
+	/**
+	 * TODO: isCacheLoading の説明
+	 */
+	function isCacheLoading();
+
+	/**
+	 * TODO: isExistentDirectory の説明
+	 */
+	function isExistentDirectory();
+
+	/**
+	 * TODO: isFastCacheLoading の説明
+	 */
+	function isFastCacheLoading();
+
+	/**
+	 * TODO: lastModifiedFileTime の説明
+	 */
+	function lastModifiedFileTime();
+
+	/**
+	 * TODO: moveFile の説明
+	 */
+	function moveFile();
+
+	/**
+	 * TODO: requestCache の説明
+	 */
+	function requestCache();
+
+	/**
+	 * TODO: requestFastCache の説明
+	 */
+	function requestFastCache();
+
+	/**
+	 * TODO: rollbackSavedata の説明
+	 */
+	function rollbackSavedata();
+
+	/**
+	 * TODO: setCacheMaxSize の説明
+	 */
+	function setCacheMaxSize();
 }

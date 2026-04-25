@@ -614,4 +614,9 @@ class ImageFunction {
 	 * 未指定時全体が対象となります。
 	 */
 	function fillRect(bmp, value, rect = null, isalpha = true, cliprect = null);
+
+	/**
+	 * TODO: copy9Patch の説明
+	 */
+	function copy9Patch();
 }

@@ -46,7 +46,7 @@ hDSiXfXz7KmfMXppM0CjofvH+IL7BJ3/GcLFcuEw3hEnzoajIm1TAgMBAAE=
 
 キー・署名ツール(tools フォルダにある krkrsign.exe)を起動すると最初に表示されるのはキー生成の画面です。
 
-![](sign0.png)
+![](../_assets/sign0.png)
 
 - **「生成する」ボタン**  
   クリックするとキーペアの生成が始まります。最初に「エントロピーを収集中」というウィンドウが現れ、マウスをでたらめに動かすことを要求されるので、指示に従ってください(他人に推測されないキーを生成する為に必要です)。
@@ -63,7 +63,7 @@ hDSiXfXz7KmfMXppM0CjofvH+IL7BJ3/GcLFcuEw3hEnzoajIm1TAgMBAAE=
 
 「署名」タブをクリックすると、署名の画面が表示されます。
 
-![](sign1.png)
+![](../_assets/sign1.png)
 
 - **秘密鍵**  
   秘密鍵を指定してください。
@@ -82,7 +82,7 @@ hDSiXfXz7KmfMXppM0CjofvH+IL7BJ3/GcLFcuEw3hEnzoajIm1TAgMBAAE=
 
 「署名確認」タブをクリックすると、署名の画面が表示されます。
 
-![](sign2.png)
+![](../_assets/sign2.png)
 
 - **公開鍵**  
   公開鍵を指定してください。

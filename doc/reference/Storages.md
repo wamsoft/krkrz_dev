@@ -18,6 +18,25 @@ Storages クラスは 吉里吉里本体の**ストレージシステム**に関
 - [searchCD](#searchcd)
 - [getLocalName](#getlocalname)
 - [selectFile](#selectfile)
+- [addCacheTargetExtension](#addcachetargetextension)
+- [clearArchiveCache](#cleararchivecache)
+- [clearCache](#clearcache)
+- [clearFastCache](#clearfastcache)
+- [clearOldCache](#clearoldcache)
+- [commitSavedata](#commitsavedata)
+- [deleteFile](#deletefile)
+- [dirlist](#dirlist)
+- [dirtree](#dirtree)
+- [getFileProperty](#getfileproperty)
+- [isCacheLoading](#iscacheloading)
+- [isExistentDirectory](#isexistentdirectory)
+- [isFastCacheLoading](#isfastcacheloading)
+- [lastModifiedFileTime](#lastmodifiedfiletime)
+- [moveFile](#movefile)
+- [requestCache](#requestcache)
+- [requestFastCache](#requestfastcache)
+- [rollbackSavedata](#rollbacksavedata)
+- [setCacheMaxSize](#setcachemaxsize)
 
 ---
 
@@ -335,6 +354,196 @@ save : false,
 if(Storages.selectFile(params))
 
 System.inform("選択したファイルは : " + params.name);
+
+---
+
+### addCacheTargetExtension
+
+メソッド
+
+**解説**
+
+TODO: addCacheTargetExtension の説明
+
+---
+
+### clearArchiveCache
+
+メソッド
+
+**解説**
+
+TODO: clearArchiveCache の説明
+
+---
+
+### clearCache
+
+メソッド
+
+**解説**
+
+TODO: clearCache の説明
+
+---
+
+### clearFastCache
+
+メソッド
+
+**解説**
+
+TODO: clearFastCache の説明
+
+---
+
+### clearOldCache
+
+メソッド
+
+**解説**
+
+TODO: clearOldCache の説明
+
+---
+
+### commitSavedata
+
+メソッド
+
+**解説**
+
+TODO: commitSavedata の説明
+
+---
+
+### deleteFile
+
+メソッド
+
+**解説**
+
+TODO: deleteFile の説明
+
+---
+
+### dirlist
+
+メソッド
+
+**解説**
+
+TODO: dirlist の説明
+
+---
+
+### dirtree
+
+メソッド
+
+**解説**
+
+TODO: dirtree の説明
+
+---
+
+### getFileProperty
+
+メソッド
+
+**解説**
+
+TODO: getFileProperty の説明
+
+---
+
+### isCacheLoading
+
+メソッド
+
+**解説**
+
+TODO: isCacheLoading の説明
+
+---
+
+### isExistentDirectory
+
+メソッド
+
+**解説**
+
+TODO: isExistentDirectory の説明
+
+---
+
+### isFastCacheLoading
+
+メソッド
+
+**解説**
+
+TODO: isFastCacheLoading の説明
+
+---
+
+### lastModifiedFileTime
+
+メソッド
+
+**解説**
+
+TODO: lastModifiedFileTime の説明
+
+---
+
+### moveFile
+
+メソッド
+
+**解説**
+
+TODO: moveFile の説明
+
+---
+
+### requestCache
+
+メソッド
+
+**解説**
+
+TODO: requestCache の説明
+
+---
+
+### requestFastCache
+
+メソッド
+
+**解説**
+
+TODO: requestFastCache の説明
+
+---
+
+### rollbackSavedata
+
+メソッド
+
+**解説**
+
+TODO: rollbackSavedata の説明
+
+---
+
+### setCacheMaxSize
+
+メソッド
+
+**解説**
+
+TODO: setCacheMaxSize の説明
 
 ---
 

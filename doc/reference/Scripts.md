@@ -19,6 +19,7 @@ Scripts クラスは TJS2 に関するメソッドやプロパティを管理し
 - [getTraceString](#gettracestring)
 - [setCallMissing](#setcallmissing)
 - [getClassNames](#getclassnames)
+- [dumpStringHeap](#dumpstringheap)
 
 ---
 
@@ -259,6 +260,16 @@ expression で指定された文字列を TJS2 式として実行します。
 クラス名を取得
 
 オブジェクトからクラス名を取得します。
+
+---
+
+### dumpStringHeap
+
+メソッド
+
+**解説**
+
+TODO: dumpStringHeap の説明
 
 ---
 

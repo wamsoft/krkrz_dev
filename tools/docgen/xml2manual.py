@@ -92,6 +92,9 @@ def render_tag(e: ET.Element) -> str:
     if tag == "img":
         src = e.get("src", "")
         alt = e.get("alt", "")
+        src = re.sub(r"^(?:\./)?imgsrc/", "../_assets/", src)
+        if not src.startswith(("http", "../", "/", "_assets/")):
+            src = "../_assets/" + src
         return f"![{alt}]({src})"
     if tag == "li":
         return "- " + inner

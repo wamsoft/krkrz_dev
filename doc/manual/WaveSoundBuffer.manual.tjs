@@ -151,4 +151,104 @@ class WaveSoundBuffer {
 	 * `"**stop**"     : ` メディアは停止中である
 	 */
 	property status { getter; }
+
+	/**
+	 * TODO: bits の説明
+	 */
+	property bits;
+
+	/**
+	 * TODO: channels の説明
+	 */
+	property channels;
+
+	/**
+	 * TODO: currentDevice の説明
+	 */
+	property currentDevice;
+
+	/**
+	 * TODO: filters の説明
+	 */
+	property filters;
+
+	/**
+	 * TODO: flags の説明
+	 */
+	property flags;
+
+	/**
+	 * TODO: frequency の説明
+	 */
+	property frequency;
+
+	/**
+	 * TODO: globalFocusMode の説明
+	 */
+	property globalFocusMode;
+
+	/**
+	 * TODO: globalVolume の説明
+	 */
+	property globalVolume;
+
+	/**
+	 * TODO: labels の説明
+	 */
+	property labels;
+
+	/**
+	 * TODO: pan の説明
+	 */
+	property pan;
+
+	/**
+	 * TODO: posX の説明
+	 */
+	property posX;
+
+	/**
+	 * TODO: posY の説明
+	 */
+	property posY;
+
+	/**
+	 * TODO: posZ の説明
+	 */
+	property posZ;
+
+	/**
+	 * TODO: samplePosition の説明
+	 */
+	property samplePosition;
+
+	/**
+	 * TODO: useVisBuffer の説明
+	 */
+	property useVisBuffer;
+
+	/**
+	 * TODO: freeDirectSound の説明
+	 */
+	function freeDirectSound();
+
+	/**
+	 * TODO: getDeviceList の説明
+	 */
+	function getDeviceList();
+
+	/**
+	 * TODO: getVisBuffer の説明
+	 */
+	function getVisBuffer();
+
+	/**
+	 * TODO: onLabel の説明
+	 */
+	function onLabel();
+
+	/**
+	 * TODO: setPos の説明
+	 */
+	function setPos();
 }

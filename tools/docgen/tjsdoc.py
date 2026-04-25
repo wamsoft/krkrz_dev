@@ -27,8 +27,9 @@ REPO = Path(__file__).resolve().parents[2]
 class Doc:
     summary: str = ""
     description: str = ""
-    params: list = field(default_factory=list)  # list[(name, desc)]
+    params: list = field(default_factory=list)  # list[(name, type, desc)]
     returns: str = ""
+    return_type: str = ""
     type_hint: str = ""
     kind_hint: str = ""  # @kind event -> "event"
     sees: list = field(default_factory=list)  # @see X.Y entries
@@ -289,11 +290,23 @@ def parse_doc_block(comment_block):
             return
         txt = tag_buffer.strip()
         if in_tag == "param":
-            m = re.match(r"^(\S+)\s*(.*)$", txt, re.DOTALL)
+            # JSDoc-style: @param {Type} name desc
+            m = re.match(r"^\{([^{}]+)\}\s*(\S+)\s*(.*)$", txt, re.DOTALL)
             if m:
-                doc.params.append((m.group(1), m.group(2).strip()))
+                doc.params.append((m.group(2), m.group(1).strip(),
+                                   m.group(3).strip()))
+            else:
+                m = re.match(r"^(\S+)\s*(.*)$", txt, re.DOTALL)
+                if m:
+                    doc.params.append((m.group(1), "", m.group(2).strip()))
         elif in_tag in ("return", "returns"):
-            doc.returns = txt
+            # JSDoc-style: @return {Type} desc
+            m = re.match(r"^\{([^{}]+)\}\s*(.*)$", txt, re.DOTALL)
+            if m:
+                doc.return_type = m.group(1).strip()
+                doc.returns = m.group(2).strip()
+            else:
+                doc.returns = txt
         elif in_tag == "description":
             desc_lines.append(txt)
         elif in_tag == "type":
@@ -541,22 +554,32 @@ def render_member(m, cls):
         parts.append(kind)
         if m.args:
             parts.append("**引数**")
-            has_type = any(t for _, _, t in m.args)
+            # Merge type info from signature and javadoc; signature wins.
+            jdoc_types = {p[0]: p[1] for p in m.doc.params if p[1]}
+            jdoc_descs = {p[0]: p[2] for p in m.doc.params}
+            merged = []
+            for arg_name, arg_default, arg_type in m.args:
+                t = arg_type or jdoc_types.get(arg_name, "")
+                d = jdoc_descs.get(arg_name, "")
+                merged.append((arg_name, arg_default, t, d))
+            has_type = any(t for _, _, t, _ in merged)
             headers = (["引数", "型", "既定値", "説明"] if has_type
                        else ["引数", "既定値", "説明"])
             rows = []
-            for arg_name, arg_default, arg_type in m.args:
-                desc = next((d for n, d in m.doc.params if n == arg_name), "")
+            for arg_name, arg_default, t, d in merged:
                 default_md = f"`{arg_default}`" if arg_default else "`&nbsp;`"
                 if has_type:
-                    type_md = f"`{arg_type}`" if arg_type else "`&nbsp;`"
-                    rows.append([f"`{arg_name}`", type_md, default_md, desc])
+                    type_md = f"`{t}`" if t else "`&nbsp;`"
+                    rows.append([f"`{arg_name}`", type_md, default_md, d])
                 else:
-                    rows.append([f"`{arg_name}`", default_md, desc])
+                    rows.append([f"`{arg_name}`", default_md, d])
             parts.append(md_table(headers, rows))
-        if m.doc.returns:
+        if m.doc.returns or m.doc.return_type:
             parts.append("**戻り値**")
-            parts.append(m.doc.returns)
+            if m.doc.return_type:
+                parts.append(f"型: `{m.doc.return_type}`")
+            if m.doc.returns:
+                parts.append(m.doc.returns)
     elif m.kind == "property":
         access = {"r": "r", "w": "w", "rw": "r/w"}[m.access]
         parts.append(f"プロパティ \\ アクセス: `{access}`")

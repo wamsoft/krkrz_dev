@@ -689,4 +689,19 @@ class VideoOverlay {
 	 * 格納されているビデオの高さです。
 	 */
 	property originalHeight { getter; }
+
+	/**
+	 * TODO: enabledVideoStream の説明
+	 */
+	property enabledVideoStream;
+
+	/**
+	 * TODO: numberOfVideoStream の説明
+	 */
+	property numberOfVideoStream;
+
+	/**
+	 * TODO: onCallbackCommand の説明
+	 */
+	function onCallbackCommand();
 }

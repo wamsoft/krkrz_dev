@@ -32,6 +32,14 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [savedGamesPath](#savedgamespath)
 - [exeBits](#exebits)
 - [osBits](#osbits)
+- [exitOnNoWindowStartup](#exitonnowindowstartup)
+- [isAndroid](#isandroid)
+- [isGeneric](#isgeneric)
+- [isWindows](#iswindows)
+- [licenseText](#licensetext)
+- [openGLESVersion](#openglesversion)
+- [processorNum](#processornum)
+- [touchDevice](#touchdevice)
 
 ### メソッド
 
@@ -54,6 +62,11 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [touchImages](#touchimages)
 - [showVersion](#showversion)
 - [dumpHeap](#dumpheap)
+- [addFont](#addfont)
+- [clearGraphicCache](#cleargraphiccache)
+- [getJoypadType](#getjoypadtype)
+- [nullpo](#nullpo)
+- [system](#system)
 
 ---
 
@@ -557,6 +570,86 @@ OS が 32bit 版か 64bit 版かを整数の 32 か 64 で表します。
 
 ---
 
+### exitOnNoWindowStartup
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: exitOnNoWindowStartup の説明
+
+---
+
+### isAndroid
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: isAndroid の説明
+
+---
+
+### isGeneric
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: isGeneric の説明
+
+---
+
+### isWindows
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: isWindows の説明
+
+---
+
+### licenseText
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: licenseText の説明
+
+---
+
+### openGLESVersion
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: openGLESVersion の説明
+
+---
+
+### processorNum
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: processorNum の説明
+
+---
+
+### touchDevice
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: touchDevice の説明
+
+---
+
 ### terminate
 
 メソッド
@@ -1004,6 +1097,56 @@ aboutダイアログを表示します。
 ヒープ情報ダンプ(1.1.0以降)
 
 ヒープの情報をコンソールに出力します。
+
+---
+
+### addFont
+
+メソッド
+
+**解説**
+
+TODO: addFont の説明
+
+---
+
+### clearGraphicCache
+
+メソッド
+
+**解説**
+
+TODO: clearGraphicCache の説明
+
+---
+
+### getJoypadType
+
+メソッド
+
+**解説**
+
+TODO: getJoypadType の説明
+
+---
+
+### nullpo
+
+メソッド
+
+**解説**
+
+TODO: nullpo の説明
+
+---
+
+### system
+
+メソッド
+
+**解説**
+
+TODO: system の説明
 
 ---
 

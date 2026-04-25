@@ -39,7 +39,7 @@
 
 フォルダ/アーカイブ選択の画面は以下のようになります。
 
-![](FolderSelector.png)
+![](../_assets/FolderSelector.png)
 
 - **「OK」ボタン**  
   現在選択中のフォルダやファイルの実行を開始します。
@@ -58,7 +58,7 @@
 
 吉里吉里は、起動直後に吉里吉里と同じフォルダに msgmap.tjs があるかどうかを調べ、それが存在すれば実行します。ただしリリースオプションでこれを読み込まないように指定されていた場合を除きます (
 
-参照 )。msgmap.tjs では [System.assignMessage](System.md#assignmessage) を使用してメッセージの割り当てを変更することができます。msgmap.tjs は
+参照 )。msgmap.tjs では [System.assignMessage](../reference/System.md#assignmessage) を使用してメッセージの割り当てを変更することができます。msgmap.tjs は
 
 でも作成することができます。
 

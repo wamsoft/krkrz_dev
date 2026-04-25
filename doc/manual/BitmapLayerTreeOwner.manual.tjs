@@ -10,4 +10,209 @@ class BitmapLayerTreeOwner {
 	 * BitmapLayerTreeOwner クラスのオブジェクトを構築します。
 	 */
 	function BitmapLayerTreeOwner();
+
+	/**
+	 * TODO: bitmap の説明
+	 */
+	property bitmap;
+
+	/**
+	 * TODO: dirtyRect の説明
+	 */
+	property dirtyRect;
+
+	/**
+	 * TODO: focusedLayer の説明
+	 */
+	property focusedLayer;
+
+	/**
+	 * TODO: height の説明
+	 */
+	property height;
+
+	/**
+	 * TODO: isUpdated の説明
+	 */
+	property isUpdated;
+
+	/**
+	 * TODO: layerEventTargetInterface の説明
+	 */
+	property layerEventTargetInterface;
+
+	/**
+	 * TODO: layerTreeOwnerInterface の説明
+	 */
+	property layerTreeOwnerInterface;
+
+	/**
+	 * TODO: primaryLayer の説明
+	 */
+	property primaryLayer;
+
+	/**
+	 * TODO: width の説明
+	 */
+	property width;
+
+	/**
+	 * TODO: clearDirtyRect の説明
+	 */
+	function clearDirtyRect();
+
+	/**
+	 * TODO: fireClick の説明
+	 */
+	function fireClick();
+
+	/**
+	 * TODO: fireDisplayRotate の説明
+	 */
+	function fireDisplayRotate();
+
+	/**
+	 * TODO: fireDoubleClick の説明
+	 */
+	function fireDoubleClick();
+
+	/**
+	 * TODO: fireKeyDown の説明
+	 */
+	function fireKeyDown();
+
+	/**
+	 * TODO: fireKeyPress の説明
+	 */
+	function fireKeyPress();
+
+	/**
+	 * TODO: fireKeyUp の説明
+	 */
+	function fireKeyUp();
+
+	/**
+	 * TODO: fireMouseDown の説明
+	 */
+	function fireMouseDown();
+
+	/**
+	 * TODO: fireMouseMove の説明
+	 */
+	function fireMouseMove();
+
+	/**
+	 * TODO: fireMouseOutOfWindow の説明
+	 */
+	function fireMouseOutOfWindow();
+
+	/**
+	 * TODO: fireMouseUp の説明
+	 */
+	function fireMouseUp();
+
+	/**
+	 * TODO: fireMouseWheel の説明
+	 */
+	function fireMouseWheel();
+
+	/**
+	 * TODO: fireMultiTouch の説明
+	 */
+	function fireMultiTouch();
+
+	/**
+	 * TODO: fireRecheckInputState の説明
+	 */
+	function fireRecheckInputState();
+
+	/**
+	 * TODO: fireReleaseCapture の説明
+	 */
+	function fireReleaseCapture();
+
+	/**
+	 * TODO: fireTouchDown の説明
+	 */
+	function fireTouchDown();
+
+	/**
+	 * TODO: fireTouchMove の説明
+	 */
+	function fireTouchMove();
+
+	/**
+	 * TODO: fireTouchRotate の説明
+	 */
+	function fireTouchRotate();
+
+	/**
+	 * TODO: fireTouchScaling の説明
+	 */
+	function fireTouchScaling();
+
+	/**
+	 * TODO: fireTouchUp の説明
+	 */
+	function fireTouchUp();
+
+	/**
+	 * TODO: onChangeLayerImage の説明
+	 */
+	function onChangeLayerImage();
+
+	/**
+	 * TODO: onDisableAttentionPoint の説明
+	 */
+	function onDisableAttentionPoint();
+
+	/**
+	 * TODO: onGetCursorPos の説明
+	 */
+	function onGetCursorPos();
+
+	/**
+	 * TODO: onReleaseMouseCapture の説明
+	 */
+	function onReleaseMouseCapture();
+
+	/**
+	 * TODO: onResetImeMode の説明
+	 */
+	function onResetImeMode();
+
+	/**
+	 * TODO: onResizeLayer の説明
+	 */
+	function onResizeLayer();
+
+	/**
+	 * TODO: onSetAttentionPoint の説明
+	 */
+	function onSetAttentionPoint();
+
+	/**
+	 * TODO: onSetCursorPos の説明
+	 */
+	function onSetCursorPos();
+
+	/**
+	 * TODO: onSetHintText の説明
+	 */
+	function onSetHintText();
+
+	/**
+	 * TODO: onSetImeMode の説明
+	 */
+	function onSetImeMode();
+
+	/**
+	 * TODO: onSetMouseCursor の説明
+	 */
+	function onSetMouseCursor();
+
+	/**
+	 * TODO: update の説明
+	 */
+	function update();
 }

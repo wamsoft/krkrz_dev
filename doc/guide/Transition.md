@@ -8,7 +8,7 @@
 
 前者の場合は該当するレイヤが、後者の場合はレイヤのツリー構造がそのままそっくり入れ替わります。
 
-[Layer.beginTransition](Layer.md#begintransition) メソッドを参照してください。
+[Layer.beginTransition](../reference/Layer.md#begintransition) メソッドを参照してください。
 
 
 
@@ -93,14 +93,14 @@
 
 拡張トランジションプラグイン ( extrans.dll ) は 吉里吉里Z用のプラグインで、本体に内蔵されていないようなトランジションをいくつか使用可能にする物です。
 
-使用可能にするには、他のプラグインと同じく、[Plugins.link](Plugins.md#link) メソッドで接続する必要があります ( KAG の場合は loadplugin タグ )。接続されるだけで以下のトランジションハンドラが使用可能になります。
+使用可能にするには、他のプラグインと同じく、[Plugins.link](../reference/Plugins.md#link) メソッドで接続する必要があります ( KAG の場合は loadplugin タグ )。接続されるだけで以下のトランジションハンドラが使用可能になります。
 
 - **wave**  
   "wave" (波) トランジションは、ラスタスクロールによる波を表現し、切り替えるトランジションです。
   
   
   
-  ![](wave_trans.jpg)
+  ![](../_assets/wave_trans.jpg)
   
   
   
@@ -123,7 +123,7 @@
   
   
   
-  ![](mosaic_trans.png)
+  ![](../_assets/mosaic_trans.png)
   
   
   
@@ -138,7 +138,7 @@
   
   
   
-  ![](turn_trans.jpg)
+  ![](../_assets/turn_trans.jpg)
   
   
   
@@ -153,7 +153,7 @@
   
   
   
-  ![](rotatezoom_trans.jpg)
+  ![](../_assets/rotatezoom_trans.jpg)
   
   
   
@@ -174,7 +174,7 @@
   
   
   
-  ![](rotatevanish_trans.jpg)
+  ![](../_assets/rotatevanish_trans.jpg)
   
   
   
@@ -193,7 +193,7 @@
   
   
   
-  ![](rotateswap_trans.jpg)
+  ![](../_assets/rotateswap_trans.jpg)
   
   
   
@@ -210,7 +210,7 @@
   
   
   
-  ![](ripple_trans.jpg)
+  ![](../_assets/ripple_trans.jpg)
   
   
   

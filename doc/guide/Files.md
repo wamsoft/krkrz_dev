@@ -26,7 +26,7 @@
 - ****krdevui.dll****  
   吉里吉里の開発用ツールが共通で使用するDLLです。このファイルをエンドユーザ向けの配布物に同梱する必要はありません。
 - ****krmovie.dll****  
-  吉里吉里で WMV/MPG の再生を行う場合に必要になります。ビデオ再生を行わない場合はエンドユーザ向けの配布物にこれを同梱する必要はありません。→ [VideoOverlayクラス](VideoOverlay.md)
+  吉里吉里で WMV/MPG の再生を行う場合に必要になります。ビデオ再生を行わない場合はエンドユーザ向けの配布物にこれを同梱する必要はありません。→ [VideoOverlayクラス](../reference/VideoOverlay.md)
 - ***.**dll****  
   吉里吉里用のプラグインの場合は、エンドユーザ向けの配布物に同梱しなければなりません。もちろん、必要のないプラグインを同梱する必要はありません。→
 - ****krkr.eXe****  
@@ -60,7 +60,7 @@
 - ***.wav *.tcw *.ogg *.opus**  
   音声ファイルです。→
 - ***.wmv *.mpg *.mp4 *.ogv**  
-  動画ファイルです。→ [VideoOverlayクラス](VideoOverlay.md)
+  動画ファイルです。→ [VideoOverlayクラス](../reference/VideoOverlay.md)
 - ***.ks**  
   KAGのシナリオファイルです。
 - ***.ksd *.kdt**  

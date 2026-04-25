@@ -692,4 +692,69 @@ class System {
 	 * @see System.platformName
 	 */
 	property osBits { getter; }
+
+	/**
+	 * TODO: exitOnNoWindowStartup の説明
+	 */
+	property exitOnNoWindowStartup;
+
+	/**
+	 * TODO: isAndroid の説明
+	 */
+	property isAndroid;
+
+	/**
+	 * TODO: isGeneric の説明
+	 */
+	property isGeneric;
+
+	/**
+	 * TODO: isWindows の説明
+	 */
+	property isWindows;
+
+	/**
+	 * TODO: licenseText の説明
+	 */
+	property licenseText;
+
+	/**
+	 * TODO: openGLESVersion の説明
+	 */
+	property openGLESVersion;
+
+	/**
+	 * TODO: processorNum の説明
+	 */
+	property processorNum;
+
+	/**
+	 * TODO: touchDevice の説明
+	 */
+	property touchDevice;
+
+	/**
+	 * TODO: addFont の説明
+	 */
+	function addFont();
+
+	/**
+	 * TODO: clearGraphicCache の説明
+	 */
+	function clearGraphicCache();
+
+	/**
+	 * TODO: getJoypadType の説明
+	 */
+	function getJoypadType();
+
+	/**
+	 * TODO: nullpo の説明
+	 */
+	function nullpo();
+
+	/**
+	 * TODO: system の説明
+	 */
+	function system();
 }

@@ -45,6 +45,15 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [hintDelay](#hintdelay)
 - [displayOrientation](#displayorientation)
 - [displayRotate](#displayrotate)
+- [displayDensity](#displaydensity)
+- [enableTouchMouse](#enabletouchmouse)
+- [innerSunken](#innersunken)
+- [layerEventTarget](#layereventtarget)
+- [layerLeft](#layerleft)
+- [layerTop](#layertop)
+- [layerTreeOwnerInterface](#layertreeownerinterface)
+- [mouseCursor](#mousecursor)
+- [showScrollBars](#showscrollbars)
 
 ### メソッド
 
@@ -69,6 +78,10 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [getMouseVelocity](#getmousevelocity)
 - [getTouchVelocity](#gettouchvelocity)
 - [resetMouseVelocity](#resetmousevelocity)
+- [beginMove](#beginmove)
+- [findFullScreenCandidates](#findfullscreencandidates)
+- [requestUpdate](#requestupdate)
+- [setLayerPos](#setlayerpos)
 
 ### イベント
 
@@ -694,6 +707,96 @@ oriUnknown (取得失敗/不明), oriPortrait(縦向き), oriLandscape(横向き
 
 ---
 
+### displayDensity
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: displayDensity の説明
+
+---
+
+### enableTouchMouse
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: enableTouchMouse の説明
+
+---
+
+### innerSunken
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: innerSunken の説明
+
+---
+
+### layerEventTarget
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: layerEventTarget の説明
+
+---
+
+### layerLeft
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: layerLeft の説明
+
+---
+
+### layerTop
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: layerTop の説明
+
+---
+
+### layerTreeOwnerInterface
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: layerTreeOwnerInterface の説明
+
+---
+
+### mouseCursor
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: mouseCursor の説明
+
+---
+
+### showScrollBars
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+TODO: showScrollBars の説明
+
+---
+
 ### close
 
 メソッド
@@ -1175,6 +1278,46 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 リセットすることで任意のタイミングから速度計測を開始することが出来ます。
 
 **関連:** [Window.getMouseVelocity](Window.md#getmousevelocity)
+
+---
+
+### beginMove
+
+メソッド
+
+**解説**
+
+TODO: beginMove の説明
+
+---
+
+### findFullScreenCandidates
+
+メソッド
+
+**解説**
+
+TODO: findFullScreenCandidates の説明
+
+---
+
+### requestUpdate
+
+メソッド
+
+**解説**
+
+TODO: requestUpdate の説明
+
+---
+
+### setLayerPos
+
+メソッド
+
+**解説**
+
+TODO: setLayerPos の説明
 
 ---
 

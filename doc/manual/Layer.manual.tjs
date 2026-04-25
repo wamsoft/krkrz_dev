@@ -1412,7 +1412,7 @@ class Layer {
 	 * 二次元アフィン変換行列による変換は、コピー元矩形の左上を原点 (0, 0) とし、
 	 * 以下のように定義されます。
 	 *
-	 * ![](2DAffineMatrix.png)
+	 * ![](../_assets/2DAffineMatrix.png)
 	 *
 	 * 二次元アフィン変換を行うことにより、拡大縮小、回転、せん断(傾け)、平行移動、反転、あるいはこれらの組み合わせすべての変形を行うことができます。
 	 *
@@ -2802,4 +2802,19 @@ class Layer {
 	 * @see Window.onHintChanged
 	 */
 	property ignoreHintSensing;
+
+	/**
+	 * TODO: nodeFocusable の説明
+	 */
+	property nodeFocusable;
+
+	/**
+	 * TODO: dump の説明
+	 */
+	function dump();
+
+	/**
+	 * TODO: releaseTouchCapture の説明
+	 */
+	function releaseTouchCapture();
 }

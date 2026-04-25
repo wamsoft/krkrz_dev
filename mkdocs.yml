@@ -98,6 +98,7 @@ nav:
       - reference/Font.md
       - reference/ImageFunction.md
       - reference/Layer.md
+      - reference/NullDrawDevice.md
       - reference/Plugins.md
       - reference/Rect.md
       - reference/Scripts.md
@@ -110,6 +111,48 @@ nav:
       - reference/WaveSoundBuffer.PhaseVocoder.md
       - reference/Window.md
       - reference/Window.BasicDrawDevice.md
+    - プラグインクラス:
+      - reference/BinaryStream.md
+      - reference/CSVParser.md
+      - reference/HttpRequest.md
+      - reference/SimpleHTTPServer.md
+      - reference/LineParser.md
+      - reference/MenuItem.md
+      - reference/Pad.md
+      - reference/Process.md
+      - reference/PSD.md
+      - reference/PreRenderedFontImage.md
+      - reference/Steam.md
+      - reference/TemporaryFiles.md
+      - reference/Zip.md
+      - reference/Unzip.md
+      - 描画 (layerExDraw):
+        - reference/GdiPlus.md
+        - reference/GdiPlus.Appearance.md
+        - reference/GdiPlus.Font.md
+        - reference/GdiPlus.Image.md
+        - reference/GdiPlus.Matrix.md
+        - reference/GdiPlus.Path.md
+        - reference/GdiPlus.PointF.md
+        - reference/GdiPlus.RectF.md
+      - リソース (resourceRW):
+        - reference/ResourceReader.md
+        - reference/ResourceWriter.md
+        - reference/ResourceIconGroup.md
+        - reference/ResourceIconImage.md
+        - reference/ResourceVersionInfo.md
+      - Win32:
+        - reference/WIN32Dialog.md
+        - reference/WIN32Dialog.Header.md
+        - reference/WIN32Dialog.Items.md
+        - reference/WIN32DialogEX.md
+        - reference/WIN32OLE.md
+        - reference/ActiveX.md
+        - reference/JScriptHost.md
+      - 拡張組み込みクラス:
+        - reference/Array.md
+        - reference/Dictionary.md
+        - reference/Math.md
   - TJS2言語リファレンス:
     - tjs2/index.md
   - 仕様書:

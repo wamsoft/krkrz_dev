@@ -228,4 +228,19 @@ class Font {
 	 * このプロパティはスタティックです。Font.rasterizer を用いて値を設定してください。
 	 */
 	property rasterizer;
+
+	/**
+	 * TODO: defaultFaceName の説明
+	 */
+	property defaultFaceName;
+
+	/**
+	 * TODO: faceIsFileName の説明
+	 */
+	property faceIsFileName;
+
+	/**
+	 * TODO: addFont の説明
+	 */
+	function addFont();
 }

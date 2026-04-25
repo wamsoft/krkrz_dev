@@ -52,19 +52,28 @@ def slug(name: str) -> str:
     s = s.replace(" ", "-")
     return s
 
-def class_link(cls: str, member: str | None = None) -> str:
+def class_link(cls: str, member: str | None = None, ctx: "Ctx | None" = None) -> str:
     anchor = f"#{slug(member)}" if member else ""
-    return f"{cls}.md{anchor}"
+    prefix = "" if (ctx is not None and ctx.kind == "class") else "../reference/"
+    return f"{prefix}{cls}.md{anchor}"
 
-def guide_link(topic: str, member: str | None = None) -> str:
+def guide_link(topic: str, member: str | None = None, ctx: "Ctx | None" = None) -> str:
     anchor = f"#{slug(member)}" if member else ""
-    return f"../guide/{topic}.md{anchor}"
+    prefix = "" if (ctx is not None and ctx.kind == "guide") else "../guide/"
+    return f"{prefix}{topic}.md{anchor}"
 
-def resolve_href(href: str, classes: set[str]) -> tuple[str, str]:
+_URL_RE = re.compile(r"^[a-z][a-z0-9+.-]*://", re.I)
+
+def resolve_href(href: str, classes: set[str],
+                 ctx: "Ctx | None" = None) -> tuple[str, str]:
     """Map legacy href like 'f_Layer.html' or 'f_Layer_onClick.html' or
     'EventSystem.html' -> (relative_md_path, title_hint).
+
+    External URLs (http://, https://, mailto:, etc.) are passed through.
     """
     h = href.strip()
+    if _URL_RE.match(h) or h.startswith(("mailto:", "#")):
+        return (h, h)
     if h.endswith(".html"):
         h = h[:-5]
     if h.startswith("f_"):
@@ -78,12 +87,12 @@ def resolve_href(href: str, classes: set[str]) -> tuple[str, str]:
                     cls = cand
                     mem = body[len(cand) + 1:]
                     break
-            return (class_link(cls, mem), f"{cls}.{mem}")
-        return (class_link(body), body)
+            return (class_link(cls, mem, ctx), f"{cls}.{mem}")
+        return (class_link(body, ctx=ctx), body)
     if "#" in h:
         topic, _, anch = h.partition("#")
-        return (guide_link(topic, anch), f"{topic}.{anch}")
-    return (guide_link(h), h)
+        return (guide_link(topic, anch, ctx), f"{topic}.{anch}")
+    return (guide_link(h, ctx=ctx), h)
 
 # ---------------------------------------------------------------------------
 # Inline rendering
@@ -104,8 +113,12 @@ def _text(x: str | None) -> str:
     return x or ""
 
 def esc_inline(s: str) -> str:
-    # minimal escape; the legacy docs already have reasonable whitespace.
-    return s.replace("\r", "")
+    # Minimal escape; the legacy docs already have reasonable whitespace.
+    # Break accidental markdown link syntax: `[menu]( <img>...` in raw text
+    # would otherwise be interpreted as a link with the image markdown as URL.
+    s = s.replace("\r", "")
+    s = re.sub(r"\]\(", r"]\\(", s)
+    return s
 
 def render_inline(elem: ET.Element, ctx: "Ctx") -> str:
     """Render an element's mixed content, returning inline markdown."""
@@ -138,16 +151,22 @@ def render_inline_tag(e: ET.Element, ctx: "Ctx") -> str:
         href = e.get("href", "")
         if not href:
             return inner
-        path, _title = resolve_href(href, ctx.classes)
+        path, _title = resolve_href(href, ctx.classes, ctx)
         label = inner or _title
         return f"[{label}]({path})"
     if tag == "a":
         href = e.get("href", "")
-        return f"[{inner}]({href})" if href else inner
+        if not href:
+            return inner
+        # Some guide XMLs use <a href="f_X.html"> instead of <at>; rewrite too.
+        if href.startswith("f_") or href.endswith(".html"):
+            path, _title = resolve_href(href, ctx.classes, ctx)
+            return f"[{inner}]({path})"
+        return f"[{inner}]({href})"
     if tag == "comlink":
         href = e.get("href", "")
         if href:
-            path, title = resolve_href(href, ctx.classes)
+            path, title = resolve_href(href, ctx.classes, ctx)
             return f" ( → [{title}]({path}) )"
         return f" ( → {inner} )"
     if tag == "anchor":
@@ -176,13 +195,13 @@ def resolve_ref(txt: str, ctx: "Ctx") -> str:
     best = None
     for cls in ctx.classes:
         if raw == cls:
-            return f"[{raw}]({class_link(cls)})"
+            return f"[{raw}]({class_link(cls, ctx=ctx)})"
         if raw.startswith(cls + "."):
             if best is None or len(cls) > len(best):
                 best = cls
     if best:
         member = raw[len(best) + 1:]
-        return f"[{raw}]({class_link(best, member)})"
+        return f"[{raw}]({class_link(best, member, ctx=ctx)})"
     return f"`{raw}`"
 
 # ---------------------------------------------------------------------------
@@ -484,12 +503,18 @@ def main() -> int:
     for d in (ref_dir, guide_dir, assets_dir):
         d.mkdir(parents=True, exist_ok=True)
 
-    # copy images
-    imgsrc = src / "imgsrc"
-    if imgsrc.exists():
-        for p in imgsrc.iterdir():
-            if p.is_file():
-                shutil.copy2(p, assets_dir / p.name)
+    # copy images from imgsrc/ (XML source) and j/contents/ (pre-rendered HTML)
+    img_exts = {".png", ".jpg", ".jpeg", ".gif", ".svg"}
+    img_sources = [src / "imgsrc",
+                   src.parent / "j" / "contents"]
+    for img_src in img_sources:
+        if not img_src.exists():
+            continue
+        for p in img_src.iterdir():
+            if p.is_file() and p.suffix.lower() in img_exts:
+                dest = assets_dir / p.name
+                if not dest.exists():
+                    shutil.copy2(p, dest)
 
     ctx_cls = Ctx(classes, "class")
     ctx_guide = Ctx(classes, "guide")

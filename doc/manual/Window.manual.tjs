@@ -1255,4 +1255,69 @@ class Window {
 	 * @see Window.displayOrientation
 	 */
 	property displayRotate { getter; }
+
+	/**
+	 * TODO: displayDensity の説明
+	 */
+	property displayDensity;
+
+	/**
+	 * TODO: enableTouchMouse の説明
+	 */
+	property enableTouchMouse;
+
+	/**
+	 * TODO: innerSunken の説明
+	 */
+	property innerSunken;
+
+	/**
+	 * TODO: layerEventTarget の説明
+	 */
+	property layerEventTarget;
+
+	/**
+	 * TODO: layerLeft の説明
+	 */
+	property layerLeft;
+
+	/**
+	 * TODO: layerTop の説明
+	 */
+	property layerTop;
+
+	/**
+	 * TODO: layerTreeOwnerInterface の説明
+	 */
+	property layerTreeOwnerInterface;
+
+	/**
+	 * TODO: mouseCursor の説明
+	 */
+	property mouseCursor;
+
+	/**
+	 * TODO: showScrollBars の説明
+	 */
+	property showScrollBars;
+
+	/**
+	 * TODO: beginMove の説明
+	 */
+	function beginMove();
+
+	/**
+	 * TODO: findFullScreenCandidates の説明
+	 */
+	function findFullScreenCandidates();
+
+	/**
+	 * TODO: requestUpdate の説明
+	 */
+	function requestUpdate();
+
+	/**
+	 * TODO: setLayerPos の説明
+	 */
+	function setLayerPos();
 }

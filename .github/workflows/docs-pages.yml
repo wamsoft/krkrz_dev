@@ -37,7 +37,7 @@ jobs:
         run: pip install -r tools/docgen/requirements.txt
 
       - name: Build site
-        run: mkdocs build
+        run: mkdocs build --strict
 
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -8,14 +8,16 @@ TJS2 の文法については TJS2 ヘルプ をご覧ください。
 
 ここでは吉里吉里のクラスを中心に説明を行います。
 
-## 連絡先
-
-https://github.com/wamsoft/krkrz_dev/issues
-
-
-## オリジナル作者情報
+## 作者連絡先など
 
 作者 : W.Dee <dee@kikyou.info>
 
-吉里吉里Z に関しては [@jin1016](../guide/https://twitter.com/jin1016.md) まで
+吉里吉里Z に関しては [@jin1016](https://twitter.com/jin1016) まで
 
+
+
+ダウンロードはこちらから
+
+吉里吉里Zダウンロード : [吉里吉里Z](http://krkrz.github.io/)
+
+ソースコードダウンロード : [GitHub リポジトリ](https://github.com/krkrz/krkrz)
