@@ -43,7 +43,7 @@ DATAPATH_ABS=$(shell $(FIXPATH) "$(DATAPATH)")
 
 BUILD_PATH=$(shell cmake --preset $(PRESET) -N | grep BUILD_DIR | sed 's/.*BUILD_DIR="\(.*\)"/\1/')
 
-.PHONY: build prebuild install clean docs docs-scan docs-diff docs-convert docs-wiki-test
+.PHONY: build prebuild install clean docs docs-scan docs-diff docs-convert
 
 all: build
 
@@ -96,14 +96,6 @@ docs-diff:
 # 消える点に注意。
 docs-convert:
 	$(VENV_PY) tools/docgen/xml2md.py
-
-# Wiki 同期処理のローカル確認。出力先ディレクトリを指定して実行:
-#   make docs-wiki-test DST=/tmp/wiki_test
-# 実際の push は .github/workflows/docs-wiki.yml が自動で行うので、
-# このターゲットはリンク書き換え結果の目視確認だけが目的。
-DST?=build/wiki_preview
-docs-wiki-test:
-	$(VENV_PY) tools/docgen/sync_wiki.py $(DST)
 
 # WIN版用ルール
 ifeq (windows,$(findstring windows,$(PRESET)))
