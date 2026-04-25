@@ -52,6 +52,7 @@ DEFAULT_OUT = REPO / "doc" / "_inventory.json"
 CLASSES = {
     "Layer", "Bitmap", "BitmapLayerTreeOwner", "Font", "ImageFunction",
     "Window", "NullDrawDevice", "BasicDrawDevice",
+    "SDLDrawDevice", "OGLDrawDevice",
     "Scripts", "Storages", "System", "Timer", "Debug", "Clipboard",
     "AsyncTrigger", "Plugins", "Rect", "Console", "VideoOverlay",
     "WaveSoundBuffer", "SoundBuffer",

@@ -349,6 +349,25 @@
       "interface"
     ]
   },
+  "OGLDrawDevice": {
+    "events": [
+      "onDone",
+      "onDraw",
+      "onInit"
+    ],
+    "file": "src/core/common/visual/opengl/OGLDrawDevice.cpp",
+    "methods": [
+      "createCanvas",
+      "recreate"
+    ],
+    "properties": [
+      "canvas",
+      "interface",
+      "matrix",
+      "texture",
+      "window"
+    ]
+  },
   "Plugins": {
     "events": [],
     "file": "src/core/generic/base/PluginImpl.cpp",
@@ -384,6 +403,15 @@
       "right",
       "top",
       "width"
+    ]
+  },
+  "SDLDrawDevice": {
+    "events": [],
+    "file": "src/core/sdl3/visual/SDLDrawDevice.cpp",
+    "methods": [],
+    "properties": [
+      "interface",
+      "window"
     ]
   },
   "Scripts": {

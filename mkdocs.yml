@@ -107,9 +107,11 @@ nav:
       - reference/Matrix44.md
       - reference/NullDrawDevice.md
       - reference/Offscreen.md
+      - reference/OGLDrawDevice.md
       - reference/Plugins.md
       - reference/Rect.md
       - reference/Scripts.md
+      - reference/SDLDrawDevice.md
       - reference/ShaderProgram.md
       - reference/SoundBuffer.md
       - reference/Storages.md
