@@ -116,16 +116,15 @@ nav:
       - reference/Window.md
       - reference/Window.BasicDrawDevice.md
     - TJS2 組み込みクラス・型:
-      - 基本型: tjs2/basictypes.md
       - Array クラス: tjs2/array.md
       - Date クラス: tjs2/date.md
       - Dictionary クラス: tjs2/dictionary.md
       - Exception クラス: tjs2/exception.md
       - Math クラス: tjs2/math.md
-      - オクテット列: tjs2/octet.md
       - Math.RandomGenerator クラス: tjs2/randomgenerator.md
       - RegExp クラス: tjs2/regexp.md
       - 文字列: tjs2/string.md
+      - オクテット列: tjs2/octet.md
     - プラグイン拡張クラス:
       - reference/BinaryStream.md
       - reference/CSVParser.md
@@ -174,6 +173,7 @@ nav:
       - TJS2 について: tjs2/about.md
       - 基本的な使い方: tjs2/simple.md
       - スタイルなど: tjs2/style.md
+      - 基本型: tjs2/basictypes.md
     - 構文:
       - トークン: tjs2/token.md
       - 項: tjs2/factor.md
@@ -203,3 +203,22 @@ nav:
     - 動画再生機能: specification/movie.md
     - 画像処理機能: specification/graphics.md
     - 音声再生機能: specification/sound.md
+  - 周辺情報:
+    - topics/index.md
+    - ユーザー向け情報:
+      - エンジン設定ツール: topics/user/engine_setting.md
+    - TJS2 で利用する機能:
+      - ツールチップの表示方法: topics/tjs2/tooltip.md
+      - 非同期画像読み込み: topics/tjs2/asyncimageload.md
+      - 吉里吉里2と吉里吉里Zの判別方法: topics/tjs2/check_2_z.md
+      - 動画の再生方法: topics/tjs2/playmovie.md
+      - 吉里吉里Zで削除された機能: topics/tjs2/deleted.md
+      - サポートするファイルフォーマット: topics/tjs2/fileformat.md
+      - 型指定構文: topics/tjs2/type_specified.md
+    - ツール:
+      - Releaser: topics/tools/releaser.md
+    - 本体 (exe) 変更者向け情報:
+      - エンジン設定の追加/編集: topics/core/engine_setting.md
+      - 吉里吉里Z固有のクラッキング対策: topics/core/anti_cracking.md
+      - メモリ不足対策: topics/core/low_memory.md
+    - ライセンス: topics/LICENSE.md
