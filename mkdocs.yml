@@ -63,31 +63,35 @@ exclude_docs: |
 nav:
   - 吉里吉里Z:
     - guide/about.md
-    - ガイド:
+    - 入門・運用:
       - 起動: guide/Startup.md
       - コマンドラインオプション: guide/CommandLine.md
       - 吉里吉里設定: guide/Configure.md
       - コンソール: guide/Console.md
       - デバッグ: guide/Debug.md
       - 環境依存の不具合: guide/ComputerDependentProblems.md
+      - 著作権など: guide/Copyrights.md
+      - ファイル一覧: guide/Files.md
+    - サブシステム:
       - イベントシステム: guide/EventSystem.md
       - グラフィックシステム: guide/GraphicSystem.md
       - サウンドシステム: guide/SoundSystem.md
       - ストレージシステム: guide/StorageSystem.md
       - トランジション: guide/Transition.md
       - プラグイン: guide/Plugins.md
-      - 著作権など: guide/Copyrights.md
-      - ファイル一覧: guide/Files.md
+    - 付属ツール:
       - ファイル破損チェックツール: guide/FileChkTool.md
       - レンダリング済みフォントデータ作成ツール: guide/FontMaker.md
       - ループチューナ: guide/LoopTuner.md
       - Releaser: guide/Releaser.md
       - キー・署名ツール: guide/SignTool.md
       - 画像フォーマットコンバータ: guide/TPC.md
-      - 仮想キーコード一覧: guide/KeyCodes.md
-      - マウスカーソル定数一覧: guide/MouseCursors.md
-      - 色定数一覧: guide/ColorCodes.md
-    - クラスリファレンス:
+    - 定数一覧:
+      - 仮想キーコード: guide/KeyCodes.md
+      - マウスカーソル: guide/MouseCursors.md
+      - 色定数: guide/ColorCodes.md
+  - クラスリファレンス:
+    - 吉里吉里Z コアクラス:
       - reference/AsyncTrigger.md
       - reference/Bitmap.md
       - reference/BitmapLayerTreeOwner.md
@@ -111,7 +115,18 @@ nav:
       - reference/WaveSoundBuffer.PhaseVocoder.md
       - reference/Window.md
       - reference/Window.BasicDrawDevice.md
-    - プラグインクラス:
+    - TJS2 組み込みクラス・型:
+      - 基本型: tjs2/basictypes.md
+      - Array クラス: tjs2/array.md
+      - Date クラス: tjs2/date.md
+      - Dictionary クラス: tjs2/dictionary.md
+      - Exception クラス: tjs2/exception.md
+      - Math クラス: tjs2/math.md
+      - オクテット列: tjs2/octet.md
+      - Math.RandomGenerator クラス: tjs2/randomgenerator.md
+      - RegExp クラス: tjs2/regexp.md
+      - 文字列: tjs2/string.md
+    - プラグイン拡張クラス:
       - reference/BinaryStream.md
       - reference/CSVParser.md
       - reference/HttpRequest.md
@@ -149,25 +164,21 @@ nav:
         - reference/WIN32OLE.md
         - reference/ActiveX.md
         - reference/JScriptHost.md
-      - 拡張組み込みクラス:
+      - TJS 組み込み拡張:
         - reference/Array.md
         - reference/Dictionary.md
         - reference/Math.md
-  - TJS2言語リファレンス:
+  - TJS2言語仕様:
     - tjs2/index.md
-    - 言語仕様:
+    - 概要:
       - TJS2 について: tjs2/about.md
       - 基本的な使い方: tjs2/simple.md
       - スタイルなど: tjs2/style.md
+    - 構文:
       - トークン: tjs2/token.md
       - 項: tjs2/factor.md
       - 式と演算子: tjs2/expr_and_op.md
       - ステートメントとブロック: tjs2/statement_and_block.md
-      - 変数: tjs2/variable.md
-      - データ型: tjs2/types.md
-      - クラス: tjs2/class.md
-      - 関数: tjs2/function.md
-      - プロパティ: tjs2/property.md
       - if ステートメント: tjs2/if.md
       - switch ステートメント: tjs2/switch.md
       - for ステートメント: tjs2/for.md
@@ -175,21 +186,17 @@ nav:
       - with ステートメント: tjs2/with.md
       - 例外処理: tjs2/try.md
       - プリプロセッサ: tjs2/pp.md
+    - 言語要素:
+      - 変数: tjs2/variable.md
+      - データ型: tjs2/types.md
+      - 関数: tjs2/function.md
+      - クラス: tjs2/class.md
+      - プロパティ: tjs2/property.md
+    - 内部仕様:
       - iTJSDispatch2 インターフェース: tjs2/interface.md
       - tTJSVariant 型: tjs2/variant.md
       - tTJS: tjs2/ttjs.md
       - 仮想マシン: tjs2/vmcodes.md
-    - 組み込みクラス・型:
-      - 基本型: tjs2/basictypes.md
-      - Array クラス: tjs2/array.md
-      - Date クラス: tjs2/date.md
-      - Dictionary クラス: tjs2/dictionary.md
-      - Exception クラス: tjs2/exception.md
-      - Math クラス: tjs2/math.md
-      - オクテット列: tjs2/octet.md
-      - Math.RandomGenerator クラス: tjs2/randomgenerator.md
-      - RegExp クラス: tjs2/regexp.md
-      - 文字列: tjs2/string.md
   - 仕様書:
     - specification/index.md
     - ファイルフォーマット: specification/fileformat.md
