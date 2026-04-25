@@ -16,64 +16,116 @@
             }
         },
         {
+            "name": "windows",
+            "description": "windows",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER":"cl",
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/windows.cmake",
+                "VCPKG_CRT_LINKAGE":"static",
+                "VCPKG_LIBRARY_LINKAGE":"static"
+            }
+        },
+        {
             "name": "x86-windows",
             "description": "windows x86 build",
-            "inherits": "default",
+            "inherits": "windows",
             "architecture": {
                 "value": "x86",
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_C_COMPILER":"cl",
-                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/windows.cmake",
                 "VCPKG_TARGET_TRIPLET":"x86-windows-static",
-                "VCPKG_TARGET_ARCHITECTURE":"x86",
-                "VCPKG_CRT_LINKAGE":"static",
-                "VCPKG_LIBRARY_LINKAGE":"static",
-                "KRKRZ_VARIANT":"WIN"
+                "VCPKG_TARGET_ARCHITECTURE":"x86"
             }
         },
         {
             "name": "x64-windows",
             "description": "windows x64 build",
-            "inherits": "default",
+            "inherits": "windows",
             "architecture": {
                 "value": "x64",
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_C_COMPILER":"cl",
-                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/windows.cmake",
                 "VCPKG_TARGET_TRIPLET":"x64-windows-static",
-                "VCPKG_TARGET_ARCHITECTURE":"x64",
-                "VCPKG_CRT_LINKAGE":"static",
-                "VCPKG_LIBRARY_LINKAGE":"static",
+                "VCPKG_TARGET_ARCHITECTURE":"x64"
+            }
+        },
+        {
+            "name": "arm64-windows",
+            "description": "windows arm64 build",
+            "inherits": "windows",
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET":"arm64-windows-static",
+                "VCPKG_TARGET_ARCHITECTURE":"arm64"
+            }
+        },
+        {
+            "name": "x86-windows-win",
+            "description": "windows x86 build WINVER",
+            "inherits": "x86-windows",
+            "cacheVariables": {
                 "KRKRZ_VARIANT":"WIN"
             }
         },
         {
-            "name": "x64-windows-sdl",
-            "description": "windows x64 build with sdl",
+            "name": "x64-windows-win",
+            "description": "windows x64 build WINVER",
             "inherits": "x64-windows",
             "cacheVariables": {
-                "KRKRZ_VARIANT":"SDL"
+                "KRKRZ_VARIANT":"WIN"
+            }
+        },
+        {
+            "name": "arm64-windows-win",
+            "description": "windows arm64 build WINVER",
+            "inherits": "arm64-windows",
+            "cacheVariables": {
+                "KRKRZ_VARIANT":"WIN"
+            }
+        },
+        {
+            "name": "linux",
+            "displayName": "for linux",
+            "description": "linux build",
+            "inherits": "default",
+            "cacheVariables": {
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/linux.cmake",
+                "VCPKG_CRT_LINKAGE":"dynamic",
+                "VCPKG_LIBRARY_LINKAGE":"static"
             }
         },
         {
             "name": "x64-linux",
             "displayName": "for linux x64",
             "description": "linux x64 build",
-            "inherits": "default",
+            "inherits": "linux",
             "architecture": {
                 "value": "x64",
                 "strategy": "external"
             },
             "cacheVariables": {
-                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/linux.cmake",
                 "VCPKG_TARGET_TRIPLET":"x64-linux",
-                "VCPKG_TARGET_ARCHITECTURE":"x64",
-                "VCPKG_CRT_LINKAGE":"dynamic",
-                "VCPKG_LIBRARY_LINKAGE":"static"
+                "VCPKG_TARGET_ARCHITECTURE":"x64"
+            }
+        },
+        {
+            "name": "arm64-linux",
+            "displayName": "for linux arm64",
+            "description": "linux arm64 build",
+            "inherits": "linux",
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET":"arm64-linux",
+                "VCPKG_TARGET_ARCHITECTURE":"arm64"
             }
         },
         {
@@ -84,7 +136,7 @@
                 "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/osx.cmake",
                 "VCPKG_CRT_LINKAGE":"dynamic",
                 "VCPKG_LIBRARY_LINKAGE":"static",
-                "USE_OPENGL":"OFF"
+                "KRKRZ_USE_OPENGL":"OFF"
             }
         },
         {
@@ -140,20 +192,32 @@
 
     "buildPresets": [
         {
-            "name": "x86-windows",
-            "configurePreset": "x86-windows"
+            "name": "x86-windows-win",
+            "configurePreset": "x86-windows-win"
+        },
+        {
+            "name": "x64-windows-win",
+            "configurePreset": "x64-windows-win"
+        },
+        {
+            "name": "arm64-windows-win",
+            "configurePreset": "arm64-windows-win"
         },
         {
             "name": "x64-windows",
             "configurePreset": "x64-windows"
         },
         {
-            "name": "x64-windows-sdl",
-            "configurePreset": "x64-windows-sdl"
+            "name": "arm64-windows",
+            "configurePreset": "arm64-windows"
         },
         {
             "name": "x64-linux",
             "configurePreset": "x64-linux"
+        },
+        {
+            "name": "arm64-linux",
+            "configurePreset": "arm64-linux"
         },
         {
             "name": "x64-osx",
