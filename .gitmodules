@@ -13,12 +13,6 @@
 [submodule "script/KAG3"]
 	path = script/KAG3
 	url = https://github.com/krkrz/kag3.git
-[submodule "document/kirikiriz"]
-	path = document/kirikiriz
-	url = https://github.com/krkrz/krkrz-documents.git
-[submodule "document/misc_markdown"]
-	path = document/misc_markdown
-	url = https://github.com/krkrz/documents.git
 [submodule "src/tools/dotNet/tjs2doc"]
 	path = src/tools/dotNet/tjs2doc
 	url = https://github.com/krkrz/tjs2doc.git

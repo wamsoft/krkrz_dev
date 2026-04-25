@@ -6,23 +6,23 @@ Markdown リファレンスと mkdocs サイトを自動生成するツール一
 ## パイプライン
 
 ```
-document/kirikiriz/j_in/classes/f_*.xml ──[xml2manual.py]──┐
-                                                           ├──> doc/manual/<Class>.manual.tjs ──┐
-src/plugins/<plugin>/manual.tjs (手書き or 既存) ─────────┘                                     ├──[tjsdoc.py]──> doc/reference/<Class>.md ──[mkdocs]──> Pages
-                                                                                                 │
-src/core/**/*.cpp + src/plugins/**/*.cpp ──[scan_tjs.py]──> doc/_inventory.json ──[diff_docs.py]─┘──> doc/_missing.md
+doc/manual/<Class>.manual.tjs (SSOT) ──┐
+                                       ├──[tjsdoc.py]──> doc/reference/<Class>.md ──[mkdocs]──> Pages
+src/plugins/<plugin>/manual.tjs ──────┘
+                                                                                                 
+src/core/**/*.cpp + src/plugins/**/*.cpp ──[scan_tjs.py]──> doc/_inventory.json ──[diff_docs.py]──> doc/_missing.md
 ```
 
 ## ツール
 
 | ツール             | 入力                                              | 出力                              |
 |-------------------|--------------------------------------------------|-----------------------------------|
-| `xml2manual.py`   | `document/kirikiriz/j_in/classes/f_*.xml`        | `doc/manual/<Class>.manual.tjs`   |
-| `xml2md.py`       | `document/kirikiriz/j_in/*.xml` (ガイド/imgsrc)  | `doc/guide/`, `doc/_assets/`      |
 | `tjsdoc.py`       | `*.manual.tjs` (複数ディレクトリ集約可)          | `doc/reference/<Class>.md`        |
 | `fix_props.py`    | `src/plugins/<plugin>/*.cpp`                     | `manual.tjs` の bare property 書き換え |
 | `scan_tjs.py`     | `src/core/**/*.cpp` のバインド情報               | `doc/_inventory.json`             |
 | `diff_docs.py`    | `_inventory.json` + `doc/manual/*.manual.tjs`    | `doc/_missing.md`                 |
+| `sync_manual.py`  | `_inventory.json` + 既存 manual.tjs              | manual.tjs に TODO スタブ追記     |
+| `merge_mpd.py`    | `../multi_platform_design/classes/*.tjs`         | manual.tjs に MPD のクラス/メンバを取込 |
 
 Python は 3.12 系。追加依存はサイト構築時のみ (`requirements.txt`)。
 
@@ -30,13 +30,8 @@ Python は 3.12 系。追加依存はサイト構築時のみ (`requirements.txt
 
 ### 1. core クラスのドキュメント追加・更新
 
-```bash
-# 旧 XML から manual.tjs を初期生成（初回のみ）
-python tools/docgen/xml2manual.py
-
-# 以後、`doc/manual/<Class>.manual.tjs` を直接編集する
-# （TJS の擬似コード + javadoc 形式で記述）
-```
+`doc/manual/<Class>.manual.tjs` を直接編集する。TJS の擬似コード +
+javadoc 形式で記述する (フォーマットは下記参照)。
 
 ### 2. C++ バインドが増減したとき
 
@@ -132,16 +127,34 @@ class Foo {
 
 ## scan_tjs.py の検出範囲
 
-`TJS_BEGIN_NATIVE_METHOD_DECL` / `TJS_BEGIN_NATIVE_PROP_DECL` /
-`TJS_BEGIN_NATIVE_EVENT_DECL` を、直前にある以下のいずれかのブロックに
-紐付けて抽出する:
+**マクロベース静的宣言** (CTOR 近傍に紐付け):
+
+- `TJS_BEGIN_NATIVE_METHOD_DECL(...)`
+- `TJS_BEGIN_NATIVE_PROP_DECL(...)`
+- `TJS_BEGIN_NATIVE_EVENT_DECL(...)`
+
+紐付け先 CTOR の判定:
 
 - `tTJSNC_<Class>::tTJSNC_<Class>(...)` コンストラクタ
-- `TVPCreateNativeClass_<Class>(...)` ファクトリ関数
+- `tTJSNativeClass * TVPCreateNativeClass_<Class>(...)` ファクトリ関数定義
+  (戻り値型を要求して関数 CALL の誤検出を回避)
+
+**ランタイム登録** (file の primary class に紐付け):
+
+- `PropSet(TJS_MEMBERENSURE, TJS_W("name"), ...)` — `Initialize()` 等で
+  既定値を入れて登録するパターン (例: `System.exceptionHandler`,
+  `System.onActivate`)。bare call (`this->` 暗黙) のみ受理。
+  `dict->PropSet(...)` のような他オブジェクト書き込みは負の lookbehind で除外。
+  名前が `^on[A-Z]` にマッチすれば event、それ以外は property に分類。
+- `static ttstr eventname(TJS_W("name"))` — `TVPPostEvent` で発火する
+  イベント名 (例: `Window.onClick`, `Window.onHintChanged`)。
 
 検出対象クラスは `CLASSES` セットで限定している（内部クラスや
 `tTJSNC_Array` など TJS ランタイム自身のクラスを除外するため）。新しい
 公開クラスを追加するときは `scan_tjs.py` の `CLASSES` にも追記すること。
+
+意図的にドキュメントから外したいメンバは `EXCLUDED_MEMBERS` に
+`Class.member` を追加 (例: `System.isAndroid`)。
 
 コンストラクタ／ファクトリは `TJS_BEGIN_NATIVE_*_DECL` マクロ越しでは
 登録されないため、scan_tjs は「クラス名と同名のメンバー」を検出できない。

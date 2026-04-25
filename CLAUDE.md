@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repository is
 
-`krkrz_dev` is the **umbrella development repository** for 吉里吉里Z (Kirikiri Z). It does not contain engine source code of its own — instead it aggregates, via git submodules, the engine core, every plugin, TJS2 script libraries (KAG3, Krkr2Compat, samples, tests), and documentation, under a single CMake build. Almost every path under `src/plugins/*`, `src/core`, `script/*`, `document/*`, and `src/tools/*/` is a submodule with its own upstream repo (see `.gitmodules`). Clone with `--recursive` or run `git submodule update --init --recursive` before building.
+`krkrz_dev` is the **umbrella development repository** for 吉里吉里Z (Kirikiri Z). It does not contain engine source code of its own — instead it aggregates, via git submodules, the engine core, every plugin, TJS2 script libraries (KAG3, Krkr2Compat, samples, tests) under a single CMake build. Almost every path under `src/plugins/*`, `src/core`, `script/*`, and `src/tools/*/` is a submodule with its own upstream repo (see `.gitmodules`). Clone with `--recursive` or run `git submodule update --init --recursive` before building. Documentation is now SSOT in `doc/` (mkdocs site) — no submodule.
 
 The top-level `CMakeLists.txt` only picks which plugins to build and then delegates to `src/core` (the engine) via `add_subdirectory`. For engine-internal architecture — WINVER vs SDL3 vs LIB variants, the OpenGL ES draw-device path, SIMD layout, generated files, build flags, the SIMD parity CTest harness, etc. — **read `src/core/CLAUDE.md`**. Do not duplicate that information here.
 
@@ -41,7 +41,7 @@ Plugins to build live in the top-level `CMakeLists.txt` as two lists consumed by
 
 Commented-out entries (`minizip`, `psdfile`, `sigcheck`, `krkrlua`, `resourceRW`, `httpserv`, `steam`) are intentionally excluded from the default build — don't re-enable without checking why. The `steam` plugin only appears when `$STEAMWORKS_SDK` is set in the environment.
 
-When you need to modify plugin code itself, remember each `src/plugins/<name>/` is its own submodule: commits go to that plugin's upstream repo, not to `krkrz_dev`. The same applies to `src/core`, `script/*`, and `document/*`.
+When you need to modify plugin code itself, remember each `src/plugins/<name>/` is its own submodule: commits go to that plugin's upstream repo, not to `krkrz_dev`. The same applies to `src/core` and `script/*`.
 
 ## Conventions
 

@@ -43,7 +43,7 @@ DATAPATH_ABS=$(shell $(FIXPATH) "$(DATAPATH)")
 
 BUILD_PATH=$(shell cmake --preset $(PRESET) -N | grep BUILD_DIR | sed 's/.*BUILD_DIR="\(.*\)"/\1/')
 
-.PHONY: build prebuild install clean docs docs-scan docs-diff docs-convert
+.PHONY: build prebuild install clean docs docs-scan docs-diff
 
 all: build
 
@@ -89,13 +89,6 @@ docs-scan:
 # _inventory.json と doc/reference/*.md を突き合わせて doc/_missing.md を再生成
 docs-diff:
 	$(VENV_PY) tools/docgen/diff_docs.py
-
-# 旧 document/kirikiriz/j_in の XML を Markdown へ一括変換（初回移行用）。
-# 通常運用では使わない。実行すると doc/reference/ / doc/guide/ /
-# doc/_assets/ が旧 XML から上書き再生成されるので、手編集済みの内容が
-# 消える点に注意。
-docs-convert:
-	$(VENV_PY) tools/docgen/xml2md.py
 
 # WIN版用ルール
 ifeq (windows,$(findstring windows,$(PRESET)))
