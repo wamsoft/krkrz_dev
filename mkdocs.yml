@@ -58,6 +58,7 @@ markdown_extensions:
 exclude_docs: |
   _index.md
   _missing.md
+  _pending_cleanup.md
   _inventory.json
 
 nav:
