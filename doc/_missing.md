@@ -19,8 +19,8 @@
 ## サマリー
 
 - クラス未作成: 0
-- 未記載メンバー合計: 0
-- コードに無いメンバー合計: 12
+- 未記載メンバー合計: 1
+- コードに無いメンバー合計: 5
 
 ## BasicDrawDevice
 
@@ -35,6 +35,9 @@
 - manual: `doc/manual/System.manual.tjs`
 - code: `src/core/common/base/SystemIntf.cpp`
 
+### 未記載メンバー
+- [ ] `isAndroid` (property)
+
 ### コードに存在しないメンバー（要確認）
 - [ ] `exceptionHandler`
 - [ ] `onActivate`
@@ -46,12 +49,5 @@
 - code: `src/core/common/visual/WindowIntf.cpp`
 
 ### コードに存在しないメンバー（要確認）
-- [ ] `canvas`
-- [ ] `drawCycle`
-- [ ] `onDraw`
 - [ ] `onHintChanged`
-- [ ] `onPointerDown`
-- [ ] `onPointerMove`
-- [ ] `onPointerUp`
-- [ ] `startDrawing`
 

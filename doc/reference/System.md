@@ -33,7 +33,6 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [exeBits](#exebits)
 - [osBits](#osbits)
 - [exitOnNoWindowStartup](#exitonnowindowstartup)
-- [isAndroid](#isandroid)
 - [isGeneric](#isgeneric)
 - [isWindows](#iswindows)
 - [licenseText](#licensetext)
@@ -577,16 +576,6 @@ OS が 32bit 版か 64bit 版かを整数の 32 か 64 で表します。
 **解説**
 
 TODO: exitOnNoWindowStartup の説明
-
----
-
-### isAndroid
-
-プロパティ \ アクセス: `r/w`
-
-**解説**
-
-システムがAndroidかどうか判定[r]
 
 ---
 

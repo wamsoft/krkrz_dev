@@ -699,11 +699,6 @@ class System {
 	property exitOnNoWindowStartup;
 
 	/**
-	 * システムがAndroidかどうか判定[r]
-	 */
-	property isAndroid;
-
-	/**
 	 * TODO: isGeneric の説明
 	 */
 	property isGeneric;
