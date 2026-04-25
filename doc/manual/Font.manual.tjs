@@ -240,7 +240,16 @@ class Font {
 	property faceIsFileName;
 
 	/**
-	 * TODO: addFont の説明
+	 * フォントシステムにフォントを追加する。
+	 * @param storage フォントファイル名
+	 * @return ファイルに入っているフェイス名を配列で返す。
 	 */
-	function addFont();
+	function addFont( storage ) : Array;
+
+	/**
+	 * コンストラクタ
+	 * @description Layerメンバのfontは、引数にLayerを渡す特殊版。
+	 * 単体使用する場合は引数なしで生成する。
+	 */
+	function Font();
 }

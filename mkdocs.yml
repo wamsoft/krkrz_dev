@@ -95,6 +95,7 @@ nav:
       - reference/AsyncTrigger.md
       - reference/Bitmap.md
       - reference/BitmapLayerTreeOwner.md
+      - reference/Canvas.md
       - reference/Clipboard.md
       - reference/Console.md
       - reference/Controller.md
@@ -102,14 +103,21 @@ nav:
       - reference/Font.md
       - reference/ImageFunction.md
       - reference/Layer.md
+      - reference/Matrix32.md
+      - reference/Matrix44.md
       - reference/NullDrawDevice.md
+      - reference/Offscreen.md
       - reference/Plugins.md
       - reference/Rect.md
       - reference/Scripts.md
+      - reference/ShaderProgram.md
       - reference/SoundBuffer.md
       - reference/Storages.md
       - reference/System.md
+      - reference/Texture.md
       - reference/Timer.md
+      - reference/VertexBinder.md
+      - reference/VertexBuffer.md
       - reference/VideoOverlay.md
       - reference/WaveSoundBuffer.md
       - reference/WaveSoundBuffer.PhaseVocoder.md

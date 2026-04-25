@@ -289,9 +289,13 @@ class Storages {
 	function dirtree();
 
 	/**
-	 * TODO: getFileProperty の説明
+	 * ファイルプロパティの取得
+	 *
+	 * @param storage プロパティを取得したいファイル名を指定します。
+	 * @return プロパティが辞書形式で返ります。プロパティがなかった場合はnullが返ります。
+	 * @description 指定されたストレージ名から、プロパティを取得して返します。
 	 */
-	function getFileProperty();
+	function getFileProperty( storage );
 
 	/**
 	 * TODO: isCacheLoading の説明

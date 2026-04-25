@@ -1257,7 +1257,14 @@ class Window {
 	property displayRotate { getter; }
 
 	/**
-	 * TODO: displayDensity の説明
+	 * 画面密度(dpi)
+	 * @description dpi値を返します。
+	 * 読み取りのみ可能です。
+	 * Windowsの場合はGetDeviceCapsで得られる値です。
+	 * Androidはコンフィグの値で、画面サイズから何種類かの値が返されます。
+	 * 画面横からのスワイプインなどでの入力を除外する際、Androidでは(int)(20 * displayDensity + 0.5)を画面隅の範囲として認識しているため、同じようにtouchDownがこの範囲にある時はスワイプインとみなす必要があります。
+	 * Androidではフルスクリーン時右から以外のスワイプインは機能が割り当てられているため、スワイプインと判定された時は無視することを推奨します。
+	 * メニューを表示したい時は、右からのスワイプインをメニュー表示とするのがAndroidでは一般的です。
 	 */
 	property displayDensity;
 
@@ -1320,4 +1327,77 @@ class Window {
 	 * TODO: setLayerPos の説明
 	 */
 	function setLayerPos();
+
+	/**
+	 * 何らかのポインティングデバイスで押下された
+	 *
+	 * @param type タッチもしくはマウスボタンの種類
+	 * @param x X位置
+	 * @param y Y位置
+	 * @param cx 接触幅(ピクセル数)、マウスの時は1
+	 * @param cy 接触高さ(ピクセル数)、マウスの時は1
+	 * @param shift 修飾キー状態、タッチの時は0
+	 * @param id タッチID、マウスの時は常に0
+	 */
+	event onPointerDown( type, x, y, cx, cy, shift, id );
+
+	/**
+	 * 何らかのポインティングデバイスが移動された
+	 *
+	 * @param type タッチもしくはマウス。マウスボタンの種類ではなく、マウスとして通知。
+	 * @param x X位置
+	 * @param y Y位置
+	 * @param cx 接触幅(ピクセル数)、マウスの時は1
+	 * @param cy 接触高さ(ピクセル数)、マウスの時は1
+	 * @param shift 修飾キー状態(マウス押下状態を含む)、タッチの時は0
+	 * @param id タッチID、マウスの時は常に0
+	 */
+	event onPointerMove( type, x, y, cx, cy, shift, id );
+
+	/**
+	 * 何らかのポインティングデバイスが離された
+	 *
+	 * @param type タッチもしくはマウスボタンの種類
+	 * @param x X位置
+	 * @param y Y位置
+	 * @param cx 接触幅(ピクセル数)、マウスの時は1
+	 * @param cy 接触高さ(ピクセル数)、マウスの時は1
+	 * @param shift 修飾キー状態、タッチの時は0
+	 * @param id タッチID、マウスの時は常に0
+	 */
+	event onPointerUp( type, x, y, cx, cy, shift, id );
+
+	/**
+	 * 画面更新コールバックイベント
+	 *
+	 * @description 画面更新処理時に呼び出される
+	 * この呼び出しの間に独自の描画処理を行う
+	 * このメソッドを直接呼び出さないこと。
+	 */
+	event onDraw();
+
+	/**
+	 * 明示的に描画を呼び出す。
+	 *
+	 * @description このメソッドはonDrawを間接的に呼び出しますす。
+	 * 自分で描画したい場合は、このメソッドを呼び出し、onDraw内で描画します。
+	 * Window.drawCycle を指定して定期的に描画するようにし、このメソッドで明示的に描画することは出来るだけ避けてください。
+	 * 将来的に他のプラットフォームでサポートできない可能性があります。
+	 */
+	function startDrawing();
+
+	/**
+	 * 指定サイクルで描画を行う
+	 *
+	 * @description 60や30などを指定します。
+	 * 0を指定するとonDrawは呼び出されません。
+	 * Canvas 描画時に有効です。
+	 */
+	property drawCycle;
+
+	/**
+	 * 描画用の Canvas クラスのインスタンスを得る
+	 * @description onDraw 内で使用します。
+	 */
+	property canvas;
 }

@@ -44,6 +44,10 @@ Layer クラスのコンストラクタの第一引数に window の代わりに
 - [fireTouchRotate](#firetouchrotate)
 - [fireTouchScaling](#firetouchscaling)
 - [fireTouchUp](#firetouchup)
+- [update](#update)
+
+### イベント
+
 - [onChangeLayerImage](#onchangelayerimage)
 - [onDisableAttentionPoint](#ondisableattentionpoint)
 - [onGetCursorPos](#ongetcursorpos)
@@ -55,7 +59,6 @@ Layer クラスのコンストラクタの第一引数に window の代わりに
 - [onSetHintText](#onsethinttext)
 - [onSetImeMode](#onsetimemode)
 - [onSetMouseCursor](#onsetmousecursor)
-- [update](#update)
 
 ---
 
@@ -107,7 +110,7 @@ TODO: focusedLayer の説明
 
 **解説**
 
-TODO: height の説明
+高さ(readonly)
 
 ---
 
@@ -137,7 +140,7 @@ TODO: layerEventTargetInterface の説明
 
 **解説**
 
-TODO: layerTreeOwnerInterface の説明
+LTOインターフェイス、内部使用(readonly)
 
 ---
 
@@ -147,7 +150,7 @@ TODO: layerTreeOwnerInterface の説明
 
 **解説**
 
-TODO: primaryLayer の説明
+プライマリレイヤ(readonly)
 
 ---
 
@@ -157,7 +160,7 @@ TODO: primaryLayer の説明
 
 **解説**
 
-TODO: width の説明
+幅(readonly)
 
 ---
 
@@ -167,7 +170,7 @@ TODO: width の説明
 
 **解説**
 
-TODO: clearDirtyRect の説明
+更新矩形情報をクリアする
 
 ---
 
@@ -175,9 +178,16 @@ TODO: clearDirtyRect の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | クリックされた位置の x 座標 ( クライアント座標 ) |
+| `y` | `&nbsp;` | クリックされた位置の y 座標 ( クライアント座標 ) |
+
 **解説**
 
-TODO: fireClick の説明
+クリックをレイヤに通知します(使用非推奨)
 
 ---
 
@@ -185,9 +195,19 @@ TODO: fireClick の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `orientation` | `&nbsp;` | 画面の向き |
+| `rotate` | `&nbsp;` | 角度 |
+| `bpp` | `&nbsp;` | bits per pixel |
+| `hresolution` | `&nbsp;` | 画面の幅 |
+| `vresolution` | `&nbsp;` | 画面の高さ |
+
 **解説**
 
-TODO: fireDisplayRotate の説明
+画面が回転されたことをレイヤに通知します
 
 ---
 
@@ -195,9 +215,16 @@ TODO: fireDisplayRotate の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | ダブルクリックされた位置の x 座標 ( クライアント座標 ) |
+| `y` | `&nbsp;` | ダブルクリックされた位置の y 座標 ( クライアント座標 ) |
+
 **解説**
 
-TODO: fireDoubleClick の説明
+ダブルクリックをレイヤに通知します(使用非推奨)
 
 ---
 
@@ -205,9 +232,16 @@ TODO: fireDoubleClick の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `key` | `&nbsp;` | 押されたキーの仮想キーコード |
+| `shift` | `&nbsp;` | キーが押された時に同時に押されていたシフト系のキーやマウスのボタンの状態 |
+
 **解説**
 
-TODO: fireKeyDown の説明
+キーが押されたことをレイヤに通知します
 
 ---
 
@@ -215,9 +249,15 @@ TODO: fireKeyDown の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `key` | `&nbsp;` | 文字 |
+
 **解説**
 
-TODO: fireKeyPress の説明
+文字が入力されたことをレイヤに通知します
 
 ---
 
@@ -225,9 +265,16 @@ TODO: fireKeyPress の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `key` | `&nbsp;` | 離されたキーの仮想キーコード |
+| `shift` | `&nbsp;` | キーが離された時に同時に押されていたシフト系のキーやマウスのボタンの状態 |
+
 **解説**
 
-TODO: fireKeyUp の説明
+キーが離されたことをレイヤに通知します
 
 ---
 
@@ -235,9 +282,18 @@ TODO: fireKeyUp の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | マウスのボタンが押された位置の x 座標 ( クライアント座標 ) |
+| `y` | `&nbsp;` | マウスのボタンが押された位置の y 座標 ( クライアント座標 ) |
+| `mb` | `&nbsp;` | 押されたマウスボタン |
+| `flags` | `&nbsp;` |  |
+
 **解説**
 
-TODO: fireMouseDown の説明
+マウス押下をレイヤに通知します
 
 ---
 
@@ -245,9 +301,17 @@ TODO: fireMouseDown の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | マウスが移動した位置の x 座標 ( クライアント座標 ) |
+| `y` | `&nbsp;` | マウスが移動した位置の y 座標 ( クライアント座標 ) |
+| `flags` | `&nbsp;` | マウスが移動していた時に同時に押されていたシフト系のキーやマウスのボタンの状態 |
+
 **解説**
 
-TODO: fireMouseMove の説明
+マウス移動をレイヤに通知します
 
 ---
 
@@ -257,7 +321,7 @@ TODO: fireMouseMove の説明
 
 **解説**
 
-TODO: fireMouseOutOfWindow の説明
+マウスがWindow外に出たことをレイヤに通知します
 
 ---
 
@@ -265,9 +329,18 @@ TODO: fireMouseOutOfWindow の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | マウスのボタンが離された位置の x 座標 ( クライアント座標 ) |
+| `y` | `&nbsp;` | マウスのボタンが離された位置の y 座標 ( クライアント座標 ) |
+| `mb` | `&nbsp;` | 離されたマウスボタン |
+| `flags` | `&nbsp;` | マウスボタンが離された時に同時に押されていたシフト系のキーの状態 |
+
 **解説**
 
-TODO: fireMouseUp の説明
+マウス押下をレイヤに通知します
 
 ---
 
@@ -275,9 +348,18 @@ TODO: fireMouseUp の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `shift` | `&nbsp;` | マウスが移動していた時に同時に押されていたシフト系のキーやマウスのボタンの状態 |
+| `delta` | `&nbsp;` | ホイールの回転角 |
+| `x` | `&nbsp;` | ホイールが回転した位置の x 座標 ( クライアント座標 ) |
+| `y` | `&nbsp;` | ホイールが回転した位置の y 座標 ( クライアント座標 ) |
+
 **解説**
 
-TODO: fireMouseWheel の説明
+マウスのホイール回転をレイヤに通知します
 
 ---
 
@@ -287,7 +369,7 @@ TODO: fireMouseWheel の説明
 
 **解説**
 
-TODO: fireMultiTouch の説明
+マルチタッチ状態変化をレイヤに通知します
 
 ---
 
@@ -297,7 +379,10 @@ TODO: fireMultiTouch の説明
 
 **解説**
 
-TODO: fireRecheckInputState の説明
+必要なら1秒間隔で呼び出します。
+
+現在のレイヤのマウス位置確認とヒントの更新、カーソルタイプ、レイヤEnter/Leaveが再チェックされます。
+内部的にはマウスカーソル移動0呼び出しが行われています。
 
 ---
 
@@ -307,7 +392,7 @@ TODO: fireRecheckInputState の説明
 
 **解説**
 
-TODO: fireReleaseCapture の説明
+マウスキャプチャ解除をレイヤに通知します
 
 ---
 
@@ -315,9 +400,19 @@ TODO: fireReleaseCapture の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | タッチされた位置の x 座標 ( クライアント座標 ) |
+| `y` | `&nbsp;` | タッチされた位置の y 座標 ( クライアント座標 ) |
+| `cx` | `&nbsp;` | 指が接触している横方向ピクセル数 |
+| `cy` | `&nbsp;` | 指が接触している縦方向ピクセル数 |
+| `id` | `&nbsp;` | タッチID |
+
 **解説**
 
-TODO: fireTouchDown の説明
+タッチされたことをレイヤに通知します
 
 ---
 
@@ -325,9 +420,19 @@ TODO: fireTouchDown の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | タッチ位置の x 座標 ( クライアント座標 ) |
+| `y` | `&nbsp;` | タッチ位置の y 座標 ( クライアント座標 ) |
+| `cx` | `&nbsp;` | 指が接触している横方向ピクセル数 |
+| `cy` | `&nbsp;` | 指が接触している縦方向ピクセル数 |
+| `id` | `&nbsp;` | タッチID |
+
 **解説**
 
-TODO: fireTouchMove の説明
+タッチが移動されたことをレイヤに通知します
 
 ---
 
@@ -335,9 +440,20 @@ TODO: fireTouchMove の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `startangle` | `&nbsp;` | マルチタッチが開始された時のラジアン角度 |
+| `curangle` | `&nbsp;` | イベント発生時のタッチのラジアン角度 |
+| `dist` | `&nbsp;` | イベント発生時のタッチのピクセル距離 |
+| `cx` | `&nbsp;` | 中心位置の x 座標 ( クライアント座標 ) |
+| `cy` | `&nbsp;` | 中心位置の y 座標 ( クライアント座標 ) |
+| `flag` | `&nbsp;` | マルチタッチ状態フラグ |
+
 **解説**
 
-TODO: fireTouchRotate の説明
+回転操作されたことをレイヤに通知します
 
 ---
 
@@ -345,9 +461,19 @@ TODO: fireTouchRotate の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `startdist` | `&nbsp;` | マルチタッチが開始された時のピクセル距離 |
+| `curdist` | `&nbsp;` | イベント発生時のタッチのピクセル距離 |
+| `cx` | `&nbsp;` | 中心位置の x 座標 ( クライアント座標 ) |
+| `cy` | `&nbsp;` | 中心位置の y 座標 ( クライアント座標 ) |
+| `flag` | `&nbsp;` | マルチタッチ状態フラグです。 |
+
 **解説**
 
-TODO: fireTouchScaling の説明
+拡大操作されたことをレイヤに通知します
 
 ---
 
@@ -355,119 +481,19 @@ TODO: fireTouchScaling の説明
 
 メソッド
 
-**解説**
+**引数**
 
-TODO: fireTouchUp の説明
-
----
-
-### onChangeLayerImage
-
-メソッド
-
-**解説**
-
-TODO: onChangeLayerImage の説明
-
----
-
-### onDisableAttentionPoint
-
-メソッド
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 離された位置の x 座標 ( クライアント座標 ) |
+| `y` | `&nbsp;` | 離された位置の y 座標 ( クライアント座標 ) |
+| `cx` | `&nbsp;` | 指が接触している横方向ピクセル数 |
+| `cy` | `&nbsp;` | 指が接触している縦方向ピクセル数 |
+| `id` | `&nbsp;` | タッチID |
 
 **解説**
 
-TODO: onDisableAttentionPoint の説明
-
----
-
-### onGetCursorPos
-
-メソッド
-
-**解説**
-
-TODO: onGetCursorPos の説明
-
----
-
-### onReleaseMouseCapture
-
-メソッド
-
-**解説**
-
-TODO: onReleaseMouseCapture の説明
-
----
-
-### onResetImeMode
-
-メソッド
-
-**解説**
-
-TODO: onResetImeMode の説明
-
----
-
-### onResizeLayer
-
-メソッド
-
-**解説**
-
-TODO: onResizeLayer の説明
-
----
-
-### onSetAttentionPoint
-
-メソッド
-
-**解説**
-
-TODO: onSetAttentionPoint の説明
-
----
-
-### onSetCursorPos
-
-メソッド
-
-**解説**
-
-TODO: onSetCursorPos の説明
-
----
-
-### onSetHintText
-
-メソッド
-
-**解説**
-
-TODO: onSetHintText の説明
-
----
-
-### onSetImeMode
-
-メソッド
-
-**解説**
-
-TODO: onSetImeMode の説明
-
----
-
-### onSetMouseCursor
-
-メソッド
-
-**解説**
-
-TODO: onSetMouseCursor の説明
+タッチが離されたことをレイヤに通知します
 
 ---
 
@@ -478,5 +504,173 @@ TODO: onSetMouseCursor の説明
 **解説**
 
 TODO: update の説明
+
+---
+
+### onChangeLayerImage
+
+イベント
+
+**解説**
+
+Layer 画像が更新された
+
+---
+
+### onDisableAttentionPoint
+
+イベント
+
+**解説**
+
+Layer から注視位置の指定解除された
+
+---
+
+### onGetCursorPos
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` |  |
+| `y` | `&nbsp;` |  |
+
+**解説**
+
+Layer からカーソル位置取得が呼び出された
+
+必要であればカーソル位置を返す
+
+---
+
+### onReleaseMouseCapture
+
+イベント
+
+**解説**
+
+Layer からマウスキャプチャ解除が呼び出された
+
+必要であればマウスキャプチャ解除を行う
+
+---
+
+### onResetImeMode
+
+イベント
+
+**解説**
+
+IMEモードがリセットされた
+
+---
+
+### onResizeLayer
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `w` | `&nbsp;` |  |
+| `h` | `&nbsp;` |  |
+
+**解説**
+
+プライマリレイヤーのサイズが変更された
+
+---
+
+### onSetAttentionPoint
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `layer` | `&nbsp;` |  |
+| `x` | `&nbsp;` |  |
+| `y` | `&nbsp;` |  |
+
+**解説**
+
+Layer から注視位置の指定が呼び出された
+
+---
+
+### onSetCursorPos
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` |  |
+| `y` | `&nbsp;` |  |
+
+**解説**
+
+Layer からカーソル位置設定が呼び出された
+
+必要であればカーソル位置を設定する
+
+---
+
+### onSetHintText
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `sender` | `&nbsp;` |  |
+| `hint` | `&nbsp;` |  |
+
+**解説**
+
+Layer からヒントテキスト設定が呼び出された
+
+必要であればヒントテキスト設定を行う
+
+---
+
+### onSetImeMode
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `mode` | `&nbsp;` |  |
+
+**解説**
+
+IMEモードが設定された
+
+---
+
+### onSetMouseCursor
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `cursor` | `&nbsp;` |  |
+
+**解説**
+
+Layer からカーソル設定が呼び出された
+
+必要であればカーソルの変更を行う。
 
 ---

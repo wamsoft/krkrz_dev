@@ -699,7 +699,7 @@ class System {
 	property exitOnNoWindowStartup;
 
 	/**
-	 * TODO: isAndroid の説明
+	 * システムがAndroidかどうか判定[r]
 	 */
 	property isAndroid;
 
@@ -709,7 +709,7 @@ class System {
 	property isGeneric;
 
 	/**
-	 * TODO: isWindows の説明
+	 * システムがWindowsかどうか判定[r]
 	 */
 	property isWindows;
 
@@ -719,7 +719,8 @@ class System {
 	property licenseText;
 
 	/**
-	 * TODO: openGLESVersion の説明
+	 * OpenGL ES のバージョン
+	 * @description 実際の値を100倍した数、つまり2.0なら200、3.0なら300が返ります。
 	 */
 	property openGLESVersion;
 
@@ -749,7 +750,8 @@ class System {
 	function getJoypadType();
 
 	/**
-	 * TODO: nullpo の説明
+	 * nullポインターアクセスを発生させます
+	 * @description 呼ばないでください。
 	 */
 	function nullpo();
 

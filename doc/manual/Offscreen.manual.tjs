@@ -1,0 +1,101 @@
+/**
+ * @description オフスクリーン。
+ * いわゆるレンダーターゲット。テクスチャとしても利用可能です。
+ * 内部的に FBO, Renderbuffer, Texture が生成されます。
+ * レンダーターゲットとして設定しないのであれば、わざわざこのクラスを使用する必要性はありません。
+ * Textureクラスを使用した方がメモリ効率が良いです。
+ */
+class Offscreen {
+	/**
+	 * オフスクリーンを生成。
+	 * @description 破棄はinvalidate時に行われるので、不要になったら明示的なinvalidate推奨します。
+	 * @param width オフスクリーン幅
+	 * @param height オフスクリーン高さ
+	 */
+	function Offscreen( width:int, height:int );
+
+
+	/**
+	 * 矩形コピー
+	 * @param dleft コピー先左端
+	 * @param dtop コピー先上端
+	 * @param src Bitmapクラスのオブジェクト
+	 * @param srcRect srcのコピー元矩形
+	 */
+	function copyRect( dleft:int, dtop:int, src:Bitmap, srcRect:Rect );
+
+	/**
+	 * 矩形コピー
+	 * @param dleft コピー先左端
+	 * @param dtop コピー先上端
+	 * @param src Bitmapクラスのオブジェクト
+	 * @param sleft コピー元左端位置
+	 * @param stop コピー元上端位置
+	 * @param swidth コピー元幅
+	 * @param sheight コピー元高さ
+	 */
+	function copyRect( dleft:int, dtop:int, src:Bitmap, sleft:int, stop:int, swidth:int, sheight:int );
+
+	/**
+	 * Bitmapにコピー
+	 * @param destBitmap 格納先ビットマップ
+	 * @param dleft コピー先左端
+	 * @param dtop コピー先上端
+	 * @param sleft コピー元左端
+	 * @param stop コピー元上端
+	 * @param width サイズ横幅
+	 * @param height サイズ縦幅
+	 */
+	function copyTo( destBitmap:Bitmap, dleft:int, dtop:int, sleft:int, stop:int, width:int, height:int );
+
+	/**
+	 * Bitmapにコピー
+	 * @description BitmapはOffscreenのサイズに合わせて拡大縮小されます。
+	 * @param destBitmap 格納先ビットマップ
+	 */
+	function copyTo( destBitmap:Bitmap );
+
+	/**
+	 * Bitmapにコピー
+	 * @param destBitmap 格納先ビットマップ
+	 * @param dleft コピー先左端
+	 * @param dtop コピー先上端
+	 * @param srcRect コピー元矩形
+	 */
+	function copyTo( destBitmap:Bitmap, dleft:int, dtop:int, srcRect:Rect );
+
+	// レンダーターゲットへはTextureを設定する(再利用のため)ので、実質的にTextureからメモリへのコピーになるが、
+	// OpenGL ES 2.0/3.0 ではフレームバッファからしかコピーできない。
+	// このため copyTo メソッドは、一度フレームバッファに設定してからコピーし、その後元のレンダーターゲットに
+	// 戻すような処理が行われる。
+	// つまり、このメソッドは極力使わないことを推奨する方が良さげと言うか、非効率的
+	// 現在フレームバッファに設定されているのであれば、マシであるが。
+	// ただし、実際に非効率的かは速度を計測しないことにはわからない。
+	// そもそも CPU <-> GPU 間の転送はなるべく避けた方が良い。
+
+
+	/**
+	 * フレームバッファに設定されているテクスチャとTextureクラスが指すテクスチャを入れ替える。
+	 * @description 交換するテクスチャのサイズは合わせておかないと例外となる。
+	 * カラーフォーマットもRGBAとする必要がある。
+	 * レンダリング途中での入れ替えも行わない方がいいかもしれない(要確認)。
+	 * クロスフェードなどで両方に描画する必要がない場合、以前の画像をTextureとして取り出し、新しいTextureに差し替えることでオーバーヘッドを減らせる。
+	 * @param texture 交換するTextureクラスのインスタンス。
+	 */
+	function exchangeTexture( texture:Texture );
+
+	/**
+	 * 幅、生成時に指定されたもの[r]
+	 */
+	property width;
+	/**
+	 * 高さ、生成時に指定されたもの[r]
+	 */
+	property height;
+
+	/**
+	 * 環境依存のハンドル[r]
+	 * @description OpenGL ES下ではtexture idとなる。
+	 */
+	property nativeHandle;
+};

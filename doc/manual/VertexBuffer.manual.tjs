@@ -1,0 +1,153 @@
+/**
+ * @description VertexBufferは頂点情報を保持するクラスです。
+ *
+ * 位置の指定やUV座標、頂点カラーなどを細かく設定したい場合に使用します。
+ * 単純な矩形ではなくメッシュ変形などを行いたい場合やポイントスプライトを使用したい場合などにも使用します。
+ *
+ * プラグインで頂点の配列を直接変更できるようにポインタアクセスも可能です(ただしOpenGLES3.0以降)。
+ * シェーダー+TJS2スクリプト+プラグインでの頂点操作で従来のようなLayer拡張性を確保できます。
+ * 従来のプラグイン内でほぼ完結していたものに比べるとやや複雑にはなります。
+ */
+class VertexBuffer {
+
+	/**
+	 * 未初期化の頂点バッファを作ります
+	 * @param size バッファのバイト数
+	 * @param dataType データの型。dtByte/dtUByte/dtShort/dtUShort/dtInt/dtFloat
+	 * @param updateType データ更新頻度。utStream/utStatic/utDynamic 
+	 * @param isIndex インデックスバッファかどうか。頂点バッファならfalse
+	 */
+	function VertexBuffer( size:int, dataType:int, updateType:int, isIndex:bool = false );
+
+	/**
+	 * 頂点配列を指定して頂点バッファを作ります
+	 * @param data 頂点配列。バッファサイズはこの配列の要素数×データ型サイズ。
+	 * @param dataType データの型。dtByte/dtUByte/dtShort/dtUShort/dtInt/dtFloat 
+	 * @param updateType データ更新頻度。utStream/utStatic/utDynamic
+	 * @param isIndex インデックスバッファかどうか。頂点バッファならfalse
+	 */
+	function VertexBuffer( data:Array, dataType:int, updateType:int, isIndex:bool = false );
+
+	/**
+	 * 頂点データを設定/更新
+	 * @description Staticの時は失敗します(例外)。
+	 * @param array 頂点配列
+	 * @param offset 変更を開始する配列オフセットインデックス(非バイトサイズ)
+	 */
+	function setVertex( array:Array, offset:int = 0 );
+
+	/**
+	 * 頂点データをロックし、データへのポインタ(read/write指定)を返します
+	 * @description プラグイン用( OpenGL ES 3.0以降でないと使えません )
+	 * @return 頂点データへのポインタ、ロックに失敗した時はnull
+	 */
+	function lock();
+
+	/**
+	 * 頂点データのロックを解除します
+	 * @description プラグイン用( OpenGL ES 3.0以降でないと使えません )。
+	 * データの受け渡しが終わったら、バッファが使用される前に呼び出します。
+	 * lockを維持せず、更新したら即座にunlockするのが好ましいです。
+	 */
+	function unlock();
+
+	/**
+	 * バッファサイズ(readonly)
+	 */
+	property size;
+
+	/**
+	 * 頂点データの型(readonly)
+	 */
+	property dataType;
+
+	/**
+	 * データ更新頻度(readonly)
+	 */
+	property updateType;
+
+	/**
+	 * インデックスバッファかどうか(readonly)
+	 */
+	property isIndex;
+
+	/**
+	 * ネイティブハンドル
+	 */
+	property nativeHandle;
+
+	/**
+	 * データ型定数(byte)
+	 */
+	const dtByte;
+	/**
+	 * データ型定数(unsigned byte)
+	 */
+	const dtUByte;
+	/**
+	 * データ型定数(short)
+	 */
+	const dtShort;
+	/**
+	 * データ型定数(unsigned short)
+	 */
+	const dtUShort;
+	/**
+	 * データ型定数(int) ES3.0以降必要
+	 */
+	const dtInt;
+	/**
+	 * データ型定数(unsinged int) ES3.0以降必要
+	 */
+	const dtUInt;
+	/**
+	 * データ型定数(fixed:固定少数点)
+	 */
+	const dtFixed;
+	/**
+	 * データ型定数(float)
+	 */
+	const dtFloat;
+
+	/**
+	 * 更新頻度定数:毎フレーム更新
+	 */
+	const utStream;
+	/**
+	 * 更新頻度定数:変更なし
+	 */
+	const utStatic;
+	/**
+	 * 更新頻度定数:頻繁に更新される
+	 */
+	const utDynamic;
+
+	/**
+	 * プリミティブ型定数(ポイントリスト)
+	 */
+	const ptPoints;
+	/**
+	 * プリミティブ型定数(ラインストリップ)
+	 */
+	const ptLineStrip;
+	/**
+	 * プリミティブ型定数(ラインループ)
+	 */
+	const ptLineLoop;
+	/**
+	 * プリミティブ型定数(ラインリスト)
+	 */
+	const ptLines;
+	/**
+	 * プリミティブ型定数(トライアングルストラップ)
+	 */
+	const ptTriangleStrip;
+	/**
+	 * プリミティブ型定数(トライアングルファン)
+	 */
+	const ptTriangleFan;
+	/**
+	 * プリミティブ型定数(トライアングルリスト)
+	 */
+	const ptTriangles;
+};

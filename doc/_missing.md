@@ -20,7 +20,7 @@
 
 - クラス未作成: 0
 - 未記載メンバー合計: 0
-- コードに無いメンバー合計: 5
+- コードに無いメンバー合計: 12
 
 ## BasicDrawDevice
 
@@ -46,5 +46,12 @@
 - code: `src/core/common/visual/WindowIntf.cpp`
 
 ### コードに存在しないメンバー（要確認）
+- [ ] `canvas`
+- [ ] `drawCycle`
+- [ ] `onDraw`
 - [ ] `onHintChanged`
+- [ ] `onPointerDown`
+- [ ] `onPointerMove`
+- [ ] `onPointerUp`
+- [ ] `startDrawing`
 

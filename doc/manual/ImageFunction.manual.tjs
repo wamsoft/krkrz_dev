@@ -616,7 +616,14 @@ class ImageFunction {
 	function fillRect(bmp, value, rect = null, isalpha = true, cliprect = null);
 
 	/**
-	 * TODO: copy9Patch の説明
+	 * 9 path を利用した画像コピー(マルチプラットフォーム版以降)
+	 *
+	 * @param dst コピー先Bitmap
+	 * @param src コピー元Bitmap
+	 * @return マージン情報
+	 * @description 9 path ( slice ) を利用した画像コピーを行います。
+	 * 返されるマージン情報はRectクラスのオブジェクトです。
+	 * このマージン内にテキストなど描画します。
 	 */
-	function copy9Patch();
+	function copy9Patch( dst:Bitmap, src:Bitmap ):Rect;
 }

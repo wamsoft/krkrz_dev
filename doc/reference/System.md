@@ -586,7 +586,7 @@ TODO: exitOnNoWindowStartup の説明
 
 **解説**
 
-TODO: isAndroid の説明
+システムがAndroidかどうか判定[r]
 
 ---
 
@@ -606,7 +606,7 @@ TODO: isGeneric の説明
 
 **解説**
 
-TODO: isWindows の説明
+システムがWindowsかどうか判定[r]
 
 ---
 
@@ -626,7 +626,9 @@ TODO: licenseText の説明
 
 **解説**
 
-TODO: openGLESVersion の説明
+OpenGL ES のバージョン
+
+実際の値を100倍した数、つまり2.0なら200、3.0なら300が返ります。
 
 ---
 
@@ -1136,7 +1138,9 @@ TODO: getJoypadType の説明
 
 **解説**
 
-TODO: nullpo の説明
+nullポインターアクセスを発生させます
+
+呼ばないでください。
 
 ---
 

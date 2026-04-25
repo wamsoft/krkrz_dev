@@ -1,0 +1,292 @@
+/**
+ * @description 4x4行列です。
+ * OpenGLのため列優先行列であることに注意してください(列優先の方が演算量的に有利です)。
+ * DirectXなどから見ると転置されているように感じます(シェーダのHLSLでは列優先で同じです)。
+ */
+class Matrix44 {
+
+	/**
+	 * 単位行列で生成
+	 */
+	functiont Matrix44();
+
+	/**
+	 * コンストラクタ
+	 * @param m11 [1][1]位置の値です。
+	 * @param m12 [1][2]位置の値です。
+	 * @param m13 [1][3]位置の値です。
+	 * @param m14 [1][4]位置の値です。
+	 * @param m21 [2][1]位置の値です。
+	 * @param m22 [2][2]位置の値です。
+	 * @param m23 [2][3]位置の値です。
+	 * @param m24 [2][4]位置の値です。
+	 * @param m31 [3][1]位置の値です。
+	 * @param m32 [3][2]位置の値です。
+	 * @param m33 [3][3]位置の値です。
+	 * @param m34 [3][4]位置の値です。
+	 * @param m41 [4][1]位置の値です。
+	 * @param m42 [4][2]位置の値です。
+	 * @param m43 [4][3]位置の値です。
+	 * @param m44 [4][4]位置の値です。
+	 */
+	functiont Matrix44(m11:real, m12:real, m13:real, m14:real, m21:real, m22:real, m23:real, m24:real, m31:real, m32:real, m33:real, m34:real, m41:real, m42:real, m43:real, m44:real);
+
+	/**
+	 * マトリックス設定
+	 * @param m11 [1][1]位置の値です。
+	 * @param m12 [1][2]位置の値です。
+	 * @param m13 [1][3]位置の値です。
+	 * @param m14 [1][4]位置の値です。
+	 * @param m21 [2][1]位置の値です。
+	 * @param m22 [2][2]位置の値です。
+	 * @param m23 [2][3]位置の値です。
+	 * @param m24 [2][4]位置の値です。
+	 * @param m31 [3][1]位置の値です。
+	 * @param m32 [3][2]位置の値です。
+	 * @param m33 [3][3]位置の値です。
+	 * @param m34 [3][4]位置の値です。
+	 * @param m41 [4][1]位置の値です。
+	 * @param m42 [4][2]位置の値です。
+	 * @param m43 [4][3]位置の値です。
+	 * @param m44 [4][4]位置の値です。
+	 */
+	function set(m11:real, m12:real, m13:real, m14:real, m21:real, m22:real, m23:real, m24:real, m31:real, m32:real, m33:real, m34:real, m41:real, m42:real, m43:real, m44:real );
+
+	/**
+	 * マトリックス設定
+	 * @description 1次元配列からコピー
+	 * @param array 16要素の配列を指定します。
+	 */
+
+	function set(array:Array);
+
+	/**
+	 * マトリックス設定
+	 * @description matrixからコピー
+	 */
+	function set(matrix:Matrix44);
+
+	/**
+	 * 単位行列化
+	 */
+	function reset();
+
+	/**
+	 * 移動量設定
+	 * @description 行列のXYZ移動位置に値を設定します。
+	 * 設定のみで現在の行列との演算などは行われません。
+	 * @param x 設定するX座標値
+	 * @param y 設定するY座標値
+	 * @param z 設定するZ座標値
+	 */
+	function setTranslate( x:real, y:real, z:real=0.0 );
+
+	/**
+	 * 拡大率設定
+	 * @description 行列のXYZ拡大位置に値を設定します。
+	 * 設定のみで現在の行列との演算などは行われません。
+	 * @param x 設定するX軸拡大率
+	 * @param y 設定するY軸拡大率
+	 * @param z 設定するZ軸拡大率
+	 */
+	function setScale( x:real, y:real, z:real=1.0 );
+
+	/**
+	 * 回転量設定
+	 * @description Z軸回転を設定します。
+	 * 設定のみで現在の行列との演算などは行われません。
+	 * @param degree 回転角度
+	 */
+	function setRotateZ( degree:real );
+
+	/**
+	 * 回転量設定
+	 * @description 設定のみで現在の行列との演算などは行われません。
+	 * 回転軸は正規化推奨
+	 * @param degree 回転角度
+	 * @param x 回転軸X
+	 * @param y 回転軸Y
+	 * @param z 回転軸Z
+	 */
+	function setRotate( degree:real, x:real, y:real, z:real );
+
+	/**
+	 * 自身に行列を加算します
+	 * @param matrix 加算する行列
+	 */
+	function add( matrix:Matrix44 );
+
+	/**
+	 * 自身から行列を減算します
+	 * @param matrix 減算する行列
+	 */
+	function sub( matrix:Matrix44 );
+
+	/**
+	 * 自身に行列を乗算します
+	 * @param matrix 乗算する行列
+	 */
+	function mul( matrix:Matrix44 );
+
+	/**
+	 * 自身から行列を除算します
+	 * @param matrix 除算する行列
+	 */
+	function div( matrix:Matrix44 );
+
+	/**
+	 * 行列を移動します
+	 * @param x 移動するX座標値
+	 * @param y 移動するY座標値
+	 * @param z 移動するZ座標値
+	 */
+	function translate( x:real, y:real, z:real=0.0 );
+
+	/**
+	 * 行列を回転します
+	 * @param degree 回転角度
+	 * @param x 回転軸X
+	 * @param y 回転軸Y
+	 * @param z 回転軸Z
+	 */
+	function rotate( degree:real, x:real, y:real, z:real );
+
+	/**
+	 * 行列を拡大縮小します
+	 * @param x X軸拡大率
+	 * @param y Y軸拡大率
+	 * @param z Z軸拡大率
+	 */
+	function scale( x:real, y:real, z:real=1.0 );
+
+	/**
+	 * 平行投影変換行列を設定
+	 * @param left 左端
+	 * @param right 右端
+	 * @param bottom 下端
+	 * @param top 上端
+	 * @param znear 全面
+	 * @param zfar 背面
+	 */
+	function ortho( left:real, right:real, bottom:real, top:real, znear:real, zfar:real );
+
+	/**
+	 * 平行投影変換行列を設定
+	 * @param left 左端
+	 * @param right 右端
+	 * @param bottom 下端
+	 * @param top 上端
+	 */
+	function ortho( left:real, right:real, bottom:real, top:real );
+
+	/**
+	 * 透視投影変換行列を設定
+	 * @param left 左端
+	 * @param right 右端
+	 * @param bottom 下端
+	 * @param top 上端
+	 * @param znear 全面
+	 * @param zfar 背面
+	 */
+	function frustum( left:real, right:real, bottom:real, top:real, znear:real, zfar:real );
+
+	/**
+	 * 射影変換行列を設定
+	 * @param fovy 視野角
+	 * @param aspect アスペクト比
+	 * @param znear 全面
+	 * @param zfar 背面
+	 */
+	function perspective( fovy:real, aspect:real, znear:real, zfar:real );
+
+	/**
+	 * 射影変換行列を設定
+	 * @param fovy 視野角
+	 * @param width 幅
+	 * @param height 高さ
+	 * @param znear 全面
+	 * @param zfar 背面
+	 */
+	function perspectiveFov( fovy:real, width:real, height:real, znear:real, zfar:real );
+
+	/**
+	 * 各種行列を用いた座標変換
+	 * @description クラスメソッドです。
+	 * @param model モデル行列
+	 * @param proj プロジェクション行列
+	 * @param viewport ビューポート
+	 * @param x X座標値(in/out)
+	 * @param y Y座標値(in/out)
+	 * @param z Z座標値(in/out)
+	 */
+	function project( model:Matrix44, proj:Matrix44, viewport:Rect, x:real, y:real, z:real );
+
+	/**
+	 * 1次元配列で受け取る[r]
+	 */
+	property array;
+	/**
+	 * m11 [1][1]位置の値
+	 */
+	property m11;
+	/**
+	 * m12 [1][2]位置の値
+	 */
+	property m12;
+	/**
+	 * m13 [1][3]位置の値
+	 */
+	property m13;
+	/**
+	 * m14 [1][4]位置の値
+	 */
+	property m14;
+	/**
+	 * m21 [2][1]位置の値
+	 */
+	property m21;
+	/**
+	 * m22 [2][2]位置の値
+	 */
+	property m22;
+	/**
+	 * m23 [2][3]位置の値
+	 */
+	property m23;
+	/**
+	 * m24 [2][4]位置の値
+	 */
+	property m24;
+	/**
+	 * m31 [3][1]位置の値
+	 */
+	property m31;
+	/**
+	 * m32 [3][2]位置の値
+	 */
+	property m32;
+	/**
+	 * m33 [3][3]位置の値
+	 */
+	property m33;
+	/**
+	 * m34 [3][4]位置の値
+	 */
+	property m34;
+	/**
+	 * m41 [4][1]位置の値
+	 */
+	property m41;
+	/**
+	 * m42 [4][2]位置の値
+	 */
+	property m42;
+	/**
+	 * m43 [4][3]位置の値
+	 */
+	property m43;
+	/**
+	 * m44 [4][4]位置の値
+	 */
+	property m44;
+};

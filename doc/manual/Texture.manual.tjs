@@ -1,0 +1,158 @@
+/**
+ * @description テクスチャクラス。
+ * ハードウェア上のテクスチャとほぼ対応しています。
+ *
+ * invalidateすることでテクスチャは無効化されるため、必要なくなったら明示的にinvalidate呼び出すことを推奨します。
+ */
+class Texture {
+	/**
+	 * ファイル読み込み版コンストラクタ
+	 * @param filename 画像ファイル名
+	 * @param format カラーフォーマット(tcfRGBA or tcfAlpha), tcfAlpha選択時に色情報はグレイスケール化されます
+	 * @param is9patch 9patch情報を読み込み、9patch描画用として使用するかどうか
+	 */
+	function Texture( filename:string, format:int=tcfRGBA, is9patch:bool=false );
+
+	/**
+	 * Bitmapコピー版コンストラクタ
+	 * @param bitmap テクスチャの元となるBitmapクラスのインスタンス
+	 * @param format カラーフォーマット(tcfRGBA or tcfAlpha), tcfAlpha選択時に色情報はグレイスケール化されます
+	 * @param is9patch 9patch情報を読み込み、9patch描画用として使用するかどうか
+	 */
+	function Texture( bitmap:Bitmap, format:int=tcfRGBA, is9patch:bool=false );
+
+	/**
+	 * サイズ指定版コンストラクタ
+	 * @description テクスチャの内容は未初期化なのでごみが入っています。
+	 * @param width テクスチャ幅
+	 * @param height テクスチャ高さ
+	 * @param format カラーフォーマット(tcfRGBA or tcfAlpha)
+	 */
+	function Texture( width:int, height:int, format:int=tcfRGBA );
+
+	/**
+	 * ミップマップ生成版コンストラクタ
+	 * @param sizelist ミップマップを生成するサイズを配列で幅、高さの組み合わせで指定します。
+	 * @param filename 画像ファイル名
+	 * @param type 縮小アルゴリズムを指定します。ImageFunction.operateStretch の type か Layer.operateStretch の type 引数と同じです。
+	 * @param typeopt ３次元補間時のシャープネスです。他の補間方法では現在のところ意味を持ちません。
+	 */
+	function Texture( sizelist:Array, filename:string, type=stFastAreaAvg, typeopt:real=-1.0 );
+
+	/**
+	 * 矩形コピー(位置指定Rect版)
+	 * @param dleft コピー先左端
+	 * @param dtop コピー先上端
+	 * @param src Bitmapクラスのオブジェクト
+	 * @param srcRect srcのコピー元矩形
+	 */
+	function copyRect( dleft:int, dtop:int, src:Bitmap, srcRect:Rect );
+
+	/**
+	 * 矩形コピー(位置指定)
+	 * @param dleft コピー先左端
+	 * @param dtop コピー先上端
+	 * @param src Bitmapクラスのオブジェクト
+	 * @param sleft コピー元左端位置
+	 * @param stop コピー元上端位置
+	 * @param swidth コピー元幅
+	 * @param sheight コピー元高さ
+	 */
+	function copyRect( dleft:int, dtop:int, src:Bitmap, sleft:int, stop:int, swidth:int, sheight:int );
+
+	/**
+	 * 矩形コピー(全コピー)
+	 * @description bitmap全体をコピーします。はみ出す場合はクリッピングされます。
+	 * @param src Bitmapクラスのオブジェクト
+	 */
+	function copyRect( src:Bitmap );
+
+	/**
+	 * 描画基準サイズの設定
+	 * @description Canvas.drawTextureで等倍描画した時、何も指定しないとテクスチャのサイズで描画されますが、このメソッドで幅と高さを設定すると、このテクスチャインスタンスを使って描画した時設定したサイズで描画されるようになります。
+	 * 拡大縮小などもこのサイズが基準となり描画されます。
+	 * 内部画像データのサイズと普段描画するサイズが異なる場合に設定しておくと、拡大率を表示したいサイズ基準で指定できるようになります。
+	 * @param width 表示基準幅
+	 * @param height 表示基準高さ
+	 */
+	function setDrawSize( width:int, height:int );
+
+	/**
+	 * 幅(有効範囲)
+	 * @description pot指定されていなければ、memoryWidthと同一です。
+	 */
+	property width;
+	/**
+	 * 高さ(有効範囲)
+	 * @description pot指定されていなければ、memoryHeightと同一です。
+	 */
+	property height;
+
+	/**
+	 * 実際(ハードウェア上)の幅
+	 */
+	property memoryWidth;
+	/**
+	 * 実際(ハードウェア上)の高さ
+	 */
+	property memoryHeight;
+
+	/**
+	 * 8bitカラーかどうか(内部ではアルファテクスチャ)
+	 */
+	property isGray;
+
+	/**
+	 * テクスチャサイズが2の累乗値かどうか
+	 */
+	property isPowerOfTwo;
+
+	/**
+	 * ネイティブハンドル(環境依存)
+	 * @description OpenGL ES2/3 環境下ではテクスチャID
+	 */
+	property nativeHandle;
+
+	/**
+	 * 拡大縮小時の補間方法
+	 */
+	property stretchType;
+
+	/**
+	 * 水平方向ラップモード
+	 */
+	property wrapModeHorizontal;
+	/**
+	 * 垂直方向ラップモード
+	 */
+	property wrapModeVertical;
+
+	/**
+	 * 9patchマージン
+	 * @description is9patchを指定して読み込んだ場合Rectクラスのオブジェクトが読み取り専用でアクセスできます。
+	 * 指定されていなかったり、読み取りできなかった場合はvoidです。
+	 */
+	property margin9Patch;
+
+	/**
+	 * 最近傍点法。stretchTypeプロパティに設定します。
+	 */
+	const stNearest;
+	/**
+	 * 線形補間。stretchTypeプロパティに設定します。
+	 */
+	const stLinear;
+
+	/**
+	 * 繰り返し。wrapModeHorizontal/wrapModeVerticalプロパティに設定します。
+	 */
+	const wmRepeat;
+	/**
+	 * 端色引き延ばし。wrapModeHorizontal/wrapModeVerticalプロパティに設定します。2の累乗サイズでない場合はこの定数でなければなりません(default)。
+	 */
+	const wmClampToEdge;
+	/**
+	 * ミラー繰り返し。wrapModeHorizontal/wrapModeVerticalプロパティに設定します。
+	 */
+	const wmMirror;
+};

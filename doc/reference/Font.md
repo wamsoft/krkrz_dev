@@ -4,6 +4,10 @@ Font クラスは、**フォント**を管理するためのクラスです。
 
 ## メンバー一覧
 
+### コンストラクタ
+
+- [Font](#font)
+
 ### プロパティ
 
 - [face](#face)
@@ -30,6 +34,19 @@ Font クラスは、**フォント**を管理するためのクラスです。
 - [mapPrerenderedFont](#mapprerenderedfont)
 - [unmapPrerenderedFont](#unmapprerenderedfont)
 - [addFont](#addfont)
+
+---
+
+### Font
+
+コンストラクタ
+
+**解説**
+
+コンストラクタ
+
+Layerメンバのfontは、引数にLayerを渡す特殊版。
+単体使用する場合は引数なしで生成する。
 
 ---
 
@@ -429,8 +446,18 @@ TODO: faceIsFileName の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `storage` | `&nbsp;` | フォントファイル名 |
+
+**戻り値**
+
+ファイルに入っているフェイス名を配列で返す。
+
 **解説**
 
-TODO: addFont の説明
+フォントシステムにフォントを追加する。
 
 ---
