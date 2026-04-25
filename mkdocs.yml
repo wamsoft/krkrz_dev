@@ -155,5 +155,44 @@ nav:
         - reference/Math.md
   - TJS2言語リファレンス:
     - tjs2/index.md
+    - 言語仕様:
+      - TJS2 について: tjs2/about.md
+      - 基本的な使い方: tjs2/simple.md
+      - スタイルなど: tjs2/style.md
+      - トークン: tjs2/token.md
+      - 項: tjs2/factor.md
+      - 式と演算子: tjs2/expr_and_op.md
+      - ステートメントとブロック: tjs2/statement_and_block.md
+      - 変数: tjs2/variable.md
+      - データ型: tjs2/types.md
+      - クラス: tjs2/class.md
+      - 関数: tjs2/function.md
+      - プロパティ: tjs2/property.md
+      - if ステートメント: tjs2/if.md
+      - switch ステートメント: tjs2/switch.md
+      - for ステートメント: tjs2/for.md
+      - while ステートメント: tjs2/while.md
+      - with ステートメント: tjs2/with.md
+      - 例外処理: tjs2/try.md
+      - プリプロセッサ: tjs2/pp.md
+      - iTJSDispatch2 インターフェース: tjs2/interface.md
+      - tTJSVariant 型: tjs2/variant.md
+      - tTJS: tjs2/ttjs.md
+      - 仮想マシン: tjs2/vmcodes.md
+    - 組み込みクラス・型:
+      - 基本型: tjs2/basictypes.md
+      - Array クラス: tjs2/array.md
+      - Date クラス: tjs2/date.md
+      - Dictionary クラス: tjs2/dictionary.md
+      - Exception クラス: tjs2/exception.md
+      - Math クラス: tjs2/math.md
+      - オクテット列: tjs2/octet.md
+      - Math.RandomGenerator クラス: tjs2/randomgenerator.md
+      - RegExp クラス: tjs2/regexp.md
+      - 文字列: tjs2/string.md
   - 仕様書:
     - specification/index.md
+    - ファイルフォーマット: specification/fileformat.md
+    - 動画再生機能: specification/movie.md
+    - 画像処理機能: specification/graphics.md
+    - 音声再生機能: specification/sound.md
