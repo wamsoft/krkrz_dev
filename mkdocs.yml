@@ -182,9 +182,7 @@ nav:
     - tjs2/index.md
     - 概要:
       - TJS2 について: tjs2/about.md
-      - 基本的な使い方: tjs2/simple.md
       - スタイルなど: tjs2/style.md
-      - 基本型: tjs2/basictypes.md
     - 構文:
       - トークン: tjs2/token.md
       - 項: tjs2/factor.md
@@ -204,6 +202,8 @@ nav:
       - クラス: tjs2/class.md
       - プロパティ: tjs2/property.md
     - 内部仕様:
+      - 組み込み方法: tjs2/simple.md
+      - 基本型: tjs2/basictypes.md
       - iTJSDispatch2 インターフェース: tjs2/interface.md
       - tTJSVariant 型: tjs2/variant.md
       - tTJS: tjs2/ttjs.md
