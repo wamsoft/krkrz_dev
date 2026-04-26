@@ -26,13 +26,14 @@ layerExBTOA
 layerExImage
 layerExLongExposure
 layerExRaster
-#layerExVector
+layerExVector
 lineParser
-#minizip
+minizip
+psdfile
 saveStruct
 scriptsEx
 shrinkCopy
-#sigcheck
+sigcheck
 #krkrlua
 )
 
@@ -44,7 +45,6 @@ addFont
 binaryStream
 fpslimit
 memfile
-#psdfile
 varfile
 fstat
 gamepad
