@@ -66,7 +66,7 @@ nav:
       - 起動: guide/Startup.md
       - コマンドラインオプション: guide/CommandLine.md
       - 吉里吉里設定: guide/Configure.md
-      - コンソール: guide/Console.md
+      - コマンドライン: guide/Console.md
       - デバッグ: guide/Debug.md
       - 環境依存の不具合: guide/ComputerDependentProblems.md
       - 著作権など: guide/Copyrights.md
