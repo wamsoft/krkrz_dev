@@ -80,7 +80,12 @@ BitmapLayerTreeOwner クラスのオブジェクトを構築します。
 
 **解説**
 
-TODO: bitmap の説明
+描画先 Bitmap オブジェクト
+
+このレイヤツリーオーナーが保持する `Bitmap` オブジェクトを返します。
+レイヤツリーの内容はこの Bitmap に描画されます。読み出し専用。
+
+**関連:** [BitmapLayerTreeOwner.update](BitmapLayerTreeOwner.md#update)
 
 ---
 
@@ -90,7 +95,10 @@ TODO: bitmap の説明
 
 **解説**
 
-TODO: dirtyRect の説明
+ダーティ矩形オブジェクト
+
+直近の描画で更新された領域を表す `Rect` オブジェクトを返します。
+読み出し専用。
 
 ---
 
@@ -100,7 +108,12 @@ TODO: dirtyRect の説明
 
 **解説**
 
-TODO: focusedLayer の説明
+フォーカス中のレイヤ
+
+このツリー内で現在フォーカスを持っているレイヤを取得 / 設定します。
+設定時に null を渡すとフォーカスを解除します。
+
+**関連:** [Layer.focused](Layer.md#focused)
 
 ---
 
@@ -120,7 +133,10 @@ TODO: focusedLayer の説明
 
 **解説**
 
-TODO: isUpdated の説明
+更新済みフラグ
+
+直近の `update` 呼び出し以降にレイヤツリーが更新されたかどうかを返します。
+真であれば再描画が必要です。読み出し専用。
 
 ---
 
@@ -128,9 +144,15 @@ TODO: isUpdated の説明
 
 プロパティ \ アクセス: `r/w`
 
+**型**: `Integer`
+
 **解説**
 
-TODO: layerEventTargetInterface の説明
+LayerEventTarget インターフェースポインタ
+
+レイヤイベント転送先の C++ インターフェース ( `tTVPLayerTreeOwner` )
+ポインタを 64bit 整数として返します。プラグイン経由でレイヤイベント
+配送系にアクセスする目的に使用します。読み出し専用。
 
 ---
 
@@ -503,7 +525,12 @@ LTOインターフェイス、内部使用(readonly)
 
 **解説**
 
-TODO: update の説明
+レイヤツリーの描画更新
+
+内部のレイヤツリーを `bitmap` プロパティが指す Bitmap に描画し、
+更新領域を `dirtyRect` に反映します。
+
+**関連:** [BitmapLayerTreeOwner.bitmap](BitmapLayerTreeOwner.md#bitmap) / [BitmapLayerTreeOwner.dirtyRect](BitmapLayerTreeOwner.md#dirtyrect)
 
 ---
 

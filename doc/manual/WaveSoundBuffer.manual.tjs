@@ -175,7 +175,12 @@ class WaveSoundBuffer {
 	}
 
 	/**
-	 * TODO: currentDevice の説明
+	 * 現在使用中のサウンドデバイスの GUID
+	 *
+	 * 現在 WaveSoundBuffer が使用している DirectSound デバイスの GUID 文字列を
+	 * 取得 / 設定します。設定すると `-wsguid` コマンドラインオプションを更新し
+	 * デバイスを再初期化します。Win32 ビルド専用、クラス静的プロパティ。
+	 * @see WaveSoundBuffer.getDeviceList
 	 */
 	property currentDevice;
 
@@ -321,17 +326,30 @@ class WaveSoundBuffer {
 	}
 
 	/**
-	 * TODO: posX の説明
+	 * 3D 音源位置 ( X 座標 )
+	 *
+	 * 3D サウンド再生時の音源位置の X 座標を取得 / 設定します。
+	 * `WaveSoundBuffer.setPos` で 3 軸まとめて設定することもできます。
+	 * @type Real
+	 * @see WaveSoundBuffer.setPos
 	 */
 	property posX;
 
 	/**
-	 * TODO: posY の説明
+	 * 3D 音源位置 ( Y 座標 )
+	 *
+	 * 3D サウンド再生時の音源位置の Y 座標を取得 / 設定します。
+	 * @type Real
+	 * @see WaveSoundBuffer.setPos
 	 */
 	property posY;
 
 	/**
-	 * TODO: posZ の説明
+	 * 3D 音源位置 ( Z 座標 )
+	 *
+	 * 3D サウンド再生時の音源位置の Z 座標を取得 / 設定します。
+	 * @type Real
+	 * @see WaveSoundBuffer.setPos
 	 */
 	property posZ;
 
@@ -372,7 +390,13 @@ class WaveSoundBuffer {
 	function freeDirectSound( );
 
 	/**
-	 * TODO: getDeviceList の説明
+	 * サウンドデバイス一覧の取得
+	 *
+	 * システムが提供するサウンドデバイスの一覧を辞書配列形式で返します。
+	 * 各エントリにはデバイス名と GUID が含まれます ( 詳細フォーマットは
+	 * Win32 実装の `GetDeviceList` を参照 )。Win32 ビルド専用、静的メソッド。
+	 * @return デバイス情報を含む辞書配列が返ります。
+	 * @see WaveSoundBuffer.currentDevice
 	 */
 	function getDeviceList();
 
@@ -409,7 +433,15 @@ class WaveSoundBuffer {
 	event onLabel( name);
 
 	/**
-	 * TODO: setPos の説明
+	 * 3D 音源位置のまとめ設定
+	 *
+	 * 3D サウンド再生時の音源位置 ( X / Y / Z ) を一括で設定します。
+	 * @param x X 座標を指定します。
+	 * @param y Y 座標を指定します。
+	 * @param z Z 座標を指定します。
+	 * @see WaveSoundBuffer.posX
+	 * @see WaveSoundBuffer.posY
+	 * @see WaveSoundBuffer.posZ
 	 */
-	function setPos();
+	function setPos(x, y, z);
 }

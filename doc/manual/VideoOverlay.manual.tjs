@@ -691,17 +691,31 @@ class VideoOverlay {
 	property originalHeight { getter; }
 
 	/**
-	 * TODO: enabledVideoStream の説明
+	 * 有効化中のビデオストリーム番号
+	 *
+	 * 現在再生に使用しているビデオストリームのインデックスを取得 / 設定します。
+	 * 設定すると `SelectVideoStream` が呼ばれ、対応するストリームに切り替わります。
+	 * @type Integer
+	 * @see VideoOverlay.numberOfVideoStream
 	 */
 	property enabledVideoStream;
 
 	/**
-	 * TODO: numberOfVideoStream の説明
+	 * ビデオストリーム数
+	 *
+	 * 開いている動画に含まれるビデオストリームの本数を返します。読み出し専用。
+	 * @type Integer
+	 * @see VideoOverlay.enabledVideoStream
 	 */
 	property numberOfVideoStream;
 
 	/**
-	 * TODO: onCallbackCommand の説明
+	 * カスタムコマンドコールバック ( イベント )
+	 *
+	 * 動画プレーヤーから任意のコマンド通知を受け取った際に発火するイベントです。
+	 * @param command コマンド名を指定します。
+	 * @param arg コマンドに付随する引数を指定します。
+	 * @kind event
 	 */
-	function onCallbackCommand();
+	function onCallbackCommand(command, arg);
 }

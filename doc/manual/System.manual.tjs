@@ -707,12 +707,22 @@ class System {
 	property osBits { getter; }
 
 	/**
-	 * TODO: exitOnNoWindowStartup の説明
+	 * ウィンドウ無し起動時の自動終了
+	 *
+	 * 真の場合、ウィンドウを 1 つも作成せずに起動が完了したときにエンジンを
+	 * 自動的に終了させます。デバッグ用途やバッチ処理時の制御に用います。
+	 * @type Boolean
 	 */
 	property exitOnNoWindowStartup;
 
 	/**
-	 * TODO: isGeneric の説明
+	 * 汎用ビルドかどうかの判定
+	 *
+	 * SDL3 ベースのクロスプラットフォームビルド ( generic / SDL ) では真、
+	 * Win32 ネイティブビルド ( WINVER ) では偽が返ります。
+	 * 読み出し専用。
+	 * @type Boolean
+	 * @see System.isWindows
 	 */
 	property isGeneric;
 
@@ -722,7 +732,12 @@ class System {
 	property isWindows;
 
 	/**
-	 * TODO: licenseText の説明
+	 * ライセンス文字列
+	 *
+	 * 吉里吉里Z 本体に組み込まれたライセンス表示用の文字列を返します。
+	 * 「吉里吉里設定」ダイアログ等で表示するために使用します。
+	 * 読み出し専用。
+	 * @type String
 	 */
 	property licenseText;
 
@@ -733,29 +748,52 @@ class System {
 	property openGLESVersion;
 
 	/**
-	 * TODO: processorNum の説明
+	 * 論理プロセッサ数
+	 *
+	 * OS から認識されている論理プロセッサ数を返します。
+	 * 描画スレッド数の自動決定などに利用されます。読み出し専用。
+	 * @type Integer
 	 */
 	property processorNum;
 
 	/**
-	 * TODO: touchDevice の説明
+	 * タッチデバイスの利用可否
+	 *
+	 * 実行環境にタッチ入力デバイスが存在する場合に真を返します。
+	 * 読み出し専用。
+	 * @type Boolean
 	 */
 	property touchDevice;
 
 	/**
-	 * TODO: addFont の説明
+	 * フォントの追加
+	 *
+	 * ストレージ内のフォントファイルをエンジンに追加します。
+	 * 追加されたフォントはレイヤやフォント描画 API から face 名で参照可能になります。
+	 * @param storage 追加するフォントファイルのストレージ名を指定します。
+	 * @return 追加されたフォントが提供する face 名の配列が返ります。
+	 * @see Font
 	 */
-	function addFont();
+	function addFont(storage);
 
 	/**
-	 * TODO: clearGraphicCache の説明
+	 * グラフィックキャッシュの破棄
+	 *
+	 * `Layer.loadImages` 等が使用する内部のグラフィックキャッシュを破棄します。
+	 * メモリ使用量の急な削減や、画像差し替え後の再読込を強制したい場合に呼び出します。
 	 */
 	function clearGraphicCache();
 
 	/**
-	 * TODO: getJoypadType の説明
+	 * 接続されているジョイパッドの種別取得
+	 *
+	 * 指定番号のジョイパッドの種別 ( ハードウェア種別 ID ) を返します。
+	 * @param no ジョイパッドのインデックスを指定します ( 既定値 0 )。
+	 * @return ジョイパッド種別を表す整数値が返ります。
+	 * 接続されていない、または対応していないプラットフォームの場合は 0 等が返ります
+	 * ( TODO: 値の意味する定数体系は要確認 )。
 	 */
-	function getJoypadType();
+	function getJoypadType(no = 0);
 
 	/**
 	 * nullポインターアクセスを発生させます
@@ -764,7 +802,13 @@ class System {
 	function nullpo();
 
 	/**
-	 * TODO: system の説明
+	 * シェルコマンドの実行
+	 *
+	 * OS の `system(3)` 相当でシェルコマンドを同期実行します。Win32 ビルド専用。
+	 * 実行直後に `TVP_COMPACT_LEVEL_MAX` レベルのコンパクトイベントが発行され、
+	 * すべてのキャッシュが破棄されます。
+	 * @param command 実行するコマンド文字列を指定します。
+	 * @return `_wsystem()` の戻り値がそのまま返ります。
 	 */
-	function system();
+	function system(command);
 }

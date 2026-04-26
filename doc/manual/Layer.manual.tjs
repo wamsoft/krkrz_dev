@@ -2804,17 +2804,29 @@ class Layer {
 	property ignoreHintSensing;
 
 	/**
-	 * TODO: nodeFocusable の説明
+	 * ノード単位のフォーカス可否
+	 *
+	 * このレイヤノードがフォーカスを持つことが可能かどうかを返します。
+	 * 親階層が含む `focusable` を考慮した結果を反映します。読み出し専用。
+	 * @see Layer.focusable
 	 */
 	property nodeFocusable;
 
 	/**
-	 * TODO: dump の説明
+	 * レイヤ構造のダンプ出力
+	 *
+	 * このレイヤを起点としたレイヤツリーの構造をデバッグログへ出力します。
+	 * @param level 出力する階層の深さを指定します。0 を指定するか省略すると
+	 * 配下の全階層を出力します。
 	 */
-	function dump();
+	function dump(level = 0);
 
 	/**
-	 * TODO: releaseTouchCapture の説明
+	 * タッチキャプチャの解放
+	 *
+	 * 自身が獲得しているタッチキャプチャを解放します。
+	 * @param id 解放する個別のタッチ ID を指定します。省略するとこのレイヤが
+	 * 獲得しているすべてのタッチキャプチャを解放します。
 	 */
-	function releaseTouchCapture();
+	function releaseTouchCapture(id = void);
 }

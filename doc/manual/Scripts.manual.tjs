@@ -133,7 +133,11 @@ class Scripts {
 	property textEncoding;
 
 	/**
-	 * TODO: dumpStringHeap の説明
+	 * 文字列ヒープのダンプ
+	 *
+	 * TJS2 ランタイムが管理している文字列ヒープの内容をデバッグ出力します。
+	 * `TJS_DEBUG_DUMP_STRING` を有効にしてビルドされたエンジンでのみ呼び出せます。
+	 * メモリリーク調査などのデバッグ用途専用。
 	 */
 	function dumpStringHeap();
 }

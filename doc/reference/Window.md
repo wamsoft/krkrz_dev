@@ -728,9 +728,14 @@ GetDeviceCapsで得られる値です。
 
 プロパティ \ アクセス: `r/w`
 
+**型**: `Boolean`
+
 **解説**
 
-TODO: enableTouchMouse の説明
+タッチ操作のマウスエミュレーション有効/無効
+
+真の場合、タッチイベントを擬似的なマウスイベントに変換して
+`Window.onMouseDown` 系ハンドラに通知します。
 
 ---
 
@@ -738,9 +743,15 @@ TODO: enableTouchMouse の説明
 
 プロパティ \ アクセス: `r/w`
 
+**型**: `Boolean`
+
 **解説**
 
-TODO: innerSunken の説明
+内側くぼみ表示の有効/無効 ( 廃止予定 )
+
+真にするとウィンドウのクライアント領域に「くぼみ」風の縁取りを表示します。
+`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換プロパティで、
+新規コードでの使用は推奨しません。
 
 ---
 
@@ -750,7 +761,10 @@ TODO: innerSunken の説明
 
 **解説**
 
-TODO: layerEventTarget の説明
+レイヤイベントの転送先オブジェクト
+
+マウスやキー入力などのレイヤイベントを受け取るオブジェクトを指定します。
+通常は `Window` 自身が用いられます。null を設定するとデフォルトに戻ります。
 
 ---
 
@@ -758,9 +772,15 @@ TODO: layerEventTarget の説明
 
 プロパティ \ アクセス: `r/w`
 
+**型**: `Integer`
+
 **解説**
 
-TODO: layerLeft の説明
+プライマリレイヤの X 位置 ( 廃止予定 )
+
+ウィンドウのクライアント領域内におけるプライマリレイヤの左端位置を取得 / 設定します。
+`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換プロパティです。
+新規コードでは `Window.setLayerPos` の代替経路を使用してください。
 
 ---
 
@@ -768,9 +788,14 @@ TODO: layerLeft の説明
 
 プロパティ \ アクセス: `r/w`
 
+**型**: `Integer`
+
 **解説**
 
-TODO: layerTop の説明
+プライマリレイヤの Y 位置 ( 廃止予定 )
+
+ウィンドウのクライアント領域内におけるプライマリレイヤの上端位置を取得 / 設定します。
+`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換プロパティです。
 
 ---
 
@@ -778,9 +803,15 @@ TODO: layerTop の説明
 
 プロパティ \ アクセス: `r/w`
 
+**型**: `Integer`
+
 **解説**
 
-TODO: layerTreeOwnerInterface の説明
+LayerTreeOwner インターフェースポインタ
+
+`iTVPLayerTreeOwner` インターフェースの C++ ポインタを 64bit 整数として返します。
+プラグインから直接ウィンドウのレイヤツリー所有者にアクセスする目的で使用します。
+読み出し専用。
 
 ---
 
@@ -790,7 +821,14 @@ TODO: layerTreeOwnerInterface の説明
 
 **解説**
 
-TODO: mouseCursor の説明
+マウスカーソルの設定
+
+現在のマウスカーソルを取得 / 設定します。
+
+設定時に文字列を渡した場合は、ストレージ名としてカーソル画像を読み込みます。
+数値を渡した場合は標準のマウスカーソル定数 ( `crArrow` 等 ) として解釈されます。
+
+**関連:** [Window.mouseCursorState](Window.md#mousecursorstate)
 
 ---
 
@@ -798,9 +836,14 @@ TODO: mouseCursor の説明
 
 プロパティ \ アクセス: `r/w`
 
+**型**: `Boolean`
+
 **解説**
 
-TODO: showScrollBars の説明
+スクロールバー表示の有効/無効 ( 廃止予定 )
+
+プライマリレイヤがウィンドウより大きい場合に、スクロールバーを表示するかどうかを
+取得 / 設定します。`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換プロパティです。
 
 ---
 
@@ -1294,7 +1337,10 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 
 **解説**
 
-TODO: beginMove の説明
+ウィンドウのドラッグ移動開始 ( 廃止予定 )
+
+ウィンドウのタイトルバーをドラッグした場合と同等の移動操作を、現在のマウス位置から
+開始させます。`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換メソッドです。
 
 ---
 
@@ -1302,9 +1348,26 @@ TODO: beginMove の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `width` | `&nbsp;` | 希望幅 ( ピクセル ) |
+| `height` | `&nbsp;` | 希望高さ ( ピクセル ) |
+| `bpp` | `&nbsp;` | 希望色深度 ( bit per pixel ) |
+| `mode` | `&nbsp;` | フルスクリーン解像度モード ( `tTVPFullScreenResolutionMode` ) |
+| `zoomMode` | `&nbsp;` | エンジンズームモード ( `tTVPFullScreenUsingEngineZoomMode` ) |
+
+**戻り値**
+
+TODO: 現在の実装では結果が TJS に返されていないため、戻り値仕様要確認。
+
 **解説**
 
-TODO: findFullScreenCandidates の説明
+フルスクリーン候補解像度の検索
+
+指定された希望解像度に近いフルスクリーン候補モードをディスプレイから検索します。
+Win32 ビルド専用です。
 
 ---
 
@@ -1314,7 +1377,12 @@ TODO: findFullScreenCandidates の説明
 
 **解説**
 
-TODO: requestUpdate の説明
+描画更新の要求
+
+ウィンドウに対して再描画 ( 次回フレームでの `Update` ) を要求します。
+即時描画ではなく、次の更新タイミングでまとめて反映されます。
+
+**関連:** [Window.update](Window.md#update)
 
 ---
 
@@ -1322,9 +1390,19 @@ TODO: requestUpdate の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `left` | `&nbsp;` | X 座標 |
+| `top` | `&nbsp;` | Y 座標 |
+
 **解説**
 
-TODO: setLayerPos の説明
+プライマリレイヤ位置の設定 ( 廃止予定 )
+
+ウィンドウクライアント領域内のプライマリレイヤ位置 ( 左上 ) を設定します。
+`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換メソッドです。
 
 ---
 

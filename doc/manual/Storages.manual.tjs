@@ -244,49 +244,106 @@ class Storages {
 	function selectFile(params);
 
 	/**
-	 * TODO: addCacheTargetExtension の説明
+	 * オンメモリキャッシュ対象拡張子の追加
+	 *
+	 * ファイルロード時にオンメモリキャッシュへ載せる拡張子を追加します。
+	 * ここで登録された拡張子のファイルは、ストレージから読み込まれた際に
+	 * 内容がメモリ上に保持され、再アクセス時のディスク I/O を省略します。
+	 * @param ext 対象とする拡張子を指定します。先頭に `.` (ピリオド) が
+	 * 無ければ自動的に補われます。
+	 * @see Storages.requestCache
 	 */
-	function addCacheTargetExtension();
+	function addCacheTargetExtension(ext);
 
 	/**
-	 * TODO: clearArchiveCache の説明
+	 * アーカイブキャッシュの破棄
+	 *
+	 * XP3 等のアーカイブを開いた際にエンジン内部で保持しているアーカイブ
+	 * メタ情報・展開バッファのキャッシュを全て破棄します。
+	 *
+	 * 多数のアーカイブを順次切り替えるなどしてメモリ使用量を抑えたい場合に
+	 * 利用します。
 	 */
 	function clearArchiveCache();
 
 	/**
-	 * TODO: clearCache の説明
+	 * キャッシュの破棄
+	 *
+	 * `Storages.requestCache` で読み込まれたファイルキャッシュを破棄します。
+	 * @param path 破棄するファイルのパスを指定します。省略または空文字列を
+	 * 指定するとすべてのキャッシュを破棄します。
+	 * @see Storages.requestCache
 	 */
-	function clearCache();
+	function clearCache(path = "");
 
 	/**
-	 * TODO: clearFastCache の説明
+	 * 高速キャッシュの破棄
+	 *
+	 * `Storages.requestFastCache` で読み込まれたファイルキャッシュを破棄します。
+	 * @param path 破棄するファイルのパスを指定します。省略または空文字列を
+	 * 指定するとすべてのキャッシュを破棄します。
+	 * @see Storages.requestFastCache
 	 */
-	function clearFastCache();
+	function clearFastCache(path = "");
 
 	/**
-	 * TODO: clearOldCache の説明
+	 * 古いキャッシュの破棄
+	 *
+	 * 一定時間以上アクセスされていないキャッシュエントリを破棄します。
+	 * @param keepTime 保持する秒数を指定します。0 を指定すると全てのキャッシュが
+	 * 対象になります。
+	 * @param force 0 以外を指定すると参照中であっても強制的に破棄します。
+	 * 既定値は 0 (参照中のものは破棄しない) 。
 	 */
-	function clearOldCache();
+	function clearOldCache(keepTime = 0, force = 0);
 
 	/**
-	 * TODO: commitSavedata の説明
+	 * セーブデータのコミット
+	 *
+	 * セーブデータ領域へ書き込まれた内容を確定 ( コミット ) します。
+	 * 一部プラットフォームでは、savedata 領域への書き込みがこの呼び出しまで
+	 * バッファされている場合があります。
+	 * @see Storages.rollbackSavedata
 	 */
 	function commitSavedata();
 
 	/**
-	 * TODO: deleteFile の説明
+	 * ファイルの削除
+	 *
+	 * 指定したストレージファイルを削除します。あわせて自動検索パスのキャッシュ
+	 * からも該当エントリが除去されます。
+	 * @param path 削除するファイルのストレージ名を指定します。
+	 * @return 削除に成功すれば真、失敗すれば偽が返ります。
+	 * @see Storages.moveFile
 	 */
-	function deleteFile();
+	function deleteFile(path);
 
 	/**
-	 * TODO: dirlist の説明
+	 * ディレクトリ内一覧の取得
+	 *
+	 * 指定ディレクトリ直下のファイル名およびサブディレクトリ名を配列で返します。
+	 *
+	 * サブディレクトリのエントリは末尾に `/` が付加された形になります。
+	 * `TVP_NO_NORMALIZE_PATH` が定義されていないビルドでは、結果はすべて
+	 * 小文字に正規化されます。
+	 * @param path 一覧を取得したいディレクトリのストレージ名を指定します。
+	 * 末尾は `/` で終わる必要があります。
+	 * @return ファイル名 / ディレクトリ名を要素とする配列が返ります。
+	 * @see Storages.dirtree
 	 */
-	function dirlist();
+	function dirlist(path);
 
 	/**
-	 * TODO: dirtree の説明
+	 * ディレクトリツリーの取得
+	 *
+	 * 指定ディレクトリ配下を再帰的に走査し、ファイル / ディレクトリ名を
+	 * 配列で返します。
+	 * @param path 走査したいディレクトリのストレージ名を指定します。
+	 * @param dironly 真を指定するとディレクトリのみを返します。既定値は偽。
+	 * @return パスを要素とする配列が返ります。
+	 * @see Storages.dirlist
 	 */
-	function dirtree();
+	function dirtree(path, dironly = false);
 
 	/**
 	 * ファイルプロパティの取得
@@ -298,47 +355,100 @@ class Storages {
 	function getFileProperty( storage );
 
 	/**
-	 * TODO: isCacheLoading の説明
+	 * 通常キャッシュ読み込み中の判定
+	 *
+	 * `Storages.requestCache` でリクエストしたファイルが、まだバックグラウンド
+	 * スレッドで読み込み中であれば真を返します。
+	 * @return 読み込み中であれば真、そうでなければ偽が返ります。
+	 * @see Storages.requestCache
 	 */
 	function isCacheLoading();
 
 	/**
-	 * TODO: isExistentDirectory の説明
+	 * ディレクトリの存在確認
+	 *
+	 * 指定したディレクトリが存在するかどうかを確認します。
+	 * @param path 確認したいディレクトリのストレージ名を指定します。
+	 * 末尾は `/` で終わる必要があります。
+	 * @return 存在すれば真、存在しなければ偽が返ります。
+	 * @see Storages.isExistentStorage
 	 */
-	function isExistentDirectory();
+	function isExistentDirectory(path);
 
 	/**
-	 * TODO: isFastCacheLoading の説明
+	 * 高速キャッシュ読み込み中の判定
+	 *
+	 * `Storages.requestFastCache` でリクエストしたファイルが、まだバックグラウンド
+	 * スレッドで読み込み中であれば真を返します。
+	 * @return 読み込み中であれば真、そうでなければ偽が返ります。
+	 * @see Storages.requestFastCache
 	 */
 	function isFastCacheLoading();
 
 	/**
-	 * TODO: lastModifiedFileTime の説明
+	 * ファイルの最終更新時刻の取得
+	 *
+	 * 指定したストレージファイルの最終更新時刻を取得します。
+	 * @param path 最終更新時刻を取得したいファイルのストレージ名を指定します。
+	 * @return プラットフォーム依存の整数値で最終更新時刻が返ります。
+	 * 取得に失敗した場合は 0 が返ります。
+	 * 解釈方法は環境によって異なる ( TODO: 単位とエポックを要確認 ) ため、
+	 * 大小比較や差分検出用途以外には注意して扱ってください。
 	 */
-	function lastModifiedFileTime();
+	function lastModifiedFileTime(path);
 
 	/**
-	 * TODO: moveFile の説明
+	 * ファイルの移動 ( リネーム )
+	 *
+	 * 指定したストレージファイルを別の場所へ移動 ( リネーム ) します。
+	 * 移動成功時は自動検索パスのキャッシュも更新されます。
+	 * @param from 移動元のストレージ名を指定します。
+	 * @param to 移動先のストレージ名を指定します。
+	 * @return 移動に成功すれば真、失敗すれば偽が返ります。
+	 * @see Storages.deleteFile
 	 */
-	function moveFile();
+	function moveFile(from, to);
 
 	/**
-	 * TODO: requestCache の説明
+	 * ファイルキャッシュへの読み込みリクエスト
+	 *
+	 * 指定したファイルを通常のファイルキャッシュへバックグラウンドで
+	 * 読み込みます。`Storages.addCacheTargetExtension` で登録された
+	 * 拡張子のファイルが対象です。
+	 * @param path 読み込み対象のファイルのストレージ名を指定します。
+	 * @see Storages.clearCache
+	 * @see Storages.isCacheLoading
+	 * @see Storages.requestFastCache
 	 */
-	function requestCache();
+	function requestCache(path);
 
 	/**
-	 * TODO: requestFastCache の説明
+	 * 高速ファイルキャッシュへの読み込みリクエスト
+	 *
+	 * 指定したファイルを高速キャッシュへバックグラウンドで読み込みます。
+	 * 内部キューが通常キャッシュと別系統になっており、
+	 * `Storages.requestCache` よりも高優先で処理されます。
+	 * @param path 読み込み対象のファイルのストレージ名を指定します。
+	 * @see Storages.clearFastCache
+	 * @see Storages.isFastCacheLoading
+	 * @see Storages.requestCache
 	 */
-	function requestFastCache();
+	function requestFastCache(path);
 
 	/**
-	 * TODO: rollbackSavedata の説明
+	 * セーブデータのロールバック
+	 *
+	 * セーブデータ領域への書き込みを破棄し、最後にコミットされた状態へ戻します。
+	 * @see Storages.commitSavedata
 	 */
 	function rollbackSavedata();
 
 	/**
-	 * TODO: setCacheMaxSize の説明
+	 * ファイルキャッシュの最大サイズの設定
+	 *
+	 * `Storages.requestCache` 系で保持するキャッシュの最大サイズを設定します。
+	 * @param size キャッシュの最大サイズをバイト単位で指定します
+	 * ( TODO: 単位がバイトかエントリ数かは要確認 )。
 	 */
-	function setCacheMaxSize();
+	function setCacheMaxSize(size);
 }

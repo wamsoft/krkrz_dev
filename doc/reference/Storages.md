@@ -361,9 +361,21 @@ System.inform("選択したファイルは : " + params.name);
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `ext` | `&nbsp;` | 対象とする拡張子を指定します。先頭に `.` (ピリオド) が<br>無ければ自動的に補われます。 |
+
 **解説**
 
-TODO: addCacheTargetExtension の説明
+オンメモリキャッシュ対象拡張子の追加
+
+ファイルロード時にオンメモリキャッシュへ載せる拡張子を追加します。
+ここで登録された拡張子のファイルは、ストレージから読み込まれた際に
+内容がメモリ上に保持され、再アクセス時のディスク I/O を省略します。
+
+**関連:** [Storages.requestCache](Storages.md#requestcache)
 
 ---
 
@@ -373,7 +385,13 @@ TODO: addCacheTargetExtension の説明
 
 **解説**
 
-TODO: clearArchiveCache の説明
+アーカイブキャッシュの破棄
+
+XP3 等のアーカイブを開いた際にエンジン内部で保持しているアーカイブ
+メタ情報・展開バッファのキャッシュを全て破棄します。
+
+多数のアーカイブを順次切り替えるなどしてメモリ使用量を抑えたい場合に
+利用します。
 
 ---
 
@@ -381,9 +399,19 @@ TODO: clearArchiveCache の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `""` | 破棄するファイルのパスを指定します。省略または空文字列を<br>指定するとすべてのキャッシュを破棄します。 |
+
 **解説**
 
-TODO: clearCache の説明
+キャッシュの破棄
+
+`Storages.requestCache` で読み込まれたファイルキャッシュを破棄します。
+
+**関連:** [Storages.requestCache](Storages.md#requestcache)
 
 ---
 
@@ -391,9 +419,19 @@ TODO: clearCache の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `""` | 破棄するファイルのパスを指定します。省略または空文字列を<br>指定するとすべてのキャッシュを破棄します。 |
+
 **解説**
 
-TODO: clearFastCache の説明
+高速キャッシュの破棄
+
+`Storages.requestFastCache` で読み込まれたファイルキャッシュを破棄します。
+
+**関連:** [Storages.requestFastCache](Storages.md#requestfastcache)
 
 ---
 
@@ -401,9 +439,18 @@ TODO: clearFastCache の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `keepTime` | `0` | 保持する秒数を指定します。0 を指定すると全てのキャッシュが<br>対象になります。 |
+| `force` | `0` | 0 以外を指定すると参照中であっても強制的に破棄します。<br>既定値は 0 (参照中のものは破棄しない) 。 |
+
 **解説**
 
-TODO: clearOldCache の説明
+古いキャッシュの破棄
+
+一定時間以上アクセスされていないキャッシュエントリを破棄します。
 
 ---
 
@@ -413,7 +460,13 @@ TODO: clearOldCache の説明
 
 **解説**
 
-TODO: commitSavedata の説明
+セーブデータのコミット
+
+セーブデータ領域へ書き込まれた内容を確定 ( コミット ) します。
+一部プラットフォームでは、savedata 領域への書き込みがこの呼び出しまで
+バッファされている場合があります。
+
+**関連:** [Storages.rollbackSavedata](Storages.md#rollbacksavedata)
 
 ---
 
@@ -421,9 +474,24 @@ TODO: commitSavedata の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 削除するファイルのストレージ名を指定します。 |
+
+**戻り値**
+
+削除に成功すれば真、失敗すれば偽が返ります。
+
 **解説**
 
-TODO: deleteFile の説明
+ファイルの削除
+
+指定したストレージファイルを削除します。あわせて自動検索パスのキャッシュ
+からも該当エントリが除去されます。
+
+**関連:** [Storages.moveFile](Storages.md#movefile)
 
 ---
 
@@ -431,9 +499,27 @@ TODO: deleteFile の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 一覧を取得したいディレクトリのストレージ名を指定します。<br>末尾は `/` で終わる必要があります。 |
+
+**戻り値**
+
+ファイル名 / ディレクトリ名を要素とする配列が返ります。
+
 **解説**
 
-TODO: dirlist の説明
+ディレクトリ内一覧の取得
+
+指定ディレクトリ直下のファイル名およびサブディレクトリ名を配列で返します。
+
+サブディレクトリのエントリは末尾に `/` が付加された形になります。
+`TVP_NO_NORMALIZE_PATH` が定義されていないビルドでは、結果はすべて
+小文字に正規化されます。
+
+**関連:** [Storages.dirtree](Storages.md#dirtree)
 
 ---
 
@@ -441,9 +527,25 @@ TODO: dirlist の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 走査したいディレクトリのストレージ名を指定します。 |
+| `dironly` | `false` | 真を指定するとディレクトリのみを返します。既定値は偽。 |
+
+**戻り値**
+
+パスを要素とする配列が返ります。
+
 **解説**
 
-TODO: dirtree の説明
+ディレクトリツリーの取得
+
+指定ディレクトリ配下を再帰的に走査し、ファイル / ディレクトリ名を
+配列で返します。
+
+**関連:** [Storages.dirlist](Storages.md#dirlist)
 
 ---
 
@@ -473,9 +575,18 @@ TODO: dirtree の説明
 
 メソッド
 
+**戻り値**
+
+読み込み中であれば真、そうでなければ偽が返ります。
+
 **解説**
 
-TODO: isCacheLoading の説明
+通常キャッシュ読み込み中の判定
+
+`Storages.requestCache` でリクエストしたファイルが、まだバックグラウンド
+スレッドで読み込み中であれば真を返します。
+
+**関連:** [Storages.requestCache](Storages.md#requestcache)
 
 ---
 
@@ -483,9 +594,23 @@ TODO: isCacheLoading の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 確認したいディレクトリのストレージ名を指定します。<br>末尾は `/` で終わる必要があります。 |
+
+**戻り値**
+
+存在すれば真、存在しなければ偽が返ります。
+
 **解説**
 
-TODO: isExistentDirectory の説明
+ディレクトリの存在確認
+
+指定したディレクトリが存在するかどうかを確認します。
+
+**関連:** [Storages.isExistentStorage](Storages.md#isexistentstorage)
 
 ---
 
@@ -493,9 +618,18 @@ TODO: isExistentDirectory の説明
 
 メソッド
 
+**戻り値**
+
+読み込み中であれば真、そうでなければ偽が返ります。
+
 **解説**
 
-TODO: isFastCacheLoading の説明
+高速キャッシュ読み込み中の判定
+
+`Storages.requestFastCache` でリクエストしたファイルが、まだバックグラウンド
+スレッドで読み込み中であれば真を返します。
+
+**関連:** [Storages.requestFastCache](Storages.md#requestfastcache)
 
 ---
 
@@ -503,9 +637,24 @@ TODO: isFastCacheLoading の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 最終更新時刻を取得したいファイルのストレージ名を指定します。 |
+
+**戻り値**
+
+プラットフォーム依存の整数値で最終更新時刻が返ります。
+取得に失敗した場合は 0 が返ります。
+解釈方法は環境によって異なる ( TODO: 単位とエポックを要確認 ) ため、
+大小比較や差分検出用途以外には注意して扱ってください。
+
 **解説**
 
-TODO: lastModifiedFileTime の説明
+ファイルの最終更新時刻の取得
+
+指定したストレージファイルの最終更新時刻を取得します。
 
 ---
 
@@ -513,9 +662,25 @@ TODO: lastModifiedFileTime の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `from` | `&nbsp;` | 移動元のストレージ名を指定します。 |
+| `to` | `&nbsp;` | 移動先のストレージ名を指定します。 |
+
+**戻り値**
+
+移動に成功すれば真、失敗すれば偽が返ります。
+
 **解説**
 
-TODO: moveFile の説明
+ファイルの移動 ( リネーム )
+
+指定したストレージファイルを別の場所へ移動 ( リネーム ) します。
+移動成功時は自動検索パスのキャッシュも更新されます。
+
+**関連:** [Storages.deleteFile](Storages.md#deletefile)
 
 ---
 
@@ -523,9 +688,21 @@ TODO: moveFile の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 読み込み対象のファイルのストレージ名を指定します。 |
+
 **解説**
 
-TODO: requestCache の説明
+ファイルキャッシュへの読み込みリクエスト
+
+指定したファイルを通常のファイルキャッシュへバックグラウンドで
+読み込みます。`Storages.addCacheTargetExtension` で登録された
+拡張子のファイルが対象です。
+
+**関連:** [Storages.clearCache](Storages.md#clearcache) / [Storages.isCacheLoading](Storages.md#iscacheloading) / [Storages.requestFastCache](Storages.md#requestfastcache)
 
 ---
 
@@ -533,9 +710,21 @@ TODO: requestCache の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 読み込み対象のファイルのストレージ名を指定します。 |
+
 **解説**
 
-TODO: requestFastCache の説明
+高速ファイルキャッシュへの読み込みリクエスト
+
+指定したファイルを高速キャッシュへバックグラウンドで読み込みます。
+内部キューが通常キャッシュと別系統になっており、
+`Storages.requestCache` よりも高優先で処理されます。
+
+**関連:** [Storages.clearFastCache](Storages.md#clearfastcache) / [Storages.isFastCacheLoading](Storages.md#isfastcacheloading) / [Storages.requestCache](Storages.md#requestcache)
 
 ---
 
@@ -545,7 +734,11 @@ TODO: requestFastCache の説明
 
 **解説**
 
-TODO: rollbackSavedata の説明
+セーブデータのロールバック
+
+セーブデータ領域への書き込みを破棄し、最後にコミットされた状態へ戻します。
+
+**関連:** [Storages.commitSavedata](Storages.md#commitsavedata)
 
 ---
 
@@ -553,9 +746,17 @@ TODO: rollbackSavedata の説明
 
 メソッド
 
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `size` | `&nbsp;` | キャッシュの最大サイズをバイト単位で指定します<br>( TODO: 単位がバイトかエントリ数かは要確認 )。 |
+
 **解説**
 
-TODO: setCacheMaxSize の説明
+ファイルキャッシュの最大サイズの設定
+
+`Storages.requestCache` 系で保持するキャッシュの最大サイズを設定します。
 
 ---
 

@@ -230,12 +230,23 @@ class Font {
 	property rasterizer;
 
 	/**
-	 * TODO: defaultFaceName の説明
+	 * 既定フォントの face 名
+	 *
+	 * フォント未指定時に使用される既定フォントの face 名を取得 / 設定します。
+	 * クラス静的プロパティとして全レイヤから共有されます。
+	 * @type String
 	 */
 	property defaultFaceName;
 
 	/**
-	 * TODO: faceIsFileName の説明
+	 * face 名をファイル名として扱うかどうか
+	 *
+	 * 真にすると `face` プロパティに指定した名前をフォントファイル名として
+	 * 開きます ( FreeType 使用時のみ有効 )。
+	 *
+	 * 注: このフラグを真にしたレイヤで IME を有効化した場合、IME の入力欄では
+	 * `DEFAULT_GUI_FONT` が使用されます。
+	 * @type Boolean
 	 */
 	property faceIsFileName;
 

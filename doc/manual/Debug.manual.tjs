@@ -119,7 +119,14 @@ class Debug {
 	property clearLogFileOnError;
 
 	/**
-	 * TODO: prettyPrint の説明
+	 * 値の整形表示
+	 *
+	 * 任意の TJS 値を、辞書配列やオブジェクトの内容を含めて読みやすい文字列に
+	 * 整形して返します。REPL やログ出力でのデバッグ用途に使用します。
+	 * @param value 整形対象の値を指定します。
+	 * @param depth 再帰的に展開する深さを指定します。既定値は 2 。
+	 * @param compact 真を指定するとコンパクトな 1 行表記になります。既定値は偽。
+	 * @return 整形結果の文字列が返ります。
 	 */
-	function prettyPrint();
+	function prettyPrint(value, depth = 2, compact = false);
 }
