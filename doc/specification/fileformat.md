@@ -31,4 +31,4 @@
 | アーカイブ | PEXP3 | .exe | 吉里吉里独自形式。<br>吉里吉里実行ファイル（krkr.eXe）とXP3形式を組み合わせたもの。<br>非推奨形式。<br>[Releaser](http://devdoc.kikyou.info/tvp/docs/kr2doc/contents/Releaser.html)にて作成する。 |
 | アーカイブ | その他 | .* | プラグインにより拡張可能。 |
 | フォント | レンダリング済みフォント | .tft | 吉里吉里独自形式。<br>[レンダリング済みフォントデータ作成ツール](http://devdoc.kikyou.info/tvp/docs/kr2doc/contents/FontMaker.html)にて生成する |
-| フォント | TrueType/OpenType フォント | .ttf<br>.otf | 非公式サポート。<br>システムにフォントをインストールすることなく使える。<br>要[addFont.dll](../../src/plugins/win32/addFont/)。Windows2000/XP/Vista のみ対応。 |
+| フォント | TrueType/OpenType フォント | .ttf<br>.otf | 非公式サポート。<br>システムにフォントをインストールすることなく使える。<br>要 [addFont.dll](https://github.com/wamsoft/addFont)。Windows のみ対応。 |

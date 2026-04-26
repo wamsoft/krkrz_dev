@@ -56,7 +56,6 @@ markdown_extensions:
 
 # 自動生成のメタファイル類はサイト内に出さない
 exclude_docs: |
-  _index.md
   _missing.md
   _pending_cleanup.md
   _inventory.json

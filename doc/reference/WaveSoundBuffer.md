@@ -2,7 +2,7 @@
 
 WaveSoundBuffer クラスは、PCMの再生を管理するクラスです。
 
-WaveSoundBuffer クラスでは、[](LoopTuner) で作成した .sli ファイルを読み込み、処理することができます。詳しくはループチューナの説明をご覧ください。
+WaveSoundBuffer クラスでは、[ループチューナ](../guide/LoopTuner.md) で作成した .sli ファイルを読み込み、処理することができます。詳しくはループチューナの説明をご覧ください。
 
 ## メンバー一覧
 

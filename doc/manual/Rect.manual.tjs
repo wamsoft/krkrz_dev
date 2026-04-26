@@ -50,7 +50,7 @@ class Rect {
 	 * この値は [Rect.left](Rect.md#left) プロパティでも取得や設定ができます。
 	 * @param y 矩形の Y 座標値を指定します。
 	 *
-	 * この値は [Rect.topt](Rect.md#topt) プロパティでも取得や設定ができます。
+	 * この値は [Rect.top](Rect.md#top) プロパティでも取得や設定ができます。
 	 */
 	function setOffset(x, y);
 

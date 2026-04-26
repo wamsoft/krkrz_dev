@@ -642,7 +642,7 @@ class Window {
 	 * ウィンドウの最大サイズを指定します。ウィンドウはこのメソッドで指定したサイズより大きくなることはできません。
 	 * @param width ウィンドウの最大の横幅を指定します。0を指定すると制限は無くなります。
 	 * @param height ウィンドウの最大の縦幅を指定します。0を指定すると制限は無くなります。
-	 * @see Window.setMixSize
+	 * @see Window.setMinSize
 	 * @see Window.setSize
 	 * @see Window.maxWidth
 	 * @see Window.maxHeight
