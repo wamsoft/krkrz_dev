@@ -185,9 +185,7 @@ this  true  try  void  var  while  with`
 
 
 
-文字列については
-
-も参照してください。
+文字列については [文字列](string.md) も参照してください。
 
 ## @ つき文字列即値
 
@@ -216,9 +214,7 @@ this  true  try  void  var  while  with`
 	<% ff ff ff 00 04 0f ff 30 %>
 ```
 
-オクテット列については
-
-も参照してください。
+オクテット列については [オクテット列](octet.md) も参照してください。
 
 ## 正規表現パターン
 
@@ -234,6 +230,4 @@ this  true  try  void  var  while  with`
 	/start(.*?)end/gi
 ```
 
-正規表現パターンについては
-
-も参照してください。
+正規表現パターンについては [RegExp クラス](regexp.md) も参照してください。

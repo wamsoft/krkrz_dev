@@ -89,6 +89,36 @@ nav:
       - 仮想キーコード: guide/KeyCodes.md
       - マウスカーソル: guide/MouseCursors.md
       - 色定数: guide/ColorCodes.md
+  - TJS2言語仕様:
+    - tjs2/index.md
+    - 概要:
+      - TJS2 について: tjs2/about.md
+      - スタイルなど: tjs2/style.md
+    - 構文:
+      - トークン: tjs2/token.md
+      - 項: tjs2/factor.md
+      - 式と演算子: tjs2/expr_and_op.md
+      - ステートメントとブロック: tjs2/statement_and_block.md
+      - if ステートメント: tjs2/if.md
+      - switch ステートメント: tjs2/switch.md
+      - for ステートメント: tjs2/for.md
+      - while ステートメント: tjs2/while.md
+      - with ステートメント: tjs2/with.md
+      - 例外処理: tjs2/try.md
+      - プリプロセッサ: tjs2/pp.md
+    - 言語要素:
+      - 変数: tjs2/variable.md
+      - データ型: tjs2/types.md
+      - 関数: tjs2/function.md
+      - クラス: tjs2/class.md
+      - プロパティ: tjs2/property.md
+    - 内部仕様:
+      - 組み込み方法: tjs2/simple.md
+      - 基本型: tjs2/basictypes.md
+      - iTJSDispatch2 インターフェース: tjs2/interface.md
+      - tTJSVariant 型: tjs2/variant.md
+      - tTJS: tjs2/ttjs.md
+      - 仮想マシン: tjs2/vmcodes.md
   - クラスリファレンス:
     - 吉里吉里Z コアクラス:
       - reference/AsyncTrigger.md
@@ -176,36 +206,6 @@ nav:
         - reference/Array.md
         - reference/Dictionary.md
         - reference/Math.md
-  - TJS2言語仕様:
-    - tjs2/index.md
-    - 概要:
-      - TJS2 について: tjs2/about.md
-      - スタイルなど: tjs2/style.md
-    - 構文:
-      - トークン: tjs2/token.md
-      - 項: tjs2/factor.md
-      - 式と演算子: tjs2/expr_and_op.md
-      - ステートメントとブロック: tjs2/statement_and_block.md
-      - if ステートメント: tjs2/if.md
-      - switch ステートメント: tjs2/switch.md
-      - for ステートメント: tjs2/for.md
-      - while ステートメント: tjs2/while.md
-      - with ステートメント: tjs2/with.md
-      - 例外処理: tjs2/try.md
-      - プリプロセッサ: tjs2/pp.md
-    - 言語要素:
-      - 変数: tjs2/variable.md
-      - データ型: tjs2/types.md
-      - 関数: tjs2/function.md
-      - クラス: tjs2/class.md
-      - プロパティ: tjs2/property.md
-    - 内部仕様:
-      - 組み込み方法: tjs2/simple.md
-      - 基本型: tjs2/basictypes.md
-      - iTJSDispatch2 インターフェース: tjs2/interface.md
-      - tTJSVariant 型: tjs2/variant.md
-      - tTJS: tjs2/ttjs.md
-      - 仮想マシン: tjs2/vmcodes.md
   - 仕様書:
     - specification/index.md
     - ファイルフォーマット: specification/fileformat.md
