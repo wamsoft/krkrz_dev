@@ -26,6 +26,11 @@
 - [エンジン設定の追加/編集](core/engine_setting.md)
 - [吉里吉里Z固有のクラッキング対策](core/anti_cracking.md)
 - [メモリ不足対策](core/low_memory.md)
+- [メモリ観測・リーク調査](core/memory_observation.md)
+- [描画スレッドプール利用率の計測 (DrawStats)](core/draw_stats.md)
+- [ゲームパッド状態の観察 (PadOverlay)](core/pad_overlay.md)
+- [REPL (対話型 TJS シェル)](core/repl.md)
+- [ログ出力](core/logging.md)
 
 ---
 

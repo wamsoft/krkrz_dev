@@ -74,6 +74,7 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [postInputEvent](#postinputevent)
 - [hideMouseCursor](#hidemousecursor)
 - [registerMessageReceiver](#registermessagereceiver)
+- [postMessage](#postmessage)
 - [getTouchPoint](#gettouchpoint)
 - [getMouseVelocity](#getmousevelocity)
 - [getTouchVelocity](#gettouchvelocity)
@@ -1215,6 +1216,30 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 吉里吉里ソース配布パッケージ中の src/plugins/win32/wmrdump に簡単な使用法の説明があります。
 
 **関連:** [Window.HWND](Window.md#hwnd)
+
+---
+
+### postMessage
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `msg` | `&nbsp;` | 送るウィンドウメッセージ ID を整数で指定します。 |
+| `wparam` | `&nbsp;` | wParam に渡す値を整数で指定します。 |
+| `lparam` | `&nbsp;` | lParam に渡す値を整数で指定します。 |
+
+**解説**
+
+ウィンドウメッセージのポスト
+
+このウィンドウのネイティブメッセージキューに、指定された
+ウィンドウメッセージを非同期に投入します。
+主に C++ プラグインがウィンドウへ通知を送るための入口として使用されます。
+
+**関連:** [Window.registerMessageReceiver](Window.md#registermessagereceiver)
 
 ---
 

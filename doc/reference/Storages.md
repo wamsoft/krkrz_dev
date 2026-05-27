@@ -19,8 +19,12 @@ Storages クラスは 吉里吉里本体の**ストレージシステム**に関
 - [getLocalName](#getlocalname)
 - [selectFile](#selectfile)
 - [addCacheTargetExtension](#addcachetargetextension)
+- [addDecodeTargetExtension](#adddecodetargetextension)
+- [removeDecodeTargetExtension](#removedecodetargetextension)
 - [clearArchiveCache](#cleararchivecache)
 - [clearCache](#clearcache)
+- [clearAllCaches](#clearallcaches)
+- [clearTransientCaches](#cleartransientcaches)
 - [clearFastCache](#clearfastcache)
 - [clearOldCache](#clearoldcache)
 - [commitSavedata](#commitsavedata)
@@ -31,10 +35,18 @@ Storages クラスは 吉里吉里本体の**ストレージシステム**に関
 - [isCacheLoading](#iscacheloading)
 - [isExistentDirectory](#isexistentdirectory)
 - [isFastCacheLoading](#isfastcacheloading)
-- [lastModifiedFileTime](#lastmodifiedfiletime)
+- [getLastModifiedFileTime](#getlastmodifiedfiletime)
 - [moveFile](#movefile)
 - [requestCache](#requestcache)
 - [requestFastCache](#requestfastcache)
+- [isImagePrefetchLoading](#isimageprefetchloading)
+- [pinCache](#pincache)
+- [unpinCache](#unpincache)
+- [isCachePinned](#iscachepinned)
+- [getFileCacheList](#getfilecachelist)
+- [getImageCacheList](#getimagecachelist)
+- [dumpFileCacheList](#dumpfilecachelist)
+- [dumpImageCacheList](#dumpimagecachelist)
 - [rollbackSavedata](#rollbacksavedata)
 - [setCacheMaxSize](#setcachemaxsize)
 
@@ -366,16 +378,61 @@ System.inform("選択したファイルは : " + params.name);
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `ext` | `&nbsp;` | 対象とする拡張子を指定します。先頭に `.` (ピリオド) が<br>無ければ自動的に補われます。 |
+| `minSize` | `0` | この拡張子に適用する最小ファイルサイズ ( バイト ) を<br>指定します。0 ( 既定 ) を指定するとサイズ閾値なし、それより小さい<br>ファイルは cache 対象外となります。 |
 
 **解説**
 
 オンメモリキャッシュ対象拡張子の追加
 
-ファイルロード時にオンメモリキャッシュへ載せる拡張子を追加します。
+ファイルロード時にオンメモリキャッシュ ( file 層 ) へ載せる拡張子を追加します。
 ここで登録された拡張子のファイルは、ストレージから読み込まれた際に
 内容がメモリ上に保持され、再アクセス時のディスク I/O を省略します。
 
-**関連:** [Storages.requestCache](Storages.md#requestcache)
+**関連:** [Storages.requestCache](Storages.md#requestcache) / [Storages.addDecodeTargetExtension](Storages.md#adddecodetargetextension)
+
+---
+
+### addDecodeTargetExtension
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `ext` | `&nbsp;` | 対象とする拡張子を指定します。先頭に `.` (ピリオド) が<br>無ければ自動的に補われます。 |
+| `minSize` | `0` | この拡張子に適用する最小ファイルサイズ ( バイト ) を<br>指定します。0 ( 既定 ) を指定するとサイズ閾値なし。 |
+
+**解説**
+
+decode キャッシュ対象拡張子の追加
+
+画像デコード結果 ( decode 層キャッシュ ) に載せる拡張子を追加します。
+ここで登録された拡張子のファイルは [Storages.requestCache](Storages.md#requestcache)
+からバックグラウンドでデコードまで実行されてキャッシュに載ります。
+
+**関連:** [Storages.removeDecodeTargetExtension](Storages.md#removedecodetargetextension) / [Storages.requestCache](Storages.md#requestcache)
+
+---
+
+### removeDecodeTargetExtension
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `ext` | `&nbsp;` | 削除する拡張子を指定します。 |
+
+**解説**
+
+decode キャッシュ対象拡張子の削除
+
+[Storages.addDecodeTargetExtension](Storages.md#adddecodetargetextension) で
+追加した拡張子を decode キャッシュ対象から除外します。
+
+**関連:** [Storages.addDecodeTargetExtension](Storages.md#adddecodetargetextension)
 
 ---
 
@@ -403,15 +460,48 @@ XP3 等のアーカイブを開いた際にエンジン内部で保持してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `path` | `""` | 破棄するファイルのパスを指定します。省略または空文字列を<br>指定するとすべてのキャッシュを破棄します。 |
+| `path` | `""` | 破棄するファイルのパスを指定します。省略または空文字列を<br>指定すると transient なキャッシュ ( pin されていないもの ) のみを<br>全破棄します。 |
 
 **解説**
 
 キャッシュの破棄
 
 `Storages.requestCache` で読み込まれたファイルキャッシュを破棄します。
+file 層 / decode 層の両層が対象です。
 
-**関連:** [Storages.requestCache](Storages.md#requestcache)
+**関連:** [Storages.requestCache](Storages.md#requestcache) / [Storages.clearAllCaches](Storages.md#clearallcaches) / [Storages.clearTransientCaches](Storages.md#cleartransientcaches)
+
+---
+
+### clearAllCaches
+
+メソッド
+
+**解説**
+
+全キャッシュの破棄
+
+file 層 / decode 層のキャッシュをすべて破棄します。
+pin されているエントリも含めて消されるため、最大強度の `doCompact(clAll)`
+に相当します。
+
+**関連:** [Storages.clearCache](Storages.md#clearcache) / [Storages.clearTransientCaches](Storages.md#cleartransientcaches)
+
+---
+
+### clearTransientCaches
+
+メソッド
+
+**解説**
+
+一時的キャッシュの破棄
+
+pin されていない ( transient な ) キャッシュエントリを file 層 / decode 層
+の両方から破棄します。タイトル画面に戻ったときなどの軽量なキャッシュ
+クリア用途を想定しています。
+
+**関連:** [Storages.pinCache](Storages.md#pincache) / [Storages.clearAllCaches](Storages.md#clearallcaches)
 
 ---
 
@@ -633,7 +723,7 @@ XP3 等のアーカイブを開いた際にエンジン内部で保持してい�
 
 ---
 
-### lastModifiedFileTime
+### getLastModifiedFileTime
 
 メソッド
 
@@ -693,16 +783,19 @@ XP3 等のアーカイブを開いた際にエンジン内部で保持してい�
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `path` | `&nbsp;` | 読み込み対象のファイルのストレージ名を指定します。 |
+| `minSize` | `0` | この呼び出しに限った最小ファイルサイズ閾値 ( バイト ) を<br>指定します。0 ( 既定 ) を指定すると拡張子側の登録設定に従います。 |
 
 **解説**
 
 ファイルキャッシュへの読み込みリクエスト
 
 指定したファイルを通常のファイルキャッシュへバックグラウンドで
-読み込みます。`Storages.addCacheTargetExtension` で登録された
-拡張子のファイルが対象です。
+読み込みます。
+`Storages.addCacheTargetExtension` で登録された拡張子は file 層の cache に、
+`Storages.addDecodeTargetExtension` で登録された画像拡張子は decode 層の cache
+( デコード結果 ) に載ります。両方該当する拡張子は両層に並行で発火します。
 
-**関連:** [Storages.clearCache](Storages.md#clearcache) / [Storages.isCacheLoading](Storages.md#iscacheloading) / [Storages.requestFastCache](Storages.md#requestfastcache)
+**関連:** [Storages.clearCache](Storages.md#clearcache) / [Storages.isCacheLoading](Storages.md#iscacheloading) / [Storages.isImagePrefetchLoading](Storages.md#isimageprefetchloading) / [Storages.requestFastCache](Storages.md#requestfastcache)
 
 ---
 
@@ -715,6 +808,7 @@ XP3 等のアーカイブを開いた際にエンジン内部で保持してい�
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `path` | `&nbsp;` | 読み込み対象のファイルのストレージ名を指定します。 |
+| `minSize` | `0` | この呼び出しに限った最小ファイルサイズ閾値 ( バイト ) を<br>指定します。0 ( 既定 ) を指定すると拡張子側の登録設定に従います。 |
 
 **解説**
 
@@ -725,6 +819,182 @@ XP3 等のアーカイブを開いた際にエンジン内部で保持してい�
 `Storages.requestCache` よりも高優先で処理されます。
 
 **関連:** [Storages.clearFastCache](Storages.md#clearfastcache) / [Storages.isFastCacheLoading](Storages.md#isfastcacheloading) / [Storages.requestCache](Storages.md#requestcache)
+
+---
+
+### isImagePrefetchLoading
+
+メソッド
+
+**戻り値**
+
+進行中であれば真、そうでなければ偽が返ります。
+
+**解説**
+
+画像 decode prefetch の進行状況の判定
+
+[Storages.requestCache](Storages.md#requestcache) などから発火された
+画像 decode prefetch ( decode 層 ) のジョブが、まだバックグラウンドで
+処理中の場合に真を返します。
+`Storages.isCacheLoading` が file 層を見るのに対し、こちらは decode 層
+の polling 用です。
+
+**関連:** [Storages.requestCache](Storages.md#requestcache) / [Storages.isCacheLoading](Storages.md#iscacheloading)
+
+---
+
+### pinCache
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | pin したいファイルのストレージ名を指定します。 |
+
+**解説**
+
+キャッシュエントリの pin 化
+
+指定パスの cache エントリを file 層 / decode 層の両方で **pin** 状態に
+し、`clearCache(空文字列)` や `clearTransientCaches` の対象外にします。
+同時に、まだ cache に載っていなければ非同期 load を自動で発火します。
+autopath 経由のファイルでも、実体パスへ正規化した上で pin されます。
+
+**関連:** [Storages.unpinCache](Storages.md#unpincache) / [Storages.isCachePinned](Storages.md#iscachepinned) / [Storages.clearTransientCaches](Storages.md#cleartransientcaches)
+
+---
+
+### unpinCache
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | pin を解除したいファイルのストレージ名を指定します。 |
+
+**解説**
+
+キャッシュエントリの pin 解除
+
+[Storages.pinCache](Storages.md#pincache) で pin したエントリを解除します。
+解除後は transient なクリア対象に戻ります ( ただちに破棄はされません )。
+
+**関連:** [Storages.pinCache](Storages.md#pincache)
+
+---
+
+### isCachePinned
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 判定したいファイルのストレージ名を指定します。 |
+
+**戻り値**
+
+pin 状態であれば真、そうでなければ偽が返ります。
+
+**解説**
+
+cache エントリが pin されているかの判定
+
+指定パスが file 層または decode 層で pin 状態かを返します。
+
+**関連:** [Storages.pinCache](Storages.md#pincache) / [Storages.unpinCache](Storages.md#unpincache)
+
+---
+
+### getFileCacheList
+
+メソッド
+
+**戻り値**
+
+cache エントリの辞書配列。
+
+**解説**
+
+file 層キャッシュ一覧の取得
+
+file 層キャッシュ ( `requestCache` 系で確保されたバイナリ ) のエントリ
+一覧を、辞書の配列で返します。
+
+各エントリは以下のキーを持ちます。
+
+- `path`        : 正規化されたストレージパス ( String )
+- `size`        : バイト数 ( Integer )
+- `lastaccess`  : 最終アクセス時刻 ( プラットフォーム依存の整数 )
+- `usecount`    : 現在の参照カウント ( Integer )
+- `pinned`      : pin 状態 ( 0 or 1 )
+
+**関連:** [Storages.dumpFileCacheList](Storages.md#dumpfilecachelist) / [Storages.getImageCacheList](Storages.md#getimagecachelist)
+
+---
+
+### getImageCacheList
+
+メソッド
+
+**戻り値**
+
+cache エントリの辞書配列。
+
+**解説**
+
+decode 層キャッシュ一覧の取得
+
+decode 層キャッシュ ( デコード済み Bitmap ) のエントリ一覧を、辞書の
+配列で返します。
+
+各エントリは以下のキーを持ちます。
+
+- `path`    : 正規化されたストレージパス ( String )
+- `keyidx`  : 同一パス内のバリエーション番号 ( Integer )
+- `mode`    : 読み込みモード ( Integer; 内部定数 )
+- `dw, dh`  : 表示サイズ ( Integer )
+- `width, height` : 元 Bitmap サイズ ( Integer )
+- `bytes`   : 占有バイト数 ( Integer )
+- `pinned`  : pin 状態 ( 0 or 1 )
+
+**関連:** [Storages.dumpImageCacheList](Storages.md#dumpimagecachelist) / [Storages.getFileCacheList](Storages.md#getfilecachelist)
+
+---
+
+### dumpFileCacheList
+
+メソッド
+
+**解説**
+
+file 層キャッシュ一覧のログ出力
+
+file 層キャッシュエントリ一覧を WARNING レベルでログに出力します。
+MASTER ビルドでも出力されます。REPL の `.fcache` と同等です。
+
+**関連:** [Storages.getFileCacheList](Storages.md#getfilecachelist) / [Storages.dumpImageCacheList](Storages.md#dumpimagecachelist)
+
+---
+
+### dumpImageCacheList
+
+メソッド
+
+**解説**
+
+decode 層キャッシュ一覧のログ出力
+
+decode 層キャッシュエントリ一覧を WARNING レベルでログに出力します。
+MASTER ビルドでも出力されます。REPL の `.icache` と同等です。
+
+**関連:** [Storages.getImageCacheList](Storages.md#getimagecachelist) / [Storages.dumpFileCacheList](Storages.md#dumpfilecachelist)
 
 ---
 

@@ -82,6 +82,24 @@ DECL_RES = {
     "event":   re.compile(r"TJS_BEGIN_NATIVE_EVENT_DECL\(\s*(?:/\*[^*]*\*/\s*)?(\w+)\s*\)"),
 }
 
+# Project-local helper macros that wrap a TJS_BEGIN_NATIVE_*_DECL inside their
+# body. The DECL_RES regexes would otherwise pick up the macro parameter name
+# (e.g. `propname`) from the `#define` body itself, while never seeing the
+# actual property names registered by the macro *invocations*. Listing the
+# call sites here lets scan_tjs identify the registered members correctly.
+HELPER_MACRO_RES = {
+    "property": [
+        re.compile(r"\bTVP_DEF_PAD_AXIS_PROP\s*\(\s*(\w+)\s*,"),
+    ],
+}
+
+# Lines inside multi-line `#define ... \` blocks confuse DECL_RES because
+# they look identical to real decls; strip them before scanning.
+DEFINE_BLOCK_RE = re.compile(
+    r"^[ \t]*#\s*define\b[^\n]*(?:\\\n[^\n]*)+",
+    re.MULTILINE,
+)
+
 # Runtime-registration patterns. Both produce member names that must be
 # attributed to the file's primary tTJSNC class (ctor proximity does not
 # work — these calls live in Initialize() bodies or free functions outside
@@ -97,11 +115,23 @@ EVENTNAME_RE = re.compile(
 )
 EVENT_NAME_PREFIX_RE = re.compile(r"^on[A-Z]")
 
+def _strip_define_blocks(text: str) -> str:
+    """Replace multi-line `#define ... \\` blocks with blanks of equal length.
+
+    Preserves offsets so other regex matches stay correctly attributed to the
+    enclosing constructor span.
+    """
+    def blank(m: re.Match) -> str:
+        return "".join("\n" if c == "\n" else " " for c in m.group(0))
+    return DEFINE_BLOCK_RE.sub(blank, text)
+
+
 def scan_file(path: Path) -> dict[str, dict]:
     try:
-        text = path.read_text(encoding="utf-8", errors="ignore")
+        raw = path.read_text(encoding="utf-8", errors="ignore")
     except OSError:
         return {}
+    text = _strip_define_blocks(raw)
 
     # Gather constructor openings: (class_name, offset).
     ctor_spans: list[tuple[int, str]] = []
@@ -142,6 +172,18 @@ def scan_file(path: Path) -> dict[str, dict]:
                 continue
             key = {"method": "methods", "property": "properties", "event": "events"}[kind]
             add(cls, key, m.group(1))
+
+    # Project-local helper macros that wrap a DECL inside their body. Use the
+    # stripped text so that the macro DEFINITION line (which also matches the
+    # regex with the parameter name) is excluded; only real invocations remain.
+    for kind, rxs in HELPER_MACRO_RES.items():
+        for rx in rxs:
+            for m in rx.finditer(text):
+                cls = class_at(m.start())
+                if cls is None or cls not in CLASSES:
+                    continue
+                key = {"method": "methods", "property": "properties", "event": "events"}[kind]
+                add(cls, key, m.group(1))
 
     # Runtime-registration patterns are tied to the file as a whole, since
     # PropSet / TVPPostEvent calls usually sit in Initialize() bodies or free

@@ -775,6 +775,19 @@ class Window {
 	function registerMessageReceiver(mode, func, userdata);
 
 	/**
+	 * ウィンドウメッセージのポスト
+	 *
+	 * このウィンドウのネイティブメッセージキューに、指定された
+	 * ウィンドウメッセージを非同期に投入します。
+	 * 主に C++ プラグインがウィンドウへ通知を送るための入口として使用されます。
+	 * @param msg 送るウィンドウメッセージ ID を整数で指定します。
+	 * @param wparam wParam に渡す値を整数で指定します。
+	 * @param lparam lParam に渡す値を整数で指定します。
+	 * @see Window.registerMessageReceiver
+	 */
+	function postMessage(msg, wparam, lparam);
+
+	/**
 	 * タッチ座標の取得
 	 *
 	 * 現在のタッチ座標配列から指定インデックスの座標情報を取得します。

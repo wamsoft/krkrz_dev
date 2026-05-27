@@ -392,6 +392,24 @@
   設定可能な値は **'auto' (自動(推奨))**, **'0' (自動的に拡大)**,  **'64' (64MB)**,  **'128' (128MB)**,  **'256' (256MB)**,  **'512' (512MB)**,  **'1024' (1024MB)**,  **'2048' (2048MB)**のいずれかで、このオプションを指定しないと 'auto' が指定されたものと見なされます。
   
   通常 auto で問題ありませんが、初期値を調整することでメモリのフラグメンテーションを軽減し、メモリ不足エラーの問題を回避できる可能性があります。
+- **-**drawdevice** (起動時の DrawDevice 選択 / SDL3 ビルド限定)**  
+  SDL3 ビルドにおいて、起動時に使用する既定の DrawDevice を選択します。
+  WINVER ビルドでは無視されます。
+  
+  設定可能な値:
+  
+    - **'sdl'**: SDL_Renderer 経由の [SDLDrawDevice](../reference/SDLDrawDevice.md) ( backend 自動選択 )
+    - **'sdlogl'**: OpenGL ES 直接版 ( PBO 経由・Canvas 非対応の純粋版 ) ( `TVP_USE_OPENGL=ON` 時のみ )
+    - **'ogl'**: OpenGL ES + Canvas / Texture / Shader / Offscreen を含むフル機能版 [OGLDrawDevice](../reference/OGLDrawDevice.md) ( `TVP_USE_OPENGL=ON` 時のみ )
+  
+  指定しなかった場合、`TVP_USE_OPENGL=ON` ビルドでは `sdlogl`、それ以外では `sdl` が選択されます。未知の値を指定するとフォールバックして既定値が使用されます。
+- **-**renderer** (SDL3 backend の明示指定 / SDL3 ビルド限定)**  
+  SDLDrawDevice が利用する SDL_Renderer の backend 名を明示します。
+  ( 例: `direct3d11`, `vulkan`, `opengl`, `software` 等 )。
+  
+  指定しなかった場合は SDL3 の自動選択に任されます。
+  
+  SDL3 ビルド + SDLDrawDevice ( = `-drawdevice=sdl` か既定 ) 使用時のみ意味を持ちます。
 
 ## CPU 機能関連のオプション
 
@@ -436,6 +454,43 @@ CPU の認識トラブルが起こった場合に 'no' に設定するとその�
   エラー時にコンソールのログをファイルに出力するかどうかの設定です。
   
   設定可能な値は **'no' (出力しない)**, **'yes' (既存のファイルに追加して出力する)**, **'clear' (既存のファイルをクリアしてから出力する)** のいずれかで、このオプションを指定しないと 'yes' が指定されたものと見なされます。
+- **-**loglevel** (ログ出力レベル)**  
+  起動時のログ出力レベルをオーバライドします。
+  
+  設定可能な値は **'debug'**, **'info'**, **'warning'**, **'error'**, **'off'** のいずれかです ( 大文字小文字を区別しません )。指定したレベル以上のログのみが出力されます。
+  
+  指定しない場合のデフォルトは、`MASTER` ビルドで `warning`、それ以外の Release ビルドで `info`、Debug ビルドで `debug` です。配布バイナリで一時的に詳細ログを採取したい場合に使用します。
+- **-**memoverlay** (メモリ状態オーバレイ表示 / SDL3 ビルド限定)**  
+  起動時から画面右上にエンジンのメモリ状態 ( File / Bitmap / Sound / Krkrz / SDL 各アロケータの使用量とプロセス RSS / VSize 等 ) をリアルタイム表示するオーバレイを有効にします。
+  
+  設定可能な値は **'1' (有効)**, **'0' (無効)** のいずれかで、このオプションを指定しないと '0' が指定されたものと見なされます。
+  
+  実行中の動的切替は [System.setMemoryOverlay](../reference/System.md#setmemoryoverlay) または REPL の `.memoverlay` で行えます。WINVER ビルドでは無視されます。
+- **-**padoverlay** (ゲームパッド状態オーバレイ表示 / SDL3 ビルド限定)**  
+  起動時から画面左上にゲームパッドの 16 ボタンマトリクスと 6 軸アナログ値をリアルタイム表示するオーバレイを有効にします。
+  
+  設定可能な値は **'1' (有効)**, **'0' (無効)** のいずれかで、このオプションを指定しないと '0' が指定されたものと見なされます。
+  
+  実行中の動的切替は [System.setPadOverlay](../reference/System.md#setpadoverlay) または REPL の `.padoverlay` で行えます。WINVER ビルドでは無視されます。
+- **-**memstatinterval** (メモリ統計の周期ダンプ)**  
+  正の整数を指定すると、その秒数ごとに `System.dumpHeap` 相当のメモリ統計をログに出力します。
+  
+  既定値は 0 ( 無効 )。短い周期 ( 1〜数秒 ) の指定はログ量と性能への影響が大きいので、調査時のみ使用します。`KRKRZ_ENABLE_PERIODIC_DUMP=OFF` でビルドした場合は無視されます。
+- **-**memstatonexit** (終了時のメモリ統計ダンプ)**  
+  設定可能な値は **'1' (有効)**, **'0' (無効)** のいずれかで、有効指定時はエンジン終了時にメモリ統計を 1 回ダンプします。既定値は '0'。
+  
+  `KRKRZ_ENABLE_PERIODIC_DUMP=OFF` でビルドした場合は無視されます。
+- **-**cachelistonexit** (終了時のキャッシュ一覧ダンプ)**  
+  エンジン終了時に Storages の file 層 / decode 層キャッシュエントリ一覧をログにダンプします。終了直前に何が cache に残っていたかを調査する用途に使います。
+  
+  設定可能な値は次のいずれか:
+  
+    - **'1' / 'all'**: file 層 + decode 層の両方
+    - **'file'**: file 層のみ
+    - **'image'**: decode 層のみ
+    - **'0' / 'none'**: 無効 ( 既定 )
+  
+  実行中に一覧を見たい場合は [Storages.dumpFileCacheList](../reference/Storages.md#dumpfilecachelist) / [Storages.dumpImageCacheList](../reference/Storages.md#dumpimagecachelist) を利用してください。
 
 ## システム互換性関連のオプション
 

@@ -28,4 +28,18 @@ class Plugins {
 	 * @return リンクされているプラグイン名が格納された配列
 	 */
 	function getList();
+
+	/**
+	 * プラグインがリンク可能かの判定
+	 *
+	 * 指定されたプラグインファイルがエンジンに読み込み可能 ( link 可能 ) かを
+	 * 事前に判定します。実際の [Plugins.link](Plugins.md#link) は行いません。
+	 *
+	 * 自動検索パスに存在しない、または環境上 link できないプラグインの場合は
+	 * 偽が返ります。
+	 * @param name 判定したいプラグインのファイル名を指定します。
+	 * @return リンク可能であれば真、不可能であれば偽が返ります。
+	 * @see Plugins.link
+	 */
+	function canLink(name);
 }

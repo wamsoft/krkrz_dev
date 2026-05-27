@@ -40,6 +40,13 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [openGLESVersion](#openglesversion)
 - [processorNum](#processornum)
 - [touchDevice](#touchdevice)
+- [buildVariantName](#buildvariantname)
+- [padAxisLeftX](#padaxisleftx)
+- [padAxisLeftY](#padaxislefty)
+- [padAxisRightX](#padaxisrightx)
+- [padAxisRightY](#padaxisrighty)
+- [padAxisLeftTrigger](#padaxislefttrigger)
+- [padAxisRightTrigger](#padaxisrighttrigger)
 
 ### メソッド
 
@@ -67,6 +74,18 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [getJoypadType](#getjoypadtype)
 - [nullpo](#nullpo)
 - [system](#system)
+- [getSystemAllocatorInfo](#getsystemallocatorinfo)
+- [resetMemoryPeak](#resetmemorypeak)
+- [beginAllocTag](#beginalloctag)
+- [endAllocTag](#endalloctag)
+- [setMemoryOverlay](#setmemoryoverlay)
+- [setPadOverlay](#setpadoverlay)
+- [setDrawStatsLog](#setdrawstatslog)
+- [getJoypadCount](#getjoypadcount)
+- [hasJoypad](#hasjoypad)
+- [getPadAxis](#getpadaxis)
+- [rumblePad](#rumblepad)
+- [stopRumblePad](#stoprumblepad)
 
 ---
 
@@ -687,6 +706,104 @@ OS から認識されている論理プロセッサ数を返します。
 
 ---
 
+### buildVariantName
+
+プロパティ \ アクセス: `r`
+
+**型**: `String`
+
+**解説**
+
+ビルドバリアント名
+
+実行中のエンジンビルドの**バリアント名**を返します。
+
+- `WIN` ... Win32 ネイティブビルド ( WINVER )
+- `SDL` ... SDL3 ベースの汎用ビルド ( generic / SDL )
+- `LIB` ... 静的ライブラリ形式 ( libkrkrz )
+
+読み出し専用。`System.isGeneric` よりも具体的なバリアント識別が必要な
+場合に使います。
+
+**関連:** [System.isGeneric](System.md#isgeneric) / [System.platformName](System.md#platformname)
+
+---
+
+### padAxisLeftX
+
+プロパティ \ アクセス: `r`
+
+**型**: `Integer`
+
+**解説**
+
+パッド軸 ID: 左スティック X 軸
+
+[System.getPadAxis](System.md#getpadaxis) の axisId 引数に指定する定数。
+読み出し専用。
+
+---
+
+### padAxisLeftY
+
+プロパティ \ アクセス: `r`
+
+**型**: `Integer`
+
+**解説**
+
+パッド軸 ID: 左スティック Y 軸
+
+---
+
+### padAxisRightX
+
+プロパティ \ アクセス: `r`
+
+**型**: `Integer`
+
+**解説**
+
+パッド軸 ID: 右スティック X 軸
+
+---
+
+### padAxisRightY
+
+プロパティ \ アクセス: `r`
+
+**型**: `Integer`
+
+**解説**
+
+パッド軸 ID: 右スティック Y 軸
+
+---
+
+### padAxisLeftTrigger
+
+プロパティ \ アクセス: `r`
+
+**型**: `Integer`
+
+**解説**
+
+パッド軸 ID: L トリガ
+
+---
+
+### padAxisRightTrigger
+
+プロパティ \ アクセス: `r`
+
+**型**: `Integer`
+
+**解説**
+
+パッド軸 ID: R トリガ
+
+---
+
 ### terminate
 
 メソッド
@@ -1232,6 +1349,302 @@ nullポインターアクセスを発生させます
 OS の `system(3)` 相当でシェルコマンドを同期実行します。Win32 ビルド専用。
 実行直後に `TVP_COMPACT_LEVEL_MAX` レベルのコンパクトイベントが発行され、
 すべてのキャッシュが破棄されます。
+
+---
+
+### getSystemAllocatorInfo
+
+メソッド
+
+**戻り値**
+
+上記キーを含む辞書が返ります。
+
+**解説**
+
+プラットフォームアロケータ情報の取得
+
+プロセスやシステムのメモリ状態を一度に取得します。値が取得できなかった
+項目はキー自体が辞書に存在しないため、`"xxx" in dict` で判定可能です。
+
+返される辞書のキー (環境により一部欠落):
+
+- `totalFreeSize`        : ヒープ全体の空き容量 ( バイト )
+- `allocatableSize`      : 確保可能な最大連続領域 ( バイト )
+- `usedSize`             : 現在の使用量 ( バイト )
+- `peakUsedSize`         : 起動以来の使用量ピーク ( バイト )
+- `totalSize`            : ヒープの総容量 ( バイト )
+- `processRss`           : プロセス RSS ( バイト )
+- `processPeakRss`       : プロセス peak RSS ( バイト )
+- `processVsize`         : プロセス仮想サイズ ( バイト )
+- `systemTotalPhysical`  : システム物理メモリ総量 ( バイト )
+- `systemAvailPhysical`  : システム利用可能物理メモリ ( バイト )
+
+**関連:** [System.resetMemoryPeak](System.md#resetmemorypeak)
+
+---
+
+### resetMemoryPeak
+
+メソッド
+
+**解説**
+
+メモリピーク計測のリセット
+
+File / Bitmap / Sound アロケータの **peak_used** を current_used に揃え
+直し、Krkrz グローバルアロケータのピーク値もリセットします。
+`MemoryOverlay` の `(peak X.XX)` 表示を「ここから先の最大」にしたい
+ときに使います。REPL `.mempeakclear` と同等。
+
+---
+
+### beginAllocTag
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | タグ名を指定します。 |
+
+**解説**
+
+メモリアロケータタグスコープの開始
+
+thread-local なタグスタックに `name` を push します。以降この
+スレッドから走るエンジン側 ( Krkrz ) のメモリ確保は、このタグに
+振り分けて計測されます。`System.endAllocTag()` で対応する pop を
+行う必要があります。
+
+利用例:
+
+```
+System.beginAllocTag("User");
+loadChapter(3);
+System.endAllocTag();
+```
+
+既知のタグ名 ( `TVPAllocTag` 列挙名: `TJS2` / `User` / `GraphicsLoader`
+等 ) と一致しない名前は **User** として扱われます。
+
+**関連:** [System.endAllocTag](System.md#endalloctag)
+
+---
+
+### endAllocTag
+
+メソッド
+
+**解説**
+
+メモリアロケータタグスコープの終了
+
+[System.beginAllocTag](System.md#beginalloctag) で push したタグを
+取り出します。
+
+**関連:** [System.beginAllocTag](System.md#beginalloctag)
+
+---
+
+### setMemoryOverlay
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `enable` | `&nbsp;` | 真で表示、偽で非表示。引数を省略 ( または void ) すると<br>現在の状態をトグルします。 |
+
+**戻り値**
+
+設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。
+
+**解説**
+
+メモリ状態オーバレイの設定
+
+画面右上にエンジンのメモリ状態をリアルタイム表示するオーバレイの
+表示有無を切り替えます。SDL3 ビルド限定で、その他のビルドでは
+何も行いません。
+
+---
+
+### setPadOverlay
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `enable` | `&nbsp;` | 真で表示、偽で非表示。引数を省略 ( または void ) すると<br>現在の状態をトグルします。 |
+
+**戻り値**
+
+設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。
+
+**解説**
+
+ゲームパッド状態オーバレイの設定
+
+画面左上にゲームパッド 16 ボタンと 6 軸のアナログ値のオーバレイを
+表示するかを切り替えます。SDL3 ビルド限定で、その他のビルドでは
+何も行いません。
+
+---
+
+### setDrawStatsLog
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `enable` | `&nbsp;` | 真でログ出力、偽で停止。引数を省略 ( または void ) すると<br>現在の状態をトグルします。 |
+
+**戻り値**
+
+設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。
+
+**解説**
+
+描画統計ログ出力の設定
+
+`KRKRZ_DRAW_STATS=ON` ビルドかつ MemoryOverlay 表示中、500ms ごとに
+`DrawThreadPool` 利用統計をログに書き出すモードを切り替えます。
+実機 ( Switch 等 ) でリアルタイム表示が速く流れて読めない場合に
+利用します。OFF ビルドや MemoryOverlay 非表示時に呼んでも実害は
+ありませんが、ログは出力されません。
+
+---
+
+### getJoypadCount
+
+メソッド
+
+**戻り値**
+
+ゲームパッド数 ( 整数 )。
+
+**解説**
+
+接続中のゲームパッド数の取得
+
+現在接続が認識されているゲームパッドの数を返します。
+
+**関連:** [System.hasJoypad](System.md#hasjoypad)
+
+---
+
+### hasJoypad
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `no` | `0` | ゲームパッド番号を指定します ( 既定値 0 )。 |
+
+**戻り値**
+
+接続されていれば真、そうでなければ偽。
+
+**解説**
+
+ゲームパッドの接続確認
+
+指定番号のゲームパッドが接続されているかを返します。
+
+**関連:** [System.getJoypadCount](System.md#getjoypadcount)
+
+---
+
+### getPadAxis
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `no` | `&nbsp;` | パッド番号を指定します ( 現状 0 のみ有効 )。 |
+| `axisId` | `&nbsp;` | 軸 ID を指定します。 |
+
+**戻り値**
+
+軸のアナログ値が実数で返ります。
+
+**解説**
+
+ゲームパッドの軸アナログ値の取得
+
+指定パッドの指定軸のアナログ値を返します。軸 ID には
+`System.padAxisLeftX` 等の定数を使用してください。
+
+戻り値の範囲:
+
+- スティック軸 ( LeftX / LeftY / RightX / RightY ) ... -1.0 〜 +1.0
+- トリガ軸 ( LeftTrigger / RightTrigger ) ... 0.0 〜 +1.0
+
+未接続、無効な軸 ID 等の場合は 0.0 が返ります。
+
+**関連:** [System.padAxisLeftX](System.md#padaxisleftx) / [System.padAxisLeftY](System.md#padaxislefty) / [System.padAxisRightX](System.md#padaxisrightx) / [System.padAxisRightY](System.md#padaxisrighty) / [System.padAxisLeftTrigger](System.md#padaxislefttrigger) / [System.padAxisRightTrigger](System.md#padaxisrighttrigger)
+
+---
+
+### rumblePad
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `no` | `&nbsp;` | パッド番号を指定します。 |
+| `low` | `&nbsp;` | 低周波モータの強度 ( 0〜65535 )。 |
+| `high` | `&nbsp;` | 高周波モータの強度 ( 0〜65535 )。 |
+| `duration` | `&nbsp;` | 駆動時間をミリ秒で指定します。 |
+
+**戻り値**
+
+開始に成功すれば真、失敗すれば偽。
+
+**解説**
+
+ゲームパッドの振動開始
+
+指定パッドのランブルモータを駆動します。
+
+**関連:** [System.stopRumblePad](System.md#stoprumblepad)
+
+---
+
+### stopRumblePad
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `no` | `0` | パッド番号を指定します ( 既定値 0 )。 |
+
+**戻り値**
+
+停止に成功すれば真、失敗すれば偽。
+
+**解説**
+
+ゲームパッドの振動停止
+
+[System.rumblePad](System.md#rumblepad) で開始した振動を停止します。
+
+**関連:** [System.rumblePad](System.md#rumblepad)
 
 ---
 

@@ -4689,6 +4689,10 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 ## プラグイン拡張: layerExVector
 
+レイヤにベクタ描画メソッドが拡張されます
+
+・描画処理はレイヤに設定されたクリッピング領域でクリップされます。
+
 ### メンバー一覧
 
 #### プロパティ
@@ -4738,11 +4742,19 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 プロパティ \ アクセス: `r/w`
 
+**解説**
+
+描画時にその領域に対する update() 呼び出しを行うかどうか
+
 ---
 
 ### smoothingMode
 
 プロパティ \ アクセス: `r/w`
+
+**解説**
+
+描画のアンチエイリアス指定(互換性のため残されています)
 
 ---
 
@@ -4755,6 +4767,10 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `matrix` | `&nbsp;` |  |
+
+**解説**
+
+表示トランスフォームの指定
 
 ---
 
@@ -4812,6 +4828,10 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 | --- | --- | --- |
 | `matrix` | `&nbsp;` |  |
 
+**解説**
+
+描画時のトランスフォームを指定
+
 ---
 
 ### resetTransform
@@ -4866,7 +4886,11 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `argb` | `&nbsp;` |  |
+| `argb` | `&nbsp;` | 消去色 |
+
+**解説**
+
+画面の消去
 
 ---
 
@@ -4878,8 +4902,16 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `path` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス GdiPlus.Appearance で描画スタイルを指定します |
+| `path` | `&nbsp;` | パス GdiPlus.Path を指定します |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+パスの描画
 
 ---
 
@@ -4891,13 +4923,21 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `x` | `&nbsp;` |  |
-| `y` | `&nbsp;` |  |
-| `width` | `&nbsp;` |  |
-| `height` | `&nbsp;` |  |
-| `startAngle` | `&nbsp;` |  |
-| `sweepAngle` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス GdiPlus.Appearance で描画スタイルを指定します |
+| `x` | `&nbsp;` | 左上座標 |
+| `y` | `&nbsp;` | 左上座標 |
+| `width` | `&nbsp;` | 横幅 |
+| `height` | `&nbsp;` | 縦幅 |
+| `startAngle` | `&nbsp;` | 時計方向円弧開始位置 |
+| `sweepAngle` | `&nbsp;` | 描画角度 |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+円弧の描画
 
 ---
 
@@ -4909,13 +4949,21 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `x` | `&nbsp;` |  |
-| `y` | `&nbsp;` |  |
-| `width` | `&nbsp;` |  |
-| `height` | `&nbsp;` |  |
-| `startAngle` | `&nbsp;` |  |
-| `sweepAngle` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス GdiPlus.Appearance で描画スタイルを指定します |
+| `x` | `&nbsp;` | 左上座標 |
+| `y` | `&nbsp;` | 左上座標 |
+| `width` | `&nbsp;` | 横幅 |
+| `height` | `&nbsp;` | 縦幅 |
+| `startAngle` | `&nbsp;` | 時計方向円弧開始位置 |
+| `sweepAngle` | `&nbsp;` | 描画角度 |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+円錐の描画
 
 ---
 
@@ -4927,7 +4975,7 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス GdiPlus.Appearance で描画スタイルを指定します |
 | `x1` | `&nbsp;` |  |
 | `y1` | `&nbsp;` |  |
 | `x2` | `&nbsp;` |  |
@@ -4936,6 +4984,14 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 | `y3` | `&nbsp;` |  |
 | `x4` | `&nbsp;` |  |
 | `y4` | `&nbsp;` |  |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+ベジェ曲線の描画
 
 ---
 
@@ -4947,8 +5003,16 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `points` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス |
+| `points` | `&nbsp;` | 点の配列 [ [x1, y1], [x2, y2] .... ] |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+連続ベジェ曲線の描画
 
 ---
 
@@ -4960,8 +5024,16 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `points` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス |
+| `points` | `&nbsp;` | 点の配列 [ [x1, y1], [x2, y2] .... ] |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+Closed cardinal spline の描画
 
 ---
 
@@ -4973,9 +5045,17 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `points` | `&nbsp;` |  |
-| `tension` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス |
+| `points` | `&nbsp;` | 点の配列 [ [x1, y1], [x2, y2] .... ] |
+| `tension` | `&nbsp;` | テンション |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+Closed cardinal spline の描画
 
 ---
 
@@ -4987,8 +5067,16 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `points` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス |
+| `points` | `&nbsp;` | 点の配列 [ [x1, y1], [x2, y2] .... ] |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+cardinal spline の描画
 
 ---
 
@@ -5000,9 +5088,17 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `points` | `&nbsp;` |  |
-| `tension` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス |
+| `points` | `&nbsp;` | 点の配列 [ [x1, y1], [x2, y2] .... ] |
+| `tension` | `&nbsp;` | テンション |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+cardinal spline の描画
 
 ---
 
@@ -5014,11 +5110,19 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `points` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス |
+| `points` | `&nbsp;` | 点の配列 [ [x1, y1], [x2, y2] .... ] |
 | `offset` | `&nbsp;` |  |
 | `numberOfSegments` | `&nbsp;` |  |
-| `tension` | `&nbsp;` |  |
+| `tension` | `&nbsp;` | テンション |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+cardinal spline の描画
 
 ---
 
@@ -5030,11 +5134,19 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス GdiPlus.Appearance で描画スタイルを指定します |
 | `x` | `&nbsp;` |  |
 | `y` | `&nbsp;` |  |
 | `width` | `&nbsp;` |  |
 | `height` | `&nbsp;` |  |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+楕円の描画
 
 ---
 
@@ -5046,11 +5158,19 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `x1` | `&nbsp;` |  |
-| `y1` | `&nbsp;` |  |
-| `x2` | `&nbsp;` |  |
-| `y2` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス GdiPlus.Appearance で描画スタイルを指定します |
+| `x1` | `&nbsp;` | 始点X座標 |
+| `y1` | `&nbsp;` | 始点Y座標 |
+| `x2` | `&nbsp;` | 終点X座標 |
+| `y2` | `&nbsp;` | 終点Y座標 |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+線分の描画
 
 ---
 
@@ -5062,8 +5182,16 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `points` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス |
+| `points` | `&nbsp;` | 点の配列 [ [x1, y1], [x2, y2] .... ] |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+連続線分の描画
 
 ---
 
@@ -5075,8 +5203,16 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `points` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス |
+| `points` | `&nbsp;` | 点の配列 [ [x1, y1], [x2, y2] .... ] |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+多角形の描画
 
 ---
 
@@ -5088,11 +5224,19 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス GdiPlus.Appearance で描画スタイルを指定します |
 | `x` | `&nbsp;` |  |
 | `y` | `&nbsp;` |  |
 | `width` | `&nbsp;` |  |
 | `height` | `&nbsp;` |  |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+矩形の描画
 
 ---
 
@@ -5104,8 +5248,16 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `app` | `&nbsp;` |  |
-| `rects` | `&nbsp;` |  |
+| `app` | `&nbsp;` | アピアランス |
+| `rects` | `&nbsp;` | 矩形の配列 [ [x1, y1, width1, height1], [x2, y2, width2, height2] .... ] |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+複数矩形の描画
 
 ---
 
@@ -5117,11 +5269,19 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `font` | `&nbsp;` |  |
-| `app` | `&nbsp;` |  |
-| `x` | `&nbsp;` |  |
-| `y` | `&nbsp;` |  |
-| `text` | `&nbsp;` |  |
+| `font` | `&nbsp;` | フォント GdiPlus.Font でフォントを指定します |
+| `app` | `&nbsp;` | アピアランス GdiPlus.Appearance で描画スタイルを指定します |
+| `x` | `&nbsp;` | 描画位置X |
+| `y` | `&nbsp;` | 描画位置Y |
+| `text` | `&nbsp;` | 描画テキスト |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+文字列の描画
 
 ---
 
@@ -5133,16 +5293,24 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `font` | `&nbsp;` |  |
-| `app` | `&nbsp;` |  |
-| `x` | `&nbsp;` |  |
-| `y` | `&nbsp;` |  |
-| `w` | `&nbsp;` |  |
-| `h` | `&nbsp;` |  |
-| `alignX` | `&nbsp;` |  |
-| `alignY` | `&nbsp;` |  |
-| `wrap` | `&nbsp;` |  |
-| `text` | `&nbsp;` |  |
+| `font` | `&nbsp;` | フォント GdiPlus.Font でフォントを指定します |
+| `app` | `&nbsp;` | アピアランス GdiPlus.Appearance で描画スタイルを指定します |
+| `x` | `&nbsp;` | 矩形左端 |
+| `y` | `&nbsp;` | 矩形上端 |
+| `w` | `&nbsp;` | 矩形幅 |
+| `h` | `&nbsp;` | 矩形高さ |
+| `alignX` | `&nbsp;` | 水平アラインメント (0=左, 0.5=中央, 1=右) |
+| `alignY` | `&nbsp;` | 垂直アラインメント (0=上, 0.5=中央, 1=下) |
+| `wrap` | `&nbsp;` | ワードラップモード (0=None, 1=Char, 2=Word, 3=MixedWrap, 4=Ellipsis) |
+| `text` | `&nbsp;` | 描画テキスト |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+矩形領域内への文字列の描画
 
 ---
 
@@ -5154,9 +5322,17 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `x` | `&nbsp;` |  |
-| `y` | `&nbsp;` |  |
-| `image` | `&nbsp;` |  |
+| `x` | `&nbsp;` | コピー先原点X |
+| `y` | `&nbsp;` | コピー先原点Y |
+| `image` | `&nbsp;` | コピー元画像(Image/ファイル名) |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+画像の描画。コピー先は元画像の Bounds を配慮した位置、サイズは Pixel 指定になります。
 
 ---
 
@@ -5168,13 +5344,21 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `dleft` | `&nbsp;` |  |
-| `dtop` | `&nbsp;` |  |
-| `src` | `&nbsp;` |  |
-| `sleft` | `&nbsp;` |  |
-| `stop` | `&nbsp;` |  |
-| `swidth` | `&nbsp;` |  |
-| `sheight` | `&nbsp;` |  |
+| `dleft` | `&nbsp;` | コピー先左端 |
+| `dtop` | `&nbsp;` | コピー先上端 |
+| `src` | `&nbsp;` | コピー元画像(Image/ファイル名) |
+| `sleft` | `&nbsp;` | 元矩形の左端 |
+| `stop` | `&nbsp;` | 元矩形の上端 |
+| `swidth` | `&nbsp;` | 元矩形の横幅 |
+| `sheight` | `&nbsp;` | 元矩形の縦幅 |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+画像の矩形コピー
 
 ---
 
@@ -5186,15 +5370,23 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `dleft` | `&nbsp;` |  |
-| `dtop` | `&nbsp;` |  |
-| `dwidth` | `&nbsp;` |  |
-| `dheight` | `&nbsp;` |  |
-| `src` | `&nbsp;` |  |
-| `sleft` | `&nbsp;` |  |
-| `stop` | `&nbsp;` |  |
-| `swidth` | `&nbsp;` |  |
-| `sheight` | `&nbsp;` |  |
+| `dleft` | `&nbsp;` | コピー先左端 |
+| `dtop` | `&nbsp;` | コピー先上端 |
+| `dwidth` | `&nbsp;` | コピー先の横幅 |
+| `dheight` | `&nbsp;` | コピー先の縦幅 |
+| `src` | `&nbsp;` | コピー元画像(Image/ファイル名) |
+| `sleft` | `&nbsp;` | 元矩形の左端 |
+| `stop` | `&nbsp;` | 元矩形の上端 |
+| `swidth` | `&nbsp;` | 元矩形の横幅 |
+| `sheight` | `&nbsp;` | 元矩形の縦幅 |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+画像の拡大縮小コピー
 
 ---
 
@@ -5206,18 +5398,26 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `src` | `&nbsp;` |  |
-| `sleft` | `&nbsp;` |  |
-| `stop` | `&nbsp;` |  |
-| `swidth` | `&nbsp;` |  |
-| `sheight` | `&nbsp;` |  |
-| `affine` | `&nbsp;` |  |
+| `src` | `&nbsp;` | コピー元画像(Image/ファイル名) |
+| `sleft` | `&nbsp;` | 元矩形の左端 |
+| `stop` | `&nbsp;` | 元矩形の上端 |
+| `swidth` | `&nbsp;` | 元矩形の横幅 |
+| `sheight` | `&nbsp;` | 元矩形の縦幅 |
+| `affine` | `&nbsp;` | アフィンパラメータの種類(true:変換行列, false:座標指定) |
 | `A` | `&nbsp;` |  |
 | `B` | `&nbsp;` |  |
 | `C` | `&nbsp;` |  |
 | `D` | `&nbsp;` |  |
 | `E` | `&nbsp;` |  |
 | `F` | `&nbsp;` |  |
+
+**戻り値**
+
+更新領域情報(RectF)
+
+**解説**
+
+画像のアフィン変換コピー
 
 ---
 

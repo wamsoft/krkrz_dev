@@ -246,14 +246,43 @@ class Storages {
 	/**
 	 * オンメモリキャッシュ対象拡張子の追加
 	 *
-	 * ファイルロード時にオンメモリキャッシュへ載せる拡張子を追加します。
+	 * ファイルロード時にオンメモリキャッシュ ( file 層 ) へ載せる拡張子を追加します。
 	 * ここで登録された拡張子のファイルは、ストレージから読み込まれた際に
 	 * 内容がメモリ上に保持され、再アクセス時のディスク I/O を省略します。
 	 * @param ext 対象とする拡張子を指定します。先頭に `.` (ピリオド) が
 	 * 無ければ自動的に補われます。
+	 * @param minSize この拡張子に適用する最小ファイルサイズ ( バイト ) を
+	 * 指定します。0 ( 既定 ) を指定するとサイズ閾値なし、それより小さい
+	 * ファイルは cache 対象外となります。
+	 * @see Storages.requestCache
+	 * @see Storages.addDecodeTargetExtension
+	 */
+	function addCacheTargetExtension(ext, minSize = 0);
+
+	/**
+	 * decode キャッシュ対象拡張子の追加
+	 *
+	 * 画像デコード結果 ( decode 層キャッシュ ) に載せる拡張子を追加します。
+	 * ここで登録された拡張子のファイルは [Storages.requestCache](Storages.md#requestcache)
+	 * からバックグラウンドでデコードまで実行されてキャッシュに載ります。
+	 * @param ext 対象とする拡張子を指定します。先頭に `.` (ピリオド) が
+	 * 無ければ自動的に補われます。
+	 * @param minSize この拡張子に適用する最小ファイルサイズ ( バイト ) を
+	 * 指定します。0 ( 既定 ) を指定するとサイズ閾値なし。
+	 * @see Storages.removeDecodeTargetExtension
 	 * @see Storages.requestCache
 	 */
-	function addCacheTargetExtension(ext);
+	function addDecodeTargetExtension(ext, minSize = 0);
+
+	/**
+	 * decode キャッシュ対象拡張子の削除
+	 *
+	 * [Storages.addDecodeTargetExtension](Storages.md#adddecodetargetextension) で
+	 * 追加した拡張子を decode キャッシュ対象から除外します。
+	 * @param ext 削除する拡張子を指定します。
+	 * @see Storages.addDecodeTargetExtension
+	 */
+	function removeDecodeTargetExtension(ext);
 
 	/**
 	 * アーカイブキャッシュの破棄
@@ -270,11 +299,37 @@ class Storages {
 	 * キャッシュの破棄
 	 *
 	 * `Storages.requestCache` で読み込まれたファイルキャッシュを破棄します。
+	 * file 層 / decode 層の両層が対象です。
 	 * @param path 破棄するファイルのパスを指定します。省略または空文字列を
-	 * 指定するとすべてのキャッシュを破棄します。
+	 * 指定すると transient なキャッシュ ( pin されていないもの ) のみを
+	 * 全破棄します。
 	 * @see Storages.requestCache
+	 * @see Storages.clearAllCaches
+	 * @see Storages.clearTransientCaches
 	 */
 	function clearCache(path = "");
+
+	/**
+	 * 全キャッシュの破棄
+	 *
+	 * file 層 / decode 層のキャッシュをすべて破棄します。
+	 * pin されているエントリも含めて消されるため、最大強度の `doCompact(clAll)`
+	 * に相当します。
+	 * @see Storages.clearCache
+	 * @see Storages.clearTransientCaches
+	 */
+	function clearAllCaches();
+
+	/**
+	 * 一時的キャッシュの破棄
+	 *
+	 * pin されていない ( transient な ) キャッシュエントリを file 層 / decode 層
+	 * の両方から破棄します。タイトル画面に戻ったときなどの軽量なキャッシュ
+	 * クリア用途を想定しています。
+	 * @see Storages.pinCache
+	 * @see Storages.clearAllCaches
+	 */
+	function clearTransientCaches();
 
 	/**
 	 * 高速キャッシュの破棄
@@ -395,7 +450,7 @@ class Storages {
 	 * 解釈方法は環境によって異なる ( TODO: 単位とエポックを要確認 ) ため、
 	 * 大小比較や差分検出用途以外には注意して扱ってください。
 	 */
-	function lastModifiedFileTime(path);
+	function getLastModifiedFileTime(path);
 
 	/**
 	 * ファイルの移動 ( リネーム )
@@ -413,14 +468,19 @@ class Storages {
 	 * ファイルキャッシュへの読み込みリクエスト
 	 *
 	 * 指定したファイルを通常のファイルキャッシュへバックグラウンドで
-	 * 読み込みます。`Storages.addCacheTargetExtension` で登録された
-	 * 拡張子のファイルが対象です。
+	 * 読み込みます。
+	 * `Storages.addCacheTargetExtension` で登録された拡張子は file 層の cache に、
+	 * `Storages.addDecodeTargetExtension` で登録された画像拡張子は decode 層の cache
+	 * ( デコード結果 ) に載ります。両方該当する拡張子は両層に並行で発火します。
 	 * @param path 読み込み対象のファイルのストレージ名を指定します。
+	 * @param minSize この呼び出しに限った最小ファイルサイズ閾値 ( バイト ) を
+	 * 指定します。0 ( 既定 ) を指定すると拡張子側の登録設定に従います。
 	 * @see Storages.clearCache
 	 * @see Storages.isCacheLoading
+	 * @see Storages.isImagePrefetchLoading
 	 * @see Storages.requestFastCache
 	 */
-	function requestCache(path);
+	function requestCache(path, minSize = 0);
 
 	/**
 	 * 高速ファイルキャッシュへの読み込みリクエスト
@@ -429,11 +489,122 @@ class Storages {
 	 * 内部キューが通常キャッシュと別系統になっており、
 	 * `Storages.requestCache` よりも高優先で処理されます。
 	 * @param path 読み込み対象のファイルのストレージ名を指定します。
+	 * @param minSize この呼び出しに限った最小ファイルサイズ閾値 ( バイト ) を
+	 * 指定します。0 ( 既定 ) を指定すると拡張子側の登録設定に従います。
 	 * @see Storages.clearFastCache
 	 * @see Storages.isFastCacheLoading
 	 * @see Storages.requestCache
 	 */
-	function requestFastCache(path);
+	function requestFastCache(path, minSize = 0);
+
+	/**
+	 * 画像 decode prefetch の進行状況の判定
+	 *
+	 * [Storages.requestCache](Storages.md#requestcache) などから発火された
+	 * 画像 decode prefetch ( decode 層 ) のジョブが、まだバックグラウンドで
+	 * 処理中の場合に真を返します。
+	 * `Storages.isCacheLoading` が file 層を見るのに対し、こちらは decode 層
+	 * の polling 用です。
+	 * @return 進行中であれば真、そうでなければ偽が返ります。
+	 * @see Storages.requestCache
+	 * @see Storages.isCacheLoading
+	 */
+	function isImagePrefetchLoading();
+
+	/**
+	 * キャッシュエントリの pin 化
+	 *
+	 * 指定パスの cache エントリを file 層 / decode 層の両方で **pin** 状態に
+	 * し、`clearCache(空文字列)` や `clearTransientCaches` の対象外にします。
+	 * 同時に、まだ cache に載っていなければ非同期 load を自動で発火します。
+	 * autopath 経由のファイルでも、実体パスへ正規化した上で pin されます。
+	 * @param path pin したいファイルのストレージ名を指定します。
+	 * @see Storages.unpinCache
+	 * @see Storages.isCachePinned
+	 * @see Storages.clearTransientCaches
+	 */
+	function pinCache(path);
+
+	/**
+	 * キャッシュエントリの pin 解除
+	 *
+	 * [Storages.pinCache](Storages.md#pincache) で pin したエントリを解除します。
+	 * 解除後は transient なクリア対象に戻ります ( ただちに破棄はされません )。
+	 * @param path pin を解除したいファイルのストレージ名を指定します。
+	 * @see Storages.pinCache
+	 */
+	function unpinCache(path);
+
+	/**
+	 * cache エントリが pin されているかの判定
+	 *
+	 * 指定パスが file 層または decode 層で pin 状態かを返します。
+	 * @param path 判定したいファイルのストレージ名を指定します。
+	 * @return pin 状態であれば真、そうでなければ偽が返ります。
+	 * @see Storages.pinCache
+	 * @see Storages.unpinCache
+	 */
+	function isCachePinned(path);
+
+	/**
+	 * file 層キャッシュ一覧の取得
+	 *
+	 * file 層キャッシュ ( `requestCache` 系で確保されたバイナリ ) のエントリ
+	 * 一覧を、辞書の配列で返します。
+	 *
+	 * 各エントリは以下のキーを持ちます。
+	 *
+	 * - `path`        : 正規化されたストレージパス ( String )
+	 * - `size`        : バイト数 ( Integer )
+	 * - `lastaccess`  : 最終アクセス時刻 ( プラットフォーム依存の整数 )
+	 * - `usecount`    : 現在の参照カウント ( Integer )
+	 * - `pinned`      : pin 状態 ( 0 or 1 )
+	 * @return cache エントリの辞書配列。
+	 * @see Storages.dumpFileCacheList
+	 * @see Storages.getImageCacheList
+	 */
+	function getFileCacheList();
+
+	/**
+	 * decode 層キャッシュ一覧の取得
+	 *
+	 * decode 層キャッシュ ( デコード済み Bitmap ) のエントリ一覧を、辞書の
+	 * 配列で返します。
+	 *
+	 * 各エントリは以下のキーを持ちます。
+	 *
+	 * - `path`    : 正規化されたストレージパス ( String )
+	 * - `keyidx`  : 同一パス内のバリエーション番号 ( Integer )
+	 * - `mode`    : 読み込みモード ( Integer; 内部定数 )
+	 * - `dw, dh`  : 表示サイズ ( Integer )
+	 * - `width, height` : 元 Bitmap サイズ ( Integer )
+	 * - `bytes`   : 占有バイト数 ( Integer )
+	 * - `pinned`  : pin 状態 ( 0 or 1 )
+	 * @return cache エントリの辞書配列。
+	 * @see Storages.dumpImageCacheList
+	 * @see Storages.getFileCacheList
+	 */
+	function getImageCacheList();
+
+	/**
+	 * file 層キャッシュ一覧のログ出力
+	 *
+	 * file 層キャッシュエントリ一覧を WARNING レベルでログに出力します。
+	 * MASTER ビルドでも出力されます。REPL の `.fcache` と同等です。
+	 * @see Storages.getFileCacheList
+	 * @see Storages.dumpImageCacheList
+	 */
+	function dumpFileCacheList();
+
+	/**
+	 * decode 層キャッシュ一覧のログ出力
+	 *
+	 * decode 層キャッシュエントリ一覧を WARNING レベルでログに出力します。
+	 * MASTER ビルドでも出力されます。REPL の `.icache` と同等です。
+	 * @see Storages.getImageCacheList
+	 * @see Storages.dumpFileCacheList
+	 */
+	function dumpImageCacheList();
 
 	/**
 	 * セーブデータのロールバック
