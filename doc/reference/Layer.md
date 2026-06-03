@@ -3251,6 +3251,342 @@ Layer.callOnPaint はこのイベントが実行し終わった後自動的に�
 
 ---
 
+## プラグイン拡張: krkr_richtext
+
+レイヤにリッチテキスト描画メソッドが拡張されます
+
+### メンバー一覧
+
+#### プロパティ
+
+- [useCache](#usecache)
+
+#### メソッド
+
+- [drawTextEx](#drawtextex)
+- [drawParagraph](#drawparagraph)
+- [drawStyledText](#drawstyledtext)
+- [drawTextLayout](#drawtextlayout)
+- [drawParagraphLayout](#drawparagraphlayout)
+- [drawStyledLayout](#drawstyledlayout)
+- [drawRectEx](#drawrectex)
+- [clearCache](#clearcache)
+- [setCacheMaxSize](#setcachemaxsize)
+
+---
+
+### useCache
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+グリフキャッシュの使用有無
+
+true (デフォルト): グリフをキャッシュして高速化
+false: 毎回レンダリング
+
+---
+
+### drawTextEx
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `text` | `&nbsp;` | 描画するテキスト |
+| `x` | `&nbsp;` | 描画開始X座標 |
+| `y` | `&nbsp;` | 描画開始Y座標（ベースライン位置） |
+| `style` | `&nbsp;` | RichText.Style オブジェクト |
+| `appearance` | `&nbsp;` | RichText.Appearance オブジェクト |
+
+**戻り値**
+
+描画領域の配列 [x, y, width, height]
+
+**解説**
+
+1行テキストを描画
+
+基本的な1行テキスト描画。自動改行は行われません。
+
+注意: 吉里吉里標準の Layer.drawText() との名前衝突を避けるため、
+TJS 側での名前は drawTextEx になります。
+
+使用例:
+var style = new RichText.Style();
+style.setFonts(["MSゴシック"]);
+style.fontSize = 24;
+
+var app = new RichText.Appearance();
+app.addFill(0xFFFFFFFF);
+
+var rect = layer.drawTextEx("Hello World", 10, 50, style, app);
+
+---
+
+### drawParagraph
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `text` | `&nbsp;` | 描画するテキスト |
+| `x` | `&nbsp;` | 描画領域の左端 |
+| `y` | `&nbsp;` | 描画領域の上端 |
+| `width` | `&nbsp;` | 描画領域の幅 |
+| `height` | `&nbsp;` | 描画領域の高さ |
+| `hAlign` | `&nbsp;` | 水平アライン (RichText.HALIGN_LEFT/CENTER/RIGHT) |
+| `vAlign` | `&nbsp;` | 垂直アライン (RichText.VALIGN_TOP/MIDDLE/BOTTOM) |
+| `style` | `&nbsp;` | RichText.Style オブジェクト |
+| `appearance` | `&nbsp;` | RichText.Appearance オブジェクト |
+
+**戻り値**
+
+実際の描画領域の配列 [x, y, width, height]
+
+**解説**
+
+パラグラフ（複数行テキスト）を描画
+
+指定した矩形領域内に自動改行してテキストを描画します。
+
+使用例:
+var rect = layer.drawParagraph(
+"長いテキストは自動的に\n改行されます。",
+10, 10, 300, 200,
+RichText.HALIGN_LEFT,
+RichText.VALIGN_TOP,
+style, app
+);
+
+---
+
+### drawStyledText
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `text` | `&nbsp;` | スタイルタグ付きテキスト |
+| `x` | `&nbsp;` | 描画領域の左端 |
+| `y` | `&nbsp;` | 描画領域の上端 |
+| `width` | `&nbsp;` | 描画領域の幅 |
+| `height` | `&nbsp;` | 描画領域の高さ |
+| `hAlign` | `&nbsp;` | 水平アライン (RichText.HALIGN_LEFT/CENTER/RIGHT) |
+| `vAlign` | `&nbsp;` | 垂直アライン (RichText.VALIGN_TOP/MIDDLE/BOTTOM) |
+| `styles` | `&nbsp;` | Style 単体、またはスタイル名→Style の辞書 |
+| `appearances` | `&nbsp;` | Appearance 単体、またはスタイル名→Appearance の辞書 |
+| `lineSpacing` | `0` | 行間（省略時: 0） |
+
+**戻り値**
+
+実際の描画領域の配列 [x, y, width, height]
+
+**解説**
+
+スタイルタグ付きテキストを描画
+
+<style:名前> タグでスタイルを切り替えながらテキストを描画します。
+styles / appearances に単体オブジェクトを渡すと "default" キーとして扱われます。
+
+使用例:
+// 単一スタイルで描画
+layer.drawStyledText(
+"テキスト",
+10, 10, 400, 300,
+RichText.HALIGN_LEFT, RichText.VALIGN_TOP,
+style, app
+);
+
+// 複数スタイルで描画
+var styles = %[ "default": normalStyle, "bold": boldStyle ];
+var apps = %[ "default": normalApp, "bold": boldApp ];
+layer.drawStyledText(
+"通常<style:bold>太字</style>通常",
+10, 10, 400, 300,
+RichText.HALIGN_LEFT, RichText.VALIGN_TOP,
+styles, apps
+);
+
+---
+
+### drawTextLayout
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `textLayout` | `&nbsp;` | RichText.Layout オブジェクト（layout() 済み） |
+| `x` | `&nbsp;` | 描画開始X座標 |
+| `y` | `&nbsp;` | 描画開始Y座標（ベースライン位置） |
+| `appearance` | `&nbsp;` | RichText.Appearance オブジェクト |
+| `maxChars` | `-1` | 描画する文字数の上限（-1で全て、省略時: -1） |
+
+**戻り値**
+
+描画領域の配列 [x, y, width, height]
+
+**解説**
+
+レイアウト済み TextLayout を描画
+
+事前にレイアウト計算済みの Layout を描画します。
+同一レイアウトの再描画に利用できます。
+
+使用例:
+var tl = new RichText.Layout();
+tl.layout("Hello World", style);
+layer.drawTextLayout(tl, 10, 50, appearance);
+
+---
+
+### drawParagraphLayout
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `paraLayout` | `&nbsp;` | RichText.ParagraphLayout オブジェクト（layout() 済み） |
+| `x` | `&nbsp;` | 描画領域の左端 |
+| `y` | `&nbsp;` | 描画領域の上端 |
+| `width` | `&nbsp;` | 描画領域の幅 |
+| `height` | `&nbsp;` | 描画領域の高さ |
+| `hAlign` | `&nbsp;` | 水平アライン (RichText.HALIGN_LEFT/CENTER/RIGHT) |
+| `vAlign` | `&nbsp;` | 垂直アライン (RichText.VALIGN_TOP/MIDDLE/BOTTOM) |
+| `style` | `&nbsp;` | RichText.Style オブジェクト |
+| `appearance` | `&nbsp;` | RichText.Appearance オブジェクト |
+| `maxChars` | `-1` | 描画する文字数の上限（-1で全て、省略時: -1） |
+
+**戻り値**
+
+実際の描画領域の配列 [x, y, width, height]
+
+**解説**
+
+レイアウト済み ParagraphLayout を描画
+
+事前にレイアウト計算済みの ParagraphLayout を描画します。
+maxChars を指定することで逐次表示（文字送り）が実現できます。
+
+使用例:
+var pl = new RichText.ParagraphLayout();
+pl.layout("長いテキスト...", 300, style);
+
+layer.drawParagraphLayout(pl, 10, 10, 300, 200,
+RichText.HALIGN_LEFT, RichText.VALIGN_TOP,
+style, app);
+
+// 文字送り（最初の5文字だけ描画）
+layer.drawParagraphLayout(pl, 10, 10, 300, 200,
+RichText.HALIGN_LEFT, RichText.VALIGN_TOP,
+style, app, 5);
+
+---
+
+### drawStyledLayout
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `styledLayout` | `&nbsp;` | RichText.StyledLayout オブジェクト |
+| `x` | `&nbsp;` | 描画X座標 |
+| `y` | `&nbsp;` | 描画Y座標 |
+| `maxChars` | `-1` | 描画する文字数の上限（-1で全て、省略時: -1） |
+
+**戻り値**
+
+実際の描画領域の配列 [x, y, width, height]
+
+**解説**
+
+レイアウト済み StyledLayout を描画
+
+事前にレイアウト計算済みの StyledLayout を描画します。
+maxChars を指定することで文字送りアニメーションが実現できます。
+
+使用例:
+var sl = new RichText.StyledLayout();
+sl.layout(text, 400, 300,
+RichText.HALIGN_LEFT, RichText.VALIGN_TOP,
+style, app);
+
+// 全描画
+layer.drawStyledLayout(sl, 10, 10);
+
+// 文字送り（最初の5文字だけ描画）
+layer.drawStyledLayout(sl, 10, 10, 5);
+
+---
+
+### drawRectEx
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | X座標 |
+| `y` | `&nbsp;` | Y座標 |
+| `width` | `&nbsp;` | 幅 |
+| `height` | `&nbsp;` | 高さ |
+| `fillColor` | `0` | 塗り色（ARGB、省略時: 0） |
+| `strokeColor` | `0` | ストローク色（ARGB、0で無効、省略時: 0） |
+| `strokeWidth` | `0` | ストローク幅（省略時: 0） |
+
+**解説**
+
+矩形を描画
+
+注意: 吉里吉里標準の Layer.drawRect() との名前衝突を避けるため、
+TJS 側での名前は drawRectEx になります。
+
+使用例:
+layer.drawRectEx(10, 10, 200, 100, 0x80FF0000);  // 半透明赤の矩形
+layer.drawRectEx(10, 10, 200, 100, 0, 0xFF000000, 2);  // 黒枠のみ
+
+---
+
+### clearCache
+
+メソッド
+
+**解説**
+
+キャッシュのクリア
+
+---
+
+### setCacheMaxSize
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `bytes` | `&nbsp;` | 最大バイト数 |
+
+**解説**
+
+キャッシュの最大サイズを設定
+
+---
+
 ## プラグイン拡張: layerExAreaAverage
 
 レイヤーに、面積平均法による画像縮小描画メソッドが拡張されます

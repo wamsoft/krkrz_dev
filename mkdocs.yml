@@ -188,6 +188,15 @@ nav:
         - reference/GdiPlus.Path.md
         - reference/GdiPlus.PointF.md
         - reference/GdiPlus.RectF.md
+      - リッチテキスト (krkr_richtext):
+        - reference/RichText.md
+        - reference/RichText.Style.md
+        - reference/RichText.Appearance.md
+        - reference/RichText.Layout.md
+        - reference/RichText.ParagraphLayout.md
+        - reference/RichText.StyledLayout.md
+        - reference/RichText.TextureAtlas.md
+        - reference/RichTextRenderBase.md
       - リソース (resourceRW):
         - reference/ResourceReader.md
         - reference/ResourceWriter.md
