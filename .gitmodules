@@ -160,3 +160,6 @@
 [submodule "src/plugins/layerExVector"]
 	path = src/plugins/layerExVector
 	url = https://github.com/wamsoft/layerExVector.git
+[submodule "src/plugins/krkr_richtext"]
+	path = src/plugins/krkr_richtext
+	url = https://github.com/wamsoft/krkr_richtext.git

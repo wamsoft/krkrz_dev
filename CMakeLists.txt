@@ -34,6 +34,7 @@ saveStruct
 scriptsEx
 shrinkCopy
 sigcheck
+krkr_richtext
 #krkrlua
 )
 
