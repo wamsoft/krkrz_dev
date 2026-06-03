@@ -34,7 +34,7 @@ else
 endif
 
 BUILD_TYPE?=Release
-CMAKEOPT?="-DKRKRZ_USE_SJIS=YES"
+CMAKEOPT?=
 INSTALL_PREFIX=bin/$(PRESET)/$(BUILD_TYPE)
 
 DATAPATH?=src/core/data
