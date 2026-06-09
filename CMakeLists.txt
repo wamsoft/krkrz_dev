@@ -125,6 +125,16 @@ set(VCPKG_MANIFEST_DIR "${CMAKE_BINARY_DIR}" CACHE PATH
 
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 
+# ----------------------------------------------------
+# 共通外部依存 (ICU / HarfBuzz)
+#
+# layerExVector / krkr_richtext / elements が各自抱えていた重複ビルドを
+# umbrella 1 箇所に集約する。各サブの CMakeLists.txt が
+# if(NOT TARGET <name>) ガードで自分のビルドをスキップする前提。
+# 詳細は cmake/CommonExternals.cmake のヘッダコメント参照。
+# ----------------------------------------------------
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CommonExternals.cmake)
+
 # KRKRZ 本体
 option(KRKRZ_BUILD_TESTS "build SIMD parity tests" OFF)
 add_subdirectory(src/core ${CMAKE_CURRENT_BINARY_DIR}/core)
