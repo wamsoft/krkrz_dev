@@ -57,6 +57,7 @@ CLASSES = {
     "AsyncTrigger", "Plugins", "Rect", "Console", "VideoOverlay",
     "WaveSoundBuffer", "SoundBuffer",
     "TextWriteStream", "TextReadStream", "BinaryStream",
+    "Dialog",
 }
 
 # Members present in the C++ binding but intentionally excluded from the

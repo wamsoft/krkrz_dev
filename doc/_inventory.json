@@ -141,6 +141,25 @@
       "logToFileOnError"
     ]
   },
+  "Dialog": {
+    "events": [
+      "onAction"
+    ],
+    "file": "src/core/common/visual/elements/DialogIntf.cpp",
+    "methods": [
+      "close",
+      "onAction",
+      "registerFont",
+      "registerFontDir",
+      "showFile",
+      "showJson",
+      "showModalFile",
+      "showModalJson"
+    ],
+    "properties": [
+      "defaultFontFamily"
+    ]
+  },
   "Font": {
     "events": [],
     "file": "src/core/common/visual/LayerIntf.cpp",

@@ -29,6 +29,7 @@
 - [メモリ観測・リーク調査](core/memory_observation.md)
 - [描画スレッドプール利用率の計測 (DrawStats)](core/draw_stats.md)
 - [ゲームパッド状態の観察 (PadOverlay)](core/pad_overlay.md)
+- [Elements ベースの汎用ダイアログ](core/elements_dialog.md)
 - [REPL (対話型 TJS シェル)](core/repl.md)
 - [ログ出力](core/logging.md)
 

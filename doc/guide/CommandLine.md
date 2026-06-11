@@ -472,6 +472,12 @@ CPU の認識トラブルが起こった場合に 'no' に設定するとその�
   設定可能な値は **'1' (有効)**, **'0' (無効)** のいずれかで、このオプションを指定しないと '0' が指定されたものと見なされます。
   
   実行中の動的切替は [System.setPadOverlay](../reference/System.md#setpadoverlay) または REPL の `.padoverlay` で行えます。WINVER ビルドでは無視されます。
+- **-**drawstatslog** (DrawStats の周期ログ出力 / SDL3 ビルド限定)**  
+  `KRKRZ_DRAW_STATS=ON` ビルドかつ MemoryOverlay 表示中、500ms ごとに DrawThreadPool 利用統計をログに出力します ( 実機などで画面表示が速く流れて読めない場合に利用 )。
+  
+  設定可能な値は **'1' (有効)**, **'0' (無効)** のいずれかで、このオプションを指定しないと '0' が指定されたものと見なされます。実行中の動的切替は [System.setDrawStatsLog](../reference/System.md#setdrawstatslog) からも行えます。
+  
+  `KRKRZ_DRAW_STATS=OFF` ビルドではフラグが立つだけで何も起きません。
 - **-**memstatinterval** (メモリ統計の周期ダンプ)**  
   正の整数を指定すると、その秒数ごとに `System.dumpHeap` 相当のメモリ統計をログに出力します。
   
