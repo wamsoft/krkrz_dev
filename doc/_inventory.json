@@ -143,20 +143,29 @@
   },
   "Dialog": {
     "events": [
-      "onAction"
+      "onAction",
+      "onScreen",
+      "onScreenLeave"
     ],
     "file": "src/core/common/visual/elements/DialogIntf.cpp",
     "methods": [
       "close",
       "onAction",
+      "onScreen",
+      "onScreenLeave",
       "registerFont",
       "registerFontDir",
       "showFile",
+      "showFlow",
+      "showFlowScreens",
       "showJson",
       "showModalFile",
-      "showModalJson"
+      "showModalJson",
+      "startFlow",
+      "startFlowScreens"
     ],
     "properties": [
+      "active",
       "defaultFontFamily"
     ]
   },

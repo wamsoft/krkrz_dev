@@ -19,13 +19,29 @@ SDL3 ビルド + `KRKRZ_USE_ELEMENTS=ON` ( デフォルト ) でビルドされ�
 
 ---
 
-## 3 つの表示モード
+## 表示モード
+
+1 画面の単発ダイアログには 3 モード、複数画面の遷移を含む「フロー」
+には 2 モードがあります。
+
+### 単発ダイアログ
 
 | 表示モード | TJS API | 挙動 |
 |---|---|---|
 | 非モーダル (オーバーレイ) | [Dialog.showJson](../../reference/Dialog.md#showjson) / [showFile](../../reference/Dialog.md#showfile) | 既存ゲーム画面の上にダイアログを描き、メインループを止めない。値変化・button click は [onAction](../../reference/Dialog.md#onaction) で逐次通知。[close](../../reference/Dialog.md#close) で終了。 |
 | ブロッキングモーダル (独立ウィンドウ) | [Dialog.showModalJson](../../reference/Dialog.md#showmodaljson) / [showModalFile](../../reference/Dialog.md#showmodalfile) ( title / w / h を渡す ) | 新しいネイティブウィンドウを開き、閉じるまでブロッキング。閉じると `%[ action, values ]` 形式の Dictionary を返す。 |
 | ブロッキングモーダル (オーバーレイ) | [Dialog.showModalJson](../../reference/Dialog.md#showmodaljson) / [showModalFile](../../reference/Dialog.md#showmodalfile) ( JSON 1 引数のみ ) | 独立ウィンドウを作らずに既存ゲーム画面に重ねて表示し、閉じるまでブロッキング。戻り値は独立ウィンドウ版と同じ。 |
+
+### 複数画面フロー
+
+| 表示モード | TJS API | 挙動 |
+|---|---|---|
+| ブロッキング ( オーバーレイ ) | [Dialog.showFlow](../../reference/Dialog.md#showflow) / [showFlowScreens](../../reference/Dialog.md#showflowscreens) | マニフェスト ( または Dictionary ) で定義された複数画面の遷移をオーバーレイで実行。フロー終了まで TJS をブロックし、最後に閉じた画面の `%[ action, values ]` を返す。 |
+| 非モーダル ( 常駐 ) | [Dialog.startFlow](../../reference/Dialog.md#startflow) / [startFlowScreens](../../reference/Dialog.md#startflowscreens) | 同じフロー定義を非ブロッキングで開始 ( ゲーム画面に常駐 )。`close` で閉じ、teardown 完了は [active](../../reference/Dialog.md#active) で判別。 |
+
+画面が切り替わるタイミングで [onScreen](../../reference/Dialog.md#onscreen) /
+[onScreenLeave](../../reference/Dialog.md#onscreenleave)、widget の
+操作で [onAction](../../reference/Dialog.md#onaction) が発火します。
 
 `showModalJson` / `showModalFile` の戻り値:
 
@@ -39,6 +55,28 @@ SDL3 ビルド + `KRKRZ_USE_ELEMENTS=ON` ( デフォルト ) でビルドされ�
 モーダル中も [onAction](../../reference/Dialog.md#onaction) は発火しますが、
 ダイアログを閉じるのは JSON 側で `"close_on_click": true` を指定した button
 ( および Esc / × による中断 ) だけです。
+
+---
+
+## 非モーダルの複数同時表示とフォーカス
+
+非モーダルダイアログ ( [showJson](../../reference/Dialog.md#showjson) /
+[startFlow](../../reference/Dialog.md#startflow) 系 ) は z-order 付きの
+インスタンスリストとして管理され、複数同時に表示できます。マウスは
+最前面からヒットテストし、キーボード / ゲームパッドはフォーカスを
+保持しているインスタンス ( z-order 末尾優先 ) に届きます。モーダル
+ダイアログを重ねた場合、下のインスタンスは描画維持・入力だけブロック
+されます。
+
+非モーダル開始系 ( [startFlow](../../reference/Dialog.md#startflow) /
+[startFlowScreens](../../reference/Dialog.md#startflowscreens) ) には
+`grabFocus` 引数があり、偽を指定すると「フォーカスを取らない常駐 HUD」
+として動きます。常駐 UI がゲームのホットキーまで食ってしまうのを
+防ぎたい場合に利用します。
+
+非モーダルでは、Elements 側で実際に処理されたキーだけを消費して未処理
+キーはゲームへ通過させる ( handled pass-through ) ため、メニューを開いた
+ままゲーム本体のホットキーで別ダイアログを開く、といった共存も可能です。
 
 ---
 
@@ -117,5 +155,8 @@ x64-windows 計測で krkrz64.exe が 15.6 MB → 13.8 MB ( OFF ) と約 1.8 MB
 - [Dialog](../../reference/Dialog.md) — TJS バインディングクラス
 - [Dialog.showJson](../../reference/Dialog.md#showjson) / [showFile](../../reference/Dialog.md#showfile) — 非モーダル
 - [Dialog.showModalJson](../../reference/Dialog.md#showmodaljson) / [showModalFile](../../reference/Dialog.md#showmodalfile) — モーダル
-- [Dialog.onAction](../../reference/Dialog.md#onaction) — 操作通知
+- [Dialog.showFlow](../../reference/Dialog.md#showflow) / [showFlowScreens](../../reference/Dialog.md#showflowscreens) — ブロッキングフロー
+- [Dialog.startFlow](../../reference/Dialog.md#startflow) / [startFlowScreens](../../reference/Dialog.md#startflowscreens) — 非モーダル ( 常駐 ) フロー
+- [Dialog.onAction](../../reference/Dialog.md#onaction) / [onScreen](../../reference/Dialog.md#onscreen) / [onScreenLeave](../../reference/Dialog.md#onscreenleave) — イベント
+- [Dialog.active](../../reference/Dialog.md#active) — 非モーダルの teardown 完了判定
 - [Dialog.registerFont](../../reference/Dialog.md#registerfont) / [registerFontDir](../../reference/Dialog.md#registerfontdir) / [defaultFontFamily](../../reference/Dialog.md#defaultfontfamily)

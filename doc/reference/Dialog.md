@@ -22,6 +22,18 @@ JSON / JSONC ( コメントと末尾カンマを許容 ) 形式のレイアウ�
 JSON 1 引数だけで呼ぶと、独立ウィンドウを開かずに既存のゲーム画面に
 重ねて表示し、閉じるまでブロッキングします。
 
+複数画面を遷移する「フロー」の駆動にも対応しています。ブロッキング
+実行は [showFlow](#showflow) / [showFlowScreens](#showflowscreens)、
+非モーダル ( 常駐 ) 実行は [startFlow](#startflow) /
+[startFlowScreens](#startflowscreens) を使用します。画面遷移の
+タイミングで [onScreen](#onscreen) / [onScreenLeave](#onscreenleave)
+が発火し、widget 操作は引き続き [onAction](#onaction) に通知されます。
+
+非モーダルダイアログは複数同時に表示できます ( z-order 付きで重ね
+描画され、マウスはヒットテスト、キーボードは最前面の handler 優先で
+フォーカスが移ります )。`grabFocus` 引数を偽にすると、フォーカスを
+取らない常駐 HUD として表示できます。
+
 JSON 仕様の要素タイプ ( label / button / input_box / checkbox / toggle /
 vtile / htile / vspacer / hspacer 等 ) や属性、`"input"` ノードによる
 キーボード / ゲームパッド操作の設定詳細は [elements_modal の README](https://github.com/wamsoft/elements/blob/develop/docs/keyboard-navigation.md)
@@ -39,6 +51,7 @@ vtile / htile / vspacer / hspacer 等 ) や属性、`"input"` ノードによる
 ### プロパティ
 
 - [defaultFontFamily](#defaultfontfamily)
+- [active](#active)
 
 ### メソッド
 
@@ -46,12 +59,18 @@ vtile / htile / vspacer / hspacer 等 ) や属性、`"input"` ノードによる
 - [showFile](#showfile)
 - [showModalJson](#showmodaljson)
 - [showModalFile](#showmodalfile)
+- [showFlow](#showflow)
+- [showFlowScreens](#showflowscreens)
+- [startFlow](#startflow)
+- [startFlowScreens](#startflowscreens)
 - [close](#close)
 - [registerFont](#registerfont)
 - [registerFontDir](#registerfontdir)
 
 ### イベント
 
+- [onScreen](#onscreen)
+- [onScreenLeave](#onscreenleave)
 - [onAction](#onaction)
 
 ---
@@ -82,6 +101,25 @@ Elements の theme に適用される label / button 等の既定フォントフ
 名 ( カンマ区切り ) を取得 / 設定します。値の getter / setter とも
 Elements ランタイムが初期化されたあと ( 最初のダイアログ表示後 ) に
 意味を持ちます。
+
+---
+
+### active
+
+プロパティ \ アクセス: `r`
+
+**型**: `bool`
+
+**解説**
+
+この Dialog インスタンスがアクティブかどうか ( 読み取り専用 )
+
+この Dialog で開いた非モーダルダイアログ / フローが現在アクティブな
+ときに真になります。[close](#close) を呼んだ直後はまだ teardown が
+終わっていないため真のままで、teardown 完了後に偽に切り替わります。
+
+非モーダル UI を閉じてから次のモーダルダイアログを起動したい、
+といったタイミング制御に使います。
 
 ---
 
@@ -209,6 +247,124 @@ action と values を保持する Dictionary が返ります。
 
 ---
 
+### showFlow
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `manifestPath` | `&nbsp;` | app.jsonc マニフェストの Storages パスを指定します。 |
+
+**戻り値**
+
+action と values を保持する Dictionary が返ります。
+
+**解説**
+
+マニフェストから複数画面フローをブロッキング表示する
+
+`app.jsonc` 形式のマニフェスト ( Storages 経由のパス指定 ) を読み込んで、
+複数画面の遷移を含むフローを既存のゲーム画面にオーバーレイで実行します。
+フロー終了まで TJS の実行を止め、最後に閉じた画面の Dictionary
+`%[ action, values ]` を返します。
+
+画面が切り替わるたびに [onScreen](#onscreen) / [onScreenLeave](#onscreenleave)、
+各 widget の操作で [onAction](#onaction) が発火します。
+
+**関連:** [Dialog.showFlowScreens](Dialog.md#showflowscreens) / [Dialog.startFlow](Dialog.md#startflow)
+
+---
+
+### showFlowScreens
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `screensDict` | `&nbsp;` | 画面名 ( 文字列 ) を JSON 文字列にマップする Dictionary。 |
+| `entry` | `&nbsp;` | 起点画面名 ( screensDict のキー ) を指定します。 |
+
+**戻り値**
+
+action と values を保持する Dictionary が返ります。
+
+**解説**
+
+インライン定義から複数画面フローをブロッキング表示する
+
+ファイル I/O を介さず、Dictionary で画面名 → JSON 文字列を渡して
+フローを実行する [showFlow](#showflow) のインライン版です。
+動作と戻り値は [showFlow](#showflow) と同じです。
+
+**関連:** [Dialog.showFlow](Dialog.md#showflow) / [Dialog.startFlowScreens](Dialog.md#startflowscreens)
+
+---
+
+### startFlow
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `manifestPath` | `&nbsp;` | app.jsonc マニフェストの Storages パスを指定します。 |
+| `grabFocus` | `true` | 真でキーボード / ゲームパッドフォーカスを取ります ( 既定値 真 )。偽を指定するとフォーカスを取らない常駐 HUD として表示されます。 |
+
+**戻り値**
+
+開始に成功したら真を返します。
+
+**解説**
+
+非モーダル ( 常駐 ) 複数画面フローを開始する
+
+[showFlow](#showflow) と同じマニフェストを非モーダル ( 非ブロッキング ) で
+開始し、即座に戻ります。ゲーム画面に出しっぱなしで進行させられるため、
+メインメニューや HUD のような常駐 UI に適しています。
+
+画面遷移は JSON 側 `transitions` 定義で行います。ボタン押下等を起点に
+TJS 側で処理する場合は、`"close_on_click"` を指定しない button の
+[onAction](#onaction) で振り分けてください。明示的に終了させるには
+[close](#close) を呼び、teardown が完了したかどうかは
+[active](#active) で判別できます。
+
+**関連:** [Dialog.startFlowScreens](Dialog.md#startflowscreens) / [Dialog.showFlow](Dialog.md#showflow) / [Dialog.active](Dialog.md#active)
+
+---
+
+### startFlowScreens
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `screensDict` | `&nbsp;` | 画面名 ( 文字列 ) を JSON 文字列にマップする Dictionary。 |
+| `entry` | `&nbsp;` | 起点画面名 ( screensDict のキー ) を指定します。 |
+| `grabFocus` | `true` | 真でキーボード / ゲームパッドフォーカスを取ります ( 既定値 真 )。偽を指定するとフォーカスを取らない常駐 HUD として表示されます。 |
+
+**戻り値**
+
+開始に成功したら真を返します。
+
+**解説**
+
+インライン定義から非モーダル ( 常駐 ) 複数画面フローを開始する
+
+[showFlowScreens](#showflowscreens) と同じ Dictionary 形式の画面定義を
+非モーダル ( 非ブロッキング ) で開始する [startFlow](#startflow) の
+インライン版です。
+
+**関連:** [Dialog.startFlow](Dialog.md#startflow) / [Dialog.showFlowScreens](Dialog.md#showflowscreens)
+
+---
+
 ### close
 
 メソッド
@@ -217,8 +373,14 @@ action と values を保持する Dictionary が返ります。
 
 ダイアログを閉じる
 
-このインスタンスで開いた非モーダル / モーダルダイアログを閉じます。
-他のインスタンスが開いたダイアログは閉じません。
+このインスタンスで開いた非モーダル / モーダルダイアログ ( フロー含む )
+を閉じます。他のインスタンスが開いたダイアログは閉じません。
+
+内部の teardown は次フレームで行われるため、close を呼んだ直後でも
+しばらく [active](#active) は真のままです。次のモーダルを安全に
+起動したい場合は [active](#active) が偽になるのを待ってください。
+
+**関連:** [Dialog.active](Dialog.md#active)
 
 ---
 
@@ -279,6 +441,51 @@ Elements 用フォントの一括登録
 パス指定が使え、XP3 内のディレクトリでも構いません。
 
 **関連:** [Dialog.registerFont](Dialog.md#registerfont)
+
+---
+
+### onScreen
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 入った画面の名前 ( マニフェストの画面キー ) 。 |
+
+**解説**
+
+フロー画面遷移通知 ( 画面に入った )
+
+[showFlow](#showflow) / [startFlow](#startflow) 系で実行している
+フローの画面に入ったタイミングで発火します。TJS 側で override して
+ください。
+
+**関連:** [Dialog.onScreenLeave](Dialog.md#onscreenleave)
+
+---
+
+### onScreenLeave
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 出た画面の名前 ( マニフェストの画面キー ) 。 |
+| `action` | `&nbsp;` | 画面を離れる契機となった button の id ( Esc / × は空文字列 ) 。 |
+
+**解説**
+
+フロー画面遷移通知 ( 画面から出た )
+
+[showFlow](#showflow) / [startFlow](#startflow) 系で実行している
+フローの画面から離れるタイミングで発火します。TJS 側で override
+してください。
+
+**関連:** [Dialog.onScreen](Dialog.md#onscreen)
 
 ---
 
