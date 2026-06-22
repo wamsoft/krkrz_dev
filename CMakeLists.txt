@@ -33,7 +33,6 @@ psdfile
 saveStruct
 scriptsEx
 shrinkCopy
-sigcheck
 krkr_richtext
 #krkrlua
 )
@@ -66,6 +65,7 @@ process
 messenger
 windowExProgress
 win32ole
+sigcheck
 )
 endif()
 
