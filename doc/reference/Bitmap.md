@@ -18,6 +18,11 @@ Bitmap クラスは、画像情報を保持するクラスです。
 - [bufferForWrite](#bufferforwrite)
 - [bufferPitch](#bufferpitch)
 - [loading](#loading)
+- [imageWidth](#imagewidth)
+- [imageHeight](#imageheight)
+- [mainImageBuffer](#mainimagebuffer)
+- [mainImageBufferForWrite](#mainimagebufferforwrite)
+- [mainImageBufferPitch](#mainimagebufferpitch)
 
 ### メソッド
 
@@ -227,6 +232,86 @@ tjs_uint32 が 32bit の整数型、tjs_uint8 が 8bit (1byte) の整数型と�
 非同期読込み中に他のメンバにアクセスすると例外が発生するので注意してください。
 
 **関連:** [Bitmap.buffer](Bitmap.md#buffer) / [Bitmap.bufferPitch](Bitmap.md#bufferpitch)
+
+---
+
+### imageWidth
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像の横幅 ([Bitmap.width](Bitmap.md#width) の別名)
+
+画像の横幅をピクセル単位で表します。[Bitmap.width](Bitmap.md#width) と同じ値を返す読み取り専用の別名です。
+
+DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.imageWidth](Layer.md#imagewidth) と同名)。
+
+**関連:** [Bitmap.width](Bitmap.md#width) / [Bitmap.imageHeight](Bitmap.md#imageheight)
+
+---
+
+### imageHeight
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像の縦幅 ([Bitmap.height](Bitmap.md#height) の別名)
+
+画像の縦幅をピクセル単位で表します。[Bitmap.height](Bitmap.md#height) と同じ値を返す読み取り専用の別名です。
+
+DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.imageHeight](Layer.md#imageheight) と同名)。
+
+**関連:** [Bitmap.height](Bitmap.md#height) / [Bitmap.imageWidth](Bitmap.md#imagewidth)
+
+---
+
+### mainImageBuffer
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像バッファポインタ ([Bitmap.buffer](Bitmap.md#buffer) の別名)
+
+画像バッファ左上隅へのポインタを表します。[Bitmap.buffer](Bitmap.md#buffer) と同じ値を返す読み取り専用の別名です。
+
+DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBuffer](Layer.md#mainimagebuffer) と同名)。このポインタには値を書き込まないでください。書き込む場合は [Bitmap.mainImageBufferForWrite](Bitmap.md#mainimagebufferforwrite) を使用してください。
+
+**関連:** [Bitmap.buffer](Bitmap.md#buffer) / [Bitmap.mainImageBufferForWrite](Bitmap.md#mainimagebufferforwrite) / [Bitmap.mainImageBufferPitch](Bitmap.md#mainimagebufferpitch)
+
+---
+
+### mainImageBufferForWrite
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像バッファポインタ(書き込み用) ([Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) の別名)
+
+書き込み可能な画像バッファ左上隅へのポインタを表します。[Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) と同じ値を返す読み取り専用の別名です(参照すると画像の共有状態が解除されます)。
+
+DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBufferForWrite](Layer.md#mainimagebufferforwrite) と同名)。
+
+**関連:** [Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) / [Bitmap.mainImageBuffer](Bitmap.md#mainimagebuffer) / [Bitmap.mainImageBufferPitch](Bitmap.md#mainimagebufferpitch)
+
+---
+
+### mainImageBufferPitch
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像バッファピッチ ([Bitmap.bufferPitch](Bitmap.md#bufferpitch) の別名)
+
+画像バッファのピッチ(一つ下のスキャンラインまでのバイト数)を表します。[Bitmap.bufferPitch](Bitmap.md#bufferpitch) と同じ値を返す読み取り専用の別名です(値が負になり得ます)。
+
+DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBufferPitch](Layer.md#mainimagebufferpitch) と同名)。
+
+**関連:** [Bitmap.bufferPitch](Bitmap.md#bufferpitch) / [Bitmap.mainImageBuffer](Bitmap.md#mainimagebuffer) / [Bitmap.mainImageBufferForWrite](Bitmap.md#mainimagebufferforwrite)
 
 ---
 

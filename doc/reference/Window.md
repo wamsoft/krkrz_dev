@@ -26,6 +26,13 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [innerHeight](#innerheight)
 - [zoomNumer](#zoomnumer)
 - [zoomDenom](#zoomdenom)
+- [viewportFit](#viewportfit)
+- [viewportZoom](#viewportzoom)
+- [viewportAlignX](#viewportalignx)
+- [viewportAlignY](#viewportaligny)
+- [viewportOffsetX](#viewportoffsetx)
+- [viewportOffsetY](#viewportoffsety)
+- [viewportBgColor](#viewportbgcolor)
 - [drawDevice](#drawdevice)
 - [borderStyle](#borderstyle)
 - [stayOnTop](#stayontop)
@@ -71,6 +78,9 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [setPos](#setpos)
 - [setInnerSize](#setinnersize)
 - [setZoom](#setzoom)
+- [setViewport](#setviewport)
+- [setViewportWallpaper](#setviewportwallpaper)
+- [clearViewportWallpaper](#clearviewportwallpaper)
 - [postInputEvent](#postinputevent)
 - [hideMouseCursor](#hidemousecursor)
 - [registerMessageReceiver](#registermessagereceiver)
@@ -385,6 +395,127 @@ Window クラスのオブジェクトを構築します。
 詳しくは [Window.setZoom](Window.md#setzoom) メソッドを参照してください。
 
 **関連:** [Window.setZoom](Window.md#setzoom) / [Window.zoomNumer](Window.md#zoomnumer)
+
+---
+
+### viewportFit
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ビューポートのフィット方式
+
+内側ゲーム画面を外側ウインドウ(surface)へどのように収めるかを表す文字列です。
+値を設定することもできます。
+
+`"contain"`(アスペクト維持で収まる最大・レターボックス。既定) / `"cover"`(アスペクト維持で埋める最小・はみ出しは clip) / `"fill"`(アスペクト無視で全面引き伸ばし) / `"none"`(原寸) / `"integer"`(収まる範囲で最大の整数倍。最低 1 倍) / `"custom"`([Window.viewportZoom](Window.md#viewportzoom) の倍率を使用) のいずれか。
+
+このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+
+**関連:** [Window.setViewport](Window.md#setviewport) / [Window.viewportZoom](Window.md#viewportzoom)
+
+---
+
+### viewportZoom
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ビューポートの拡大倍率
+
+[Window.viewportFit](Window.md#viewportfit) が `"custom"` のときに使用する拡大倍率を表す実数です(例 1.8 = 180%)。既定は 1.0。
+値を設定することもできます。
+
+このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+
+**関連:** [Window.viewportFit](Window.md#viewportfit) / [Window.setViewport](Window.md#setviewport)
+
+---
+
+### viewportAlignX
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ビューポートの水平配置
+
+余白が生じたときの内側ゲーム画面の水平配置を表す実数です。0=左 / 0.5=中央 / 1=右。既定は 0.5。
+値を設定することもできます。
+
+このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+
+**関連:** [Window.viewportAlignY](Window.md#viewportaligny) / [Window.setViewport](Window.md#setviewport)
+
+---
+
+### viewportAlignY
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ビューポートの垂直配置
+
+余白が生じたときの内側ゲーム画面の垂直配置を表す実数です。0=上 / 0.5=中央 / 1=下。既定は 0.5。
+値を設定することもできます。
+
+このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+
+**関連:** [Window.viewportAlignX](Window.md#viewportalignx) / [Window.setViewport](Window.md#setviewport)
+
+---
+
+### viewportOffsetX
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ビューポートの水平オフセット
+
+align 後に加算する内側ゲーム画面の水平オフセットを表す整数です(px・surface 座標)。
+値を設定することもできます。
+
+このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+
+**関連:** [Window.viewportOffsetY](Window.md#viewportoffsety) / [Window.setViewport](Window.md#setviewport)
+
+---
+
+### viewportOffsetY
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ビューポートの垂直オフセット
+
+align 後に加算する内側ゲーム画面の垂直オフセットを表す整数です(px・surface 座標)。
+値を設定することもできます。
+
+このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+
+**関連:** [Window.viewportOffsetX](Window.md#viewportoffsetx) / [Window.setViewport](Window.md#setviewport)
+
+---
+
+### viewportBgColor
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ビューポート余白の背景色
+
+ビューポートで生じた余白を塗る背景色を `0xRRGGBB` 形式の整数で表します(上位 8bit は alpha)。既定は黒。
+値を設定することもできます。壁紙([Window.setViewportWallpaper](Window.md#setviewportwallpaper))が設定されている場合は壁紙が優先されます。
+
+このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+
+**関連:** [Window.setViewportWallpaper](Window.md#setviewportwallpaper) / [Window.setViewport](Window.md#setviewport)
 
 ---
 
@@ -1143,6 +1274,78 @@ tutNormal や tutEntire は実装されていません。
 オプションによっては、吉里吉里は拡大・縮小に使用可能なハードウェアを、倍率が変更されるたびに調査するため、このメソッドは拡大率を連続的に変化させて演出を行うような用途には適していません。
 
 **関連:** [Window.zoomNumer](Window.md#zoomnumer) / [Window.zoomDenom](Window.md#zoomdenom)
+
+---
+
+### setViewport
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `fit` | `&nbsp;` | フィット方式を文字列で指定します。`"contain"`(アスペクト維持で収まる最大・レターボックス。既定) / `"cover"`(アスペクト維持で埋める最小・はみ出しは clip) / `"fill"`(アスペクト無視で全面引き伸ばし) / `"none"`(原寸) / `"integer"`(収まる範囲で最大の整数倍。最低 1 倍) / `"custom"`([Window.viewportZoom](Window.md#viewportzoom) の倍率を使用) のいずれか。 |
+| `zoom` | `&nbsp;` | `"custom"` 時の拡大倍率を実数で指定します(例 1.8 = 180%)。 |
+| `alignX` | `&nbsp;` | 水平配置を実数で指定します。0=左 / 0.5=中央 / 1=右。 |
+| `alignY` | `&nbsp;` | 垂直配置を実数で指定します。0=上 / 0.5=中央 / 1=下。 |
+| `offsetX` | `&nbsp;` | align 後に加算する水平オフセットを整数(px・surface 座標)で指定します。 |
+| `offsetY` | `&nbsp;` | align 後に加算する垂直オフセットを整数(px)で指定します。 |
+
+**解説**
+
+ビューポート(表示画角)の一括設定
+
+外側ウインドウ([Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) で表される surface)の中に、内側ゲーム画面(primaryLayer のサイズ)をどのように配置するかをまとめて設定します。両者のサイズが一致していれば従来どおり全面等倍で表示され、異なるサイズにすると本設定に従ってゲームが surface 内へ配置され、余白が生じます。余白は [Window.viewportBgColor](Window.md#viewportbgcolor) や [Window.setViewportWallpaper](Window.md#setviewportwallpaper) で埋められます。
+
+マウス座標は配置に応じて自動的にゲーム論理座標へ補正されるため、どの設定でも入力は正しくゲーム内部へ届きます。
+
+各引数は対応するプロパティ([Window.viewportFit](Window.md#viewportfit) など)を個別に設定するのと同じです。省略した引数は変更されません。
+
+このメソッドは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+
+**関連:** [Window.viewportFit](Window.md#viewportfit) / [Window.viewportZoom](Window.md#viewportzoom) / [Window.viewportAlignX](Window.md#viewportalignx) / [Window.viewportAlignY](Window.md#viewportaligny) / [Window.viewportOffsetX](Window.md#viewportoffsetx) / [Window.viewportOffsetY](Window.md#viewportoffsety) / [Window.setViewportWallpaper](Window.md#setviewportwallpaper)
+
+---
+
+### setViewportWallpaper
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `image` | `&nbsp;` | 壁紙画像を指定します。ストレージ名(文字列)を渡すと内部で [Bitmap](Bitmap.md) を生成してロードします。[Layer](Layer.md) または [Bitmap](Bitmap.md) オブジェクトを直接渡すこともでき、その場合はオブジェクトが参照保持され、描画時に画像が取得されます。 |
+| `fit` | `"cover"` | 壁紙のフィット方式を文字列で指定します。既定は `"cover"`。指定可能な値は [Window.setViewport](Window.md#setviewport) の fit と同じです。 |
+| `alignX` | `0.5` | 壁紙の水平配置を実数で指定します。0=左 / 0.5=中央 / 1=右。既定は 0.5。 |
+| `alignY` | `0.5` | 壁紙の垂直配置を実数で指定します。0=上 / 0.5=中央 / 1=下。既定は 0.5。 |
+
+**解説**
+
+ビューポート余白の壁紙画像設定
+
+ビューポートで生じた余白(内側ゲーム画面の外側)を埋める壁紙画像を設定します。ゲーム描画より前に背景として描かれます。
+
+このメソッドは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+
+**関連:** [Window.clearViewportWallpaper](Window.md#clearviewportwallpaper) / [Window.viewportBgColor](Window.md#viewportbgcolor) / [Window.setViewport](Window.md#setviewport)
+
+---
+
+### clearViewportWallpaper
+
+メソッド
+
+**解説**
+
+ビューポート余白の壁紙画像解除
+
+[Window.setViewportWallpaper](Window.md#setviewportwallpaper) で設定した壁紙を解除します。以降、余白は [Window.viewportBgColor](Window.md#viewportbgcolor) の背景色のみで塗られます。
+
+このメソッドは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+
+**関連:** [Window.setViewportWallpaper](Window.md#setviewportwallpaper) / [Window.viewportBgColor](Window.md#viewportbgcolor)
 
 ---
 

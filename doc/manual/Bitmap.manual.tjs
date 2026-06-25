@@ -405,4 +405,62 @@ class Bitmap {
 	 * @see Bitmap.bufferPitch
 	 */
 	property loading { getter; }
+
+	/**
+	 * 画像の横幅 ([Bitmap.width](Bitmap.md#width) の別名)
+	 *
+	 * 画像の横幅をピクセル単位で表します。[Bitmap.width](Bitmap.md#width) と同じ値を返す読み取り専用の別名です。
+	 *
+	 * DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.imageWidth](Layer.md#imagewidth) と同名)。
+	 * @see Bitmap.width
+	 * @see Bitmap.imageHeight
+	 */
+	property imageWidth { getter; }
+
+	/**
+	 * 画像の縦幅 ([Bitmap.height](Bitmap.md#height) の別名)
+	 *
+	 * 画像の縦幅をピクセル単位で表します。[Bitmap.height](Bitmap.md#height) と同じ値を返す読み取り専用の別名です。
+	 *
+	 * DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.imageHeight](Layer.md#imageheight) と同名)。
+	 * @see Bitmap.height
+	 * @see Bitmap.imageWidth
+	 */
+	property imageHeight { getter; }
+
+	/**
+	 * 画像バッファポインタ ([Bitmap.buffer](Bitmap.md#buffer) の別名)
+	 *
+	 * 画像バッファ左上隅へのポインタを表します。[Bitmap.buffer](Bitmap.md#buffer) と同じ値を返す読み取り専用の別名です。
+	 *
+	 * DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBuffer](Layer.md#mainimagebuffer) と同名)。このポインタには値を書き込まないでください。書き込む場合は [Bitmap.mainImageBufferForWrite](Bitmap.md#mainimagebufferforwrite) を使用してください。
+	 * @see Bitmap.buffer
+	 * @see Bitmap.mainImageBufferForWrite
+	 * @see Bitmap.mainImageBufferPitch
+	 */
+	property mainImageBuffer { getter; }
+
+	/**
+	 * 画像バッファポインタ(書き込み用) ([Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) の別名)
+	 *
+	 * 書き込み可能な画像バッファ左上隅へのポインタを表します。[Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) と同じ値を返す読み取り専用の別名です(参照すると画像の共有状態が解除されます)。
+	 *
+	 * DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBufferForWrite](Layer.md#mainimagebufferforwrite) と同名)。
+	 * @see Bitmap.bufferForWrite
+	 * @see Bitmap.mainImageBuffer
+	 * @see Bitmap.mainImageBufferPitch
+	 */
+	property mainImageBufferForWrite { getter; }
+
+	/**
+	 * 画像バッファピッチ ([Bitmap.bufferPitch](Bitmap.md#bufferpitch) の別名)
+	 *
+	 * 画像バッファのピッチ(一つ下のスキャンラインまでのバイト数)を表します。[Bitmap.bufferPitch](Bitmap.md#bufferpitch) と同じ値を返す読み取り専用の別名です(値が負になり得ます)。
+	 *
+	 * DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBufferPitch](Layer.md#mainimagebufferpitch) と同名)。
+	 * @see Bitmap.bufferPitch
+	 * @see Bitmap.mainImageBuffer
+	 * @see Bitmap.mainImageBufferForWrite
+	 */
+	property mainImageBufferPitch { getter; }
 }

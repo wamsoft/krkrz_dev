@@ -245,5 +245,6 @@ nav:
       - ゲームパッド状態の観察 (PadOverlay): topics/core/pad_overlay.md
       - Elements ベースの汎用ダイアログ: topics/core/elements_dialog.md
       - REPL (対話型 TJS シェル): topics/core/repl.md
+      - ゲーム画面の表示画角制御 (ビューポート): topics/core/viewport.md
       - ログ出力: topics/core/logging.md
     - ライセンス: topics/LICENSE.md
