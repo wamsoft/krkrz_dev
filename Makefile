@@ -43,7 +43,7 @@ DATAPATH_ABS=$(shell $(FIXPATH) "$(DATAPATH)")
 
 BUILD_PATH=$(shell cmake --preset $(PRESET) -N | grep BUILD_DIR | sed 's/.*BUILD_DIR="\(.*\)"/\1/')
 
-.PHONY: build prebuild install clean
+.PHONY: build prebuild install clean docs docs-scan docs-diff
 
 all: build
 
@@ -61,6 +61,34 @@ install:
 
 clean:
 	cmake --build $(BUILD_PATH) --config $(BUILD_TYPE) --target clean
+
+# ===== ドキュメント生成（doc/ 配下） =====
+# いずれのターゲットも .venv の python を使用する前提。
+# 仮想環境が無い場合は以下で作成:
+#   python -m venv .venv
+# stdlib のみ使用しているので追加 pip install は不要。
+#
+# Windows と Unix 系で python 実行パスが異なるので自動判定。
+ifeq ($(OS),Windows_NT)
+VENV_PY=.venv/Scripts/python.exe
+else
+VENV_PY=.venv/bin/python
+endif
+
+# src/core のバインドと doc/reference/*.md の差分を更新する通常フロー。
+# 1) scan_tjs.py で TJS ネイティブクラスのメンバー一覧を _inventory.json に抽出
+# 2) diff_docs.py で _missing.md（未記載 / 廃止メンバー一覧）を再生成
+# 実行後に doc/_missing.md を見て doc/reference/<Class>.md を手編集し、
+# 再度 `make docs` を走らせてレポートが空に近づくまで繰り返す。
+docs: docs-scan docs-diff
+
+# src/core から TJS メンバー一覧を抽出 -> doc/_inventory.json
+docs-scan:
+	$(VENV_PY) tools/docgen/scan_tjs.py
+
+# _inventory.json と doc/reference/*.md を突き合わせて doc/_missing.md を再生成
+docs-diff:
+	$(VENV_PY) tools/docgen/diff_docs.py
 
 # WIN版用ルール
 ifeq (windows,$(findstring windows,$(PRESET)))

@@ -3,3 +3,5 @@ bin
 .vscode
 .venv
 .claude
+site
+__pycache__

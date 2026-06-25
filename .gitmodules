@@ -13,21 +13,12 @@
 [submodule "script/KAG3"]
 	path = script/KAG3
 	url = https://github.com/krkrz/kag3.git
-[submodule "document/kirikiriz"]
-	path = document/kirikiriz
-	url = https://github.com/krkrz/krkrz-documents.git
-[submodule "document/misc_markdown"]
-	path = document/misc_markdown
-	url = https://github.com/krkrz/documents.git
 [submodule "src/tools/dotNet/tjs2doc"]
 	path = src/tools/dotNet/tjs2doc
 	url = https://github.com/krkrz/tjs2doc.git
 [submodule "src/tools/win32/debugger"]
 	path = src/tools/win32/debugger
 	url = https://github.com/krkrz/debugger.git
-[submodule "src/core"]
-	path = src/core
-	url = https://github.com/wamsoft/krkrz.git
 [submodule "src/plugins/KAGParserEx"]
 	path = src/plugins/KAGParserEx
 	url = https://github.com/wamsoft/KAGParserEx.git
@@ -163,3 +154,12 @@
 [submodule "src/plugins/gamepad"]
 	path = src/plugins/gamepad
 	url = https://github.com/wamsoft/gamepad.git
+[submodule "src/core"]
+	path = src/core
+	url = https://github.com/wamsoft/krkrz.git
+[submodule "src/plugins/layerExVector"]
+	path = src/plugins/layerExVector
+	url = https://github.com/wamsoft/layerExVector.git
+[submodule "src/plugins/krkr_richtext"]
+	path = src/plugins/krkr_richtext
+	url = https://github.com/wamsoft/krkr_richtext.git

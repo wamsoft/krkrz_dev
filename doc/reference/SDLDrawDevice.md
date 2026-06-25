@@ -1,0 +1,58 @@
+# SDLDrawDevice
+
+SDLDrawDevice クラスは、このインスタンスを [Window.drawDevice](Window.md#drawdevice) に登録して使用するための DrawDevice で、SDL3 (`SDL_Renderer` + `SDL_Texture`) を用いた標準的な描画機能を提供します。
+
+SDL3 ビルド (KRKRZ_VARIANT=SDL) では起動時のデフォルト DrawDevice として既に登録されているため、新たに登録する必要はありません。Windows 向け WINVER ビルドでも DLL/プラットフォームが SDL3 をサポートしていれば利用可能です。
+
+OpenGL ES ベースの描画パスへ切り替えたい場合は [OGLDrawDevice](OGLDrawDevice.md) を Window.drawDevice にセットしてください。
+
+## メンバー一覧
+
+### コンストラクタ
+
+- [SDLDrawDevice](#sdldrawdevice)
+
+### プロパティ
+
+- [interface](#interface)
+- [window](#window)
+
+---
+
+### SDLDrawDevice
+
+コンストラクタ
+
+**解説**
+
+SDLDrawDevice オブジェクトの構築
+
+SDLDrawDevice クラスのオブジェクトを構築します。
+
+初期状態で SDL3 ビルドの Window.drawDevice にはこのクラスのインスタンスが登録されているので、新たに登録する必要はありません。
+
+---
+
+### interface
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+インターフェースオブジェクトを取得
+
+プラグインなどで DrawDevice オブジェクトを利用するためにあります。
+
+---
+
+### window
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+関連付けられた Window オブジェクトを取得
+
+この DrawDevice をセットしている Window オブジェクトを返します。
+
+---

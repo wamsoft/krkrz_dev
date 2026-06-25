@@ -1,0 +1,642 @@
+# Bitmap
+
+Bitmap クラスは、画像情報を保持するクラスです。
+
+## メンバー一覧
+
+### コンストラクタ
+
+- [Bitmap](#bitmap)
+- [Bitmap](#bitmap)
+- [Bitmap](#bitmap)
+
+### プロパティ
+
+- [width](#width)
+- [height](#height)
+- [buffer](#buffer)
+- [bufferForWrite](#bufferforwrite)
+- [bufferPitch](#bufferpitch)
+- [loading](#loading)
+- [imageWidth](#imagewidth)
+- [imageHeight](#imageheight)
+- [mainImageBuffer](#mainimagebuffer)
+- [mainImageBufferForWrite](#mainimagebufferforwrite)
+- [mainImageBufferPitch](#mainimagebufferpitch)
+
+### メソッド
+
+- [getPixel](#getpixel)
+- [setPixel](#setpixel)
+- [getMaskPixel](#getmaskpixel)
+- [setMaskPixel](#setmaskpixel)
+- [independ](#independ)
+- [setSize](#setsize)
+- [copyFrom](#copyfrom)
+- [save](#save)
+- [load](#load)
+- [loadAsync](#loadasync)
+- [loadHeader](#loadheader)
+- [getSaveOption](#getsaveoption)
+
+### イベント
+
+- [onLoaded](#onloaded)
+
+---
+
+### Bitmap
+
+コンストラクタ
+
+**解説**
+
+Bitmap オブジェクトの構築
+
+Bitmap クラスのオブジェクトを構築します。
+
+初期状態では 幅と高さは32ピクセルになっています。
+
+---
+
+### Bitmap
+
+コンストラクタ
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `width` | `&nbsp;` | 画像の幅を指定します。 |
+| `height` | `&nbsp;` | 画像の高さを指定します。 |
+| `bpp` | `32` | 画像の各ピクセルのビット数を指定します。<br>32 か 8 のいずれかを指定してください。 |
+
+**解説**
+
+Bitmap オブジェクトの構築
+
+Bitmap クラスのオブジェクトを指定の大きさで構築します。
+
+---
+
+### Bitmap
+
+コンストラクタ
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `filename` | `&nbsp;` | 画像のファイル名を指定します。 |
+| `colorkey` | `clNone` | カラーキーを指定します。<br>値は [Layer.loadImages](Layer.md#loadimages) と同じです。 |
+
+**解説**
+
+Bitmap オブジェクトの構築
+
+Bitmap クラスのオブジェクトをファイルから構築します。
+
+---
+
+### width
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+画像横幅
+
+画像の横幅をピクセル単位で指定します。
+
+値を設定することもできます。
+
+**関連:** [Bitmap.setSize](Bitmap.md#setsize)
+
+---
+
+### height
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+画像縦幅
+
+画像の縦幅をピクセル単位で指定します。
+
+値を設定することもできます。
+
+**関連:** [Bitmap.setSize](Bitmap.md#setsize)
+
+---
+
+### buffer
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像バッファポインタ
+
+画像 ( 色とマスク(不透明度)の情報を含む 32bpp のビットマップ ) の画像バッファ左上隅へのポインタ
+を表します。
+
+このプロパティは、プラグインなどのために画像バッファへの直接のアクセスの手段を提供する
+ためにあります。
+
+整数型で返されますが、プラグインなどでは適切な型 ( const unsigned long * 等 ) にキャストして使って
+ください。
+
+このプロパティで得られたポインタには値を書き込まないでください。
+[Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) で得られたポインタならば書き込むことができます。
+
+画像のサイズは [Bitmap.width](Bitmap.md#width) と [Bitmap.height](Bitmap.md#height) プロパティが
+表しています。
+
+ポインタの計算方法は [Bitmap.bufferPitch](Bitmap.md#bufferpitch) を参照してください。
+
+**関連:** [Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) / [Bitmap.bufferPitch](Bitmap.md#bufferpitch)
+
+---
+
+### bufferForWrite
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像バッファポインタ(書き込み用)
+
+画像 ( 色とマスク(不透明度)の情報を含む 32bpp のビットマップ ) の画像バッファ左上隅へのポインタ
+を表します。
+
+このプロパティは、プラグインなどのために画像バッファへの直接のアクセスの手段を提供する
+ためにあります。
+
+整数型で返されますが、プラグインなどでは適切な型 ( unsigned long * 等 ) にキャストして使って
+ください。
+
+このプロパティで得られたポインタには [Bitmap.buffer](Bitmap.md#buffer) と異なり、
+値を書き込むことができます。吉里吉里内部では全く同じ画像は複数のオブジェト間で共有しますが、
+このプロパティを参照するとその共有状態を解除します。
+
+画像のサイズは [Bitmap.width](Bitmap.md#width) と [Bitmap.height](Bitmap.md#height) プロパティが
+表しています。
+
+ポインタの計算方法は [Bitmap.bufferPitch](Bitmap.md#bufferpitch) を参照してください。
+
+**関連:** [Bitmap.buffer](Bitmap.md#buffer) / [Bitmap.bufferPitch](Bitmap.md#bufferpitch)
+
+---
+
+### bufferPitch
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像バッファピッチ
+
+画像 ( 色とマスク(不透明度)の情報を含む 32bpp のビットマップ ) の画像バッファのピッチ
+( 一つ下のスキャンラインまでのバイト数 ) を表します。
+
+このプロパティは、プラグインなどのために画像バッファへの直接のアクセスの手段を提供する
+ためにあります。
+
+tjs_uint32 が 32bit の整数型、tjs_uint8 が 8bit (1byte) の整数型として、画像位置 (x, y) への
+ポインタは C 言語で書くと以下のように計算することができます。
+
+`( (tjs_uint32*)( (tjs_uint8*)buffer + y*bufferPitch )) + x`
+
+このプロパティは、次のスキャンラインまでのピクセル数ではなく、バイト数を返すことに
+注意してください。この数値は画像横幅ぴったりに必要なバイト数よりも若干大きい場合があります。
+
+このプロパティは値が負になり得ますので注意してください。
+
+**関連:** [Bitmap.buffer](Bitmap.md#buffer) / [Bitmap.bufferForWrite](Bitmap.md#bufferforwrite)
+
+---
+
+### loading
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+非同期読込み中確認
+
+非同期読込み中かどうかを表します。
+
+この値が真の時非同期読込み中です。
+
+非同期読込み中に他のメンバにアクセスすると例外が発生するので注意してください。
+
+**関連:** [Bitmap.buffer](Bitmap.md#buffer) / [Bitmap.bufferPitch](Bitmap.md#bufferpitch)
+
+---
+
+### imageWidth
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像の横幅 ([Bitmap.width](Bitmap.md#width) の別名)
+
+画像の横幅をピクセル単位で表します。[Bitmap.width](Bitmap.md#width) と同じ値を返す読み取り専用の別名です。
+
+DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.imageWidth](Layer.md#imagewidth) と同名)。
+
+**関連:** [Bitmap.width](Bitmap.md#width) / [Bitmap.imageHeight](Bitmap.md#imageheight)
+
+---
+
+### imageHeight
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像の縦幅 ([Bitmap.height](Bitmap.md#height) の別名)
+
+画像の縦幅をピクセル単位で表します。[Bitmap.height](Bitmap.md#height) と同じ値を返す読み取り専用の別名です。
+
+DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.imageHeight](Layer.md#imageheight) と同名)。
+
+**関連:** [Bitmap.height](Bitmap.md#height) / [Bitmap.imageWidth](Bitmap.md#imagewidth)
+
+---
+
+### mainImageBuffer
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像バッファポインタ ([Bitmap.buffer](Bitmap.md#buffer) の別名)
+
+画像バッファ左上隅へのポインタを表します。[Bitmap.buffer](Bitmap.md#buffer) と同じ値を返す読み取り専用の別名です。
+
+DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBuffer](Layer.md#mainimagebuffer) と同名)。このポインタには値を書き込まないでください。書き込む場合は [Bitmap.mainImageBufferForWrite](Bitmap.md#mainimagebufferforwrite) を使用してください。
+
+**関連:** [Bitmap.buffer](Bitmap.md#buffer) / [Bitmap.mainImageBufferForWrite](Bitmap.md#mainimagebufferforwrite) / [Bitmap.mainImageBufferPitch](Bitmap.md#mainimagebufferpitch)
+
+---
+
+### mainImageBufferForWrite
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像バッファポインタ(書き込み用) ([Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) の別名)
+
+書き込み可能な画像バッファ左上隅へのポインタを表します。[Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) と同じ値を返す読み取り専用の別名です(参照すると画像の共有状態が解除されます)。
+
+DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBufferForWrite](Layer.md#mainimagebufferforwrite) と同名)。
+
+**関連:** [Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) / [Bitmap.mainImageBuffer](Bitmap.md#mainimagebuffer) / [Bitmap.mainImageBufferPitch](Bitmap.md#mainimagebufferpitch)
+
+---
+
+### mainImageBufferPitch
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+画像バッファピッチ ([Bitmap.bufferPitch](Bitmap.md#bufferpitch) の別名)
+
+画像バッファのピッチ(一つ下のスキャンラインまでのバイト数)を表します。[Bitmap.bufferPitch](Bitmap.md#bufferpitch) と同じ値を返す読み取り専用の別名です(値が負になり得ます)。
+
+DrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBufferPitch](Layer.md#mainimagebufferpitch) と同名)。
+
+**関連:** [Bitmap.bufferPitch](Bitmap.md#bufferpitch) / [Bitmap.mainImageBuffer](Bitmap.md#mainimagebuffer) / [Bitmap.mainImageBufferForWrite](Bitmap.md#mainimagebufferforwrite)
+
+---
+
+### getPixel
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 取得する x 座標値をピクセル単位で指定します。 |
+| `y` | `&nbsp;` | 取得する y 座標値をピクセル単位で指定します。 |
+
+**戻り値**
+
+ピクセル値
+
+**解説**
+
+ピクセル値の取得
+
+画像のピクセル値を取得します。
+
+**関連:** [Bitmap.setPixel](Bitmap.md#setpixel)
+
+---
+
+### setPixel
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 設定する x 座標値をピクセル単位で指定します。 |
+| `y` | `&nbsp;` | 設定する y 座標値をピクセル単位で指定します。 |
+| `value` | `&nbsp;` | 設定するピクセル値を指定します。 |
+
+**解説**
+
+ピクセル値の設定
+
+画像のピクセル値を設定します。
+
+**関連:** [Bitmap.getPixel](Bitmap.md#getpixel)
+
+---
+
+### getMaskPixel
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 取得する x 座標値をピクセル単位で指定します。 |
+| `y` | `&nbsp;` | 取得する y 座標値をピクセル単位で指定します。 |
+
+**戻り値**
+
+ピクセルのアルファ値
+
+**解説**
+
+ピクセルのアルファ値の取得
+
+画像のピクセルのアルファ値を取得します。
+
+**関連:** [Bitmap.setMaskPixel](Bitmap.md#setmaskpixel)
+
+---
+
+### setMaskPixel
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 設定する x 座標値をピクセル単位で指定します。 |
+| `y` | `&nbsp;` | 設定する y 座標値をピクセル単位で指定します。 |
+| `value` | `&nbsp;` | 設定するピクセルのアルファ値を指定します。 |
+
+**解説**
+
+ピクセルのアルファ値の取得
+
+画像のピクセルのアルファ値を設定します。
+
+**関連:** [Bitmap.getMaskPixel](Bitmap.md#getmaskpixel)
+
+---
+
+### independ
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `copy` | `true` | 共有状態を解除する際、元の画像をコピーするかどうかを指定します。<br>真を指定すると元の画像をコピーします。偽を指定すると元の画像はコピーされず、画像の<br>内容は不定となります。 |
+
+**解説**
+
+画像の共有の解除
+
+画像の共有状態を強制的に解除します。
+
+吉里吉里は、assignImages などで画像をまるごとコピーした場合、実際には
+画像バッファのコピーを行わず、同一の画像を共有するようになります。
+
+通常、画像に変更を加えようとする直前でこの共有状態は自動的に解除されますが、
+このメソッドで強制的に解除することができます。
+
+copy 引数に false を指定した場合は、画像の共有は解除されますが、元の画像を
+引き継ぐことは保証されません ( 画像の内容は不定になります ) が、共有の解除を
+より高速に行うことができます。画像全部を書き換える場合は元の画像を
+引き継ぐ必要はありませんので、描画を行う前にあらかじめこのメソッドに false を
+指定して呼び出すと効率が良くなる場合があります。
+
+このメソッドは、画像が共有されていない場合は何もしません。
+
+---
+
+### setSize
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `width` | `&nbsp;` | 画像の横幅をピクセル単位で指定します。<br>この値は [Bitmap.width](Bitmap.md#width) プロパティでも取得や設定ができます。 |
+| `height` | `&nbsp;` | 画像の縦幅をピクセル単位で指定します。<br>この値は [Bitmap.height](Bitmap.md#height) プロパティでも取得や設定ができます。 |
+
+**解説**
+
+画像サイズの設定
+
+画像サイズを指定します。
+
+---
+
+### copyFrom
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `src` | `&nbsp;` | コピー元の Bitmap オブジェクトを指定します。 |
+
+**解説**
+
+画像のコピー
+
+画像のコピーを行います。
+
+コピーといっても、実際は「同じ画像を二つ以上のオブジェクトで共有している」という状態になるだけなので
+このメソッドはほとんど実行時間がかかりません。
+
+---
+
+### save
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 保存するストレージ名を指定します。 |
+| `type` | `"bmp"` | 保存する画像形式を文字列で指定します。現バージョンでは以下の形式を指定可能です。<br>"**bmp**" または "**bmp32**"<br>32bpp の BMP です。アルファチャンネル(マスク)も保存します。<br>"**bmp24**"<br>24bpp の BMP です。アルファチャンネル(マスク)は保存されません。<br>"**bmp8**"<br>8bpp の BMP です。アルファチャンネル(マスク)は保存されません。画像は<br>252色の固定パレットによる4×4組織化ディザリングを用いて減色されます。<br>"**jpg**"<br>JPEG です。アルファチャンネル(マスク)は保存されません。画像は<br>クオリティー90%で保存されます。<br>"**jpg###**"<br>JPEG です。アルファチャンネル(マスク)は保存されません。画像は<br>###で指定されたクオリティーで保存されます。"jpg010" で 10%、"jpg100" で 100%、"jpg080" で 80%です。<br>"**png**"<br>32bpp の PNG です。アルファチャンネル(マスク)も保存します。<br>"**png24**"<br>24bpp の PNG です。アルファチャンネル(マスク)は保存されません。<br>"**tlg5**"<br>32bpp の TLG5 です。アルファチャンネル(マスク)も保存します。<br>"**tlg524**"<br>24bpp の TLG5 です。アルファチャンネル(マスク)は保存されません。<br>"**tlg6**"<br>32bpp の TLG6 です。アルファチャンネル(マスク)も保存します。<br>"**tlg624**"<br>24bpp の TLG6 です。アルファチャンネル(マスク)は保存されません。 |
+| `meta` | `null` | TLG 形式の場合、保存するタグ情報を辞書形式で指定します。<br>その他の形式の場合は追加オプションを指定します(1.3.0以降)。<br>指定可能なオプションはgetSaveOptionで取得可能です。 |
+
+**解説**
+
+画像の保存
+
+name で指定したストレージ (ファイル) に、type で指定した画像形式でファイルを保存します。
+
+**関連:** [Bitmap.getSaveOption](Bitmap.md#getsaveoption)
+
+---
+
+### load
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `image` | `&nbsp;` | 読み込む画像ストレージを指定します。 |
+| `colorkey` | `clNone` | 読み込む画像のカラーキー ( 透明色 ) を指定します。<br>0xRRGGBB 形式で色を指定すると、その色をカラーキーとします。<br>`**clPalIdx**` に 任意のパレットインデックスを加算した数値を指定すると、<br>そのパレットインデックスが透明色になります ( 256 色以下の画像の場合 )。<br>`**clAdapt**` を指定すると、画像の一番上のラインにおいて<br>もっとも多く使われている色が自動的に透明色になります。<br>`**clAlphaMat**` に 0xRRGGBB<br>形式の色を表す数値を加算したものを指定すると、画像がその色の上に<br>αブレンド(ltAlphaの方式)を用いて重ね合わせられます。<br>たとえば、(clAlphaMat + 0xffffff) を指定すると、<br>読み込まれた画像が白い色の上に重ね合わせられます。<br>画像は全て不透明な画像となります<br>( 画像は全て不透明となりますが、<br>このモードではタグ情報はいっさい変更されないので<br>注意してください )。 |
+
+**戻り値**
+
+タグ情報の辞書配列
+
+**解説**
+
+画像の読み込み
+
+画像を読み込みます。
+
+戻り値としてタグ情報(その画像のレイヤタイプや表示位置など、画像そのものに対する情報)の辞書配列が返ります。
+
+画像がタグ情報を持たない場合は null が返ります。
+
+現バージョンでは、タグ情報は PNG, TLG5/6 形式のみが持つことができます。取得可能な情報については、[画像フォーマットコンバータ](../guide/TPC.md) を参照してください。
+
+---
+
+### loadAsync
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `image` | `&nbsp;` | 読み込む画像ストレージを指定します。<br>ここで指定するファイル名は拡張子を含んだものになることに注意してください。<br>拡張子がないとファイルが見つからずエラーとなります。 |
+
+**解説**
+
+画像の非同期読み込み
+
+画像を非同期で読み込みます。
+
+読込みの完了は [Bitmap.onLoaded](Bitmap.md#onloaded) で受け取れます。
+
+非同期読込み中か否かは [Bitmap.loading](Bitmap.md#loading) で確認できます。
+
+非同期読込み中は [Bitmap.loading](Bitmap.md#loading) 以外のメンバへアクセスすると例外が発生します。
+
+[Bitmap.onLoaded](Bitmap.md#onloaded) の説明も確認してください。
+
+**関連:** [Bitmap.onLoaded](Bitmap.md#onloaded) / [Bitmap.loading](Bitmap.md#loading) / [Layer.copyFromBitmapToMainImage](Layer.md#copyfrombitmaptomainimage)
+
+---
+
+### loadHeader
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `image` | `&nbsp;` | 読み込む画像ストレージを指定します。<br>ここで指定するファイル名は拡張子を含んだものになることに注意してください。<br>拡張子がないとファイルが見つからずエラーとなります。 |
+
+**戻り値**
+
+情報の辞書配列
+
+**解説**
+
+画像情報の読み込み(1.3.0以降)
+
+画像情報のみを読み込みます。
+
+画像の読み込みは行われないため、情報のみを得たい時は高速に読み込めます。
+
+返される辞書のwidth, heightは必須で、その他の情報は画像形式に依存します。
+
+---
+
+### getSaveOption
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `type` | `&nbsp;` | 画像形式を指定します。<br>指定方法はsaveメソッドと同じ形式です。 |
+
+**戻り値**
+
+追加情報の辞書配列
+
+**解説**
+
+画像保存追加情報取得(1.3.0以降)
+
+画像保存時に指定可能な追加情報を取得します。
+
+**関連:** [Bitmap.save](Bitmap.md#save)
+
+---
+
+### onLoaded
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `meta` | `&nbsp;` | 読み込んだ画像のタグ情報です。 |
+| `async` | `&nbsp;` | 非同期で読み込まれたかどうかです。<br>画像データがキャッシュ内にある場合、 [Bitmap.loadAsync](Bitmap.md#loadasync) 実行中に本イベントが発生します。 |
+| `error` | `&nbsp;` | 画像読込みでエラーが発生したかどうかです。 |
+| `message` | `&nbsp;` | エラーメッセージです。<br>エラーが発生した場合、エラーメッセージが渡されます。 |
+
+**解説**
+
+非同期読込みが完了した
+
+非同期読込みが完了した時に発生します。
+
+読み込んだ画像は [Layer.copyFromBitmapToMainImage](Layer.md#copyfrombitmaptomainimage) で Layer にコピーできます。
+
+読込み処理は非同期であるため、読込みが完了した時に、その画像を渡す Layer が既に無効化されている可能性があります。
+
+本イベントで他のオブジェクトへアクセスする場合は、無効化されていないか確認して下さい。
+
+もしくは、本イベントが完了するまで対象オブジェクトが無効化されないようにしてください。
+
+**関連:** [Bitmap.loadAsync](Bitmap.md#loadasync) / [Layer.copyFromBitmapToMainImage](Layer.md#copyfrombitmaptomainimage)
+
+---

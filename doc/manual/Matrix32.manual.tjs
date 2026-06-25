@@ -1,0 +1,182 @@
+/**
+ * @description 2次元用の3x2行列です。
+ * OpenGLのため列優先行列であることに注意してください。
+ */
+class Matrix32 {
+	/**
+	 * コンストラクタ(単位行列)
+	 */
+	function Matrix32();
+
+	/**
+	 * コンストラクタ
+	 * @description 引数値を入れて初期化します。
+	 * @param m11 [1][1]位置の値です。
+	 * @param m12 [1][2]位置の値です。
+	 * @param m21 [2][1]位置の値です。
+	 * @param m22 [2][2]位置の値です。
+	 * @param m31 [3][1]位置の値です。
+	 * @param m32 [3][2]位置の値です。
+	 */
+	function Matrix32( m11:real, m12:real, m21:real, m22:real, m31:real, m32:real );
+
+	/**
+	 * マトリックス設定
+	 * @param m11 [1][1]位置の値です。
+	 * @param m12 [1][2]位置の値です。
+	 * @param m21 [2][1]位置の値です。
+	 * @param m22 [2][2]位置の値です。
+	 * @param m31 [3][1]位置の値です。
+	 * @param m32 [3][2]位置の値です。
+	 */
+	function set( m11:real, m12:real, m21:real, m22:real, m31:real, m32:real );
+
+	/**
+	 * マトリックス設定
+	 * @description 1次元配列からコピー
+	 * @param array 6要素の配列を渡します。
+	 */
+	function set( array:Array );
+
+	/**
+	 * マトリックス設定
+	 * @description matrixからコピー
+	 * @param matrix Matrix32クラスのインスタンスを渡します。
+	 */
+	function set( matrix:Matrix32 );
+
+	/**
+	 * 単位行列化
+	 */
+	function reset();
+
+	/**
+	 * 移動行列を設定する
+	 * @param x 設定するX座標値
+	 * @param y 設定するY座標値
+	 */
+	function setTranslate( x:real, y:real );
+
+	/**
+	 * 拡大行列を設定する
+	 * @param x 設定するX軸拡大率
+	 * @param y 設定するY軸拡大率
+	 */
+	function setScale( x:real, y:real );
+
+	/**
+	 * 回転行列を設定する
+	 * @param degree 回転角度
+	 */
+	function setRotate( degree:real );
+
+	/**
+	 * X軸傾斜行列を設定する
+	 * @param degree 傾斜角度
+	 */
+	function setSkewX( degree:real );
+
+	/**
+	 * Y軸傾斜行列を設定する
+	 * @param degree 傾斜角度
+	 */
+	function setSkewY( degree:real );
+
+	/**
+	 * 行列を移動させる
+	 * @param x 移動するX座標値
+	 * @param y 移動するY座標値
+	 */
+	function translate( x:real, y:real );
+
+	/**
+	 * 行列を回転させる
+	 * @param degree 回転角度
+	 */
+	function rotate( degree:real );
+
+	/**
+	 * 行列を回転させる
+	 * @param degree 回転角度
+	 * @param px 中心点
+	 * @param py 中心点
+	 */
+	function rotate( degree:real, px:real, py:real );
+
+	/**
+	 * 行列を拡大させる
+	 * @param x 拡大率X座標値
+	 * @param y 拡大率Y座標値
+	 */
+	function scale( x:real, y:real );
+
+	/**
+	 * 行列を拡大させる(事前拡大)
+	 * @param x 拡大率X座標値
+	 * @param y 拡大率Y座標値
+	 */
+	function preScale( x:real, y:real );
+
+	/**
+	 * 行列をX軸傾斜させる
+	 * @param degree 傾斜角度
+	 */
+	function skewX( degree:real );
+
+	/**
+	 * 行列をY軸傾斜させる
+	 * @param degree 傾斜角度
+	 */
+	function skewY( degree:real );
+
+	/**
+	 * XY座標値をこの行列にかけ合わせて変換する
+	 * @description 入力引き数がそのまま出力となる
+	 * @param x X座標値
+	 * @param y Y座標値
+	 */
+	function transform( x:real, y:real );
+
+	/**
+	 * 行列をかける(this = this * matrix)
+	 * @param matrix かける行列
+	 */
+	function multiply( matrix:Matrix32 );
+
+	/**
+	 * 行列を後ろにかける(this = matrix * this)
+	 * @param matrix かける行列
+	 */
+	function premultiply( matrix:Matrix32 );
+
+
+	/**
+	 * 1次元配列で受け取る[r]
+	 */
+	property array;
+
+	/**
+	 * [1][1]位置の値[r/w]
+	 */
+	property m11;
+	/**
+	 * [1][2]位置の値[r/w]
+	 */
+	property m12;
+	/**
+	 * [2][1]位置の値[r/w]
+	 */
+	property m21;
+	/**
+	 * [2][2]位置の値[r/w]
+	 */
+	property m22;
+	/**
+	 * [3][1]位置の値[r/w]
+	 */
+	property m31;
+	/**
+	 * [3][2]位置の値[r/w]
+	 */
+	property m32;
+};
