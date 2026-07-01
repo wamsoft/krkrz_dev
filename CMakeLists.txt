@@ -6,9 +6,14 @@ set(PROJECT_VERSION 1.0)
 # 共通プラグインフォルダ
 set(PLUGINS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/plugins)
 
+# ワムソフト開発作業用プラグインフォルダ (krkrtemplate 側、UTF-8 版)
+# ../krkrtemplate/plugins_utf8 に src/plugins に無いプラグインのソースがある
+set(WAMSOFT_PLUGINS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../krkrtemplate/plugins_utf8)
+
 # プラグイン対象フォルダ
 list(APPEND TVP_PLUGIN_FOLDERS
     ${PLUGINS_DIR}
+    ${WAMSOFT_PLUGINS_DIR}
 )
 
 set(TPSTUB_DIR ${PLUGINS_DIR}/tp_stub)
@@ -35,6 +40,19 @@ scriptsEx
 shrinkCopy
 krkr_richtext
 #krkrlua
+)
+
+# ワムソフト追加分 (plugins_utf8 由来) のうち Win32 非依存を確認できたもの。
+# 全バリアント (WIN/SDL/LIB) 共通でビルドする。
+#   textrender : フォント実測は TJS コールバック委譲。windows.h 無し・.rc 不参照。
+#   wfstkeff   : 音声エフェクト(STK)。windows.h は #ifdef _WIN32 ガード済、
+#                license.cpp は非Windows no-op、license.rc/V2LINK_NEED_HMODULE は WIN 限定。
+#   wfdspfilter: 音声フィルタ(DSPFilters 純C++)。同上。
+#   ※ wf* の非Windows 実ビルドは未検証 (特に wfstkeff の STK OS 設定)。要ビルド確認。
+list(APPEND TVP_PLUGINS
+textrender      # textrender.dll
+wfstkeff        # wfBasicEffect.dll
+wfdspfilter     # wfTypicalDSP.dll
 )
 
 
@@ -66,6 +84,25 @@ messenger
 windowExProgress
 win32ole
 sigcheck
+)
+
+# ----------------------------------------------------
+# ワムソフト開発作業用プラグイン (krkrtemplate/plugins_utf8 由来)
+#
+# makeworld_tools_utf8/plugin64* に配置されている DLL のうち、src/plugins に
+# ソースが無く plugins_utf8 側にソースがあるもので、Win32 依存が残るもの。
+# (Win32非依存化できた textrender/wfstkeff/wfdspfilter は上の base リストへ移動済)
+# ----------------------------------------------------
+list(APPEND TVP_PLUGINS
+getLangName     # getLangName.dll   (CMakeLists 既存)
+lzfs            # lzfs.dll
+msdfrender      # msdfrender.dll    (GDIフォント使用: Plugin.cpp/kzbackport)
+# wfstkeff / wfdspfilter は Win32 非依存化して base(全バリアント)へ移動済
+# k2compat は除外 (原則今後は使わない方針。吉里吉里2互換のGUI/WM_TOUCH依存。
+#   CMakeLists.txt は残置)
+# wvdecoder は除外 (解析ツール用。ogg/opus は wu*.dll(TSS COMモジュール)の動的
+#   ロードが前提だが、本体機能とは別物で本構成には無い。将来は python 等の
+#   別ツールでの解析対応が無難という方針。CMakeLists.txt は残置)
 )
 endif()
 
