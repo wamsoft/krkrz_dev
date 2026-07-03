@@ -166,3 +166,6 @@
 [submodule "src/plugins/extrans"]
 	path = src/plugins/extrans
 	url = https://github.com/wamsoft/extrans.git
+[submodule "src/plugins/extNagano"]
+	path = src/plugins/extNagano
+	url = https://github.com/wamsoft/extNagano.git

@@ -35,6 +35,7 @@ scriptsEx
 shrinkCopy
 krkr_richtext
 extrans
+extNagano
 #krkrlua
 )
 
