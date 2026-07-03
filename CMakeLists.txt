@@ -34,6 +34,7 @@ saveStruct
 scriptsEx
 shrinkCopy
 krkr_richtext
+extrans
 #krkrlua
 )
 

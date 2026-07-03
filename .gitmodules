@@ -163,3 +163,6 @@
 [submodule "src/plugins/krkr_richtext"]
 	path = src/plugins/krkr_richtext
 	url = https://github.com/wamsoft/krkr_richtext.git
+[submodule "src/plugins/extrans"]
+	path = src/plugins/extrans
+	url = https://github.com/wamsoft/extrans.git
