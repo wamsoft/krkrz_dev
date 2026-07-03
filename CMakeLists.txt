@@ -10,10 +10,14 @@ set(PLUGINS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/plugins)
 # ../krkrtemplate/plugins_utf8 に src/plugins に無いプラグインのソースがある
 set(WAMSOFT_PLUGINS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../krkrtemplate/plugins_utf8)
 
+# ワムソフト SVN 作業ツリー (psbfile / psbwriter 等のソース)
+set(WAMSOFT_WORK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../wamsoft_work)
+
 # プラグイン対象フォルダ
 list(APPEND TVP_PLUGIN_FOLDERS
     ${PLUGINS_DIR}
     ${WAMSOFT_PLUGINS_DIR}
+    ${WAMSOFT_WORK_DIR}
 )
 
 set(TPSTUB_DIR ${PLUGINS_DIR}/tp_stub)
@@ -41,6 +45,8 @@ shrinkCopy
 krkr_richtext
 extrans
 extNagano
+psbfile          # wamsoft_work 由来 (PSBファイル読取 + Storages.mountPSB)
+psbwriter        # wamsoft_work 由来 (PSBファイル生成。psbwriter.dll 復元版)
 #krkrlua
 )
 
