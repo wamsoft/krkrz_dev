@@ -39,6 +39,8 @@ saveStruct
 scriptsEx
 shrinkCopy
 krkr_richtext
+extrans
+extNagano
 #krkrlua
 )
 
@@ -55,6 +57,16 @@ wfstkeff        # wfBasicEffect.dll
 wfdspfilter     # wfTypicalDSP.dll
 )
 
+# 非同期通知(worker スレッド + ウィンドウメッセージ通知)イディオムを全バリアント
+# 対応化したもの。`_beginthread`→std::thread、`::PostMessage`→TVPPostWindowMessage、
+# Win32 型(WM_APP/WPARAM/DWORD 等)を移植して WIN/SDL/LIB 共通でビルドできる。
+#   layerExSave : レイヤ画像の非同期セーブ (PNG/TLG5)
+#   sigcheck    : 実行ファイル/ファイル署名の非同期検証 (libtomcrypt)
+list(APPEND TVP_PLUGINS
+layerExSave
+sigcheck
+)
+
 
 if (KRKRZ_VARIANT STREQUAL "WIN")
 list(APPEND TVP_PLUGINS
@@ -67,7 +79,6 @@ varfile
 fstat
 gamepad
 layerExDraw
-layerExSave
 menu
 msgreceiver
 stdio
@@ -83,7 +94,6 @@ process
 messenger
 windowExProgress
 win32ole
-sigcheck
 )
 
 # ----------------------------------------------------
