@@ -36,6 +36,7 @@ shrinkCopy
 krkr_richtext
 extrans
 extNagano
+AlphaMovie
 #krkrlua
 )
 

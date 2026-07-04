@@ -169,3 +169,6 @@
 [submodule "src/plugins/extNagano"]
 	path = src/plugins/extNagano
 	url = https://github.com/wamsoft/extNagano.git
+[submodule "src/plugins/AlphaMovie"]
+	path = src/plugins/AlphaMovie
+	url = https://github.com/wamsoft/AlphaMovie.git
