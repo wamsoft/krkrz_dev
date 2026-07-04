@@ -37,6 +37,7 @@ krkr_richtext
 extrans
 extNagano
 AlphaMovie
+expat
 #krkrlua
 )
 

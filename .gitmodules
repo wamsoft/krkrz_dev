@@ -172,3 +172,6 @@
 [submodule "src/plugins/AlphaMovie"]
 	path = src/plugins/AlphaMovie
 	url = https://github.com/wamsoft/AlphaMovie.git
+[submodule "src/plugins/expat"]
+	path = src/plugins/expat
+	url = https://github.com/wamsoft/expat.git
