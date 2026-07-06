@@ -63,6 +63,14 @@
 ■ 構成ファイル
 
   startup.tjs      デモ本体 (トランジション定義テーブル + UI + 実行)
-  image/rule.png   ルール画像 (universal / 3duniversal / imagewipe 用。
-                   標準同梱の image/map07.png と同一)
+  image/rule.png   universal 用ルール画像 (本デモ独自生成。中心から広がる
+                   放射グラデーションの 256 階調グレースケール)
+  image/rule4.png  3duniversal 用ルール画像 (本デモ独自生成。画面サイズ
+                   1280x720。ステンドグラス状の Voronoi セル分割で、セル毎に
+                   R=落下開始時間(上ほど早い) を均一化し領域ごとまとまって落下。
+                   G=落下速度 / B=方向(64=真下)。緑の境界線は高速セル境界で
+                   割れ目が先に裂ける)
+  image/rule5.png  imagewipe 用ルール画像 (本デモ独自生成。幅=ワイプ帯の厚み・
+                   高=画面高の RGBA。アルファの波状右端がワイプ境界の輪郭に、
+                   RGB(白→金の暖色グロー)が縁の装飾になる)
   readme.txt       このファイル
