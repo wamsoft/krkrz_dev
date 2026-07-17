@@ -86,7 +86,7 @@ Takechin 氏作の画像ビューア「Susie32」用のプラグインを利用�
 | **extNagano** | 3duniversal / blurfade / scanline / zoomfade / rgbfade / spin / flutter / book / imagewipe / honeyturn / morphing / multiripple の追加トランジション 12 種を登録します。詳細は [トランジション](Transition.md) を参照してください。 |
 | **getSample** | 再生中サウンドのサンプル値を取得するメソッドを [WaveSoundBuffer](../reference/WaveSoundBuffer.md) に追加します。 |
 | **json** | JSON の読み書き ( evalJSON / saveJSON 等 ) を [Scripts](../reference/Scripts.md) に追加します。 |
-| **KAGParserEx** | KAG シナリオを解析する KAGParser クラスを追加します。 |
+| **KAGParserEx** | KAG シナリオを解析する [KAGParser](../reference/KAGParser.md) クラスを追加します ( 本体組み込み版を拡張版で置き換えます )。 |
 | **krkr_richtext** | 多言語・装飾対応のリッチテキスト描画を行う [RichText](../reference/RichText.md) クラス群と [Layer](../reference/Layer.md) 拡張を追加します。 |
 | **layerExAreaAverage** | 面積平均法による高品質な縮小コピーを [Layer](../reference/Layer.md) に追加します。 |
 | **layerExBTOA** | 青成分をアルファ値へ変換するメソッドを [Layer](../reference/Layer.md) に追加します。 |

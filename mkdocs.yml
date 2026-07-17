@@ -172,6 +172,7 @@ nav:
       - reference/CSVParser.md
       - reference/HttpRequest.md
       - reference/SimpleHTTPServer.md
+      - reference/KAGParser.md
       - reference/LineParser.md
       - reference/MenuItem.md
       - reference/Pad.md
