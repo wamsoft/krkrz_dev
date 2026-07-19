@@ -4,6 +4,32 @@
 ドキュメント等開発関係のもの全てが入ったリポジトリ。
 各種ファイルはサブモジュールで参照されています。
 
+## 他プラットフォーム向けの外枠リポジトリ (ブラウザ / Android)
+
+Win32 や各種デスクトップ向けのビルドは本リポジトリ (umbrella) で完結するが、
+**ブラウザ (wasm) と Android** はそれぞれ別の「外枠」リポジトリでビルドする。
+どちらも本リポジトリをエンジンソースとして参照し (環境変数 `KRKRZ_BASE` に
+本リポジトリの親フォルダを指定)、エンジン本体・プラグインには手を入れず、
+各プラットフォーム固有のビルド定義・パッケージングだけを持つ。本リポジトリと
+同じ場所に clone しておく (`KRKRZ_BASE/krkrz_dev` と `KRKRZ_BASE/krkrz_web` /
+`KRKRZ_BASE/krkrz_android` が並ぶ構成)。
+
+- **krkrz_web** — ブラウザ (Emscripten / wasm32, SDL3 ベース) 版。
+  https://github.com/wamsoft/krkrz_web (公開予定)
+  共有バイナリ (案件非依存) を一度ビルドし、案件のデータ・リソース・起動設定は
+  「配信サイドカー」として差し替える方式。案件データはバラファイルを `web://` で
+  オンデマンド fetch (+ OPFS キャッシュ) する。案件構成は `web-config.json`
+  (`assetPack.sources` で複数ソースをマージ) で定義し、
+  `make PROJECT_DIR=<案件> run` でステージング + ローカル起動する。
+  SharedArrayBuffer/pthread + JSPI 対応ブラウザ (Chrome / Edge) が必要。
+
+- **krkrz_android** — Android 版 (Gradle + NDK/CMake, SDL3 ベース)。
+  https://github.com/wamsoft/krkrz_android
+  案件構成は `app-config.json` (`assetPack.sources` で資材をマージ、`padPacks`
+  で Play Asset Delivery の分割配信) で定義し、`PROJECT_DIR` を指定してビルドする。
+
+各リポジトリ固有の詳細はそれぞれの README を参照。
+
 ## ビルド手順
 
 Win32 版を作成する場合は、Visual Studio のコマンドラインの x86 版を

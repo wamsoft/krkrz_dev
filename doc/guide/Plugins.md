@@ -71,101 +71,62 @@ Takechin 氏作の画像ビューア「Susie32」用のプラグインを利用�
 
 ## 吉里吉里付属のプラグインについて
 
-吉里吉里に標準で添付されているプラグインの説明です。
+吉里吉里Z に標準で同梱されているプラグインの一覧です。各プラグインのソースコードは [wamsoft](https://github.com/wamsoft) 配下の各リポジトリで管理されています。
 
-- ****wuvorbis.dll****  
-  **OggVorbis** を吉里吉里で再生可能にするためのプラグインです。
-- ****wumsadp.dll****  
-  **Microsoft ADPCM** 形式の .wav ファイルを吉里吉里で再生可能にするためのプラグインです。
-- ****wutcwf.dll****  
-  **TCWF** 形式のファイルを吉里吉里で再生可能にするためのプラグインです。
-- ****extrans.dll****  
-  吉里吉里本体のトランジションの種類を拡張するためのプラグインで、吉里吉里本体に接続するといくつかのトランジションが使用可能になります。
-  
-  このプラグインの使い方については
-  
-  を参照してください。
-- ****dirlist.dll****  
-  指定されたディレクトリ内にあるファイルのリストを得るためのプラグインです。
-  
-  このプラグインを接続すると **getDirList** という関数が使用可能になります。
-  
-  `getDirList(ディレクトリ)`
-  
-  の形式で指定すると、そのディレクトリ内にあるすべてのファイルのリストを
-  配列で返してきます。このリストにはディレクトリも含まれ、ディレクトリの場合は
-  要素の文字列の最後に '/' がついています。
-  
-  また、このリストには通常、 './' と '../' の２つの要素が含まれます。
-  
-  この関数は指定されたディレクトリ直下のファイルのリストを得るだけで、再帰的に
-  それよりも下層のディレクトリのファイルを得ることはありません。
-- ****fftgraph.dll****  
-  WaveSoundBuffer と同期して、簡易的なスペクトラムアナライザー（スペアナ）を表示させるための
-  プラグインです。
-  
-  このプラグインを接続すると **drawFFTGraph** という関数が使用可能になります。
-  
-  使い方は吉里吉里ソースに含まれる fftgraph のソースおよび KAG 用のスペアナプラグインを
-  参照してください。
-- ****win32ole.dll****  
-  ActiveX コントロール吉里吉里のウィンドウに貼り付けたり、OLE オートメーション可能なオブジェクトを吉里吉里から操作するためのプラグインです。
-  
-  これを使用すると、たとえば吉里吉里のウィンドウに Web ブラウザ (Internet Explorer) や メディアプレーヤを貼り付けたり、Excel を吉里吉里から操作したりすることができます。
-  
-  使用方法については 吉里吉里ソースの [kirikiri2/trunk/kirikiri2/src/plugins/win32/win32ole/manual.tjs](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/src/plugins/win32/win32ole/manual.tjs) および [kirikiri2/trunk/kirikiri2/tests/win32ole](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/tests/win32ole) ディレクトリを参照してください。
-- ****wsh.dll** (experimental)**  
-  吉里吉里で JScript、VBScript、PerlScript を使用可能にするプラグインです (RubyScript の動作については調整中です)。
-  
-  このプラグインを接続すると、[Scripts.exec](../reference/Scripts.md#exec) と [Scripts.execStorage](../reference/Scripts.md#execstorage) が拡張されます。
-  
-  Scripts.exec は第２引数に 拡張子、あるいは ProgId 、あるいは CLSID を受け付けるようになります。Scripts.execStorage も Scripts.exec 同様に第２引数に拡張子、あるいは ProgId 、あるいは CLSID を受け付けるようになりますが、第２引数が省略された場合は第１引数の拡張子から言語が決定されます。
-  
-  拡張子は js, vbs, pl, rb のいずれかで、ProgId は、それぞれ JScript, VBScript, PerlScript, RubyScript となります。CLSID を指定する場合は、スクリプトエンジンのクラスIDを指定します。これら以外の拡張子が渡された場合は TJS スクリプトとして実行します。
-  
-  使用方法については 吉里吉里ソースの [kirikiri2/trunk/kirikiri2/tests/wsh](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/tests/wsh) ディレクトリを参照してください。
-- ****agg.dll** (experimental)**  
-  吉里吉里で [AGG (Anti-Grain Geometry)](http://www.antigrain.com/) を利用して図形描画を行うプラグインです。
-  
-  簡易的な SVG 読み込み/描画機能を利用することができます。
-  
-  SVG を描画するには、たとえば
-  
-  ```
-  var svg  = new AGGPrimitive(layer, "SVG", "tiger.svg");
-  var svg1 = new AGGPrimitive(layer, "SVG", "tiger.svg");
-  ```
-  
-  とします (もとの AGG の SVG 読み込みサポートの制限により、読み込めない SVG が多いです)。
-  
-  詳しくは 吉里吉里ソースの [kirikiri2/trunk/kirikiri2/src/plugins/win32/layerExAgg](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/src/plugins/win32/layerExAgg/) ディレクトリを参照してください。
-- ****csvParser.dll** (experimental)**  
-  吉里吉里で CSV (Comma Separated Values) ファイルを読み込むためのプラグインです。
-  
-  詳しくは 吉里吉里ソースの [kirikiri2/trunk/kirikiri2/src/plugins/win32/csvParser](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/src/plugins/win32/csvParser/) ディレクトリを参照してください。
-- ****expat.dll** (experimental)**  
-  吉里吉里で [Expat](http://expat.sourceforge.net/) を通じて XML ァイルを読み込むためのプラグインです。
-  
-  詳しくは 吉里吉里ソースの [kirikiri2/trunk/kirikiri2/src/plugins/win32/expat](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/src/plugins/win32/expat/) ディレクトリを参照してください。
-- ****json.dll** (experimental)**  
-  吉里吉里で [JSON](http://www.json.org/) を読み込むためのプラグインです。
-  
-  詳しくは 吉里吉里ソースの [kirikiri2/trunk/kirikiri2/src/plugins/win32/json](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/src/plugins/win32/json/) ディレクトリを参照してください。
-- ****layerExImage.dll** (experimental)**  
-  レイヤに対し、明度とコントラストの調整、色相と彩度の調整、ノイズ追加を読み込むためのプラグインです。
-  
-  詳しくは 吉里吉里ソースの [kirikiri2/trunk/kirikiri2/src/plugins/win32/layerExImage](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/src/plugins/win32/layerExImage/) ディレクトリを参照してください。
-- ****perspective.dll** (experimental)**  
-  レイヤのパースペクティブ変形を行うプラグインです。
-  
-  詳しくは 吉里吉里ソースの [kirikiri2/trunk/kirikiri2/src/plugins/win32/layerPerspective](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/src/plugins/win32/layerExPerspective/) ディレクトリを参照してください。
-- ****saveStruct.dll****  
-  Array/Dictionary の saveStruct の処理を、Unicode (UTF-16)ではなく、現在のコードページまたは UTF-8 で出力可能にする物です。
-  
-  詳しくは 吉里吉里ソースの [kirikiri2/trunk/kirikiri2/src/plugins/win32/saveStruct](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/src/plugins/win32/saveStruct/) ディレクトリを参照してください。
-- ****fstat.dll****  
-  Storages クラスに、ファイルのサイズや更新日時などの情報を取得したり、ファイルをストレージシステム内から取り出すメソッドを追加します。
-  詳しくは 吉里吉里ソースの [kirikiri2/trunk/kirikiri2/src/plugins/win32/fstat](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/src/plugins/win32/fstat/) ディレクトリを参照してください。
-- ****clipboardEx.dll**(experimental)**  
-  Clipboard クラスに、画像やTJS式をクリップボードを介してやりとりする機能や、クリップボードの更新を自動検知するハンドラを登録する機能を追加します。
-  詳しくは 吉里吉里ソースの [kirikiri2/trunk/kirikiri2/src/plugins/win32/clipboardEx](https://sv.kikyou.info/trac/kirikiri/browser/kirikiri2/trunk/kirikiri2/src/plugins/win32/clipboardEx/) ディレクトリを参照してください。
+クラスを追加するものはリファレンスの各クラスのページを、既存クラスを拡張するものは拡張先クラスのページの「プラグイン拡張」節を参照してください。
+
+### 全プラットフォーム共通
+
+| プラグイン | 説明 |
+|---|---|
+| **AlphaMovie** | アルファチャンネル付き動画 ( .amv ) を再生する [AlphaMovie](../reference/AlphaMovie.md) クラスを追加します。 |
+| **csvParser** | CSV ファイルを解析する [CSVParser](../reference/CSVParser.md) クラスを追加します。 |
+| **expat** | XML を解析する [XMLParser](../reference/XMLParser.md) クラスを追加します。 |
+| **extrans** | wave / mosaic / turn / rotatezoom / rotatevanish / rotateswap / ripple の追加トランジション 7 種を登録します。詳細は [トランジション](Transition.md) を参照してください。 |
+| **extNagano** | 3duniversal / blurfade / scanline / zoomfade / rgbfade / spin / flutter / book / imagewipe / honeyturn / morphing / multiripple の追加トランジション 12 種を登録します。詳細は [トランジション](Transition.md) を参照してください。 |
+| **getSample** | 再生中サウンドのサンプル値を取得するメソッドを [WaveSoundBuffer](../reference/WaveSoundBuffer.md) に追加します。 |
+| **json** | JSON の読み書き ( evalJSON / saveJSON 等 ) を [Scripts](../reference/Scripts.md) に追加します。 |
+| **KAGParserEx** | KAG シナリオを解析する [KAGParser](../reference/KAGParser.md) クラスを追加します ( 本体組み込み版を拡張版で置き換えます )。 |
+| **krkr_richtext** | 多言語・装飾対応のリッチテキスト描画を行う [RichText](../reference/RichText.md) クラス群と [Layer](../reference/Layer.md) 拡張を追加します。 |
+| **layerExAreaAverage** | 面積平均法による高品質な縮小コピーを [Layer](../reference/Layer.md) に追加します。 |
+| **layerExBTOA** | 青成分をアルファ値へ変換するメソッドを [Layer](../reference/Layer.md) に追加します。 |
+| **layerExImage** | 明度/コントラスト/色相/彩度の調整やノイズ追加などの画像処理を [Layer](../reference/Layer.md) に追加します。 |
+| **layerExLongExposure** | 長時間露光 ( フレーム累積合成 ) 風の効果を [Layer](../reference/Layer.md) に追加します。 |
+| **layerExRaster** | ラスタスクロール効果を [Layer](../reference/Layer.md) に追加します。 |
+| **layerExSave** | レイヤ画像の非同期セーブ ( PNG / TLG5 ) を [Layer](../reference/Layer.md) / [Window](../reference/Window.md) に追加します。 |
+| **layerExVector** | thorvg による SVG などのベクター描画を [Layer](../reference/Layer.md) に追加します ( [GdiPlus](../reference/GdiPlus.md) 互換 API )。 |
+| **lineParser** | 行単位のテキスト解析を行う [LineParser](../reference/LineParser.md) クラスを追加します。 |
+| **minizip** | ZIP アーカイブの読み込み ( zip:// 自動検索パス ) と作成を行う [Zip](../reference/Zip.md) / [Unzip](../reference/Unzip.md) クラスを追加します。 |
+| **psdfile** | Photoshop PSD ファイルを読み込む [PSD](../reference/PSD.md) クラスを追加します。 |
+| **saveStruct** | Array / Dictionary の saveStruct を拡張し、UTF-8 など出力エンコーディングを指定可能にします ( [Scripts](../reference/Scripts.md) 参照 )。 |
+| **scriptsEx** | スクリプト実行系のユーティリティを [Scripts](../reference/Scripts.md) に追加します。 |
+| **shrinkCopy** | 高速な縮小コピーを [Layer](../reference/Layer.md) に追加します。 |
+| **sigcheck** | ファイル署名のバックグラウンド検証を [Window](../reference/Window.md) に追加します。 |
+
+### Windows ( WINVER ビルド ) 専用
+
+Win32 API に依存しているため、現時点では WINVER ビルドでのみ利用できます。
+
+| プラグイン | 説明 |
+|---|---|
+| **addFont** | プライベートフォント ( .ttf / .otf ) の動的追加を行います。 |
+| **binaryStream** | ファイルをバイナリレベルで読み書きする [BinaryStream](../reference/BinaryStream.md) クラスを追加します。 |
+| **fpslimit** | メインループの実行頻度に制限をかけます ( 現在は本体の -contfreq オプションで代替できます )。 |
+| **fstat** | ファイルサイズや更新日時の取得などを [Storages](../reference/Storages.md) に追加します。 |
+| **gamepad** | ゲームパッドを直接扱う [Pad](../reference/Pad.md) クラスを追加します。 |
+| **httprequest** | HTTP 通信を行う [HttpRequest](../reference/HttpRequest.md) クラスを追加します。 |
+| **layerExDraw** | GDI+ による図形/テキスト描画を行う [GdiPlus](../reference/GdiPlus.md) クラス群を追加します。 |
+| **memfile** | メモリ上の仮想ファイル ( mem:// ) を [Storages](../reference/Storages.md) に追加します。 |
+| **menu** | ウィンドウメニューを構築する [MenuItem](../reference/MenuItem.md) クラスを追加します。 |
+| **messenger** | 外部プロセスとの WM_COPYDATA ベースのメッセージ交換を [Window](../reference/Window.md) に追加します。 |
+| **msgreceiver** | 外部制御の口 ( WM_COPYDATA 受信 ) を追加します ( 非推奨。messenger を利用してください )。 |
+| **process** | 外部プロセスの起動と監視を行う [Process](../reference/Process.md) クラスを追加します。 |
+| **shellExecute** | 関連付けアプリケーションによるファイル / URL のオープンを [System](../reference/System.md) に追加します。 |
+| **stdio** | 標準入出力へのアクセスを [System](../reference/System.md) に追加します。 |
+| **systemEx** | OS 情報の取得などのユーティリティを [System](../reference/System.md) に追加します。 |
+| **tftSave** | レンダリング済みフォントデータの保存機能を [System](../reference/System.md) / [Layer](../reference/Layer.md) に追加します。 |
+| **varfile** | TJS の変数空間 ( 辞書中の octet ) をファイルとして参照する var:// アクセスを追加します。 |
+| **win32dialog** | Win32 ネイティブダイアログを構築する [WIN32Dialog](../reference/WIN32Dialog.md) クラスを追加します。 |
+| **win32ole** | OLE オートメーション / ActiveX を扱う [WIN32OLE](../reference/WIN32OLE.md) / [ActiveX](../reference/ActiveX.md) / [JScriptHost](../reference/JScriptHost.md) クラスを追加します。 |
+| **windowEx** | ウィンドウ操作の各種拡張を [Window](../reference/Window.md) / [System](../reference/System.md) / [Console](../reference/Console.md) などに追加します。 |
+| **windowExProgress** | 実行ブロック中でも表示され続けるプログレスバー付きウィンドウ表示を [Window](../reference/Window.md) に追加します。 |

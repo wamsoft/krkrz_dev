@@ -4,6 +4,7 @@ site_url: https://wamsoft.github.io/krkrz_dev/
 repo_url: https://github.com/wamsoft/krkrz_dev
 repo_name: wamsoft/krkrz_dev
 edit_uri: edit/develop/doc/
+copyright: "(c) Kirikiri Z Project / Wamsoft Ltd. Partnership"
 
 docs_dir: doc
 
@@ -166,10 +167,12 @@ nav:
       - 文字列: tjs2/string.md
       - オクテット列: tjs2/octet.md
     - プラグイン拡張クラス:
+      - reference/AlphaMovie.md
       - reference/BinaryStream.md
       - reference/CSVParser.md
       - reference/HttpRequest.md
       - reference/SimpleHTTPServer.md
+      - reference/KAGParser.md
       - reference/LineParser.md
       - reference/MenuItem.md
       - reference/Pad.md
@@ -180,6 +183,7 @@ nav:
       - reference/TemporaryFiles.md
       - reference/Zip.md
       - reference/Unzip.md
+      - reference/XMLParser.md
       - 描画 (layerExDraw):
         - reference/GdiPlus.md
         - reference/GdiPlus.Appearance.md

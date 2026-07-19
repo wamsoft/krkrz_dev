@@ -163,3 +163,15 @@
 [submodule "src/plugins/krkr_richtext"]
 	path = src/plugins/krkr_richtext
 	url = https://github.com/wamsoft/krkr_richtext.git
+[submodule "src/plugins/extrans"]
+	path = src/plugins/extrans
+	url = https://github.com/wamsoft/extrans.git
+[submodule "src/plugins/extNagano"]
+	path = src/plugins/extNagano
+	url = https://github.com/wamsoft/extNagano.git
+[submodule "src/plugins/AlphaMovie"]
+	path = src/plugins/AlphaMovie
+	url = https://github.com/wamsoft/AlphaMovie.git
+[submodule "src/plugins/expat"]
+	path = src/plugins/expat
+	url = https://github.com/wamsoft/expat.git

@@ -5,6 +5,7 @@
 [![CC BY](../_assets/by.png "CC BY")](http://creativecommons.org/licenses/by/4.0/deed.ja)
 
 [(c) Takenori Imoto(jin1016)](https://github.com/jin1016)  
-[(c) Naoya Komatsu(sakano)](https://github.com/sakano)
+[(c) Naoya Komatsu(sakano)](https://github.com/sakano)  
+[(c) Wamsoft Ltd. Partnership](https://github.com/wamsoft)
 
 プルリクエストしてもらえる場合は上記位置に自分名前とリンクを追加してください。
