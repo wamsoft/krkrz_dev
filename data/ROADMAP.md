@@ -90,11 +90,13 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
 ### ① コア機能 (src/core/data)
 
 - [x] sysinfo — System / Storages の情報表示 (demolib 動作確認を兼ねる最小デモ、It.1)
-- [ ] ☆ elements_gallery — Elements 主要パーツ一覧: label / button / toggle / check /
-      radio / slider(+range) / input_box / cycle・segmented picker / selection_menu /
-      tab_view / scroller / atlas_* / sprite_button / animate / vars・テーマ変数。
-      各パーツのレイアウト定義を画面内に併記して「見て写せる」カタログにする。
-      レイアウトは Dialog.showDict (TJS Dictionary、core 34d719dd で追加) で記述
+- [x] elements_gallery — Elements 主要パーツ一覧 (It.2、2026-07-20)。7 ページ
+      (基本/値入力/選択/レイアウト/atlas/アニメ/vars) を segmented_picker で切替、
+      各ページの定義ソース (TJS Dictionary) を右パネルに併記 (表示=実物、pages.tjs の
+      行配列を eval して使用)、onAction イベントログ付き。レイアウトは Dialog.showDict。
+      atlas 素材は自作 (gen_assets.tjs で生成)。※ 実装中に elements fork のバグを 1 件
+      発見・修正 (button の vars_on_focus が無効 → wamsoft/elements ブランチ
+      fix/button-vars-on-focus。core submodule ポインタ更新は要レビュー)
 - [ ] ☆ gl_canvas — OpenGL 基礎: OGLDrawDevice への切替、Canvas.clear / drawTexture、
       Texture、ShaderProgram (カスタムフラグメント)、Offscreen (RTT)、Matrix32
       krkrgles 由来の**ポストエフェクト機構は Canvas へ取り込み済み**
@@ -158,7 +160,7 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
 | It. | 内容 | 主な作業場所 |
 |---|---|---|
 | 1 ✅ | 基盤: core samples.tjs マージ + demolib + sysinfo デモ + ランチャ改良 (スクロール/カテゴリ/process 起動/-demotest) — 2026-07-20 完了 | src/core (submodule) + data/ |
-| 2 | elements_gallery (Elements 主要パーツ一覧) | src/core/data |
+| 2 ✅ | elements_gallery (Elements 主要パーツ一覧、7 ページ) — 2026-07-20 完了 | src/core/data |
 | 3 | gl_canvas + gl_particles (OpenGL/Canvas 基礎 + エフェクト/クリップ + 高速パーティクル) — 前提だった krkrgles 取り込みは完了済み (8823a9e2) | src/core/data |
 | 4 | vector_demo (layerExVector 横断) + layerExVector sample/ 整理 | data/ + plugin |
 | 5 | collect_samples 集約機構 + doc/ デモ一覧ページ | tools/ + doc/ |
