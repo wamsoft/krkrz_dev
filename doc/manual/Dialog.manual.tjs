@@ -6,6 +6,10 @@
  * ボタン・チェックボックス・トグル・テキスト入力等を含むダイアログを表示
  * できます。動作モードは 3 種類あります。
  *
+ * レイアウト定義は JSON / JSONC 文字列のほか、TJS の Dictionary / Array を
+ * そのまま渡せる Dict 系メソッド ( [showDict](#showdict) /
+ * [showModalDict](#showmodaldict) ) も利用できます。
+ *
  * - **非モーダル (オーバーレイ表示)**
  *   [showJson](#showjson) / [showFile](#showfile) で表示します。表示中もメイン
  *   ループは止まらず、ボタン押下や値変更があるたびに [onAction](#onaction)
@@ -75,6 +79,19 @@ class Dialog {
 	function showFile(path);
 
 	/**
+	 * Dictionary で非モーダルダイアログを表示する
+	 *
+	 * [showJson](#showjson) のレイアウトを JSON 文字列ではなく TJS の
+	 * Dictionary / Array で直接指定する版です。内部で JSON へ変換して
+	 * 同じ経路で表示します ( 変換仕様は [dictToJson](#dicttojson) と同じ )。
+	 * @param dict レイアウト定義の Dictionary を指定します。
+	 * @return 表示開始に成功したら真を返します。
+	 * @see Dialog.showJson
+	 * @see Dialog.dictToJson
+	 */
+	function showDict(dict);
+
+	/**
 	 * JSON 文字列でモーダルダイアログを表示する
 	 *
 	 * 指定された JSON / JSONC 定義からダイアログを構築し、閉じるまで
@@ -120,6 +137,41 @@ class Dialog {
 	function showModalFile(path, title = "", width = 800, height = 600);
 
 	/**
+	 * Dictionary でモーダルダイアログを表示する
+	 *
+	 * [showModalJson](#showmodaljson) のレイアウトを TJS の Dictionary /
+	 * Array で直接指定する版です。引数 1 個で呼ぶとオーバーレイ、title
+	 * 以降を渡すと独立ウィンドウで表示する点、および戻り値の形式は
+	 * [showModalJson](#showmodaljson) と同じです。
+	 * @param dict レイアウト定義の Dictionary を指定します。
+	 * @param title 独立ウィンドウのタイトルを指定します ( 省略するとオーバーレイモードに切替わります )。
+	 * @param width 独立ウィンドウの幅をピクセル単位で指定します ( 既定値 800 )。
+	 * @param height 独立ウィンドウの高さをピクセル単位で指定します ( 既定値 600 )。
+	 * @return action と values を保持する Dictionary が返ります。
+	 * @see Dialog.showModalJson
+	 * @see Dialog.showDict
+	 */
+	function showModalDict(dict, title = "", width = 800, height = 600);
+
+	/**
+	 * Dictionary / Array を JSON 文字列へ変換する
+	 *
+	 * [showDict](#showdict) / [showModalDict](#showmodaldict) が内部で行う
+	 * 変換をそのまま呼び出すユーティリティです。Dictionary で組み立てた
+	 * レイアウトを JSON 資材として保存する、変換結果を確認する、といった
+	 * 用途に使えます。インスタンスを作らず `Dialog.dictToJson(...)` として
+	 * 呼べます。
+	 *
+	 * 対応する値の型は void / Integer / Real / String / Dictionary / Array
+	 * です。それ以外 ( Octet や一般のオブジェクト、循環参照、非有限の実数 )
+	 * は例外になります。
+	 * @param value 変換する値 ( Dictionary / Array / 基本型 ) を指定します。
+	 * @return JSON 文字列が返ります。
+	 * @see Dialog.showDict
+	 */
+	function dictToJson(value);
+
+	/**
 	 * マニフェストから複数画面フローをブロッキング表示する
 	 *
 	 * `app.jsonc` 形式のマニフェスト ( Storages 経由のパス指定 ) を読み込んで、
@@ -139,10 +191,10 @@ class Dialog {
 	/**
 	 * インライン定義から複数画面フローをブロッキング表示する
 	 *
-	 * ファイル I/O を介さず、Dictionary で画面名 → JSON 文字列を渡して
+	 * ファイル I/O を介さず、Dictionary で画面名 → レイアウト定義を渡して
 	 * フローを実行する [showFlow](#showflow) のインライン版です。
 	 * 動作と戻り値は [showFlow](#showflow) と同じです。
-	 * @param screensDict 画面名 ( 文字列 ) を JSON 文字列にマップする Dictionary。
+	 * @param screensDict 画面名 ( 文字列 ) をレイアウト定義 ( JSON 文字列、または Dictionary / Array ) にマップする Dictionary。両形式の混在も可能です。
 	 * @param entry 起点画面名 ( screensDict のキー ) を指定します。
 	 * @return action と values を保持する Dictionary が返ります。
 	 * @see Dialog.showFlow

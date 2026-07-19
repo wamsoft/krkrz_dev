@@ -167,6 +167,11 @@ class Canvas {
 	 * テクスチャの描画に使用されるデフォルトのシェーダー(drawTextureでtexture1枚のみ渡した時のシェーダー)
 	 * @description 設定もできるが、基本的に変更する必要はない。
 	 * voidを入れると組み込みの初期デフォルトシェーダーに戻る。
+	 *
+	 * 既定シェーダーの a_opacity uniform は Canvas 生成時に 1.0 が設定される。
+	 * 半透明で描画したい場合のみ `canvas.defaultShader.a_opacity` を変更する。
+	 * 自作シェーダーで a_opacity を宣言した場合は呼び出し側での設定が必要
+	 * (未設定の uniform は GL 初期値 0 = 完全透明になる点に注意)。
 	 */
 	property defaultShader;
 	
@@ -200,6 +205,73 @@ class Canvas {
 	 * @description true の時、clipRectプロパティによってクリッピングされる
 	 */
 	property enableClipRect;
+
+	/**
+	 * ポストエフェクトの捕捉を開始する
+	 * @description ここから [endEffect](#endeffect) までの描画を中間バッファ
+	 * (透明クリア済み) に捕捉する。ネスト可。閉じ忘れはフレーム終端で破棄され
+	 * 警告ログが出る。
+	 * コマンド仕様や内部構造の詳細は
+	 * [Canvas ポストエフェクト / クリッピング](../topics/core/canvas_effect.md) を参照。
+	 * @see Canvas.endEffect
+	 */
+	function beginEffect();
+
+	/**
+	 * 捕捉した描画に加工コマンド列を適用して合成する
+	 * @description [beginEffect](#begineffect) からの描画に commands を順に
+	 * 適用し、現在の blendMode で直前の描画先へ合成する。加工は CPU 読み戻し
+	 * なしに GPU 内で完結する。
+	 *
+	 * コマンドは `%[ cmd:"名前", ... ]` の Dictionary 配列で指定する:
+	 * LUT 系 ( gamma / adjustGamma / light / lut )、
+	 * 混合系 ( grayscale / colorize / modulate / noise / generateWhiteNoise /
+	 * overcolor )、近傍系 ( boxBlur / gaussianBlur )。
+	 * 各コマンドのパラメータと融合規則は
+	 * [Canvas ポストエフェクト / クリッピング](../topics/core/canvas_effect.md) を参照。
+	 * @param commands 加工コマンド ( Dictionary ) の配列。省略すると素通し合成。
+	 * @see Canvas.beginEffect
+	 */
+	function endEffect(commands = null);
+
+	/**
+	 * マスククリップの捕捉を開始する
+	 * @description ここから [endMaskClip](#endmaskclip) までの描画を捕捉する。
+	 * どんな描画にも安全に使える画像クリップ方式。
+	 * @see Canvas.endMaskClip
+	 */
+	function beginMaskClip();
+
+	/**
+	 * 捕捉した描画にマスクの α を乗算して合成する
+	 * @description mask の α を乗算して直前の描画先へ合成する。マスク矩形の
+	 * 外側は α=0 (完全クリップ)。CPU 版 Layer.clipAlphaRect 相当。
+	 * @param mask マスクに使う Texture / Offscreen。void で素通し合成。
+	 * @param x マスクを置く X 位置
+	 * @param y マスクを置く Y 位置
+	 * @see Canvas.beginMaskClip
+	 */
+	function endMaskClip(mask, x:int, y:int);
+
+	/**
+	 * ステンシルクリップを開始する
+	 * @description マスクの α をステンシルバッファへ書き込み、
+	 * [endStencilClip](#endstencilclip) までの描画を切り抜く。単純なテクスチャ
+	 * 描画向けの軽量方式 (自前でステンシルを使う描画とは競合するので、その
+	 * 場合はマスククリップを使う)。
+	 * @param mask マスクに使う Texture / Offscreen
+	 * @param x マスクを置く X 位置
+	 * @param y マスクを置く Y 位置
+	 * @param threshold α 閾値 ( 1〜255 )
+	 * @see Canvas.endStencilClip
+	 */
+	function beginStencilClip(mask, x:int, y:int, threshold:int = 1);
+
+	/**
+	 * ステンシルクリップを終了する
+	 * @see Canvas.beginStencilClip
+	 */
+	function endStencilClip();
 
 	/**
 	 * 表裏カリングを行うかどうかの設定

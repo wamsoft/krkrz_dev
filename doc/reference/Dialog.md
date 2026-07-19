@@ -8,6 +8,10 @@ JSON / JSONC ( コメントと末尾カンマを許容 ) 形式のレイアウ�
 ボタン・チェックボックス・トグル・テキスト入力等を含むダイアログを表示
 できます。動作モードは 3 種類あります。
 
+レイアウト定義は JSON / JSONC 文字列のほか、TJS の Dictionary / Array を
+そのまま渡せる Dict 系メソッド ( [showDict](#showdict) /
+[showModalDict](#showmodaldict) ) も利用できます。
+
 - **非モーダル (オーバーレイ表示)**
 [showJson](#showjson) / [showFile](#showfile) で表示します。表示中もメイン
 ループは止まらず、ボタン押下や値変更があるたびに [onAction](#onaction)
@@ -57,8 +61,11 @@ vtile / htile / vspacer / hspacer 等 ) や属性、`"input"` ノードによる
 
 - [showJson](#showjson)
 - [showFile](#showfile)
+- [showDict](#showdict)
 - [showModalJson](#showmodaljson)
 - [showModalFile](#showmodalfile)
+- [showModalDict](#showmodaldict)
+- [dictToJson](#dicttojson)
 - [showFlow](#showflow)
 - [showFlowScreens](#showflowscreens)
 - [startFlow](#startflow)
@@ -175,6 +182,32 @@ JSON 文字列で非モーダルダイアログを表示する
 
 ---
 
+### showDict
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `dict` | `&nbsp;` | レイアウト定義の Dictionary を指定します。 |
+
+**戻り値**
+
+表示開始に成功したら真を返します。
+
+**解説**
+
+Dictionary で非モーダルダイアログを表示する
+
+[showJson](#showjson) のレイアウトを JSON 文字列ではなく TJS の
+Dictionary / Array で直接指定する版です。内部で JSON へ変換して
+同じ経路で表示します ( 変換仕様は [dictToJson](#dicttojson) と同じ )。
+
+**関連:** [Dialog.showJson](Dialog.md#showjson) / [Dialog.dictToJson](Dialog.md#dicttojson)
+
+---
+
 ### showModalJson
 
 メソッド
@@ -247,6 +280,68 @@ action と values を保持する Dictionary が返ります。
 
 ---
 
+### showModalDict
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `dict` | `&nbsp;` | レイアウト定義の Dictionary を指定します。 |
+| `title` | `""` | 独立ウィンドウのタイトルを指定します ( 省略するとオーバーレイモードに切替わります )。 |
+| `width` | `800` | 独立ウィンドウの幅をピクセル単位で指定します ( 既定値 800 )。 |
+| `height` | `600` | 独立ウィンドウの高さをピクセル単位で指定します ( 既定値 600 )。 |
+
+**戻り値**
+
+action と values を保持する Dictionary が返ります。
+
+**解説**
+
+Dictionary でモーダルダイアログを表示する
+
+[showModalJson](#showmodaljson) のレイアウトを TJS の Dictionary /
+Array で直接指定する版です。引数 1 個で呼ぶとオーバーレイ、title
+以降を渡すと独立ウィンドウで表示する点、および戻り値の形式は
+[showModalJson](#showmodaljson) と同じです。
+
+**関連:** [Dialog.showModalJson](Dialog.md#showmodaljson) / [Dialog.showDict](Dialog.md#showdict)
+
+---
+
+### dictToJson
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `value` | `&nbsp;` | 変換する値 ( Dictionary / Array / 基本型 ) を指定します。 |
+
+**戻り値**
+
+JSON 文字列が返ります。
+
+**解説**
+
+Dictionary / Array を JSON 文字列へ変換する
+
+[showDict](#showdict) / [showModalDict](#showmodaldict) が内部で行う
+変換をそのまま呼び出すユーティリティです。Dictionary で組み立てた
+レイアウトを JSON 資材として保存する、変換結果を確認する、といった
+用途に使えます。インスタンスを作らず `Dialog.dictToJson(...)` として
+呼べます。
+
+対応する値の型は void / Integer / Real / String / Dictionary / Array
+です。それ以外 ( Octet や一般のオブジェクト、循環参照、非有限の実数 )
+は例外になります。
+
+**関連:** [Dialog.showDict](Dialog.md#showdict)
+
+---
+
 ### showFlow
 
 メソッド
@@ -285,7 +380,7 @@ action と values を保持する Dictionary が返ります。
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `screensDict` | `&nbsp;` | 画面名 ( 文字列 ) を JSON 文字列にマップする Dictionary。 |
+| `screensDict` | `&nbsp;` | 画面名 ( 文字列 ) をレイアウト定義 ( JSON 文字列、または Dictionary / Array ) にマップする Dictionary。両形式の混在も可能です。 |
 | `entry` | `&nbsp;` | 起点画面名 ( screensDict のキー ) を指定します。 |
 
 **戻り値**
@@ -296,7 +391,7 @@ action と values を保持する Dictionary が返ります。
 
 インライン定義から複数画面フローをブロッキング表示する
 
-ファイル I/O を介さず、Dictionary で画面名 → JSON 文字列を渡して
+ファイル I/O を介さず、Dictionary で画面名 → レイアウト定義を渡して
 フローを実行する [showFlow](#showflow) のインライン版です。
 動作と戻り値は [showFlow](#showflow) と同じです。
 

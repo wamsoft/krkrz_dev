@@ -24,6 +24,7 @@ OGLDrawDevice クラスは、このインスタンスを [Window.drawDevice](Win
 
 - [recreate](#recreate)
 - [createCanvas](#createcanvas)
+- [resumeOnDraw](#resumeondraw)
 
 ### イベント
 
@@ -133,6 +134,21 @@ Canvas オブジェクトを生成
 
 このデバイスに紐づく [Canvas](Canvas.md) オブジェクトの生成を要求します。
 生成された Canvas は [canvas](#canvas) プロパティから取得できます。
+
+---
+
+### resumeOnDraw
+
+メソッド
+
+**解説**
+
+自動停止した onDraw の発火を再開
+
+onDraw ハンドラが毎フレーム例外を投げ続けて連続例外の上限
+( コマンドラインオプション `-eventexceptionlimit`、既定 10 ) に達すると、
+onDraw の発火は自動停止します ( 画面クリア等の描画サイクル自体は継続 )。
+このメソッドを呼ぶと発火を再開します。
 
 ---
 

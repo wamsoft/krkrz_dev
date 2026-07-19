@@ -155,15 +155,18 @@
     "file": "src/core/common/visual/elements/DialogIntf.cpp",
     "methods": [
       "close",
+      "dictToJson",
       "onAction",
       "onScreen",
       "onScreenLeave",
       "registerFont",
       "registerFontDir",
+      "showDict",
       "showFile",
       "showFlow",
       "showFlowScreens",
       "showJson",
+      "showModalDict",
       "showModalFile",
       "showModalJson",
       "startFlow",
@@ -391,7 +394,8 @@
     "file": "src/core/common/visual/opengl/OGLDrawDevice.cpp",
     "methods": [
       "createCanvas",
-      "recreate"
+      "recreate",
+      "resumeOnDraw"
     ],
     "properties": [
       "canvas",
