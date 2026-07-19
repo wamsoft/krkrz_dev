@@ -5,10 +5,20 @@
 追加していく前提で、以下の規約で構成します。
 
 このフォルダ自体も 1 つのプロジェクトで、直下の `startup.tjs` は
-**サンプルランチャ** (一覧表示 + 起動) です。一覧は `samples.tjs` に
-定義します。コア機能確認用のサンプルは `src/core/data` に置き、
-Web ビルド (krkrz_web) ではステージング時に `core/` として合成されて
-ランチャから起動できます。
+**サンプルランチャ** (カテゴリ付き一覧表示 + 起動) です。一覧は 2 系統を
+マージして表示します:
+
+- **コア機能デモ** — `src/core/data/samples.tjs` で定義 (各デモは
+  `src/core/data/<demo>/`)。Web ビルド (krkrz_web) ではステージング時に
+  `core/` として合成され、デスクトップでは `../src/core/data/` を直接読む。
+- **横断デモ・サンプル** — この `samples.tjs` (手書き) と
+  `samples_auto.tjs` (プラグイン別サンプルの自動集約分・生成物、予定)。
+
+ランチャはヘッドレステストに対応しています:
+`krkrz64.exe data -demotest` で一覧構築結果 (`@demotest:entry ...`) を
+出力して即終了します。また `process` プラグインが link できる環境
+(現状 WIN ビルドのみ) では、選択したサンプルを子プロセスとして直接
+起動します (無い環境ではコマンドラインを案内)。
 
 ## 構成規約
 
@@ -28,6 +38,15 @@ Web ビルド (krkrz_web) ではステージング時に `core/` として合成
 - 依存プラグインは `startup.tjs` の中で `Plugins.canLink` → `Plugins.link`
   し、**無い場合はその機能をスキップ**して落ちないようにします
   (サンプルは環境依存で欠けても最低限動くのが望ましい)。
+- **デモ共通ヘルパ demolib** — `src/core/data/demolib/demo_common.tjs`
+  (SSOT) に DemoWindow (FPS 表示 / 説明帯 / Elements パネル自動リトライ /
+  `-demotest` ヘッドレステスト) 等の共通機能があります。読み込みブロックと
+  API は [src/core/data/demolib/readme.txt](../src/core/data/demolib/readme.txt)
+  を参照。
+- **描画は primary レイヤに直接行わない** — フルサイズの opaque 子レイヤ
+  (demolib では `DemoWindow.stage`) に描きます。primary への直接 drawText と
+  primary 直下の半透明 ltAlpha レイヤは、現行エンジンの既知の描画問題を
+  踏みます (2026-07-20 時点)。
 
 ## 実行方法
 
@@ -61,10 +80,14 @@ krkrz_web を既定構成 (`KRKRZ_WEB_DATA_DIR` 未指定) でビルドすると
 
 | サンプル | 概要 | 主な対象 | 要 SDL/Elements |
 |---|---|---|---|
-| core (Web のみ、実体は [src/core/data](../src/core/data/)) | 入力・サウンド再生 (PhaseVocoder)・フォント・UI 等のコア機能確認 | エンジンコア全般 | ○ |
+| core (実体は [src/core/data](../src/core/data/)) | 入力・サウンド再生 (PhaseVocoder)・セーブ・ビデオ・UI 等の一括動作確認 (レガシー、順次個別デモへ分割予定) | エンジンコア全般 | ○ |
+| core/sysinfo | System / Storages の情報表示。demolib の動作確認を兼ねる | System / Storages / demolib | パネルのみ |
 | [transition_demo](transition_demo/) | 標準 + extrans + extNagano のトランジションを Elements UI パネルで選択・パラメータ設定・実行 | トランジション全般 / extrans / extNagano / Dialog | ○ |
 
-*(今後、プラグインごとにサンプルを追加予定)*
+コア機能デモの追加は `src/core/data/samples.tjs` へ、横断デモの追加は
+この `samples.tjs` へ (手順は下記)。
+
+*(今後の追加計画・バックログは [ROADMAP.md](ROADMAP.md) を参照)*
 
 ## 新しいサンプルの追加手順
 

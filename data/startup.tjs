@@ -1,20 +1,28 @@
 // ----------------------------------------------------------------------
 //  krkrz サンプルランチャ
 //
-//  data/ 直下のサンプル (各サブフォルダ = 独立したプロジェクト) を一覧
-//  表示し、選択したサンプルを「そのフォルダをプロジェクトとして再起動」
-//  して開く。
+//  data/ 直下のサンプル (各サブフォルダ = 独立したプロジェクト) と、
+//  コア機能デモ (src/core/data、Web では core/ として合成) をマージして
+//  カテゴリ付き一覧表示し、選択したサンプルを起動する。
 //
-//  - 一覧は samples.tjs (+ 将来: 自動集約の samples_auto.tjs) から読み、
-//    startup.tjs が実在するものだけを表示する
+//  - 一覧のソース:
+//      * コア機能: core/samples.tjs (Web 合成後) または
+//                  ../src/core/data/samples.tjs (デスクトップ) の先に
+//                  見つかった方
+//      * 横断デモ: samples.tjs (手書き) + samples_auto.tjs (プラグイン別
+//                  サンプルの自動集約分・生成物、無ければ無視)
+//    いずれも startup.tjs が実在するエントリだけを表示する
 //  - Web (Emscripten) 版: 選択すると Debug.message で
-//    "@krkrz-web:launch-sample=<name>" トークンを出力する。krkrz_web の
-//    pre.js がこれを検知してページを ?sample=<name> 付きでリロードし、
+//    "@krkrz-web:launch-sample=<path>" トークンを出力する。krkrz_web の
+//    pre.js がこれを検知してページを ?sample=<path> 付きでリロードし、
 //    サンプルフォルダをプロジェクトとして起動し直す
-//  - デスクトップ版: リロード機構が無いので、コマンドライン起動
-//    (krkrz64 data/<name>) を画面に案内する
+//  - デスクトップ版: process プラグインがあれば子プロセスとして起動する
+//    (現状 process は WIN ビルドのみ。無い場合はコマンドラインを案内)
+//  - ヘッドレステスト: krkrz64.exe data -demotest で一覧構築結果を出力して
+//    即終了する ("@demotest:entry ..." 行 + "@demotest:ok")
 //
-//  操作: ↑↓ = 選択 / ENTER・SPACE = 起動 / マウスクリック = 起動
+//  操作: ↑↓/PgUp/PgDn = 選択  ENTER・SPACE・クリック = 起動
+//        ホイール = スクロール
 // ----------------------------------------------------------------------
 
 function dm(x) { Debug.message(x); }
@@ -22,132 +30,309 @@ function dm(x) { Debug.message(x); }
 var WIDTH = 1280;
 var HEIGHT = 720;
 
-// ---- サンプルリスト読込 ----------------------------------------------
-var samples = [];
-function loadSampleList(path)
+// ---- サンプルリスト構築 ----------------------------------------------
+// entries の各要素:
+//   title    … 表示名
+//   desc     … 一行説明
+//   cat      … カテゴリ (この単位で見出しを挟む)
+//   checkDir … ランチャ (プロジェクト = data/) から見たサンプルフォルダの
+//              ストレージパス (末尾 "/")。存在確認と子プロセス起動に使う
+//   web      … Web 版の起動トークン (?sample= に渡る)
+//   desk     … umbrella ルートから見た表示/コマンド案内用パス
+var entries = [];
+
+function addEntry(title, desc, cat, checkDir, web, desk)
 {
-    if (!Storages.isExistentStorage(path)) return;
-    var list;
-    try {
-        list = Scripts.evalStorage(path);
-    } catch (e) {
-        dm(@"sample list load failed: ${path}: ${e.message}");
+    if (!Storages.isExistentStorage(checkDir + "startup.tjs")) {
+        dm(@"sample skipped (no startup.tjs): ${desk}");
         return;
     }
-    for (var i = 0; i < list.count; i++) {
-        var e = list[i];
-        // 末尾カンマ等による void 要素は無視 (TJS2 の配列リテラルは
-        // 末尾カンマで void 要素が増える)
-        if (typeof e != "Object") continue;
-        if (Storages.isExistentStorage(e.path + "/startup.tjs")) {
-            samples.add(e);
-        } else {
-            dm(@"sample skipped (no startup.tjs): ${e.path}");
-        }
+    entries.add(%[ title:title, desc:desc, cat:cat,
+                   checkDir:checkDir, web:web, desk:desk ]);
+}
+
+function evalList(path)
+{
+    if (!Storages.isExistentStorage(path)) return void;
+    try {
+        return Scripts.evalStorage(path);
+    } catch (e) {
+        dm(@"sample list load failed: ${path}: ${e.message}");
+        return void;
     }
 }
-loadSampleList("samples.tjs");
-loadSampleList("samples_auto.tjs"); // プラグイン別サンプルの自動集約分 (生成物、無ければ無視)
-dm(@"sample launcher: ${samples.count} sample(s) available");
+
+// ① コア機能デモ (src/core/data/samples.tjs)
+function loadCoreSamples()
+{
+    // Web 合成後 (core/) とデスクトップ (../src/core/data/) の順で探す
+    var cands = [
+        %[ list:"core/samples.tjs",             base:"core/" ],
+        %[ list:"../src/core/data/samples.tjs", base:"../src/core/data/" ]
+    ];
+    for (var c = 0; c < cands.count; c++) {
+        var lst = evalList(cands[c].list);
+        if (lst === void) continue;
+        for (var i = 0; i < lst.count; i++) {
+            var e = lst[i];
+            if (typeof e != "Object") continue;  // 末尾カンマによる void 要素は無視
+            var sub = (e.path == "." || e.path == "") ? "" : e.path;
+            addEntry(e.title, e.desc, "コア機能 (src/core/data)",
+                     cands[c].base + (sub == "" ? "" : sub + "/"),
+                     sub == "" ? "core" : "core/" + sub,
+                     sub == "" ? "src/core/data" : "src/core/data/" + sub);
+        }
+        return;  // 最初に見つかったリストだけ使う
+    }
+    dm("core samples.tjs not found (skip)");
+}
+
+// ③ 横断デモ・サンプル (data/ 直下)
+function loadDataSamples(path)
+{
+    var lst = evalList(path);
+    if (lst === void) return;
+    for (var i = 0; i < lst.count; i++) {
+        var e = lst[i];
+        if (typeof e != "Object") continue;
+        var cat = (typeof e.cat == "String") ? e.cat : "横断デモ・サンプル (data/)";
+        addEntry(e.title, e.desc, cat, e.path + "/", e.path, "data/" + e.path);
+    }
+}
+
+loadCoreSamples();
+loadDataSamples("samples.tjs");
+loadDataSamples("samples_auto.tjs"); // プラグイン別サンプルの自動集約分 (生成物、無ければ無視)
+dm(@"sample launcher: ${entries.count} sample(s) available");
+
+// ---- 子プロセス起動 (デスクトップ、process プラグインがあれば) --------
+var processAvailable = false;
+try {
+    if (Plugins.canLink("process.dll")) {
+        Plugins.link("process.dll");
+        processAvailable = true;
+        dm("process plugin linked: 子プロセス起動が利用できます");
+    }
+} catch (e) {
+    dm(@"process plugin link failed: ${e.message}");
+}
+var childProcs = []; // 起動した Process への参照保持 (GC 回収防止)
+
+// ---- ヘッドレステスト (-demotest): 一覧構築結果を出力して終了 ----------
+if (System.getArgument("-demotest") !== void) {
+    for (var i = 0; i < entries.count; i++) {
+        var e = entries[i];
+        dm(@"@demotest:entry [${e.cat}] ${e.desk} : ${e.title}");
+    }
+    dm(@"@demotest:launcher entries=${entries.count} process=${processAvailable ? 1 : 0}");
+    dm("@demotest:ok");
+    System.exit(0);
+}
 
 // ---- ランチャウィンドウ ----------------------------------------------
 class LauncherWindow extends Window
 {
-    var base;
-    var cursor = 0;
+    var primary;   // 背景のみ (直接描かない — エンジンの既知の描画問題回避)
+    var base;      // 描画用フルサイズ子レイヤ
+    var cursor = 0;        // entries 内 index
+    var scrollY = 0;       // リストのスクロール量 (px)
     var footerText = "";
 
-    var itemTop = 180;
-    var itemH = 96;
+    // レイアウト定数
+    var LIST_TOP  = 132;   // リスト表示域の上端
+    var FOOTER_H  = 56;    // フッタ帯の高さ
+    var CAT_H     = 44;    // カテゴリ見出し行の高さ
+    var ITEM_H    = 76;    // サンプル行の高さ
+
+    var rows = [];         // 表示行: %[kind:"cat"/"item", ...] (y は先頭からの累積)
+    var contentH = 0;
 
     function LauncherWindow()
     {
-        super.Window(...);
+        super.Window();
         caption = "krkrz サンプルランチャ";
         setInnerSize(WIDTH, HEIGHT);
 
-        base = new Layer(this, null);
+        primary = new Layer(this, null);
+        primary.setSize(WIDTH, HEIGHT);
+        primary.fillRect(0, 0, WIDTH, HEIGHT, 0xff000000);
+        primary.visible = true;
+        add(primary);
+
+        // primary へ直接 drawText すると現行エンジンの既知の描画問題を踏む
+        // ため、描画は全てフルサイズの opaque 子レイヤで行う
+        base = new Layer(this, primary);
         base.setSize(WIDTH, HEIGHT);
         base.visible = true;
         add(base);
 
-        footerText = "↑↓: 選択   ENTER / クリック: 起動";
+        buildRows();
+        footerText = "↑↓: 選択   ENTER / クリック: 起動   ホイール: スクロール";
         draw();
     }
 
+    // --- 表示行の構築 (カテゴリ見出しを挟む) ---------------------------
+    function buildRows()
+    {
+        rows = [];
+        var y = 0;
+        var lastCat = void;
+        for (var i = 0; i < entries.count; i++) {
+            var e = entries[i];
+            if (e.cat != lastCat) {
+                rows.add(%[ kind:"cat", text:e.cat, y:y, h:CAT_H ]);
+                y += CAT_H;
+                lastCat = e.cat;
+            }
+            rows.add(%[ kind:"item", idx:i, y:y, h:ITEM_H ]);
+            y += ITEM_H;
+        }
+        contentH = y;
+    }
+
+    function viewHeight() { return HEIGHT - LIST_TOP - FOOTER_H; }
+
+    function clampScroll()
+    {
+        var maxScroll = contentH - viewHeight();
+        if (maxScroll < 0) maxScroll = 0;
+        if (scrollY > maxScroll) scrollY = maxScroll;
+        if (scrollY < 0) scrollY = 0;
+    }
+
+    function rowOfItem(idx)
+    {
+        for (var i = 0; i < rows.count; i++) {
+            if (rows[i].kind == "item" && rows[i].idx == idx) return rows[i];
+        }
+        return void;
+    }
+
+    function ensureVisible()
+    {
+        var r = rowOfItem(cursor);
+        if (r === void) return;
+        // 直上のカテゴリ見出しも見えるように少し余裕を持たせる
+        if (r.y - CAT_H < scrollY) scrollY = r.y - CAT_H;
+        else if (r.y + r.h > scrollY + viewHeight()) scrollY = r.y + r.h - viewHeight();
+        clampScroll();
+    }
+
+    // --- 描画 -----------------------------------------------------------
     function draw()
     {
         var w = WIDTH, h = HEIGHT;
         base.fillRect(0, 0, w, h, 0xff14161c);
 
-        // ヘッダ
-        base.fillRect(0, 0, w, 126, 0xff1f2530);
-        base.fillRect(0, 126, w, 2, 0xff3a4456);
-        base.font.face = "";
-        base.font.height = 52;
-        base.drawText(48, 30, "krkrz サンプルランチャ", 0xffffff, 255, true, 0, 0x000000, 0, 2, 2);
-        base.font.height = 22;
-        base.drawText(52, 94, "サンプルを選んで起動してください", 0x9aa4b8, 255);
-
-        // サンプル一覧
-        if (samples.count == 0) {
-            base.font.height = 28;
-            base.drawText(64, itemTop, "利用可能なサンプルがありません", 0xd0a0a0, 255);
-        }
-        for (var i = 0; i < samples.count; i++) {
-            var e = samples[i];
-            var y = itemTop + i * itemH;
-            var selected = (i == cursor);
-            base.fillRect(40, y, w - 80, itemH - 12, selected ? 0xff2d4266 : 0xff1c212c);
-            if (selected) {
-                base.fillRect(40, y, 6, itemH - 12, 0xff64a0ff);
+        // リスト (ヘッダ/フッタ帯より先に描き、後で帯を重ねる)
+        var viewH = viewHeight();
+        for (var i = 0; i < rows.count; i++) {
+            var r = rows[i];
+            var ry = LIST_TOP + r.y - scrollY;
+            if (ry + r.h <= LIST_TOP - CAT_H || ry >= h - FOOTER_H + ITEM_H) continue;
+            if (r.kind == "cat") {
+                base.font.height = 22;
+                base.drawText(44, ry + 12, "■ " + r.text, 0x8fa8d0, 255);
+                base.fillRect(40, ry + CAT_H - 4, w - 80, 1, 0xff2c3444);
+            } else {
+                var e = entries[r.idx];
+                var selected = (r.idx == cursor);
+                base.fillRect(40, ry, w - 96, ITEM_H - 10, selected ? 0xff2d4266 : 0xff1c212c);
+                if (selected) base.fillRect(40, ry, 6, ITEM_H - 10, 0xff64a0ff);
+                base.font.height = 26;
+                base.drawText(72, ry + 8, e.title, selected ? 0xffffff : 0xc8d0e0, 255);
+                base.font.height = 17;
+                base.drawText(74, ry + 42, e.desc, selected ? 0xaac0e8 : 0x808a9c, 255);
+                base.font.height = 15;
+                var pw = base.font.getTextWidth(e.desk);
+                base.drawText(w - 72 - pw, ry + 10, e.desk, 0x60708c, 255);
             }
-            base.font.height = 32;
-            base.drawText(72, y + 12, e.title, selected ? 0xffffff : 0xc8d0e0, 255);
-            base.font.height = 20;
-            base.drawText(74, y + 54, e.desc, selected ? 0xaac0e8 : 0x808a9c, 255);
-            base.font.height = 18;
-            var pw = base.font.getTextWidth("data/" + e.path);
-            base.drawText(w - 64 - pw, y + 16, "data/" + e.path, 0x60708c, 255);
         }
 
-        // フッタ
-        base.fillRect(0, h - 56, w, 56, 0xff20242e);
-        base.font.height = 22;
-        base.drawText(24, h - 42, footerText, 0xffe080, 255);
+        // スクロールバー
+        if (contentH > viewH) {
+            var barArea = viewH - 8;
+            var barH = barArea * viewH / contentH;
+            if (barH < 24) barH = 24;
+            var barY = LIST_TOP + 4 + (barArea - barH) * scrollY / (contentH - viewH);
+            base.fillRect(w - 44, LIST_TOP + 4, 6, barArea, 0xff1c212c);
+            base.fillRect(w - 44, barY, 6, barH, 0xff4a5a74);
+        }
+
+        // ヘッダ帯
+        base.fillRect(0, 0, w, LIST_TOP - 6, 0xff1f2530);
+        base.fillRect(0, LIST_TOP - 6, w, 2, 0xff3a4456);
+        base.font.height = 46;
+        base.drawText(48, 24, "krkrz サンプルランチャ", 0xffffff, 255, true, 0, 0x000000, 0, 2, 2);
+        base.font.height = 20;
+        base.drawText(52, 86, @"サンプルを選んで起動してください (${entries.count} 件)", 0x9aa4b8, 255);
+
+        // フッタ帯
+        base.fillRect(0, h - FOOTER_H, w, FOOTER_H, 0xff20242e);
+        base.font.height = 20;
+        base.drawText(24, h - FOOTER_H + 16, footerText, 0xffe080, 255);
+
+        if (entries.count == 0) {
+            base.font.height = 28;
+            base.drawText(64, LIST_TOP + 40, "利用可能なサンプルがありません", 0xd0a0a0, 255);
+        }
         base.update();
     }
 
+    // --- 起動 -----------------------------------------------------------
     function launch()
     {
-        if (samples.count == 0) return;
-        var name = samples[cursor].path;
-        dm(@"launching sample: ${name}");
+        if (entries.count == 0) return;
+        var e = entries[cursor];
+        dm(@"launching sample: ${e.web}");
 
-        // Web 版: pre.js がこのトークンを検知して ?sample=<name> でリロードする
-        dm("@krkrz-web:launch-sample=" + name);
+        // Web 版: pre.js がこのトークンを検知して ?sample=<path> でリロードする
+        dm("@krkrz-web:launch-sample=" + e.web);
 
-        // デスクトップ等リロード機構が無い環境向けの案内 (Web ではこの直後に
-        // ページが遷移するため見えない)
-        footerText = @"Web 版以外では次のコマンドで起動してください:  krkrz64 data/${name}";
+        // デスクトップ版: process プラグインがあれば子プロセスとして起動
+        if (processAvailable) {
+            try {
+                var dir = Storages.getLocalName(Storages.getFullPath(e.checkDir));
+                var p = new Process();
+                p.execute(System.exeName, '"' + dir + '"');
+                childProcs.add(p);
+                footerText = @"起動しました: ${e.desk}";
+            } catch (err) {
+                footerText = @"起動失敗 (${err.message})   コマンド: krkrz64 ${e.desk}";
+            }
+        } else {
+            // Web ではこの直後にページ遷移するため見えない
+            footerText = @"この環境では次のコマンドで起動してください:  krkrz64 ${e.desk}";
+        }
         draw();
     }
 
+    // --- 選択移動 / スクロール -------------------------------------------
     function moveCursor(d)
     {
-        if (samples.count == 0) return;
-        cursor = (cursor + d + samples.count) % samples.count;
+        if (entries.count == 0) return;
+        cursor = (cursor + d + entries.count) % entries.count;
+        ensureVisible();
+        draw();
+    }
+
+    function scrollBy(px)
+    {
+        scrollY += px;
+        clampScroll();
         draw();
     }
 
     function onKeyDown(key, shift)
     {
         switch (key) {
-        case VK_UP:
-            moveCursor(-1);
-            break;
-        case VK_DOWN:
-            moveCursor(1);
+        case VK_UP:     moveCursor(-1); break;
+        case VK_DOWN:   moveCursor(1);  break;
+        case VK_PRIOR:  moveCursor(-5); break;
+        case VK_NEXT:   moveCursor(5);  break;
+        case VK_HOME:   cursor = 0; ensureVisible(); draw(); break;
+        case VK_END:
+            if (entries.count > 0) { cursor = entries.count - 1; ensureVisible(); draw(); }
             break;
         case VK_RETURN:
         case VK_SPACE:
@@ -156,15 +341,25 @@ class LauncherWindow extends Window
         }
     }
 
+    function onMouseWheel(shift, delta, x, y)
+    {
+        scrollBy(-(delta / 120) * ITEM_H);
+    }
+
     function onMouseDown(x, y, button, shift)
     {
         if (button != mbLeft) return;
-        if (y < itemTop) return;
-        var i = (y - itemTop) \ itemH;
-        if (i >= 0 && i < samples.count) {
-            cursor = i;
-            draw();
-            launch();
+        if (y < LIST_TOP || y >= HEIGHT - FOOTER_H) return;
+        var cy = y - LIST_TOP + scrollY;
+        for (var i = 0; i < rows.count; i++) {
+            var r = rows[i];
+            if (r.kind != "item") continue;
+            if (cy >= r.y && cy < r.y + r.h) {
+                cursor = r.idx;
+                draw();
+                launch();
+                return;
+            }
         }
     }
 }

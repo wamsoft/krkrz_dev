@@ -227,7 +227,9 @@ class MyWindow extends Window
         drawScene(base1, 0xff10305f, 0xff2f86c8, "A", "画面 A");
         drawScene(base2, 0xff5f2410, 0xffd8892f, "B", "画面 B");
 
-        // 実行内容を表示する HUD (最前面・半透明帯)
+        // 実行内容を表示する HUD (最前面の帯)。
+        // ※ primary 直下の半透明 ltAlpha はエンジンの既知の描画問題
+        //    (合成異常で白帯化) を踏むため、不透明塗りで運用する
         hud = new Layer(this, primaryLayer);
         hud.setSize(WIDTH, 64);
         hud.setPos(0, HEIGHT - 64);
@@ -280,7 +282,7 @@ class MyWindow extends Window
 
     // --- HUD ------------------------------------------------------------
     function updateHud(text) {
-        hud.fillRect(0, 0, hud.width, hud.height, 0xa0000000);
+        hud.fillRect(0, 0, hud.width, hud.height, 0xff16181e);
         hud.font.face = "";
         hud.font.height = 26;
         hud.drawText(16, 18, text, 0xffff80, 255);
