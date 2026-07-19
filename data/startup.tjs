@@ -1,7 +1,173 @@
-var dm = Debug.message;
-Plugins.link("csvParser.dll");
+// ----------------------------------------------------------------------
+//  krkrz サンプルランチャ
+//
+//  data/ 直下のサンプル (各サブフォルダ = 独立したプロジェクト) を一覧
+//  表示し、選択したサンプルを「そのフォルダをプロジェクトとして再起動」
+//  して開く。
+//
+//  - 一覧は samples.tjs (+ 将来: 自動集約の samples_auto.tjs) から読み、
+//    startup.tjs が実在するものだけを表示する
+//  - Web (Emscripten) 版: 選択すると Debug.message で
+//    "@krkrz-web:launch-sample=<name>" トークンを出力する。krkrz_web の
+//    pre.js がこれを検知してページを ?sample=<name> 付きでリロードし、
+//    サンプルフォルダをプロジェクトとして起動し直す
+//  - デスクトップ版: リロード機構が無いので、コマンドライン起動
+//    (krkrz64 data/<name>) を画面に案内する
+//
+//  操作: ↑↓ = 選択 / ENTER・SPACE = 起動 / マウスクリック = 起動
+// ----------------------------------------------------------------------
 
-dm(@"class CSVParser:${CSVParser} loaded");
+function dm(x) { Debug.message(x); }
 
-dm("startup.tjs loaded");
+var WIDTH = 1280;
+var HEIGHT = 720;
 
+// ---- サンプルリスト読込 ----------------------------------------------
+var samples = [];
+function loadSampleList(path)
+{
+    if (!Storages.isExistentStorage(path)) return;
+    var list;
+    try {
+        list = Scripts.evalStorage(path);
+    } catch (e) {
+        dm(@"sample list load failed: ${path}: ${e.message}");
+        return;
+    }
+    for (var i = 0; i < list.count; i++) {
+        var e = list[i];
+        // 末尾カンマ等による void 要素は無視 (TJS2 の配列リテラルは
+        // 末尾カンマで void 要素が増える)
+        if (typeof e != "Object") continue;
+        if (Storages.isExistentStorage(e.path + "/startup.tjs")) {
+            samples.add(e);
+        } else {
+            dm(@"sample skipped (no startup.tjs): ${e.path}");
+        }
+    }
+}
+loadSampleList("samples.tjs");
+loadSampleList("samples_auto.tjs"); // プラグイン別サンプルの自動集約分 (生成物、無ければ無視)
+dm(@"sample launcher: ${samples.count} sample(s) available");
+
+// ---- ランチャウィンドウ ----------------------------------------------
+class LauncherWindow extends Window
+{
+    var base;
+    var cursor = 0;
+    var footerText = "";
+
+    var itemTop = 180;
+    var itemH = 96;
+
+    function LauncherWindow()
+    {
+        super.Window(...);
+        caption = "krkrz サンプルランチャ";
+        setInnerSize(WIDTH, HEIGHT);
+
+        base = new Layer(this, null);
+        base.setSize(WIDTH, HEIGHT);
+        base.visible = true;
+        add(base);
+
+        footerText = "↑↓: 選択   ENTER / クリック: 起動";
+        draw();
+    }
+
+    function draw()
+    {
+        var w = WIDTH, h = HEIGHT;
+        base.fillRect(0, 0, w, h, 0xff14161c);
+
+        // ヘッダ
+        base.fillRect(0, 0, w, 126, 0xff1f2530);
+        base.fillRect(0, 126, w, 2, 0xff3a4456);
+        base.font.face = "";
+        base.font.height = 52;
+        base.drawText(48, 30, "krkrz サンプルランチャ", 0xffffff, 255, true, 0, 0x000000, 0, 2, 2);
+        base.font.height = 22;
+        base.drawText(52, 94, "サンプルを選んで起動してください", 0x9aa4b8, 255);
+
+        // サンプル一覧
+        if (samples.count == 0) {
+            base.font.height = 28;
+            base.drawText(64, itemTop, "利用可能なサンプルがありません", 0xd0a0a0, 255);
+        }
+        for (var i = 0; i < samples.count; i++) {
+            var e = samples[i];
+            var y = itemTop + i * itemH;
+            var selected = (i == cursor);
+            base.fillRect(40, y, w - 80, itemH - 12, selected ? 0xff2d4266 : 0xff1c212c);
+            if (selected) {
+                base.fillRect(40, y, 6, itemH - 12, 0xff64a0ff);
+            }
+            base.font.height = 32;
+            base.drawText(72, y + 12, e.title, selected ? 0xffffff : 0xc8d0e0, 255);
+            base.font.height = 20;
+            base.drawText(74, y + 54, e.desc, selected ? 0xaac0e8 : 0x808a9c, 255);
+            base.font.height = 18;
+            var pw = base.font.getTextWidth("data/" + e.path);
+            base.drawText(w - 64 - pw, y + 16, "data/" + e.path, 0x60708c, 255);
+        }
+
+        // フッタ
+        base.fillRect(0, h - 56, w, 56, 0xff20242e);
+        base.font.height = 22;
+        base.drawText(24, h - 42, footerText, 0xffe080, 255);
+        base.update();
+    }
+
+    function launch()
+    {
+        if (samples.count == 0) return;
+        var name = samples[cursor].path;
+        dm(@"launching sample: ${name}");
+
+        // Web 版: pre.js がこのトークンを検知して ?sample=<name> でリロードする
+        dm("@krkrz-web:launch-sample=" + name);
+
+        // デスクトップ等リロード機構が無い環境向けの案内 (Web ではこの直後に
+        // ページが遷移するため見えない)
+        footerText = @"Web 版以外では次のコマンドで起動してください:  krkrz64 data/${name}";
+        draw();
+    }
+
+    function moveCursor(d)
+    {
+        if (samples.count == 0) return;
+        cursor = (cursor + d + samples.count) % samples.count;
+        draw();
+    }
+
+    function onKeyDown(key, shift)
+    {
+        switch (key) {
+        case VK_UP:
+            moveCursor(-1);
+            break;
+        case VK_DOWN:
+            moveCursor(1);
+            break;
+        case VK_RETURN:
+        case VK_SPACE:
+            launch();
+            break;
+        }
+    }
+
+    function onMouseDown(x, y, button, shift)
+    {
+        if (button != mbLeft) return;
+        if (y < itemTop) return;
+        var i = (y - itemTop) \ itemH;
+        if (i >= 0 && i < samples.count) {
+            cursor = i;
+            draw();
+            launch();
+        }
+    }
+}
+
+var win = new LauncherWindow();
+win.visible = true;

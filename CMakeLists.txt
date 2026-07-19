@@ -45,6 +45,8 @@ shrinkCopy
 krkr_richtext
 extrans
 extNagano
+AlphaMovie
+expat
 psbfile          # wamsoft_work 由来 (PSBファイル読取 + Storages.mountPSB)
 psbwriter        # wamsoft_work 由来 (PSBファイル生成。psbwriter.dll 復元版)
 #krkrlua

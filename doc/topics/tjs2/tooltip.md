@@ -88,4 +88,4 @@ win.visible = true;
 ```
 
 [GitHub にも同じサンプルが上げてある。
-](https://github.com/krkrz/krkrz/blob/master/script/Sample/tooltip/startup.tjs)
+](https://github.com/krkrz/SampleScript/blob/master/tooltip/startup.tjs)

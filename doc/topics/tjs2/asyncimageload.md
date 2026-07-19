@@ -118,5 +118,5 @@ var win = new MainWindow(640,480);
 win.visible = true;
 ```
 
-[GitHubに入っているものと同じ](https://github.com/krkrz/krkrz/blob/master/script/Sample/asyncimageload/startup.tjs)
+[GitHubに入っているものと同じ](https://github.com/krkrz/SampleScript/blob/master/asyncimageload/startup.tjs)
 
