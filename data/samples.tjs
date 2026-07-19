@@ -15,5 +15,8 @@
 [
     %[ path : "transition_demo",
        title : "トランジション デモ",
-       desc : "標準 + extrans + extNagano の全トランジションを Elements UI で実行" ]
+       desc : "標準 + extrans + extNagano の全トランジションを Elements UI で実行" ],
+    %[ path : "vector_demo",
+       title : "ベクタ描画 + 画像効果",
+       desc : "layerExVector でベクタ描画し layerExImage で加工 (複数プラグイン横断)" ]
 ]

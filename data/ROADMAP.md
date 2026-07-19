@@ -130,9 +130,11 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
 ### ③ 横断デモ (data/、複数プラグイン組み合わせ)
 
 - [x] transition_demo — 標準 + extrans + extNagano トランジション (完成済)
-- [ ] ☆ vector_demo — layerExVector (GdiPlus 互換 API): パス/プリミティブ/
-      アウトラインテキスト描画ギャラリー、Elements パネルでパラメータ操作。
-      layerExImage との組み合わせ (描いた結果への画像効果) も一画面に
+- [x] vector_demo — layerExVector (GdiPlus 互換 API) 横断デモ (It.4、2026-07-20)。
+      プリミティブ/グラデ/パス/回転のギャラリー、Elements パネルで線幅/回転/
+      グラデ色相/画像効果を操作。layerExImage との組み合わせ (描画結果への
+      ブラー/明度/カラー化/ノイズ) を実装。アウトライン文字はフォント未同梱で
+      任意 (font/ に .ttf があれば表示)
 - [ ] data_parse — json + csvParser + lineParser: データ駆動でシナリオ/表を読み
       画面構築、saveStruct での書き戻し
 - [ ] net_demo — httprequest + json: Web API 取得→パース→表示 (Web ビルドでは
@@ -166,7 +168,7 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
 | 2 ✅ | elements_gallery (Elements 主要パーツ一覧、7 ページ) — 2026-07-20 完了 | src/core/data |
 | 3a ✅ | gl_canvas (OpenGL/Canvas 基礎 + エフェクト/クリップ、5 ページ) — 2026-07-20 完了 | src/core/data |
 | 3b ✅ | gl_particles (ステートレス GPU パーティクル、50000 粒子) — 2026-07-20 完了 | src/core/data |
-| 4 | vector_demo (layerExVector 横断) + layerExVector sample/ 整理 | data/ + plugin |
+| 4 ✅ | vector_demo (layerExVector + layerExImage 横断) — 2026-07-20 完了 | data/ |
 | 5 | collect_samples 集約機構 + doc/ デモ一覧ページ | tools/ + doc/ |
 | 6〜 | バックログから順次選択 (layer_basic / sound / storage / data_parse …) | — |
 
