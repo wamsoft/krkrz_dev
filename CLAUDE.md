@@ -8,6 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The top-level `CMakeLists.txt` only picks which plugins to build and then delegates to `src/core` (the engine) via `add_subdirectory`. For engine-internal architecture — WINVER vs SDL3 vs LIB variants, the OpenGL ES draw-device path, SIMD layout, generated files, build flags, the SIMD parity CTest harness, etc. — **read `src/core/CLAUDE.md`**. Do not duplicate that information here.
 
+This umbrella builds the Win32 / desktop native targets. **Browser (Emscripten/wasm) and Android builds live in separate external "外枠" repos** that consume this repo as their engine source via `KRKRZ_BASE` (cloned next to `krkrz_dev`), touching only platform-specific build/packaging: `krkrz_web` (https://github.com/wamsoft/krkrz_web, wasm32/SDL3 — shared binary + `web://` on-demand delivery sidecars, `web-config.json`) and `krkrz_android` (https://github.com/wamsoft/krkrz_android, Gradle+NDK, `app-config.json`). See the README and each repo's own README for details.
+
 ## Build commands (umbrella level)
 
 vcpkg is required; set `VCPKG_ROOT` before configuring. The top-level `Makefile` is a thin wrapper around CMake presets defined in `src/core/CMakePresets.json`.
