@@ -106,9 +106,10 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       gamma/light/lut/grayscale/colorize/modulate/noise/overcolor/
       boxBlur/gaussianBlur、マスク/ステンシルクリップ、doc/CanvasEffect.md)。
       **エフェクト + クリッピングのデモページを含めて作る**
-- [ ] ☆ gl_particles — Canvas による高速パーティクル & アクション表示:
-      VertexBuffer / VertexBinder で数万粒子、加算合成、スプライトシートアニメ、
-      Elements パネルで粒子数・エミッタ・ブレンド切替、FPS 計測付き
+- [x] gl_particles — ステートレス GPU パーティクル (It.3、2026-07-20)。VertexBuffer +
+      ポイントスプライトシェーダで数万粒子 (50000 で ~55fps)、加算/通常ブレンド、
+      3 エミッタ (噴水/放射/上昇)、Elements パネル + FPS 表示。位置はシェーダが
+      時刻からパラメトリック計算 (CPU 更新なし)
 - [ ] layer_basic — Layer 階層・type (ltAlpha/ltAddAlpha/…)・opacity・hitTest・
       クリッピング・drawText / fillRect / operateRect / copy 系
 - [ ] image_ops — Bitmap / ImageFunction: adjustGamma・グレースケール・フリップ・
@@ -164,7 +165,7 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
 | 1 ✅ | 基盤: core samples.tjs マージ + demolib + sysinfo デモ + ランチャ改良 (スクロール/カテゴリ/process 起動/-demotest) — 2026-07-20 完了 | src/core (submodule) + data/ |
 | 2 ✅ | elements_gallery (Elements 主要パーツ一覧、7 ページ) — 2026-07-20 完了 | src/core/data |
 | 3a ✅ | gl_canvas (OpenGL/Canvas 基礎 + エフェクト/クリップ、5 ページ) — 2026-07-20 完了 | src/core/data |
-| 3b | gl_particles (ステートレス GPU パーティクル) | src/core/data |
+| 3b ✅ | gl_particles (ステートレス GPU パーティクル、50000 粒子) — 2026-07-20 完了 | src/core/data |
 | 4 | vector_demo (layerExVector 横断) + layerExVector sample/ 整理 | data/ + plugin |
 | 5 | collect_samples 集約機構 + doc/ デモ一覧ページ | tools/ + doc/ |
 | 6〜 | バックログから順次選択 (layer_basic / sound / storage / data_parse …) | — |
