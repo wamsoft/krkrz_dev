@@ -97,8 +97,10 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       atlas 素材は自作 (gen_assets.tjs で生成)。※ 実装中に elements fork のバグを 1 件
       発見・修正 (button の vars_on_focus が無効 → wamsoft/elements ブランチ
       fix/button-vars-on-focus。core submodule ポインタ更新は要レビュー)
-- [ ] ☆ gl_canvas — OpenGL 基礎: OGLDrawDevice への切替、Canvas.clear / drawTexture、
-      Texture、ShaderProgram (カスタムフラグメント)、Offscreen (RTT)、Matrix32
+- [x] gl_canvas — OpenGL 基礎 (It.3、2026-07-20)。5 ページ: drawTexture+Matrix32 /
+      ShaderProgram (波打ちフラグメント) / Offscreen RTT / ポストエフェクト /
+      マスククリップ。素材自作 (gen_assets)。※ カスタム頂点シェーダは a_size +
+      ortho 射影が必須 (drawTexture 規約)
       krkrgles 由来の**ポストエフェクト機構は Canvas へ取り込み済み**
       (core 8823a9e2、2026-07-20: beginEffect/endEffect + コマンド列
       gamma/light/lut/grayscale/colorize/modulate/noise/overcolor/
@@ -161,7 +163,8 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
 |---|---|---|
 | 1 ✅ | 基盤: core samples.tjs マージ + demolib + sysinfo デモ + ランチャ改良 (スクロール/カテゴリ/process 起動/-demotest) — 2026-07-20 完了 | src/core (submodule) + data/ |
 | 2 ✅ | elements_gallery (Elements 主要パーツ一覧、7 ページ) — 2026-07-20 完了 | src/core/data |
-| 3 | gl_canvas + gl_particles (OpenGL/Canvas 基礎 + エフェクト/クリップ + 高速パーティクル) — 前提だった krkrgles 取り込みは完了済み (8823a9e2) | src/core/data |
+| 3a ✅ | gl_canvas (OpenGL/Canvas 基礎 + エフェクト/クリップ、5 ページ) — 2026-07-20 完了 | src/core/data |
+| 3b | gl_particles (ステートレス GPU パーティクル) | src/core/data |
 | 4 | vector_demo (layerExVector 横断) + layerExVector sample/ 整理 | data/ + plugin |
 | 5 | collect_samples 集約機構 + doc/ デモ一覧ページ | tools/ + doc/ |
 | 6〜 | バックログから順次選択 (layer_basic / sound / storage / data_parse …) | — |
