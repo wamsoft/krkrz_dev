@@ -118,8 +118,9 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
 - [ ] image_ops — Bitmap / ImageFunction: adjustGamma・グレースケール・フリップ・
       アフィン copy・saveLayerImage、ピクセル直接操作 (bufferPointer)
 - [ ] text_font — Font 列挙・サイズ/装飾・getTextWidth・縦書き・アンチエイリアス比較
-- [ ] input — キーボード / マウス / ホイール / タッチ / パッド入力の可視化
-      (現 startup.tjs のキーコード表示を発展させて移設)
+- [x] input — キーボード / マウス / ホイール / パッド入力の可視化 (2026-07-20)。
+      VK 名+コード+修飾キー+履歴、マウス座標/ボタン/ホイール/ドラッグ軌跡、
+      パッド軸 (System.padAxis*)。postInputEvent で demotest 注入
 - [ ] timer_async — Timer / AsyncTrigger / onContinuous のタイミング可視化
 - [ ] sound — WaveSoundBuffer: 再生・ループ・ラベル・fade・pan、PhaseVocoder
       (現デモから移設)、SoundBuffer
