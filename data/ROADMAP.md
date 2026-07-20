@@ -67,6 +67,15 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
       往復・Elements パネル付きデモからの ESC 復帰 (grabFocus=false パススルー) を
       実画面キャプチャで検証済 (menu→vector→ESC→GL particles 60fps→transition 実行 A⇔B)。
       横断デモも scene.tjs + 薄い startup.tjs に分離 (単体起動と hub でシーン共有)。
+- [x] **elements_gallery のシーン化** (2026-07-20)。最後まで残っていたコアデモを
+      DemoScene 化し gallery/hub に統合。**コア 9 + 横断 2 = 全 11 シーン**が 1 プロセス
+      集約に。atlas ページの画像参照を getFullPath→自動検索パス名参照に変更し hub でも
+      解決 (実機で atlas 全ウィジェット描画確認)。メニュー見出しの「(再起動なしで
+      切り替わります)」表記は削除。
+- [x] **GL デモ (OGLDrawDevice) でも Elements パネルが出るよう修正** (2026-07-20)。
+      主因は demolib のパネル再試行自壊バグ (shellClosePanel が pending を消す)、
+      副次でエンジンの host 解決を提示中デバイス追従に改善 (core b143beaa)。GPU
+      パーティクルでパネル表示+クリック操作 (粒子数変更) を実機確認。
 - [ ] `tools/collect_samples.py` + `make samples`: plugin `sample/` 集約 → `samples_auto.tjs` 生成
 - [ ] doc/ にデモ一覧ページ (topics/samples.md 等) 新設、以後デモ追加ごとに更新
 - [ ] krkrz_web: ランチャの起動トークンが `core/<demo>` 形式 (スラッシュ入り) に
