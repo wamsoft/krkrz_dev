@@ -119,7 +119,9 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       flipUD/doBoxBlur/affineCopy(回転)/colorRect を 3x3 で before-after 比較。
       ※ ラベルは不透明面に濃い下地バー+白文字 (ltAlpha オーバーレイだと文字が
       薄く合成され暗背景で読めない問題を修正、layer_basic も同様に対応)
-- [ ] text_font — Font 列挙・サイズ/装飾・getTextWidth・縦書き・アンチエイリアス比較
+- [x] text_font — フォントと文字描画 (2026-07-20)。サイズ/装飾 (bold/italic/
+      underline/strikeout)/アンチエイリアス/影/getTextWidth 計測/Font.getList 一覧。
+      drawText の色 24bit 仕様の実演も含む
 - [x] input — キーボード / マウス / ホイール / パッド入力の可視化 (2026-07-20)。
       VK 名+コード+修飾キー+履歴、マウス座標/ボタン/ホイール/ドラッグ軌跡、
       パッド軸 (System.padAxis*)。postInputEvent で demotest 注入
