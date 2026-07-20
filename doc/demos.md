@@ -22,7 +22,7 @@
 
 <p>
   うまく表示されない場合は
-  <a href="_assets/demo/" target="_blank" rel="noopener">別タブでフルスクリーン表示</a>
+  <a href="../_assets/demo/" target="_blank" rel="noopener">別タブでフルスクリーン表示</a>
   を試してください。
 </p>
 
@@ -33,7 +33,7 @@
   btn.addEventListener("click", function () {
     var holder = document.getElementById("krkrz-demo-holder");
     var f = document.createElement("iframe");
-    f.src = "_assets/demo/";
+    f.src = "../_assets/demo/";
     f.setAttribute("allow", "autoplay; fullscreen; gamepad");
     f.setAttribute("allowfullscreen", "");
     f.style.cssText =
