@@ -15,7 +15,7 @@ Win32 や各種デスクトップ向けのビルドは本リポジトリ (umbrel
 `KRKRZ_BASE/krkrz_android` が並ぶ構成)。
 
 - **krkrz_web** — ブラウザ (Emscripten / wasm32, SDL3 ベース) 版。
-  https://github.com/wamsoft/krkrz_web (公開予定)
+  https://github.com/wamsoft/krkrz_web
   共有バイナリ (案件非依存) を一度ビルドし、案件のデータ・リソース・起動設定は
   「配信サイドカー」として差し替える方式。案件データはバラファイルを `web://` で
   オンデマンド fetch (+ OPFS キャッシュ) する。案件構成は `web-config.json`
