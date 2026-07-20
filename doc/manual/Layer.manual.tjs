@@ -965,7 +965,18 @@ class Layer {
 	 * @param x 文字描画を開始する原点の ( 画像位置における ) x 座標をピクセル単位で指定します。
 	 * @param y 文字描画を開始する原点の ( 画像位置における ) y 座標をピクセル単位で指定します。
 	 * @param text 描画する文字を指定します。
-	 * @param color 描画する文字の色を 0xRRGGBB 形式で指定します。
+	 * @param color 描画する文字の色を 0xRRGGBB 形式 ( 24bit ) で指定します。
+	 *
+	 * **注意:** 上位 8bit (アルファ) は 0 にしてください。上位 8bit が 0 以外の
+	 * 値 ( 例: 白のつもりで 0xFFFFFFFF ) を指定すると、その値は「システムカラー
+	 * 番号」として解釈され ( 内部で `TVPToActualColor` を経由 )、意図しない色
+	 * ( 多くの場合ほぼ黒 ) になります。不透明度は color ではなく opa 引数で
+	 * 指定してください。
+	 *
+	 * ( [Layer.fillRect](Layer.md#fillrect) / [Layer.colorRect](Layer.md#colorrect) /
+	 * [Layer.operateRect](Layer.md#operaterect) などの色は 0xAARRGGBB 形式で
+	 * アルファを含みますが、drawText / drawGlyph などフォント描画系の color は
+	 * 24bit RGB である点が異なります。)
 	 * @param opa 描画する文字の不透明度 ( -255 ～ 0 ～ 255 ) を指定します。
 	 *
 	 * 負の数の指定は [Layer.face](Layer.md#face) が dfAlpha の場合のみに有効で、
@@ -996,7 +1007,11 @@ class Layer {
 	 * @param x 文字描画を開始する原点の ( 画像位置における ) x 座標をピクセル単位で指定します。
 	 * @param y 文字描画を開始する原点の ( 画像位置における ) y 座標をピクセル単位で指定します。
 	 * @param glyph 描画するグリフを指定します。
-	 * @param color 描画する文字の色を 0xRRGGBB 形式で指定します。
+	 * @param color 描画する文字の色を 0xRRGGBB 形式 ( 24bit ) で指定します。
+	 *
+	 * **注意:** [Layer.drawText](Layer.md#drawtext) の color と同様、上位 8bit は
+	 * 0 にしてください ( 0xFFFFFFFF 等を渡すとシステムカラー扱いになり意図しない
+	 * 色になります )。不透明度は opa 引数で指定します。
 	 * @param opa 描画する文字の不透明度 ( -255 ～ 0 ～ 255 ) を指定します。
 	 *
 	 * 負の数の指定は face が dfAlpha の場合のみに有効で、

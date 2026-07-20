@@ -33,6 +33,16 @@ class OGLDrawDevice {
 	function createCanvas();
 
 	/**
+	 * 自動停止した onDraw の発火を再開
+	 *
+	 * onDraw ハンドラが毎フレーム例外を投げ続けて連続例外の上限
+	 * ( コマンドラインオプション `-eventexceptionlimit`、既定 10 ) に達すると、
+	 * onDraw の発火は自動停止します ( 画面クリア等の描画サイクル自体は継続 )。
+	 * このメソッドを呼ぶと発火を再開します。
+	 */
+	function resumeOnDraw();
+
+	/**
 	 * インターフェースオブジェクトを取得
 	 *
 	 * プラグインなどで DrawDevice オブジェクトを利用するためにあります。

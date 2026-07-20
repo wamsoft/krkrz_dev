@@ -4,17 +4,19 @@
 //  path  : サンプルフォルダ名 (data/ 直下、フォルダ = 独立プロジェクト)
 //  title : 一覧に表示する名前
 //  desc  : 一行説明
+//  cat   : カテゴリ (省略時 "横断デモ・サンプル (data/)")
 //
 //  ランチャは path + "/startup.tjs" が存在するエントリだけを表示するので、
 //  パッケージ構成によってサンプルが欠けていても安全に動作する。
-//  ※ プラグイン別サンプルの自動集約分は samples_auto.tjs (生成物) に
-//     分離する予定。手書きのエントリはこのファイルに追加する。
+//  ※ コア機能デモは src/core/data/samples.tjs 側で定義する (ランチャが
+//     マージ読込する)。プラグイン別サンプルの自動集約分は samples_auto.tjs
+//     (生成物) に分離する予定。手書きのエントリはこのファイルに追加する。
 // ----------------------------------------------------------------------
 [
-    %[ path : "core",
-       title : "コア機能テスト",
-       desc : "入力・サウンド再生 (PhaseVocoder)・フォント・UI 等のコア機能確認 (src/core/data 由来)" ],
     %[ path : "transition_demo",
        title : "トランジション デモ",
-       desc : "標準 + extrans + extNagano の全トランジションを Elements UI で実行" ]
+       desc : "標準 + extrans + extNagano の全トランジションを Elements UI で実行" ],
+    %[ path : "vector_demo",
+       title : "ベクタ描画 + 画像効果",
+       desc : "layerExVector でベクタ描画し layerExImage で加工 (複数プラグイン横断)" ]
 ]
