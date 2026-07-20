@@ -125,7 +125,7 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
 - [x] input — キーボード / マウス / ホイール / パッド入力の可視化 (2026-07-20)。
       VK 名+コード+修飾キー+履歴、マウス座標/ボタン/ホイール/ドラッグ軌跡、
       パッド軸 (System.padAxis*)。postInputEvent で demotest 注入
-- [ ] timer_async — Timer / AsyncTrigger / onContinuous のタイミング可視化
+- [x] timer_async — Timer/AsyncTrigger/連続ハンドラのタイミング可視化 (2026-07-20)
 - [ ] sound — WaveSoundBuffer: 再生・ループ・ラベル・fade・pan、PhaseVocoder
       (現デモから移設)、SoundBuffer
 - [ ] video — VideoOverlay: layer / overlay モード、シーク、ループ
