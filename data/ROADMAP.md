@@ -115,8 +115,10 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       omScreen/omDodge/omDarken/omLighten) を比較、opacity パネル操作。
       ※ 非全画面入れ子レイヤの Layer.type ブレンドが黒くなる挙動を発見
       (回避=operateRect、engine-layer-tree-nested-blend-black メモに記録)
-- [ ] image_ops — Bitmap / ImageFunction: adjustGamma・グレースケール・フリップ・
-      アフィン copy・saveLayerImage、ピクセル直接操作 (bufferPointer)
+- [x] image_ops — 画像処理 (2026-07-20)。doGrayScale/adjustGamma(明暗)/flipLR/
+      flipUD/doBoxBlur/affineCopy(回転)/colorRect を 3x3 で before-after 比較。
+      ※ ラベルは不透明面に濃い下地バー+白文字 (ltAlpha オーバーレイだと文字が
+      薄く合成され暗背景で読めない問題を修正、layer_basic も同様に対応)
 - [ ] text_font — Font 列挙・サイズ/装飾・getTextWidth・縦書き・アンチエイリアス比較
 - [x] input — キーボード / マウス / ホイール / パッド入力の可視化 (2026-07-20)。
       VK 名+コード+修飾キー+履歴、マウス座標/ボタン/ホイール/ドラッグ軌跡、
