@@ -110,8 +110,11 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       ポイントスプライトシェーダで数万粒子 (50000 で ~55fps)、加算/通常ブレンド、
       3 エミッタ (噴水/放射/上昇)、Elements パネル + FPS 表示。位置はシェーダが
       時刻からパラメトリック計算 (CPU 更新なし)
-- [ ] layer_basic — Layer 階層・type (ltAlpha/ltAddAlpha/…)・opacity・hitTest・
-      クリッピング・drawText / fillRect / operateRect / copy 系
+- [x] layer_basic — 合成モードと不透明度 (2026-07-20)。operateRect で 9 種の
+      合成モード (omOpaque/omAlpha/omAdditive/omSubtractive/omMultiplicative/
+      omScreen/omDodge/omDarken/omLighten) を比較、opacity パネル操作。
+      ※ 非全画面入れ子レイヤの Layer.type ブレンドが黒くなる挙動を発見
+      (回避=operateRect、engine-layer-tree-nested-blend-black メモに記録)
 - [ ] image_ops — Bitmap / ImageFunction: adjustGamma・グレースケール・フリップ・
       アフィン copy・saveLayerImage、ピクセル直接操作 (bufferPointer)
 - [ ] text_font — Font 列挙・サイズ/装飾・getTextWidth・縦書き・アンチエイリアス比較
