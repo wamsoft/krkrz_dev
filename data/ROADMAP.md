@@ -95,8 +95,8 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       各ページの定義ソース (TJS Dictionary) を右パネルに併記 (表示=実物、pages.tjs の
       行配列を eval して使用)、onAction イベントログ付き。レイアウトは Dialog.showDict。
       atlas 素材は自作 (gen_assets.tjs で生成)。※ 実装中に elements fork のバグを 1 件
-      発見・修正 (button の vars_on_focus が無効 → wamsoft/elements ブランチ
-      fix/button-vars-on-focus。core submodule ポインタ更新は要レビュー)
+      発見・修正 (button の vars_on_focus が無効) → wamsoft/elements develop に取込・
+      push 済み、core submodule ポインタも更新済み
 - [x] gl_canvas — OpenGL 基礎 (It.3、2026-07-20)。5 ページ: drawTexture+Matrix32 /
       ShaderProgram (波打ちフラグメント) / Offscreen RTT / ポストエフェクト /
       マスククリップ。素材自作 (gen_assets)。※ カスタム頂点シェーダは a_size +
