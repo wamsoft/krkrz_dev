@@ -36,6 +36,12 @@ Windowを生成すると、プロパティcanvasが自動的に作られます�
 - [drawTextureAtlas](#drawtextureatlas)
 - [drawTextureAtlas](#drawtextureatlas)
 - [draw9Patch](#draw9patch)
+- [beginEffect](#begineffect)
+- [endEffect](#endeffect)
+- [beginMaskClip](#beginmaskclip)
+- [endMaskClip](#endmaskclip)
+- [beginStencilClip](#beginstencilclip)
+- [endStencilClip](#endstencilclip)
 - [flush](#flush)
 - [drawText](#drawtext)
 
@@ -99,6 +105,11 @@ bmDisable, bmOpaque, bmAlpha, bmAdd, bmAddWithAlpha が指定可能。
 
 設定もできるが、基本的に変更する必要はない。
 voidを入れると組み込みの初期デフォルトシェーダーに戻る。
+
+既定シェーダーの a_opacity uniform は Canvas 生成時に 1.0 が設定される。
+半透明で描画したい場合のみ `canvas.defaultShader.a_opacity` を変更する。
+自作シェーダーで a_opacity を宣言した場合は呼び出し側での設定が必要
+(未設定の uniform は GL 初期値 0 = 完全透明になる点に注意)。
 
 ---
 
@@ -448,6 +459,129 @@ defaultShaderで描画されます。
 
 描画に使用するTextureは9patch情報が読み込まれている必要があります。
 指定できるのはTextureクラスのみです。
+
+---
+
+### beginEffect
+
+メソッド
+
+**解説**
+
+ポストエフェクトの捕捉を開始する
+
+ここから [endEffect](#endeffect) までの描画を中間バッファ
+(透明クリア済み) に捕捉する。ネスト可。閉じ忘れはフレーム終端で破棄され
+警告ログが出る。
+コマンド仕様や内部構造の詳細は
+[Canvas ポストエフェクト / クリッピング](../topics/core/canvas_effect.md) を参照。
+
+**関連:** [Canvas.endEffect](Canvas.md#endeffect)
+
+---
+
+### endEffect
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `commands` | `null` | 加工コマンド ( Dictionary ) の配列。省略すると素通し合成。 |
+
+**解説**
+
+捕捉した描画に加工コマンド列を適用して合成する
+
+[beginEffect](#begineffect) からの描画に commands を順に
+適用し、現在の blendMode で直前の描画先へ合成する。加工は CPU 読み戻し
+なしに GPU 内で完結する。
+
+コマンドは `%[ cmd:"名前", ... ]` の Dictionary 配列で指定する:
+LUT 系 ( gamma / adjustGamma / light / lut )、
+混合系 ( grayscale / colorize / modulate / noise / generateWhiteNoise /
+overcolor )、近傍系 ( boxBlur / gaussianBlur )。
+各コマンドのパラメータと融合規則は
+[Canvas ポストエフェクト / クリッピング](../topics/core/canvas_effect.md) を参照。
+
+**関連:** [Canvas.beginEffect](Canvas.md#begineffect)
+
+---
+
+### beginMaskClip
+
+メソッド
+
+**解説**
+
+マスククリップの捕捉を開始する
+
+ここから [endMaskClip](#endmaskclip) までの描画を捕捉する。
+どんな描画にも安全に使える画像クリップ方式。
+
+**関連:** [Canvas.endMaskClip](Canvas.md#endmaskclip)
+
+---
+
+### endMaskClip
+
+メソッド
+
+**引数**
+
+| 引数 | 型 | 既定値 | 説明 |
+| --- | --- | --- | --- |
+| `mask` | `&nbsp;` | `&nbsp;` | マスクに使う Texture / Offscreen。void で素通し合成。 |
+| `x` | `int` | `&nbsp;` | マスクを置く X 位置 |
+| `y` | `int` | `&nbsp;` | マスクを置く Y 位置 |
+
+**解説**
+
+捕捉した描画にマスクの α を乗算して合成する
+
+mask の α を乗算して直前の描画先へ合成する。マスク矩形の
+外側は α=0 (完全クリップ)。CPU 版 Layer.clipAlphaRect 相当。
+
+**関連:** [Canvas.beginMaskClip](Canvas.md#beginmaskclip)
+
+---
+
+### beginStencilClip
+
+メソッド
+
+**引数**
+
+| 引数 | 型 | 既定値 | 説明 |
+| --- | --- | --- | --- |
+| `mask` | `&nbsp;` | `&nbsp;` | マスクに使う Texture / Offscreen |
+| `x` | `int` | `&nbsp;` | マスクを置く X 位置 |
+| `y` | `int` | `&nbsp;` | マスクを置く Y 位置 |
+| `threshold` | `int` | `1` | α 閾値 ( 1〜255 ) |
+
+**解説**
+
+ステンシルクリップを開始する
+
+マスクの α をステンシルバッファへ書き込み、
+[endStencilClip](#endstencilclip) までの描画を切り抜く。単純なテクスチャ
+描画向けの軽量方式 (自前でステンシルを使う描画とは競合するので、その
+場合はマスククリップを使う)。
+
+**関連:** [Canvas.endStencilClip](Canvas.md#endstencilclip)
+
+---
+
+### endStencilClip
+
+メソッド
+
+**解説**
+
+ステンシルクリップを終了する
+
+**関連:** [Canvas.beginStencilClip](Canvas.md#beginstencilclip)
 
 ---
 

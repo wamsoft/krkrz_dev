@@ -8,6 +8,13 @@ copyright: "(c) Kirikiri Z Project / Wamsoft Ltd. Partnership"
 
 docs_dir: doc
 
+# ブラウザ実行デモ (doc/_assets/demo) を iframe 埋め込みで動かすため、全ページで
+# coi-serviceworker を登録し crossOriginIsolated (SharedArrayBuffer) を成立させる。
+# GitHub Pages は COOP/COEP ヘッダを設定できないため、SW でクライアント側に注入する。
+# 既定 COEP=credentialless なので外部リソース (テーマのフォント等) は壊れにくい。
+extra_javascript:
+  - coi-serviceworker.js
+
 theme:
   name: material
   language: ja
@@ -61,6 +68,7 @@ exclude_docs: |
   _inventory.json
 
 nav:
+  - デモ: demos.md
   - 吉里吉里Z:
     - guide/about.md
     - 入門・運用:
@@ -250,5 +258,6 @@ nav:
       - Elements ベースの汎用ダイアログ: topics/core/elements_dialog.md
       - REPL (対話型 TJS シェル): topics/core/repl.md
       - ゲーム画面の表示画角制御 (ビューポート): topics/core/viewport.md
+      - Canvas ポストエフェクト / クリッピング: topics/core/canvas_effect.md
       - ログ出力: topics/core/logging.md
     - ライセンス: topics/LICENSE.md

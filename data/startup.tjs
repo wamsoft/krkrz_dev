@@ -1,173 +1,73 @@
+// -*- mode:tjs2 -*-
+// ======================================================================
+//  krkrz デモ ギャラリー (再起動なしの統合ランチャ)
 // ----------------------------------------------------------------------
-//  krkrz サンプルランチャ
+//  data/ をプロジェクトとして起動すると、コア機能デモ (src/core/data) と
+//  横断デモ (data/、複数プラグイン) を 1 つのプロセスに束ねてメニュー表示し、
+//  選択したデモへ「再起動なし」で移動、ESC でメニューへ戻る。
 //
-//  data/ 直下のサンプル (各サブフォルダ = 独立したプロジェクト) を一覧
-//  表示し、選択したサンプルを「そのフォルダをプロジェクトとして再起動」
-//  して開く。
+//  仕組み: 各デモは DemoScene として分離されており (各フォルダの scene.tjs)、
+//  それらを 1 つの DemoShell (hub モード) に集約する。GL デモは切替時に
+//  DrawDevice を差し替え/復帰する。
 //
-//  - 一覧は samples.tjs (+ 将来: 自動集約の samples_auto.tjs) から読み、
-//    startup.tjs が実在するものだけを表示する
-//  - Web (Emscripten) 版: 選択すると Debug.message で
-//    "@krkrz-web:launch-sample=<name>" トークンを出力する。krkrz_web の
-//    pre.js がこれを検知してページを ?sample=<name> 付きでリロードし、
-//    サンプルフォルダをプロジェクトとして起動し直す
-//  - デスクトップ版: リロード機構が無いので、コマンドライン起動
-//    (krkrz64 data/<name>) を画面に案内する
+//  操作: ↑↓ / クリックでデモ選択、Enter で起動、ESC でメニューへ戻る
+//        (メニュー上で ESC を押すと終了)。各デモ固有の操作はそのデモに届く。
 //
-//  操作: ↑↓ = 選択 / ENTER・SPACE = 起動 / マウスクリック = 起動
-// ----------------------------------------------------------------------
+//  ※ Elements パネルを使うデモは SDL3 ビルド + KRKRZ_USE_ELEMENTS=ON が必要。
+//     横断デモのプラグイン (layerExVector / layerExImage / extrans / extNagano)
+//     は canLink 判定で自動的に有無を吸収する (無ければ案内表示 or 項目除外)。
+// ======================================================================
 
-function dm(x) { Debug.message(x); }
-
-var WIDTH = 1280;
-var HEIGHT = 720;
-
-// ---- サンプルリスト読込 ----------------------------------------------
-var samples = [];
-function loadSampleList(path)
+// --- demolib 読み込み --------------------------------------------------
+// data/ から見た demolib: デスクトップ = ../src/core/data/demolib/、
+// Web 合成後 = core/demolib/。
+var demolibPath = void;
 {
-    if (!Storages.isExistentStorage(path)) return;
-    var list;
+    var cands = ["core/demolib/", "../src/core/data/demolib/", "../demolib/"];
+    for (var i = 0; i < cands.count; i++) {
+        if (Storages.isExistentStorage(cands[i] + "demo_common.tjs")) { demolibPath = cands[i]; break; }
+    }
+}
+if (demolibPath === void) { System.inform("demolib が見つかりません"); System.exit(1); }
+Scripts.execStorage(demolibPath + "demo_common.tjs");
+
+// --- 横断デモ (data/) の資材検索パスを登録 -----------------------------
+// これらのデモは単体起動時は自分のフォルダを project にするが、この統合
+// ランチャでは project = data/ なので、サブフォルダ配下の資材を明示登録する。
+Storages.addAutoPath("vector_demo/font/");
+Storages.addAutoPath("transition_demo/image/");
+
+// --- シーン読み込みヘルパ ----------------------------------------------
+var scenes = [];
+function tryScene(path, ctor)
+{
+    if (!Storages.isExistentStorage(path)) { dm(@"scene skip (not found): ${path}"); return; }
     try {
-        list = Scripts.evalStorage(path);
+        Scripts.execStorage(path);
+        scenes.add(ctor());
     } catch (e) {
-        dm(@"sample list load failed: ${path}: ${e.message}");
-        return;
-    }
-    for (var i = 0; i < list.count; i++) {
-        var e = list[i];
-        // 末尾カンマ等による void 要素は無視 (TJS2 の配列リテラルは
-        // 末尾カンマで void 要素が増える)
-        if (typeof e != "Object") continue;
-        if (Storages.isExistentStorage(e.path + "/startup.tjs")) {
-            samples.add(e);
-        } else {
-            dm(@"sample skipped (no startup.tjs): ${e.path}");
-        }
-    }
-}
-loadSampleList("samples.tjs");
-loadSampleList("samples_auto.tjs"); // プラグイン別サンプルの自動集約分 (生成物、無ければ無視)
-dm(@"sample launcher: ${samples.count} sample(s) available");
-
-// ---- ランチャウィンドウ ----------------------------------------------
-class LauncherWindow extends Window
-{
-    var base;
-    var cursor = 0;
-    var footerText = "";
-
-    var itemTop = 180;
-    var itemH = 96;
-
-    function LauncherWindow()
-    {
-        super.Window(...);
-        caption = "krkrz サンプルランチャ";
-        setInnerSize(WIDTH, HEIGHT);
-
-        base = new Layer(this, null);
-        base.setSize(WIDTH, HEIGHT);
-        base.visible = true;
-        add(base);
-
-        footerText = "↑↓: 選択   ENTER / クリック: 起動";
-        draw();
-    }
-
-    function draw()
-    {
-        var w = WIDTH, h = HEIGHT;
-        base.fillRect(0, 0, w, h, 0xff14161c);
-
-        // ヘッダ
-        base.fillRect(0, 0, w, 126, 0xff1f2530);
-        base.fillRect(0, 126, w, 2, 0xff3a4456);
-        base.font.face = "";
-        base.font.height = 52;
-        base.drawText(48, 30, "krkrz サンプルランチャ", 0xffffff, 255, true, 0, 0x000000, 0, 2, 2);
-        base.font.height = 22;
-        base.drawText(52, 94, "サンプルを選んで起動してください", 0x9aa4b8, 255);
-
-        // サンプル一覧
-        if (samples.count == 0) {
-            base.font.height = 28;
-            base.drawText(64, itemTop, "利用可能なサンプルがありません", 0xd0a0a0, 255);
-        }
-        for (var i = 0; i < samples.count; i++) {
-            var e = samples[i];
-            var y = itemTop + i * itemH;
-            var selected = (i == cursor);
-            base.fillRect(40, y, w - 80, itemH - 12, selected ? 0xff2d4266 : 0xff1c212c);
-            if (selected) {
-                base.fillRect(40, y, 6, itemH - 12, 0xff64a0ff);
-            }
-            base.font.height = 32;
-            base.drawText(72, y + 12, e.title, selected ? 0xffffff : 0xc8d0e0, 255);
-            base.font.height = 20;
-            base.drawText(74, y + 54, e.desc, selected ? 0xaac0e8 : 0x808a9c, 255);
-            base.font.height = 18;
-            var pw = base.font.getTextWidth("data/" + e.path);
-            base.drawText(w - 64 - pw, y + 16, "data/" + e.path, 0x60708c, 255);
-        }
-
-        // フッタ
-        base.fillRect(0, h - 56, w, 56, 0xff20242e);
-        base.font.height = 22;
-        base.drawText(24, h - 42, footerText, 0xffe080, 255);
-        base.update();
-    }
-
-    function launch()
-    {
-        if (samples.count == 0) return;
-        var name = samples[cursor].path;
-        dm(@"launching sample: ${name}");
-
-        // Web 版: pre.js がこのトークンを検知して ?sample=<name> でリロードする
-        dm("@krkrz-web:launch-sample=" + name);
-
-        // デスクトップ等リロード機構が無い環境向けの案内 (Web ではこの直後に
-        // ページが遷移するため見えない)
-        footerText = @"Web 版以外では次のコマンドで起動してください:  krkrz64 data/${name}";
-        draw();
-    }
-
-    function moveCursor(d)
-    {
-        if (samples.count == 0) return;
-        cursor = (cursor + d + samples.count) % samples.count;
-        draw();
-    }
-
-    function onKeyDown(key, shift)
-    {
-        switch (key) {
-        case VK_UP:
-            moveCursor(-1);
-            break;
-        case VK_DOWN:
-            moveCursor(1);
-            break;
-        case VK_RETURN:
-        case VK_SPACE:
-            launch();
-            break;
-        }
-    }
-
-    function onMouseDown(x, y, button, shift)
-    {
-        if (button != mbLeft) return;
-        if (y < itemTop) return;
-        var i = (y - itemTop) \ itemH;
-        if (i >= 0 && i < samples.count) {
-            cursor = i;
-            draw();
-            launch();
-        }
+        dm(@"scene load failed: ${path}: ${e.message}");
     }
 }
 
-var win = new LauncherWindow();
-win.visible = true;
+// コアデモ (src/core/data / Web 合成後は core/)。demolib と同階層基準で解決。
+var coreBase = demolibPath + "../";
+tryScene(coreBase + "sysinfo/scene.tjs",      function() { return new SysInfoScene(); });
+tryScene(coreBase + "text_font/scene.tjs",    function() { return new TextFontScene(); });
+tryScene(coreBase + "image_ops/scene.tjs",    function() { return new ImageOpsScene(); });
+tryScene(coreBase + "layer_basic/scene.tjs",  function() { return new LayerBasicScene(); });
+tryScene(coreBase + "input/scene.tjs",        function() { return new InputScene(); });
+tryScene(coreBase + "timer_async/scene.tjs",  function() { return new TimerAsyncScene(); });
+tryScene(coreBase + "gl_canvas/scene.tjs",    function() { return new GLCanvasScene(); });
+tryScene(coreBase + "gl_particles/scene.tjs", function() { return new GLParticlesScene(); });
+tryScene(coreBase + "elements_gallery/scene.tjs", function() { return new ElementsGalleryScene(); });
+
+// 横断デモ (data/ 直下、複数プラグイン)
+tryScene("vector_demo/scene.tjs",     function() { return new VectorScene(); });
+tryScene("transition_demo/scene.tjs", function() { return new TransitionScene(); });
+
+dm(@"gallery: ${scenes.count} scene(s)");
+if (scenes.count == 0) { System.inform("シーンが読み込めませんでした"); System.exit(1); }
+
+// hub 型: メニュー ⇄ 各デモを ESC / クリックで行き来する
+runDemoHub(scenes, "krkrz デモ ギャラリー");
