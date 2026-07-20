@@ -60,12 +60,22 @@ class Dialog {
 	 * 止まらず、ユーザ操作のたびに [onAction](#onaction) が発火します。
 	 * 表示を終わらせるには [close](#close) を呼んでください。
 	 * @param json JSON / JSONC 形式のレイアウト定義文字列を指定します。
+	 * @param grabFocus キーボードフォーカスを取得するかどうか ( 既定 true )。
+	 *
+	 * true のときはパネルがキーボードフォーカスを取得し、input_box 等への文字
+	 * 入力やウィジェットのキー操作ができます ( ただしパネルが処理するキーは
+	 * ホスト側 [Window.onKeyDown](Window.md#onkeydown) には届きません )。
+	 *
+	 * false のときはフォーカスを取らず、キー入力はホスト ( Window ) へ通ります。
+	 * ゲーム側のホットキーを活かしたい常駐 HUD 的なパネルや、独自のキー操作
+	 * ( 画面切替等 ) と併用する場合に指定します。この場合パネル内の input_box 等
+	 * への文字入力はできません。マウス操作は grabFocus に関わらず有効です。
 	 * @return 表示開始に成功したら真を返します。
 	 * @see Dialog.showFile
 	 * @see Dialog.onAction
 	 * @see Dialog.close
 	 */
-	function showJson(json);
+	function showJson(json, grabFocus = true);
 
 	/**
 	 * ファイルから非モーダルダイアログを表示する
@@ -73,10 +83,11 @@ class Dialog {
 	 * 指定パスから JSON / JSONC レイアウト定義を読み込み、[showJson](#showjson)
 	 * と同じ動作で表示します。パスは Storages 経由のパス指定が使えます。
 	 * @param path JSON / JSONC ファイルのパスを指定します。
+	 * @param grabFocus キーボードフォーカスを取得するかどうか ( 既定 true )。詳細は [showJson](#showjson) を参照。
 	 * @return 表示開始に成功したら真を返します。
 	 * @see Dialog.showJson
 	 */
-	function showFile(path);
+	function showFile(path, grabFocus = true);
 
 	/**
 	 * Dictionary で非モーダルダイアログを表示する
@@ -85,11 +96,12 @@ class Dialog {
 	 * Dictionary / Array で直接指定する版です。内部で JSON へ変換して
 	 * 同じ経路で表示します ( 変換仕様は [dictToJson](#dicttojson) と同じ )。
 	 * @param dict レイアウト定義の Dictionary を指定します。
+	 * @param grabFocus キーボードフォーカスを取得するかどうか ( 既定 true )。詳細は [showJson](#showjson) を参照。
 	 * @return 表示開始に成功したら真を返します。
 	 * @see Dialog.showJson
 	 * @see Dialog.dictToJson
 	 */
-	function showDict(dict);
+	function showDict(dict, grabFocus = true);
 
 	/**
 	 * JSON 文字列でモーダルダイアログを表示する
