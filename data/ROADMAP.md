@@ -56,8 +56,10 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
 - [x] 再起動なしシーン切替 (2026-07-20)。demolib に DemoShell/DemoScene を追加し、
       ベース Window を共有して各デモをシーンとして束ね、PgUp/PgDn で切替。各デモは
       scene.tjs (DemoScene) + 薄い startup.tjs (単体起動) に分離。`gallery` デモが
-      6 シーン (sysinfo/text_font/image_ops/layer_basic/input/timer_async) を統合。
-      GL 系 (gl_canvas/gl_particles)・elements_gallery・横断デモは順次シーン化予定
+      **8 シーン** (sysinfo/text_font/image_ops/layer_basic/input/timer_async/
+      gl_canvas/gl_particles) を統合。GL シーンは drawDevice 差し替え + ツリー透過 +
+      GL 終了時のツリー再構築で対応 (shell の enableGL / GL モード)。
+      残: elements_gallery・横断デモ (vector_demo 等) のシーン化
 - [ ] `tools/collect_samples.py` + `make samples`: plugin `sample/` 集約 → `samples_auto.tjs` 生成
 - [ ] doc/ にデモ一覧ページ (topics/samples.md 等) 新設、以後デモ追加ごとに更新
 - [ ] krkrz_web: ランチャの起動トークンが `core/<demo>` 形式 (スラッシュ入り) に
