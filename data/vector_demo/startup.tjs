@@ -261,7 +261,8 @@ class VectorWindow extends DemoWindow
     function label(text, x, y)
     {
         vec.font.height = 16;
-        vec.drawText(x, y, text, 0xff405070, 255);
+        // drawText の色は 24bit RGB (0xRRGGBB)。8桁だと符号付きで誤解釈され黒になる。
+        vec.drawText(x, y, text, 0x405070, 255);
     }
 
     // --- 画像効果 (layerExImage) ----------------------------------------
