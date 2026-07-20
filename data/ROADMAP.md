@@ -59,7 +59,14 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
       **8 シーン** (sysinfo/text_font/image_ops/layer_basic/input/timer_async/
       gl_canvas/gl_particles) を統合。GL シーンは drawDevice 差し替え + ツリー透過 +
       GL 終了時のツリー再構築で対応 (shell の enableGL / GL モード)。
-      残: elements_gallery・横断デモ (vector_demo 等) のシーン化
+- [x] **トップ data/ ランチャの hub 化** (2026-07-20)。旧 `data/startup.tjs`
+      (samples.tjs + process.dll で子プロセス起動 = 再起動方式) を廃し、コア 8 シーン
+      + 横断 2 シーン (vector_demo/transition_demo) を **1 プロセスに集約**する
+      hub-and-spoke ランチャに全面組み直し。`runDemoHub` で先頭に MenuScene を挿し、
+      メニュー ⇄ 各デモを **クリック/Enter で起動・ESC でメニューへ戻る**。GL デモ
+      往復・Elements パネル付きデモからの ESC 復帰 (grabFocus=false パススルー) を
+      実画面キャプチャで検証済 (menu→vector→ESC→GL particles 60fps→transition 実行 A⇔B)。
+      横断デモも scene.tjs + 薄い startup.tjs に分離 (単体起動と hub でシーン共有)。
 - [ ] `tools/collect_samples.py` + `make samples`: plugin `sample/` 集約 → `samples_auto.tjs` 生成
 - [ ] doc/ にデモ一覧ページ (topics/samples.md 等) 新設、以後デモ追加ごとに更新
 - [ ] krkrz_web: ランチャの起動トークンが `core/<demo>` 形式 (スラッシュ入り) に

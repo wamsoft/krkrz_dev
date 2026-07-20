@@ -1,0 +1,256 @@
+// -*- mode:tjs2 -*-
+// ======================================================================
+//  vector_demo シーン (VectorScene) — layerExVector 描画 + layerExImage 効果
+//  横断デモ (複数プラグイン)。単体起動は startup.tjs、束ね起動は data/ ランチャ。
+// ======================================================================
+
+class VectorScene extends DemoScene
+{
+    var vec, fx, font;
+    var effects;
+    var hasVector = false, hasImage = false, haveFont = false;
+    var penWidth = 3, rotation = 0.0, gradHue = 0.0, effectIndex = 0;
+    var W = 900, H = 640;
+    var pendingDraw = false;
+
+    function VectorScene() { super.DemoScene("ベクタ描画 + 画像効果"); }
+
+    function create()
+    {
+        hasVector = tryPlugin("layerExVector.dll");
+        hasImage  = tryPlugin("layerExImage.dll");
+        effects = [
+            %[ name:"なし",     apply:function(lay) { } ],
+            %[ name:"ブラー",   apply:function(lay) { lay.gaussianBlur(4.0); } ],
+            %[ name:"明度+",    apply:function(lay) { lay.light(40, 30); } ],
+            %[ name:"カラー化", apply:function(lay) { lay.colorize(150, 200, 0.6); } ],
+            %[ name:"ノイズ",   apply:function(lay) { lay.noise(40); } ]
+        ];
+        // 資材 (フォント) 検索パス。単体起動は project=vector_demo/ なので "font/"。
+        // 束ね起動 (data/ ランチャ) では launcher 側が "vector_demo/font/" を登録する。
+        Storages.addAutoPath("font/");
+
+        vec = new Layer(window, stage);
+        vec.setSize(W, H); vec.setPos(24, 20); vec.visible = true; window.add(vec);
+        fx = new Layer(window, stage);
+        fx.setSize(W, H); fx.setPos(24, 20); fx.visible = false; window.add(fx);
+
+        if (hasVector) { tryLoadFont(); redraw(); }
+        else {
+            stage.font.height = 28;
+            stage.drawText(40, 40, "layerExVector.dll が見つかりません", 0xd0a0a0, 255);
+            stage.drawText(40, 80, "プラグインを exe の隣か plugin64/ に置いてください", 0x9aa4b8, 255);
+            stage.update();
+        }
+        setInfo("パネルで 線幅/回転/グラデ色相/画像効果 を変更   R: 再描画");
+        showPanelDict(panelDict());
+    }
+
+    function tryLoadFont()
+    {
+        var cand = ["NotoSansJP-VF.ttf", "NotoSans.ttf", "font.ttf"];
+        for (var i = 0; i < cand.count; i++) {
+            if (Storages.isExistentStorage(cand[i])) {
+                if (GdiPlus.loadFont(cand[i], "VecFont")) {
+                    font = new GdiPlus.Font("VecFont", 26);
+                    haveFont = true;
+                    return;
+                }
+            }
+        }
+    }
+
+    function redraw()
+    {
+        if (!hasVector) return;
+        vec.clear(0xfff4f6fa);
+        var head = new GdiPlus.Appearance();
+        head.addBrush(0xff223052);
+        vec.drawRectangle(head, 0, 0, W, 46);
+        drawPrimitives(84);   // ヘッダ帯(0-46)にラベル(y-22)が重ならないよう下げる
+        drawGradients(200);
+        drawPaths(340);
+        drawTransformShowcase(340);
+        drawTextSection(520);
+        vec.update();
+        applyEffect();
+    }
+
+    function drawPrimitives(y)
+    {
+        var a = new GdiPlus.Appearance();
+        a.addBrush(0x803a6bd0); a.addPen(0xff1f3f88, penWidth);
+        vec.drawRectangle(a, 24, y, 150, 90);
+        var b = new GdiPlus.Appearance();
+        b.addBrush(0x80d04a4a); b.addPen(0xff902020, penWidth);
+        vec.drawEllipse(b, 200, y, 150, 90);
+        var c = new GdiPlus.Appearance();
+        c.addBrush(0x80e0a030); c.addPen(0xffa06810, penWidth);
+        var cx = 440, cy = y + 45, r = 46, pts = [];
+        for (var i = 0; i < 5; i++) {
+            var ang = -Math.PI / 2 + i * 2 * Math.PI / 5;
+            pts.add([cx + r * Math.cos(ang), cy + r * Math.sin(ang)]);
+        }
+        vec.drawPolygon(c, pts);
+        var d = new GdiPlus.Appearance();
+        d.addPen(0xff8030c0, penWidth + 1);
+        vec.drawArc(d, 520, y, 90, 90, 0, 270);
+        var e = new GdiPlus.Appearance();
+        e.addBrush(0x8030b0a0); e.addPen(0xff207868, penWidth);
+        vec.drawPie(e, 640, y, 90, 90, 30, 220);
+        label("プリミティブ (drawRectangle / Ellipse / Polygon / Arc / Pie)", 24, y - 22);
+    }
+
+    function drawGradients(y)
+    {
+        var g = new GdiPlus.Appearance();
+        g.addPen(0xff444444, 1);
+        g.addBrush(%[ type:GdiPlus.BrushTypeLinearGradient, point1:[24, y], point2:[224, y + 100],
+                      color1:hsvColor(gradHue), color2:hsvColor(fmod(gradHue + 0.4, 1.0)) ]);
+        vec.drawRectangle(g, 24, y, 200, 100);
+        var rg = new GdiPlus.Appearance();
+        rg.addPen(0xff888888, 1);
+        rg.addBrush(%[ type:GdiPlus.BrushTypePathGradient, centerPoint:[350, y + 50], centerColor:hsvColor(gradHue), radius:60 ]);
+        vec.drawEllipse(rg, 290, y, 120, 100);
+        var m = new GdiPlus.Appearance();
+        m.addPen(0xffe05050, penWidth + 4); m.addPen(0xffffffff, penWidth); m.addBrush(0x30000000);
+        vec.drawRectangle(m, 460, y, 150, 100);
+        label("グラデーション (線形 / 放射) と多重ペン", 24, y - 22);
+    }
+
+    function drawPaths(y)
+    {
+        var path = new GdiPlus.Path();
+        var cx = 90, cy = y + 55, ro = 50, ri = 22, poly = [];
+        for (var i = 0; i < 10; i++) {
+            var rr = (i & 1) ? ri : ro;
+            var ang = -Math.PI / 2 + i * Math.PI / 5;
+            poly.add([cx + rr * Math.cos(ang), cy + rr * Math.sin(ang)]);
+        }
+        path.drawPolygon(poly);
+        var ap = new GdiPlus.Appearance();
+        ap.addBrush(0x80f0c040); ap.addPen(0xffa07810, penWidth);
+        vec.drawPath(ap, path);
+        var wave = [];
+        for (var i = 0; i <= 40; i++) wave.add([170 + i * 5, y + 55 + Math.sin(i * 0.5) * 30]);
+        var aw = new GdiPlus.Appearance();
+        aw.addPen(0xff3070c0, penWidth);
+        vec.drawLines(aw, wave);
+        label("パス (drawPath / drawLines)", 24, y - 22);
+    }
+
+    function drawTransformShowcase(y)
+    {
+        var deg = rotation * 360, cx = 780, cy = y + 55;
+        var path = new GdiPlus.Path(), quad = [], half = 48;
+        var corners = [ [-half,-half],[half,-half],[half,half],[-half,half] ];
+        var rad = deg * Math.PI / 180, cs = Math.cos(rad), sn = Math.sin(rad);
+        for (var i = 0; i < 4; i++) {
+            var px = corners[i][0], py = corners[i][1];
+            quad.add([cx + px * cs - py * sn, cy + px * sn + py * cs]);
+        }
+        path.drawPolygon(quad);
+        var a = new GdiPlus.Appearance();
+        a.addBrush(0x8050c070); a.addPen(0xff207040, penWidth);
+        vec.drawPath(a, path);
+        label("回転 " + ("%d".sprintf(deg \ 1)) + "°", 740, y - 22);
+    }
+
+    function drawTextSection(y)
+    {
+        if (haveFont) {
+            var a = new GdiPlus.Appearance();
+            a.addBrush(0xff203050);
+            vec.drawString(font, a, 24, y, "アウトライン文字 — layerExVector");
+            var o = new GdiPlus.Appearance();
+            o.addPen(0xffc03030, 2);
+            vec.drawString(font, o, 24, y + 40, "OUTLINE ABCDEF 0123");
+            label("アウトライン文字 (drawString)", 24, y - 22);
+        } else {
+            label("アウトライン文字: フォント未同梱 (font/ に .ttf を置くと表示)", 24, y - 22);
+        }
+    }
+
+    function label(text, x, y)
+    {
+        vec.font.height = 16;
+        vec.drawText(x, y, text, 0x405070, 255);   // drawText の色は 24bit RGB
+    }
+
+    function applyEffect()
+    {
+        if (effectIndex == 0 || !hasImage) { fx.visible = false; vec.visible = true; return; }
+        fx.copyRect(0, 0, vec, 0, 0, W, H);
+        effects[effectIndex].apply(fx);
+        fx.update();
+        fx.visible = true; vec.visible = false;
+    }
+
+    function panelDict()
+    {
+        var effOpts = [];
+        for (var i = 0; i < effects.count; i++) effOpts.add(effects[i].name);
+        return %[
+            size : [320, 320], background : [28, 30, 40, 236], locale : "ja-JP",
+            align : "top_right", margin : 14,
+            content : %[ type : "margin", padding : 14, child : %[ type : "vtile", children : [
+                %[ type : "hspacer", width : 288 ],
+                %[ type : "align_center", child : %[ type : "label", text : "ベクタ描画設定", size_scale : 1.2 ] ],
+                %[ type : "vspacer", height : 10 ],
+                %[ type : "labeled_row", label : "線幅", label_width : 90,
+                   child : %[ type : "slider_with_range", id : "pen", min : 1, max : 12, initial : penWidth ] ],
+                %[ type : "vspacer", height : 8 ],
+                %[ type : "labeled_row", label : "回転", label_width : 90,
+                   child : %[ type : "slider", id : "rot", initial : rotation ] ],
+                %[ type : "vspacer", height : 8 ],
+                %[ type : "labeled_row", label : "グラデ色相", label_width : 90,
+                   child : %[ type : "slider", id : "hue", initial : gradHue ] ],
+                %[ type : "vspacer", height : 8 ],
+                %[ type : "labeled_row", label : "画像効果", label_width : 90,
+                   child : %[ type : "cycle_picker", id : "fx", options : effOpts, initial : effectIndex ] ],
+                %[ type : "vspacer", height : 12 ],
+                %[ type : "button", id : "redraw", text : "再描画" ]
+            ] ] ]
+        ];
+    }
+
+    function onPanelAction(id, payload)
+    {
+        switch (id) {
+        case "pen": penWidth = Math.floor(payload + 0.5); pendingDraw = true; break;
+        case "rot": rotation = payload;                   pendingDraw = true; break;
+        case "hue": gradHue = payload;                    pendingDraw = true; break;
+        case "fx":  effectIndex = Math.floor(+payload);   pendingDraw = true; break;
+        case "redraw": pendingDraw = true; break;
+        }
+    }
+
+    function onDemoFrame(tick) { if (pendingDraw) { pendingDraw = false; redraw(); } }
+
+    function onKeyDown(key, shift) { if (key == VK_R) redraw(); }
+
+    function onDemoTest()
+    {
+        if (hasImage) { effectIndex = 3; redraw(); }
+        dm(@"@demotest:vector_demo vector=${hasVector ? 1 : 0} image=${hasImage ? 1 : 0} font=${haveFont ? 1 : 0}");
+    }
+
+    // --- 色ヘルパ (クラス内: グローバル名衝突回避) ---
+    function fmod(a, b) { return a - (Math.floor(a / b) * b); }
+    function hsvColor(h)
+    {
+        h = fmod(h, 1.0) * 6.0;
+        var i = Math.floor(h), f = h - i;
+        var v = 230, p = 40, q = (230 * (1 - f) + 40 * f) \ 1, t = (40 * (1 - f) + 230 * f) \ 1;
+        var r, g, b;
+        switch (i % 6) {
+        case 0: r = v; g = t; b = p; break;
+        case 1: r = q; g = v; b = p; break;
+        case 2: r = p; g = v; b = t; break;
+        case 3: r = p; g = q; b = v; break;
+        case 4: r = t; g = p; b = v; break;
+        default: r = v; g = p; b = q; break;
+        }
+        return 0xff000000 | (r << 16) | (g << 8) | b;
+    }
+}
