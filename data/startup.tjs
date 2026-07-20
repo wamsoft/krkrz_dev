@@ -60,6 +60,7 @@ tryScene(coreBase + "input/scene.tjs",        function() { return new InputScene
 tryScene(coreBase + "timer_async/scene.tjs",  function() { return new TimerAsyncScene(); });
 tryScene(coreBase + "gl_canvas/scene.tjs",    function() { return new GLCanvasScene(); });
 tryScene(coreBase + "gl_particles/scene.tjs", function() { return new GLParticlesScene(); });
+tryScene(coreBase + "elements_gallery/scene.tjs", function() { return new ElementsGalleryScene(); });
 
 // 横断デモ (data/ 直下、複数プラグイン)
 tryScene("vector_demo/scene.tjs",     function() { return new VectorScene(); });
