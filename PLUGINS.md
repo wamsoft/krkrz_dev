@@ -179,7 +179,7 @@ win32ole(COM) / k2compat(GUI/WM_TOUCH) / wvdecoder(COM/TSS) / msdfrender(GDI fon
 | DLL | 状況 |
 |---|---|
 | AlphaMovie / extrans / psbfile / motionplayer | 別リポジトリ (未取得) |
-| psd | 要確認 (src/plugins/psdfile は別物の `psdfile.dll`) |
+| psd | **対応済 (2026-07-21)**: `wamsoft_work/libpsd` を近代化して取込 (WIN 専用、フォルダ名 libpsd → ターゲット psd)。TVPCreateStream 化 + libpsd の x64 ポインタ切り捨て修正 (`psd_uintptr`)。src/plugins/psdfile は別物の `psdfile.dll` |
 | PackinOne | `plugins_utf8/packinone` はあるが `_makefile` が svn switch のみでソース未取得 (`/branches/plugin_PackInOne`) |
 | krmovie | 本体側 (`src/core` win32 movie) |
 | krkrsteam | `src/plugins/steam` にあり (既定コメントアウト・`STEAMWORKS_SDK` 必須) |
