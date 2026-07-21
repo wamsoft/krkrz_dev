@@ -59,10 +59,13 @@ psbwriter        # wamsoft_work 由来 (PSBファイル生成。psbwriter.dll �
 #                license.cpp は非Windows no-op、license.rc/V2LINK_NEED_HMODULE は WIN 限定。
 #   wfdspfilter: 音声フィルタ(DSPFilters 純C++)。同上。
 #   ※ wf* の非Windows 実ビルドは未検証 (特に wfstkeff の STK OS 設定)。要ビルド確認。
+#   layerExAreaSplit : Layer の画像バッファプロパティ経由のみ。windows.h 除去 +
+#                      simplebinder の V2Link scaffold 化済。
 list(APPEND TVP_PLUGINS
 textrender      # textrender.dll
 wfstkeff        # wfBasicEffect.dll
 wfdspfilter     # wfTypicalDSP.dll
+layerExAreaSplit # layerExAreaSplit.dll (色領域別 province 塗り)
 )
 
 # 非同期通知(worker スレッド + ウィンドウメッセージ通知)イディオムを全バリアント
