@@ -77,6 +77,21 @@ sigcheck
 
 
 if (KRKRZ_VARIANT STREQUAL "WIN")
+
+# ----------------------------------------------------
+# wamsoft_work 由来のうちソースが WINVER 前提のもの (wchar_t=tjs_char 仮定の
+# L"..." リテラル、TVPCreateIStream、SetDllDirectory/HWND 等)。generic 変種への
+# 移植 (TJS_W 化ほか「旧Win32プラグイン近代化」パターン) が済むまで WIN 専用。
+# フォルダ名とターゲット名は一致しない (krkrz_plugin() 登録名で解決される):
+#   motion → krkrmotion + krkremote / live2d → krkrlive2d / gles → krkrgles
+# live2d は環境変数 CUBISM_SDK (CubismNativeSamples のパス) が必要。
+# ----------------------------------------------------
+list(APPEND TVP_PLUGINS
+motion           # M2Motion/Emote
+live2d           # Live2D
+gles             # OpenGL ES 2.0/3.0 特殊バインダ
+)
+
 list(APPEND TVP_PLUGINS
 # WIN32固有機能をつかっていて現時点でWIN専用。要改修
 addFont

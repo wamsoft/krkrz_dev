@@ -37,7 +37,7 @@ There are no automated tests at this umbrella level. The only test target is the
 
 Plugins to build live in the top-level `CMakeLists.txt` as two lists consumed by `src/core`:
 
-- `TVP_PLUGINS` — shared, portable plugins built for every variant.
+- `TVP_PLUGINS` — shared, portable plugins built for every variant. Entries are **folder names**; the actual CMake target name(s) may differ (e.g. `gles` → `krkrgles`, `motion` → `krkrmotion` + `krkremote`) — `krkrz_plugin()` registers created targets in the `KRKRZ_PLUGIN_TARGETS` global property and `src/core` resolves them per folder, falling back to folder name for plugins that don't use `krkrz_plugin()`.
 - A second block gated on `KRKRZ_VARIANT STREQUAL "WIN"` — Win32-only plugins (`addFont`, `windowEx`, `layerExDraw`, `win32ole`, …) that still use Win32 APIs and have not been ported.
 - `TVP_PLUGINS_STATIC` (passed via `CMAKEOPT`) — subset to link statically into the exe; see the plugin-system section of `src/core/CLAUDE.md` for the static-registration contract.
 
