@@ -93,6 +93,7 @@ if (KRKRZ_VARIANT STREQUAL "WIN")
 list(APPEND TVP_PLUGINS
 motion           # M2Motion/Emote
 live2d           # Live2D
+effekseer        # Effekseer
 gles             # OpenGL ES 2.0/3.0 特殊バインダ
 libpsd           # psd.dll (libpsd ベースの PSD 読み込み。フォルダ名≠ターゲット名)
 )
@@ -135,6 +136,7 @@ list(APPEND TVP_PLUGINS
 getLangName     # getLangName.dll   (CMakeLists 既存)
 lzfs            # lzfs.dll
 msdfrender      # msdfrender.dll    (GDIフォント使用: Plugin.cpp/kzbackport)
+xlsxWriter      # xlsxWriter.dll    (Excel 読み書き。libxlsxwriter/openxlsx/zlib 同梱, CMake化+x64対応 2026-07-27)
 # wfstkeff / wfdspfilter は Win32 非依存化して base(全バリアント)へ移動済
 # k2compat は除外 (原則今後は使わない方針。吉里吉里2互換のGUI/WM_TOUCH依存。
 #   CMakeLists.txt は残置)
