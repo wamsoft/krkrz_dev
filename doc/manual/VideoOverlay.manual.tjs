@@ -1,9 +1,10 @@
 /**
- * VideoOverlay クラスは、MPEG I や WMV、H.264、theora などを表示するため表示領域を作成するクラスです。吉里吉里のレイヤに表示を行うこともできます。
+ * VideoOverlay クラスは、動画を表示するための表示領域を作成するクラスです。吉里吉里のレイヤに表示を行うこともできます。
  *
- * 1.3.0以前は WMV/MPEG I を再生するときは、吉里吉里実行可能ファイルと同じ場所に、krmovie.dll が必要になります。
- *
- * 1.3.0以降は krmovie.dll が本体に統合されたため、別途添付する必要はなくなりました。theora を再生するには krdstheora.dll が必要になります。
+ * 動画再生機構 (krmovie) は本体実行可能ファイルに統合されており、別途 DLL を添付する必要はありません。
+ * 再生には DirectShow を使わず、WebM は movie-player (libvpx)、MPEG-1 は pl_mpeg、それ以外 (WMV/ASF/MP4 等) は
+ * Media Foundation でデコードします。MP4/WMV など Media Foundation ネイティブ形式は既定でハードウェアデコード
+ * されます (コマンドラインオプション -mediaengine=no で無効化可能)。旧 theora (krdstheora.dll) は非対応です。
  *
  * レイヤでの再生を除き、オーバーレイによる再生では、VideoOverlay クラスの表示領域は、すべてのレイヤよりも手前に表示され、透過することはできません。
  *
@@ -84,9 +85,10 @@ class VideoOverlay {
 	 *
 	 * 指定されたメディアを開きます。
 	 *
-	 * 現バージョンで再生可能なのは MPEG I (拡張子 .mpeg または .mpg または .mpv)、WMVです。
+	 * 再生可能な主な形式は WebM (VP8/VP9、アルファ対応)、MPEG-1 (拡張子 .mpeg / .mpg / .mpv)、
+	 * WMV / ASF、MP4 (.mp4 / .m4v / .mov、H.264 / HEVC)、AVI (内部コーデック依存) です。
 	 *
-	 * ビデオのみの (オーディオとマルチプレクシングされていない) MPEG I ストリームの拡張子は .mpv にしてください。
+	 * WebM は透過 (アルファ) 付き動画に対応します。MP4 / WMV などは既定でハードウェアデコードされます。
 	 * @param storage 指定されたメディアを開きます。
 	 */
 	function open(storage);
