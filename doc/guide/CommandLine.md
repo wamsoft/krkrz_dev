@@ -422,6 +422,19 @@
   指定しなかった場合は SDL3 の自動選択に任されます。
   
   SDL3 ビルド + SDLDrawDevice ( = `-drawdevice=sdl` か既定 ) 使用時のみ意味を持ちます。
+- **-**mediaengine** (動画のハードウェアデコード / Windows 限定)**  
+  [VideoOverlay](../reference/VideoOverlay.md) のオーバーレイ再生 ( `vomOverlay` ) で、
+  mp4/H.264/HEVC/wmv/asf などの MF-native 形式を Media Foundation ( IMFMediaEngine ) で
+  ハードウェアデコードするかどうかを指定します。
+  
+  設定可能な値は **'yes' (既定, ハードウェアデコードを使う)** または
+  **'no' / 'off' / 'false' / '0' (使わない)** です。'no' を指定すると全形式が
+  ソフトウェアデコード ( MF SourceReader / pl_mpeg / movie-player ) になります。
+  
+  webm ( VP8/VP9 ) と mpeg ( MPEG-1 ) は Media Foundation にデコーダが無いため、この
+  設定に関わらず常にソフトウェアデコードです。また `vomMixer` モード ( 追加画像合成 ) は
+  常にソフトウェア合成経路になります ( [VideoOverlay](../reference/VideoOverlay.md) の
+  `mode` プロパティ参照 )。
 
 ## CPU 機能関連のオプション
 

@@ -298,13 +298,25 @@ layer1 プロパティと layer2 プロパティを異なるレイヤに設定�
 
 **解説**
 
-オーバーレイorレイヤ描画の指定
+再生モードの指定
 
-オーバーレイモードであるか、レイヤ描画モードであるか、ミキサーモードであるかを表します。値を設定することもできます。
+再生方式を表します。オープン前に設定してください (オープン後の変更は無効)。
 
-オーバーレイモードの場合は **vomOverlay**、レイヤ描画モードの場合は **vomLayer** 、ミキサーモードの場合は **vomMixer**、Media Foundation モードの場合は **vomMFEVR** となります。
+- **vomOverlay** (既定, オーバーレイ): 動画を全画面前面に表示します。Windows では
+mp4/H.264/HEVC/wmv/asf などは既定でハードウェアデコード (Media Foundation の
+IMFMediaEngine) を用い、映像は描画デバイス (BasicDrawDevice) の Direct3D11 バック
+バッファへ直接合成されます。webm/mpeg はソフトウェアデコードです。このモードでは
+{@link VideoOverlay.setMixingLayer setMixingLayer} による追加画像合成は行われません。
+- **vomMixer** (ミキサー): オーバーレイ + 追加画像合成。ハードウェアデコードを使わず
+必ずソフトウェア合成経路になり、{@link VideoOverlay.setMixingLayer setMixingLayer}
+による画像合成が利用できます (音声も内部処理となり音量制御が確実に効きます)。
+- **vomLayer** (レイヤ描画): 動画をレイヤ ({@link VideoOverlay.layer1 layer1} /
+{@link VideoOverlay.layer2 layer2}) の画像として描画します。
+- **vomMFEVR**: 旧 Media Foundation + EVR モード。現在は vomOverlay と同じ動作です
+(値は互換のため残されています)。
 
-vomMFEVR モードは 1.2.0 以降でのみ使用できます。
+ハードウェアデコードはコマンドラインオプション **-mediaengine=no** で無効化でき、その
+場合は全形式ソフトウェアデコードになります。
 
 ---
 
