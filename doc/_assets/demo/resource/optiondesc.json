@@ -49,18 +49,6 @@
 				]
 			},
 			{
-				"caption":"タイマの精度",
-				"description":"タイマの精度の設定です。\n\n「高い」を指定すると動作のもたつきが改善される場合がありますが、パフォーマンスが低下する場合もあります。このオプションは、NT 系 OS (NT/2000/XP/Vista以降) においてのみ意味を持ちます。",
-				"name":"timerprec",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"normal", "desc":"通常", "default":true },
-					{ "value":"higher", "desc":"やや高い" },
-					{ "value":"high", "desc":"高い" }
-				]
-			},
-			{
 				"caption":"タイマイベント許容量制限",
 				"description":"タイマイベントの許容量を制限するかどうかの設定です。\n\n「する」を指定すると、処理の遅いコンピュータ上でシステムの処理が追いつかず、ユーザの操作がしづらくなる状況を回避できる場合があります。",
 				"name":"laxtimer",
@@ -236,209 +224,8 @@
 				]
 			},
 			{
-				"caption":"DirectSound ソフトウェアミキシング",
-				"description":"DirectSoundでソフトウェアを使ってミキシングを行うかどうかの設定です。\n\n設定を変更すると 音切れや音飛びが改善される場合があります。",
-				"name":"wssoft",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"yes", "desc":"ソフトウェアのみ", "default":true },
-					{ "value":"no", "desc":"ハードウェア優先" }
-				]
-			},
-			{
-				"caption":"DirectSound セカンダリバッファ再生成",
-				"description":"DirectSoundでセカンダリバッファを常に再生成するかどうかの設定です。\n\n設定を変更すると 再生開始時の音切れや音飛びが改善される場合があります。",
-				"name":"wsrecreate",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"yes", "desc":"常に再生成" },
-					{ "value":"no", "desc":"必要に応じて再生成", "default":true }
-				]
-			},
-			{
-				"caption":"DirectSound セカンダリバッファ長さ",
-				"description":"DirectSoundセカンダリバッファの長さを指定します。\n\n一般に長くとると再生が安定しますが、メモリを消費します。",
-				"name":"wsl1len",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"250", "desc":"250ms" },
-					{ "value":"375", "desc":"375ms" },
-					{ "value":"500", "desc":"500ms" },
-					{ "value":"625", "desc":"625ms" },
-					{ "value":"750", "desc":"750ms" },
-					{ "value":"875", "desc":"875ms" },
-					{ "value":"1000", "desc":"1000ms", "default":true },
-					{ "value":"1125", "desc":"1125ms" },
-					{ "value":"1250", "desc":"1250ms" },
-					{ "value":"1375", "desc":"1375ms" },
-					{ "value":"1500", "desc":"1500ms" },
-					{ "value":"1625", "desc":"1625ms" },
-					{ "value":"1750", "desc":"1750ms" },
-					{ "value":"1875", "desc":"1875ms" },
-					{ "value":"2000", "desc":"2000ms" },
-					{ "value":"2125", "desc":"2125ms" },
-					{ "value":"2250", "desc":"2250ms" },
-					{ "value":"2375", "desc":"2375ms" },
-					{ "value":"2500", "desc":"2500ms" },
-					{ "value":"2625", "desc":"2625ms" },
-					{ "value":"2750", "desc":"2750ms" },
-					{ "value":"2875", "desc":"2875ms" },
-					{ "value":"3000", "desc":"3000ms" },
-					{ "value":"3125", "desc":"3125ms" },
-					{ "value":"3250", "desc":"3250ms" },
-					{ "value":"3375", "desc":"3375ms" },
-					{ "value":"3500", "desc":"3500ms" },
-					{ "value":"3625", "desc":"3625ms" },
-					{ "value":"3750", "desc":"3750ms" },
-					{ "value":"3875", "desc":"3875ms" },
-					{ "value":"4000", "desc":"4000ms" },
-					{ "value":"4500", "desc":"4500ms" },
-					{ "value":"5000", "desc":"5000ms" },
-					{ "value":"5500", "desc":"5500ms" },
-					{ "value":"6000", "desc":"6000ms" },
-					{ "value":"6500", "desc":"6500ms" },
-					{ "value":"7000", "desc":"7000ms" },
-					{ "value":"7500", "desc":"7500ms" },
-					{ "value":"8000", "desc":"8000ms" },
-					{ "value":"8500", "desc":"8500ms" },
-					{ "value":"9000", "desc":"9000ms" },
-					{ "value":"9500", "desc":"9500ms" },
-					{ "value":"10000", "desc":"10000ms" }
-				]
-			},
-			{
-				"caption":"DirectSound セカンダリ補助バッファ長さ",
-				"description":"DirectSoundセカンダリバッファ用の補助バッファの長さを指定します。\n\n一般に長くとると再生が安定しますが、メモリを消費します。",
-				"name":"wsl2len",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"250", "desc":"250ms" },
-					{ "value":"375", "desc":"375ms" },
-					{ "value":"500", "desc":"500ms" },
-					{ "value":"625", "desc":"625ms" },
-					{ "value":"750", "desc":"750ms" },
-					{ "value":"875", "desc":"875ms" },
-					{ "value":"1000", "desc":"1000ms", "default":true },
-					{ "value":"1125", "desc":"1125ms" },
-					{ "value":"1250", "desc":"1250ms" },
-					{ "value":"1375", "desc":"1375ms" },
-					{ "value":"1500", "desc":"1500ms" },
-					{ "value":"1625", "desc":"1625ms" },
-					{ "value":"1750", "desc":"1750ms" },
-					{ "value":"1875", "desc":"1875ms" },
-					{ "value":"2000", "desc":"2000ms" },
-					{ "value":"2125", "desc":"2125ms" },
-					{ "value":"2250", "desc":"2250ms" },
-					{ "value":"2375", "desc":"2375ms" },
-					{ "value":"2500", "desc":"2500ms" },
-					{ "value":"2625", "desc":"2625ms" },
-					{ "value":"2750", "desc":"2750ms" },
-					{ "value":"2875", "desc":"2875ms" },
-					{ "value":"3000", "desc":"3000ms" },
-					{ "value":"3125", "desc":"3125ms" },
-					{ "value":"3250", "desc":"3250ms" },
-					{ "value":"3375", "desc":"3375ms" },
-					{ "value":"3500", "desc":"3500ms" },
-					{ "value":"3625", "desc":"3625ms" },
-					{ "value":"3750", "desc":"3750ms" },
-					{ "value":"3875", "desc":"3875ms" },
-					{ "value":"4000", "desc":"4000ms" },
-					{ "value":"4500", "desc":"4500ms" },
-					{ "value":"5000", "desc":"5000ms" },
-					{ "value":"5500", "desc":"5500ms" },
-					{ "value":"6000", "desc":"6000ms" },
-					{ "value":"6500", "desc":"6500ms" },
-					{ "value":"7000", "desc":"7000ms" },
-					{ "value":"7500", "desc":"7500ms" },
-					{ "value":"8000", "desc":"8000ms" },
-					{ "value":"8500", "desc":"8500ms" },
-					{ "value":"9000", "desc":"9000ms" },
-					{ "value":"9500", "desc":"9500ms" },
-					{ "value":"10000", "desc":"10000ms" }
-				]
-			},
-			{
-				"caption":"DirectSound ミュート",
-				"description":"DirectSound でアプリケーションが非アクティブあるいは最小化した際にミュートするか(音量を下げるか)どうかの設定です。\n\n「ミュートしない」を選択するとミュートは行われません。\n\n「最小化時」や「非アクティブ」では、それぞれアプリケーションが最小化したとき、非アクティブになったときにミュートされます。",
-				"name":"wsmute",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"never", "desc":"ミュートしない", "default":true },
-					{ "value":"minimize", "desc":"最小化時" },
-					{ "value":"deactive", "desc":"非アクティブ時" }
-				]
-			},
-			{
-				"caption":"DirectSound ミュート音量",
-				"description":"「DirectSound ミュート」でのミュート時の音量の設定です。\n\n「0%」を指定すると完全に無音となり、「50%」を指定すると半分の音量(約-6dB)となります。",
-				"name":"wsmutevol",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"0", "desc":"0%(-∞dB)", "default":true },
-					{ "value":"5", "desc":"5%(-26.0dB)" },
-					{ "value":"10", "desc":"10%(-20.0dB)" },
-					{ "value":"15", "desc":"15%(-16.5dB)" },
-					{ "value":"20", "desc":"20%(-14.0dB)" },
-					{ "value":"25", "desc":"25%(-12.0dB)" },
-					{ "value":"30", "desc":"30%(-10.5dB)" },
-					{ "value":"35", "desc":"35%(-9.1dB)" },
-					{ "value":"40", "desc":"40%(-8.0dB)" },
-					{ "value":"45", "desc":"45%(-6.9dB)" },
-					{ "value":"50", "desc":"50%(-6.0dB)" },
-					{ "value":"55", "desc":"55%(-5.2dB)" },
-					{ "value":"60", "desc":"60%(-4.4dB)" },
-					{ "value":"65", "desc":"65%(-3.7dB)" },
-					{ "value":"70", "desc":"70%(-3.1dB)" },
-					{ "value":"75", "desc":"75%(-2.5dB)" },
-					{ "value":"80", "desc":"80%(-1.9dB)" },
-					{ "value":"85", "desc":"85%(-1.4dB)" },
-					{ "value":"90", "desc":"90%(-0.9dB)" },
-					{ "value":"95", "desc":"95%(-0.4dB)" }
-				]
-			},
-			{
-				"caption":"DirectSound 強制フォーマット変換",
-				"description":"DirectSoundに再生させるPCMデータを、指定の形式に強制的に変換するかどうかの設定です。\n\n設定を変更すると再生時の障害が改善する場合があります。\n\n「16bit整数モノラルに変換」を選択すると「DirectSound 強制4ch再生」の設定は無視されます。",
-				"name":"wsforcecnv",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"none", "desc":"変換しない", "default":true },
-					{ "value":"i16", "desc":"16bit整数に変換" },
-					{ "value":"i16m", "desc":"16bit整数モノラルに変換" }
-				]
-			},
-			{
-				"caption":"DirectSound 3D制御",
-				"description":"DirectSoundで3D制御を行うかどうかの設定です。\n\n「する」を選択すると、サウンドの3D制御が有効になります(アプリケーションによっては効果がありません)。また、多くの環境では、ステレオやモノラルのサウンドが、サラウンドスピーカーを使用するように拡張されて再生されます。「する」を選択すると「DirectSound 強制4ch再生」の設定は無視されます。",
-				"name":"wsuse3d",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"no", "desc":"しない", "default":true },
-					{ "value":"yes", "desc":"する" }
-				]
-			},
-			{
-				"caption":"DirectSound 強制4ch再生",
-				"description":"DirectSoundでステレオやモノラルのサウンドを再生する場合に、強制的にリアスピーカーを含む4chで再生させるかどうかの設定です。\n\n「する」を設定すると、ステレオやモノラルのサウンドがフロントスピーカーでしか再生されない環境でも、フロントスピーカーとリアスピーカーの両方でサウンドを再生させることができます。",
-				"name":"wsexpandquad",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"no", "desc":"しない", "default":true },
-					{ "value":"yes", "desc":"する" }
-				]
-			},
-			{
-				"caption":"DirectSound プライマリバッファ周波数",
-				"description":"DirectSoundのプライマリバッファの再生周波数の設定です。\n\n設定を変更しても再生状態に変化がない場合もあります。",
+				"caption":"サウンド出力周波数",
+				"description":"サウンド出力(ミキサ)のサンプリング周波数の設定です。\n\n設定を変更しても再生状態に変化がない場合もあります。",
 				"name":"wsfreq",
 				"type":"select",
 				"user":true,
@@ -456,43 +243,16 @@
 					{ "value":"88200", "desc":"88.2kHz" },
 					{ "value":"96000", "desc":"96kHz" }
 				]
-			},
+						},
 			{
-				"caption":"DirectSound プライマリバッファビット数",
-				"description":"DirectSoundのプライマリバッファの再生ビット数の設定です。\n\n設定を変更しても再生状態に変化がない場合もあります。",
-				"name":"wsbits",
+				"caption":"オーディオデバイス先行初期化",
+				"description":"起動時にオーディオデバイス(音声出力)を先行して初期化します。\n\n最初のサウンド再生時に初めてデバイスを開くと、その分だけ再生開始が遅れ、音の先頭がわずかに欠けることがあります。「する」にしておくと起動時に初期化を済ませるため、この頭切れを防げます。\n\n不安定なサウンドドライバなどで起動時のデバイスオープンを避けたい場合は「しない」を指定してください。",
+				"name":"wspreinit",
 				"type":"select",
 				"user":true,
 				"values":[
-					{ "value":"i8", "desc":"8bit整数" },
-					{ "value":"i16", "desc":"16bit整数", "default":true },
-					{ "value":"i24", "desc":"24bit整数" },
-					{ "value":"i32", "desc":"32bit整数" },
-					{ "value":"f32", "desc":"32bit浮動小数点数" }
-				]
-			},
-			{
-				"caption":"DirectSound プライマリバッファ再生制御",
-				"description":"DirectSoundのプライマリバッファに対して再生/停止の制御を行うかどうかの設定です。\n\n設定を変更すると 音切れや音飛びが改善される場合があります。",
-				"name":"wscontrolpri",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"yes", "desc":"制御を行う", "default":true },
-					{ "value":"no", "desc":"制御を行わない" }
-				]
-			},
-			{
-				"caption":"DirectSound プライマリバッファ設定試行レベル",
-				"description":"DirectSoundプライマリバッファのフォーマットを指定する際にどれほど多くの設定を試すかの設定です。\n\nレベル 0 を指定すると、ステレオ 16bit整数のフォーマットの設定を試行します。\n\nレベル 1 を指定すると レベル 0 を試行する前に、システムのスピーカー設定に従ったチャンネル数、16bit整数でのフォーマットの設定を試行します。\n\nレベル 2 を指定すると レベル 1 を試行する前に、「DirectSound プライマリバッファビット数」で指定されたビット数、システムのスピーカー設定に従ったチャンネル数、WAVEFORMATEX 構造体によるフォーマットの設定を試行します。\n\n「すべて」を指定すると レベル 2 を試行する前に、レベル 2 と同様の設定で WAVEFORMATEXTENSIBLE 構造体によるフォーマットの指定を試行します。",
-				"name":"wspritry",
-				"type":"select",
-				"user":true,
-				"values":[
-					{ "value":"0", "desc":"レベル0" },
-					{ "value":"1", "desc":"レベル1" },
-					{ "value":"2", "desc":"レベル2" },
-					{ "value":"all", "desc":"すべて", "default":true }
+					{ "value":"yes", "desc":"する", "default":true },
+					{ "value":"no", "desc":"しない" }
 				]
 			}
 		]
@@ -999,17 +759,6 @@
 				"values":[
 					{ "value":"default", "desc":"2.25以降の動作", "default":true },
 					{ "value":"compat", "desc":"2.25未満と互換" }
-				]
-			},
-			{
-				"caption":"DirectSoundボリュームカーブ",
-				"description":"DirectSoundのボリュームカーブです。\n\nDirectSoundのボリュームカーブは、2.31 2011/6/14 より、より直感的なカーブになりました。",
-				"name":"dsvolfactor",
-				"type":"select",
-				"user":false,
-				"values":[
-					{ "value":"3322", "desc":"2.31 以降の動作", "default":true },
-					{ "value":"5000", "desc":"2.31 未満と互換" }
 				]
 			},
 			{

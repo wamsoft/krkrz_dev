@@ -4,7 +4,6 @@
 * TLG5/6(独自形式)
 * PNG
 * JPEG
-* JPEG XR
 * BMP
 
 ## 音声
