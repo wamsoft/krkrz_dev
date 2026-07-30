@@ -1,10 +1,11 @@
 # VideoOverlay
 
-VideoOverlay クラスは、MPEG I や WMV、H.264、theora などを表示するため表示領域を作成するクラスです。吉里吉里のレイヤに表示を行うこともできます。
+VideoOverlay クラスは、動画を表示するための表示領域を作成するクラスです。吉里吉里のレイヤに表示を行うこともできます。
 
-1.3.0以前は WMV/MPEG I を再生するときは、吉里吉里実行可能ファイルと同じ場所に、krmovie.dll が必要になります。
-
-1.3.0以降は krmovie.dll が本体に統合されたため、別途添付する必要はなくなりました。theora を再生するには krdstheora.dll が必要になります。
+動画再生機構 (krmovie) は本体実行可能ファイルに統合されており、別途 DLL を添付する必要はありません。
+再生には DirectShow を使わず、WebM は movie-player (libvpx)、MPEG-1 は pl_mpeg、それ以外 (WMV/ASF/MP4 等) は
+Media Foundation でデコードします。MP4/WMV など Media Foundation ネイティブ形式は既定でハードウェアデコード
+されます (コマンドラインオプション -mediaengine=no で無効化可能)。旧 theora (krdstheora.dll) は非対応です。
 
 レイヤでの再生を除き、オーバーレイによる再生では、VideoOverlay クラスの表示領域は、すべてのレイヤよりも手前に表示され、透過することはできません。
 
@@ -298,13 +299,25 @@ layer1 プロパティと layer2 プロパティを異なるレイヤに設定�
 
 **解説**
 
-オーバーレイorレイヤ描画の指定
+再生モードの指定
 
-オーバーレイモードであるか、レイヤ描画モードであるか、ミキサーモードであるかを表します。値を設定することもできます。
+再生方式を表します。オープン前に設定してください (オープン後の変更は無効)。
 
-オーバーレイモードの場合は **vomOverlay**、レイヤ描画モードの場合は **vomLayer** 、ミキサーモードの場合は **vomMixer**、Media Foundation モードの場合は **vomMFEVR** となります。
+- **vomOverlay** (既定, オーバーレイ): 動画を全画面前面に表示します。Windows では
+mp4/H.264/HEVC/wmv/asf などは既定でハードウェアデコード (Media Foundation の
+IMFMediaEngine) を用い、映像は描画デバイス (BasicDrawDevice) の Direct3D11 バック
+バッファへ直接合成されます。webm/mpeg はソフトウェアデコードです。このモードでは
+{@link VideoOverlay.setMixingLayer setMixingLayer} による追加画像合成は行われません。
+- **vomMixer** (ミキサー): オーバーレイ + 追加画像合成。ハードウェアデコードを使わず
+必ずソフトウェア合成経路になり、{@link VideoOverlay.setMixingLayer setMixingLayer}
+による画像合成が利用できます (音声も内部処理となり音量制御が確実に効きます)。
+- **vomLayer** (レイヤ描画): 動画をレイヤ ({@link VideoOverlay.layer1 layer1} /
+{@link VideoOverlay.layer2 layer2}) の画像として描画します。
+- **vomMFEVR**: 旧 Media Foundation + EVR モード。現在は vomOverlay と同じ動作です
+(値は互換のため残されています)。
 
-vomMFEVR モードは 1.2.0 以降でのみ使用できます。
+ハードウェアデコードはコマンドラインオプション **-mediaengine=no** で無効化でき、その
+場合は全形式ソフトウェアデコードになります。
 
 ---
 
@@ -320,9 +333,9 @@ vomMFEVR モードは 1.2.0 以降でのみ使用できます。
 
 1.0 を指定すると通常の再生速度、0.5 では半分の再生速度、2では2倍の再生速度となります。
 
-設定可能値はDirectShowのフィルタによって決まります。
+設定可能な範囲はデコーダ / コーデックに依存します。
 
-参考 : 音声付のMPEGファイルの場合、0.0より大きい値から2.0までの値が設定可能です。音声なしのMPEGファイルの場合、0.0より大きい値からdoubleの範囲内(たぶん)で設定可能ですが、実際の再生速度は処理速度によって上限が決まります。
+参考 : 音声付の動画の場合、概ね 0.0 より大きい値から 2.0 までの値が設定可能です。音声なしの動画の場合、0.0 より大きい値から double の範囲内で設定可能ですが、実際の再生速度は処理速度によって上限が決まります。
 
 ---
 
@@ -820,9 +833,10 @@ saturationRangeMin から saturationRangeMax への有効な増分を表しま�
 
 指定されたメディアを開きます。
 
-現バージョンで再生可能なのは MPEG I (拡張子 .mpeg または .mpg または .mpv)、WMVです。
+再生可能な主な形式は WebM (VP8/VP9、アルファ対応)、MPEG-1 (拡張子 .mpeg / .mpg / .mpv)、
+WMV / ASF、MP4 (.mp4 / .m4v / .mov、H.264 / HEVC)、AVI (内部コーデック依存) です。
 
-ビデオのみの (オーディオとマルチプレクシングされていない) MPEG I ストリームの拡張子は .mpv にしてください。
+WebM は透過 (アルファ) 付き動画に対応します。MP4 / WMV などは既定でハードウェアデコードされます。
 
 ---
 

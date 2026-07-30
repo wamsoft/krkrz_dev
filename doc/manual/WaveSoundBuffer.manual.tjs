@@ -175,16 +175,6 @@ class WaveSoundBuffer {
 	}
 
 	/**
-	 * 現在使用中のサウンドデバイスの GUID
-	 *
-	 * 現在 WaveSoundBuffer が使用している DirectSound デバイスの GUID 文字列を
-	 * 取得 / 設定します。設定すると `-wsguid` コマンドラインオプションを更新し
-	 * デバイスを再初期化します。Win32 ビルド専用、クラス静的プロパティ。
-	 * @see WaveSoundBuffer.getDeviceList
-	 */
-	property currentDevice;
-
-	/**
 	 * フィルタ配列
 	 *
 	 * @description インサーションフィルタオブジェクトを保持している配列(Arrayクラスのインスタンス)です。
@@ -265,7 +255,6 @@ class WaveSoundBuffer {
 	 *
 	 * このプロパティは WaveSoundBuffer クラス上にしか存在しません (WaveSoundBufferから作られたオブジェクト上にこのプロパティはありません)。
 	 * 使用する際は WaveSoundBuffer.globalFocusMode としてください。
-	 * このプロパティの設定よりも、コマンドラインオプションで指定した '-wsmute' (DirectSound ミュート) の設定が優先されます。
 	 */
 	 property globalFocusMode {
 	 getter() { return value; }
@@ -379,26 +368,16 @@ class WaveSoundBuffer {
 	}
 
 	/**
-	 * DirectSound の解放
+	 * DirectSound の解放 ( 互換用・何もしません )
 	 *
-	 * @description DirectSound を解放します。
-	 * すべての WaveSoundBuffer クラスのオブジェクトは停止状態になります。
-	 * DirectSound と WaveMapper ( MCI 等 ) による再生を同時に行えない環境などで DirectSound を 解放するためにこのメソッドを使います。
+	 * @description 旧 DirectSound 実装向けに用意されていたメソッドです。
+	 * 現在の吉里吉里Z の音声出力は miniaudio ( WASAPI 共有モード ) を使用しており
+	 * DirectSound は使用しないため、このメソッドは呼び出しても何も行いません。
+	 * 過去のスクリプトとの互換性のためにのみ残されています。
 	 * このメソッドは WaveSoundBuffer クラス上にしか存在しません (WaveSoundBufferから作られたオブジェクト上にこのメソッドはありません)。
 	 * 使用する際は WaveSoundBuffer.freeDirectSound(); としてください。
 	 */
 	function freeDirectSound( );
-
-	/**
-	 * サウンドデバイス一覧の取得
-	 *
-	 * システムが提供するサウンドデバイスの一覧を辞書配列形式で返します。
-	 * 各エントリにはデバイス名と GUID が含まれます ( 詳細フォーマットは
-	 * Win32 実装の `GetDeviceList` を参照 )。Win32 ビルド専用、静的メソッド。
-	 * @return デバイス情報を含む辞書配列が返ります。
-	 * @see WaveSoundBuffer.currentDevice
-	 */
-	function getDeviceList();
 
 	/**
 	 * 視覚化用データの取得

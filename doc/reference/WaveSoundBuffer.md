@@ -21,7 +21,6 @@ WaveSoundBuffer クラスでは、[ループチューナ](../guide/LoopTuner.md)
 - [status](#status)
 - [bits](#bits)
 - [channels](#channels)
-- [currentDevice](#currentdevice)
 - [filters](#filters)
 - [flags](#flags)
 - [frequency](#frequency)
@@ -43,7 +42,6 @@ WaveSoundBuffer クラスでは、[ループチューナ](../guide/LoopTuner.md)
 - [fade](#fade)
 - [stopFade](#stopfade)
 - [freeDirectSound](#freedirectsound)
-- [getDeviceList](#getdevicelist)
 - [getVisBuffer](#getvisbuffer)
 - [setPos](#setpos)
 
@@ -211,22 +209,6 @@ CD と同じ量子化ビット数の場合は 16 になります。
 
 ---
 
-### currentDevice
-
-プロパティ \ アクセス: `r/w`
-
-**解説**
-
-現在使用中のサウンドデバイスの GUID
-
-現在 WaveSoundBuffer が使用している DirectSound デバイスの GUID 文字列を
-取得 / 設定します。設定すると `-wsguid` コマンドラインオプションを更新し
-デバイスを再初期化します。Win32 ビルド専用、クラス静的プロパティ。
-
-**関連:** [WaveSoundBuffer.getDeviceList](WaveSoundBuffer.md#getdevicelist)
-
----
-
 ### filters
 
 プロパティ \ アクセス: `r`
@@ -320,7 +302,6 @@ CD と同じサンプリング周波数の場合は 44100 になります。
 
 このプロパティは WaveSoundBuffer クラス上にしか存在しません (WaveSoundBufferから作られたオブジェクト上にこのプロパティはありません)。
 使用する際は WaveSoundBuffer.globalFocusMode としてください。
-このプロパティの設定よりも、コマンドラインオプションで指定した '-wsmute' (DirectSound ミュート) の設定が優先されます。
 
 ---
 
@@ -545,33 +526,14 @@ debug.message(buf.labels['start'].samplePosition);
 
 **解説**
 
-DirectSound の解放
+DirectSound の解放 ( 互換用・何もしません )
 
-DirectSound を解放します。
-すべての WaveSoundBuffer クラスのオブジェクトは停止状態になります。
-DirectSound と WaveMapper ( MCI 等 ) による再生を同時に行えない環境などで DirectSound を 解放するためにこのメソッドを使います。
+旧 DirectSound 実装向けに用意されていたメソッドです。
+現在の吉里吉里Z の音声出力は miniaudio ( WASAPI 共有モード ) を使用しており
+DirectSound は使用しないため、このメソッドは呼び出しても何も行いません。
+過去のスクリプトとの互換性のためにのみ残されています。
 このメソッドは WaveSoundBuffer クラス上にしか存在しません (WaveSoundBufferから作られたオブジェクト上にこのメソッドはありません)。
 使用する際は WaveSoundBuffer.freeDirectSound(); としてください。
-
----
-
-### getDeviceList
-
-メソッド
-
-**戻り値**
-
-デバイス情報を含む辞書配列が返ります。
-
-**解説**
-
-サウンドデバイス一覧の取得
-
-システムが提供するサウンドデバイスの一覧を辞書配列形式で返します。
-各エントリにはデバイス名と GUID が含まれます ( 詳細フォーマットは
-Win32 実装の `GetDeviceList` を参照 )。Win32 ビルド専用、静的メソッド。
-
-**関連:** [WaveSoundBuffer.currentDevice](WaveSoundBuffer.md#currentdevice)
 
 ---
 
@@ -671,80 +633,5 @@ Win32 実装の `GetDeviceList` を参照 )。Win32 ビルド専用、静的メ�
 ラベルを通過した
 
 再生位置がラベルを通過した際に発生します。
-
----
-
-## プラグイン拡張: getSample
-
-擬似コードによるマニュアル
-
-### メンバー一覧
-
-#### プロパティ
-
-- [sampleValue](#samplevalue)
-- [sampleCount](#samplecount)
-- [sampleAhead](#sampleahead)
-
-#### メソッド
-
-- [getSample](#getsample)
-
----
-
-### sampleValue
-
-プロパティ \ アクセス: `r`
-
-**解説**
-
-サンプル値の取得（新方式）
-
-getVisBuffer(buf, sampleCount, 1, sampleAhead)でサンプルを取得し，
-(value/32768)^2の最大値を取得します。(0～1の実数で返ります)
-※このプロパティを読み出すと暗黙でuseVisBuffer=trueに設定されます
-
----
-
-### sampleCount
-
-プロパティ \ アクセス: `r/w`
-
-**解説**
-
-新方式のバッファ取得用パラメータプロパティ（sampleValueを参照）
-
-デフォルトはsetDefaultCounts/setDefaultAheadsで決定されます
-※このプロパティを読み書きする暗黙でuseVisBuffer=trueに設定されます
-
----
-
-### sampleAhead
-
-プロパティ \ アクセス: `r/w`
-
----
-
-### getSample
-
-メソッド
-
-**引数**
-
-| 引数 | 既定値 | 説明 |
-| --- | --- | --- |
-| `n` | `&nbsp;` | 取得するサンプルの数。省略すると 100 |
-
-**戻り値**
-
-平均値
-※ 予めuseVisBuffer=trueにしておくこと
-
-**解説**
-
-サンプル値の取得（旧方式）
-
-現在の再生位置から指定数のサンプルを取得してその平均値を返します。
-値が負のサンプル値は無視されます。
 
 ---
