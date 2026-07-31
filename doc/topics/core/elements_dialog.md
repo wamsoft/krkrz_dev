@@ -13,9 +13,11 @@
 - elements_modal ライブラリ: [external/elements_modal/README.md](https://github.com/wamsoft/krkrz_develop/blob/master/external/elements_modal/README.md)
 - JSON で表現できる widget / 属性 / キー操作: [elements_modal の README](https://github.com/wamsoft/elements/blob/develop/docs/keyboard-navigation.md)
 
-SDL3 ビルド + `KRKRZ_USE_ELEMENTS=ON` ( デフォルト ) でビルドされた
-エンジンで利用できます。WINVER ビルド・`KRKRZ_USE_ELEMENTS=OFF`
-ビルドでは [Dialog](../../reference/Dialog.md) クラスは登録されません。
+`KRKRZ_USE_ELEMENTS=ON` ( デフォルト ) でビルドされたエンジンで利用できます。
+SDL3 ビルドと **WINVER ( Windows ネイティブ / D3D11 ) ビルドの両方**に対応します
+( WINVER では独立 OS ウィンドウ版モーダルは overlay モーダルで代替 )。
+`KRKRZ_USE_ELEMENTS=OFF` ビルドでは [Dialog](../../reference/Dialog.md)
+クラスは登録されません。
 
 ---
 
@@ -137,12 +139,13 @@ slant / stretch を推定 )。
 ## ビルド構成
 
 `CMakeLists.txt` の `KRKRZ_USE_ELEMENTS` で Elements / UserConfig を一括で
-無効化できます ( SDL3 ビルド専用、デフォルト ON )。OFF にすると以下が
+無効化できます ( SDL3 / WINVER 共通、デフォルト ON )。OFF にすると以下が
 コンパイル / リンクから除外されます。
 
 - `external/elements` ( cycfi::elements + thorvg ) と `external/elements_modal`
 - `common/visual/elements/*` / `sdl3/visual/SDL{Dialog,Elements*}` /
-  `common/visual/opengl/OGLDialogRenderer.{cpp,h}`
+  `common/visual/opengl/OGLDialogRenderer.{cpp,h}` /
+  `win32/visual/D3D11DialogRenderer.{cpp,h}` ( WINVER )
 - TJS [Dialog](../../reference/Dialog.md) クラスの登録
 
 x64-windows 計測で krkrz64.exe が 15.6 MB → 13.8 MB ( OFF ) と約 1.8 MB

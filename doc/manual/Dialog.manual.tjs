@@ -41,8 +41,10 @@
  * キーボード / ゲームパッド操作の設定詳細は [elements_modal の README](https://github.com/wamsoft/elements/blob/develop/docs/keyboard-navigation.md)
  * を参照してください。
  *
- * `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe や WINVER ビルドでは Dialog
- * クラスは利用できません。
+ * `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では Dialog クラスは利用できません。
+ * WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用できます
+ * (非モーダル / overlay モーダル / フロー / テキスト入力に対応。 独立 OS
+ * ウィンドウ版モーダルは overlay モーダルで代替されます)。
  */
 class Dialog {
 	/**
