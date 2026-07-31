@@ -15,7 +15,7 @@
 
 `KRKRZ_USE_ELEMENTS=ON` ( デフォルト ) でビルドされたエンジンで利用できます。
 SDL3 ビルドと **WINVER ( Windows ネイティブ / D3D11 ) ビルドの両方**に対応します
-( WINVER では独立 OS ウィンドウ版モーダルは overlay モーダルで代替 )。
+( 独立 OS ウィンドウ版モーダルも WINVER で動作する )。
 `KRKRZ_USE_ELEMENTS=OFF` ビルドでは [Dialog](../../reference/Dialog.md)
 クラスは登録されません。
 

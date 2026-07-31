@@ -45,8 +45,8 @@ vtile / htile / vspacer / hspacer 等 ) や属性、`"input"` ノードによる
 
 `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では Dialog クラスは利用できません。
 WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用できます
-(非モーダル / overlay モーダル / フロー / テキスト入力に対応。 独立 OS
-ウィンドウ版モーダルは overlay モーダルで代替されます)。
+(非モーダル / overlay モーダル / 独立ウィンドウモーダル / フロー /
+テキスト入力すべてに対応)。
 
 ## メンバー一覧
 
