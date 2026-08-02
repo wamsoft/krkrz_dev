@@ -239,6 +239,16 @@ class Storages {
 	 * 指定しないでください。
 	 *
 	 * 省略すると、拡張子が付加されることはありません。
+	 *
+	 * **プラットフォームによる差異**
+	 *
+	 * Windows ネイティブ版では OS 標準のファイルダイアログ ( GetOpenFileName ) を、
+	 * SDL 版では SDL のファイルダイアログを使用します ( いずれもデスクトップ向け )。
+	 *
+	 * SDL 版では filter のワイルドカード ( 例 `*.png;*.jpg` ) は SDL 形式へ変換されて
+	 * 適用されますが、title / defaultExt / filterIndex ( 初期選択・戻り値 ) は環境に
+	 * よって無視される場合があります。選択結果の name は Windows 版と同様に正規化された
+	 * ストレージ名で書き戻されます。
 	 * @return ユーザがファイルを選択して OK ボタンを押せば真、キャンセルボタンを押せば偽が戻ります。
 	 */
 	function selectFile(params);

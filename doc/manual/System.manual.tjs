@@ -90,6 +90,12 @@ class System {
 	 *
 	 * target 引数にファイルを指定した場合はこの引数を省略するか、あるいは空文字列を
 	 * 指定してください。
+	 *
+	 * **プラットフォームによる差異**
+	 *
+	 * Windows ネイティブ版では ShellExecute を、SDL 版では SDL_OpenURL を用いて
+	 * target を OS 既定のハンドラで開きます ( URL やファイルのオープンに対応 )。
+	 * SDL 版では param ( 引数 ) は無視されます ( 引数付きのプログラム実行には非対応 )。
 	 * @return 実行に成功すれば真、失敗すれば偽が返ります。
 	 */
 	function shellExecute(target, param = "");

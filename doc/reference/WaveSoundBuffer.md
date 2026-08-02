@@ -635,3 +635,78 @@ DirectSound は使用しないため、このメソッドは呼び出しても�
 再生位置がラベルを通過した際に発生します。
 
 ---
+
+## プラグイン拡張: getSample
+
+擬似コードによるマニュアル
+
+### メンバー一覧
+
+#### プロパティ
+
+- [sampleValue](#samplevalue)
+- [sampleCount](#samplecount)
+- [sampleAhead](#sampleahead)
+
+#### メソッド
+
+- [getSample](#getsample)
+
+---
+
+### sampleValue
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+サンプル値の取得（新方式）
+
+getVisBuffer(buf, sampleCount, 1, sampleAhead)でサンプルを取得し，
+(value/32768)^2の最大値を取得します。(0～1の実数で返ります)
+※このプロパティを読み出すと暗黙でuseVisBuffer=trueに設定されます
+
+---
+
+### sampleCount
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+新方式のバッファ取得用パラメータプロパティ（sampleValueを参照）
+
+デフォルトはsetDefaultCounts/setDefaultAheadsで決定されます
+※このプロパティを読み書きする暗黙でuseVisBuffer=trueに設定されます
+
+---
+
+### sampleAhead
+
+プロパティ \ アクセス: `r/w`
+
+---
+
+### getSample
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `n` | `&nbsp;` | 取得するサンプルの数。省略すると 100 |
+
+**戻り値**
+
+平均値
+※ 予めuseVisBuffer=trueにしておくこと
+
+**解説**
+
+サンプル値の取得（旧方式）
+
+現在の再生位置から指定数のサンプルを取得してその平均値を返します。
+値が負のサンプル値は無視されます。
+
+---
