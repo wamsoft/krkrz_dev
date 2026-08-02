@@ -18,6 +18,10 @@ Font クラスは、**フォント**を管理するためのクラスです。
 - [underline](#underline)
 - [angle](#angle)
 - [rasterizer](#rasterizer)
+- [emojiMode](#emojimode)
+- [defaultEmojiMode](#defaultemojimode)
+- [emojiFaceName](#emojifacename)
+- [colorEmojiFaceName](#coloremojifacename)
 - [defaultFaceName](#defaultfacename)
 - [faceIsFileName](#faceisfilename)
 
@@ -170,6 +174,87 @@ Layerメンバのfontは、引数にLayerを渡す特殊版。
 FreeType を指定した場合、横書きにのみ対応しています。その他は未対応です。
 
 このプロパティはスタティックです。Font.rasterizer を用いて値を設定してください。
+
+---
+
+### emojiMode
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+絵文字の描画モード
+
+該当するコードポイントを絵文字フォントにフォールバックして描画するモードを
+表します。値を設定することもできます。
+
+`**-1** ` : グローバル既定 ( `Font.defaultEmojiMode` ) に従う ( 既定 )
+
+`** 0** ` : 絵文字フォントを使わない ( 元フォントのみ )
+
+`** 1** ` : モノクロ絵文字フォントで描画する
+
+`** 2** ` : カラー絵文字フォントで描画する
+
+この機能は FreeType ラスタライザ ( `rasterizer` = 0 ) 使用時のみ有効です。
+GDI ラスタライザ ( WINVER 既定 ) では効果がありません。
+
+絵文字フォントは実行ファイルに標準で埋め込まれています ( モノクロ = Noto Emoji、
+カラー = Noto Color Emoji )。`emojiFaceName` / `colorEmojiFaceName` と `addFont`
+で任意の絵文字フォントに差し替えることもできます。
+
+注: ★ や ❤ など元フォントにも字形があるコードポイントは、元フォント側が優先され
+モノクロ表示になる場合があります ( 高度な絵文字表示切り替えは対象外 )。
+
+---
+
+### defaultEmojiMode
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Integer`
+
+**解説**
+
+絵文字描画モードのグローバル既定
+
+`emojiMode` が -1 のフォントに適用される既定の絵文字描画モードを取得 / 設定します。
+値は `emojiMode` と同じ ( 0 = 使わない / 1 = モノクロ / 2 = カラー )。
+このプロパティはスタティックです。
+
+---
+
+### emojiFaceName
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+モノクロ絵文字フォールバックに使う face 名
+
+`emojiMode` = 1 ( モノクロ ) のときに使用する絵文字フォントの face 名を
+取得 / 設定します。既定は埋め込みの Noto Emoji ( "Noto Emoji Regular" )。
+`addFont` で登録した任意フォントの face 名を指定できます。
+このプロパティはスタティックです。
+
+---
+
+### colorEmojiFaceName
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+カラー絵文字フォールバックに使う face 名
+
+`emojiMode` = 2 ( カラー ) のときに使用する絵文字フォントの face 名を
+取得 / 設定します。既定は埋め込みの Noto Color Emoji ( "Noto Color Emoji Regular" )。
+カラー絵文字は COLRv0 / CBDT / sbix 形式に対応します ( COLRv1 は非対応 )。
+このプロパティはスタティックです。
 
 ---
 
