@@ -44,6 +44,7 @@ WaveSoundBuffer クラスでは、[ループチューナ](../guide/LoopTuner.md)
 - [freeDirectSound](#freedirectsound)
 - [getVisBuffer](#getvisbuffer)
 - [setPos](#setpos)
+- [setGainQueryCallback](#setgainquerycallback)
 
 ### イベント
 
@@ -585,6 +586,50 @@ DirectSound は使用しないため、このメソッドは呼び出しても�
 3D サウンド再生時の音源位置 ( X / Y / Z ) を一括で設定します。
 
 **関連:** [WaveSoundBuffer.posX](WaveSoundBuffer.md#posx) / [WaveSoundBuffer.posY](WaveSoundBuffer.md#posy) / [WaveSoundBuffer.posZ](WaveSoundBuffer.md#posz)
+
+---
+
+### setGainQueryCallback
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `callback` | `&nbsp;` | URL ( ストレージ名 ) を 1 引数で受け取り、適用する追加<br>ゲインを dB で返す関数を指定します。null を指定すると解除します。 |
+
+**解説**
+
+曲別ゲイン取得コールバックの設定 ( クラスメソッド )
+
+ogg ( Vorbis ) / opus ファイルのデコード時に、ファイルごとに適用する
+**追加ゲイン ( dB )** を返すコールバック関数を登録します。これはクラス
+メソッドで、登録は全 WaveSoundBuffer で共有されます。旧 wuvorbis /
+wuopus プラグインの同名 API を本体内蔵デコーダへ統合したものです。
+コールバックはファイルを開くとき ( open 時、スクリプトスレッド ) に 1 回
+呼ばれ、戻り値の dB がデコード出力に適用されます。曲ごとに音量を揃える
+( ラウドネス正規化 ) 用途などに使います。
+
+例 :
+
+`WaveSoundBuffer.setGainQueryCallback(function(url) {`
+
+`  return url.indexOf("loud_") != -1 ? -6.0 : 0.0; // 特定曲だけ -6dB`
+
+`});`
+
+ゲインには他に、起動時コマンドラインオプションによる全体ゲインや
+ReplayGain タグ対応もあります ( [コマンドライン](../guide/CommandLine.md)
+の「サウンドのゲイン」参照 )。
+
+**コーデックによる差異 / 推奨**
+
+opus は仕様上ヘッダに出力ゲイン ( R128 ) を持ち、デコーダ内部で正確・
+低コストに適用されます ( CLI / コールバックのゲインもこれに加算 )。一方
+Vorbis はフォーマットにゲイン概念が無いため、本体は出力 PCM を float 域で
+スケールして適用します ( 実用上の性能差はほぼありません )。**ゲインや
+ラウドネスを積極的に扱う場合は opus の利用を推奨します。**
 
 ---
 
