@@ -105,13 +105,13 @@ Takechin 氏作の画像ビューア「Susie32」用のプラグインを利用�
 
 #### OpenGL ES 描画系
 
-GLES ( ANGLE/glad ) で描画するプラグイン群です。描画先の GL コンテキストは吉里吉里本体の `OGLDrawDevice` か、`krkrgles` の `GLESAdaptor` が供給します。
+GLES ( ANGLE/glad ) で描画するプラグイン群です。描画先の GL コンテキストは吉里吉里本体の `OGLDrawDevice` か、Windows では `krkrgles` の `GLESAdaptor` が供給します。
 
 | プラグイン | 説明 |
 |---|---|
-| **krkrgles** | OpenGL ES ( ANGLE/EGL 経由 ) で描画した結果を [Layer](../reference/Layer.md) へ吸い上げる `GLESAdaptor` / `GLESTexture` クラスを追加します。GPU 上で完結するポストエフェクト機構を持ちます。 |
 | **krkreffekseer** | [Effekseer](https://effekseer.github.io/) のエフェクト ( .efk / .efkefc / .efkzip ) をホスト供給の GL コンテキストへ描画する `EffekseerDevice` / `EffekseerEffect` / `EffekseerPlayer` クラスを追加します。 |
 | **krkrlive2d** | Live2D Cubism モデルを再生・描画する `Live2DDevice` / `Live2DModel` / `Live2DPlayer` / `Live2DMatrix` クラスを追加します。**Live2D Cubism Core が必要なため、環境変数 `CUBISM_SDK` が設定されているときのみビルドされます** ( ドライバ側 CMake が `$CUBISM_SDK/Core` を参照 )。 |
+| **krkrgles** | OpenGL ES ( ANGLE/EGL 経由 ) で描画した結果を [Layer](../reference/Layer.md) へ吸い上げる `GLESAdaptor` / `GLESTexture` クラスを追加します。GPU 上で完結するポストエフェクト機構を持ちます。**EGL/ANGLE コンテキストを `Window.HWND` から生成するため Windows 専用**です ( macOS / Linux では GL コンテキストは本体 `OGLDrawDevice` を利用してください )。 |
 
 ### Windows ( WINVER ビルド ) 専用
 
