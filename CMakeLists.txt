@@ -79,6 +79,26 @@ messenger
 windowExProgress
 win32ole
 )
+
+# OpenGL ES 描画系プラグイン。GLES(ANGLE/glad)で描画し、描画先の GL コンテキストは
+# 吉里吉里本体の OGLDrawDevice もしくは krkrgles の GLESAdaptor が供給する。現状ソースが
+# tjs_char==wchar_t / Win32 W-API 前提のため WINVER ビルドでのみビルドできる(generic/SDL は
+# tjs_char==char16_t で未対応)。
+#   krkrgles      : GLES 描画アダプタ (レイヤ⇔FBO、ポストエフェクト)
+#   krkreffekseer : Effekseer エフェクト再生 (ホスト供給の GL コンテキストへ描画)
+list(APPEND TVP_PLUGINS
+krkrgles
+krkreffekseer
+)
+
+# krkrlive2d は上記に加えて Live2D Cubism Core を必要とする。SDK パスは環境変数
+# CUBISM_SDK (ドライバ側 CMake が $ENV{CUBISM_SDK}/Core を参照) で与えられ、未設定では
+# ビルドできないため、設定されているときだけビルド対象に含める。
+if(DEFINED ENV{CUBISM_SDK})
+list(APPEND TVP_PLUGINS
+krkrlive2d
+)
+endif()
 endif()
 
 # 特殊プラグイン
