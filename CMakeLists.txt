@@ -79,11 +79,11 @@ messenger
 windowExProgress
 win32ole
 )
+endif()
 
 # OpenGL ES 描画系プラグイン。GLES(ANGLE/glad)で描画し、描画先の GL コンテキストは
-# 吉里吉里本体の OGLDrawDevice もしくは krkrgles の GLESAdaptor が供給する。現状ソースが
-# tjs_char==wchar_t / Win32 W-API 前提のため WINVER ビルドでのみビルドできる(generic/SDL は
-# tjs_char==char16_t で未対応)。
+# 吉里吉里本体の OGLDrawDevice もしくは krkrgles の GLESAdaptor が供給する。Win32 GUI に
+# 依存せず全バリアント対象。
 #   krkrgles      : GLES 描画アダプタ (レイヤ⇔FBO、ポストエフェクト)
 #   krkreffekseer : Effekseer エフェクト再生 (ホスト供給の GL コンテキストへ描画)
 list(APPEND TVP_PLUGINS
@@ -98,7 +98,6 @@ if(DEFINED ENV{CUBISM_SDK})
 list(APPEND TVP_PLUGINS
 krkrlive2d
 )
-endif()
 endif()
 
 # 特殊プラグイン
