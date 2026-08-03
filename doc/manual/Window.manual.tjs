@@ -1573,4 +1573,15 @@ class Window {
 	 * @param id タッチID、マウスの時は常に0
 	 */
 	event onPointerUp( type, x, y, cx, cy, shift, id );
+
+	/**
+	 * GL エントリポイント解決関数へのポインタ ( 整数 )
+	 *
+	 * GLES 系プラグイン ( EffekseerDevice 等 ) の oglbase として利用します。初回
+	 * アクセス時に GL コンテキストが未初期化なら遅延生成してカレントにします
+	 * ( OGLDrawDevice / Canvas を使う場合でもウィンドウから取得できます )。GL を
+	 * 取得できない環境では 0 ( null ) を返します。
+	 * @type Integer
+	 */
+	property GLGetProcAddress { getter; }
 }

@@ -140,6 +140,7 @@ nav:
       - reference/Debug.md
       - reference/Dialog.md
       - reference/Font.md
+      - reference/GLCompositor.md
       - reference/ImageFunction.md
       - reference/Layer.md
       - reference/Matrix32.md
@@ -192,6 +193,17 @@ nav:
       - reference/Zip.md
       - reference/Unzip.md
       - reference/XMLParser.md
+      - GLES 描画 (krkrgles):
+        - reference/GLESAdaptor.md
+        - reference/GLESTexture.md
+      - Effekseer (krkreffekseer):
+        - reference/EffekseerDevice.md
+        - reference/EffekseerEffect.md
+        - reference/EffekseerPlayer.md
+      - Live2D (krkrlive2d):
+        - reference/Live2DDevice.md
+        - reference/Live2DModel.md
+        - reference/Live2DPlayer.md
       - 描画 (layerExDraw):
         - reference/GdiPlus.md
         - reference/GdiPlus.Appearance.md

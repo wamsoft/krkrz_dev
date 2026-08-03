@@ -1,0 +1,104 @@
+/**
+ * @description OGLDrawDevice を使わない状況 (画面の描画デバイスが D3D11 や
+ * SDL_Renderer 等) でも、裏で OpenGL ES によるオフスクリーン合成を行い、その結果を
+ * Layer へ書き戻すためのクラスです。
+ *
+ * 旧 krkrgles プラグインの GLESAdaptor 相当の機能を、本体内蔵かつ Canvas / Offscreen の
+ * 既存 GL 描画コードを共有する形で提供します。描画デバイスに依存せず、ウィンドウから
+ * GL コンテキストを取得して自前でカレント化します (画面への present は行わず、
+ * オフスクリーン FBO への描画のみ)。OGL 描画デバイスが動作中の場合はそのコンテキストを
+ * 共有します。
+ *
+ * capture() のコールバックには内部 Canvas が渡され、Canvas のフル API
+ * (drawTexture / beginEffect / endEffect / クリップ等) をそのまま利用できます。
+ */
+class GLCompositor {
+
+	/**
+	 * GLCompositor を生成。
+	 * @description 指定ウィンドウの GL コンテキストで初期化します。
+	 * @param window 対象の Window オブジェクト
+	 */
+	function GLCompositor( window:Window );
+
+	/**
+	 * オフスクリーン合成を実行し、結果を layer へ書き戻す。
+	 * @description layer のサイズのオフスクリーン FBO を color でクリアしたのち、
+	 * callback(canvas, w, h, param) を呼び出して描画させ、その結果を layer の
+	 * メインイメージへ読み戻します。callback 内では引数の canvas (内部 Canvas) を
+	 * 使って drawTexture / beginEffect / クリップ等の描画が行えます。また
+	 * このオブジェクトの drawLayer / copyLayer も callback 内から利用できます。
+	 * @param layer 描画結果の書き戻し先 Layer
+	 * @param callback 描画コールバック function(canvas:Canvas, w:int, h:int, param)
+	 * @param param callback へ渡す任意の値
+	 * @param color クリア色 (ARGB)
+	 */
+	function capture( layer:Layer, callback, param, color:int );
+
+	/**
+	 * layer をアフィン変換 + 不透明度で現在の描画先へ描く。
+	 * @description capture() のコールバック内から呼び出します。変換行列は
+	 * 2x2 部 (a,b,c,d) + 平行移動 (tx,ty) で指定します。
+	 * @param layer 描画元 Layer
+	 * @param a 変換行列 m11
+	 * @param b 変換行列 m12
+	 * @param c 変換行列 m21
+	 * @param d 変換行列 m22
+	 * @param tx 平行移動 x
+	 * @param ty 平行移動 y
+	 * @param opacity = 255 不透明度 (0〜255)
+	 */
+	function drawLayer( layer:Layer, a:real, b:real, c:real, d:real, tx:real, ty:real, opacity:int = 255 );
+
+	/**
+	 * layer を (left, top) にそのまま描く。
+	 * @description drawLayer の単純平行移動版です。capture() のコールバック内から
+	 * 呼び出します。
+	 * @param layer 描画元 Layer
+	 * @param left 配置 x
+	 * @param top 配置 y
+	 */
+	function copyLayer( layer:Layer, left:int, top:int );
+
+	/**
+	 * オフスクリーン合成の既定サイズを設定。
+	 * @param width 幅
+	 * @param height 高さ
+	 */
+	function setScreenSize( width:int, height:int );
+
+	/**
+	 * この GLCompositor の GL コンテキストをカレントにする。
+	 */
+	function makeCurrent();
+
+	/**
+	 * 内部 Canvas。
+	 * @description drawTexture / beginEffect / endEffect / クリップ等、Canvas の
+	 * フル API を利用できます。
+	 */
+	property canvas { getter; }
+
+	/**
+	 * 描画の合成モード指定。
+	 * @description 内部 Canvas の blendMode に対応します。
+	 */
+	property blendMode;
+
+	/**
+	 * オフスクリーン合成の既定幅。
+	 */
+	property screenWidth;
+
+	/**
+	 * オフスクリーン合成の既定高さ。
+	 */
+	property screenHeight;
+
+	/**
+	 * GL エントリポイント解決関数へのポインタ (整数)。
+	 * @description GLES 系プラグイン (EffekseerDevice 等) の oglbase として利用します。
+	 * 例: new EffekseerDevice(compositor)。
+	 */
+	property GLGetProcAddress { getter; }
+}

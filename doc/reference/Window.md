@@ -61,6 +61,7 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [layerTreeOwnerInterface](#layertreeownerinterface)
 - [mouseCursor](#mousecursor)
 - [showScrollBars](#showscrollbars)
+- [GLGetProcAddress](#glgetprocaddress)
 
 ### メソッド
 
@@ -978,6 +979,23 @@ LayerTreeOwner インターフェースポインタ
 
 プライマリレイヤがウィンドウより大きい場合に、スクロールバーを表示するかどうかを
 取得 / 設定します。`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換プロパティです。
+
+---
+
+### GLGetProcAddress
+
+プロパティ \ アクセス: `r`
+
+**型**: `Integer`
+
+**解説**
+
+GL エントリポイント解決関数へのポインタ ( 整数 )
+
+GLES 系プラグイン ( EffekseerDevice 等 ) の oglbase として利用します。初回
+アクセス時に GL コンテキストが未初期化なら遅延生成してカレントにします
+( OGLDrawDevice / Canvas を使う場合でもウィンドウから取得できます )。GL を
+取得できない環境では 0 ( null ) を返します。
 
 ---
 
