@@ -43,6 +43,9 @@ WaveSoundBuffer クラスでは、[ループチューナ](../guide/LoopTuner.md)
 - [stopFade](#stopfade)
 - [freeDirectSound](#freedirectsound)
 - [getVisBuffer](#getvisbuffer)
+- [getSoundLevel](#getsoundlevel)
+- [getSoundSpectrum](#getsoundspectrum)
+- [getVowel](#getvowel)
 - [setPos](#setpos)
 - [setGainQueryCallback](#setgainquerycallback)
 
@@ -564,6 +567,93 @@ DirectSound は使用しないため、このメソッドは呼び出しても�
 ただし、バッファの状態や再生形式によっては正常にデータを読み込めない可能性もあります。
 このメソッドは C や C++ 等で書かれたプラグインから利用されることを想定してますので、たとえばbuffer 引数に TJS の配列を指定する、などのようなことはできません。
 このメソッドを使用するには  WaveSoundBuffer.useVisBuffer プロパティを真に指定する必要があります。
+
+---
+
+### getSoundLevel
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `ahead` | `0` | 先読みするサンプル数を指定します ( 既定 0 = 現在の再生位置 )。<br>描画のレイテンシに合わせて口パクを前後させたい場合に使います。 |
+| `windowSamples` | `0` | 音量を計算する窓のサンプル数を指定します ( 既定 0 = エンジン既定 )。 |
+
+**戻り値**
+
+`%[ rms:実効値, peak:ピーク値 ]` の辞書を返します。いずれも 0.0〜1.0 で、
+`rms` は口の開き量にそのまま使えます。
+
+**解説**
+
+音量レベルの取得 ( リップシンク用 )
+
+現在の再生位置付近の音量を取得します。`getVisBuffer` のように生の
+PCM を取り出して TJS 側で計算する必要はなく、エンジンが C++ 側で計算して返します。
+使用するには `WaveSoundBuffer.useVisBuffer` を真にする必要があります ( 未設定の
+場合は自動的に有効化され、その回は 0 が返ります )。
+
+**関連:** [WaveSoundBuffer.getVowel](WaveSoundBuffer.md#getvowel) / [WaveSoundBuffer.getSoundSpectrum](WaveSoundBuffer.md#getsoundspectrum)
+
+---
+
+### getSoundSpectrum
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `numbands` | `&nbsp;` | 取得するバンド数を指定します ( 1〜256 )。 |
+| `ahead` | `0` | 先読みするサンプル数を指定します ( 既定 0 )。 |
+
+**戻り値**
+
+各バンドのエネルギーを格納した配列 ( 要素数 numbands ) を返します。
+バンドは対数配置 ( 低域から高域 ) です。
+
+**解説**
+
+スペクトルの取得 ( リップシンク用 )
+
+現在の再生位置付近のスペクトルを FFT で解析し、対数配置の
+バンドエネルギーとして返します。母音判定やイコライザ表示などに利用できます。
+`WaveSoundBuffer.useVisBuffer` を真にする必要があります。
+
+**関連:** [WaveSoundBuffer.getVowel](WaveSoundBuffer.md#getvowel)
+
+---
+
+### getVowel
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `ahead` | `0` | 先読みするサンプル数を指定します ( 既定 0 )。 |
+
+**戻り値**
+
+`%[ a:, i:, u:, e:, o:, voiced: ]` の辞書を返します。a〜o は各母音の
+推定重み ( 合計がおよそ 1.0 )、`voiced` は有声 ( 母音帯域にエネルギーあり ) なら 1、
+無音なら 0 です。
+
+**解説**
+
+母音推定の取得 ( リップシンク用 )
+
+現在の再生位置付近のスペクトルを解析し、日本語 5 母音 ( あいうえお )
+らしさをフォルマント帯域のエネルギー比から推定して返します。口の形
+( viseme ) のブレンド重みとして利用できます。あくまで簡易推定である点に
+注意してください。
+`WaveSoundBuffer.useVisBuffer` を真にする必要があります。
+
+**関連:** [WaveSoundBuffer.getSoundLevel](WaveSoundBuffer.md#getsoundlevel)
 
 ---
 

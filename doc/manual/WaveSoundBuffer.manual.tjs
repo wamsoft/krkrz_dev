@@ -404,6 +404,53 @@ class WaveSoundBuffer {
 	function getVisBuffer( buffer, numsamples, channel, ahead=0);
 
 	/**
+	 * 音量レベルの取得 ( リップシンク用 )
+	 *
+	 * @param ahead 先読みするサンプル数を指定します ( 既定 0 = 現在の再生位置 )。
+	 * 描画のレイテンシに合わせて口パクを前後させたい場合に使います。
+	 * @param windowSamples 音量を計算する窓のサンプル数を指定します ( 既定 0 = エンジン既定 )。
+	 * @return `%[ rms:実効値, peak:ピーク値 ]` の辞書を返します。いずれも 0.0〜1.0 で、
+	 * `rms` は口の開き量にそのまま使えます。
+	 * @description 現在の再生位置付近の音量を取得します。`getVisBuffer` のように生の
+	 * PCM を取り出して TJS 側で計算する必要はなく、エンジンが C++ 側で計算して返します。
+	 * 使用するには `WaveSoundBuffer.useVisBuffer` を真にする必要があります ( 未設定の
+	 * 場合は自動的に有効化され、その回は 0 が返ります )。
+	 * @see WaveSoundBuffer.getVowel
+	 * @see WaveSoundBuffer.getSoundSpectrum
+	 */
+	function getSoundLevel( ahead=0, windowSamples=0 );
+
+	/**
+	 * スペクトルの取得 ( リップシンク用 )
+	 *
+	 * @param numbands 取得するバンド数を指定します ( 1〜256 )。
+	 * @param ahead 先読みするサンプル数を指定します ( 既定 0 )。
+	 * @return 各バンドのエネルギーを格納した配列 ( 要素数 numbands ) を返します。
+	 * バンドは対数配置 ( 低域から高域 ) です。
+	 * @description 現在の再生位置付近のスペクトルを FFT で解析し、対数配置の
+	 * バンドエネルギーとして返します。母音判定やイコライザ表示などに利用できます。
+	 * `WaveSoundBuffer.useVisBuffer` を真にする必要があります。
+	 * @see WaveSoundBuffer.getVowel
+	 */
+	function getSoundSpectrum( numbands, ahead=0 );
+
+	/**
+	 * 母音推定の取得 ( リップシンク用 )
+	 *
+	 * @param ahead 先読みするサンプル数を指定します ( 既定 0 )。
+	 * @return `%[ a:, i:, u:, e:, o:, voiced: ]` の辞書を返します。a〜o は各母音の
+	 * 推定重み ( 合計がおよそ 1.0 )、`voiced` は有声 ( 母音帯域にエネルギーあり ) なら 1、
+	 * 無音なら 0 です。
+	 * @description 現在の再生位置付近のスペクトルを解析し、日本語 5 母音 ( あいうえお )
+	 * らしさをフォルマント帯域のエネルギー比から推定して返します。口の形
+	 * ( viseme ) のブレンド重みとして利用できます。あくまで簡易推定である点に
+	 * 注意してください。
+	 * `WaveSoundBuffer.useVisBuffer` を真にする必要があります。
+	 * @see WaveSoundBuffer.getSoundLevel
+	 */
+	function getVowel( ahead=0 );
+
+	/**
 	 * ラベルを通過した
 	 *
 	 * @param name 通過したラベル名です。
