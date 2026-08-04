@@ -18,6 +18,7 @@ Storages クラスは 吉里吉里本体の**ストレージシステム**に関
 - [searchCD](#searchcd)
 - [getLocalName](#getlocalname)
 - [selectFile](#selectfile)
+- [selectDirectory](#selectdirectory)
 - [addCacheTargetExtension](#addcachetargetextension)
 - [addDecodeTargetExtension](#adddecodetargetextension)
 - [removeDecodeTargetExtension](#removedecodetargetextension)
@@ -366,6 +367,42 @@ save : false,
 if(Storages.selectFile(params))
 
 System.inform("選択したファイルは : " + params.name);
+
+---
+
+### selectDirectory
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `params` | `&nbsp;` | データの受け渡しに用いる辞書配列を指定します。指定できるメンバは<br>次の通りです。<br>**name**<br>初期選択フォルダを指定します。ユーザが OK を押すと、選択されたフォルダの<br>正規化ストレージ名がこのメンバに書き戻されます。<br>**title**<br>ダイアログボックスのタイトルを指定します ( WINVER ビルドのみ反映 )。<br>**rootDir**<br>初期表示フォルダ ( name 未指定時のフォールバック ) を指定します。<br>**window**<br>親にするウィンドウを指定します ( 省略可 )。<br>**プラットフォームによる差異**<br>Windows ネイティブ版では OS 標準のフォルダ選択ダイアログ ( IFileOpenDialog )<br>を、SDL 版では SDL のフォルダ選択ダイアログ ( SDL_ShowOpenFolderDialog ) を<br>使用します。SDL 版では title は無視される場合があります。 |
+
+**戻り値**
+
+ユーザがフォルダを選択して OK ボタンを押せば真、キャンセルすれば偽が戻ります。
+
+**解説**
+
+フォルダ選択ダイアログボックスを表示
+
+フォルダ ( ディレクトリ ) 選択ダイアログボックスをモーダルで開きます。
+
+var params = %[
+
+name : "",
+
+title : "フォルダを選択",
+
+rootDir : System.exePath,
+
+];
+
+if(Storages.selectDirectory(params))
+
+System.inform("選択したフォルダは : " + params.name);
 
 ---
 

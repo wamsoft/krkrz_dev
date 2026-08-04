@@ -254,6 +254,53 @@ class Storages {
 	function selectFile(params);
 
 	/**
+	 * フォルダ選択ダイアログボックスを表示
+	 *
+	 * フォルダ ( ディレクトリ ) 選択ダイアログボックスをモーダルで開きます。
+	 *
+	 * var params = %[
+	 *
+	 * name : "",
+	 *
+	 * title : "フォルダを選択",
+	 *
+	 * rootDir : System.exePath,
+	 *
+	 * ];
+	 *
+	 * if(Storages.selectDirectory(params))
+	 *
+	 * System.inform("選択したフォルダは : " + params.name);
+	 * @param params データの受け渡しに用いる辞書配列を指定します。指定できるメンバは
+	 * 次の通りです。
+	 *
+	 * **name**
+	 *
+	 * 初期選択フォルダを指定します。ユーザが OK を押すと、選択されたフォルダの
+	 * 正規化ストレージ名がこのメンバに書き戻されます。
+	 *
+	 * **title**
+	 *
+	 * ダイアログボックスのタイトルを指定します ( WINVER ビルドのみ反映 )。
+	 *
+	 * **rootDir**
+	 *
+	 * 初期表示フォルダ ( name 未指定時のフォールバック ) を指定します。
+	 *
+	 * **window**
+	 *
+	 * 親にするウィンドウを指定します ( 省略可 )。
+	 *
+	 * **プラットフォームによる差異**
+	 *
+	 * Windows ネイティブ版では OS 標準のフォルダ選択ダイアログ ( IFileOpenDialog )
+	 * を、SDL 版では SDL のフォルダ選択ダイアログ ( SDL_ShowOpenFolderDialog ) を
+	 * 使用します。SDL 版では title は無視される場合があります。
+	 * @return ユーザがフォルダを選択して OK ボタンを押せば真、キャンセルすれば偽が戻ります。
+	 */
+	function selectDirectory(params);
+
+	/**
 	 * オンメモリキャッシュ対象拡張子の追加
 	 *
 	 * ファイルロード時にオンメモリキャッシュ ( file 層 ) へ載せる拡張子を追加します。

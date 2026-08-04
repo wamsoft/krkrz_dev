@@ -56,6 +56,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [addContinuousHandler](#addcontinuoushandler)
 - [removeContinuousHandler](#removecontinuoushandler)
 - [inform](#inform)
+- [confirm](#confirm)
 - [getTickCount](#gettickcount)
 - [getKeyState](#getkeystate)
 - [shellExecute](#shellexecute)
@@ -931,6 +932,35 @@ Continuous ハンドラの削除
 ユーザにメッセージを示すためのウィンドウを表示します。
 
 ウィンドウはモーダルで表示されます ( つまり、表示中は他のウィンドウは操作できない )。
+
+---
+
+### confirm
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `text` | `&nbsp;` | 表示するメッセージを指定します。 |
+| `caption` | `""` | ウィンドウのキャプションとなる文字列を指定します。 |
+| `window` | `void` | 親にするウィンドウを指定します ( 省略可 )。WINVER ビルドでのみ<br>親指定が反映されます。 |
+
+**戻り値**
+
+ユーザが「はい」を選んだ場合は真、「いいえ」またはダイアログを閉じた
+場合は偽が返ります。
+
+**解説**
+
+確認メッセージの表示 ( Yes / No )
+
+ユーザに「はい / いいえ」を問うためのモーダルウィンドウを表示します
+( [System.inform](System.md#inform) の Yes/No 版 )。表示中は他のウィンドウは
+操作できません。
+REPL / ヘッダレス駆動中はブロッキングダイアログを表示せず、
+内容をログへ出力して既定応答 ( 真 ) を返します。
 
 ---
 
