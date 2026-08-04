@@ -1503,20 +1503,6 @@ class Window {
 	function beginMove();
 
 	/**
-	 * フルスクリーン候補解像度の検索
-	 *
-	 * 指定された希望解像度に近いフルスクリーン候補モードをディスプレイから検索します。
-	 * Win32 ビルド専用です。
-	 * @param width 希望幅 ( ピクセル )
-	 * @param height 希望高さ ( ピクセル )
-	 * @param bpp 希望色深度 ( bit per pixel )
-	 * @param mode フルスクリーン解像度モード ( `tTVPFullScreenResolutionMode` )
-	 * @param zoomMode エンジンズームモード ( `tTVPFullScreenUsingEngineZoomMode` )
-	 * @return TODO: 現在の実装では結果が TJS に返されていないため、戻り値仕様要確認。
-	 */
-	function findFullScreenCandidates(width, height, bpp, mode, zoomMode);
-
-	/**
 	 * 描画更新の要求
 	 *
 	 * ウィンドウに対して再描画 ( 次回フレームでの `Update` ) を要求します。
