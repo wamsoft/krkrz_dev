@@ -10,8 +10,10 @@ GL コンテキストを取得して自前でカレント化します (画面へ
 オフスクリーン FBO への描画のみ)。OGL 描画デバイスが動作中の場合はそのコンテキストを
 共有します。
 
-capture() のコールバックには内部 Canvas が渡され、Canvas のフル API
-(drawTexture / beginEffect / endEffect / クリップ等) をそのまま利用できます。
+capture() のコールバックは「incontextof このコンポジタ」で実行され、
+コールバック内の this はこの GLCompositor になります。そのため this.canvas
+(内部 Canvas) の フル API (drawTexture / beginEffect / endEffect / クリップ等) や
+this.drawLayer / this.copyLayer をそのまま利用できます (GLESAdaptor 互換)。
 
 ## メンバー一覧
 
@@ -122,7 +124,7 @@ GLES 系プラグイン (EffekseerDevice 等) の oglbase として利用しま�
 | 引数 | 型 | 既定値 | 説明 |
 | --- | --- | --- | --- |
 | `layer` | `Layer` | `&nbsp;` | 描画結果の書き戻し先 Layer |
-| `callback` | `&nbsp;` | `&nbsp;` | 描画コールバック function(canvas:Canvas, w:int, h:int, param) |
+| `callback` | `&nbsp;` | `&nbsp;` | 描画コールバック function(w:int, h:int, param) (this=GLCompositor) |
 | `param` | `&nbsp;` | `&nbsp;` | callback へ渡す任意の値 |
 | `color` | `int` | `&nbsp;` | クリア色 (ARGB) |
 
@@ -131,10 +133,11 @@ GLES 系プラグイン (EffekseerDevice 等) の oglbase として利用しま�
 オフスクリーン合成を実行し、結果を layer へ書き戻す。
 
 layer のサイズのオフスクリーン FBO を color でクリアしたのち、
-callback(canvas, w, h, param) を呼び出して描画させ、その結果を layer の
-メインイメージへ読み戻します。callback 内では引数の canvas (内部 Canvas) を
-使って drawTexture / beginEffect / クリップ等の描画が行えます。また
-このオブジェクトの drawLayer / copyLayer も callback 内から利用できます。
+callback(w, h, param) を「incontextof このコンポジタ」で呼び出して描画させ、
+その結果を layer のメインイメージへ読み戻します。callback 内では this が
+この GLCompositor になるので、this.canvas を使って drawTexture / beginEffect /
+クリップ等の描画が行え、this.drawLayer / this.copyLayer も直接利用できます
+(GLESAdaptor 互換。canvas は引数ではなく this.canvas で参照します)。
 
 ---
 
