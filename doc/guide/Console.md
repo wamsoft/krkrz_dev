@@ -37,6 +37,30 @@ krkrz64 -repl data/      # Win32 版
 Win32 ( windowed subsystem ) 版は REPL 起動時に `AttachConsole` で親プロセス
 のコンソールを取得し、無ければ `AllocConsole` で新規確保します。
 
+#### 新規コンソールを強制する ( `-repl=new` )
+
+`-repl=new` ( 別名 `-repl=window` / `-repl=separate` ) を指定すると、親や
+継承したコンソールに attach せず、必ず**新規コンソールウィンドウ**を開きます。
+ターミナルや別アプリから GUI を起動しつつ、REPL を起動元のコンソールに
+食い込ませたくない場合に使います。
+
+!!! note "Windows Terminal には載りません"
+    本 exe は GUI ( windowed ) subsystem のため、実行中に確保するコンソールは
+    「既定のターミナル アプリ」設定や `wt.exe` 経由に関わらず従来の conhost に
+    なります ( GUI アプリは端末の擬似コンソールに参加できないため )。
+
+### 分割コンソール ( `-repl=split` ) { #split }
+
+`-repl=split` を指定すると、**上=ログ領域 / 下=入力行**に分割した TUI
+( [FTXUI](https://github.com/ArthurSonzogni/FTXUI) ベース ) で REPL を表示します。
+別スレッドから流れるログが入力行を乱さず、ログはスクロール領域に、入力は
+最下部に固定されます。`-repl=new` 同様に新規コンソールで開きます
+( `KRKRZ_REPL_FTXUI=ON` でビルドされている場合 )。
+
+現状 split では TJS 式評価・`exit`/`quit`・色分けログ・結果 (`=>`) / エラー表示に
+対応します。ドットコマンド・複数行継続・入力履歴・タブ補完は通常の `-repl`
+( icline ) 側のみの対応です。
+
 ### 操作
 
 プロンプトは `krkrz>` です。継続入力中は `...` に変わります。
