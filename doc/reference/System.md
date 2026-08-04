@@ -57,6 +57,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [removeContinuousHandler](#removecontinuoushandler)
 - [inform](#inform)
 - [confirm](#confirm)
+- [inputString](#inputstring)
 - [getTickCount](#gettickcount)
 - [getKeyState](#getkeystate)
 - [shellExecute](#shellexecute)
@@ -961,6 +962,35 @@ Continuous ハンドラの削除
 操作できません。
 REPL / ヘッダレス駆動中はブロッキングダイアログを表示せず、
 内容をログへ出力して既定応答 ( 真 ) を返します。
+
+---
+
+### inputString
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `caption` | `&nbsp;` | ダイアログのタイトルを指定します。 |
+| `prompt` | `""` | 入力を促す説明文を指定します ( 省略時は caption を使用 )。 |
+| `default` | `""` | 入力欄の初期値を指定します ( 省略可 )。 |
+
+**戻り値**
+
+ユーザが入力した文字列が返ります。**キャンセルした場合は void** が返ります。
+
+**解説**
+
+文字列の入力
+
+ユーザに 1 行のテキストを入力させるモーダルダイアログを表示します
+( 吉里吉里2 互換 )。
+WINVER ビルドではネイティブの入力ダイアログを表示します。
+SDL ビルドでは ( REPL 以外では ) 現状未対応で void を返します。
+REPL 駆動中はブロッキングダイアログを出さず、REPL の応答チャネル経由で
+入力を受け取ります ( 応答口が無い場合は default を返します )。
 
 ---
 
