@@ -61,6 +61,7 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [layerTreeOwnerInterface](#layertreeownerinterface)
 - [mouseCursor](#mousecursor)
 - [showScrollBars](#showscrollbars)
+- [GLGetProcAddress](#glgetprocaddress)
 
 ### メソッド
 
@@ -90,7 +91,6 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [getTouchVelocity](#gettouchvelocity)
 - [resetMouseVelocity](#resetmousevelocity)
 - [beginMove](#beginmove)
-- [findFullScreenCandidates](#findfullscreencandidates)
 - [requestUpdate](#requestupdate)
 - [setLayerPos](#setlayerpos)
 
@@ -981,6 +981,23 @@ LayerTreeOwner インターフェースポインタ
 
 ---
 
+### GLGetProcAddress
+
+プロパティ \ アクセス: `r`
+
+**型**: `Integer`
+
+**解説**
+
+GL エントリポイント解決関数へのポインタ ( 整数 )
+
+GLES 系プラグイン ( EffekseerDevice 等 ) の oglbase として利用します。初回
+アクセス時に GL コンテキストが未初期化なら遅延生成してカレントにします
+( OGLDrawDevice / Canvas を使う場合でもウィンドウから取得できます )。GL を
+取得できない環境では 0 ( null ) を返します。
+
+---
+
 ### close
 
 メソッド
@@ -1571,33 +1588,6 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 
 ウィンドウのタイトルバーをドラッグした場合と同等の移動操作を、現在のマウス位置から
 開始させます。`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換メソッドです。
-
----
-
-### findFullScreenCandidates
-
-メソッド
-
-**引数**
-
-| 引数 | 既定値 | 説明 |
-| --- | --- | --- |
-| `width` | `&nbsp;` | 希望幅 ( ピクセル ) |
-| `height` | `&nbsp;` | 希望高さ ( ピクセル ) |
-| `bpp` | `&nbsp;` | 希望色深度 ( bit per pixel ) |
-| `mode` | `&nbsp;` | フルスクリーン解像度モード ( `tTVPFullScreenResolutionMode` ) |
-| `zoomMode` | `&nbsp;` | エンジンズームモード ( `tTVPFullScreenUsingEngineZoomMode` ) |
-
-**戻り値**
-
-TODO: 現在の実装では結果が TJS に返されていないため、戻り値仕様要確認。
-
-**解説**
-
-フルスクリーン候補解像度の検索
-
-指定された希望解像度に近いフルスクリーン候補モードをディスプレイから検索します。
-Win32 ビルド専用です。
 
 ---
 

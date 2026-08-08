@@ -39,8 +39,11 @@ JSON 1 引数だけで呼ぶと、独立ウィンドウを開かずに既存の�
 取らない常駐 HUD として表示できます。
 
 JSON 仕様の要素タイプ ( label / button / input_box / checkbox / toggle /
-vtile / htile / vspacer / hspacer 等 ) や属性、`"input"` ノードによる
-キーボード / ゲームパッド操作の設定詳細は [elements_modal の README](https://github.com/wamsoft/elements/blob/develop/docs/keyboard-navigation.md)
+vtile / htile / vspacer / hspacer 等 ) や属性、レイアウト密度指定
+( `"gap"` / top-level `"style"` ブロック ) の詳細は
+[elements_modal の README](https://github.com/wamsoft/elements/blob/develop/external/elements_modal/README.md)、
+`"input"` ノードによるキーボード / ゲームパッド操作の設定詳細は
+[キーボードナビゲーション仕様](https://github.com/wamsoft/elements/blob/develop/docs/keyboard-navigation.md)
 を参照してください。
 
 `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では Dialog クラスは利用できません。
@@ -373,6 +376,21 @@ action と values を保持する Dictionary が返ります。
 画面が切り替わるたびに [onScreen](#onscreen) / [onScreenLeave](#onscreenleave)、
 各 widget の操作で [onAction](#onaction) が発火します。
 
+画面 JSON の `transitions` エントリを object 形式にすると、画面切替時の
+遷移エフェクトを宣言できます ( `effect: "fade"` = クロスフェード /
+`effect: "universal"` = rule 画像によるユニバーサルトランジション。
+`duration` = 所要 ms ( 省略時 200 )、universal では追加で `rule` =
+rule 画像パス ( 宣言した画面からの相対 / Storages パス / autopath 検索 )、
+`vague` = 境界ぼかし幅 0〜255 ( 省略時 64 ) を指定します )。
+
+```json
+"transitions": {
+"next": { "target": "s2", "effect": "fade", "duration": 300 },
+"back": { "target": "<back>", "effect": "universal",
+"rule": "rule.png", "vague": 64, "duration": 500 }
+}
+```
+
 **関連:** [Dialog.showFlowScreens](Dialog.md#showflowscreens) / [Dialog.startFlow](Dialog.md#startflow)
 
 ---
@@ -479,6 +497,11 @@ TJS 側で処理する場合は、`"close_on_click"` を指定しない button �
 内部の teardown は次フレームで行われるため、close を呼んだ直後でも
 しばらく [active](#active) は真のままです。次のモーダルを安全に
 起動したい場合は [active](#active) が偽になるのを待ってください。
+
+画面内の要素に `"animate"` の `"on": "exit"` 指定 ( 退場演出 ) がある
+場合、close でも退場演出を再生し、完了してから閉じます ( その間も
+[active](#active) は真のままです )。フロー実行中の close は画面遷移
+( transitions ) を解決せず、フローごと終了します。
 
 **関連:** [Dialog.active](Dialog.md#active)
 

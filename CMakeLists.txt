@@ -146,6 +146,34 @@ xlsxWriter      # xlsxWriter.dll    (Excel 読み書き。libxlsxwriter/openxlsx
 )
 endif()
 
+# OpenGL ES 描画系プラグイン。GLES(ANGLE/glad)で描画し、描画先の GL コンテキストは
+# 吉里吉里本体の OGLDrawDevice もしくは krkrgles の GLESAdaptor が供給する。
+#   krkreffekseer : Effekseer エフェクト再生 (ホスト供給の GL コンテキストへ描画)。
+#                   Win32 GUI 非依存で全プラットフォーム対象。
+list(APPEND TVP_PLUGINS
+krkreffekseer
+)
+
+# krkrgles は EGL/ANGLE を Window.HWND から生成する作りで Windows 専用
+# (macOS / Linux には HWND が無い)。非 Windows では krkreffekseer / krkrlive2d の
+# GL コンテキスト供給は本体 OGLDrawDevice を使うため krkrgles は不要。
+# ※このブロックは project() より前なので CMAKE_HOST_WIN32 で判定する。
+#   krkrgles      : GLES 描画アダプタ (レイヤ⇔FBO、ポストエフェクト)
+if(CMAKE_HOST_WIN32)
+list(APPEND TVP_PLUGINS
+krkrgles
+)
+endif()
+
+# krkrlive2d は上記に加えて Live2D Cubism Core を必要とする。SDK パスは環境変数
+# CUBISM_SDK (ドライバ側 CMake が $ENV{CUBISM_SDK}/Core を参照) で与えられ、未設定では
+# ビルドできないため、設定されているときだけビルド対象に含める。
+if(DEFINED ENV{CUBISM_SDK})
+list(APPEND TVP_PLUGINS
+krkrlive2d
+)
+endif()
+
 # 特殊プラグイン
 # STEAMプラグインはSDKパスが環境変数で提供された場合のみビルド
 if(DEFINED ENV{STEAMWORKS_SDK})

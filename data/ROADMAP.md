@@ -76,6 +76,12 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
       主因は demolib のパネル再試行自壊バグ (shellClosePanel が pending を消す)、
       副次でエンジンの host 解決を提示中デバイス追従に改善 (core b143beaa)。GPU
       パーティクルでパネル表示+クリック操作 (粒子数変更) を実機確認。
+- [x] **elements_flow (Elements 画面遷移) 追加** (2026-08-08)。Dialog フロー
+      (startFlow) の画面切替エフェクト (`transitions` の `effect: fade / universal` +
+      rule 画像 + vague) と退場 (exit) 演出を確認するコアデモ
+      (`src/core/data/elements_flow/`)。斜めワイプ (vague 大小) / サークル
+      (開閉、反転 rule) / クロスフェードの 3 系統。core gallery / data hub /
+      単体起動の 3 経路に登録。実機キャプチャ検証済。
 - [ ] `tools/collect_samples.py` + `make samples`: plugin `sample/` 集約 → `samples_auto.tjs` 生成
 - [ ] doc/ にデモ一覧ページ (topics/samples.md 等) 新設、以後デモ追加ごとに更新
 - [ ] krkrz_web: ランチャの起動トークンが `core/<demo>` 形式 (スラッシュ入り) に
@@ -150,7 +156,12 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       パッド軸 (System.padAxis*)。postInputEvent で demotest 注入
 - [x] timer_async — Timer/AsyncTrigger/連続ハンドラのタイミング可視化 (2026-07-20)
 - [ ] sound — WaveSoundBuffer: 再生・ループ・ラベル・fade・pan、PhaseVocoder
-      (現デモから移設)、SoundBuffer
+      (現デモから移設)、SoundBuffer、**ゲインコントロール** (setGainQueryCallback で
+      曲別 dB / CLI 全体ゲイン -opus_gain・-ogg_gain / ReplayGain -*_rg の効果を実聴。
+      ゲイン用途は opus 推奨。詳細 [[project_sound_gain_extension]] / doc CommandLine.md)
+- [ ] sound_3d — WaveSoundBuffer 3D 定位 (miniaudio spatializer): フライバイ/周回、
+      距離減衰/ドップラー/減衰モデル。現 startup.tjs のホットキー実装を専用シーン化
+      (前/後/左/右の離散位置サンプルも)。詳細は project_wavesound_3d_spatializer
 - [ ] video — VideoOverlay: layer / overlay モード、シーク、ループ
 - [ ] storage — Storages / autoPath / アーカイブ / BinaryStream / セーブデータ
       (Web では IDBFS 永続化の確認を兼ねる)

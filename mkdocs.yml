@@ -140,6 +140,7 @@ nav:
       - reference/Debug.md
       - reference/Dialog.md
       - reference/Font.md
+      - reference/GLCompositor.md
       - reference/ImageFunction.md
       - reference/Layer.md
       - reference/Matrix32.md
@@ -192,6 +193,17 @@ nav:
       - reference/Zip.md
       - reference/Unzip.md
       - reference/XMLParser.md
+      - GLES 描画 (krkrgles):
+        - reference/GLESAdaptor.md
+        - reference/GLESTexture.md
+      - Effekseer (krkreffekseer):
+        - reference/EffekseerDevice.md
+        - reference/EffekseerEffect.md
+        - reference/EffekseerPlayer.md
+      - Live2D (krkrlive2d):
+        - reference/Live2DDevice.md
+        - reference/Live2DModel.md
+        - reference/Live2DPlayer.md
       - 描画 (layerExDraw):
         - reference/GdiPlus.md
         - reference/GdiPlus.Appearance.md
@@ -254,10 +266,12 @@ nav:
       - メモリ不足対策: topics/core/low_memory.md
       - メモリ観測・リーク調査: topics/core/memory_observation.md
       - 描画スレッドプール利用率の計測 (DrawStats): topics/core/draw_stats.md
+      - ゲームパッド入力: topics/core/gamepad.md
       - ゲームパッド状態の観察 (PadOverlay): topics/core/pad_overlay.md
       - Elements ベースの汎用ダイアログ: topics/core/elements_dialog.md
       - REPL (対話型 TJS シェル): topics/core/repl.md
       - ゲーム画面の表示画角制御 (ビューポート): topics/core/viewport.md
       - Canvas ポストエフェクト / クリッピング: topics/core/canvas_effect.md
+      - Canvas トランジション描画 (drawTransition): topics/core/canvas_transition.md
       - ログ出力: topics/core/logging.md
     - ライセンス: topics/LICENSE.md

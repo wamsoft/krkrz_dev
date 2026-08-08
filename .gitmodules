@@ -175,3 +175,12 @@
 [submodule "src/plugins/expat"]
 	path = src/plugins/expat
 	url = https://github.com/wamsoft/expat.git
+[submodule "src/plugins/krkrgles"]
+	path = src/plugins/krkrgles
+	url = https://github.com/wamsoft/krkrgles.git
+[submodule "src/plugins/krkrlive2d"]
+	path = src/plugins/krkrlive2d
+	url = https://github.com/wamsoft/krkrlive2d.git
+[submodule "src/plugins/krkreffekseer"]
+	path = src/plugins/krkreffekseer
+	url = https://github.com/wamsoft/krkreffekseer.git
