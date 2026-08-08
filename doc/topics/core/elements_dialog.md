@@ -91,6 +91,27 @@ GPU 側の同等機能は [Canvas トランジション描画](canvas_transition
 ダイアログを閉じるのは JSON 側で `"close_on_click": true` を指定した button
 ( および Esc / × による中断 ) だけです。
 
+### レイアウト密度の指定 ( gap / style ブロック )
+
+既定は fit-to-content + 密着積みのため、明示指定を省略すると詰まった
+見た目になります。spacer を並べる代わりに以下で密度をまとめて指定できます:
+
+```jsonc
+{
+    "style": { "font_scale": 1.25, "row_height": 44, "tile_gap": 8, "padding": 24 },
+    "content": { "type": "vtile", "gap": 12, "children": [ ... ] }
+}
+```
+
+- `vtile` / `htile` の `"gap"` — 子要素間の隙間 px ( spacer 自動挿入と等価 )
+- top-level `"style"` — `font_scale` ( 既定フォント倍率 ) / `tile_gap`
+  ( gap 未指定タイルの既定 ) / `row_height` ( button 系 / input_box の既定
+  最小高 ) / `padding` ( content 全体の外側余白 ) を未指定値の既定として適用
+
+いずれも省略で従来と完全一致です。詳細は
+[elements_modal README](https://github.com/wamsoft/elements/blob/develop/external/elements_modal/README.md)
+の「style ブロック」を参照してください。
+
 ---
 
 ## 非モーダルの複数同時表示とフォーカス
