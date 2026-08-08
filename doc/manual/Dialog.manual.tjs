@@ -37,8 +37,11 @@
  * 取らない常駐 HUD として表示できます。
  *
  * JSON 仕様の要素タイプ ( label / button / input_box / checkbox / toggle /
- * vtile / htile / vspacer / hspacer 等 ) や属性、`"input"` ノードによる
- * キーボード / ゲームパッド操作の設定詳細は [elements_modal の README](https://github.com/wamsoft/elements/blob/develop/docs/keyboard-navigation.md)
+ * vtile / htile / vspacer / hspacer 等 ) や属性、レイアウト密度指定
+ * ( `"gap"` / top-level `"style"` ブロック ) の詳細は
+ * [elements_modal の README](https://github.com/wamsoft/elements/blob/develop/external/elements_modal/README.md)、
+ * `"input"` ノードによるキーボード / ゲームパッド操作の設定詳細は
+ * [キーボードナビゲーション仕様](https://github.com/wamsoft/elements/blob/develop/docs/keyboard-navigation.md)
  * を参照してください。
  *
  * `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では Dialog クラスは利用できません。
