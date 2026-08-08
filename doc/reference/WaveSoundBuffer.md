@@ -43,7 +43,11 @@ WaveSoundBuffer クラスでは、[ループチューナ](../guide/LoopTuner.md)
 - [stopFade](#stopfade)
 - [freeDirectSound](#freedirectsound)
 - [getVisBuffer](#getvisbuffer)
+- [getSoundLevel](#getsoundlevel)
+- [getSoundSpectrum](#getsoundspectrum)
+- [getVowel](#getvowel)
 - [setPos](#setpos)
+- [setGainQueryCallback](#setgainquerycallback)
 
 ### イベント
 
@@ -566,6 +570,93 @@ DirectSound は使用しないため、このメソッドは呼び出しても�
 
 ---
 
+### getSoundLevel
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `ahead` | `0` | 先読みするサンプル数を指定します ( 既定 0 = 現在の再生位置 )。<br>描画のレイテンシに合わせて口パクを前後させたい場合に使います。 |
+| `windowSamples` | `0` | 音量を計算する窓のサンプル数を指定します ( 既定 0 = エンジン既定 )。 |
+
+**戻り値**
+
+`%[ rms:実効値, peak:ピーク値 ]` の辞書を返します。いずれも 0.0〜1.0 で、
+`rms` は口の開き量にそのまま使えます。
+
+**解説**
+
+音量レベルの取得 ( リップシンク用 )
+
+現在の再生位置付近の音量を取得します。`getVisBuffer` のように生の
+PCM を取り出して TJS 側で計算する必要はなく、エンジンが C++ 側で計算して返します。
+使用するには `WaveSoundBuffer.useVisBuffer` を真にする必要があります ( 未設定の
+場合は自動的に有効化され、その回は 0 が返ります )。
+
+**関連:** [WaveSoundBuffer.getVowel](WaveSoundBuffer.md#getvowel) / [WaveSoundBuffer.getSoundSpectrum](WaveSoundBuffer.md#getsoundspectrum)
+
+---
+
+### getSoundSpectrum
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `numbands` | `&nbsp;` | 取得するバンド数を指定します ( 1〜256 )。 |
+| `ahead` | `0` | 先読みするサンプル数を指定します ( 既定 0 )。 |
+
+**戻り値**
+
+各バンドのエネルギーを格納した配列 ( 要素数 numbands ) を返します。
+バンドは対数配置 ( 低域から高域 ) です。
+
+**解説**
+
+スペクトルの取得 ( リップシンク用 )
+
+現在の再生位置付近のスペクトルを FFT で解析し、対数配置の
+バンドエネルギーとして返します。母音判定やイコライザ表示などに利用できます。
+`WaveSoundBuffer.useVisBuffer` を真にする必要があります。
+
+**関連:** [WaveSoundBuffer.getVowel](WaveSoundBuffer.md#getvowel)
+
+---
+
+### getVowel
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `ahead` | `0` | 先読みするサンプル数を指定します ( 既定 0 )。 |
+
+**戻り値**
+
+`%[ a:, i:, u:, e:, o:, voiced: ]` の辞書を返します。a〜o は各母音の
+推定重み ( 合計がおよそ 1.0 )、`voiced` は有声 ( 母音帯域にエネルギーあり ) なら 1、
+無音なら 0 です。
+
+**解説**
+
+母音推定の取得 ( リップシンク用 )
+
+現在の再生位置付近のスペクトルを解析し、日本語 5 母音 ( あいうえお )
+らしさをフォルマント帯域のエネルギー比から推定して返します。口の形
+( viseme ) のブレンド重みとして利用できます。あくまで簡易推定である点に
+注意してください。
+`WaveSoundBuffer.useVisBuffer` を真にする必要があります。
+
+**関連:** [WaveSoundBuffer.getSoundLevel](WaveSoundBuffer.md#getsoundlevel)
+
+---
+
 ### setPos
 
 メソッド
@@ -585,6 +676,50 @@ DirectSound は使用しないため、このメソッドは呼び出しても�
 3D サウンド再生時の音源位置 ( X / Y / Z ) を一括で設定します。
 
 **関連:** [WaveSoundBuffer.posX](WaveSoundBuffer.md#posx) / [WaveSoundBuffer.posY](WaveSoundBuffer.md#posy) / [WaveSoundBuffer.posZ](WaveSoundBuffer.md#posz)
+
+---
+
+### setGainQueryCallback
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `callback` | `&nbsp;` | URL ( ストレージ名 ) を 1 引数で受け取り、適用する追加<br>ゲインを dB で返す関数を指定します。null を指定すると解除します。 |
+
+**解説**
+
+曲別ゲイン取得コールバックの設定 ( クラスメソッド )
+
+ogg ( Vorbis ) / opus ファイルのデコード時に、ファイルごとに適用する
+**追加ゲイン ( dB )** を返すコールバック関数を登録します。これはクラス
+メソッドで、登録は全 WaveSoundBuffer で共有されます。旧 wuvorbis /
+wuopus プラグインの同名 API を本体内蔵デコーダへ統合したものです。
+コールバックはファイルを開くとき ( open 時、スクリプトスレッド ) に 1 回
+呼ばれ、戻り値の dB がデコード出力に適用されます。曲ごとに音量を揃える
+( ラウドネス正規化 ) 用途などに使います。
+
+例 :
+
+`WaveSoundBuffer.setGainQueryCallback(function(url) {`
+
+`  return url.indexOf("loud_") != -1 ? -6.0 : 0.0; // 特定曲だけ -6dB`
+
+`});`
+
+ゲインには他に、起動時コマンドラインオプションによる全体ゲインや
+ReplayGain タグ対応もあります ( [コマンドライン](../guide/CommandLine.md)
+の「サウンドのゲイン」参照 )。
+
+**コーデックによる差異 / 推奨**
+
+opus は仕様上ヘッダに出力ゲイン ( R128 ) を持ち、デコーダ内部で正確・
+低コストに適用されます ( CLI / コールバックのゲインもこれに加算 )。一方
+Vorbis はフォーマットにゲイン概念が無いため、本体は出力 PCM を float 域で
+スケールして適用します ( 実用上の性能差はほぼありません )。**ゲインや
+ラウドネスを積極的に扱う場合は opus の利用を推奨します。**
 
 ---
 
@@ -633,5 +768,80 @@ DirectSound は使用しないため、このメソッドは呼び出しても�
 ラベルを通過した
 
 再生位置がラベルを通過した際に発生します。
+
+---
+
+## プラグイン拡張: getSample
+
+擬似コードによるマニュアル
+
+### メンバー一覧
+
+#### プロパティ
+
+- [sampleValue](#samplevalue)
+- [sampleCount](#samplecount)
+- [sampleAhead](#sampleahead)
+
+#### メソッド
+
+- [getSample](#getsample)
+
+---
+
+### sampleValue
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+サンプル値の取得（新方式）
+
+getVisBuffer(buf, sampleCount, 1, sampleAhead)でサンプルを取得し，
+(value/32768)^2の最大値を取得します。(0～1の実数で返ります)
+※このプロパティを読み出すと暗黙でuseVisBuffer=trueに設定されます
+
+---
+
+### sampleCount
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+新方式のバッファ取得用パラメータプロパティ（sampleValueを参照）
+
+デフォルトはsetDefaultCounts/setDefaultAheadsで決定されます
+※このプロパティを読み書きする暗黙でuseVisBuffer=trueに設定されます
+
+---
+
+### sampleAhead
+
+プロパティ \ アクセス: `r/w`
+
+---
+
+### getSample
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `n` | `&nbsp;` | 取得するサンプルの数。省略すると 100 |
+
+**戻り値**
+
+平均値
+※ 予めuseVisBuffer=trueにしておくこと
+
+**解説**
+
+サンプル値の取得（旧方式）
+
+現在の再生位置から指定数のサンプルを取得してその平均値を返します。
+値が負のサンプル値は無視されます。
 
 ---

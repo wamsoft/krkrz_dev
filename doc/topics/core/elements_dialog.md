@@ -45,6 +45,39 @@ SDL3 ビルドと **WINVER ( Windows ネイティブ / D3D11 ) ビルドの両�
 [onScreenLeave](../../reference/Dialog.md#onscreenleave)、widget の
 操作で [onAction](../../reference/Dialog.md#onaction) が発火します。
 
+#### 画面切替エフェクト ( fade / universal )
+
+画面 JSON の `transitions` エントリを object 形式にすると、画面切替時の
+遷移エフェクトを宣言できます。CPU 合成のため、SDL / WINVER / GL のすべての
+DrawDevice で同一に動作します。
+
+```jsonc
+"transitions": {
+    "next": { "target": "s2", "effect": "fade", "duration": 300 },
+    "back": { "target": "<back>", "effect": "universal",
+              "rule": "rule.png", "vague": 64, "duration": 500 }
+}
+```
+
+| キー | 意味 |
+|---|---|
+| `effect` | `"fade"` = クロスフェード / `"universal"` = rule 画像によるユニバーサルトランジション。未対応名は警告ログ + 即切替 |
+| `duration` | 所要時間 ms。省略 / 0 で 200ms |
+| `rule` | universal の rule 画像 ( グレースケール。値が小さい画素ほど早く次画面へ切り替わる )。解決順 = 遷移を宣言した画面からの相対 → Storages パス → autopath 検索 |
+| `vague` | 境界ぼかし幅 ( rule 値スケール 0〜255、既定 64 ) |
+
+#### 退場 ( exit ) 演出との協調
+
+要素の `"animate"` に `"on": "exit"` を付けると、画面が閉じる / 遷移する
+ときに退場演出を再生してから遷移します。close_on_click / Esc などの画面内
+トリガに加えて、TJS からの [close](../../reference/Dialog.md#close) でも
+発火します ( 演出完了後に閉じ、フロー実行中は transitions を解決せず
+フローごと終了します )。
+
+デモ: `src/core/data/elements_flow/` ( サンプルランチャ「Elements 画面遷移」)。
+GPU 側の同等機能は [Canvas トランジション描画](canvas_transition.md) を
+参照してください。
+
 `showModalJson` / `showModalFile` の戻り値:
 
 ```tjs
@@ -57,6 +90,27 @@ SDL3 ビルドと **WINVER ( Windows ネイティブ / D3D11 ) ビルドの両�
 モーダル中も [onAction](../../reference/Dialog.md#onaction) は発火しますが、
 ダイアログを閉じるのは JSON 側で `"close_on_click": true` を指定した button
 ( および Esc / × による中断 ) だけです。
+
+### レイアウト密度の指定 ( gap / style ブロック )
+
+既定は fit-to-content + 密着積みのため、明示指定を省略すると詰まった
+見た目になります。spacer を並べる代わりに以下で密度をまとめて指定できます:
+
+```jsonc
+{
+    "style": { "font_scale": 1.25, "row_height": 44, "tile_gap": 8, "padding": 24 },
+    "content": { "type": "vtile", "gap": 12, "children": [ ... ] }
+}
+```
+
+- `vtile` / `htile` の `"gap"` — 子要素間の隙間 px ( spacer 自動挿入と等価 )
+- top-level `"style"` — `font_scale` ( 既定フォント倍率 ) / `tile_gap`
+  ( gap 未指定タイルの既定 ) / `row_height` ( button 系 / input_box の既定
+  最小高 ) / `padding` ( content 全体の外側余白 ) を未指定値の既定として適用
+
+いずれも省略で従来と完全一致です。詳細は
+[elements_modal README](https://github.com/wamsoft/elements/blob/develop/external/elements_modal/README.md)
+の「style ブロック」を参照してください。
 
 ---
 
@@ -133,6 +187,12 @@ Elements 自身は krkrz Storages ( XP3 含む ) を経由してフォントを�
 エンジン側でも、起動時に `Application->ResourcePath()` 下の `.ttf` / `.otf`
 を自動スキャンして登録しています ( ファイル名から family / weight /
 slant / stretch を推定 )。
+
+チェックボックスの ✓ や selection_menu の ▼ などのアイコングリフは、本文
+フォントではなく**アイコンフォント `elements_basic.ttf`** ( fontello 生成、
+`resource/` に同梱 ) で描画されます。エンジンが自動登録するため通常は意識
+不要ですが、リソースを差し替える構成でこのフォントを落とすと「枠は出るが
+✓ が出ない」状態になります。
 
 ---
 

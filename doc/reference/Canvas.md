@@ -33,6 +33,8 @@ Windowを生成すると、プロパティcanvasが自動的に作られます�
 - [drawTexture](#drawtexture)
 - [drawTexture](#drawtexture)
 - [drawTexture](#drawtexture)
+- [drawTransition](#drawtransition)
+- [drawTransition](#drawtransition)
 - [drawTextureAtlas](#drawtextureatlas)
 - [drawTextureAtlas](#drawtextureatlas)
 - [draw9Patch](#draw9patch)
@@ -396,6 +398,61 @@ Offscreenクラスを指定する場合は、renderTargetからそのOffscreen�
 Offscreenクラスを指定する場合は、renderTargetからそのOffscreenクラスは外されていることが前提(循環しないように)です。
 OpenGL ES 2.0の場合はテクスチャ最大8枚、3.0は頂点側最大16枚，フラグメント側最大16枚なので、まだ追加できますが、とりあえずは3枚まで定義しています。
 将来的にはテクスチャを配列で渡すバージョンを作り、4枚以上はそちらで対応も検討します。
+
+---
+
+### drawTransition
+
+メソッド
+
+**引数**
+
+| 引数 | 型 | 既定値 | 説明 |
+| --- | --- | --- | --- |
+| `front` | `Texture` | `&nbsp;` | 表側 ( phase=0.0 で表示される ) テクスチャ |
+| `back` | `Texture` | `&nbsp;` | 裏側 ( phase=1.0 で表示される ) テクスチャ |
+| `phase` | `real` | `&nbsp;` | 進行度 0.0〜1.0 ( 範囲外はクランプされます ) |
+
+**解説**
+
+表裏 2 枚のテクスチャをクロスフェード描画
+
+front → back を進行度 phase で混色して描画します。
+シェーダーは内蔵されているため ShaderProgram を用意する必要はありません。
+位置や拡大縮小、回転は matrix で指定します ( drawTexture と同じ規約で、
+blendMode / クリップにも従います )。
+テクスチャは Texture クラスだけでなく Offscreen クラスも指定できます。
+
+---
+
+### drawTransition
+
+メソッド
+
+**引数**
+
+| 引数 | 型 | 既定値 | 説明 |
+| --- | --- | --- | --- |
+| `front` | `Texture` | `&nbsp;` | 表側テクスチャ |
+| `back` | `Texture` | `&nbsp;` | 裏側テクスチャ |
+| `phase` | `real` | `&nbsp;` | 進行度 0.0〜1.0 |
+| `rule` | `Texture` | `&nbsp;` | rule 画像テクスチャ ( tcfAlpha )。null でクロスフェード |
+| `vague` | `int` | `64` | 境界ぼかし幅 ( rule 値スケール 0〜255 ) |
+
+**解説**
+
+表裏 2 枚のテクスチャをユニバーサルトランジション描画
+
+rule 画像 ( グレースケール ) の値が小さい画素ほど早く back 側へ
+切り替わります。切替の閾値は phase * (1 + vague/255) をスイープするため、
+phase=1.0 で必ず全画素が back になります。境界は vague の幅でぼかされます。
+
+rule テクスチャは tcfAlpha 形式で作成してください
+( 例: `new Texture("rule.png", tcfAlpha)` )。rule に null を渡すと
+クロスフェードとして動作します。
+
+Elements ダイアログのフロー画面切替エフェクト ( JSON `transitions` の
+`effect` / `rule` / `vague` ) と同じ意味論・同じ rule 資材が使えます。
 
 ---
 
