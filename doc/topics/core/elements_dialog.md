@@ -45,6 +45,39 @@ SDL3 ビルドと **WINVER ( Windows ネイティブ / D3D11 ) ビルドの両�
 [onScreenLeave](../../reference/Dialog.md#onscreenleave)、widget の
 操作で [onAction](../../reference/Dialog.md#onaction) が発火します。
 
+#### 画面切替エフェクト ( fade / universal )
+
+画面 JSON の `transitions` エントリを object 形式にすると、画面切替時の
+遷移エフェクトを宣言できます。CPU 合成のため、SDL / WINVER / GL のすべての
+DrawDevice で同一に動作します。
+
+```jsonc
+"transitions": {
+    "next": { "target": "s2", "effect": "fade", "duration": 300 },
+    "back": { "target": "<back>", "effect": "universal",
+              "rule": "rule.png", "vague": 64, "duration": 500 }
+}
+```
+
+| キー | 意味 |
+|---|---|
+| `effect` | `"fade"` = クロスフェード / `"universal"` = rule 画像によるユニバーサルトランジション。未対応名は警告ログ + 即切替 |
+| `duration` | 所要時間 ms。省略 / 0 で 200ms |
+| `rule` | universal の rule 画像 ( グレースケール。値が小さい画素ほど早く次画面へ切り替わる )。解決順 = 遷移を宣言した画面からの相対 → Storages パス → autopath 検索 |
+| `vague` | 境界ぼかし幅 ( rule 値スケール 0〜255、既定 64 ) |
+
+#### 退場 ( exit ) 演出との協調
+
+要素の `"animate"` に `"on": "exit"` を付けると、画面が閉じる / 遷移する
+ときに退場演出を再生してから遷移します。close_on_click / Esc などの画面内
+トリガに加えて、TJS からの [close](../../reference/Dialog.md#close) でも
+発火します ( 演出完了後に閉じ、フロー実行中は transitions を解決せず
+フローごと終了します )。
+
+デモ: `src/core/data/elements_flow/` ( サンプルランチャ「Elements 画面遷移」)。
+GPU 側の同等機能は [Canvas トランジション描画](canvas_transition.md) を
+参照してください。
+
 `showModalJson` / `showModalFile` の戻り値:
 
 ```tjs

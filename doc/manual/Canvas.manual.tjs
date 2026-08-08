@@ -136,6 +136,39 @@ class Canvas {
 	function drawTexture( texture:Texture, texture2:Texture, texture3:Texture, shader:ShaderProgram );
 
 	/**
+	 * 表裏 2 枚のテクスチャをクロスフェード描画
+	 * @description front → back を進行度 phase で混色して描画します。
+	 * シェーダーは内蔵されているため ShaderProgram を用意する必要はありません。
+	 * 位置や拡大縮小、回転は matrix で指定します ( drawTexture と同じ規約で、
+	 * blendMode / クリップにも従います )。
+	 * テクスチャは Texture クラスだけでなく Offscreen クラスも指定できます。
+	 * @param front 表側 ( phase=0.0 で表示される ) テクスチャ
+	 * @param back 裏側 ( phase=1.0 で表示される ) テクスチャ
+	 * @param phase 進行度 0.0〜1.0 ( 範囲外はクランプされます )
+	 */
+	function drawTransition( front:Texture, back:Texture, phase:real );
+
+	/**
+	 * 表裏 2 枚のテクスチャをユニバーサルトランジション描画
+	 * @description rule 画像 ( グレースケール ) の値が小さい画素ほど早く back 側へ
+	 * 切り替わります。切替の閾値は phase * (1 + vague/255) をスイープするため、
+	 * phase=1.0 で必ず全画素が back になります。境界は vague の幅でぼかされます。
+	 *
+	 * rule テクスチャは tcfAlpha 形式で作成してください
+	 * ( 例: `new Texture("rule.png", tcfAlpha)` )。rule に null を渡すと
+	 * クロスフェードとして動作します。
+	 *
+	 * Elements ダイアログのフロー画面切替エフェクト ( JSON `transitions` の
+	 * `effect` / `rule` / `vague` ) と同じ意味論・同じ rule 資材が使えます。
+	 * @param front 表側テクスチャ
+	 * @param back 裏側テクスチャ
+	 * @param phase 進行度 0.0〜1.0
+	 * @param rule rule 画像テクスチャ ( tcfAlpha )。null でクロスフェード
+	 * @param vague 境界ぼかし幅 ( rule 値スケール 0〜255 )
+	 */
+	function drawTransition( front:Texture, back:Texture, phase:real, rule:Texture, vague:int=64 );
+
+	/**
 	 * テクスチャの一部分を描画
 	 * @param rect テクスチャ内で描画する矩形領域
 	 * @param texture 描画するテクスチャ

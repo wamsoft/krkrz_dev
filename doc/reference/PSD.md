@@ -21,6 +21,8 @@ psd://PSDファイル名/id/レイヤID.bmp
 - [channels](#channels)
 - [color_mode](#color_mode)
 - [layer_count](#layer_count)
+- [hresolution](#hresolution)
+- [vresolution](#vresolution)
 
 ### メソッド
 
@@ -36,6 +38,24 @@ psd://PSDファイル名/id/レイヤID.bmp
 - [getGuides](#getguides)
 - [getBlend](#getblend)
 - [getLayerComp](#getlayercomp)
+- [save](#save)
+- [createBlank](#createblank)
+- [deleteLayer](#deletelayer)
+- [moveLayer](#movelayer)
+- [duplicateLayer](#duplicatelayer)
+- [copyLayerFrom](#copylayerfrom)
+- [setLayerName](#setlayername)
+- [setFillOpacity](#setfillopacity)
+- [setMaskDisabled](#setmaskdisabled)
+- [setMaskDensity](#setmaskdensity)
+- [setMaskFeather](#setmaskfeather)
+- [setMaskDefaultColor](#setmaskdefaultcolor)
+- [setLayerPixels](#setlayerpixels)
+- [setLayerMaskPixels](#setlayermaskpixels)
+- [addLayer](#addlayer)
+- [setMergedImage](#setmergedimage)
+- [setLayerText](#setlayertext)
+- [setLayerRunStyle](#setlayerrunstyle)
 - [clearStorageCache](#clearstoragecache)
 
 ---
@@ -87,6 +107,26 @@ psd://PSDファイル名/id/レイヤID.bmp
 **解説**
 
 レイヤ数
+
+---
+
+### hresolution
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+水平解像度(dpi, 既定72, image resource 1005)
+
+---
+
+### vresolution
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+垂直解像度(dpi, 既定72)
 
 ---
 
@@ -204,6 +244,13 @@ group_layer_id 親レイヤID
 type         合成モード（吉里吉里の対応モード)
 clipping	クリッピングマスクの対象か？
 mask		レイヤマスクを持っているかどうか？
+mask_params  マスクパラメータ(density/feather)。マスクを持ちパラメータ
+ブロックが実在するレイヤのみ存在。指定された項目だけ持つ
+%[ user_density:   // ユーザーマスク濃度 0..255
+user_feather:   // ユーザーマスクぼかし(px)
+vector_density: // ベクタマスク濃度 0..255
+vector_feather: // ベクタマスクぼかし(px)
+]
 layer_comp    レイヤーカンプ情報(カンプIDをキーとした辞書)
 %[ <id>: [ id,       // カンプID(getLayerComp() を参照してください)
 offset_x, // レイヤのXオフセット
@@ -224,6 +271,10 @@ color:        // RGBA 各 0..1 の配列 [ r, g, b, a ](未指定なら存在し
 tracking:     // トラッキング(字送り, 1/1000 em)
 kerning:      // 手動カーニング
 auto_kerning: // 自動カーニング(メトリクス/オプティカル)有効か
+],... ]
+paragraphs: [   // 段落別の行揃え(box text で段落ごとに揃えが変わる用)
+%[ length:        // 段落の文字数(UTF-16 コードユニット)
+justification: // 行揃え 0=左 1=右 2=中央
 ],... ]
 ]
 以下 additional information （※詳細はPSD仕様書を参照のこと）
@@ -368,6 +419,410 @@ comment,           // コメント
 **解説**
 
 レイヤーカンプデータの読み出し
+
+---
+
+### save
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `filename` | `&nbsp;` | 保存先ファイル名(ローカルパス) |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+現在の内容を PSD ファイルとして書き出す
+
+---
+
+### createBlank
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `width` | `&nbsp;` | 幅 |
+| `height` | `&nbsp;` | 高さ |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+この PSD を空の 8bit RGB 文書(白の合成画像)として初期化する。
+
+以後 addLayer(...) でレイヤを足して save() できる。
+
+---
+
+### deleteLayer
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+
+**戻り値**
+
+成功したら true(範囲外で false)
+
+**解説**
+
+レイヤを 1 枚削除する
+
+---
+
+### moveLayer
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `from` | `&nbsp;` | 移動元レイヤ番号 |
+| `to` | `&nbsp;` | 移動先(削除後リストでの挿入位置) |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+レイヤを from から to へ移動する
+
+---
+
+### duplicateLayer
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+
+**戻り値**
+
+複製の新レイヤ番号(失敗で -1)
+
+**解説**
+
+レイヤを複製する(元の直後に挿入)
+
+---
+
+### copyLayerFrom
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `src` | `&nbsp;` | コピー元 PSD インスタンス |
+| `srcIndex` | `&nbsp;` | コピー元レイヤ番号 |
+| `destIndex` | `&nbsp;` | 挿入位置(負値で末尾) |
+
+**戻り値**
+
+新レイヤ番号(失敗で -1)
+
+**解説**
+
+別の PSD インスタンスからレイヤをコピー挿入する。
+
+カラーモード/ビット深度が一致している必要がある。コピー元 PSD は
+この PSD の save() が終わるまで生存している必要がある。
+
+---
+
+### setLayerName
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `name` | `&nbsp;` | 新しい名前 |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+レイヤを改名する(pascal 名 + luni 名の両方を更新)
+
+---
+
+### setFillOpacity
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `opacity` | `&nbsp;` | 0..255 |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+塗り不透明度(fill opacity)を編集する
+
+---
+
+### setMaskDisabled
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `disabled` | `&nbsp;` | マスクを無効にするか |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+マスク無効フラグを編集する(マスクを持つレイヤのみ)
+
+---
+
+### setMaskDensity
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `density` | `&nbsp;` | 0..255 |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+ユーザーマスク濃度を編集する(マスクを持つレイヤのみ)
+
+---
+
+### setMaskFeather
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `feather` | `&nbsp;` | ぼかし半径(px) |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+ユーザーマスクぼかしを編集する(マスクを持つレイヤのみ)
+
+---
+
+### setMaskDefaultColor
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `color` | `&nbsp;` | 0..255 |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+マスク既定色を編集する(マスクを持つレイヤのみ)
+
+---
+
+### setLayerPixels
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `layer` | `&nbsp;` | 画素供給元 Layer |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+既存レイヤの画素を Layer オブジェクトの内容で差し替える。
+
+Layer の imageWidth×imageHeight・BGRA を取り込む。left/top は保持し
+width/height は更新される。8bit RGB 文書のみ。
+
+---
+
+### setLayerMaskPixels
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `layer` | `&nbsp;` | マスク供給元 Layer |
+| `top` | `&nbsp;` | マスク上端 |
+| `left` | `&nbsp;` | マスク左端 |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+レイヤのマスク画素を Layer オブジェクトの内容(B 成分をグレーとして使用)で
+
+差し替える。マスク矩形も (top,left,imageWidth,imageHeight) に設定する。
+マスクが無ければ新規作成する。8bit 文書のみ。
+
+---
+
+### addLayer
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | レイヤ名 |
+| `left` | `&nbsp;` | 左座標 |
+| `top` | `&nbsp;` | 上座標 |
+| `layer` | `&nbsp;` | 画素供給元 Layer |
+| `blendMode` | `blend_mode_normal` | 合成モード(blend_mode_*、既定 blend_mode_normal) |
+| `opacity` | `255` | 不透明度 0..255(既定 255) |
+| `destIndex` | `-1` | 挿入位置(負値で末尾) |
+
+**戻り値**
+
+新レイヤ番号(失敗で -1)
+
+**解説**
+
+新規画像レイヤを追加する。Layer の imageWidth×imageHeight・BGRA を取り込む。
+
+8bit RGB 文書のみ。
+
+---
+
+### setMergedImage
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `layer` | `&nbsp;` | 画素供給元 Layer |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+合成済み画像(プレビュー/getBlend の元)を Layer の内容で差し替える。
+
+Layer のサイズは canvas サイズ(width×height)と一致している必要がある。
+8bit RGB 文書のみ。
+
+---
+
+### setLayerText
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `text` | `&nbsp;` | 新しい本文(改行は \\r) |
+
+**解説**
+
+テキストレイヤの本文を差し替える(スタイルは先頭ランに畳まれる)。
+
+テキストレイヤ以外や TySh ブロックが無い場合は例外。
+
+---
+
+### setLayerRunStyle
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `runIndex` | `&nbsp;` | ラン番号 |
+| `style` | `&nbsp;` | スタイル辞書 |
+
+**解説**
+
+テキストレイヤの runIndex 番目のラン(getLayerInfo().text.runs に対応)の
+
+スタイルを編集する。style 辞書のうち指定されたキーだけ上書きする。
+%[ size_px:   // フォントサイズ(px)
+color:     // RGBA 各 0..1 の配列 [ r, g, b, a ]
+tracking:  // トラッキング(1/1000 em)
+kerning:   // 手動カーニング
+bold:      // 疑似ボールド(FauxBold) true/false
+italic:    // 疑似イタリック(FauxItalic) true/false
+underline: // 下線(Underline) true/false
+]
+テキストレイヤ以外や runIndex 範囲外の場合は例外。
 
 ---
 

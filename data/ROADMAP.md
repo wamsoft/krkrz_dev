@@ -76,6 +76,12 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
       主因は demolib のパネル再試行自壊バグ (shellClosePanel が pending を消す)、
       副次でエンジンの host 解決を提示中デバイス追従に改善 (core b143beaa)。GPU
       パーティクルでパネル表示+クリック操作 (粒子数変更) を実機確認。
+- [x] **elements_flow (Elements 画面遷移) 追加** (2026-08-08)。Dialog フロー
+      (startFlow) の画面切替エフェクト (`transitions` の `effect: fade / universal` +
+      rule 画像 + vague) と退場 (exit) 演出を確認するコアデモ
+      (`src/core/data/elements_flow/`)。斜めワイプ (vague 大小) / サークル
+      (開閉、反転 rule) / クロスフェードの 3 系統。core gallery / data hub /
+      単体起動の 3 経路に登録。実機キャプチャ検証済。
 - [ ] `tools/collect_samples.py` + `make samples`: plugin `sample/` 集約 → `samples_auto.tjs` 生成
 - [ ] doc/ にデモ一覧ページ (topics/samples.md 等) 新設、以後デモ追加ごとに更新
 - [ ] krkrz_web: ランチャの起動トークンが `core/<demo>` 形式 (スラッシュ入り) に

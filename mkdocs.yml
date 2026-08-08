@@ -272,5 +272,6 @@ nav:
       - REPL (対話型 TJS シェル): topics/core/repl.md
       - ゲーム画面の表示画角制御 (ビューポート): topics/core/viewport.md
       - Canvas ポストエフェクト / クリッピング: topics/core/canvas_effect.md
+      - Canvas トランジション描画 (drawTransition): topics/core/canvas_transition.md
       - ログ出力: topics/core/logging.md
     - ライセンス: topics/LICENSE.md

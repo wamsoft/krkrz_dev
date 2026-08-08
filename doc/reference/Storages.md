@@ -1442,6 +1442,9 @@ params.rootDir フォルダ選択のルートを指定します(このフォル�
 
 フォルダ選択ダイアログを開く
 
+※本体に Storages.selectDirectory が実装されている環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+
 ---
 
 ### isExistentDirectory
