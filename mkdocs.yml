@@ -204,6 +204,8 @@ nav:
         - reference/Live2DDevice.md
         - reference/Live2DModel.md
         - reference/Live2DPlayer.md
+      - 3D (krkrthreepp):
+        - reference/threepp/index.md
       - 描画 (layerExDraw):
         - reference/GdiPlus.md
         - reference/GdiPlus.Appearance.md
