@@ -1,4 +1,28 @@
 {
+  "Agent": {
+    "events": [],
+    "file": "src/core/common/environ/AgentControlIntf.cpp",
+    "methods": [
+      "captureScreen",
+      "click",
+      "closeAllDialogs",
+      "closeDialog",
+      "dialogClick",
+      "dialogFocus",
+      "dialogTree",
+      "dialogs",
+      "keyDown",
+      "keyPress",
+      "keyUp",
+      "lastCapture",
+      "mouseDown",
+      "mouseMove",
+      "mouseUp",
+      "text",
+      "wheel"
+    ],
+    "properties": []
+  },
   "AsyncTrigger": {
     "events": [
       "onFire"
@@ -491,6 +515,20 @@
       "textEncoding"
     ]
   },
+  "SoundListener": {
+    "events": [],
+    "file": "src/core/common/sound/WaveIntf.cpp",
+    "methods": [
+      "setCone",
+      "setDirection",
+      "setPosition",
+      "setVelocity",
+      "setWorldUp"
+    ],
+    "properties": [
+      "enabled"
+    ]
+  },
   "Storages": {
     "events": [],
     "file": "src/core/common/base/StorageIntf.cpp",
@@ -782,6 +820,25 @@
       "useVisBuffer",
       "volume",
       "volume2"
+    ]
+  },
+  "WebServer": {
+    "events": [],
+    "file": "src/core/common/utils/ReplWebIntf.cpp",
+    "methods": [
+      "broadcast",
+      "openBrowser",
+      "register",
+      "serveStatic",
+      "start",
+      "startAt",
+      "stop",
+      "unregister",
+      "unserveStatic"
+    ],
+    "properties": [
+      "active",
+      "url"
     ]
   },
   "Window": {

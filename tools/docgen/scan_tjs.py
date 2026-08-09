@@ -55,9 +55,9 @@ CLASSES = {
     "SDLDrawDevice", "OGLDrawDevice",
     "Scripts", "Storages", "System", "Timer", "Debug", "Clipboard",
     "AsyncTrigger", "Plugins", "Rect", "Console", "VideoOverlay",
-    "WaveSoundBuffer", "SoundBuffer",
+    "WaveSoundBuffer", "SoundBuffer", "SoundListener",
     "TextWriteStream", "TextReadStream", "BinaryStream",
-    "Dialog",
+    "Dialog", "Agent", "WebServer",
 }
 
 # Members present in the C++ binding but intentionally excluded from the
