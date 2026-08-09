@@ -418,6 +418,28 @@ class System {
 	property exePath { getter; }
 
 	/**
+	 * 実画面を PNG 保存する
+	 *
+	 * 次フレームの present 直前に、オーバーレイ込みの実画面を読み戻して path へ PNG 保存する
+	 * 要求を立てます (実際の保存は DrawDevice の描画時)。x,y,w,h で保存範囲を指定でき、
+	 * w/h を 0 にすると画面全体になります。SDL の `Agent.captureScreen` と同等で、Agent 非対応の
+	 * WINVER でも使えるよう REPL 有効時に用意される、テスト/検証用の機能です。戻り値は保存先パス。
+	 * @param path 保存先の統一ストレージパス (.png)
+	 * @param x = 0 保存範囲の左端
+	 * @param y = 0 保存範囲の上端
+	 * @param w = 0 保存範囲の幅 (0 で画面全体)
+	 * @param h = 0 保存範囲の高さ (0 で画面全体)
+	 */
+	function captureScreen(path, x = 0, y = 0, w = 0, h = 0);
+
+	/**
+	 * ブラウザ REPL ビューワーの URL
+	 *
+	 * `-replweb` で開いているブラウザ REPL ビューワーの URL を表します。未起動なら空文字列です。
+	 */
+	property replWebURL { getter; }
+
+	/**
 	 * マイドキュメントのパス
 	 *
 	 * ユーザのマイドキュメントのパスを表します。Windows の場合、レジストリの

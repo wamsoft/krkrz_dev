@@ -77,6 +77,13 @@ CTOR_RE = re.compile(
     # Bitmap).
     r"|tTJSNativeClass\s*\*\s*TVPCreateNativeClass_(\w+)\s*\("
 )
+# A factory function's name suffix is usually the class it builds, but not
+# always: TVPCreateNativeClass_QueueSoundBuffer() actually does
+# `new tTJSNC_WaveSoundBuffer()` (QueueSoundBuffer is the impl of the public
+# WaveSoundBuffer class) and registers members onto it via *_DECL_OUTER(cls,..).
+# Prefer the class actually instantiated so those members map to the documented
+# class. Searched only near the factory opening (the `new` is the first stmt).
+NEW_INSTANCE_RE = re.compile(r"new\s+tTJSNC_(\w+)\s*\(")
 DECL_RES = {
     "method":  re.compile(r"TJS_BEGIN_NATIVE_METHOD_DECL\(\s*(?:/\*[^*]*\*/\s*)?(\w+)\s*\)"),
     "property": re.compile(r"TJS_BEGIN_NATIVE_PROP_DECL\(\s*(?:/\*[^*]*\*/\s*)?(\w+)\s*\)"),
@@ -138,6 +145,12 @@ def scan_file(path: Path) -> dict[str, dict]:
     ctor_spans: list[tuple[int, str]] = []
     for m in CTOR_RE.finditer(text):
         name = m.group(1) or m.group(2)
+        if m.group(2):
+            # factory function: prefer the class it actually `new`s (handles
+            # TVPCreateNativeClass_QueueSoundBuffer -> tTJSNC_WaveSoundBuffer).
+            nm = NEW_INSTANCE_RE.search(text, m.start(), m.start() + 500)
+            if nm:
+                name = nm.group(1)
         if name:
             ctor_spans.append((m.start(), name))
     if not ctor_spans:

@@ -16,6 +16,8 @@ OpenGL ES ベースの描画パスへ切り替えたい場合は [OGLDrawDevice]
 
 - [interface](#interface)
 - [window](#window)
+- [sdlVideoPresenterHost](#sdlvideopresenterhost)
+- [dialogRendererHost](#dialogrendererhost)
 
 ---
 
@@ -54,5 +56,32 @@ SDLDrawDevice クラスのオブジェクトを構築します。
 関連付けられた Window オブジェクトを取得
 
 この DrawDevice をセットしている Window オブジェクトを返します。
+
+---
+
+### sdlVideoPresenterHost
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+オーバーレイ動画 presenter 登録口 (ポインタ値)
+
+オーバーレイ動画側がこの DrawDevice へ pull 型で合成するために読み取る presenter host
+へのポインタ値です (WINVER の [videoPresenterHost](Window.BasicDrawDevice.md#videopresenterhost) と同じ規約)。
+通常はエンジン内部/プラグインが使用します。
+
+---
+
+### dialogRendererHost
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+Elements ダイアログ renderer host (ポインタ値)
+
+Elements のオーバーレイ描画アダプタを取得するための host へのポインタ値です。
+通常はエンジン内部/プラグインが使用します。
 
 ---

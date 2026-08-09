@@ -61,6 +61,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 
 - [defaultFontFamily](#defaultfontfamily)
 - [active](#active)
+- [renderScale](#renderscale)
 
 ### メソッド
 
@@ -78,12 +79,19 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [close](#close)
 - [registerFont](#registerfont)
 - [registerFontDir](#registerfontdir)
+- [registerImage](#registerimage)
+- [unregisterImage](#unregisterimage)
+- [clearImages](#clearimages)
+- [setVar](#setvar)
+- [setPadIconBase](#setpadiconbase)
+- [setPadTheme](#setpadtheme)
 
 ### イベント
 
 - [onScreen](#onscreen)
 - [onScreenLeave](#onscreenleave)
 - [onAction](#onaction)
+- [onClose](#onclose)
 
 ---
 
@@ -132,6 +140,24 @@ Elements ランタイムが初期化されたあと ( 最初のダイアログ�
 
 非モーダル UI を閉じてから次のモーダルダイアログを起動したい、
 といったタイミング制御に使います。
+
+---
+
+### renderScale
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+オーバーレイの描画密度モード
+
+overlay の描画密度モードです ( クラス全体に効く static 相当 )。
+
+- 0 ( 既定 ) = auto: 最終 present サイズで直接ラスタライズ。
+- >0 = authored 論理サイズ × この倍率で描き、present 時に拡縮 ( 1.0 = 原寸レンダ→拡縮表示、
+2.0 = supersampling 相当 )。
+
+表示中の画面にも次フレームから反映されます ( 描画品質/負荷の比較用 )。
 
 ---
 
@@ -567,6 +593,129 @@ Elements 用フォントの一括登録
 
 ---
 
+### registerImage
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | ストア上の名前 ( `mem://<name>` で参照 )。 |
+| `path` | `&nbsp;` | 登録する画像の統一ストレージパス。 |
+
+**戻り値**
+
+読込・登録に成功したかどうか。
+
+**解説**
+
+実行時画像を登録する
+
+統一ストレージパス path のファイルを name で実行時画像ストアへ登録します。jsonc の
+image ウィジェット等からは `"mem://<name>"` で参照します。セーブサムネイル等、実行時に
+変わる画像を Elements へ渡すための仕組みです。pixmap は画面 build 時に読み直されるので、
+再登録 → 画面再オープンで表示が更新されます。
+
+---
+
+### unregisterImage
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 削除する画像の名前。 |
+
+**解説**
+
+実行時画像を削除する
+
+[registerImage](#registerimage) で登録した name を実行時画像ストアから削除します。
+
+---
+
+### clearImages
+
+メソッド
+
+**解説**
+
+実行時画像をすべて消去する
+
+実行時画像ストアを全消去します。
+
+---
+
+### setVar
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 変数名。 |
+| `value` | `&nbsp;` | 設定する値 ( 文字列 )。 |
+
+**戻り値**
+
+書き込めたかどうか。
+
+**解説**
+
+表示中ダイアログの変数を書き換える
+
+表示中ダイアログの変数 store へ値を書き込みます。JSON で `"text_var": name` を指定した
+label 等が次フレームで更新されます。自分のインスタンスが非アクティブなら false を返します。
+
+---
+
+### setPadIconBase
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `dir` | `&nbsp;` | pad_icon 素材のベースディレクトリ ( 統一ストレージパス )。 |
+
+**解説**
+
+pad_icon のベースディレクトリを設定する
+
+pad_icon ( Kenney input prompts ) のベースディレクトリを設定します。dir は統一ストレージ
+パス ( XP3 内でも可 )。配下に xbox/ps/switch/keyboard の各ディレクトリ + vector/*.svg がある
+構成を想定します。未設定のままだと pad_icon は灰色プレースホルダになります。
+
+---
+
+### setPadTheme
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | テーマ名。 |
+
+**戻り値**
+
+名前を解釈できたかどうか。
+
+**解説**
+
+pad_icon の全体テーマを設定する
+
+pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"none"` ) を
+設定します。画面 JSON の top-level `"pad_theme"` が指定されていればそちらが優先されます。
+
+---
+
 ### onScreen
 
 イベント
@@ -641,5 +790,24 @@ payload の内容は widget の種類によって変わります。
 - checkbox / toggle ... bool ( 変更後の値 )
 - input_box ... string ( 編集後のテキスト )
 - slider 等 ... 各 widget が渡す値
+
+---
+
+### onClose
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `action` | `&nbsp;` | 閉じる契機となった button の id ( `close_on_click` / Esc で閉じた場合。<br>[close](#close) 等で明示的に閉じた場合は空文字列 )。 |
+
+**解説**
+
+ダイアログ teardown 完了通知
+
+このインスタンスのダイアログが閉じ切った ( teardown 完了 ) タイミングで発火する
+非ブロッキング経路のイベントです。TJS 側で override してください。
 
 ---

@@ -19,6 +19,8 @@ OGLDrawDevice クラスは、このインスタンスを [Window.drawDevice](Win
 - [canvas](#canvas)
 - [texture](#texture)
 - [matrix](#matrix)
+- [glVideoPresenterHost](#glvideopresenterhost)
+- [dialogRendererHost](#dialogrendererhost)
 
 ### メソッド
 
@@ -107,6 +109,34 @@ onDraw 内などからアクセスして描画コマンドを発行します。
 
 このデバイスが管理している [Matrix32](Matrix32.md) オブジェクトを返します。
 描画時の座標変換に使用します。
+
+---
+
+### glVideoPresenterHost
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+オーバーレイ動画 presenter 登録口 (ポインタ値)
+
+オーバーレイ動画側がこの GL デバイスへ pull 型で合成するために読み取る presenter host
+へのポインタ値です (WINVER の [videoPresenterHost](Window.BasicDrawDevice.md#videopresenterhost) /
+SDL の [sdlVideoPresenterHost](SDLDrawDevice.md#sdlvideopresenterhost) と同じ規約)。
+通常はエンジン内部/プラグインが使用します。
+
+---
+
+### dialogRendererHost
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+Elements ダイアログ renderer host (ポインタ値)
+
+Elements のオーバーレイ描画アダプタを取得するための host へのポインタ値です。
+通常はエンジン内部/プラグインが使用します。
 
 ---
 

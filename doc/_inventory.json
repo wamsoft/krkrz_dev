@@ -21,7 +21,10 @@
       "recreate"
     ],
     "properties": [
-      "interface"
+      "d3d11Device",
+      "dialogRendererHost",
+      "interface",
+      "videoPresenterHost"
     ]
   },
   "Bitmap": {
@@ -149,18 +152,25 @@
   "Dialog": {
     "events": [
       "onAction",
+      "onClose",
       "onScreen",
       "onScreenLeave"
     ],
     "file": "src/core/common/visual/elements/DialogIntf.cpp",
     "methods": [
+      "clearImages",
       "close",
       "dictToJson",
       "onAction",
+      "onClose",
       "onScreen",
       "onScreenLeave",
       "registerFont",
       "registerFontDir",
+      "registerImage",
+      "setPadIconBase",
+      "setPadTheme",
+      "setVar",
       "showDict",
       "showFile",
       "showFlow",
@@ -170,11 +180,13 @@
       "showModalFile",
       "showModalJson",
       "startFlow",
-      "startFlowScreens"
+      "startFlowScreens",
+      "unregisterImage"
     ],
     "properties": [
       "active",
-      "defaultFontFamily"
+      "defaultFontFamily",
+      "renderScale"
     ]
   },
   "Font": {
@@ -196,7 +208,11 @@
     "properties": [
       "angle",
       "bold",
+      "colorEmojiFaceName",
+      "defaultEmojiMode",
       "defaultFaceName",
+      "emojiFaceName",
+      "emojiMode",
       "face",
       "faceIsFileName",
       "height",
@@ -399,6 +415,8 @@
     ],
     "properties": [
       "canvas",
+      "dialogRendererHost",
+      "glVideoPresenterHost",
       "interface",
       "matrix",
       "texture",
@@ -448,7 +466,9 @@
     "file": "src/core/sdl3/visual/SDLDrawDevice.cpp",
     "methods": [],
     "properties": [
+      "dialogRendererHost",
       "interface",
+      "sdlVideoPresenterHost",
       "window"
     ]
   },
@@ -515,6 +535,7 @@
       "requestFastCache",
       "rollbackSavedata",
       "searchCD",
+      "selectDirectory",
       "selectFile",
       "setCacheMaxSize",
       "unpinCache"
@@ -533,7 +554,9 @@
       "addFont",
       "assignMessage",
       "beginAllocTag",
+      "captureScreen",
       "clearGraphicCache",
+      "confirm",
       "createAppLock",
       "createUUID",
       "doCompact",
@@ -549,6 +572,7 @@
       "getTickCount",
       "hasJoypad",
       "inform",
+      "inputString",
       "nullpo",
       "readRegValue",
       "removeContinuousHandler",
@@ -595,9 +619,11 @@
       "padAxisRightTrigger",
       "padAxisRightX",
       "padAxisRightY",
+      "padEnabled",
       "personalPath",
       "platformName",
       "processorNum",
+      "replWebURL",
       "savedGamesPath",
       "screenHeight",
       "screenWidth",
@@ -706,25 +732,33 @@
   },
   "WaveSoundBuffer": {
     "events": [],
-    "file": "src/core/common/sound/WaveIntf.cpp",
+    "file": "src/core/common/sound/QueueSoundBufferImpl.cpp",
     "methods": [
       "fade",
       "freeDirectSound",
-      "getDeviceList",
+      "getSoundLevel",
+      "getSoundSpectrum",
       "getVisBuffer",
+      "getVowel",
       "onFadeCompleted",
       "onLabel",
       "onStatusChanged",
       "open",
       "play",
+      "set3DCone",
+      "set3DConeDirection",
+      "set3DPosition",
+      "set3DVelocity",
+      "setGainQueryCallback",
       "setPos",
       "stop",
       "stopFade"
     ],
     "properties": [
+      "attenuationModel",
       "bits",
       "channels",
-      "currentDevice",
+      "dopplerFactor",
       "filters",
       "flags",
       "frequency",
@@ -732,15 +766,19 @@
       "globalVolume",
       "labels",
       "looping",
+      "maxDistance",
+      "minDistance",
       "pan",
       "paused",
       "posX",
       "posY",
       "posZ",
       "position",
+      "rolloffFactor",
       "samplePosition",
       "status",
       "totalTime",
+      "use3D",
       "useVisBuffer",
       "volume",
       "volume2"
@@ -782,7 +820,6 @@
       "bringToFront",
       "clearViewportWallpaper",
       "close",
-      "findFullScreenCandidates",
       "getMouseVelocity",
       "getTouchPoint",
       "getTouchVelocity",
@@ -832,6 +869,7 @@
       "update"
     ],
     "properties": [
+      "GLGetProcAddress",
       "HWND",
       "borderStyle",
       "caption",

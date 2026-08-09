@@ -13,6 +13,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [platformName](#platformname)
 - [osName](#osname)
 - [exePath](#exepath)
+- [replWebURL](#replweburl)
 - [personalPath](#personalpath)
 - [appDataPath](#appdatapath)
 - [dataPath](#datapath)
@@ -72,6 +73,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [touchImages](#touchimages)
 - [showVersion](#showversion)
 - [dumpHeap](#dumpheap)
+- [captureScreen](#capturescreen)
 - [addFont](#addfont)
 - [clearGraphicCache](#cleargraphiccache)
 - [getJoypadType](#getjoypadtype)
@@ -197,6 +199,18 @@ OS 名
 吉里吉里本体が設置してあるパスを表します。パス名は統一ストレージ名で表現されます。
 
 **関連:** [System.appDataPath](System.md#appdatapath) / [System.personalPath](System.md#personalpath)
+
+---
+
+### replWebURL
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+ブラウザ REPL ビューワーの URL
+
+`-replweb` で開いているブラウザ REPL ビューワーの URL を表します。未起動なら空文字列です。
 
 ---
 
@@ -1334,6 +1348,31 @@ aboutダイアログを表示します。
 ヒープ情報ダンプ(1.1.0以降)
 
 ヒープの情報をコンソールに出力します。
+
+---
+
+### captureScreen
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 保存先の統一ストレージパス (.png) |
+| `x` | `0` | = 0 保存範囲の左端 |
+| `y` | `0` | = 0 保存範囲の上端 |
+| `w` | `0` | = 0 保存範囲の幅 (0 で画面全体) |
+| `h` | `0` | = 0 保存範囲の高さ (0 で画面全体) |
+
+**解説**
+
+実画面を PNG 保存する
+
+次フレームの present 直前に、オーバーレイ込みの実画面を読み戻して path へ PNG 保存する
+要求を立てます (実際の保存は DrawDevice の描画時)。x,y,w,h で保存範囲を指定でき、
+w/h を 0 にすると画面全体になります。SDL の `Agent.captureScreen` と同等で、Agent 非対応の
+WINVER でも使えるよう REPL 有効時に用意される、テスト/検証用の機能です。戻り値は保存先パス。
 
 ---
 
