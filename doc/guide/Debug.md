@@ -26,16 +26,16 @@
 - **型情報追跡機能**  
   TJS2のオブジェクトに関する情報が強化されます。
   
-  デバッグモードではない場合は、たとえば KAG で kag.saveSystemVariables の情報を得ようとしても
+  デバッグモードではない場合は、たとえば あるオブジェクトのメソッド obj.doAction の情報を得ようとしても
   
   ```
-  コンソール : kag.saveSystemVariables = (object)(object 0x0279E130:0x01EB0BD4)
+  コンソール : obj.doAction = (object)(object 0x0279E130:0x01EB0BD4)
   ```
   
   が得られるだけですが、デバッグモードが有効の場合は
   
   ```
-  コンソール : kag.saveSystemVariables = (object)(object 0x0279E130[(function) KAGWindow.saveSystemVariables]:0x01EB0BD4[instance of class KAGWindow])
+  コンソール : obj.doAction = (object)(object 0x0279E130[(function) MyClass.doAction]:0x01EB0BD4[instance of class MyClass])
   ```
   
   のように型の情報が得られます。(':' で区切られた２つの部分のうち、前の部分はオブジェクトの型、後ろの部分はそのオブジェクトが動作するコンテキストです )。
@@ -169,8 +169,8 @@ VSCode 側で「実行とデバッグ」 → 「launch.json を作成」 → 「
 
 ### 既知の制限
 
-- **KAG (`.ks`) 行への BP は不可** ( TJS VM の hook を踏まないため )。
-  `[iscript]...[endscript]` 内の TJS なら BP 設置可能
+- BP を設置できるのは TJS VM が実行する `.tjs` スクリプトの行のみです
+  ( TJS VM の hook を踏まない行には BP を設置できません )
 - 例外 / BP 停止中は krkrz 全体 ( 描画・ContinuousHandler 等 ) が止まります。
   停止解除は VSCode の Continue / 停止ボタン、または吉里吉里Z 内蔵の
   [REPL](Console.md#repl) から ( 停止中も REPL 入力は処理されます )
@@ -183,4 +183,4 @@ VSCode 側で「実行とデバッグ」 → 「launch.json を作成」 → 「
 
 詳細な使い方や拡張のビルド方法、最新の対応機能については
 [krkrz-vscode の README](https://github.com/wamsoft/krkrz-vscode) を参照してください。
-TJS2 / KAG のシンタックスハイライトも同拡張に同梱されています。
+TJS2 のシンタックスハイライトも同拡張に同梱されています。
