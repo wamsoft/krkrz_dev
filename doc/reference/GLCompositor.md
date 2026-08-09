@@ -25,6 +25,7 @@ this.drawLayer / this.copyLayer をそのまま利用できます (GLESAdaptor �
 
 - [canvas](#canvas)
 - [blendMode](#blendmode)
+- [unpremultiply](#unpremultiply)
 - [screenWidth](#screenwidth)
 - [screenHeight](#screenheight)
 - [GLGetProcAddress](#glgetprocaddress)
@@ -79,6 +80,21 @@ drawTexture / beginEffect / endEffect / クリップ等、Canvas の
 描画の合成モード指定。
 
 内部 Canvas の blendMode に対応します。
+
+---
+
+### unpremultiply
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+capture の読み戻しで un-premultiply するか (既定 false)。
+
+true にすると capture() の読み戻し時に premultiplied-alpha を
+straight-alpha へ戻して (RGB = RGB×255÷A) Layer へ書き込みます。MSAA を効かせた
+3D (VRM 立ち絵等) の半透明縁が premultiplied のまま読み戻ると、通常アルファ合成
+(ltAlpha) で縁に白フリンジが出るのを防ぎます。旧 GLESAdaptor.unpremultiply 相当。
 
 ---
 

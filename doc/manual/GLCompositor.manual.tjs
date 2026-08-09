@@ -89,6 +89,15 @@ class GLCompositor {
 	property blendMode;
 
 	/**
+	 * capture の読み戻しで un-premultiply するか (既定 false)。
+	 * @description true にすると capture() の読み戻し時に premultiplied-alpha を
+	 * straight-alpha へ戻して (RGB = RGB×255÷A) Layer へ書き込みます。MSAA を効かせた
+	 * 3D (VRM 立ち絵等) の半透明縁が premultiplied のまま読み戻ると、通常アルファ合成
+	 * (ltAlpha) で縁に白フリンジが出るのを防ぎます。旧 GLESAdaptor.unpremultiply 相当。
+	 */
+	property unpremultiply;
+
+	/**
 	 * オフスクリーン合成の既定幅。
 	 */
 	property screenWidth;
