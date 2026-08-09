@@ -194,7 +194,7 @@ class VectorScene extends DemoScene
             size : [320, 320], background : [28, 30, 40, 236], locale : "ja-JP",
             align : "top_right", margin : 14,
             content : %[ type : "margin", padding : 14, child : %[ type : "vtile", children : [
-                %[ type : "hspacer", width : 288 ],
+                %[ type : "vsize", height : 0, child : %[ type : "hspacer", width : 288 ] ],
                 %[ type : "align_center", child : %[ type : "label", text : "ベクタ描画設定", size_scale : 1.2 ] ],
                 %[ type : "vspacer", height : 10 ],
                 %[ type : "labeled_row", label : "線幅", label_width : 90,
