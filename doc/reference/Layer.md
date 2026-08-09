@@ -97,6 +97,8 @@ Layer クラスは、**レイヤ**を管理するためのクラスです。
 - [colorRect](#colorrect)
 - [drawText](#drawtext)
 - [drawGlyph](#drawglyph)
+- [drawGlyphwareText](#drawglyphwaretext)
+- [measureGlyphwareText](#measureglyphwaretext)
 - [copyRect](#copyrect)
 - [copy9Patch](#copy9patch)
 - [piledCopy](#piledcopy)
@@ -1946,6 +1948,79 @@ dfOpaque (またはdfMain) を指定した場合、描画先のマスクが破�
 グリフは、glyph : Array[9] = [ width, height, originx, originy, incx, incy, inc, bitmap(Octet), colors ] の様な形式の配列を指定します。
 
 グリフの colors が省略された場合は、256階調であると判断されます。
+
+---
+
+### drawGlyphwareText
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 描画するベースライン原点の x 座標をピクセル単位で指定します。 |
+| `y` | `&nbsp;` | 描画するベースライン原点の y 座標をピクセル単位で指定します。 |
+| `text` | `&nbsp;` | 描画する文字列を指定します。 |
+| `color` | `&nbsp;` | 描画する文字の色を 0xAARRGGBB 形式で指定します ( 上位 8bit のα省略 = 不透明 )。 |
+| `fontKey` | `&nbsp;` | フォントを指定します。data/fonts.json で宣言したフォント名・ストレージパス・<br>( WINVER の ) インストール済みシステムフォント名のいずれか。カンマ区切りで複数指定すると<br>フォールバック連鎖になります ( コードポイント毎に最初に収録する face を使用。例:<br>"メイリオ,Segoe UI Emoji" )。 |
+| `size` | `&nbsp;` | フォントの高さをピクセル単位で指定します。 |
+| `base` | `0` | 基本方向を指定します。0 = 自動判定 / 1 = 左横書き ( LTR ) / 2 = 右横書き ( RTL )。 |
+| `bold` | `false` | 太字 ( 合成 ) にするかどうかを指定します。 |
+| `italic` | `false` | 斜体 ( 合成 ) にするかどうかを指定します。 |
+| `underline` | `false` | 下線を引くかどうかを指定します。 |
+| `strikeout` | `false` | 打ち消し線を引くかどうかを指定します。 |
+| `angle` | `0` | テキストの回転角を 1/10 度単位・反時計回りで指定します ( [Font.angle](Font.md#angle) 準拠 )。<br>グリフの送り位置が回転します。カラー絵文字は変換非対応のため直立のままです。 |
+
+**戻り値**
+
+前進幅 ( ピクセル ) を返します。失敗時は -1 を返します。
+
+**解説**
+
+文字描画 ( glyphware / 統一フォントエンジン )
+
+統一フォントエンジン glyphware ( FreeType + HarfBuzz ) を用いて、メインイメージの
+ベースライン原点 (x, y) にテキストを描画します。[Layer.drawText](Layer.md#drawtext)
+とは独立した描画経路で、**BiDi ( 双方向テキスト )・複雑スクリプトのシェイピング・
+フォントフォールバック** に対応します ( アラビア語・ヘブライ語等 )。戻り値は前進幅
+( ピクセル ) です。
+
+**注意:** これは段階移行用に既存 drawText と並存する新経路です。既存 drawText の
+挙動 ( 1 コードポイントずつの cell-stepping ) を glyphware に切り替えたい場合は
+[Font.rasterizer](Font.md#rasterizer) を用います ( そちらはシェイピングしません )。
+
+---
+
+### measureGlyphwareText
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `text` | `&nbsp;` | 計測する文字列を指定します。 |
+| `fontKey` | `&nbsp;` | フォントを指定します ( drawGlyphwareText と同じ形式・フォールバック連鎖可 )。 |
+| `size` | `&nbsp;` | フォントの高さをピクセル単位で指定します。 |
+| `base` | `0` | 基本方向を指定します ( 0 = 自動 / 1 = LTR / 2 = RTL )。 |
+| `bold` | `false` | 太字 ( 合成 ) として計測するかどうかを指定します。 |
+| `italic` | `false` | 斜体 ( 合成 ) として計測するかどうかを指定します。 |
+
+**戻り値**
+
+計測結果の Dictionary を返します ( 失敗時は void )。すべてベースライン原点 (0,0)
+基準のピクセル値です:
+%[ "width" => 前進幅, "left" => インク左, "top" => インク上 ( 負 = ベースラインより上 ),
+"right" => インク右, "bottom" => インク下, "ascent" => アセント, "descent" => ディセント ]
+
+**解説**
+
+文字列計測 ( glyphware / 統一フォントエンジン )
+
+統一フォントエンジン glyphware でテキストを計測し、結果を Dictionary で返します。
+描画は行いません。[Layer.drawGlyphwareText](Layer.md#drawglyphwaretext) と同じ
+フォント指定・シェイピングで計測します。
 
 ---
 

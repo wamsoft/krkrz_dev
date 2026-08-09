@@ -163,15 +163,27 @@ Layerメンバのfontは、引数にLayerを渡す特殊版。
 
 文字列描画方式
 
-文字列描画方式を表します。値を設定することもできます。
+[Layer.drawText](Layer.md#drawtext) で使用するラスタライザ ( 文字列描画方式 ) を
+表します。値を設定することもできます。
 
-値は以下のどちらかを指定します。
+値は整数のインデックスで、利用可能な値と番号は**ビルドによって異なります**:
 
-`**frGDI**      ` : GDI を使って文字を描画します
+`**0**` : FreeType ラスタライザ ( 全ビルド。SDL / 汎用ビルドの既定 )
 
-`**frFreeType** ` : FreeType を使って文字を描画します
+`**1**` ( WINVER のみ ) : GDI ラスタライザ ( WINVER の既定 )。SDL / 汎用ビルドでは
+この番号が glyphware になります。
 
-FreeType を指定した場合、横書きにのみ対応しています。その他は未対応です。
+`**2**` ( WINVER ) / `**1**` ( 非 WINVER ) : glyphware ( 統一フォントエンジン。
+FreeType + HarfBuzz )。GDI 既定を変えず、選択時のみ drawText のグリフ生成が glyphware
+経由になります ( 埋め込みビットマップではなくアウトライン描画・カラー絵文字対応 )。
+なお drawText 経路は 1 コードポイントずつの cell-stepping で**シェイピングは行いません**
+( BiDi / 複雑スクリプトのシェイピングが必要な場合は
+[Layer.drawGlyphwareText](Layer.md#drawglyphwaretext) を用います )。
+
+FreeType / glyphware を指定した場合、横書きにのみ対応しています。その他は未対応です。
+
+利用可能な番号は [System.buildVariantName](System.md#buildvariantname) で判定するか、
+番号を設定してから読み戻して ( 設定が反映されない = 未対応 ) 検出できます。
 
 このプロパティはスタティックです。Font.rasterizer を用いて値を設定してください。
 
