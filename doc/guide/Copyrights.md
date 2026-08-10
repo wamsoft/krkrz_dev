@@ -18,6 +18,32 @@ var text = System.getLicenseText("FreeType");
 - 詳細はリファレンスの [System.getLicenseList](../reference/System.md#getlicenselist) /
   [System.getLicenseText](../reference/System.md#getlicensetext) を参照してください。
 
+### プロジェクトで追加資材を同梱する場合の記述例
+
+プロジェクトの `licenses/` フォルダに 1 資材 = 1 テキストで置くと、
+`System.getLicenseList()` の一覧 (source = `storage`) に自動で載ります。
+例として、ゲームパッドのボタン表示によく使う
+[Kenney Input Prompts](https://kenney.nl/assets/input-prompts) (CC0) を
+同梱するなら `licenses/kenney-input-prompts.txt` として:
+
+```
+Input Prompts (Kenney)
+
+This product includes "Input Prompts" by Kenney (www.kenney.nl),
+released under Creative Commons Zero (CC0 1.0 Universal).
+
+  https://kenney.nl/assets/input-prompts
+  https://creativecommons.org/publicdomain/zero/1.0/
+
+Attribution is not required, but appreciated:
+  "Input Prompts" by Kenney (www.kenney.nl)
+```
+
+pack 同梱の License.txt をそのまま置いてもかまいません
+(Elements の `copy_kenney_assets.sh` はコピー先に License.txt を
+一緒に配置します)。CC0 は表記義務がないため省略も可能ですが、
+一覧に載せておくと資材の出所管理とクレジット表示が楽になります。
+
 ## 著作権/ライセンス
 
 SDK 付属の license.txt をご覧ください。
