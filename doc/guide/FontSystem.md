@@ -99,6 +99,14 @@ python tools/fontgen/gen_fonts_json.py \
 (「family subfamily」連結、例 "Noto Color Emoji Regular") を `aliases` に
 出力するため、どちらの名前でも解決できます。
 
+同梱例: コアデモの `src/core/data/fonts` には Noto Color Emoji に加えて
+RTL 用の **Noto Sans Arabic / Noto Sans Hebrew** を同梱しています
+(SDL 版含む全プラットフォームでアラビア語/ヘブライ語が同一表示)。他の
+スクリプトも Noto ファミリ (https://notofonts.github.io/) から取得すると
+埋め込みの Noto Sans JP / Roboto と見た目が揃います
+(候補: Noto Sans Thai / Devanagari / KR / SC / TC など。詳細は
+`src/core/data/fonts/README.md`)。
+
 ### ③ 実行時登録 (スクリプト)
 
 - [Font.addFont](../reference/Font.md#addfont)`(storage)` — フォントファイルを
