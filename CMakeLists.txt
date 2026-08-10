@@ -92,10 +92,6 @@ if (KRKRZ_VARIANT STREQUAL "WIN")
 # ----------------------------------------------------
 list(APPEND TVP_PLUGINS
 motion           # M2Motion/Emote
-live2d           # Live2D
-effekseer        # Effekseer
-gles             # OpenGL ES 2.0/3.0 特殊バインダ
-libpsd           # psd.dll (libpsd ベースの PSD 読み込み。フォルダ名≠ターゲット名)
 )
 
 list(APPEND TVP_PLUGINS
