@@ -87,6 +87,7 @@ nav:
       - サウンドシステム: guide/SoundSystem.md
       - ストレージシステム: guide/StorageSystem.md
       - ダイアログ: guide/Dialog.md
+      - フォントシステム: guide/FontSystem.md
       - トランジション: guide/Transition.md
       - プラグイン: guide/Plugins.md
     - 付属ツール:
