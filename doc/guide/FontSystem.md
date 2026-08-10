@@ -176,6 +176,10 @@ var r = Font.queryFonts(%[ containsText : "あ", weight : 700 ]);
 計測は [Layer.measureGlyphwareText](../reference/Layer.md#measureglyphwaretext)
 で行います (インク境界と ascent/descent を返します)。
 
+動作サンプル: コアデモギャラリー (`src/core/data`) の
+「多言語シェイピング (glyphware)」シーンで、アラビア語/ヘブライ語 (RTL)・
+BiDi 混在・絵文字混在・計測の実例を確認できます。
+
 ## UI 系 (Elements) と layerExVector のフォント
 
 - **Elements ダイアログ** ([ダイアログ](Dialog.md)) のテキストは glyphware で
