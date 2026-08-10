@@ -48,7 +48,12 @@ class VectorScene extends DemoScene
 
     function tryLoadFont()
     {
-        var cand = ["NotoSansJP-VF.ttf", "NotoSans.ttf", "font.ttf"];
+        // 同梱フォント (font/*.ttf) を優先し、無ければ本体埋め込みフォント
+        // (resource://) にフォールバックする。glyphware 統一後は本体側の
+        // フォント資材をそのまま layerExVector からも利用できる。
+        var cand = ["NotoSansJP-VF.ttf", "NotoSans.ttf", "font.ttf",
+                    "resource://./notosansjp-regular.otf",
+                    "resource://./roboto-regular.ttf"];
         for (var i = 0; i < cand.count; i++) {
             if (Storages.isExistentStorage(cand[i])) {
                 if (GdiPlus.loadFont(cand[i], "VecFont")) {
