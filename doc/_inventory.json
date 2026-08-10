@@ -222,11 +222,14 @@
       "getEscHeightY",
       "getEscWidthX",
       "getEscWidthY",
+      "getFontInfo",
       "getGlyphDrawRect",
       "getList",
       "getTextHeight",
       "getTextWidth",
       "mapPrerenderedFont",
+      "queryFonts",
+      "registerFontFile",
       "unmapPrerenderedFont"
     ],
     "properties": [
