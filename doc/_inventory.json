@@ -610,6 +610,8 @@
       "getJoypadCount",
       "getJoypadType",
       "getKeyState",
+      "getLicenseList",
+      "getLicenseText",
       "getPadAxis",
       "getSystemAllocatorInfo",
       "getTickCount",

@@ -91,6 +91,8 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [getPadAxis](#getpadaxis)
 - [rumblePad](#rumblepad)
 - [stopRumblePad](#stoprumblepad)
+- [getLicenseList](#getlicenselist)
+- [getLicenseText](#getlicensetext)
 
 ---
 
@@ -1769,6 +1771,67 @@ System.endAllocTag();
 [System.rumblePad](System.md#rumblepad) で開始した振動を停止します。
 
 **関連:** [System.rumblePad](System.md#rumblepad)
+
+---
+
+### getLicenseList
+
+メソッド
+
+**戻り値**
+
+ライセンス情報 ( 辞書 ) の配列
+
+**解説**
+
+ライセンス一覧の取得
+
+エンジンとプラグインが内蔵する第三者コンポーネントのライセンス情報と、
+プロジェクトの `licenses/` フォルダに置かれたライセンスファイル
+( `licenses/*.txt` または `.md` ) をまとめた一覧を返します。
+ゲーム内のライセンス表示画面 ( フォント選択画面など ) を
+スクリプト側で自由に組むための情報源です。
+
+各要素は辞書で、以下のメンバを持ちます:
++ `name` : 表示名 ( `getLicenseText` に渡す )
++ `group` : 分類 ( "engine" / "font" / "font-engine" / "audio" / "video" /
+"ui" / "platform" / "plugin:～" / "data" 等 )
++ `source` : 出所 ( "builtin" = 本体内蔵 / "plugin" = プラグイン登録 /
+"storage" = プロジェクトの licenses/ フォルダ )
+
+同名のライセンスが複数の出所にある場合は 1 件にまとめられます
+( プラグイン登録 > 本体内蔵 > storage の優先 )。
+
+**関連:** [System.getLicenseText](System.md#getlicensetext)
+
+---
+
+### getLicenseText
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | ライセンス名 |
+
+**戻り値**
+
+ライセンス文 ( 見つからなければ void )
+
+**解説**
+
+ライセンス文の取得
+
+[System.getLicenseList](System.md#getlicenselist) の `name` を指定して
+ライセンス文全体を文字列で取得します。見つからない場合は void を返します。
+
+プロジェクトの `licenses/` フォルダに置いたファイル ( 追加フォントの
+ライセンス文など ) も同じ名前解決で取得できます
+( `licenses/<name>.txt` → 無ければ `.md` )。
+
+**関連:** [System.getLicenseList](System.md#getlicenselist)
 
 ---
 

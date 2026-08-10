@@ -1,5 +1,23 @@
 # 著作権など
 
+## サードパーティライセンスの確認と表示
+
+エンジン・プラグインが内蔵する第三者コンポーネント (ライブラリ/フォント) の
+ライセンス文は、実行時に TJS から取得できます:
+
+```tjs
+var list = System.getLicenseList();   // [%[name, group, source], ...]
+var text = System.getLicenseText("FreeType");
+```
+
+- 本体内蔵分に加え、プラグインが登録した分と、**プロジェクトの `licenses/`
+  フォルダに置いたテキスト** (`licenses/*.txt`、追加フォントのライセンス等)
+  も同じ一覧に合流します。
+- ゲーム内のライセンス表示画面 (フォント選択画面等) はこの API で自由に
+  組めます (例: `group == "font"` で絞り込み)。
+- 詳細はリファレンスの [System.getLicenseList](../reference/System.md#getlicenselist) /
+  [System.getLicenseText](../reference/System.md#getlicensetext) を参照してください。
+
 ## 著作権/ライセンス
 
 SDK 付属の license.txt をご覧ください。
