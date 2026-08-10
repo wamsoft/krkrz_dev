@@ -17,6 +17,10 @@ var text = System.getLicenseText("FreeType");
   組めます (例: `group == "font"` で絞り込み)。
 - 詳細はリファレンスの [System.getLicenseList](../reference/System.md#getlicenselist) /
   [System.getLicenseText](../reference/System.md#getlicensetext) を参照してください。
+- Elements Dialog が使えるビルドでは、サンプル実装
+  `src/core/data/ui/license_dialog.tjs` の `showLicenseDialog(win)` で
+  「左=ジャンル別一覧 / 右=本文」の全画面モーダルビューアをそのまま
+  利用できます (プロジェクトへコピーして利用可)。
 
 ### プロジェクトで追加資材を同梱する場合の記述例
 
