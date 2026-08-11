@@ -198,6 +198,12 @@ Layer クラスは非表示の状態で構築されます。
 異なるウィンドウや異なるプライマリレイヤに所属するレイヤの子になったり、自分自身や自分の子孫の
 子になることはできません。
 
+レイヤを invalidate で無効化した場合、子レイヤは自動的には無効化されず、
+親から切り離された ( 親を持たない ) 有効なレイヤとして残ります。切り離された
+レイヤは画面には表示されませんが、描画メソッド等は例外を出さずに動作するため、
+古い参照へ描画してしまっても気づきにくい点に注意してください。サブツリー
+ごと破棄したい場合は、子レイヤを ( 再帰的に ) 個別に invalidate してください。
+
 ---
 
 ### children
@@ -2144,6 +2150,14 @@ dfOpaque (またはdfMain) を指定した場合、描画先のマスクが破�
 演算先の ( メソッドを実行する ) レイヤや演算元のレイヤの [Layer.face](Layer.md#face) プロパティの値
 は無視されます。
 
+演算先レイヤの [Layer.holdAlpha](Layer.md#holdalpha) プロパティが偽の場合、
+演算系の合成 ( omAdditive / omSubtractive / omMultiplicative / omDodge /
+omDarken / omLighten / omScreen および omPs 系 ) は演算先のマスク ( アルファ )
+情報を保護せず、結果のマスクはモードごとに異なる不定値になります
+( 例 : 乗算・覆い焼き・比較系では 0、スクリーンでは 255 )。ltAlpha の
+レイヤへ演算合成するなどマスクを保持したい場合は、holdAlpha を真にして
+ください。
+
 mode に omAuto を指定した場合は、演算元レイヤの[Layer.type](Layer.md#type)プロパティに従って演算の種類が自動的に決定されます。
 
 ---
@@ -2216,6 +2230,8 @@ dfOpaque (または dfMain) の場合は、[Layer.holdAlpha](Layer.md#holdalpha)
 
 指定された重ね合わせ元レイヤの矩形を、重ね合わせ先 ( メソッドを実行するレイヤ ) の矩形に
 演算合成します。重ね合わせ元矩形と重ね合わせ先矩形のサイズが異なる場合は拡大または縮小が行われます。
+
+[Layer.holdAlpha](Layer.md#holdalpha) プロパティが偽の場合に演算系合成が重ね合わせ先のマスク ( アルファ ) 情報を保護しない点は [Layer.operateRect](Layer.md#operaterect) を参照してください。
 
 mode に omAuto を指定した場合は、演算元レイヤの[Layer.type](Layer.md#type)プロパティに従って演算の種類が自動的に決定されます。
 
@@ -2307,6 +2323,8 @@ dfOpaque (または dfMain) の場合は、[Layer.holdAlpha](Layer.md#holdalpha)
 アフィン変換を行いながら演算合成します。
 
 アフィン変換については [Layer.affineCopy](Layer.md#affinecopy) も参照してください。
+
+[Layer.holdAlpha](Layer.md#holdalpha) プロパティが偽の場合に演算系合成が重ね合わせ先のマスク ( アルファ ) 情報を保護しない点は [Layer.operateRect](Layer.md#operaterect) を参照してください。
 
 mode に omAuto を指定した場合は、演算元レイヤの[Layer.type](Layer.md#type)プロパティに従って演算の種類が自動的に決定されます。
 
