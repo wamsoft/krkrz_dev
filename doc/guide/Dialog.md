@@ -91,6 +91,21 @@ GPU ( OpenGL 描画 ) 側で同等のトランジションを行いたい場合�
 
 非モーダルでは、Elements 側で実際に処理されたキーだけを消費し、未処理キーはゲームへ通過させる ( handled pass-through ) ため、メニューを開いたままゲーム本体のホットキーで別のダイアログを開く、といった共存も可能です。
 
+### 入力の配送優先順位とホストホットキー
+
+入力は次の優先順位で配送されます。
+
+1. **モーダルダイアログ** — 全入力を独占 ( 下にもゲームにも通しません )
+2. **ホストホットキー** ( [registerHotKey](../reference/Dialog.md#registerhotkey) ) — 登録キーはダイアログへ渡らず [Window.onKeyDown](../reference/Window.md#onkeydown) 等へ直行
+3. **フォーカスを持つ非モーダルパネル** — キー / パッドを受け、未処理分のみ素通し
+4. **ゲーム / レイヤ** — 未消費の落ち先
+
+単発表示系 ( [showJson](../reference/Dialog.md#showjson) / showFile / showDict ) は第 3 引数 `modal` で「非モーダル + フォーカスあり」( `showJson(json, true, false)` ) を指定できます。slider や picker を含む操作パネルはこの形で出すと、パッドの十字 / A ボタンやキーボードでウィジェットを操作しつつ、パネルが使わないキーはゲームへ流れます。その上で ESC ( シーン復帰 ) や PageUp/Down ( 画面切替 ) のような「必ずホストが受けたいキー」を registerHotKey で確保するのが定石です ( 実例: `data/demolib/demo_common.tjs` の DemoShell )。
+
+- ホットキーはテキスト入力ウィジェットにキャレットがある間は既定で抑止されます ( `duringTextInput = true` で入力中も有効化 )
+- モーダル表示中はホットキーも無効です ( 確認ダイアログの ESC = cancel を奪いません )
+- マウスボタン ( VK_RBUTTON 等 ) も登録でき、全画面透過 HUD が右クリックを拾って閉じてしまう問題の回避にも使えます
+
 ## ミニマルな利用例
 
 [Dialog](../reference/Dialog.md) を継承したクラスで [onAction](../reference/Dialog.md#onaction) を実装し、JSON レイアウトを渡して表示します。

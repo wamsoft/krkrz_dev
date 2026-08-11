@@ -34,7 +34,10 @@
  * 非モーダルダイアログは複数同時に表示できます ( z-order 付きで重ね
  * 描画され、マウスはヒットテスト、キーボードは最前面の handler 優先で
  * フォーカスが移ります )。`grabFocus` 引数を偽にすると、フォーカスを
- * 取らない常駐 HUD として表示できます。
+ * 取らない常駐 HUD として表示できます。`showJson(json, true, false)`
+ * ( フォーカスあり非モーダル ) にするとキー / パッドでパネルを操作しつつ
+ * 未処理キーをホストへ素通しでき、ホストが必ず受けたいキーは
+ * [registerHotKey](#registerhotkey) で確保できます。
  *
  * JSON 仕様の要素タイプ ( label / button / input_box / checkbox / toggle /
  * vtile / htile / vspacer / hspacer 等 ) や属性、レイアウト密度指定
@@ -68,19 +71,30 @@ class Dialog {
 	 * @param grabFocus キーボードフォーカスを取得するかどうか ( 既定 true )。
 	 *
 	 * true のときはパネルがキーボードフォーカスを取得し、input_box 等への文字
-	 * 入力やウィジェットのキー操作ができます ( ただしパネルが処理するキーは
-	 * ホスト側 [Window.onKeyDown](Window.md#onkeydown) には届きません )。
+	 * 入力やウィジェットのキー / パッド操作ができます。
 	 *
 	 * false のときはフォーカスを取らず、キー入力はホスト ( Window ) へ通ります。
-	 * ゲーム側のホットキーを活かしたい常駐 HUD 的なパネルや、独自のキー操作
-	 * ( 画面切替等 ) と併用する場合に指定します。この場合パネル内の input_box 等
+	 * 表示専用の常駐 HUD 的なパネルに指定します。この場合パネル内の input_box 等
 	 * への文字入力はできません。マウス操作は grabFocus に関わらず有効です。
+	 * @param modal モーダル ( 入力独占 ) にするかどうか。省略時は後方互換で
+	 * grabFocus と同じ値になります。
+	 *
+	 * `showJson(json, true, false)` = 「非モーダル + フォーカスあり」の中間状態で、
+	 * キー / パッドはパネルへ届いてウィジェットを操作でき ( パッドの十字 = フォーカス
+	 * ナビ / A = 決定 )、パネルが処理しなかったキーだけがホスト
+	 * ( [Window.onKeyDown](Window.md#onkeydown) ) へ素通しされます。操作パネル用途は
+	 * この指定を推奨します。ホストが必ず受けたいキーは
+	 * [registerHotKey](#registerhotkey) で確保してください。
+	 *
+	 * 用途 3 態: モーダルダイアログ `showJson(json)` / 操作パネル
+	 * `showJson(json, true, false)` / 表示専用 HUD `showJson(json, false)`。
 	 * @return 表示開始に成功したら真を返します。
 	 * @see Dialog.showFile
+	 * @see Dialog.registerHotKey
 	 * @see Dialog.onAction
 	 * @see Dialog.close
 	 */
-	function showJson(json, grabFocus = true);
+	function showJson(json, grabFocus = true, modal = grabFocus);
 
 	/**
 	 * ファイルから非モーダルダイアログを表示する
@@ -89,10 +103,11 @@ class Dialog {
 	 * と同じ動作で表示します。パスは Storages 経由のパス指定が使えます。
 	 * @param path JSON / JSONC ファイルのパスを指定します。
 	 * @param grabFocus キーボードフォーカスを取得するかどうか ( 既定 true )。詳細は [showJson](#showjson) を参照。
+	 * @param modal モーダルにするかどうか ( 省略時は grabFocus に追従 )。詳細は [showJson](#showjson) を参照。
 	 * @return 表示開始に成功したら真を返します。
 	 * @see Dialog.showJson
 	 */
-	function showFile(path, grabFocus = true);
+	function showFile(path, grabFocus = true, modal = grabFocus);
 
 	/**
 	 * Dictionary で非モーダルダイアログを表示する
@@ -102,11 +117,12 @@ class Dialog {
 	 * 同じ経路で表示します ( 変換仕様は [dictToJson](#dicttojson) と同じ )。
 	 * @param dict レイアウト定義の Dictionary を指定します。
 	 * @param grabFocus キーボードフォーカスを取得するかどうか ( 既定 true )。詳細は [showJson](#showjson) を参照。
+	 * @param modal モーダルにするかどうか ( 省略時は grabFocus に追従 )。詳細は [showJson](#showjson) を参照。
 	 * @return 表示開始に成功したら真を返します。
 	 * @see Dialog.showJson
 	 * @see Dialog.dictToJson
 	 */
-	function showDict(dict, grabFocus = true);
+	function showDict(dict, grabFocus = true, modal = grabFocus);
 
 	/**
 	 * JSON 文字列でモーダルダイアログを表示する
@@ -319,6 +335,63 @@ class Dialog {
 	 * @see Dialog.registerFont
 	 */
 	function registerFontDir(dir);
+
+	/**
+	 * ホストホットキーの登録
+	 *
+	 * 「ダイアログにフォーカスを渡しつつ、特定のキーだけは必ずホスト側で
+	 * 受けたい」ためのバイパス機構です。登録したキーはダイアログへ渡らず、
+	 * そのまま通常のゲーム入力経路
+	 * ( [Window.onKeyDown](Window.md#onkeydown) /
+	 * [Window.onMouseDown](Window.md#onmousedown) 等 ) へ届きます
+	 * ( 専用イベントはありません )。
+	 *
+	 * 入力の配送優先順位は次の一列です。
+	 *
+	 * 1. モーダルダイアログ ( 全入力を独占。ホットキーより優先 )
+	 * 2. ホストホットキー ( ダイアログをバイパスしてホストへ )
+	 * 3. フォーカスを持つ非モーダルパネル ( 未処理キーのみ素通し )
+	 * 4. ゲーム / レイヤ
+	 *
+	 * ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を含む
+	 * 操作パネル ( `showJson(json, true, false)` ) の表示中でも確実に効かせる
+	 * 用途を想定しています。
+	 * @param key 仮想キーコード ( VK_ESCAPE 等 )。キーのほか、パッドボタン
+	 * ( VK_PAD1 〜 VK_PAD12 等 ) とマウスボタン ( VK_LBUTTON / VK_RBUTTON /
+	 * VK_MBUTTON / VK_XBUTTON1 / VK_XBUTTON2 ) も同じ空間で指定できます。
+	 * 印字キーの登録は非推奨です ( onKeyPress の文字イベントまでは抑止
+	 * されません )。
+	 * @param shift 修飾キーの組合せ ( ssShift | ssAlt | ssCtrl、既定 0 )。
+	 * キー down は完全一致で判定し、up はキーのみの一致で対にバイパスします。
+	 * @param duringTextInput 真にすると、ダイアログ内のテキスト入力ウィジェット
+	 * ( input_box 等 ) にキャレットがある間も有効になります。既定の偽では
+	 * テキスト入力中は抑止され、ESC / BackSpace 等を入力欄から奪いません。
+	 * @return 戻り値はありません。同じ ( key, shift ) の再登録は
+	 * duringTextInput の上書きになります。
+	 * @see Dialog.unregisterHotKey
+	 * @see Dialog.clearHotKeys
+	 * @see Dialog.showJson
+	 */
+	function registerHotKey(key, shift = 0, duringTextInput = false);
+
+	/**
+	 * ホストホットキーの解除
+	 *
+	 * [registerHotKey](#registerhotkey) で登録したホットキーを解除します
+	 * ( key と shift の両方が一致するエントリを削除 )。
+	 * @param key 仮想キーコードを指定します。
+	 * @param shift 修飾キーの組合せ ( 既定 0 )。
+	 * @see Dialog.registerHotKey
+	 */
+	function unregisterHotKey(key, shift = 0);
+
+	/**
+	 * ホストホットキーの全解除
+	 *
+	 * [registerHotKey](#registerhotkey) で登録したホットキーを全て解除します。
+	 * @see Dialog.registerHotKey
+	 */
+	function clearHotKeys();
 
 	/**
 	 * デフォルトフォントファミリ

@@ -182,6 +182,7 @@
     ],
     "file": "src/core/common/visual/elements/DialogIntf.cpp",
     "methods": [
+      "clearHotKeys",
       "clearImages",
       "close",
       "dictToJson",
@@ -191,6 +192,7 @@
       "onScreenLeave",
       "registerFont",
       "registerFontDir",
+      "registerHotKey",
       "registerImage",
       "setPadIconBase",
       "setPadTheme",
@@ -205,6 +207,7 @@
       "showModalJson",
       "startFlow",
       "startFlowScreens",
+      "unregisterHotKey",
       "unregisterImage"
     ],
     "properties": [

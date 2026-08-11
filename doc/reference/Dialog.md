@@ -36,7 +36,10 @@ JSON 1 引数だけで呼ぶと、独立ウィンドウを開かずに既存の�
 非モーダルダイアログは複数同時に表示できます ( z-order 付きで重ね
 描画され、マウスはヒットテスト、キーボードは最前面の handler 優先で
 フォーカスが移ります )。`grabFocus` 引数を偽にすると、フォーカスを
-取らない常駐 HUD として表示できます。
+取らない常駐 HUD として表示できます。`showJson(json, true, false)`
+( フォーカスあり非モーダル ) にするとキー / パッドでパネルを操作しつつ
+未処理キーをホストへ素通しでき、ホストが必ず受けたいキーは
+[registerHotKey](#registerhotkey) で確保できます。
 
 JSON 仕様の要素タイプ ( label / button / input_box / checkbox / toggle /
 vtile / htile / vspacer / hspacer 等 ) や属性、レイアウト密度指定
@@ -79,6 +82,9 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [close](#close)
 - [registerFont](#registerfont)
 - [registerFontDir](#registerfontdir)
+- [registerHotKey](#registerhotkey)
+- [unregisterHotKey](#unregisterhotkey)
+- [clearHotKeys](#clearhotkeys)
 - [registerImage](#registerimage)
 - [unregisterImage](#unregisterimage)
 - [clearImages](#clearimages)
@@ -170,7 +176,8 @@ overlay の描画密度モードです ( クラス全体に効く static 相当 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `json` | `&nbsp;` | JSON / JSONC 形式のレイアウト定義文字列を指定します。 |
-| `grabFocus` | `true` | キーボードフォーカスを取得するかどうか ( 既定 true )。<br>true のときはパネルがキーボードフォーカスを取得し、input_box 等への文字<br>入力やウィジェットのキー操作ができます ( ただしパネルが処理するキーは<br>ホスト側 [Window.onKeyDown](Window.md#onkeydown) には届きません )。<br>false のときはフォーカスを取らず、キー入力はホスト ( Window ) へ通ります。<br>ゲーム側のホットキーを活かしたい常駐 HUD 的なパネルや、独自のキー操作<br>( 画面切替等 ) と併用する場合に指定します。この場合パネル内の input_box 等<br>への文字入力はできません。マウス操作は grabFocus に関わらず有効です。 |
+| `grabFocus` | `true` | キーボードフォーカスを取得するかどうか ( 既定 true )。<br>true のときはパネルがキーボードフォーカスを取得し、input_box 等への文字<br>入力やウィジェットのキー / パッド操作ができます。<br>false のときはフォーカスを取らず、キー入力はホスト ( Window ) へ通ります。<br>表示専用の常駐 HUD 的なパネルに指定します。この場合パネル内の input_box 等<br>への文字入力はできません。マウス操作は grabFocus に関わらず有効です。 |
+| `modal` | `grabFocus` | モーダル ( 入力独占 ) にするかどうか。省略時は後方互換で<br>grabFocus と同じ値になります。<br>`showJson(json, true, false)` = 「非モーダル + フォーカスあり」の中間状態で、<br>キー / パッドはパネルへ届いてウィジェットを操作でき ( パッドの十字 = フォーカス<br>ナビ / A = 決定 )、パネルが処理しなかったキーだけがホスト<br>( [Window.onKeyDown](Window.md#onkeydown) ) へ素通しされます。操作パネル用途は<br>この指定を推奨します。ホストが必ず受けたいキーは<br>[registerHotKey](#registerhotkey) で確保してください。<br>用途 3 態: モーダルダイアログ `showJson(json)` / 操作パネル<br>`showJson(json, true, false)` / 表示専用 HUD `showJson(json, false)`。 |
 
 **戻り値**
 
@@ -185,7 +192,7 @@ JSON 文字列で非モーダルダイアログを表示する
 止まらず、ユーザ操作のたびに [onAction](#onaction) が発火します。
 表示を終わらせるには [close](#close) を呼んでください。
 
-**関連:** [Dialog.showFile](Dialog.md#showfile) / [Dialog.onAction](Dialog.md#onaction) / [Dialog.close](Dialog.md#close)
+**関連:** [Dialog.showFile](Dialog.md#showfile) / [Dialog.registerHotKey](Dialog.md#registerhotkey) / [Dialog.onAction](Dialog.md#onaction) / [Dialog.close](Dialog.md#close)
 
 ---
 
@@ -199,6 +206,7 @@ JSON 文字列で非モーダルダイアログを表示する
 | --- | --- | --- |
 | `path` | `&nbsp;` | JSON / JSONC ファイルのパスを指定します。 |
 | `grabFocus` | `true` | キーボードフォーカスを取得するかどうか ( 既定 true )。詳細は [showJson](#showjson) を参照。 |
+| `modal` | `grabFocus` | モーダルにするかどうか ( 省略時は grabFocus に追従 )。詳細は [showJson](#showjson) を参照。 |
 
 **戻り値**
 
@@ -225,6 +233,7 @@ JSON 文字列で非モーダルダイアログを表示する
 | --- | --- | --- |
 | `dict` | `&nbsp;` | レイアウト定義の Dictionary を指定します。 |
 | `grabFocus` | `true` | キーボードフォーカスを取得するかどうか ( 既定 true )。詳細は [showJson](#showjson) を参照。 |
+| `modal` | `grabFocus` | モーダルにするかどうか ( 省略時は grabFocus に追従 )。詳細は [showJson](#showjson) を参照。 |
 
 **戻り値**
 
@@ -590,6 +599,85 @@ Elements 用フォントの一括登録
 パス指定が使え、XP3 内のディレクトリでも構いません。
 
 **関連:** [Dialog.registerFont](Dialog.md#registerfont)
+
+---
+
+### registerHotKey
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `key` | `&nbsp;` | 仮想キーコード ( VK_ESCAPE 等 )。キーのほか、パッドボタン<br>( VK_PAD1 〜 VK_PAD12 等 ) とマウスボタン ( VK_LBUTTON / VK_RBUTTON /<br>VK_MBUTTON / VK_XBUTTON1 / VK_XBUTTON2 ) も同じ空間で指定できます。<br>印字キーの登録は非推奨です ( onKeyPress の文字イベントまでは抑止<br>されません )。 |
+| `shift` | `0` | 修飾キーの組合せ ( ssShift \| ssAlt \| ssCtrl、既定 0 )。<br>キー down は完全一致で判定し、up はキーのみの一致で対にバイパスします。 |
+| `duringTextInput` | `false` | 真にすると、ダイアログ内のテキスト入力ウィジェット<br>( input_box 等 ) にキャレットがある間も有効になります。既定の偽では<br>テキスト入力中は抑止され、ESC / BackSpace 等を入力欄から奪いません。 |
+
+**戻り値**
+
+戻り値はありません。同じ ( key, shift ) の再登録は
+duringTextInput の上書きになります。
+
+**解説**
+
+ホストホットキーの登録
+
+「ダイアログにフォーカスを渡しつつ、特定のキーだけは必ずホスト側で
+受けたい」ためのバイパス機構です。登録したキーはダイアログへ渡らず、
+そのまま通常のゲーム入力経路
+( [Window.onKeyDown](Window.md#onkeydown) /
+[Window.onMouseDown](Window.md#onmousedown) 等 ) へ届きます
+( 専用イベントはありません )。
+
+入力の配送優先順位は次の一列です。
+
+1. モーダルダイアログ ( 全入力を独占。ホットキーより優先 )
+2. ホストホットキー ( ダイアログをバイパスしてホストへ )
+3. フォーカスを持つ非モーダルパネル ( 未処理キーのみ素通し )
+4. ゲーム / レイヤ
+
+ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を含む
+操作パネル ( `showJson(json, true, false)` ) の表示中でも確実に効かせる
+用途を想定しています。
+
+**関連:** [Dialog.unregisterHotKey](Dialog.md#unregisterhotkey) / [Dialog.clearHotKeys](Dialog.md#clearhotkeys) / [Dialog.showJson](Dialog.md#showjson)
+
+---
+
+### unregisterHotKey
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `key` | `&nbsp;` | 仮想キーコードを指定します。 |
+| `shift` | `0` | 修飾キーの組合せ ( 既定 0 )。 |
+
+**解説**
+
+ホストホットキーの解除
+
+[registerHotKey](#registerhotkey) で登録したホットキーを解除します
+( key と shift の両方が一致するエントリを削除 )。
+
+**関連:** [Dialog.registerHotKey](Dialog.md#registerhotkey)
+
+---
+
+### clearHotKeys
+
+メソッド
+
+**解説**
+
+ホストホットキーの全解除
+
+[registerHotKey](#registerhotkey) で登録したホットキーを全て解除します。
+
+**関連:** [Dialog.registerHotKey](Dialog.md#registerhotkey)
 
 ---
 
