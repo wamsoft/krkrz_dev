@@ -80,6 +80,26 @@ class OGLDrawDevice {
 	property matrix { getter; }
 
 	/**
+	 * オーバーレイ動画 presenter 登録口 (ポインタ値)
+	 *
+	 * オーバーレイ動画側がこの GL デバイスへ pull 型で合成するために読み取る presenter host
+	 * へのポインタ値です (WINVER の [videoPresenterHost](Window.BasicDrawDevice.md#videopresenterhost) /
+	 * SDL の [sdlVideoPresenterHost](SDLDrawDevice.md#sdlvideopresenterhost) と同じ規約)。
+	 * 通常はエンジン内部/プラグインが使用します。
+	 * @kind property
+	 */
+	property glVideoPresenterHost { getter; }
+
+	/**
+	 * Elements ダイアログ renderer host (ポインタ値)
+	 *
+	 * Elements のオーバーレイ描画アダプタを取得するための host へのポインタ値です。
+	 * 通常はエンジン内部/プラグインが使用します。
+	 * @kind property
+	 */
+	property dialogRendererHost { getter; }
+
+	/**
 	 * GL コンテキスト初期化時に呼び出されるイベント
 	 *
 	 * このデバイスが Window.drawDevice にセットされ、内部の OpenGL ES コンテキストの生成と初期化が完了した直後に発火します。

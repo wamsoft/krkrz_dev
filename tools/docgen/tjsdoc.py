@@ -776,7 +776,17 @@ def main(argv=None):
         groups.setdefault(cls.name, []).append(cls)
 
     for name, group in groups.items():
-        target = out_dir / f"{name}.md"
+        # threepp (krkrthreepp) は 110 クラスと多く、flat な reference ルートを埋めない
+        # よう doc/reference/threepp/ サブディレクトリへ分離している (nav も独立セクション:
+        # mkdocs.yml の reference/threepp/index.md)。名前空間名 "Threepp" とその配下
+        # "Threepp.*" だけをそこへ出力する (他の namespaced クラス GdiPlus.*/RichText.* 等は
+        # flat のまま)。手作りの index.md はここでは生成しない。
+        if name == "Threepp" or name.startswith("Threepp."):
+            sub_dir = out_dir / "threepp"
+            sub_dir.mkdir(parents=True, exist_ok=True)
+            target = sub_dir / f"{name}.md"
+        else:
+            target = out_dir / f"{name}.md"
         target.write_text(render_group(group), encoding="utf-8")
         sources = ", ".join(c.source or "(core)" for c in group)
         print(f"wrote {target} ({sum(len(c.members) for c in group)} members from {sources})")

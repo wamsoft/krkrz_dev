@@ -150,6 +150,13 @@ list(APPEND TVP_PLUGINS
 krkreffekseer
 )
 
+# krkrthreepp : threepp (three.js 互換 C++ 3D エンジン) による 3D シーン描画 + VRM ロード。
+#               ホスト供給の GL コンテキストへ描画 (krkreffekseer 同様 Win32 GUI 非依存で全PF対象)。
+#               nested submodule (threepp / external/VRM) を要再帰初期化。
+list(APPEND TVP_PLUGINS
+krkrthreepp
+)
+
 # krkrgles は EGL/ANGLE を Window.HWND から生成する作りで Windows 専用
 # (macOS / Linux には HWND が無い)。非 Windows では krkreffekseer / krkrlive2d の
 # GL コンテキスト供給は本体 OGLDrawDevice を使うため krkrgles は不要。

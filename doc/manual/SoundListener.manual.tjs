@@ -1,0 +1,68 @@
+/**
+ * SoundListener クラスは 3D 音声定位における「リスナー」を制御するためのクラスです。このクラスからオブジェクトを作成することはできません。System と同様に `SoundListener.setPosition(...)` のように直接呼び出して使用します。
+ *
+ * このクラスは miniaudio ベースの 3D 音声定位における、エンジンで共有されるリスナー ( listener 0 ) を制御します。音源側は WaveSoundBuffer の [use3D](WaveSoundBuffer.md#use3d) や set3DPosition 等で設定します。
+ *
+ * 座標系は miniaudio に準じます ( 右手系・Y up・任意単位、既定では forward = -Z, up = +Y、コーン角はラジアン )。
+ *
+ * なお HRTF には対応していません。ステレオ環境では前後の区別はつかず、L / R のパンと距離による減衰のみが反映されます。
+ */
+class SoundListener {
+	/**
+	 * リスナー ( 3D 定位 ) を有効にするか
+	 *
+	 * リスナー ( 3D 定位 ) を有効にするかどうかを表します。値を設定することもできます。
+	 * @see WaveSoundBuffer.use3D
+	 */
+	property enabled;
+
+	/**
+	 * リスナー位置の設定
+	 *
+	 * リスナーの位置を設定します。
+	 * @param x 位置の X 成分を指定します。
+	 * @param y 位置の Y 成分を指定します。
+	 * @param z 位置の Z 成分を指定します。
+	 */
+	function setPosition(x, y, z);
+
+	/**
+	 * リスナーの向きの設定
+	 *
+	 * リスナーの向き ( forward ベクトル ) を設定します。
+	 * @param x forward ベクトルの X 成分を指定します。
+	 * @param y forward ベクトルの Y 成分を指定します。
+	 * @param z forward ベクトルの Z 成分を指定します。
+	 */
+	function setDirection(x, y, z);
+
+	/**
+	 * ワールドの上方向ベクトルの設定
+	 *
+	 * ワールドの上方向 ( up ) ベクトルを設定します。
+	 * @param x up ベクトルの X 成分を指定します。
+	 * @param y up ベクトルの Y 成分を指定します。
+	 * @param z up ベクトルの Z 成分を指定します。
+	 */
+	function setWorldUp(x, y, z);
+
+	/**
+	 * リスナー速度の設定
+	 *
+	 * ドップラー計算に用いるリスナーの速度を設定します。
+	 * @param x 速度の X 成分を指定します。
+	 * @param y 速度の Y 成分を指定します。
+	 * @param z 速度の Z 成分を指定します。
+	 */
+	function setVelocity(x, y, z);
+
+	/**
+	 * リスナーの指向性コーンの設定
+	 *
+	 * リスナーの指向性コーンを設定します。角度はラジアンで指定します。
+	 * @param innerAngleRad コーンの内側角度をラジアンで指定します。
+	 * @param outerAngleRad コーンの外側角度をラジアンで指定します。
+	 * @param outerGain コーンの外側でのゲインを指定します ( 0 〜 1 )。
+	 */
+	function setCone(innerAngleRad, outerAngleRad, outerGain);
+}

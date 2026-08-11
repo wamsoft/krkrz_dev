@@ -13,6 +13,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [platformName](#platformname)
 - [osName](#osname)
 - [exePath](#exepath)
+- [replWebURL](#replweburl)
 - [personalPath](#personalpath)
 - [appDataPath](#appdatapath)
 - [dataPath](#datapath)
@@ -72,6 +73,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [touchImages](#touchimages)
 - [showVersion](#showversion)
 - [dumpHeap](#dumpheap)
+- [captureScreen](#capturescreen)
 - [addFont](#addfont)
 - [clearGraphicCache](#cleargraphiccache)
 - [getJoypadType](#getjoypadtype)
@@ -89,6 +91,8 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [getPadAxis](#getpadaxis)
 - [rumblePad](#rumblepad)
 - [stopRumblePad](#stoprumblepad)
+- [getLicenseList](#getlicenselist)
+- [getLicenseText](#getlicensetext)
 
 ---
 
@@ -197,6 +201,18 @@ OS 名
 吉里吉里本体が設置してあるパスを表します。パス名は統一ストレージ名で表現されます。
 
 **関連:** [System.appDataPath](System.md#appdatapath) / [System.personalPath](System.md#personalpath)
+
+---
+
+### replWebURL
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+ブラウザ REPL ビューワーの URL
+
+`-replweb` で開いているブラウザ REPL ビューワーの URL を表します。未起動なら空文字列です。
 
 ---
 
@@ -1337,6 +1353,31 @@ aboutダイアログを表示します。
 
 ---
 
+### captureScreen
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 保存先の統一ストレージパス (.png) |
+| `x` | `0` | = 0 保存範囲の左端 |
+| `y` | `0` | = 0 保存範囲の上端 |
+| `w` | `0` | = 0 保存範囲の幅 (0 で画面全体) |
+| `h` | `0` | = 0 保存範囲の高さ (0 で画面全体) |
+
+**解説**
+
+実画面を PNG 保存する
+
+次フレームの present 直前に、オーバーレイ込みの実画面を読み戻して path へ PNG 保存する
+要求を立てます (実際の保存は DrawDevice の描画時)。x,y,w,h で保存範囲を指定でき、
+w/h を 0 にすると画面全体になります。SDL の `Agent.captureScreen` と同等で、Agent 非対応の
+WINVER でも使えるよう REPL 有効時に用意される、テスト/検証用の機能です。戻り値は保存先パス。
+
+---
+
 ### addFont
 
 メソッド
@@ -1730,6 +1771,67 @@ System.endAllocTag();
 [System.rumblePad](System.md#rumblepad) で開始した振動を停止します。
 
 **関連:** [System.rumblePad](System.md#rumblepad)
+
+---
+
+### getLicenseList
+
+メソッド
+
+**戻り値**
+
+ライセンス情報 ( 辞書 ) の配列
+
+**解説**
+
+ライセンス一覧の取得
+
+エンジンとプラグインが内蔵する第三者コンポーネントのライセンス情報と、
+プロジェクトの `licenses/` フォルダに置かれたライセンスファイル
+( `licenses/*.txt` または `.md` ) をまとめた一覧を返します。
+ゲーム内のライセンス表示画面 ( フォント選択画面など ) を
+スクリプト側で自由に組むための情報源です。
+
+各要素は辞書で、以下のメンバを持ちます:
++ `name` : 表示名 ( `getLicenseText` に渡す )
++ `group` : 分類 ( "engine" / "font" / "font-engine" / "audio" / "video" /
+"ui" / "platform" / "plugin:～" / "data" 等 )
++ `source` : 出所 ( "builtin" = 本体内蔵 / "plugin" = プラグイン登録 /
+"storage" = プロジェクトの licenses/ フォルダ )
+
+同名のライセンスが複数の出所にある場合は 1 件にまとめられます
+( プラグイン登録 > 本体内蔵 > storage の優先 )。
+
+**関連:** [System.getLicenseText](System.md#getlicensetext)
+
+---
+
+### getLicenseText
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | ライセンス名 |
+
+**戻り値**
+
+ライセンス文 ( 見つからなければ void )
+
+**解説**
+
+ライセンス文の取得
+
+[System.getLicenseList](System.md#getlicenselist) の `name` を指定して
+ライセンス文全体を文字列で取得します。見つからない場合は void を返します。
+
+プロジェクトの `licenses/` フォルダに置いたファイル ( 追加フォントの
+ライセンス文など ) も同じ名前解決で取得できます
+( `licenses/<name>.txt` → 無ければ `.md` )。
+
+**関連:** [System.getLicenseList](System.md#getlicenselist)
 
 ---
 

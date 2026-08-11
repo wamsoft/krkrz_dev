@@ -83,8 +83,11 @@ nav:
     - サブシステム:
       - イベントシステム: guide/EventSystem.md
       - グラフィックシステム: guide/GraphicSystem.md
+      - 3Dグラフィックシステム: guide/Graphic3DSystem.md
       - サウンドシステム: guide/SoundSystem.md
       - ストレージシステム: guide/StorageSystem.md
+      - ダイアログ: guide/Dialog.md
+      - フォントシステム: guide/FontSystem.md
       - トランジション: guide/Transition.md
       - プラグイン: guide/Plugins.md
     - 付属ツール:
@@ -133,38 +136,42 @@ nav:
       - reference/AsyncTrigger.md
       - reference/Bitmap.md
       - reference/BitmapLayerTreeOwner.md
-      - reference/Canvas.md
-      - reference/Clipboard.md
-      - reference/Console.md
-      - reference/Controller.md
-      - reference/Debug.md
       - reference/Dialog.md
       - reference/Font.md
-      - reference/GLCompositor.md
       - reference/ImageFunction.md
       - reference/Layer.md
-      - reference/Matrix32.md
-      - reference/Matrix44.md
-      - reference/NullDrawDevice.md
-      - reference/Offscreen.md
-      - reference/OGLDrawDevice.md
-      - reference/Plugins.md
       - reference/Rect.md
-      - reference/Scripts.md
-      - reference/SDLDrawDevice.md
-      - reference/ShaderProgram.md
       - reference/SoundBuffer.md
-      - reference/Storages.md
-      - reference/System.md
-      - reference/Texture.md
+      - reference/SoundListener.md
       - reference/Timer.md
-      - reference/VertexBinder.md
-      - reference/VertexBuffer.md
       - reference/VideoOverlay.md
       - reference/WaveSoundBuffer.md
       - reference/WaveSoundBuffer.PhaseVocoder.md
       - reference/Window.md
       - reference/Window.BasicDrawDevice.md
+      - reference/SDLDrawDevice.md
+      - reference/NullDrawDevice.md
+    - 吉里吉里Z 3D機能クラス:
+      - reference/OGLDrawDevice.md
+      - reference/Canvas.md
+      - reference/Texture.md
+      - reference/Offscreen.md
+      - reference/ShaderProgram.md
+      - reference/VertexBuffer.md
+      - reference/VertexBinder.md
+      - reference/Matrix32.md
+      - reference/Matrix44.md
+      - reference/GLCompositor.md
+    - 吉里吉里Z 管理機能クラス:
+      - reference/System.md
+      - reference/Storages.md
+      - reference/Debug.md
+      - reference/Scripts.md
+      - reference/Plugins.md
+      - reference/Clipboard.md
+      - reference/Controller.md
+      - reference/Agent.md
+      - reference/WebServer.md
     - TJS2 組み込みクラス・型:
       - Array クラス: tjs2/array.md
       - Date クラス: tjs2/date.md
@@ -178,6 +185,7 @@ nav:
     - プラグイン拡張クラス:
       - reference/AlphaMovie.md
       - reference/BinaryStream.md
+      - reference/Console.md
       - reference/CSVParser.md
       - reference/HttpRequest.md
       - reference/SimpleHTTPServer.md
@@ -204,6 +212,8 @@ nav:
         - reference/Live2DDevice.md
         - reference/Live2DModel.md
         - reference/Live2DPlayer.md
+      - 3D (krkrthreepp):
+        - reference/threepp/index.md
       - 描画 (layerExDraw):
         - reference/GdiPlus.md
         - reference/GdiPlus.Appearance.md
@@ -242,6 +252,7 @@ nav:
         - reference/Math.md
   - 仕様書:
     - specification/index.md
+    - システム構成: specification/system.md
     - ファイルフォーマット: specification/fileformat.md
     - 動画再生機能: specification/movie.md
     - 画像処理機能: specification/graphics.md
@@ -255,6 +266,7 @@ nav:
       - 非同期画像読み込み: topics/tjs2/asyncimageload.md
       - 吉里吉里2と吉里吉里Zの判別方法: topics/tjs2/check_2_z.md
       - 動画の再生方法: topics/tjs2/playmovie.md
+      - Wamsoft 派生版で削除/追加された機能: topics/tjs2/wamsoft_changes.md
       - 吉里吉里Zで削除された機能: topics/tjs2/deleted.md
       - サポートするファイルフォーマット: topics/tjs2/fileformat.md
       - 型指定構文: topics/tjs2/type_specified.md
@@ -268,10 +280,7 @@ nav:
       - 描画スレッドプール利用率の計測 (DrawStats): topics/core/draw_stats.md
       - ゲームパッド入力: topics/core/gamepad.md
       - ゲームパッド状態の観察 (PadOverlay): topics/core/pad_overlay.md
-      - Elements ベースの汎用ダイアログ: topics/core/elements_dialog.md
       - REPL (対話型 TJS シェル): topics/core/repl.md
       - ゲーム画面の表示画角制御 (ビューポート): topics/core/viewport.md
-      - Canvas ポストエフェクト / クリッピング: topics/core/canvas_effect.md
-      - Canvas トランジション描画 (drawTransition): topics/core/canvas_transition.md
       - ログ出力: topics/core/logging.md
     - ライセンス: topics/LICENSE.md

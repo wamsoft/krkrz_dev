@@ -13,6 +13,7 @@
 - [非同期画像読み込み](tjs2/asyncimageload.md)
 - [吉里吉里2と吉里吉里Zの判別方法](tjs2/check_2_z.md)
 - [動画の再生方法](tjs2/playmovie.md)
+- [Wamsoft 派生版で削除/追加された機能](tjs2/wamsoft_changes.md)
 - [吉里吉里Zで削除された機能](tjs2/deleted.md)
 - [サポートするファイルフォーマット](tjs2/fileformat.md)
 - [型指定構文](tjs2/type_specified.md)
@@ -29,7 +30,6 @@
 - [メモリ観測・リーク調査](core/memory_observation.md)
 - [描画スレッドプール利用率の計測 (DrawStats)](core/draw_stats.md)
 - [ゲームパッド状態の観察 (PadOverlay)](core/pad_overlay.md)
-- [Elements ベースの汎用ダイアログ](core/elements_dialog.md)
 - [REPL (対話型 TJS シェル)](core/repl.md)
 - [ログ出力](core/logging.md)
 

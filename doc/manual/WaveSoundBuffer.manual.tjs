@@ -472,6 +472,98 @@ class WaveSoundBuffer {
 	function setPos(x, y, z);
 
 	/**
+	 * 3D 定位 ( スペーシャライザ ) の有効/無効
+	 *
+	 * この WaveSoundBuffer に対して miniaudio ベースの 3D 定位 ( 距離減衰・パンニング・
+	 * ドップラー・指向性コーン ) を有効にするかどうかを表します。有効時は
+	 * [set3DPosition](#set3dposition) 等で音源位置を与えます。
+	 */
+	property use3D;
+
+	/**
+	 * 3D 音源位置を設定する
+	 *
+	 * 3D 定位の音源位置を設定します ( [use3D](#use3d) が有効なときに作用 )。
+	 * @param x X 座標。
+	 * @param y Y 座標。
+	 * @param z Z 座標。
+	 * @see WaveSoundBuffer.setPos
+	 */
+	function set3DPosition(x, y, z);
+
+	/**
+	 * 3D 音源の速度ベクトルを設定する
+	 *
+	 * ドップラー計算に使う音源の速度ベクトルを設定します。
+	 * @param vx X 方向の速度。
+	 * @param vy Y 方向の速度。
+	 * @param vz Z 方向の速度。
+	 * @see WaveSoundBuffer.dopplerFactor
+	 */
+	function set3DVelocity(vx, vy, vz);
+
+	/**
+	 * 指向性コーンの向きを設定する
+	 *
+	 * 指向性コーン ( [set3DCone](#set3dcone) ) の向きベクトルを設定します。
+	 * @param dx 向きの X 成分。
+	 * @param dy 向きの Y 成分。
+	 * @param dz 向きの Z 成分。
+	 */
+	function set3DConeDirection(dx, dy, dz);
+
+	/**
+	 * 指向性コーンを設定する
+	 *
+	 * 音源の指向性コーンを設定します。角度はラジアンで、コーン外側では outerGain の
+	 * ゲインまで減衰します。全方位 ( 無指向 ) にしたい場合は inner = outer = 2*PI とします。
+	 * @param innerAngleRad 内側コーンの全角 ( ラジアン )。この内側では減衰しません。
+	 * @param outerAngleRad 外側コーンの全角 ( ラジアン )。
+	 * @param outerGain 外側での減衰ゲイン ( 0.0 〜 1.0 )。
+	 * @see WaveSoundBuffer.set3DConeDirection
+	 */
+	function set3DCone(innerAngleRad, outerAngleRad, outerGain);
+
+	/**
+	 * 最小距離
+	 *
+	 * この距離以内では距離減衰しません ( 音量最大 )。
+	 * @see WaveSoundBuffer.maxDistance
+	 */
+	property minDistance;
+
+	/**
+	 * 最大距離
+	 *
+	 * この距離を超えると距離減衰が頭打ちになります。
+	 * @see WaveSoundBuffer.minDistance
+	 */
+	property maxDistance;
+
+	/**
+	 * 距離減衰の強さ
+	 *
+	 * 距離減衰の強さ ( ロールオフ係数 ) です。大きいほど急激に減衰します。
+	 */
+	property rolloffFactor;
+
+	/**
+	 * ドップラー効果の強度
+	 *
+	 * ドップラー効果の強度です ( 0 で無効、1 で標準 )。
+	 * @see WaveSoundBuffer.set3DVelocity
+	 */
+	property dopplerFactor;
+
+	/**
+	 * 距離減衰モデル
+	 *
+	 * 距離減衰モデルを表す整数です。0 = なし、1 = 逆二乗 ( inverse )、2 = 線形 ( linear )、
+	 * 3 = 指数 ( exponential ) に対応します。
+	 */
+	property attenuationModel;
+
+	/**
 	 * 曲別ゲイン取得コールバックの設定 ( クラスメソッド )
 	 *
 	 * ogg ( Vorbis ) / opus ファイルのデコード時に、ファイルごとに適用する

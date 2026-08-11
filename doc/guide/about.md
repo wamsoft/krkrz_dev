@@ -12,9 +12,11 @@ TJS2 の文法については TJS2 ヘルプ をご覧ください。
 
 ## 作者連絡先など
 
-作者 : W.Dee <dee@kikyou.info>
+吉里吉里2 作者: W.Dee <dee@kikyou.info>
 
 吉里吉里Z に関しては [@jin1016](https://twitter.com/jin1016) まで
+
+Wamsoft 派生版 ( 本ドキュメントが対象とする版 ) に関するご要望・不具合報告は、[wamsoft/krkrz_dev の Issues](https://github.com/wamsoft/krkrz_dev/issues) までお願いします。
 
 ## リポジトリ
 
