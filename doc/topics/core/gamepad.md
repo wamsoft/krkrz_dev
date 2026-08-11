@@ -36,6 +36,15 @@ function onKeyDown(key, shift) {
 十字キー・左右スティック方向は 8 方向に量子化され、上記の方向キーとして届きます
 (生のスティック値が必要なときは次節)。
 
+### Elements ダイアログとの関係
+
+[Dialog](../../reference/Dialog.md) のパネルがキーボードフォーカスを持っていると、
+`VK_PAD*` はパネルのウィジェット操作 (十字 = フォーカスナビ / A = 決定 / B =
+cancel) に消費されます。「このパッドボタンだけは必ずゲーム側で受けたい」場合は
+[Dialog.registerHotKey](../../reference/Dialog.md#registerhotkey) で登録すると、
+ダイアログをバイパスして `Window.onKeyDown` へ直行します (入力の配送優先順位は
+[Dialog ガイド](../../guide/Dialog.md) を参照)。
+
 ## アナログ軸
 
 スティックの傾き・トリガの押し込み量は `System.getPadAxis(no, axisId)` で取得します。
