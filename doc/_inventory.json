@@ -213,6 +213,8 @@
     "properties": [
       "active",
       "defaultFontFamily",
+      "renderCache",
+      "renderCount",
       "renderScale"
     ]
   },
@@ -291,7 +293,8 @@
       "doBoxBlur",
       "doGrayScale",
       "drawGlyph",
-      "drawGlyphwareText",
+      "drawShapedText",
+      "drawShapedTextArea",
       "drawText",
       "dump",
       "fillRect",
@@ -308,7 +311,7 @@
       "independProvinceImage",
       "loadImages",
       "loadProvinceImage",
-      "measureGlyphwareText",
+      "measureShapedText",
       "moveBefore",
       "moveBehind",
       "onBeforeFocus",
@@ -358,6 +361,7 @@
       "setProvincePixel",
       "setSize",
       "setSizeToImageSize",
+      "shapedTextCount",
       "stopTransition",
       "stretchCopy",
       "update"
