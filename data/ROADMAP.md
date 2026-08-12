@@ -82,6 +82,13 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
       (`src/core/data/elements_flow/`)。斜めワイプ (vague 大小) / サークル
       (開閉、反転 rule) / クロスフェードの 3 系統。core gallery / data hub /
       単体起動の 3 経路に登録。実機キャプチャ検証済。
+- [x] **text_glyphware シーンをシェイピング API 刷新へ追従** (2026-08-12)。
+      `drawShapedText` 系改名 (旧 drawGlyphwareText) + Font オブジェクト渡しを
+      反映し、`drawShapedTextArea` の矩形内折り返し (禁則/align) と
+      `shapedTextCount` + count 制限の**自動再生タイプライタ** (RTL 混在文が
+      論理順で 1 クラスタずつ現れる) を追加。実機キャプチャ検証済。
+      ※ doc 埋め込み wasm デモ (doc/_assets/demo) への反映は krkrz_web
+      再ビルドが必要 (別リポ作業、未実施)。
 - [ ] `tools/collect_samples.py` + `make samples`: plugin `sample/` 集約 → `samples_auto.tjs` 生成
 - [ ] doc/ にデモ一覧ページ (topics/samples.md 等) 新設、以後デモ追加ごとに更新
 - [ ] krkrz_web: ランチャの起動トークンが `core/<demo>` 形式 (スラッシュ入り) に

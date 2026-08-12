@@ -201,8 +201,8 @@ var r = Font.queryFonts(%[ containsText : "あ", weight : 700 ]);
 
 動作サンプル: コアデモギャラリー (`src/core/data`) の
 「多言語シェイピング (glyphware)」シーンで、アラビア語/ヘブライ語 (RTL)・
-BiDi 混在・絵文字混在・計測・矩形内折り返し・タイプライタ表示の実例を
-確認できます。
+BiDi 混在・絵文字混在・計測・矩形内折り返し・タイプライタ表示 (RTL 混在文の
+自動再生 — RTL 区間が論理順で 1 クラスタずつ現れます) の実例を確認できます。
 
 ## UI 系 (Elements) と layerExVector のフォント
 
