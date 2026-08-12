@@ -89,7 +89,14 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
       論理順で 1 クラスタずつ現れる) を追加。実機キャプチャ検証済。
       ※ doc 埋め込み wasm デモ (doc/_assets/demo) への反映は krkrz_web
       再ビルドが必要 (別リポ作業、未実施)。
-- [ ] `tools/collect_samples.py` + `make samples`: plugin `sample/` 集約 → `samples_auto.tjs` 生成
+- [x] **elements_bench (Elements 負荷計測) 追加** (2026-08-12)。
+      `Dialog.renderStats` (描画パイプラインの区間計測: update/raster/
+      acquire/upload/present の累積時間+回数) を新設し、更新パターン別
+      シナリオ (静的/キャレット点滅/毎フレーム setVar/アニメ小/広域/複合) と
+      renderCache A/B トグル付きのベンチ画面を core デモに追加
+      (`src/core/data/elements_bench/`)。NX 実測・部分再描画の before/after
+      確認用。実測で Windows SDL は再ラスタ時の upload (テクスチャ転送) が
+      サイズ非依存 ~10ms 級で支配的と判明 (ElementsDialog.md に記録)。
 - [ ] doc/ にデモ一覧ページ (topics/samples.md 等) 新設、以後デモ追加ごとに更新
 - [ ] krkrz_web: ランチャの起動トークンが `core/<demo>` 形式 (スラッシュ入り) に
       なったため、pre.js の ?sample= 対応を krkrz_web 側で確認 (別リポ作業)

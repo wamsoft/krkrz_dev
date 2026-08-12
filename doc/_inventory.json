@@ -194,6 +194,7 @@
       "registerFontDir",
       "registerHotKey",
       "registerImage",
+      "renderStatsReset",
       "setPadIconBase",
       "setPadTheme",
       "setVar",
@@ -215,7 +216,8 @@
       "defaultFontFamily",
       "renderCache",
       "renderCount",
-      "renderScale"
+      "renderScale",
+      "renderStats"
     ]
   },
   "Font": {

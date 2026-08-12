@@ -67,6 +67,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [renderScale](#renderscale)
 - [renderCache](#rendercache)
 - [renderCount](#rendercount)
+- [renderStats](#renderstats)
 
 ### メソッド
 
@@ -93,6 +94,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [setVar](#setvar)
 - [setPadIconBase](#setpadiconbase)
 - [setPadTheme](#setpadtheme)
+- [renderStatsReset](#renderstatsreset)
 
 ### イベント
 
@@ -197,6 +199,30 @@ false にすると従来どおり毎フレーム再描画します ( 負荷比�
 
 実際にラスタライズ ( 再描画 ) を行った累計回数です ( クラス全体で共通 )。
 アイドル時に増えていなければ renderCache が効いています ( 検証・負荷比較用 )。
+
+---
+
+### renderStats
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+描画パイプラインの区間計測 ( 読み取り専用 )
+
+オーバーレイ描画の負荷内訳を Dictionary で返します ( クラス全体で共通の累積値 )。
+時間はすべてマイクロ秒です:
+%[ "frames" => 提示フレーム数, "updates" => 状態更新回数,
+"rasters" => ラスタライズ回数, "cachedPresents" => ラスタ省略提示回数,
+"presents" => 提示回数, "totalUs" => 描画処理全体, "updateUs" => 状態更新,
+"rasterUs" => CPU ラスタライズ, "acquireUs" => バッファ確保,
+"uploadUs" => テクスチャ転送, "presentUs" => 提示 ]
+
+累積値なので 2 回読んで差分を取り、経過実時間との比で
+「Elements が消費した時間・割合」を計算します
+( [Dialog.renderStatsReset](Dialog.md#renderstatsreset) で 0 クリア )。
+計測用のベンチ画面がコアデモ `elements_bench` にあります
+( シナリオ切替 + renderCache A/B + 500ms ごとの内訳表示 )。
 
 ---
 
@@ -834,6 +860,19 @@ pad_icon の全体テーマを設定する
 
 pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"none"` ) を
 設定します。画面 JSON の top-level `"pad_theme"` が指定されていればそちらが優先されます。
+
+---
+
+### renderStatsReset
+
+メソッド
+
+**解説**
+
+描画計測カウンタのリセット
+
+[Dialog.renderStats](Dialog.md#renderstats) の累積カウンタを 0 クリアします。
+計測区間の開始時に呼びます。
 
 ---
 
