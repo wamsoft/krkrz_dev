@@ -42,12 +42,19 @@ JSON 1 引数だけで呼ぶと、独立ウィンドウを開かずに既存の�
 [registerHotKey](#registerhotkey) で確保できます。
 
 JSON 仕様の要素タイプ ( label / button / input_box / checkbox / toggle /
-vtile / htile / vspacer / hspacer 等 ) や属性、レイアウト密度指定
-( `"gap"` / top-level `"style"` ブロック ) の詳細は
+text_box / text_area / vtile / htile / vspacer / hspacer 等 ) や属性、
+レイアウト密度指定 ( `"gap"` / top-level `"style"` ブロック ) の詳細は
 [elements_modal の README](https://github.com/wamsoft/elements/blob/develop/external/elements_modal/README.md)、
 `"input"` ノードによるキーボード / ゲームパッド操作の設定詳細は
 [キーボードナビゲーション仕様](https://github.com/wamsoft/elements/blob/develop/docs/keyboard-navigation.md)
 を参照してください。
+
+矩形へ本文を流し込むなら `text_area` を使います。折り返し・行頭行末禁則・
+文字送りが [Layer.drawShapedTextArea](Layer.md#drawshapedtextarea) と同じ
+ロジックなので、**同じ本文・同じ幅なら改行位置が一致します**。
+`"count_var"` に変数名を与えると [setVar](#setvar) で文字送りが進み、
+折り返しは全文で確定済みなので送ってもリフローしません
+( 字幕やセリフ窓向け。従来からある `text_box` は互換のためそのまま )。
 
 `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では Dialog クラスは利用できません。
 WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用できます

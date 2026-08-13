@@ -212,6 +212,11 @@ BiDi 混在・絵文字混在・計測・矩形内折り返し・タイプライ
   `Dialog.registerFont(family, storage[, weight, slant, stretch])` /
   `Dialog.registerFontDir(dir)` で登録します。ストレージパス (XP3 内・
   `resource://` 含む) をそのまま渡せます。
+- 矩形への流し込みは**折り返しロジックも共有**します。ダイアログの
+  `text_area` ウィジェットは上記 `drawShapedTextArea` と同じ折り返し・
+  行頭行末禁則・クラスタ単位の文字送りを通るため、同じ本文・同じ幅なら
+  レイヤ描画と Elements で**改行位置が一致**します
+  (従来からある `text_box` は互換のため素朴な折り返しのまま)。
 - **layerExVector プラグイン** (`GdiPlus.loadFont(storage, name)`) も同じ
   エンジンを共有します。`resource://./notosansjp-regular.otf` のように
   本体埋め込みフォントを指定でき、フォントを同梱しなくてもアウトライン
