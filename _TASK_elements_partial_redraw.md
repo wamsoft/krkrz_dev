@@ -70,9 +70,15 @@ counter 8747→5949us (54.5%→37.3%) / 複合 8748→5935us (54.9%→37.9%)。
    もこれとセットで初めて使える。 **ここが次の本丸**。
    (テキストについては 2026-08-13 の run ビットマップキャッシュで先行して
    解決済み = ラスタ -38%。 doc/ElementsDialog.md 参照)
-2. Windows の upload 経路 (`SDL_UpdateTexture` が 12〜15ms/回、 矩形サイズ
-   非依存)。 NX は 0.1〜0.8ms なので Windows 固有。
-3. D3D11 (WINVER) の `ReleaseBufferRect` 実装。
+2. ~~Windows の upload 経路~~ **✅ 2026-08-13 解消**。 真因は
+   `SDL_UpdateTexture` ではなく既定 DrawDevice (`sdlogl`) の **PBO 経路**で、
+   ANGLE が PBO からの転送で同期待ち (ビジーウェイト) していた。
+   `GLTexture::UpdateTextureDirect` で直接転送に変更 → upload 13.7ms → 9〜56us、
+   プロセス CPU **-70〜83%**。 `KRKRZ_DLGTEX=pbo` で旧経路に戻せる。
+3. ~~D3D11 (WINVER) の `ReleaseBufferRect` 実装~~ **✅ 2026-08-13 完了**。
+   DEFAULT テクスチャ + `UpdateSubresource(box)` + present は `RenderSRV`。
+   旧実装は present のたびに全面 memcpy していた (renderCache ヒット中も) ため、
+   **静止 UI の常時コストが 113→39us / 365→39us (パネルサイズ非依存)**。
 4. 全画面パネルの密度上限 (`Dialog.renderScale` は authored 相対なので
    扱いにくい。 「buffer 高さの上限」型の指定を足すと docked 1080p を
    720p 相当で描けて面積比で約半分になる)。
