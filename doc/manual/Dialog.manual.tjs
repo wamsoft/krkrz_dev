@@ -536,6 +536,54 @@ class Dialog {
 	function setPadTheme(name);
 
 	/**
+	 * i18n の表示言語
+	 *
+	 * 画面 JSON の top-level `strings` ( textID → 言語別文字列 ) を引くときのキーです
+	 * ( クラス全体に効く static 相当 )。`"ja"` / `"en"` / `"tc"` / `"sc"` など、
+	 * `strings` 側で使っているキーをそのまま指定します。
+	 *
+	 * ```tjs
+	 * global.Dialog.language = "en";     // 表示中の画面もその場で切り替わる
+	 * ```
+	 *
+	 * 代入すると**表示中の全ダイアログへ即時適用**されます ( `text_id` / `text_list_id` /
+	 * `options_id` を持つ widget が再解決され、画面を開き直さずに表示が変わります )。
+	 * 以後に開く画面の既定にもなります。picker 系は選択 index を維持したまま
+	 * 表示文字列だけ差し替わります。
+	 *
+	 * 読み出すと設定済みの言語を返します。未設定なら空文字 ( = 各画面 JSON の
+	 * `lang` 指定に従う ) です。`strings` を持たない画面では何も起きません。
+	 *
+	 * @type String
+	 */
+	property language;
+
+	/**
+	 * フォーカス枠の表示
+	 *
+	 * フォーカス中の要素に Elements が描く汎用の枠 ( 青い角丸 ) の表示です
+	 * ( クラス全体に効く static 相当 )。既定は true。
+	 *
+	 * ```tjs
+	 * global.Dialog.focusRing = false;    // アプリ全体で消す
+	 * ```
+	 *
+	 * button / slider / dial / thumbwheel の枠がまとめて消えます。状態別の絵
+	 * ( 通常 / オーバー / 押し下げ / 無効 ) を素材として持つ画像 UI では、汎用の枠が
+	 * 絵に重なって邪魔になるので切ります。**フォーカス自体は生きている**ので、
+	 * キー/パッドのナビゲーションと hilite フレームへの切替は従来どおり動きます。
+	 *
+	 * 画面単位ではなくアプリ全体の設定です ( グローバルテーマのフラグ )。
+	 *
+	 * クラス内から触るときは `global.Dialog.focusRing` と書きます。Dialog を継承した
+	 * クラスのメソッド内で素の `Dialog` と書くと親クラス参照になり、static プロパティへの
+	 * 代入が「メンバが見つかりません」になります。
+	 *
+	 * @type Boolean
+	 */
+	property focusRing;
+
+	/**
 	 * オーバーレイの描画密度モード
 	 *
 	 * overlay の描画密度モードです ( クラス全体に効く static 相当 )。
