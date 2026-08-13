@@ -66,6 +66,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [active](#active)
 - [renderScale](#renderscale)
 - [renderCache](#rendercache)
+- [partialRedraw](#partialredraw)
 - [renderCount](#rendercount)
 - [renderStats](#renderstats)
 
@@ -189,6 +190,26 @@ false にすると従来どおり毎フレーム再描画します ( 負荷比�
 
 ---
 
+### partialRedraw
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+オーバーレイの部分再描画
+
+true ( 既定 ) の間、変化した範囲が矩形で特定できる場合は**その矩形だけ**を
+再ラスタライズしてテクスチャへ部分転送します ( クラス全体に効く static 相当 )。
+矩形が特定できるのはテキスト欄のキャレット点滅などに限られ、入力・フォーカス
+変化・パーツ演出・setVar などは従来どおり全面再描画になります。
+
+[Dialog.renderCache](Dialog.md#rendercache) が有効なときのみ機能します
+( 前回の描画結果が残っていることが前提 )。false にすると変化フレームは
+常に全面再描画します ( 負荷比較・問題切り分け用 )。実際に部分再描画できた
+回数は [Dialog.renderStats](Dialog.md#renderstats) の "partials" で確認できます。
+
+---
+
 ### renderCount
 
 プロパティ \ アクセス: `r/w`
@@ -213,7 +234,8 @@ false にすると従来どおり毎フレーム再描画します ( 負荷比�
 オーバーレイ描画の負荷内訳を Dictionary で返します ( クラス全体で共通の累積値 )。
 時間はすべてマイクロ秒です:
 %[ "frames" => 提示フレーム数, "updates" => 状態更新回数,
-"rasters" => ラスタライズ回数, "cachedPresents" => ラスタ省略提示回数,
+"rasters" => ラスタライズ回数, "partials" => うち部分再描画だった回数,
+"cachedPresents" => ラスタ省略提示回数,
 "presents" => 提示回数, "totalUs" => 描画処理全体, "updateUs" => 状態更新,
 "rasterUs" => CPU ラスタライズ, "acquireUs" => バッファ確保,
 "uploadUs" => テクスチャ転送, "presentUs" => 提示 ]

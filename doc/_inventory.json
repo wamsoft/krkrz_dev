@@ -214,6 +214,7 @@
     "properties": [
       "active",
       "defaultFontFamily",
+      "partialRedraw",
       "renderCache",
       "renderCount",
       "renderScale",
