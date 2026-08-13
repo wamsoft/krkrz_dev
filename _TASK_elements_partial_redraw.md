@@ -23,22 +23,45 @@ hover / 演出 tick / setVar) は**全面へ昇格**させて正しさを担保�
 - NX 実測: 上記シナリオ以外 (counter / anim / multi) は矩形が特定
   できないため数値不変 = **回帰なし**を確認 (下表)
 
+## ✅ 第二段も完了 (2026-08-13, elements 45bd5362 相当)
+
+矩形化の対象を広げた。 **setVar / vars_on_focus による要素更新**と
+**focus/hover 変化**を、 該当要素の矩形だけの再描画にした。
+
+- 変数: subscriber に「見た目が変わる要素」を持たせて通知
+  (`set_var_change_notifier`)。 複数要素が変わる購読 (slider+gauge) や
+  位置が変わるもの (`at_var`) は通知せず全面フォールバック
+- focus/hover: 変化した新旧 id を `id_map` から引いて両方の矩形を積む
+- ⚠ 要素は bounds をはみ出して描くので、 矩形は
+  「bounds ∪ 自然サイズ(`limits().min`)」で求め、 変数変化は**変更前後の
+  2 回**積む (縮んだときの消し残り防止)。 `view::element_bounds()` を新設
+  (refresh を横取りして同期的に矩形を得る)
+- 「範囲不明なら全面」を update 冒頭のヒューリスティックでやっていたのを
+  やめ、 **契機側で明示的に全面ダーティを立てる**設計へ変更
+
+**NX 実測**: counter 8747→5882us (-33%、 share 54.5%→36.9%) /
+複合 8748→5873us (-33%、 54.9%→37.5%)。 Windows も -36〜38%。
+全面再描画とのピクセル差なし。
+
 ### 残タスク (次段)
 
-1. **矩形を特定できる契機を増やす** — 現状の効果はキャレット点滅限定。
-   focus/hover 変化は `id_map` から要素 bounds を引けば矩形化できる
-   (新旧 2 要素の合併)。 setVar による label 更新も subscriber の
-   bounds が引ければ矩形化できる。 ここが counter / HUD 系に効く本命。
-2. **animate の矩形化** — 変換前後の合併矩形。 現状は全面。
-   anim 系シナリオ (NX で 79〜94% 消費) に効く。
-3. D3D11 (WINVER) の `ReleaseBufferRect` 実装 (presenter にテクスチャ
-   保持 + 部分 UpdateSubresource が要る)。
-4. NX でのキャレット部分再描画の実測 — テキスト欄 focus は
+1. **animate の矩形化** — ここが最大の残り (NX でアニメ小 78% /
+   広域 94%)。 tick 前後の占有矩形を集める実装は一度試して**取り下げた**:
+   要素 bounds 取得コスト +1.9ms/frame がラスタ節約 -0.8ms を上回り、
+   変換後の実描画範囲も bounds から再現できず残像が出た。
+   → **proxy の変換適用後の実描画範囲を elements 側から直接取れる仕組み**
+   (draw 時に実際に描いた矩形を記録して返す等) を先に用意するのが筋。
+2. **shape 生成のキャッシュ** — 1 と同じ根に触る話。 elements の canvas は
+   即時モード (毎フレーム全 Shape 生成→remove) なので、 変化のない要素の
+   Shape を保持できれば矩形化に依らず効く。
+3. Windows の upload 経路 (`SDL_UpdateTexture` が 12〜15ms/回、 矩形サイズ
+   非依存)。 NX は 0.1〜0.8ms なので Windows 固有。
+4. D3D11 (WINVER) の `ReleaseBufferRect` 実装。
+5. NX でのキャレット部分再描画の実測 — テキスト欄 focus は
    ソフトウェアキーボードを開くため自動計測不可。 sg8bit のタイトル
    入力画面など実画面での目視/手動計測で確認する。
-   (NX の回帰チェックは `bash tools/nxctl.sh install && bash tools/nxctl.sh
-   bench-inst` で無操作実行できる。 10 組の数値が導入前と一致することを
-   2026-08-13 に確認済み)
+   (NX の計測は `bash tools/nxctl.sh install && bash tools/nxctl.sh
+   bench-inst` で無操作実行できる)
 
 ## ✅ NX 実測結果 (2026-08-13, EDEV / Release / -benchauto, generic krkrz_nx)
 
