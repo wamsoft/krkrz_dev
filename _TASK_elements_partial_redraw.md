@@ -36,6 +36,9 @@ hover / 演出 tick / setVar) は**全面へ昇格**させて正しさを担保�
 4. NX でのキャレット部分再描画の実測 — テキスト欄 focus は
    ソフトウェアキーボードを開くため自動計測不可。 sg8bit のタイトル
    入力画面など実画面での目視/手動計測で確認する。
+   (NX の回帰チェックは `bash tools/nxctl.sh install && bash tools/nxctl.sh
+   bench-inst` で無操作実行できる。 10 組の数値が導入前と一致することを
+   2026-08-13 に確認済み)
 
 ## ✅ NX 実測結果 (2026-08-13, EDEV / Release / -benchauto, generic krkrz_nx)
 
