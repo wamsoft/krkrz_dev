@@ -40,6 +40,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [licenseText](#licensetext)
 - [openGLESVersion](#openglesversion)
 - [processorNum](#processornum)
+- [renderStats](#renderstats)
 - [touchDevice](#touchdevice)
 - [buildVariantName](#buildvariantname)
 - [padAxisLeftX](#padaxisleftx)
@@ -74,6 +75,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [showVersion](#showversion)
 - [dumpHeap](#dumpheap)
 - [captureScreen](#capturescreen)
+- [renderStatsReset](#renderstatsreset)
 - [addFont](#addfont)
 - [clearGraphicCache](#cleargraphiccache)
 - [getJoypadType](#getjoypadtype)
@@ -707,6 +709,44 @@ OpenGL ES のバージョン
 
 OS から認識されている論理プロセッサ数を返します。
 描画スレッド数の自動決定などに利用されます。読み出し専用。
+
+---
+
+### renderStats
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Dictionary`
+
+**解説**
+
+画面転送コストの計測値
+
+合成済みの画面バッファを GPU テクスチャへ転送するのにかかった時間を
+返します。読み出し専用。返る辞書のキーは次の通りです。
+
+| キー | 意味 |
+|---|---|
+| `texUploadUs` | 転送呼び出しの累計時間 (マイクロ秒) |
+| `texUploads` | 転送回数 (ダーティ矩形単位) |
+| `texUploadBytes` | 転送した累計バイト数 |
+| `frames` | 転送フェーズの実行回数 (≒ 画面更新フレーム数) |
+
+すべて累積値なので、**2 回読んで差分を取り、経過実時間との比**で
+「1 秒あたり転送に何ミリ秒使ったか」を見ます。
+`System.renderStatsReset()` で 0 に戻せます。
+
+転送はドライバの都合でブロックすることがあり (転送先テクスチャを
+GPU がまだ参照している場合など)、その待ちもこの時間に含まれます。
+描画デバイスによって転送方法が違う (OpenGL = glTexSubImage2D /
+SDLDrawDevice = SDL_UpdateTexture / Windows ネイティブ =
+UpdateSubresource) ので、実機で詰まっていないかの一次指標として使います。
+
+ビルドオプションは不要で常に計測されます (1 フレームに数回の
+カウンタ加算のみ)。オーバーレイダイアログ側の内訳は
+`Dialog.renderStats` を参照してください。
+
+**関連:** [System.renderStatsReset](System.md#renderstatsreset)
 
 ---
 
@@ -1375,6 +1415,21 @@ aboutダイアログを表示します。
 要求を立てます (実際の保存は DrawDevice の描画時)。x,y,w,h で保存範囲を指定でき、
 w/h を 0 にすると画面全体になります。SDL の `Agent.captureScreen` と同等で、Agent 非対応の
 WINVER でも使えるよう REPL 有効時に用意される、テスト/検証用の機能です。戻り値は保存先パス。
+
+---
+
+### renderStatsReset
+
+メソッド
+
+**解説**
+
+画面転送コストの計測値をリセットする
+
+`System.renderStats` の累積カウンタを 0 に戻します。
+計測区間の開始点として呼びます。
+
+**関連:** [System.renderStats](System.md#renderstats)
 
 ---
 
