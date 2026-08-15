@@ -9,7 +9,12 @@ Elements (`src/core/external/elements` = wamsoft/elements、その中の
 
 ---
 
-## 1. 複数行テキストがレイアウトで壊れる (優先度: 高)
+## 1. 複数行テキストがレイアウトで壊れる (優先度: 高) — ✅ 対応済み
+
+> **2026-08-15 対応** (elements `develop`): 1-a は `default_label_styler` の
+> `limits` / `draw` を改行対応にして解決。 1-b は `block_text_box::limits` の実装
+> (elements `fb473a83`) で既に解決済みだったことを実機で確認。 1-c は仕様どおりで
+> README に記載済み。 1-d は 1-a の解決により lint 不要。 詳細は各項の末尾を参照。
 
 報告元: rpgsys (吉里吉里Z + threepp の RPG テンプレート) のメインメニュー。
 2026-08-14 に実機調査。詳細メモ = `D:\work\kirikiri\krkrz_rpgsys\docs\elements-feedback-multiline.md`。
@@ -39,6 +44,19 @@ Elements (`src/core/external/elements` = wamsoft/elements、その中の
 2. 最低限 `em_logf` で「複数行 label は text_area/text_box を使うこと」と警告
 3. README のスキーマ表に「label は 1 行専用」と明記
 
+**✅ 採った対応 (2026-08-15)**: 上記いずれでもなく、**`default_label_styler` 自体を
+改行対応にした** (`lib/src/element/label.cpp`)。 描画側はもともと 3 行出ていて
+`limits` だけが 1 行分を返していたのが原因だったため、
+
+- `limits`: `
+` で分割して「幅 = 最長行 / 高さ = 行高 x 行数」を返す
+- `draw`: 行ごとに `fill_text` し、 縦アラインはブロック全体に適用
+
+とした。 JSON 側の自動展開ではないので **`text_var` / `text_id` の動的テキストでも
+そのまま効く** (ただし行数が変わる差し替えは、 次に親がレイアウトし直すまで高さが
+追従しない旨を README に明記)。 実機確認: 3 行 label + button 2 個の vtile で
+重なりが解消。
+
 ### 1-b. `text_area` / `text_box` が縦の内容高さを返さない (複数行の受け皿がない)
 
 1-a の正しい代替であるはずの `text_area` が、`vtile` の子に置くと**何も表示されない**。
@@ -62,10 +80,22 @@ static_text_box の limits):
 2. 少なくとも `vsize` で囲んだときは確実にその高さで描画されるようにする
 3. 幅 0 のまま構築されたら警告ログ (静かに消えるのが一番つらい)
 
+**✅ 解決済み (報告時点より新しい elements で修正済)**: `block_text_box::limits`
+(elements `fb473a83` 「矩形テキスト widget text_area を追加」) が
+「幅 = 直近レイアウト幅での折返し結果 (最小 200px) / 高さ = 折返し結果の高さ」を
+返すようになっており、 2026-08-15 に実機で再確認したところ **vtile の子に直接置いた
+`text_area` は 3 行ぶんの高さを確保し、 後続の button と重ならない**。
+報告は 2026-08-13 ビルドでのものだったため、 その後の修正で解消していた。
+
 ### 1-c. (確認事項) dialog の `size` は「固定」ではなく「上限」?
 
 `"size": [320, 220]` でも内容が小さいと実サイズは内容ぶん (例 104x42) に縮み、
 内容が大きいときは指定値まで伸びる。仕様ならスキーマ表に明記してほしい。
+
+**✅ 仕様どおり・記載済み**: `elements_modal/README.md` の「トップレベル」表に
+`size` = 「推奨論理サイズ (run_modal は上限としてのみ使用、 fit-to-content で実サイズが
+決まる)」と明記されている。 固定サイズにしたい場合は content 側を `hsize` / `vsize` で
+括る。
 
 ### 1-d. elements_console (EUI DSL / uitool) 側
 

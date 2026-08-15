@@ -19,7 +19,6 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
-| **高** | Elements のレイアウト不具合 | 複数行 `label` で後続ウィジェットが重なる / `text_area`・`text_box` が縦の内容高さを返さず `vsize` も効かない / dialog の `size` は固定か上限かの仕様確認 / DSL 側 lint。詳細と回避策は [TODO-elements.md](TODO-elements.md) |
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
@@ -68,3 +67,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 - ✅ モーダル表示中にタイマーが完全停止する / wake 投函失敗でタイマーが永久停止する
   / WINVER の Agent 入力がモーダルへ届かない (src/core `90698ee1`)
   詳細 = [src/core/doc/ModalWindow.md](src/core/doc/ModalWindow.md)
+- ✅ Elements の複数行テキストがレイアウトで壊れる (elements `c98276e1` / src/core `c5e156fa`)
+  `default_label_styler` の limits / draw を改行対応に。`text_area` の高さ (1-b) は
+  報告後の修正で解決済みだったことを実機確認、dialog の `size` (1-c) は仕様どおりで
+  README 記載済み、DSL の lint (1-d) は不要になった。詳細 = [TODO-elements.md](TODO-elements.md)
