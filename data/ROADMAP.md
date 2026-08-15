@@ -169,6 +169,12 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       VK 名+コード+修飾キー+履歴、マウス座標/ボタン/ホイール/ドラッグ軌跡、
       パッド軸 (System.padAxis*)。postInputEvent で demotest 注入
 - [x] timer_async — Timer/AsyncTrigger/連続ハンドラのタイミング可視化 (2026-07-20)
+- [x] layer_tree — レイヤツリー / ヒットテスト / フォーカス (2026-08-16)。
+      htMask + hitThreshold の 3 帯、htProvince (領域画像をコード生成した円)、
+      onHitTest による最終判定、親の visible/enabled が子の nodeVisible/
+      nodeEnabled に伝わる様子、bringToFront/bringToBack と Tab フォーカス連鎖。
+      資材不要。※ hitType は htMask / htProvince の 2 値で htRect は無い
+      (矩形全面は hitThreshold = 0)
 - [ ] sound — WaveSoundBuffer: 再生・ループ・ラベル・fade・pan、PhaseVocoder
       (現デモから移設)、SoundBuffer、**ゲインコントロール** (setGainQueryCallback で
       曲別 dB / CLI 全体ゲイン -opus_gain・-ogg_gain / ReplayGain -*_rg の効果を実聴。
