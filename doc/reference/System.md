@@ -41,6 +41,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [openGLESVersion](#openglesversion)
 - [processorNum](#processornum)
 - [renderStats](#renderstats)
+- [texUploadUsePBO](#texuploadusepbo)
 - [touchDevice](#touchdevice)
 - [buildVariantName](#buildvariantname)
 - [padAxisLeftX](#padaxisleftx)
@@ -747,6 +748,40 @@ UpdateSubresource) ので、実機で詰まっていないかの一次指標と�
 `Dialog.renderStats` を参照してください。
 
 **関連:** [System.renderStatsReset](System.md#renderstatsreset)
+
+---
+
+### texUploadUsePBO
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Boolean`
+
+**解説**
+
+テクスチャ転送に PBO を使うかの強制指定
+
+画面バッファを GPU テクスチャへ転送する経路を、計測・比較のために
+強制します。設定できる値は次の通りです。
+
+| 値 | 意味 |
+|---|---|
+| `void` (既定) | 用途ごとの既定に従う (本画面 = 転送サイズで自動判定 / オーバーレイ = 直接転送) |
+| `true` | 常に PBO 経由で転送する |
+| `false` | 常に `glTexSubImage2D` で直接転送する |
+
+既定では転送バイト数が 256KB 以上なら PBO、それ未満なら直接転送を
+選びます。小さい矩形を多数更新する画面では PBO の固定コストが効いて
+不利になるためです。また ANGLE 実装 (Windows の GLES → D3D11
+エミュレーション) ではサイズによらず常に直接転送になります。
+
+A/B 比較には `System.renderStatsReset()` と `System.renderStats` を
+併用します。環境変数 `KRKRZ_GLTEXUP=pbo|direct` でも同じ指定が
+できますが、環境変数を渡せない環境ではこちらを使います。
+
+OpenGL 描画を有効にしたビルドでのみ存在します (既定で有効)。
+
+**関連:** [System.renderStats](System.md#renderstats)
 
 ---
 
