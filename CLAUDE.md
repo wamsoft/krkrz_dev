@@ -45,6 +45,10 @@ Commented-out entries (`minizip`, `psdfile`, `sigcheck`, `krkrlua`, `resourceRW`
 
 When you need to modify plugin code itself, remember each `src/plugins/<name>/` is its own submodule: commits go to that plugin's upstream repo, not to `krkrz_dev`. The same applies to `src/core` and `script/*`.
 
+## Outstanding work
+
+`TODO.md` at the repo root is the index of open issues across the whole project (priority + one-liner + link to the detailed SSOT). Detailed lists live in their own files — `TODO-elements.md` (Elements layout/dialog bugs), `data/ROADMAP.md` (demos), `src/core/doc/*.md` (engine subsystems) — so keep `TODO.md` thin and link rather than duplicate. When an item is finished, mark it ✅ with the commit hash instead of deleting it.
+
 ## Conventions
 
 Source is UTF-8; comments, identifiers, and commit messages are frequently in Japanese — keep that style when editing existing files. The default branch here is `develop` (not `master`); PRs typically target `master` only for releases.
