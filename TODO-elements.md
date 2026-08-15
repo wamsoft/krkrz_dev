@@ -48,8 +48,7 @@ Elements (`src/core/external/elements` = wamsoft/elements、その中の
 改行対応にした** (`lib/src/element/label.cpp`)。 描画側はもともと 3 行出ていて
 `limits` だけが 1 行分を返していたのが原因だったため、
 
-- `limits`: `
-` で分割して「幅 = 最長行 / 高さ = 行高 x 行数」を返す
+- `limits`: 改行で分割して「幅 = 最長行 / 高さ = 行高 x 行数」を返す
 - `draw`: 行ごとに `fill_text` し、 縦アラインはブロック全体に適用
 
 とした。 JSON 側の自動展開ではないので **`text_var` / `text_id` の動的テキストでも
@@ -102,9 +101,19 @@ static_text_box の limits):
 同じ落とし穴を DSL でも踏むので、lint (label の text に改行 → 警告して text_area を
 勧める) と README 注記があると良い。
 
+**✅ lint は不要になった (2026-08-15)**: 1-a の対応で `label` が改行をそのまま正しく
+扱えるようになったため、警告して `text_area` へ誘導する必要がなくなった。README には
+「label は明示した改行でのみ改行し、自動折返しはしない (折返しが要るなら `text_area` /
+`text_box`)」を追記済み。
+
 ### ホスト側の現状回避策 (対応後に外せる)
 
 rpgsys は**複数行テキストを行ごとの label に分解して vtile へ積む**回避策を入れた
 (`data/rpglib/menu.tjs` の `addLines` / `setLineVars` / `lineVars`)。
 reactive 更新のため `text_var` も行ごと (`status0`, `status1`, ...)。
-Elements 側が直ったらこの回避策は削除する。
+
+**2026-08-15 時点**: Elements 側 (1-a) は解決したので、この回避策は外せる状態。
+**rpgsys 側の削除と動作調整は rpgsys リポで別途対応する** (本リポの作業範囲外)。
+外す際の注意として、`label` は明示した改行文字でしか改行しない (自動折返しはしない)
+ので、幅で折り返したい箇所は `text_area` を使うこと。 また `text_var` で**行数が
+変わる**差し替えをすると、次に親がレイアウトし直すまで高さが追従しない。
