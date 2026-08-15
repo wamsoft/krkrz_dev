@@ -97,7 +97,7 @@ Takechin 氏作の画像ビューア「Susie32」用のプラグインを利用�
 | **layerExVector** | thorvg による SVG などのベクター描画を [Layer](../reference/Layer.md) に追加します ( [GdiPlus](../reference/GdiPlus.md) 互換 API )。 |
 | **lineParser** | 行単位のテキスト解析を行う [LineParser](../reference/LineParser.md) クラスを追加します。 |
 | **minizip** | ZIP アーカイブの読み込み ( zip:// 自動検索パス ) と作成を行う [Zip](../reference/Zip.md) / [Unzip](../reference/Unzip.md) クラスを追加します。 |
-| **psdfile** | Photoshop PSD ファイルを読み込む [PSD](../reference/PSD.md) クラスを追加します。 |
+| **psdfile** | Photoshop PSD ファイルの読み込み・編集・保存を行う [PSD](../reference/PSD.md) クラスを追加します。 |
 | **saveStruct** | Array / Dictionary の saveStruct を拡張し、UTF-8 など出力エンコーディングを指定可能にします ( [Scripts](../reference/Scripts.md) 参照 )。 |
 | **scriptsEx** | スクリプト実行系のユーティリティを [Scripts](../reference/Scripts.md) に追加します。 |
 | **shrinkCopy** | 高速な縮小コピーを [Layer](../reference/Layer.md) に追加します。 |

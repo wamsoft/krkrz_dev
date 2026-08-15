@@ -42,6 +42,9 @@ psd://PSDファイル名/id/レイヤID.bmp
 - [createBlank](#createblank)
 - [deleteLayer](#deletelayer)
 - [moveLayer](#movelayer)
+- [groupSpan](#groupspan)
+- [moveLayerSibling](#movelayersibling)
+- [moveLayerRange](#movelayerrange)
 - [duplicateLayer](#duplicatelayer)
 - [copyLayerFrom](#copylayerfrom)
 - [setLayerName](#setlayername)
@@ -56,6 +59,14 @@ psd://PSDファイル名/id/レイヤID.bmp
 - [setMergedImage](#setmergedimage)
 - [setLayerText](#setlayertext)
 - [setLayerRunStyle](#setlayerrunstyle)
+- [setLayerRichText](#setlayerrichtext)
+- [setLayerJustification](#setlayerjustification)
+- [getLayerFonts](#getlayerfonts)
+- [getLayerTextTransform](#getlayertexttransform)
+- [setLayerTextTransform](#setlayertexttransform)
+- [moveTextLayer](#movetextlayer)
+- [getLayerTextBounds](#getlayertextbounds)
+- [setLayerTextBounds](#setlayertextbounds)
 - [clearStorageCache](#clearstoragecache)
 
 ---
@@ -271,6 +282,9 @@ color:        // RGBA 各 0..1 の配列 [ r, g, b, a ](未指定なら存在し
 tracking:     // トラッキング(字送り, 1/1000 em)
 kerning:      // 手動カーニング
 auto_kerning: // 自動カーニング(メトリクス/オプティカル)有効か
+bold:         // 疑似ボールド(FauxBold)
+italic:       // 疑似イタリック(FauxItalic)
+underline:    // 下線(Underline)
 ],... ]
 paragraphs: [   // 段落別の行揃え(box text で段落ごとに揃えが変わる用)
 %[ length:        // 段落の文字数(UTF-16 コードユニット)
@@ -503,6 +517,80 @@ comment,           // コメント
 **解説**
 
 レイヤを from から to へ移動する
+
+---
+
+### groupSpan
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+
+**戻り値**
+
+%[ start: // 塊の先頭レイヤ番号
+count: // 塊の枚数
+]  範囲外なら void
+
+**解説**
+
+レイヤがレイヤ一覧上で占める「塊」を返す。
+
+フォルダ(layer_type_folder)の場合は対応する区切り(layer_type_hidden)から
+自分自身までの範囲(入れ子も内側に含む)、それ以外は自分自身 1 枚だけ。
+moveLayerRange と組み合わせてフォルダごと動かすのに使う。
+
+---
+
+### moveLayerSibling
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `up` | `true` | true でレイヤパネル表示上ひとつ上(レイヤ一覧では後ろ)へ。<br>既定 true |
+
+**戻り値**
+
+移動後のレイヤ番号。端まで来ていて動かせない場合や範囲外は -1
+
+**解説**
+
+レイヤを同じ階層の隣の兄弟と入れ替える。
+
+フォルダは区切り+中身をまとめた塊として動き、隣がフォルダならその塊ごと
+飛び越える。階層をまたぐ移動はしない。
+
+---
+
+### moveLayerRange
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `from` | `&nbsp;` | 移動元先頭レイヤ番号 |
+| `count` | `&nbsp;` | 移動する枚数 |
+| `to` | `&nbsp;` | 移動先(「取り除く前」のレイヤ一覧でのインデックス) |
+
+**戻り値**
+
+成功したら true(引数が不正なら false)
+
+**解説**
+
+レイヤ一覧上の [from, from+count) の範囲をまとめて to の位置へ動かす
+
+(低水準。フォルダごと動かすなら groupSpan の戻り値を渡す)。
 
 ---
 
@@ -814,15 +902,204 @@ Layer のサイズは canvas サイズ(width×height)と一致している必要
 テキストレイヤの runIndex 番目のラン(getLayerInfo().text.runs に対応)の
 
 スタイルを編集する。style 辞書のうち指定されたキーだけ上書きする。
-%[ size_px:   // フォントサイズ(px)
-color:     // RGBA 各 0..1 の配列 [ r, g, b, a ]
+%[ font:      // フォント名。文書のフォントセットに無ければ追加される
+// (getLayerFonts() が返す PostScript 風の名前。表示名では
+//  ないことに注意。手元に無い名前は Photoshop 側で代替される)
+size_px:   // フォントサイズ(px)
+color:     // RGBA 各 0..1 の配列 [ r, g, b, a ](a 省略で [ r, g, b ] も可)
 tracking:  // トラッキング(1/1000 em)
 kerning:   // 手動カーニング
 bold:      // 疑似ボールド(FauxBold) true/false
 italic:    // 疑似イタリック(FauxItalic) true/false
 underline: // 下線(Underline) true/false
 ]
+本文とランの長さは変わらない。継承でキーを持たないランには追加される。
 テキストレイヤ以外や runIndex 範囲外の場合は例外。
+
+---
+
+### setLayerRichText
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `text` | `&nbsp;` | 新しい本文(改行は \\r) |
+| `runs` | `void` | [ %[ length: // 適用文字数<br>…setLayerRunStyle の style と同じキー<br>],... ]   省略可 |
+| `paragraphs` | `void` | [ %[ length:        // 段落の文字数<br>justification: // 行揃え 0=左 1=右 2=中央<br>],... ]   省略可 |
+
+**解説**
+
+テキストレイヤの本文とラン構成/段落構成をまとめて差し替える。
+
+setLayerText はスタイルを先頭ランに畳んでしまうので、本文を変えつつ
+部分ごとに書式を変えたい場合はこちらを使う。
+
+runs / paragraphs の length は UTF-16 コードユニット数(絵文字等サロゲート
+ペアは 2)。length の合計が本文長と合わない場合は末尾要素が過不足を吸収する
+(伸ばす/切り詰める)。長さ 0 の要素は捨てられる。void や空配列を渡すと
+単一ラン/単一段落に畳まれる。末尾に改行(\r)が無ければ補われる。
+各ランのスタイルは「元の先頭ランを雛形にして指定キーだけ上書き」なので、
+指定しなかった書式は元の見た目のまま残る。
+
+テキストレイヤ以外の場合は例外。
+
+---
+
+### setLayerJustification
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `justification` | `&nbsp;` | 行揃え 0=左 1=右 2=中央 |
+| `paraIndex` | `-1` | 対象段落番号(getLayerInfo().text.paragraphs に対応)。<br>負値で全段落。既定 -1 |
+
+**解説**
+
+テキストレイヤの段落の行揃えだけを変更する(本文もラン構成も変えない)。
+
+テキストレイヤ以外や paraIndex 範囲外の場合は例外。
+
+---
+
+### getLayerFonts
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+
+**戻り値**
+
+フォント名の配列
+
+**解説**
+
+テキストレイヤが持つフォント名の一覧を返す(フォント選択 UI の候補用)。
+
+setLayerRunStyle / setLayerRichText の font に渡せる名前。
+テキストレイヤ以外の場合は例外。
+
+---
+
+### getLayerTextTransform
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+
+**戻り値**
+
+[ xx, xy, yx, yy, tx, ty ](tx,ty=平行移動)
+
+**解説**
+
+テキストレイヤの配置(アフィン変換)を取得する。
+
+getLayerInfo().text.transform と同じ値。テキストレイヤ以外は例外。
+
+---
+
+### setLayerTextTransform
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `matrix` | `&nbsp;` | [ xx, xy, yx, yy, tx, ty ] の 6 要素配列 |
+
+**解説**
+
+テキストレイヤの配置(アフィン変換)を差し替える。
+
+書き換わるのはテキスト情報だけで、レイヤ矩形(焼き込み済みラスタ)は
+動かない。単純な平行移動には moveTextLayer を使うこと。
+テキストレイヤ以外や要素数不足の場合は例外。
+
+---
+
+### moveTextLayer
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `dx` | `&nbsp;` | X 移動量(px) |
+| `dy` | `&nbsp;` | Y 移動量(px) |
+
+**解説**
+
+テキストレイヤを平行移動する。アフィン変換の tx/ty とレイヤ矩形
+
+(マスク矩形があればそれも)を同じだけずらすので、PSD 内蔵のラスタも
+一緒に動く。テキストレイヤ以外の場合は例外。
+
+---
+
+### getLayerTextBounds
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+
+**戻り値**
+
+%[ left:, top:, right:, bottom: ]
+
+**解説**
+
+テキストレイヤの流し込み枠を取得する(アフィン変換のローカル座標。
+
+文書上の位置は transform の tx/ty を足したもの)。
+テキストレイヤ以外の場合は例外。
+
+---
+
+### setLayerTextBounds
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` | レイヤ番号 |
+| `left` | `&nbsp;` | 左 |
+| `top` | `&nbsp;` | 上 |
+| `right` | `&nbsp;` | 右 |
+| `bottom` | `&nbsp;` | 下 |
+
+**解説**
+
+テキストレイヤの流し込み枠を差し替える(アフィン変換のローカル座標)。
+
+実際に流し込みが変わるのは段落テキスト(ボックステキスト)のみで、
+ポイントテキストでは Photoshop 側が字形から枠を作り直す。
+テキストレイヤ以外の場合は例外。
 
 ---
 
