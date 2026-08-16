@@ -184,6 +184,13 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       更新されなくなる GL コンテキスト問題、サブウィンドウ提示で Elements
       overlay が移設され閉じると消える問題。
       ※ WINVER の setZoom は windowed で見た目が変わらない (TODO.md に記載)
+- [x] perf_stats — 転送コストとメモリ計測 (2026-08-16)。System.renderStats の
+      差分で提示フレーム/転送回数/転送量/転送率を 500ms ごとに表示し、負荷
+      パターン (なし / 小矩形多数 / 全面塗り / 動いた所だけ更新) で比較する。
+      texUploadUsePBO の A/B、getSystemAllocatorInfo、doCompact /
+      clearGraphicCache / resetMemoryPeak / setMemoryOverlay。資材不要。
+      ※ 実測: 全面塗り = 転送率 92.8% に対し、動いた矩形だけ update なら 3.2%
+      ※ WINVER は本画面を毎フレーム全画面転送する実装 (TODO.md に記録)
 - [ ] sound — WaveSoundBuffer: 再生・ループ・ラベル・fade・pan、PhaseVocoder
       (現デモから移設)、SoundBuffer、**ゲインコントロール** (setGainQueryCallback で
       曲別 dB / CLI 全体ゲイン -opus_gain・-ogg_gain / ReplayGain -*_rg の効果を実聴。

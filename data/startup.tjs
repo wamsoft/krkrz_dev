@@ -64,6 +64,7 @@ tryScene(coreBase + "gl_canvas/scene.tjs",    function() { return new GLCanvasSc
 tryScene(coreBase + "gl_particles/scene.tjs", function() { return new GLParticlesScene(); });
 tryScene(coreBase + "elements_gallery/scene.tjs", function() { return new ElementsGalleryScene(); });
 tryScene(coreBase + "elements_flow/scene.tjs", function() { return new ElementsFlowScene(); });
+tryScene(coreBase + "perf_stats/scene.tjs",    function() { return new PerfStatsScene(); });
 
 // 横断デモ (data/ 直下、複数プラグイン)
 tryScene("vector_demo/scene.tjs",     function() { return new VectorScene(); });

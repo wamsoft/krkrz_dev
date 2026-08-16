@@ -23,7 +23,8 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
 | 低 | プラグイン向けログレベル個別 IF | `TVPLogMsg` を tp_stub に収録するだけ。important = WARNING は維持 |
-| 低 | WINVER の `Window.setZoom` が事実上効かない | WINVER は zoom を DestRect 計算にしか使わず、レイヤ×zoom をクライアントへアスペクト維持でフィットさせるため、windowed では倍率を変えても見た目が変わらない (旧 kirikiri2 はウィンドウ自体がリサイズされた)。SDL/generic 側は「レイヤ×zoom をウィンドウの内側サイズにする」実装 (`window_multi` デモで確認可)。KAG3 の画面サイズ切替に影響するため、揃えるかどうかは要判断 |
+| 低 | WINVER の本画面転送が毎フレーム全画面 | `BasicDrawDevice::DrawCompositedFrame` はシャドウバッファ全体を `UpdateSubresource` する (コード内 NOTE のとおり正確性優先)。1280x720 で 3.5MB×fps。ダーティ矩形の union だけ転送する余地あり。現状 D3D11 が速いので転送率は 5% 程度 (`perf_stats` デモで計測可) |
+| 低 (保留) | WINVER の `Window.setZoom` が事実上効かない | WINVER は zoom を DestRect 計算にしか使わず、レイヤ×zoom をクライアントへアスペクト維持でフィットさせるため、windowed では倍率を変えても見た目が変わらない (旧 kirikiri2 はウィンドウ自体がリサイズされた)。SDL/generic 側は「レイヤ×zoom をウィンドウの内側サイズにする」実装 (`window_multi` デモで確認可)。KAG3 の画面サイズ切替に影響するため、**現在の使われ方を調べてから対応検討 (保留)** |
 | 低 | 「SDL3 ビルド限定」表記の全体精査 | WINVER 対応済みの機能が「SDL3 限定」と書かれたままの箇所がある。Dialog は修正済、CommandLine / System overlay 系が要確認 |
 
 ## 将来課題
