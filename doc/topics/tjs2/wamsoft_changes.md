@@ -55,3 +55,4 @@
 | Media Foundation HW 動画 | `IMFMediaEngine` によるハードウェアデコード ( mp4/wmv 既定、`-mediaengine=no` で無効 ) |
 | オンスクリーンデバッグ表示 | ゲームパッド状態 ( PadOverlay )、メモリ観測、描画スレッド利用率 ( DrawStats ) |
 | DPI 対応 / ボーダレスフルスクリーン / 長いパス | PerMonitorV2 DPI 追従、`\\?\` 拡張パス対応 |
+| 起動ディスプレイの指定 | マルチディスプレイ環境で最初に表示するモニタを番号 / 名前で選ぶ `-display` ( [コマンドラインオプション](../../guide/CommandLine.md) ) |

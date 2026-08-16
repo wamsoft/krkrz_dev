@@ -51,6 +51,10 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 ## 低優先・保留
 
+- SDL/generic の `System.screenWidth` / `screenHeight` がメインウィンドウのある
+  ディスプレイを見ていない (常にプライマリ。`-display` 指定時のみ指定ディスプレイ)。
+  リファレンスの記述「メインウィンドウのあるディスプレイを対象」は WINVER の挙動。
+  `SDL_GetDisplayForWindow(メインウィンドウ)` を優先すれば揃う
 - MF SourceReader の WINVER YUV 対応
 - web REPL の modal 転送 / 重複プラグインの削除
 - Elements WINVER 展開のクリーンアップ
@@ -76,6 +80,14 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 ---
 
 ## 最近クローズしたもの
+
+- ✅ 起動するディスプレイの指定 `-display` (src/core `94c67f6b` / umbrella `35a9353`)
+  マルチディスプレイ環境で最初に表示するモニタを番号 (1 origin) / モニタ名の
+  部分一致 / `primary` で指定できる (`-display=list` で一覧をログ出力)。
+  WINVER / SDL3 両対応。テスト時にメインディスプレイを占有しないための口。
+  仕様 = [doc/guide/CommandLine.md](doc/guide/CommandLine.md)。
+  ※落とし穴: WINVER は `TTVPWindowForm` コンストラクタ**途中**で `SetWindowPos`
+  すると WM_MOVE/WM_SIZE ハンドラが未初期化の `TJSNativeInstance` を触って即死する
 
 - ✅ 「SDL3 ビルド限定」表記の全体精査 (src/core `a9bf9de4` / umbrella 側 doc)
   memoverlay / padoverlay は「ビルド限定」ではなく**描画デバイス依存**だった
