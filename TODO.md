@@ -5,6 +5,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 領域 | 詳細 SSOT |
 |---|---|
+| バージョン番号の扱い | [src/core/doc/Versioning.md](src/core/doc/Versioning.md) |
 | 画面転送コスト (計測・読み方) | [src/core/doc/ScreenTransfer.md](src/core/doc/ScreenTransfer.md) |
 | Elements (レイアウト/ダイアログ) の要修正 | [TODO-elements.md](TODO-elements.md) |
 | デモ整備 | [data/ROADMAP.md](data/ROADMAP.md) |
@@ -20,6 +21,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
+| 中 | リリースのバージョン運用を確定する | 番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。残りは **タグ運用の確定**: core (krkrz.git) に `v2.0.0`、umbrella にも同名タグ、core 無変更でプラグインだけ更新する再パッケージは `v2.0.0-2` 等のサフィックス、という案で検討中。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する想定 |
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
