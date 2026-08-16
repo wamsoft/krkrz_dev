@@ -26,6 +26,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
 | 低 | プラグイン向けログレベル個別 IF | `TVPLogMsg` を tp_stub に収録するだけ。important = WARNING は維持 |
+| 低 | レイヤ系プラグインの Bitmap 両対応 | `Bitmap` に Layer 同名の read-only プロパティ 5 件を追加済みなので、プラグイン側の対象判定 (`IsInstanceOf`) を Layer 限定から Layer/Bitmap 両対応にしたい。事前調査済 (障害は `hasImage` の有無 / class dispatch 経路 / Layer 専用メンバの使用の 3 点)。プラグインごとに要否が分かれるので、対応する価値のあるものから個別に |
 | 低 (保留) | WINVER の `Window.setZoom` が事実上効かない | WINVER は zoom を DestRect 計算にしか使わず、レイヤ×zoom をクライアントへアスペクト維持でフィットさせるため、windowed では倍率を変えても見た目が変わらない (旧 kirikiri2 はウィンドウ自体がリサイズされた)。SDL/generic 側は「レイヤ×zoom をウィンドウの内側サイズにする」実装 (`window_multi` デモで確認可)。KAG3 の画面サイズ切替に影響するため、**現在の使われ方を調べてから対応検討 (保留)** |
 
 ## 将来課題
@@ -37,6 +38,16 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 中 | SDL ビルドの SEH 捕捉 | ゼロ除算・アクセス違反でログを残さず即死する。WINVER は translator + minidump あり |
 | 低 | WINVER モダン化の残 | F-3 (入力)、HW mixer の直描画 |
 | 低 | generic フラグの 3 種区別 | `kirikiriz_generic` が導入当時「CS (コンシューマ) 版」の意味だったため、案件スクリプトは generic = プラグイン静的リンク前提で分岐している。PC の SDL ビルドは CS でも WINVER でもない第 3 の形態なのに区別する手段が無い。案件側スクリプトにも影響するため改定は慎重に |
+
+## 未修正の既知バグ (回避策で運用中)
+
+いずれもレイヤ合成系。回避規約を敷いて運用しているので実害は出ていないが、
+**エンジン側のバグの可能性が高く未調査**。直したら回避規約を外せる。
+
+| 課題 | 症状と回避 |
+|---|---|
+| primary レイヤ直描き / primary 直下の非全画面レイヤ | primary へ直接 `drawText` するとグリフが崩れ、primary 直下の半透明 `ltAlpha` レイヤが白帯化する。`Layer.type` を明示設定した後の `drawText` も崩れる。CPU フラグ (`-cpuavx2=no` / `-cpusimd=no`) で症状が変わるが SIMD パリティテストは全合格なので、レイヤ種別ごとの関数選択・dispatch 経路が疑わしい。DrawDevice 非依存。**回避**: 描画は必ず「primary の全画面 opaque 子レイヤ (demolib の `base`/`stage`)」以下で行う。デモ全体に適用済み (`data/demolib/readme.txt` / `data/README.md` に注意書き) |
+| 非全画面の入れ子レイヤの `Layer.type` ブレンド | primary→stage→bg→sp のような**非全画面の孫レイヤ**に `Layer.type` でブレンドを設定すると、多くの型 (`ltOpaque` / `ltAlpha` / `ltMultiplicative` / `ltDodge` / `ltDarken` / `ltLighten`) でそのセルが真っ黒になる (`ltAdditive` / `ltSubtractive` / `ltScreen` は正常)。上と同じ合成器系統の別 facet の可能性。**回避**: ブレンド比較はレイヤツリー合成ではなく `Layer.operateRect` (CPU 合成) を使う。`layer_basic` デモはこの方式 |
 
 ## 低優先・保留
 
