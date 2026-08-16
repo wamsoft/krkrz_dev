@@ -330,17 +330,26 @@
   設定可能な値は **'auto' (自動(推奨))**, **'0' (自動的に拡大)**,  **'64' (64MB)**,  **'128' (128MB)**,  **'256' (256MB)**,  **'512' (512MB)**,  **'1024' (1024MB)**,  **'2048' (2048MB)**のいずれかで、このオプションを指定しないと 'auto' が指定されたものと見なされます。
   
   通常 auto で問題ありませんが、初期値を調整することでメモリのフラグメンテーションを軽減し、メモリ不足エラーの問題を回避できる可能性があります。
-- **-**drawdevice** (起動時の DrawDevice 選択 / SDL3 ビルド限定)**  
-  SDL3 ビルドにおいて、起動時に使用する既定の DrawDevice を選択します。
-  WINVER ビルドでは無視されます。
+- **-**drawdevice** (起動時の DrawDevice 選択)**  
+  起動時に使用する既定の DrawDevice を選択します。選べる値はビルドによって異なります。
   
-  設定可能な値:
+  SDL3 ビルド:
   
     - **'sdl'**: SDL_Renderer 経由の [SDLDrawDevice](../reference/SDLDrawDevice.md) ( backend 自動選択 )
     - **'sdlogl'**: OpenGL ES 直接版 ( PBO 経由・Canvas 非対応の純粋版 ) ( `TVP_USE_OPENGL=ON` 時のみ )
     - **'ogl'**: OpenGL ES + Canvas / Texture / Shader / Offscreen を含むフル機能版 [OGLDrawDevice](../reference/OGLDrawDevice.md) ( `TVP_USE_OPENGL=ON` 時のみ )
   
-  指定しなかった場合、`TVP_USE_OPENGL=ON` ビルドでは `sdlogl`、それ以外では `sdl` が選択されます。未知の値を指定するとフォールバックして既定値が使用されます。
+  指定しなかった場合、`TVP_USE_OPENGL=ON` ビルドでは `sdlogl`、それ以外では `sdl` が選択されます。
+  
+  Windows ネイティブ ( WINVER ) ビルド:
+  
+    - **'basic'**: Direct3D 11 の [BasicDrawDevice](../reference/Window.BasicDrawDevice.md) ( 既定 )
+    - **'ogl'**: [OGLDrawDevice](../reference/OGLDrawDevice.md) ( `TVP_USE_OPENGL=ON` 時のみ )
+    - **'null'**: 描画を行わない NullDrawDevice ( 検証用 )
+  
+  指定しなかった場合は `basic` です。どちらのビルドでも、未知の値を指定すると警告を出して既定値へフォールバックします。
+  
+  これは**起動時の既定**の指定で、実行中に [Window.drawDevice](../reference/Window.md#drawdevice) へ代入して切り替えるのは従来どおり可能です。
 - **-**renderer** (SDL3 backend の明示指定 / SDL3 ビルド限定)**  
   SDLDrawDevice が利用する SDL_Renderer の backend 名を明示します。
   ( 例: `direct3d11`, `vulkan`, `opengl`, `software` 等 )。
