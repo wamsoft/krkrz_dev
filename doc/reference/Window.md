@@ -1305,14 +1305,19 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用
 
 オプションによっては、吉里吉里は拡大・縮小に使用可能なハードウェアを、倍率が変更されるたびに調査するため、このメソッドは拡大率を連続的に変化させて演出を行うような用途には適していません。
 
-!!! warning "ビルドによる挙動の違い"
-SDL3 / 汎用ビルドは「レイヤサイズ × 倍率」をウィンドウの内側サイズに
-します ( ウィンドウがリサイズされ、中身が拡縮されます )。
-Windows ネイティブ ( WINVER ) ビルドは倍率を描画先矩形の計算にしか
-使わないため、**ウィンドウ表示中は倍率を変えても見た目が変わりません**
-( [Window.setInnerSize](Window.md#setinnersize) で「レイヤサイズ × 倍率」を
-明示的に指定すれば、どちらのビルドでも意図どおり表示されます )。
-この差異は既知で、今後 SDL3 / 汎用ビルドの挙動へ揃える予定です。
+このメソッドは「ウィンドウの内側サイズ ( [Window.innerWidth](Window.md#innerwidth) /
+[Window.innerHeight](Window.md#innerheight) ) をレイヤサイズ × 倍率にする」という意味を持ちます。
+ウィンドウがその大きさへリサイズされ、中身が倍率どおりに拡縮されて表示されます。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドで挙動は同じです
+( WINVER 側は 2026-08-17 に揃えました。それ以前は倍率を覚えるだけで
+ウィンドウはリサイズされず、[Window.setInnerSize](Window.md#setinnersize) で
+明示的に指定する必要がありました )。
+
+!!! note "リサイズできない場合"
+ウィンドウサイズを変更できない環境 ( モバイル / コンソール等 ) や、
+OS の最小ウィンドウサイズを下回る指定では、内側サイズが指定どおりに
+ならないことがあります。その場合でもゲーム画面は
+[Window.setViewport](Window.md#setviewport) の設定に従って内側へ配置されます。
 
 **関連:** [Window.zoomNumer](Window.md#zoomnumer) / [Window.zoomDenom](Window.md#zoomdenom)
 
