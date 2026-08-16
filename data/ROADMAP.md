@@ -169,6 +169,13 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       VK 名+コード+修飾キー+履歴、マウス座標/ボタン/ホイール/ドラッグ軌跡、
       パッド軸 (System.padAxis*)。postInputEvent で demotest 注入
 - [x] timer_async — Timer/AsyncTrigger/連続ハンドラのタイミング可視化 (2026-07-20)
+- [x] pad_advanced — ゲームパッド (多パッド / 軸 / 振動) (2026-08-16)。論理番号
+      (0=最後に操作したパッド / 1..N)、getPadAxis のスティック升目 + トリガバー
+      可視化、VK_PAD* のイベント + getKeyState マトリクス、rumblePad (弱/強/両方
+      + 時間)、padEnabled、setPadOverlay、onJoypadChange。資材不要 (実パッドは要)。
+      ※ Elements パネル表示中は VK_PAD* がパネルに消費されるため、
+        Dialog.registerHotKey で全ボタンを確保してバイパスさせている
+        (パネルのチェックで ON/OFF を切り替えて挙動差を確認できる)
 - [x] layer_tree — レイヤツリー / ヒットテスト / フォーカス (2026-08-16)。
       htMask + hitThreshold の 3 帯、htProvince (領域画像をコード生成した円)、
       onHitTest による最終判定、親の visible/enabled が子の nodeVisible/

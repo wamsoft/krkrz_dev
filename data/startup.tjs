@@ -68,6 +68,7 @@ tryScene(coreBase + "perf_stats/scene.tjs",    function() { return new PerfStats
 tryScene(coreBase + "system_debug/scene.tjs",  function() { return new SystemDebugScene(); });
 tryScene(coreBase + "webui/scene.tjs",         function() { return new WebUIScene(); });
 tryScene(coreBase + "softkey_ime/scene.tjs",   function() { return new SoftkeyImeScene(); });
+tryScene(coreBase + "pad_advanced/scene.tjs",  function() { return new PadAdvancedScene(); });
 
 // 横断デモ (data/ 直下、複数プラグイン)
 tryScene("vector_demo/scene.tjs",     function() { return new VectorScene(); });
