@@ -13,6 +13,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [platformName](#platformname)
 - [osName](#osname)
 - [exePath](#exepath)
+- [resourcePath](#resourcepath)
 - [replWebURL](#replweburl)
 - [personalPath](#personalpath)
 - [appDataPath](#appdatapath)
@@ -204,6 +205,39 @@ OS 名
 吉里吉里本体が設置してあるパスを表します。パス名は統一ストレージ名で表現されます。
 
 **関連:** [System.appDataPath](System.md#appdatapath) / [System.personalPath](System.md#personalpath)
+
+---
+
+### resourcePath
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+エンジン組み込みリソースのあるパス
+
+`config.cf` / `messages.json` / 同梱フォント (`notosansjp-regular.otf` 等) といった
+エンジン組み込みリソースが置かれている場所を、末尾に `/` の付いた統一ストレージ名で
+返します。
+
+実体はプラットフォームで異なります。
+
+| プラットフォーム | 値 | 実体 |
+|---|---|---|
+| WINVER / デスクトップ SDL3 | `resource://./` | exe 埋め込み / OS リソース |
+| ブラウザ (wasm) | `file://./resource/` | 起動時に MEMFS へ preload |
+
+ブラウザビルドには `resource://` メディア自体が存在しないため、`resource://...` を
+直書きしたスクリプトは [Storages.isExistentStorage](Storages.md#isexistentstorage) の
+時点で「対応していないメディアタイプです」例外になります。同梱フォントなどを参照する
+ときは必ずこのプロパティを前置してください。
+
+```tjs
+// 同梱の日本語フォントを参照する
+var path = System.resourcePath + "notosansjp-regular.otf";
+```
+
+**関連:** [System.exePath](System.md#exepath)
 
 ---
 

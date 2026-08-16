@@ -48,20 +48,28 @@ class VectorScene extends DemoScene
 
     function tryLoadFont()
     {
-        // 同梱フォント (font/*.ttf) を優先し、無ければ本体埋め込みフォント
-        // (resource://) にフォールバックする。glyphware 統一後は本体側の
+        // 同梱フォント (font/*.ttf) を優先し、無ければ本体リソースの
+        // フォントにフォールバックする。glyphware 統一後は本体側の
         // フォント資材をそのまま layerExVector からも利用できる。
+        //
+        // リソースの実体パスはプラットフォームで違う (desktop = resource://./ 、
+        // wasm = file://./resource/)。System.resourcePath がその差を吸収するので
+        // 直書きせず必ず前置する。
+        var res = System.resourcePath;
         var cand = ["NotoSansJP-VF.ttf", "NotoSans.ttf", "font.ttf",
-                    "resource://./notosansjp-regular.otf",
-                    "resource://./roboto-regular.ttf"];
+                    res + "notosansjp-regular.otf",
+                    res + "roboto-regular.ttf"];
         for (var i = 0; i < cand.count; i++) {
-            if (Storages.isExistentStorage(cand[i])) {
+            // 想定外のパスで例外が出ても create() ごと巻き込まないよう握る
+            // (ここで抜けるとシーンが空のまま表示される)。
+            try {
+                if (!Storages.isExistentStorage(cand[i])) continue;
                 if (GdiPlus.loadFont(cand[i], "VecFont")) {
                     font = new GdiPlus.Font("VecFont", 26);
                     haveFont = true;
                     return;
                 }
-            }
+            } catch {}
         }
     }
 

@@ -685,6 +685,7 @@
       "processorNum",
       "renderStats",
       "replWebURL",
+      "resourcePath",
       "savedGamesPath",
       "screenHeight",
       "screenWidth",
