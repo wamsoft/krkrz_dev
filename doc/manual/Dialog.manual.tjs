@@ -1,6 +1,6 @@
 /**
  * Dialog クラスは、Elements ベースの汎用ダイアログを TJS から駆動するための
- * クラスです ( SDL3 ビルド限定 )。
+ * クラスです ( SDL3 / WINVER 両ビルド対応 )。
  *
  * JSON / JSONC ( コメントと末尾カンマを許容 ) 形式のレイアウト定義を渡して、
  * ボタン・チェックボックス・トグル・テキスト入力等を含むダイアログを表示
@@ -34,15 +34,25 @@
  * 非モーダルダイアログは複数同時に表示できます ( z-order 付きで重ね
  * 描画され、マウスはヒットテスト、キーボードは最前面の handler 優先で
  * フォーカスが移ります )。`grabFocus` 引数を偽にすると、フォーカスを
- * 取らない常駐 HUD として表示できます。
+ * 取らない常駐 HUD として表示できます。`showJson(json, true, false)`
+ * ( フォーカスあり非モーダル ) にするとキー / パッドでパネルを操作しつつ
+ * 未処理キーをホストへ素通しでき、ホストが必ず受けたいキーは
+ * [registerHotKey](#registerhotkey) で確保できます。
  *
  * JSON 仕様の要素タイプ ( label / button / input_box / checkbox / toggle /
- * vtile / htile / vspacer / hspacer 等 ) や属性、レイアウト密度指定
- * ( `"gap"` / top-level `"style"` ブロック ) の詳細は
+ * text_box / text_area / vtile / htile / vspacer / hspacer 等 ) や属性、
+ * レイアウト密度指定 ( `"gap"` / top-level `"style"` ブロック ) の詳細は
  * [elements_modal の README](https://github.com/wamsoft/elements/blob/develop/external/elements_modal/README.md)、
  * `"input"` ノードによるキーボード / ゲームパッド操作の設定詳細は
  * [キーボードナビゲーション仕様](https://github.com/wamsoft/elements/blob/develop/docs/keyboard-navigation.md)
  * を参照してください。
+ *
+ * 矩形へ本文を流し込むなら `text_area` を使います。折り返し・行頭行末禁則・
+ * 文字送りが [Layer.drawShapedTextArea](Layer.md#drawshapedtextarea) と同じ
+ * ロジックなので、**同じ本文・同じ幅なら改行位置が一致します**。
+ * `"count_var"` に変数名を与えると [setVar](#setvar) で文字送りが進み、
+ * 折り返しは全文で確定済みなので送ってもリフローしません
+ * ( 字幕やセリフ窓向け。従来からある `text_box` は互換のためそのまま )。
  *
  * `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では Dialog クラスは利用できません。
  * WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用できます
@@ -68,19 +78,30 @@ class Dialog {
 	 * @param grabFocus キーボードフォーカスを取得するかどうか ( 既定 true )。
 	 *
 	 * true のときはパネルがキーボードフォーカスを取得し、input_box 等への文字
-	 * 入力やウィジェットのキー操作ができます ( ただしパネルが処理するキーは
-	 * ホスト側 [Window.onKeyDown](Window.md#onkeydown) には届きません )。
+	 * 入力やウィジェットのキー / パッド操作ができます。
 	 *
 	 * false のときはフォーカスを取らず、キー入力はホスト ( Window ) へ通ります。
-	 * ゲーム側のホットキーを活かしたい常駐 HUD 的なパネルや、独自のキー操作
-	 * ( 画面切替等 ) と併用する場合に指定します。この場合パネル内の input_box 等
+	 * 表示専用の常駐 HUD 的なパネルに指定します。この場合パネル内の input_box 等
 	 * への文字入力はできません。マウス操作は grabFocus に関わらず有効です。
+	 * @param modal モーダル ( 入力独占 ) にするかどうか。省略時は後方互換で
+	 * grabFocus と同じ値になります。
+	 *
+	 * `showJson(json, true, false)` = 「非モーダル + フォーカスあり」の中間状態で、
+	 * キー / パッドはパネルへ届いてウィジェットを操作でき ( パッドの十字 = フォーカス
+	 * ナビ / A = 決定 )、パネルが処理しなかったキーだけがホスト
+	 * ( [Window.onKeyDown](Window.md#onkeydown) ) へ素通しされます。操作パネル用途は
+	 * この指定を推奨します。ホストが必ず受けたいキーは
+	 * [registerHotKey](#registerhotkey) で確保してください。
+	 *
+	 * 用途 3 態: モーダルダイアログ `showJson(json)` / 操作パネル
+	 * `showJson(json, true, false)` / 表示専用 HUD `showJson(json, false)`。
 	 * @return 表示開始に成功したら真を返します。
 	 * @see Dialog.showFile
+	 * @see Dialog.registerHotKey
 	 * @see Dialog.onAction
 	 * @see Dialog.close
 	 */
-	function showJson(json, grabFocus = true);
+	function showJson(json, grabFocus = true, modal = grabFocus);
 
 	/**
 	 * ファイルから非モーダルダイアログを表示する
@@ -89,10 +110,11 @@ class Dialog {
 	 * と同じ動作で表示します。パスは Storages 経由のパス指定が使えます。
 	 * @param path JSON / JSONC ファイルのパスを指定します。
 	 * @param grabFocus キーボードフォーカスを取得するかどうか ( 既定 true )。詳細は [showJson](#showjson) を参照。
+	 * @param modal モーダルにするかどうか ( 省略時は grabFocus に追従 )。詳細は [showJson](#showjson) を参照。
 	 * @return 表示開始に成功したら真を返します。
 	 * @see Dialog.showJson
 	 */
-	function showFile(path, grabFocus = true);
+	function showFile(path, grabFocus = true, modal = grabFocus);
 
 	/**
 	 * Dictionary で非モーダルダイアログを表示する
@@ -102,11 +124,12 @@ class Dialog {
 	 * 同じ経路で表示します ( 変換仕様は [dictToJson](#dicttojson) と同じ )。
 	 * @param dict レイアウト定義の Dictionary を指定します。
 	 * @param grabFocus キーボードフォーカスを取得するかどうか ( 既定 true )。詳細は [showJson](#showjson) を参照。
+	 * @param modal モーダルにするかどうか ( 省略時は grabFocus に追従 )。詳細は [showJson](#showjson) を参照。
 	 * @return 表示開始に成功したら真を返します。
 	 * @see Dialog.showJson
 	 * @see Dialog.dictToJson
 	 */
-	function showDict(dict, grabFocus = true);
+	function showDict(dict, grabFocus = true, modal = grabFocus);
 
 	/**
 	 * JSON 文字列でモーダルダイアログを表示する
@@ -321,6 +344,63 @@ class Dialog {
 	function registerFontDir(dir);
 
 	/**
+	 * ホストホットキーの登録
+	 *
+	 * 「ダイアログにフォーカスを渡しつつ、特定のキーだけは必ずホスト側で
+	 * 受けたい」ためのバイパス機構です。登録したキーはダイアログへ渡らず、
+	 * そのまま通常のゲーム入力経路
+	 * ( [Window.onKeyDown](Window.md#onkeydown) /
+	 * [Window.onMouseDown](Window.md#onmousedown) 等 ) へ届きます
+	 * ( 専用イベントはありません )。
+	 *
+	 * 入力の配送優先順位は次の一列です。
+	 *
+	 * 1. モーダルダイアログ ( 全入力を独占。ホットキーより優先 )
+	 * 2. ホストホットキー ( ダイアログをバイパスしてホストへ )
+	 * 3. フォーカスを持つ非モーダルパネル ( 未処理キーのみ素通し )
+	 * 4. ゲーム / レイヤ
+	 *
+	 * ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を含む
+	 * 操作パネル ( `showJson(json, true, false)` ) の表示中でも確実に効かせる
+	 * 用途を想定しています。
+	 * @param key 仮想キーコード ( VK_ESCAPE 等 )。キーのほか、パッドボタン
+	 * ( VK_PAD1 〜 VK_PAD12 等 ) とマウスボタン ( VK_LBUTTON / VK_RBUTTON /
+	 * VK_MBUTTON / VK_XBUTTON1 / VK_XBUTTON2 ) も同じ空間で指定できます。
+	 * 印字キーの登録は非推奨です ( onKeyPress の文字イベントまでは抑止
+	 * されません )。
+	 * @param shift 修飾キーの組合せ ( ssShift | ssAlt | ssCtrl、既定 0 )。
+	 * キー down は完全一致で判定し、up はキーのみの一致で対にバイパスします。
+	 * @param duringTextInput 真にすると、ダイアログ内のテキスト入力ウィジェット
+	 * ( input_box 等 ) にキャレットがある間も有効になります。既定の偽では
+	 * テキスト入力中は抑止され、ESC / BackSpace 等を入力欄から奪いません。
+	 * @return 戻り値はありません。同じ ( key, shift ) の再登録は
+	 * duringTextInput の上書きになります。
+	 * @see Dialog.unregisterHotKey
+	 * @see Dialog.clearHotKeys
+	 * @see Dialog.showJson
+	 */
+	function registerHotKey(key, shift = 0, duringTextInput = false);
+
+	/**
+	 * ホストホットキーの解除
+	 *
+	 * [registerHotKey](#registerhotkey) で登録したホットキーを解除します
+	 * ( key と shift の両方が一致するエントリを削除 )。
+	 * @param key 仮想キーコードを指定します。
+	 * @param shift 修飾キーの組合せ ( 既定 0 )。
+	 * @see Dialog.registerHotKey
+	 */
+	function unregisterHotKey(key, shift = 0);
+
+	/**
+	 * ホストホットキーの全解除
+	 *
+	 * [registerHotKey](#registerhotkey) で登録したホットキーを全て解除します。
+	 * @see Dialog.registerHotKey
+	 */
+	function clearHotKeys();
+
+	/**
 	 * デフォルトフォントファミリ
 	 *
 	 * Elements の theme に適用される label / button 等の既定フォントファミリ
@@ -391,4 +471,240 @@ class Dialog {
 	 * @kind event
 	 */
 	function onAction(id, payload);
+
+	/**
+	 * ダイアログ teardown 完了通知
+	 *
+	 * このインスタンスのダイアログが閉じ切った ( teardown 完了 ) タイミングで発火する
+	 * 非ブロッキング経路のイベントです。TJS 側で override してください。
+	 * @param action 閉じる契機となった button の id ( `close_on_click` / Esc で閉じた場合。
+	 *   [close](#close) 等で明示的に閉じた場合は空文字列 )。
+	 * @kind event
+	 */
+	function onClose(action);
+
+	/**
+	 * 実行時画像を登録する
+	 *
+	 * 統一ストレージパス path のファイルを name で実行時画像ストアへ登録します。jsonc の
+	 * image ウィジェット等からは `"mem://<name>"` で参照します。セーブサムネイル等、実行時に
+	 * 変わる画像を Elements へ渡すための仕組みです。pixmap は画面 build 時に読み直されるので、
+	 * 再登録 → 画面再オープンで表示が更新されます。
+	 * @param name ストア上の名前 ( `mem://<name>` で参照 )。
+	 * @param path 登録する画像の統一ストレージパス。
+	 * @returns 読込・登録に成功したかどうか。
+	 */
+	function registerImage(name, path);
+
+	/**
+	 * 実行時画像を削除する
+	 *
+	 * [registerImage](#registerimage) で登録した name を実行時画像ストアから削除します。
+	 * @param name 削除する画像の名前。
+	 */
+	function unregisterImage(name);
+
+	/**
+	 * 実行時画像をすべて消去する
+	 *
+	 * 実行時画像ストアを全消去します。
+	 */
+	function clearImages();
+
+	/**
+	 * 表示中ダイアログの変数を書き換える
+	 *
+	 * 表示中ダイアログの変数 store へ値を書き込みます。JSON で `"text_var": name` を指定した
+	 * label 等が次フレームで更新されます。自分のインスタンスが非アクティブなら false を返します。
+	 * @param name 変数名。
+	 * @param value 設定する値 ( 文字列 )。
+	 * @returns 書き込めたかどうか。
+	 */
+	function setVar(name, value);
+
+	/**
+	 * pad_icon のベースディレクトリを設定する
+	 *
+	 * pad_icon ( Kenney input prompts ) のベースディレクトリを設定します。dir は統一ストレージ
+	 * パス ( XP3 内でも可 )。配下に xbox/ps/switch/keyboard の各ディレクトリ + vector/*.svg がある
+	 * 構成を想定します。未設定のままだと pad_icon は灰色プレースホルダになります。
+	 * @param dir pad_icon 素材のベースディレクトリ ( 統一ストレージパス )。
+	 */
+	function setPadIconBase(dir);
+
+	/**
+	 * pad_icon の全体テーマを設定する
+	 *
+	 * pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"none"` ) を
+	 * 設定します。画面 JSON の top-level `"pad_theme"` が指定されていればそちらが優先されます。
+	 * @param name テーマ名。
+	 * @returns 名前を解釈できたかどうか。
+	 */
+	function setPadTheme(name);
+
+	/**
+	 * i18n の表示言語
+	 *
+	 * 画面 JSON の top-level `strings` ( textID → 言語別文字列 ) を引くときのキーです
+	 * ( クラス全体に効く static 相当 )。`"ja"` / `"en"` / `"tc"` / `"sc"` など、
+	 * `strings` 側で使っているキーをそのまま指定します。
+	 *
+	 * ```tjs
+	 * global.Dialog.language = "en";     // 表示中の画面もその場で切り替わる
+	 * ```
+	 *
+	 * 代入すると**表示中の全ダイアログへ即時適用**されます ( `text_id` / `text_list_id` /
+	 * `options_id` を持つ widget が再解決され、画面を開き直さずに表示が変わります )。
+	 * 以後に開く画面の既定にもなります。picker 系は選択 index を維持したまま
+	 * 表示文字列だけ差し替わります。
+	 *
+	 * 読み出すと設定済みの言語を返します。未設定なら空文字 ( = 各画面 JSON の
+	 * `lang` 指定に従う ) です。`strings` を持たない画面では何も起きません。
+	 *
+	 * @type String
+	 */
+	property language;
+
+	/**
+	 * 内蔵仮想キーボードの動作モード
+	 *
+	 * テキスト欄 ( `input_box` 等 ) に focus が入ったとき、OS のソフトウェア
+	 * キーボードの代わりに Elements 内蔵の英数キーボードを出すかどうかを
+	 * 指定します。設定できる値は次の通りです。
+	 *
+	 * | 値 | 意味 |
+	 * |---|---|
+	 * | `"auto"` | 既定。物理キーボードが接続されていないときだけ出す |
+	 * | `"always"` | 物理キーボードがあっても常に出す ( テスト用。デスクトップでも出る ) |
+	 * | `"never"` | 出さない ( OS 側に任せる )。表示中なら閉じる |
+	 *
+	 * 初期値は環境変数 `KRKRZ_FORCE_VIRTUAL_KEYBOARD=1` があれば `"always"`、
+	 * 無ければ `"auto"` です。
+	 *
+	 * 出るのは **Elements のテキスト欄に focus が入ったとき**で、ゲーム側が
+	 * 自前で描いている入力欄では出ません。押鍵は貯めずにその場で入力先へ
+	 * 流し込まれるため、入力欄がリアルタイムに更新されます。
+	 * 現バージョンでは大文字英数字のみ対応です。
+	 *
+	 * 動作を確認できるコアデモは `softkey_ime` です。
+	 *
+	 * @type String
+	 * @see Dialog.hasPhysicalKeyboard
+	 */
+	property virtualKeyboard;
+
+	/**
+	 * 物理キーボードの有無
+	 *
+	 * 物理 ( ハードウェア ) キーボードが接続されているかを返します。読み出し専用。
+	 * デスクトップでは常に真、コンソール機等では USB キーボードの接続状態に
+	 * なります。ゲーム側が独自のソフトウェアキーボードを出すかどうかの判断に
+	 * 使用します。
+	 *
+	 * @type Boolean
+	 * @see Dialog.virtualKeyboard
+	 */
+	property hasPhysicalKeyboard { getter; }
+
+	/**
+	 * フォーカス枠の表示
+	 *
+	 * フォーカス中の要素に Elements が描く汎用の枠 ( 青い角丸 ) の表示です
+	 * ( クラス全体に効く static 相当 )。既定は true。
+	 *
+	 * ```tjs
+	 * global.Dialog.focusRing = false;    // アプリ全体で消す
+	 * ```
+	 *
+	 * button / slider / dial / thumbwheel の枠がまとめて消えます。状態別の絵
+	 * ( 通常 / オーバー / 押し下げ / 無効 ) を素材として持つ画像 UI では、汎用の枠が
+	 * 絵に重なって邪魔になるので切ります。**フォーカス自体は生きている**ので、
+	 * キー/パッドのナビゲーションと hilite フレームへの切替は従来どおり動きます。
+	 *
+	 * 画面単位ではなくアプリ全体の設定です ( グローバルテーマのフラグ )。
+	 *
+	 * クラス内から触るときは `global.Dialog.focusRing` と書きます。Dialog を継承した
+	 * クラスのメソッド内で素の `Dialog` と書くと親クラス参照になり、static プロパティへの
+	 * 代入が「メンバが見つかりません」になります。
+	 *
+	 * @type Boolean
+	 */
+	property focusRing;
+
+	/**
+	 * オーバーレイの描画密度モード
+	 *
+	 * overlay の描画密度モードです ( クラス全体に効く static 相当 )。
+	 *
+	 * - 0 ( 既定 ) = auto: 最終 present サイズで直接ラスタライズ。
+	 * - >0 = authored 論理サイズ × この倍率で描き、present 時に拡縮 ( 1.0 = 原寸レンダ→拡縮表示、
+	 *   2.0 = supersampling 相当 )。
+	 *
+	 * 表示中の画面にも次フレームから反映されます ( 描画品質/負荷の比較用 )。
+	 */
+	property renderScale;
+
+	/**
+	 * オーバーレイの再ラスタライズ抑止
+	 *
+	 * true ( 既定 ) の間、変化の無いフレームはダイアログの再ラスタライズ ( CPU ) と
+	 * テクスチャ再アップロードを省略し、前回の描画結果をそのまま提示します
+	 * ( クラス全体に効く static 相当 )。アイドル中の CPU 負荷が大きく下がります。
+	 *
+	 * 入力イベント・フォーカス/ホバー変化・パーツ演出再生中・setVar の実変化・
+	 * テキスト欄キャレットの点滅・画面遷移エフェクト中などは自動的に再描画されます。
+	 * false にすると従来どおり毎フレーム再描画します ( 負荷比較・問題切り分け用 )。
+	 */
+	property renderCache;
+
+	/**
+	 * オーバーレイの部分再描画
+	 *
+	 * true ( 既定 ) の間、変化した範囲が矩形で特定できる場合は**その矩形だけ**を
+	 * 再ラスタライズしてテクスチャへ部分転送します ( クラス全体に効く static 相当 )。
+	 * 矩形が特定できるのはテキスト欄のキャレット点滅などに限られ、入力・フォーカス
+	 * 変化・パーツ演出・setVar などは従来どおり全面再描画になります。
+	 *
+	 * [Dialog.renderCache](Dialog.md#rendercache) が有効なときのみ機能します
+	 * ( 前回の描画結果が残っていることが前提 )。false にすると変化フレームは
+	 * 常に全面再描画します ( 負荷比較・問題切り分け用 )。実際に部分再描画できた
+	 * 回数は [Dialog.renderStats](Dialog.md#renderstats) の "partials" で確認できます。
+	 */
+	property partialRedraw;
+
+	/**
+	 * ラスタライズ累計回数 ( 読み取り専用 )
+	 *
+	 * 実際にラスタライズ ( 再描画 ) を行った累計回数です ( クラス全体で共通 )。
+	 * アイドル時に増えていなければ renderCache が効いています ( 検証・負荷比較用 )。
+	 */
+	property renderCount;
+
+	/**
+	 * 描画パイプラインの区間計測 ( 読み取り専用 )
+	 *
+	 * オーバーレイ描画の負荷内訳を Dictionary で返します ( クラス全体で共通の累積値 )。
+	 * 時間はすべてマイクロ秒です:
+	 * %[ "frames" => 提示フレーム数, "updates" => 状態更新回数,
+	 * "rasters" => ラスタライズ回数, "partials" => うち部分再描画だった回数,
+	 * "cachedPresents" => ラスタ省略提示回数,
+	 * "presents" => 提示回数, "totalUs" => 描画処理全体, "updateUs" => 状態更新,
+	 * "rasterUs" => CPU ラスタライズ, "acquireUs" => バッファ確保,
+	 * "uploadUs" => テクスチャ転送, "presentUs" => 提示 ]
+	 *
+	 * 累積値なので 2 回読んで差分を取り、経過実時間との比で
+	 * 「Elements が消費した時間・割合」を計算します
+	 * ( [Dialog.renderStatsReset](Dialog.md#renderstatsreset) で 0 クリア )。
+	 * 計測用のベンチ画面がコアデモ `elements_bench` にあります
+	 * ( シナリオ切替 + renderCache A/B + 500ms ごとの内訳表示 )。
+	 */
+	property renderStats;
+
+	/**
+	 * 描画計測カウンタのリセット
+	 *
+	 * [Dialog.renderStats](Dialog.md#renderstats) の累積カウンタを 0 クリアします。
+	 * 計測区間の開始時に呼びます。
+	 */
+	function renderStatsReset();
 }

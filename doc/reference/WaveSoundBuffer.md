@@ -33,6 +33,12 @@ WaveSoundBuffer クラスでは、[ループチューナ](../guide/LoopTuner.md)
 - [posZ](#posz)
 - [samplePosition](#sampleposition)
 - [useVisBuffer](#usevisbuffer)
+- [use3D](#use3d)
+- [minDistance](#mindistance)
+- [maxDistance](#maxdistance)
+- [rolloffFactor](#rollofffactor)
+- [dopplerFactor](#dopplerfactor)
+- [attenuationModel](#attenuationmodel)
 
 ### メソッド
 
@@ -47,6 +53,10 @@ WaveSoundBuffer クラスでは、[ループチューナ](../guide/LoopTuner.md)
 - [getSoundSpectrum](#getsoundspectrum)
 - [getVowel](#getvowel)
 - [setPos](#setpos)
+- [set3DPosition](#set3dposition)
+- [set3DVelocity](#set3dvelocity)
+- [set3DConeDirection](#set3dconedirection)
+- [set3DCone](#set3dcone)
 - [setGainQueryCallback](#setgainquerycallback)
 
 ### イベント
@@ -446,6 +456,87 @@ debug.message(buf.labels['start'].samplePosition);
 
 ---
 
+### use3D
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+3D 定位 ( スペーシャライザ ) の有効/無効
+
+この WaveSoundBuffer に対して miniaudio ベースの 3D 定位 ( 距離減衰・パンニング・
+ドップラー・指向性コーン ) を有効にするかどうかを表します。有効時は
+[set3DPosition](#set3dposition) 等で音源位置を与えます。
+
+---
+
+### minDistance
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+最小距離
+
+この距離以内では距離減衰しません ( 音量最大 )。
+
+**関連:** [WaveSoundBuffer.maxDistance](WaveSoundBuffer.md#maxdistance)
+
+---
+
+### maxDistance
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+最大距離
+
+この距離を超えると距離減衰が頭打ちになります。
+
+**関連:** [WaveSoundBuffer.minDistance](WaveSoundBuffer.md#mindistance)
+
+---
+
+### rolloffFactor
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+距離減衰の強さ
+
+距離減衰の強さ ( ロールオフ係数 ) です。大きいほど急激に減衰します。
+
+---
+
+### dopplerFactor
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ドップラー効果の強度
+
+ドップラー効果の強度です ( 0 で無効、1 で標準 )。
+
+**関連:** [WaveSoundBuffer.set3DVelocity](WaveSoundBuffer.md#set3dvelocity)
+
+---
+
+### attenuationModel
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+距離減衰モデル
+
+距離減衰モデルを表す整数です。0 = なし、1 = 逆二乗 ( inverse )、2 = 線形 ( linear )、
+3 = 指数 ( exponential ) に対応します。
+
+---
+
 ### open
 
 メソッド
@@ -676,6 +767,93 @@ PCM を取り出して TJS 側で計算する必要はなく、エンジンが C
 3D サウンド再生時の音源位置 ( X / Y / Z ) を一括で設定します。
 
 **関連:** [WaveSoundBuffer.posX](WaveSoundBuffer.md#posx) / [WaveSoundBuffer.posY](WaveSoundBuffer.md#posy) / [WaveSoundBuffer.posZ](WaveSoundBuffer.md#posz)
+
+---
+
+### set3DPosition
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | X 座標。 |
+| `y` | `&nbsp;` | Y 座標。 |
+| `z` | `&nbsp;` | Z 座標。 |
+
+**解説**
+
+3D 音源位置を設定する
+
+3D 定位の音源位置を設定します ( [use3D](#use3d) が有効なときに作用 )。
+
+**関連:** [WaveSoundBuffer.setPos](WaveSoundBuffer.md#setpos)
+
+---
+
+### set3DVelocity
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `vx` | `&nbsp;` | X 方向の速度。 |
+| `vy` | `&nbsp;` | Y 方向の速度。 |
+| `vz` | `&nbsp;` | Z 方向の速度。 |
+
+**解説**
+
+3D 音源の速度ベクトルを設定する
+
+ドップラー計算に使う音源の速度ベクトルを設定します。
+
+**関連:** [WaveSoundBuffer.dopplerFactor](WaveSoundBuffer.md#dopplerfactor)
+
+---
+
+### set3DConeDirection
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `dx` | `&nbsp;` | 向きの X 成分。 |
+| `dy` | `&nbsp;` | 向きの Y 成分。 |
+| `dz` | `&nbsp;` | 向きの Z 成分。 |
+
+**解説**
+
+指向性コーンの向きを設定する
+
+指向性コーン ( [set3DCone](#set3dcone) ) の向きベクトルを設定します。
+
+---
+
+### set3DCone
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `innerAngleRad` | `&nbsp;` | 内側コーンの全角 ( ラジアン )。この内側では減衰しません。 |
+| `outerAngleRad` | `&nbsp;` | 外側コーンの全角 ( ラジアン )。 |
+| `outerGain` | `&nbsp;` | 外側での減衰ゲイン ( 0.0 〜 1.0 )。 |
+
+**解説**
+
+指向性コーンを設定する
+
+音源の指向性コーンを設定します。角度はラジアンで、コーン外側では outerGain の
+ゲインまで減衰します。全方位 ( 無指向 ) にしたい場合は inner = outer = 2*PI とします。
+
+**関連:** [WaveSoundBuffer.set3DConeDirection](WaveSoundBuffer.md#set3dconedirection)
 
 ---
 

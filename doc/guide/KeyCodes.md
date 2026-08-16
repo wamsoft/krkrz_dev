@@ -139,6 +139,7 @@ VK_PAD???? はパッド(ジョイスティック)からの入力を、あたか�
  VK_PADUP          =0x1B6;
  VK_PADRIGHT       =0x1B7;
  VK_PADDOWN        =0x1B8;
+ VK_PADCENTER      =0x1B9;
  VK_PAD1           =0x1C0;
  VK_PAD2           =0x1C1;
  VK_PAD3           =0x1C2;
@@ -149,6 +150,16 @@ VK_PAD???? はパッド(ジョイスティック)からの入力を、あたか�
  VK_PAD8           =0x1C7;
  VK_PAD9           =0x1C8;
  VK_PAD10          =0x1C9;
+ VK_PAD11          =0x1CA;
+ VK_PAD12          =0x1CB;
+ VK_PAD_L_LEFT     =0x1CC;
+ VK_PAD_L_UP       =0x1CD;
+ VK_PAD_L_RIGHT    =0x1CE;
+ VK_PAD_L_DOWN     =0x1CF;
+ VK_PAD_R_LEFT     =0x1D0;
+ VK_PAD_R_UP       =0x1D1;
+ VK_PAD_R_RIGHT    =0x1D2;
+ VK_PAD_R_DOWN     =0x1D3;
  VK_PADANY         =0x1DF;
  VK_PROCESSKEY     =0xE5;
  VK_ATTN           =0xF6;

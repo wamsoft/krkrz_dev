@@ -249,10 +249,10 @@ class TransitionScene extends DemoScene
             rows += paramRowJson(ps[i]);
         }
         return
-        "{\"size\":[560,960],\"background\":[30,32,42,236],\"locale\":\"ja-JP\"," +
-         "\"align\":\"top_left\",\"margin\":18," +
+        "{\"background\":[30,32,42,236],\"locale\":\"ja-JP\"," +
+         "\"align\":\"top_right\",\"margin\":18," +
          "\"content\":{\"type\":\"margin\",\"padding\":16,\"child\":{\"type\":\"vtile\",\"children\":[" +
-           "{\"type\":\"hspacer\",\"width\":524}," +
+           "{\"type\":\"vsize\",\"height\":0,\"child\":{\"type\":\"hspacer\",\"width\":524}}," +
            "{\"type\":\"align_center\",\"child\":{\"type\":\"label\",\"text\":\"トランジション デモ\",\"size_scale\":1.9}}," +
            "{\"type\":\"vspacer\",\"height\":8}," +
            "{\"type\":\"labeled_row\",\"label\":\"種類\",\"label_width\":80,\"child\":" +

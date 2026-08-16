@@ -11,6 +11,9 @@ Window.BasicDrawDevice クラスは、このインスタンスを [Window.drawDe
 ### プロパティ
 
 - [interface](#interface)
+- [videoPresenterHost](#videopresenterhost)
+- [dialogRendererHost](#dialogrendererhost)
+- [d3d11Device](#d3d11device)
 
 ### メソッド
 
@@ -41,6 +44,48 @@ Window.BasicDrawDevice クラスのオブジェクトを構築します。
 インターフェースオブジェクトを取得
 
 プラグインなどで DrawDevice オブジェクトを利用するためにあります。
+
+---
+
+### videoPresenterHost
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+オーバーレイ動画 presenter 登録口 (ポインタ値)
+
+オーバーレイ動画側 (VideoOverlay) が、この DrawDevice の D3D11 バックバッファへ
+pull 型で合成するために読み取る `iTVPVideoPresenterHost` へのポインタ値です。
+非 0 なら presenter を登録して pull 合成に載り、0/未定義なら子ウィンドウ present に
+フォールバックします。通常はエンジン内部/プラグインが使用します。
+
+---
+
+### dialogRendererHost
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+Elements ダイアログ renderer host (ポインタ値)
+
+Elements のオーバーレイ描画アダプタを取得するための `iTVPDialogRendererHost` への
+ポインタ値です。通常はエンジン内部/プラグインが使用します。
+
+---
+
+### d3d11Device
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+ID3D11Device ポインタ (ポインタ値)
+
+HW 動画 (IMFMediaEngine) がエンジンの D3D11 デバイスへ束ねて HW デコードするために
+公開している `ID3D11Device` へのポインタ値です (VIDEO_SUPPORT + マルチスレッド保護済み)。
+WINVER (D3D11) ビルドのみ。通常はエンジン内部/プラグインが使用します。
 
 ---
 

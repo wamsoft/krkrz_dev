@@ -1,4 +1,28 @@
 {
+  "Agent": {
+    "events": [],
+    "file": "src/core/common/environ/AgentControlIntf.cpp",
+    "methods": [
+      "captureScreen",
+      "click",
+      "closeAllDialogs",
+      "closeDialog",
+      "dialogClick",
+      "dialogFocus",
+      "dialogTree",
+      "dialogs",
+      "keyDown",
+      "keyPress",
+      "keyUp",
+      "lastCapture",
+      "mouseDown",
+      "mouseMove",
+      "mouseUp",
+      "text",
+      "wheel"
+    ],
+    "properties": []
+  },
   "AsyncTrigger": {
     "events": [
       "onFire"
@@ -21,7 +45,10 @@
       "recreate"
     ],
     "properties": [
-      "interface"
+      "d3d11Device",
+      "dialogRendererHost",
+      "interface",
+      "videoPresenterHost"
     ]
   },
   "Bitmap": {
@@ -149,18 +176,28 @@
   "Dialog": {
     "events": [
       "onAction",
+      "onClose",
       "onScreen",
       "onScreenLeave"
     ],
     "file": "src/core/common/visual/elements/DialogIntf.cpp",
     "methods": [
+      "clearHotKeys",
+      "clearImages",
       "close",
       "dictToJson",
       "onAction",
+      "onClose",
       "onScreen",
       "onScreenLeave",
       "registerFont",
       "registerFontDir",
+      "registerHotKey",
+      "registerImage",
+      "renderStatsReset",
+      "setPadIconBase",
+      "setPadTheme",
+      "setVar",
       "showDict",
       "showFile",
       "showFlow",
@@ -170,11 +207,22 @@
       "showModalFile",
       "showModalJson",
       "startFlow",
-      "startFlowScreens"
+      "startFlowScreens",
+      "unregisterHotKey",
+      "unregisterImage"
     ],
     "properties": [
       "active",
-      "defaultFontFamily"
+      "defaultFontFamily",
+      "focusRing",
+      "hasPhysicalKeyboard",
+      "language",
+      "partialRedraw",
+      "renderCache",
+      "renderCount",
+      "renderScale",
+      "renderStats",
+      "virtualKeyboard"
     ]
   },
   "Font": {
@@ -186,17 +234,24 @@
       "getEscHeightY",
       "getEscWidthX",
       "getEscWidthY",
+      "getFontInfo",
       "getGlyphDrawRect",
       "getList",
       "getTextHeight",
       "getTextWidth",
       "mapPrerenderedFont",
+      "queryFonts",
+      "registerFontFile",
       "unmapPrerenderedFont"
     ],
     "properties": [
       "angle",
       "bold",
+      "colorEmojiFaceName",
+      "defaultEmojiMode",
       "defaultFaceName",
+      "emojiFaceName",
+      "emojiMode",
       "face",
       "faceIsFileName",
       "height",
@@ -245,6 +300,8 @@
       "doBoxBlur",
       "doGrayScale",
       "drawGlyph",
+      "drawShapedText",
+      "drawShapedTextArea",
       "drawText",
       "dump",
       "fillRect",
@@ -261,6 +318,7 @@
       "independProvinceImage",
       "loadImages",
       "loadProvinceImage",
+      "measureShapedText",
       "moveBefore",
       "moveBehind",
       "onBeforeFocus",
@@ -310,6 +368,7 @@
       "setProvincePixel",
       "setSize",
       "setSizeToImageSize",
+      "shapedTextCount",
       "stopTransition",
       "stretchCopy",
       "update"
@@ -399,6 +458,8 @@
     ],
     "properties": [
       "canvas",
+      "dialogRendererHost",
+      "glVideoPresenterHost",
       "interface",
       "matrix",
       "texture",
@@ -448,7 +509,9 @@
     "file": "src/core/sdl3/visual/SDLDrawDevice.cpp",
     "methods": [],
     "properties": [
+      "dialogRendererHost",
       "interface",
+      "sdlVideoPresenterHost",
       "window"
     ]
   },
@@ -469,6 +532,20 @@
     ],
     "properties": [
       "textEncoding"
+    ]
+  },
+  "SoundListener": {
+    "events": [],
+    "file": "src/core/common/sound/WaveIntf.cpp",
+    "methods": [
+      "setCone",
+      "setDirection",
+      "setPosition",
+      "setVelocity",
+      "setWorldUp"
+    ],
+    "properties": [
+      "enabled"
     ]
   },
   "Storages": {
@@ -515,6 +592,7 @@
       "requestFastCache",
       "rollbackSavedata",
       "searchCD",
+      "selectDirectory",
       "selectFile",
       "setCacheMaxSize",
       "unpinCache"
@@ -533,7 +611,9 @@
       "addFont",
       "assignMessage",
       "beginAllocTag",
+      "captureScreen",
       "clearGraphicCache",
+      "confirm",
       "createAppLock",
       "createUUID",
       "doCompact",
@@ -544,14 +624,18 @@
       "getJoypadCount",
       "getJoypadType",
       "getKeyState",
+      "getLicenseList",
+      "getLicenseText",
       "getPadAxis",
       "getSystemAllocatorInfo",
       "getTickCount",
       "hasJoypad",
       "inform",
+      "inputString",
       "nullpo",
       "readRegValue",
       "removeContinuousHandler",
+      "renderStatsReset",
       "resetMemoryPeak",
       "rumblePad",
       "setArgument",
@@ -595,12 +679,16 @@
       "padAxisRightTrigger",
       "padAxisRightX",
       "padAxisRightY",
+      "padEnabled",
       "personalPath",
       "platformName",
       "processorNum",
+      "renderStats",
+      "replWebURL",
       "savedGamesPath",
       "screenHeight",
       "screenWidth",
+      "texUploadUsePBO",
       "title",
       "touchDevice",
       "versionInformation",
@@ -706,25 +794,33 @@
   },
   "WaveSoundBuffer": {
     "events": [],
-    "file": "src/core/common/sound/WaveIntf.cpp",
+    "file": "src/core/common/sound/QueueSoundBufferImpl.cpp",
     "methods": [
       "fade",
       "freeDirectSound",
-      "getDeviceList",
+      "getSoundLevel",
+      "getSoundSpectrum",
       "getVisBuffer",
+      "getVowel",
       "onFadeCompleted",
       "onLabel",
       "onStatusChanged",
       "open",
       "play",
+      "set3DCone",
+      "set3DConeDirection",
+      "set3DPosition",
+      "set3DVelocity",
+      "setGainQueryCallback",
       "setPos",
       "stop",
       "stopFade"
     ],
     "properties": [
+      "attenuationModel",
       "bits",
       "channels",
-      "currentDevice",
+      "dopplerFactor",
       "filters",
       "flags",
       "frequency",
@@ -732,18 +828,41 @@
       "globalVolume",
       "labels",
       "looping",
+      "maxDistance",
+      "minDistance",
       "pan",
       "paused",
       "posX",
       "posY",
       "posZ",
       "position",
+      "rolloffFactor",
       "samplePosition",
       "status",
       "totalTime",
+      "use3D",
       "useVisBuffer",
       "volume",
       "volume2"
+    ]
+  },
+  "WebServer": {
+    "events": [],
+    "file": "src/core/common/utils/ReplWebIntf.cpp",
+    "methods": [
+      "broadcast",
+      "openBrowser",
+      "register",
+      "serveStatic",
+      "start",
+      "startAt",
+      "stop",
+      "unregister",
+      "unserveStatic"
+    ],
+    "properties": [
+      "active",
+      "url"
     ]
   },
   "Window": {
@@ -782,7 +901,6 @@
       "bringToFront",
       "clearViewportWallpaper",
       "close",
-      "findFullScreenCandidates",
       "getMouseVelocity",
       "getTouchPoint",
       "getTouchVelocity",
@@ -832,6 +950,7 @@
       "update"
     ],
     "properties": [
+      "GLGetProcAddress",
       "HWND",
       "borderStyle",
       "caption",

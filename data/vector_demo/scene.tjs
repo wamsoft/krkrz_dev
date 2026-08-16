@@ -48,7 +48,12 @@ class VectorScene extends DemoScene
 
     function tryLoadFont()
     {
-        var cand = ["NotoSansJP-VF.ttf", "NotoSans.ttf", "font.ttf"];
+        // 同梱フォント (font/*.ttf) を優先し、無ければ本体埋め込みフォント
+        // (resource://) にフォールバックする。glyphware 統一後は本体側の
+        // フォント資材をそのまま layerExVector からも利用できる。
+        var cand = ["NotoSansJP-VF.ttf", "NotoSans.ttf", "font.ttf",
+                    "resource://./notosansjp-regular.otf",
+                    "resource://./roboto-regular.ttf"];
         for (var i = 0; i < cand.count; i++) {
             if (Storages.isExistentStorage(cand[i])) {
                 if (GdiPlus.loadFont(cand[i], "VecFont")) {
@@ -194,7 +199,7 @@ class VectorScene extends DemoScene
             size : [320, 320], background : [28, 30, 40, 236], locale : "ja-JP",
             align : "top_right", margin : 14,
             content : %[ type : "margin", padding : 14, child : %[ type : "vtile", children : [
-                %[ type : "hspacer", width : 288 ],
+                %[ type : "vsize", height : 0, child : %[ type : "hspacer", width : 288 ] ],
                 %[ type : "align_center", child : %[ type : "label", text : "ベクタ描画設定", size_scale : 1.2 ] ],
                 %[ type : "vspacer", height : 10 ],
                 %[ type : "labeled_row", label : "線幅", label_width : 90,

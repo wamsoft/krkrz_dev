@@ -330,17 +330,26 @@
   設定可能な値は **'auto' (自動(推奨))**, **'0' (自動的に拡大)**,  **'64' (64MB)**,  **'128' (128MB)**,  **'256' (256MB)**,  **'512' (512MB)**,  **'1024' (1024MB)**,  **'2048' (2048MB)**のいずれかで、このオプションを指定しないと 'auto' が指定されたものと見なされます。
   
   通常 auto で問題ありませんが、初期値を調整することでメモリのフラグメンテーションを軽減し、メモリ不足エラーの問題を回避できる可能性があります。
-- **-**drawdevice** (起動時の DrawDevice 選択 / SDL3 ビルド限定)**  
-  SDL3 ビルドにおいて、起動時に使用する既定の DrawDevice を選択します。
-  WINVER ビルドでは無視されます。
+- **-**drawdevice** (起動時の DrawDevice 選択)**  
+  起動時に使用する既定の DrawDevice を選択します。選べる値はビルドによって異なります。
   
-  設定可能な値:
+  SDL3 ビルド:
   
     - **'sdl'**: SDL_Renderer 経由の [SDLDrawDevice](../reference/SDLDrawDevice.md) ( backend 自動選択 )
     - **'sdlogl'**: OpenGL ES 直接版 ( PBO 経由・Canvas 非対応の純粋版 ) ( `TVP_USE_OPENGL=ON` 時のみ )
     - **'ogl'**: OpenGL ES + Canvas / Texture / Shader / Offscreen を含むフル機能版 [OGLDrawDevice](../reference/OGLDrawDevice.md) ( `TVP_USE_OPENGL=ON` 時のみ )
   
-  指定しなかった場合、`TVP_USE_OPENGL=ON` ビルドでは `sdlogl`、それ以外では `sdl` が選択されます。未知の値を指定するとフォールバックして既定値が使用されます。
+  指定しなかった場合、`TVP_USE_OPENGL=ON` ビルドでは `sdlogl`、それ以外では `sdl` が選択されます。
+  
+  Windows ネイティブ ( WINVER ) ビルド:
+  
+    - **'basic'**: Direct3D 11 の [BasicDrawDevice](../reference/Window.BasicDrawDevice.md) ( 既定 )
+    - **'ogl'**: [OGLDrawDevice](../reference/OGLDrawDevice.md) ( `TVP_USE_OPENGL=ON` 時のみ )
+    - **'null'**: 描画を行わない NullDrawDevice ( 検証用 )
+  
+  指定しなかった場合は `basic` です。どちらのビルドでも、未知の値を指定すると警告を出して既定値へフォールバックします。
+  
+  これは**起動時の既定**の指定で、実行中に [Window.drawDevice](../reference/Window.md#drawdevice) へ代入して切り替えるのは従来どおり可能です。
 - **-**renderer** (SDL3 backend の明示指定 / SDL3 ビルド限定)**  
   SDLDrawDevice が利用する SDL_Renderer の backend 名を明示します。
   ( 例: `direct3d11`, `vulkan`, `opengl`, `software` 等 )。
@@ -445,19 +454,19 @@ CPU の認識トラブルが起こった場合に 'no' に設定するとその�
   REPL 稼働中は `System.inputString` / `System.confirm` / ファイル選択などのモーダルが、ネイティブダイアログではなく modal 応答チャネル ( エージェント応答 ) 待ちになります。応答が来ないまま指定秒数を過ぎると、catch 可能な例外を投げて呼び出し元へ伝播し、無限待ちを防ぎます。
   
   既定は **30** ( 秒 )。**0** を指定すると無限待ち ( 従来動作 ) になります。
-- **-**memoverlay** (メモリ状態オーバレイ表示 / SDL3 ビルド限定)**  
+- **-**memoverlay** (メモリ状態オーバレイ表示)**  
   起動時から画面右上にエンジンのメモリ状態 ( File / Bitmap / Sound / Krkrz / SDL 各アロケータの使用量とプロセス RSS / VSize 等 ) をリアルタイム表示するオーバレイを有効にします。
   
   設定可能な値は **'1' (有効)**, **'0' (無効)** のいずれかで、このオプションを指定しないと '0' が指定されたものと見なされます。
   
-  実行中の動的切替は [System.setMemoryOverlay](../reference/System.md#setmemoryoverlay) または REPL の `.memoverlay` で行えます。WINVER ビルドでは無視されます。
-- **-**padoverlay** (ゲームパッド状態オーバレイ表示 / SDL3 ビルド限定)**  
+  実行中の動的切替は [System.setMemoryOverlay](../reference/System.md#setmemoryoverlay) または REPL の `.memoverlay` で行えます。オプション自体は全ビルドで有効ですが、描画するのは OGL 系 DrawDevice ( `OGLDrawDevice` / `SDLOGLDrawDevice` ) と SDL の `SDLDrawDevice` です。 WINVER 既定の `BasicDrawDevice` (D3D11) には 描画フックが無いため表示されませんが、 **WINVER でも drawDevice を OGL 系へ 切り替えれば表示されます**。
+- **-**padoverlay** (ゲームパッド状態オーバレイ表示)**  
   起動時から画面左上にゲームパッドの 16 ボタンマトリクスと 6 軸アナログ値をリアルタイム表示するオーバレイを有効にします。
   
   設定可能な値は **'1' (有効)**, **'0' (無効)** のいずれかで、このオプションを指定しないと '0' が指定されたものと見なされます。
   
-  実行中の動的切替は [System.setPadOverlay](../reference/System.md#setpadoverlay) または REPL の `.padoverlay` で行えます。WINVER ビルドでは無視されます。
-- **-**drawstatslog** (DrawStats の周期ログ出力 / SDL3 ビルド限定)**  
+  実行中の動的切替は [System.setPadOverlay](../reference/System.md#setpadoverlay) または REPL の `.padoverlay` で行えます。オプション自体は全ビルドで有効ですが、描画するのは OGL 系 DrawDevice ( `OGLDrawDevice` / `SDLOGLDrawDevice` ) と SDL の `SDLDrawDevice` です。 WINVER 既定の `BasicDrawDevice` (D3D11) には 描画フックが無いため表示されませんが、 **WINVER でも drawDevice を OGL 系へ 切り替えれば表示されます**。
+- **-**drawstatslog** (DrawStats の周期ログ出力 / SDL3・LIB ビルド限定)**  
   `KRKRZ_DRAW_STATS=ON` ビルドかつ MemoryOverlay 表示中、500ms ごとに DrawThreadPool 利用統計をログに出力します ( 実機などで画面表示が速く流れて読めない場合に利用 )。
   
   設定可能な値は **'1' (有効)**, **'0' (無効)** のいずれかで、このオプションを指定しないと '0' が指定されたものと見なされます。実行中の動的切替は [System.setDrawStatsLog](../reference/System.md#setdrawstatslog) からも行えます。

@@ -28,4 +28,23 @@ class SDLDrawDevice {
 	 * この DrawDevice をセットしている Window オブジェクトを返します。
 	 */
 	property window { getter; }
+
+	/**
+	 * オーバーレイ動画 presenter 登録口 (ポインタ値)
+	 *
+	 * オーバーレイ動画側がこの DrawDevice へ pull 型で合成するために読み取る presenter host
+	 * へのポインタ値です (WINVER の [videoPresenterHost](Window.BasicDrawDevice.md#videopresenterhost) と同じ規約)。
+	 * 通常はエンジン内部/プラグインが使用します。
+	 * @kind property
+	 */
+	property sdlVideoPresenterHost { getter; }
+
+	/**
+	 * Elements ダイアログ renderer host (ポインタ値)
+	 *
+	 * Elements のオーバーレイ描画アダプタを取得するための host へのポインタ値です。
+	 * 通常はエンジン内部/プラグインが使用します。
+	 * @kind property
+	 */
+	property dialogRendererHost { getter; }
 }

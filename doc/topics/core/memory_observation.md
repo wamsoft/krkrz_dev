@@ -54,7 +54,7 @@
 
 | オプション | 機能 |
 |---|---|
-| `-memoverlay=1` | 起動時から画面右上にメモリ状態をオーバレイ表示 ( SDL3 ビルド限定 ) |
+| `-memoverlay=1` | 起動時から画面右上にメモリ状態をオーバレイ表示 ( 描画は OGL 系 / SDL の DrawDevice。WINVER 既定の D3D11 では表示されない ) |
 | `-memstatinterval=N` | N 秒ごとにメモリ統計をログ出力 |
 | `-memstatonexit=1` | 終了時にメモリ統計を 1 回ログ出力 |
 | `-cachelistonexit=<mode>` | 終了時に Storages cache 一覧をダンプ ( `1`/`all`/`file`/`image`/`0`/`none` ) |

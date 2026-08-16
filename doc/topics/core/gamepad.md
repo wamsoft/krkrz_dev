@@ -36,6 +36,18 @@ function onKeyDown(key, shift) {
 十字キー・左右スティック方向は 8 方向に量子化され、上記の方向キーとして届きます
 (生のスティック値が必要なときは次節)。
 
+### Elements ダイアログとの関係
+
+[Dialog](../../reference/Dialog.md) のパネルがキーボードフォーカスを持っていると、
+`VK_PAD*` はパネルのウィジェット操作 (十字 = フォーカスナビ / A = 決定 / B =
+cancel) に消費されます。「このパッドボタンだけは必ずゲーム側で受けたい」場合は
+[Dialog.registerHotKey](../../reference/Dialog.md#registerhotkey) で登録すると、
+ダイアログをバイパスして `Window.onKeyDown` へ直行します (入力の配送優先順位は
+[Dialog ガイド](../../guide/Dialog.md) を参照)。
+
+コアデモ `pad_advanced` にはこの確保を ON/OFF するチェックがあり、同じボタンが
+「ゲームに届く」「パネルに吸われる」と切り替わる様子をその場で比較できます。
+
 ## アナログ軸
 
 スティックの傾き・トリガの押し込み量は `System.getPadAxis(no, axisId)` で取得します。
@@ -50,6 +62,12 @@ var t = System.getPadAxis(0, System.padAxisLeftTrigger); //  0.0 〜 +1.0
 / `padAxisLeftTrigger` / `padAxisRightTrigger` の 6 種。TJS グローバル定数
 `paLeftX` … `paRightTrigger` でも同じ値を指定できます。デッドゾーンは適用されない
 ので、必要に応じて呼び出し側で処理してください。
+
+!!! tip "無操作でも 0 にはならない"
+    デッドゾーン未適用のため、スティックに触れていなくても実測で ±0.05 程度の
+    値が返ります。「触っていないのにキャラが動く」を避けるには、呼び出し側で
+    小さい値を切り捨てる処理を入れてください。挙動はコアデモ `pad_advanced`
+    (スティック升目 + 生値表示) で確認できます。
 
 ## 接続の検知 / 振動
 

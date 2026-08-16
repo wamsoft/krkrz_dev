@@ -97,6 +97,10 @@ Layer クラスは、**レイヤ**を管理するためのクラスです。
 - [colorRect](#colorrect)
 - [drawText](#drawtext)
 - [drawGlyph](#drawglyph)
+- [drawShapedText](#drawshapedtext)
+- [drawShapedTextArea](#drawshapedtextarea)
+- [measureShapedText](#measureshapedtext)
+- [shapedTextCount](#shapedtextcount)
 - [copyRect](#copyrect)
 - [copy9Patch](#copy9patch)
 - [piledCopy](#piledcopy)
@@ -195,6 +199,12 @@ Layer クラスは非表示の状態で構築されます。
 
 異なるウィンドウや異なるプライマリレイヤに所属するレイヤの子になったり、自分自身や自分の子孫の
 子になることはできません。
+
+レイヤを invalidate で無効化した場合、子レイヤは自動的には無効化されず、
+親から切り離された ( 親を持たない ) 有効なレイヤとして残ります。切り離された
+レイヤは画面には表示されませんが、描画メソッド等は例外を出さずに動作するため、
+古い参照へ描画してしまっても気づきにくい点に注意してください。サブツリー
+ごと破棄したい場合は、子レイヤを ( 再帰的に ) 個別に invalidate してください。
 
 ---
 
@@ -1418,7 +1428,7 @@ falseを設定すると判定が行われます。
 このメソッドはレイヤの画像サイズは変更しますが、画像サイズがレイヤの表示サイズより小さかった場合を
 除いて、レイヤの表示サイズは変更しません。
 
-戻り値としてタグ情報(その画像のレイヤタイプや表示位置など、画像そのものに対する情報)の辞書配列が返ります。KAG の「タグ」の意味と混同しないように注意してください。
+戻り値としてタグ情報(その画像のレイヤタイプや表示位置など、画像そのものに対する情報)の辞書配列が返ります。
 
 画像がタグ情報を持たない場合は null が返ります。
 
@@ -1949,6 +1959,139 @@ dfOpaque (またはdfMain) を指定した場合、描画先のマスクが破�
 
 ---
 
+### drawShapedText
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 描画するベースライン原点の x 座標をピクセル単位で指定します。 |
+| `y` | `&nbsp;` | 描画するベースライン原点の y 座標をピクセル単位で指定します。 |
+| `text` | `&nbsp;` | 描画する文字列を指定します。 |
+| `color` | `&nbsp;` | 描画する文字の色を 0xAARRGGBB 形式で指定します ( 上位 8bit のα省略 = 不透明 )。 |
+| `font` | `void` | 描画属性をまとめて指定します。以下のいずれかです。<br>+ [Font](Font.md) オブジェクト … face ( フォント指定 )・height ( サイズ px )・<br>bold・italic・underline・strikeout・angle ( 1/10 度単位・反時計回り。カラー絵文字は<br>変換非対応のため直立のまま ) を使用します<br>+ 文字列 … 自レイヤの font の face のみ差し替えて使用します<br>+ void ( 省略 ) … 自レイヤの [Layer.font](Layer.md#font) をそのまま使用します<br>face ( フォント指定 ) は data/fonts.json で宣言したフォント名・ストレージパス・<br>( WINVER の ) インストール済みシステムフォント名のいずれかで、カンマ区切りで複数指定すると<br>フォールバック連鎖になります ( コードポイント毎に最初に収録する face を使用。例:<br>"メイリオ,Segoe UI Emoji" )。 |
+| `base` | `0` | 基本方向を指定します。0 = 自動判定 / 1 = 左横書き ( LTR ) / 2 = 右横書き ( RTL )。 |
+| `count` | `-1` | 0 以上を指定すると、論理順 ( 読み順 ) で先頭 count 「文字」だけを描画します<br>( タイプライタ表示用 )。「文字」は描画時に一塊として扱われるクラスタ単位で、<br>[Layer.shapedTextCount](Layer.md#shapedtextcount) と同じ数え方です ( 合字・結合文字・<br>絵文字 ZWJ シーケンスで 1 )。全文をシェイピングしてから先頭部分だけを描くため、<br>表示途中でもアラビア語の文脈字形などは変化しません。省略時 ( -1 ) は全体を描画します。 |
+
+**戻り値**
+
+描画した部分の前進幅 ( ピクセル ) を返します。失敗時は -1 を返します。
+
+**解説**
+
+文字描画 ( シェイピング / 統一フォントエンジン )
+
+統一フォントエンジン glyphware ( FreeType + HarfBuzz ) を用いて、メインイメージの
+ベースライン原点 (x, y) にテキストを描画します。[Layer.drawText](Layer.md#drawtext)
+とは独立した描画経路で、**BiDi ( 双方向テキスト )・複雑スクリプトのシェイピング・
+フォントフォールバック** に対応します ( アラビア語・ヘブライ語等 )。戻り値は
+描画した部分の前進幅 ( ピクセル ) です。
+
+**注意:** これは段階移行用に既存 drawText と並存する新経路です。既存 drawText の
+挙動 ( 1 コードポイントずつの cell-stepping ) を glyphware に切り替えたい場合は
+[Font.rasterizer](Font.md#rasterizer) を用います ( そちらはシェイピングしません )。
+
+---
+
+### drawShapedTextArea
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 矩形の左端をピクセル単位で指定します。 |
+| `y` | `&nbsp;` | 矩形の上端をピクセル単位で指定します。 |
+| `width` | `&nbsp;` | 矩形の幅をピクセル単位で指定します。 |
+| `height` | `&nbsp;` | 矩形の高さをピクセル単位で指定します。 |
+| `text` | `&nbsp;` | 描画する文字列を指定します。 |
+| `color` | `&nbsp;` | 描画する文字の色を 0xAARRGGBB 形式で指定します ( 上位 8bit のα省略 = 不透明 )。 |
+| `font` | `void` | 描画属性をまとめて指定します ( [Layer.drawShapedText](Layer.md#drawshapedtext) と同じ )。 |
+| `base` | `0` | 基本方向を指定します ( 0 = 自動 / 1 = LTR / 2 = RTL )。 |
+| `count` | `-1` | 0 以上を指定すると、全体を通して先頭 count 「文字」( クラスタ ) だけを<br>描画します ( タイプライタ表示用 )。折り返し位置は全文で確定してから描画するため、<br>表示途中に行の組み替え ( リフロー ) は起こりません。省略時 ( -1 ) は全体を描画します。 |
+| `lineSpacing` | `0` | 行間に追加するピクセル数を指定します ( 負値も可 )。 |
+| `align` | `0` | 行揃えを指定します。0 = 左揃え / 1 = 中央揃え / 2 = 右揃え。 |
+
+**戻り値**
+
+描画結果の Dictionary を返します ( 失敗時は void ):
+%[ "height" => 消費した高さ ( px ), "lines" => 描画した行数,
+"count" => 実際に描画したクラスタ数 ]
+
+**解説**
+
+矩形内文字描画 ( シェイピング / 簡易折り返し )
+
+統一フォントエンジン glyphware を用いて、矩形 (x, y, width, height) の内側に
+簡易折り返し付きでテキストを描画します。\n ( \r\n / \r ) は明示改行として扱い、
+空白で区切られる言語 ( 英語等 ) はワード単位、日本語等の CJK は文字単位で
+折り返します ( 行頭・行末の簡易禁則処理付き )。矩形の下端を超える行は描画されず、
+描画は矩形内にクリップされます。font の angle は無視されます。
+
+---
+
+### measureShapedText
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `text` | `&nbsp;` | 計測する文字列を指定します。 |
+| `font` | `void` | 描画属性をまとめて指定します ( [Layer.drawShapedText](Layer.md#drawshapedtext) と同じ )。 |
+| `base` | `0` | 基本方向を指定します ( 0 = 自動 / 1 = LTR / 2 = RTL )。 |
+
+**戻り値**
+
+計測結果の Dictionary を返します ( 失敗時は void )。すべてベースライン原点 (0,0)
+基準のピクセル値です:
+%[ "width" => 前進幅, "left" => インク左, "top" => インク上 ( 負 = ベースラインより上 ),
+"right" => インク右, "bottom" => インク下, "ascent" => アセント, "descent" => ディセント,
+"count" => 描画クラスタ数 ( [Layer.shapedTextCount](Layer.md#shapedtextcount) と同じ ) ]
+
+**解説**
+
+文字列計測 ( シェイピング / 統一フォントエンジン )
+
+統一フォントエンジン glyphware でテキストを計測し、結果を Dictionary で返します。
+描画は行いません。[Layer.drawShapedText](Layer.md#drawshapedtext) と同じ
+フォント指定・シェイピングで計測します。
+
+---
+
+### shapedTextCount
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `text` | `&nbsp;` | 数える文字列を指定します。 |
+| `font` | `void` | 描画属性をまとめて指定します ( [Layer.drawShapedText](Layer.md#drawshapedtext) と同じ。<br>合字の有無などフォントによってクラスタ数が変わることがあります )。 |
+| `base` | `0` | 基本方向を指定します ( 0 = 自動 / 1 = LTR / 2 = RTL )。 |
+
+**戻り値**
+
+クラスタ数を返します。失敗時は -1 を返します。
+
+**解説**
+
+描画文字数 ( クラスタ数 ) の取得
+
+テキストの「描画時に一塊として扱われる文字数 ( クラスタ数 )」を返します。
+[Layer.drawShapedText](Layer.md#drawshapedtext) /
+[Layer.drawShapedTextArea](Layer.md#drawshapedtextarea) の count 引数が制限する
+単位と同じです。合字・基底文字 + 結合文字・絵文字 ZWJ シーケンスがそれぞれ
+1 と数えられるため、コードポイント数 ( 文字列の length ) とは一致しないことが
+あります。改行文字は行を分割し、それ自身は数えられません。
+
+---
+
 ### copyRect
 
 メソッド
@@ -2069,6 +2212,14 @@ dfOpaque (またはdfMain) を指定した場合、描画先のマスクが破�
 演算先の ( メソッドを実行する ) レイヤや演算元のレイヤの [Layer.face](Layer.md#face) プロパティの値
 は無視されます。
 
+演算先レイヤの [Layer.holdAlpha](Layer.md#holdalpha) プロパティが偽の場合、
+演算系の合成 ( omAdditive / omSubtractive / omMultiplicative / omDodge /
+omDarken / omLighten / omScreen および omPs 系 ) は演算先のマスク ( アルファ )
+情報を保護せず、結果のマスクはモードごとに異なる不定値になります
+( 例 : 乗算・覆い焼き・比較系では 0、スクリーンでは 255 )。ltAlpha の
+レイヤへ演算合成するなどマスクを保持したい場合は、holdAlpha を真にして
+ください。
+
 mode に omAuto を指定した場合は、演算元レイヤの[Layer.type](Layer.md#type)プロパティに従って演算の種類が自動的に決定されます。
 
 ---
@@ -2141,6 +2292,8 @@ dfOpaque (または dfMain) の場合は、[Layer.holdAlpha](Layer.md#holdalpha)
 
 指定された重ね合わせ元レイヤの矩形を、重ね合わせ先 ( メソッドを実行するレイヤ ) の矩形に
 演算合成します。重ね合わせ元矩形と重ね合わせ先矩形のサイズが異なる場合は拡大または縮小が行われます。
+
+[Layer.holdAlpha](Layer.md#holdalpha) プロパティが偽の場合に演算系合成が重ね合わせ先のマスク ( アルファ ) 情報を保護しない点は [Layer.operateRect](Layer.md#operaterect) を参照してください。
 
 mode に omAuto を指定した場合は、演算元レイヤの[Layer.type](Layer.md#type)プロパティに従って演算の種類が自動的に決定されます。
 
@@ -2232,6 +2385,8 @@ dfOpaque (または dfMain) の場合は、[Layer.holdAlpha](Layer.md#holdalpha)
 アフィン変換を行いながら演算合成します。
 
 アフィン変換については [Layer.affineCopy](Layer.md#affinecopy) も参照してください。
+
+[Layer.holdAlpha](Layer.md#holdalpha) プロパティが偽の場合に演算系合成が重ね合わせ先のマスク ( アルファ ) 情報を保護しない点は [Layer.operateRect](Layer.md#operaterect) を参照してください。
 
 mode に omAuto を指定した場合は、演算元レイヤの[Layer.type](Layer.md#type)プロパティに従って演算の種類が自動的に決定されます。
 

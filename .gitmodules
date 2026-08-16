@@ -184,3 +184,6 @@
 [submodule "src/plugins/krkreffekseer"]
 	path = src/plugins/krkreffekseer
 	url = https://github.com/wamsoft/krkreffekseer.git
+[submodule "src/plugins/krkrthreepp"]
+	path = src/plugins/krkrthreepp
+	url = https://github.com/wamsoft/krkrthreepp.git

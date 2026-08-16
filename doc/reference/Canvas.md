@@ -531,7 +531,7 @@ defaultShaderで描画されます。
 (透明クリア済み) に捕捉する。ネスト可。閉じ忘れはフレーム終端で破棄され
 警告ログが出る。
 コマンド仕様や内部構造の詳細は
-[Canvas ポストエフェクト / クリッピング](../topics/core/canvas_effect.md) を参照。
+[3D グラフィックシステム](../guide/Graphic3DSystem.md) を参照。
 
 **関連:** [Canvas.endEffect](Canvas.md#endeffect)
 
@@ -560,7 +560,7 @@ LUT 系 ( gamma / adjustGamma / light / lut )、
 混合系 ( grayscale / colorize / modulate / noise / generateWhiteNoise /
 overcolor )、近傍系 ( boxBlur / gaussianBlur )。
 各コマンドのパラメータと融合規則は
-[Canvas ポストエフェクト / クリッピング](../topics/core/canvas_effect.md) を参照。
+[3D グラフィックシステム](../guide/Graphic3DSystem.md) を参照。
 
 **関連:** [Canvas.beginEffect](Canvas.md#begineffect)
 

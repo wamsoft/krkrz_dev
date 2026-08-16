@@ -38,6 +38,9 @@ Font クラスは、**フォント**を管理するためのクラスです。
 - [mapPrerenderedFont](#mapprerenderedfont)
 - [unmapPrerenderedFont](#unmapprerenderedfont)
 - [addFont](#addfont)
+- [registerFontFile](#registerfontfile)
+- [queryFonts](#queryfonts)
+- [getFontInfo](#getfontinfo)
 
 ---
 
@@ -163,15 +166,27 @@ Layerメンバのfontは、引数にLayerを渡す特殊版。
 
 文字列描画方式
 
-文字列描画方式を表します。値を設定することもできます。
+[Layer.drawText](Layer.md#drawtext) で使用するラスタライザ ( 文字列描画方式 ) を
+表します。値を設定することもできます。
 
-値は以下のどちらかを指定します。
+値は整数のインデックスで、利用可能な値と番号は**ビルドによって異なります**:
 
-`**frGDI**      ` : GDI を使って文字を描画します
+`**0**` : FreeType ラスタライザ ( 全ビルド。SDL / 汎用ビルドの既定 )
 
-`**frFreeType** ` : FreeType を使って文字を描画します
+`**1**` ( WINVER のみ ) : GDI ラスタライザ ( WINVER の既定 )。SDL / 汎用ビルドでは
+この番号が glyphware になります。
 
-FreeType を指定した場合、横書きにのみ対応しています。その他は未対応です。
+`**2**` ( WINVER ) / `**1**` ( 非 WINVER ) : glyphware ( 統一フォントエンジン。
+FreeType + HarfBuzz )。GDI 既定を変えず、選択時のみ drawText のグリフ生成が glyphware
+経由になります ( 埋め込みビットマップではなくアウトライン描画・カラー絵文字対応 )。
+なお drawText 経路は 1 コードポイントずつの cell-stepping で**シェイピングは行いません**
+( BiDi / 複雑スクリプトのシェイピングが必要な場合は
+[Layer.drawShapedText](Layer.md#drawshapedtext) を用います )。
+
+FreeType / glyphware を指定した場合、横書きにのみ対応しています。その他は未対応です。
+
+利用可能な番号は [System.buildVariantName](System.md#buildvariantname) で判定するか、
+番号を設定してから読み戻して ( 設定が反映されない = 未対応 ) 検出できます。
 
 このプロパティはスタティックです。Font.rasterizer を用いて値を設定してください。
 
@@ -563,5 +578,101 @@ face 名をファイル名として扱うかどうか
 **解説**
 
 フォントシステムにフォントを追加する。
+
+---
+
+### registerFontFile
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `storage` | `&nbsp;` | フォントファイル名 |
+| `family` | `&nbsp;` | 登録するフォント名 ( 省略時は即時ロード ) |
+
+**戻り値**
+
+family 省略時は収録フェイス名の配列、指定時は void
+
+**解説**
+
+フォントを登録する (遅延登録対応版)。
+
+`family` を省略すると `addFont` と同様にフォントファイルを即座に読み込み、
+収録フェイス名の配列を返します。
+
+`family` を指定すると **ファイルを開かずに名前だけを登録**します
+( `fonts.json` の 1 エントリ相当の遅延登録 )。実ファイルは
+その名前が初めて使用されたときに読み込まれます。大きなフォントを
+起動時間に影響させずに登録したい場合に使用します。
+
+---
+
+### queryFonts
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `query` | `&nbsp;` | 検索条件の辞書 ( 省略可 ) |
+
+**戻り値**
+
+該当フォント情報 ( 辞書 ) の配列
+
+**解説**
+
+登録済みフォントをリッチ検索する。
+
+`fonts.json` 宣言・`addFont`/`registerFontFile` による実行時登録の
+フォントから、条件に合う face をランク順 ( 一致度の高い順 ) で返します。
+検索条件はすべて省略可能で、省略した項目は制約しません。
+引数自体を省略すると全登録フォントを返します。
+
++ `name` : フォント名 ( family / 別名 / fullName / PostScript 名 )
++ `weight` : ウェイト ( 100〜900、400=Regular / 700=Bold )
++ `slant` : 0=normal, 1=italic, 2=oblique
++ `italic` : 真ならイタリック ( slant の簡易指定 )
++ `script` : ISO-15924 スクリプトタグ ( 例 "Jpan" "Hans" "Zsye" )
++ `containsText` : この文字列の全コードポイントを収録していること
++ `monospace` : 等幅かどうか
++ `color` : カラー絵文字フォントかどうか
+
+返る配列の各要素は `getFontInfo` と同じ形式の辞書です。
+
+---
+
+### getFontInfo
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `nameOrPath` | `&nbsp;` | フォント名またはストレージパス |
+
+**戻り値**
+
+メタデータ辞書 ( 解決できなければ void )
+
+**解説**
+
+フォントのメタデータを取得する。
+
+フォント名 ( 宣言名・SFNT 実名 ) またはストレージパスを解決し、
+SFNT メタデータの辞書を返します。解決できない場合は void を返します。
+
+辞書のメンバ:
++ `key` : フォントキー ( ストレージパス等 )
++ `faceIndex` : TTC 内の face 番号
++ `family` / `subfamily` / `fullName` / `postScriptName` : 名前情報
++ `weight` : 100〜900
++ `slant` : 0=normal, 1=italic, 2=oblique
++ `bold` / `color` / `monospace` / `scalable` : 属性 ( 0/1 )
 
 ---
