@@ -201,6 +201,13 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
 - [ ] video — VideoOverlay: layer / overlay モード、シーク、ループ
 - [ ] storage — Storages / autoPath / アーカイブ / BinaryStream / セーブデータ
       (Web では IDBFS 永続化の確認を兼ねる)
+- [x] webui — ブラウザ UI (WebServer) (2026-08-16)。内蔵 HTTP + SSE サーバで
+      ブラウザ側にツール UI を置く最小構成。静的配信 (serveStatic で同梱
+      web/index.html)、動的エンドポイント (GET /api/state / POST /api/message /
+      /api/color / /api/bump?by=N)、ゲーム → ブラウザ push (broadcast + SSE)。
+      -replweb 稼働中は相乗り、単体なら 8900 で start。資材不要 (HTML 自作)。
+      ※ マルチバイトの値は body で受ける (System.urldecode は Windows 拡張)
+      ※ TJS の文字取り出しは s[i]。s[i,1] はカンマ式になり常に s[1] を返す
 - [ ] ui_flow — Elements 画面遷移 (screens / navigator): 現 flowdemo.jsonc +
       menu/*.json を整理してタイトル→設定→ダイアログの一連フローに
 - [x] system_debug — デバッグ支援 (2026-08-16)。Scripts.eval + Debug.prettyPrint

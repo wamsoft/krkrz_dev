@@ -55,7 +55,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 `sound` / `sound_3d` / `video` / `storage` / `ui_flow` /
 `data_parse` / `net_demo` / `movie_alpha` / `archive_demo` / `richtext_demo` の 10 本
 (多くは資材待ち。資材一覧は [data/DEMO-ASSETS.md](data/DEMO-ASSETS.md))。
-資材不要の残りは `softkey_ime` / `pad_advanced` / `webui`。
+資材不要の残りは `softkey_ime` / `pad_advanced`。
 ほかに doc へのデモ一覧ページ新設、krkrz_web のランチャ起動トークン (スラッシュ入り)
 対応、wasm 再ビルド (別リポ作業・未実施)。
 

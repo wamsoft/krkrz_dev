@@ -66,6 +66,7 @@ tryScene(coreBase + "elements_gallery/scene.tjs", function() { return new Elemen
 tryScene(coreBase + "elements_flow/scene.tjs", function() { return new ElementsFlowScene(); });
 tryScene(coreBase + "perf_stats/scene.tjs",    function() { return new PerfStatsScene(); });
 tryScene(coreBase + "system_debug/scene.tjs",  function() { return new SystemDebugScene(); });
+tryScene(coreBase + "webui/scene.tjs",         function() { return new WebUIScene(); });
 
 // 横断デモ (data/ 直下、複数プラグイン)
 tryScene("vector_demo/scene.tjs",     function() { return new VectorScene(); });
