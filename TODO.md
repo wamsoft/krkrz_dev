@@ -5,6 +5,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 領域 | 詳細 SSOT |
 |---|---|
+| 画面転送コスト (計測・読み方) | [src/core/doc/ScreenTransfer.md](src/core/doc/ScreenTransfer.md) |
 | Elements (レイアウト/ダイアログ) の要修正 | [TODO-elements.md](TODO-elements.md) |
 | デモ整備 | [data/ROADMAP.md](data/ROADMAP.md) |
 | WINVER モダン化 | [src/core/doc/ModernizationRoadmap.md](src/core/doc/ModernizationRoadmap.md) |
