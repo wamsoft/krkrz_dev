@@ -88,7 +88,7 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
       `shapedTextCount` + count 制限の**自動再生タイプライタ** (RTL 混在文が
       論理順で 1 クラスタずつ現れる) を追加。実機キャプチャ検証済。
       ※ doc 埋め込み wasm デモ (doc/_assets/demo) への反映は krkrz_web
-      再ビルドが必要 (別リポ作業、未実施)。
+      再ビルドが必要 (別リポ作業)。**2026-08-16 に再ビルド・再ステージング済**。
 - [x] **elements_bench (Elements 負荷計測) 追加** (2026-08-12)。
       `Dialog.renderStats` (描画パイプラインの区間計測: update/raster/
       acquire/upload/present の累積時間+回数) を新設し、更新パターン別
@@ -97,7 +97,10 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
       (`src/core/data/elements_bench/`)。NX 実測・部分再描画の before/after
       確認用。実測で Windows SDL は再ラスタ時の upload (テクスチャ転送) が
       サイズ非依存 ~10ms 級で支配的と判明 (ElementsDialog.md に記録)。
-- [ ] doc/ にデモ一覧ページ (topics/samples.md 等) 新設、以後デモ追加ごとに更新
+- [x] doc/ にデモ一覧ページ新設 (2026-08-16)。`doc/demos.md` = ブラウザ実行 (wasm)
+      埋め込み + デモ一覧。mkdocs nav に登録済。以後デモ追加ごとに更新すること
+      (デモを増やしたら krkrz_web の再ビルド → `tools/stage_docs.py` で
+      `doc/_assets/demo` を差し替え)
 - [ ] krkrz_web: ランチャの起動トークンが `core/<demo>` 形式 (スラッシュ入り) に
       なったため、pre.js の ?sample= 対応を krkrz_web 側で確認 (別リポ作業)
 

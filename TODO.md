@@ -21,7 +21,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
-| 中 | リリースのバージョン運用を確定する | 番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。残りは **タグ運用の確定**: core (krkrz.git) に `v2.0.0`、umbrella にも同名タグ、core 無変更でプラグインだけ更新する再パッケージは `v2.0.0-2` 等のサフィックス、という案で検討中。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する想定 |
+| 中 | リリースのバージョン運用を確定する | 番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する |
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
@@ -57,8 +57,10 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 `data_parse` / `net_demo` / `movie_alpha` / `archive_demo` / `richtext_demo` の 10 本
 (多くは資材待ち。資材一覧は [data/DEMO-ASSETS.md](data/DEMO-ASSETS.md))。
 資材不要のデモは全て実装済み (残りは資材待ち)。
-ほかに doc へのデモ一覧ページ新設、krkrz_web のランチャ起動トークン (スラッシュ入り)
-対応、wasm 再ビルド (別リポ作業・未実施)。
+ほかに krkrz_web のランチャ起動トークン (スラッシュ入り) 対応が残っている。
+doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビルド・再ステージングは
+✅ 2026-08-16 に完了 (デモを増やしたら krkrz_web を再ビルドして
+`tools/stage_docs.py` で `doc/_assets/demo` を差し替えること)。
 
 ---
 
