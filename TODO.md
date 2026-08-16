@@ -9,6 +9,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 画面転送コスト (計測・読み方) | [src/core/doc/ScreenTransfer.md](src/core/doc/ScreenTransfer.md) |
 | Elements (レイアウト/ダイアログ) の要修正 | [TODO-elements.md](TODO-elements.md) |
 | デモ整備 | [data/ROADMAP.md](data/ROADMAP.md) |
+| Window のサイズ/位置/ズーム/ビューポート仕様 | [src/core/doc/WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | WINVER モダン化 | [src/core/doc/ModernizationRoadmap.md](src/core/doc/ModernizationRoadmap.md) |
 | 動画 (Media Foundation 移行) | [src/core/doc/MovieMFMigration.md](src/core/doc/MovieMFMigration.md) |
 | リファレンスとコードの差分 | [doc/_missing.md](doc/_missing.md) (生成物。現在 0 件) |
@@ -24,10 +25,14 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 中 | リリースのバージョン運用を確定する | 番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する |
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
+| 中 | Window ジオメトリ仕様の統一 **P1** (DestRect を viewport 共通計算へ + viewport API 全バリアント公開 + WINVER 入力座標の DestRect オフセット対応) | 方針確定済。SSOT = [WindowGeometry.md](src/core/doc/WindowGeometry.md)。既定値は fit=`contain` / align=中央 / DPI は inner の物理サイズ維持。**P1 は等価変換なので挙動不変** |
+| 中 | 同 **P2** (WINVER `setZoom` を `SetInnerSize(layer×zoom)` 方式へ + 既定 align を中央へ) | 旧 WIN の「`inner == layer×zoom`」不変条件をエンジン側で保証する形にする。同梱スクリプトへの影響は KAG3 `YesNoDialog` の同値再設定のみ。**P1 の入力座標修正が前提** |
+| 中 | 同 **P3** (基準面を inner へ統一) | SDL の `innerWidth` 実値化 / WINVER の min/max を inner 基準へ / WINVER `borderStyle` 変更を inner 維持へ / SDL `displayDensity` の `96` 固定を実 DPI へ / WINVER `SetClientSize` を `AdjustWindowRectExForDpi` へ / `frameWidth`・`frameHeight` 追加。同梱スクリプトでの `setMinSize`/`setMaxSize`/`setSize` 使用は 0 件 |
+| 中 | 同 **P4** (DPI ポリシー = inner の物理ピクセルサイズ維持) | WINVER の `WM_DPICHANGED` を「client 物理サイズ維持 + 位置だけ提案矩形へ」に変更 / SDL はプログラム移動の前後で client サイズを退避・再適用。**P3 の後** |
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
 | 低 | プラグイン向けログレベル個別 IF | `TVPLogMsg` を tp_stub に収録するだけ。important = WARNING は維持 |
 | 低 | レイヤ系プラグインの Bitmap 両対応 | `Bitmap` に Layer 同名の read-only プロパティ 5 件を追加済みなので、プラグイン側の対象判定 (`IsInstanceOf`) を Layer 限定から Layer/Bitmap 両対応にしたい。事前調査済 (障害は `hasImage` の有無 / class dispatch 経路 / Layer 専用メンバの使用の 3 点)。プラグインごとに要否が分かれるので、対応する価値のあるものから個別に |
-| 低 (保留) | WINVER の `Window.setZoom` が事実上効かない | WINVER は zoom を DestRect 計算にしか使わず、レイヤ×zoom をクライアントへアスペクト維持でフィットさせるため、windowed では倍率を変えても見た目が変わらない (旧 kirikiri2 はウィンドウ自体がリサイズされた)。SDL/generic 側は「レイヤ×zoom をウィンドウの内側サイズにする」実装 (`window_multi` デモで確認可)。KAG3 の画面サイズ切替に影響するため、**現在の使われ方を調べてから対応検討 (保留)** |
+| — | ~~WINVER の `Window.setZoom` が事実上効かない~~ | 上の **P2** に統合。調査の結果、旧来の契約は「`setZoom` は倍率を覚えるだけで `inner == layer×zoom` はスクリプトが維持する」(KAG3 `YesNoDialog.tjs:51-59` が実例) であり、この不変条件が守られていれば現 WINVER も 1:1 で正しく出る。差が出るのは `setInnerSize` を伴わず `setZoom` だけ呼んだ場合。詳細 = [WindowGeometry.md](src/core/doc/WindowGeometry.md) §3 |
 
 ## 将来課題
 
