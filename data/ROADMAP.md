@@ -199,6 +199,14 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       距離減衰/ドップラー/減衰モデル。現 startup.tjs のホットキー実装を専用シーン化
       (前/後/左/右の離散位置サンプルも)。詳細は project_wavesound_3d_spatializer
 - [ ] video — VideoOverlay: layer / overlay モード、シーク、ループ
+- [x] softkey_ime — 文字入力 / 仮想キーボード / IME (2026-08-16)。onKeyPress で
+      文字を受ける自前入力欄、Layer.imeMode + setAttentionPoint、内蔵仮想
+      キーボード (Dialog.virtualKeyboard の auto/always/never と
+      hasPhysicalKeyboard)、System.inputString、Clipboard。資材不要。
+      ※ 作成中に SDL のクリップボードが空実装だったのを SDL3 API で実装
+      ※ demolib に onKeyPress フックを追加
+      ※ doc の ElementsDialog.md が ElementsDialog.virtualKeyboard と誤記
+        (正しくは Dialog.virtualKeyboard) → 修正
 - [ ] storage — Storages / autoPath / アーカイブ / BinaryStream / セーブデータ
       (Web では IDBFS 永続化の確認を兼ねる)
 - [x] webui — ブラウザ UI (WebServer) (2026-08-16)。内蔵 HTTP + SSE サーバで
