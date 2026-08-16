@@ -203,7 +203,12 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       (Web では IDBFS 永続化の確認を兼ねる)
 - [ ] ui_flow — Elements 画面遷移 (screens / navigator): 現 flowdemo.jsonc +
       menu/*.json を整理してタイトル→設定→ダイアログの一連フローに
-- [ ] system_debug — System 情報 / Debug.console / Scripts.eval / 例外ハンドラ挙動
+- [x] system_debug — デバッグ支援 (2026-08-16)。Scripts.eval + Debug.prettyPrint
+      で式をその場評価、例外オブジェクト (message / trace) を種類別に確認、
+      System.exceptionHandler を差し替えて未捕捉例外を自前処理 (true を返して
+      既定動作を抑止)、Debug.addLoggingHandler でエンジンのログを画面へ。
+      資材不要。※ TJS2 の組込例外クラスは Exception のみ / e.trace は -debug
+      起動時のみ中身が入る
 
 ### ③ 横断デモ (data/、複数プラグイン組み合わせ)
 
