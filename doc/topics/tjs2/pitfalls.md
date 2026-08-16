@@ -111,7 +111,7 @@ if (obj.name !== void) { ... }                          // 正しい
 | `System.appDataPath` / `personalPath` | WINVER 限定。保存先は `System.dataPath` を使う |
 | `System.desktopLeft/Top/Width/Height` | WINVER 限定。解像度だけなら `System.screenWidth/Height` |
 | `System.urldecode` / `readRegValue` 等 | Windows 拡張。SDL3 ビルドには無い |
-| `System.setMemoryOverlay` / `setPadOverlay` | SDL3 ビルド限定 ( 他では何もしない ) |
+| `System.setMemoryOverlay` / `setPadOverlay` | フラグは全ビルド共通だが、描画するのは OGL 系 / SDL の DrawDevice ( WINVER 既定の D3D11 では出ない ) |
 | `Layer.imeMode` / `setAttentionPoint` | 値は全ビルドで保持されるが、実際に効くのは WINVER |
 | `Window.setZoom` | 挙動が異なる ( SDL3 はウィンドウがリサイズされる。[Window.setZoom](../../reference/Window.md#setzoom) 参照 ) |
 | `Dialog` 系 / `WebServer` | ビルドオプション ( `KRKRZ_USE_ELEMENTS` / `KRKRZ_REPL_WEB` ) 次第 |

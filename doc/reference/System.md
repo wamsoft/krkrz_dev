@@ -1714,8 +1714,11 @@ System.endAllocTag();
 メモリ状態オーバレイの設定
 
 画面右上にエンジンのメモリ状態をリアルタイム表示するオーバレイの
-表示有無を切り替えます。SDL3 ビルド限定で、その他のビルドでは
-何も行いません。
+表示有無を切り替えます。フラグ自体は全ビルドで切り替わりますが、
+**描画するのは OGL 系 DrawDevice ( `OGLDrawDevice` / `SDLOGLDrawDevice` )
+と SDL の `SDLDrawDevice`** です。Windows ネイティブ ( WINVER ) ビルドの
+既定 `BasicDrawDevice` (D3D11) には描画フックが無いため表示されませんが、
+WINVER でも `Window.drawDevice` を OGL 系へ切り替えれば表示されます。
 
 ---
 
@@ -1738,8 +1741,13 @@ System.endAllocTag();
 ゲームパッド状態オーバレイの設定
 
 画面左上にゲームパッド 16 ボタンと 6 軸のアナログ値のオーバレイを
-表示するかを切り替えます。SDL3 ビルド限定で、その他のビルドでは
-何も行いません。
+表示するかを切り替えます。フラグ自体は全ビルドで切り替わりますが、
+**描画するのは OGL 系 DrawDevice ( `OGLDrawDevice` / `SDLOGLDrawDevice` )
+と SDL の `SDLDrawDevice`** です。Windows ネイティブ ( WINVER ) ビルドの
+既定 `BasicDrawDevice` (D3D11) には描画フックが無いため表示されませんが、
+WINVER でも `Window.drawDevice` を OGL 系へ切り替えれば表示されます
+( パッドの状態取得は全ビルド共通の論理層を使うため、WINVER でも
+XInput のパッド名・ボタン・軸が表示されます )。
 
 ---
 

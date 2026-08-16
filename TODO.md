@@ -25,7 +25,6 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
 | 低 | プラグイン向けログレベル個別 IF | `TVPLogMsg` を tp_stub に収録するだけ。important = WARNING は維持 |
 | 低 (保留) | WINVER の `Window.setZoom` が事実上効かない | WINVER は zoom を DestRect 計算にしか使わず、レイヤ×zoom をクライアントへアスペクト維持でフィットさせるため、windowed では倍率を変えても見た目が変わらない (旧 kirikiri2 はウィンドウ自体がリサイズされた)。SDL/generic 側は「レイヤ×zoom をウィンドウの内側サイズにする」実装 (`window_multi` デモで確認可)。KAG3 の画面サイズ切替に影響するため、**現在の使われ方を調べてから対応検討 (保留)** |
-| 低 | 「SDL3 ビルド限定」表記の全体精査 | WINVER 対応済みの機能が「SDL3 限定」と書かれたままの箇所がある。Dialog は修正済、CommandLine / System overlay 系が要確認 |
 
 ## 将来課題
 
@@ -63,6 +62,15 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 ## 最近クローズしたもの
 
+- ✅ 「SDL3 ビルド限定」表記の全体精査 (src/core `a9bf9de4` / umbrella 側 doc)
+  memoverlay / padoverlay は「ビルド限定」ではなく**描画デバイス依存**だった
+  (OGL 系 DrawDevice と SDLDrawDevice が描く / WINVER 既定の D3D11 は描かない。
+  WINVER でも OGL へ切り替えれば出る)。 併せて PadOverlayGL の WINVER stub を
+  撤去し、WINVER でも実パッドの名前・ボタン・軸が出るようにした。
+  CommandLine.md / System リファレンス / MemoryGuide / DrawStats / PadOverlay /
+  REPL ヘルプ文言 / 各 SystemImpl のコメントを修正。
+  ※ `-drawdevice` `-renderer` は実装が sdl3/ のみなので「SDL3 限定」のまま、
+  `-drawstatslog` は generic 実装なので「SDL3・LIB」に補正。
 - ✅ WINVER 本画面転送の差分更新化 (src/core `5597496d`)
   `BasicDrawDevice` がダーティ矩形単位で `UpdateSubresource` するようになり、
   静止画面 421.9MB/秒 → 1.8MB/秒 (転送率 5.0% → 0.0%)、動きのある画面でも

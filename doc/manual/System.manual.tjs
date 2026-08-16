@@ -1067,8 +1067,11 @@ class System {
 	 * メモリ状態オーバレイの設定
 	 *
 	 * 画面右上にエンジンのメモリ状態をリアルタイム表示するオーバレイの
-	 * 表示有無を切り替えます。SDL3 ビルド限定で、その他のビルドでは
-	 * 何も行いません。
+	 * 表示有無を切り替えます。フラグ自体は全ビルドで切り替わりますが、
+	 * **描画するのは OGL 系 DrawDevice ( `OGLDrawDevice` / `SDLOGLDrawDevice` )
+	 * と SDL の `SDLDrawDevice`** です。Windows ネイティブ ( WINVER ) ビルドの
+	 * 既定 `BasicDrawDevice` (D3D11) には描画フックが無いため表示されませんが、
+	 * WINVER でも `Window.drawDevice` を OGL 系へ切り替えれば表示されます。
 	 * @param enable 真で表示、偽で非表示。引数を省略 ( または void ) すると
 	 * 現在の状態をトグルします。
 	 * @return 設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。
@@ -1079,8 +1082,13 @@ class System {
 	 * ゲームパッド状態オーバレイの設定
 	 *
 	 * 画面左上にゲームパッド 16 ボタンと 6 軸のアナログ値のオーバレイを
-	 * 表示するかを切り替えます。SDL3 ビルド限定で、その他のビルドでは
-	 * 何も行いません。
+	 * 表示するかを切り替えます。フラグ自体は全ビルドで切り替わりますが、
+	 * **描画するのは OGL 系 DrawDevice ( `OGLDrawDevice` / `SDLOGLDrawDevice` )
+	 * と SDL の `SDLDrawDevice`** です。Windows ネイティブ ( WINVER ) ビルドの
+	 * 既定 `BasicDrawDevice` (D3D11) には描画フックが無いため表示されませんが、
+	 * WINVER でも `Window.drawDevice` を OGL 系へ切り替えれば表示されます
+	 * ( パッドの状態取得は全ビルド共通の論理層を使うため、WINVER でも
+	 * XInput のパッド名・ボタン・軸が表示されます )。
 	 * @param enable 真で表示、偽で非表示。引数を省略 ( または void ) すると
 	 * 現在の状態をトグルします。
 	 * @return 設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。
