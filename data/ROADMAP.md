@@ -175,6 +175,15 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       nodeEnabled に伝わる様子、bringToFront/bringToBack と Tab フォーカス連鎖。
       資材不要。※ hitType は htMask / htProvince の 2 値で htRect は無い
       (矩形全面は hitThreshold = 0)
+- [x] window_multi — 複数ウィンドウ / モーダル / 画面情報 (2026-08-16)。
+      サブウィンドウ生成、showModal のブロッキング時間計測、borderStyle /
+      stayOnTop / setZoom / fullScreen、screen 解像度と displayDensity、
+      System.captureScreen による PNG 保存。資材不要。
+      ※ 作成中に engine 側 3 件を修正: SDL のウィンドウ位置/サイズ/枠/最前面/
+      全画面/zoom が未実装だったのを実装、2 枚目の Window を閉じるとメイン画面が
+      更新されなくなる GL コンテキスト問題、サブウィンドウ提示で Elements
+      overlay が移設され閉じると消える問題。
+      ※ WINVER の setZoom は windowed で見た目が変わらない (TODO.md に記載)
 - [ ] sound — WaveSoundBuffer: 再生・ループ・ラベル・fade・pan、PhaseVocoder
       (現デモから移設)、SoundBuffer、**ゲインコントロール** (setGainQueryCallback で
       曲別 dB / CLI 全体ゲイン -opus_gain・-ogg_gain / ReplayGain -*_rg の効果を実聴。

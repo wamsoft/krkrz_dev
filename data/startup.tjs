@@ -57,6 +57,7 @@ tryScene(coreBase + "text_font/scene.tjs",    function() { return new TextFontSc
 tryScene(coreBase + "image_ops/scene.tjs",    function() { return new ImageOpsScene(); });
 tryScene(coreBase + "layer_basic/scene.tjs",  function() { return new LayerBasicScene(); });
 tryScene(coreBase + "layer_tree/scene.tjs",   function() { return new LayerTreeScene(); });
+tryScene(coreBase + "window_multi/scene.tjs", function() { return new WindowMultiScene(); });
 tryScene(coreBase + "input/scene.tjs",        function() { return new InputScene(); });
 tryScene(coreBase + "timer_async/scene.tjs",  function() { return new TimerAsyncScene(); });
 tryScene(coreBase + "gl_canvas/scene.tjs",    function() { return new GLCanvasScene(); });
