@@ -24,6 +24,8 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [trapKey](#trapkey)
 - [innerWidth](#innerwidth)
 - [innerHeight](#innerheight)
+- [frameWidth](#framewidth)
+- [frameHeight](#frameheight)
 - [zoomNumer](#zoomnumer)
 - [zoomDenom](#zoomdenom)
 - [viewportFit](#viewportfit)
@@ -210,9 +212,9 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの最小の横幅
 
-ウィンドウの最小の横幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
+ウィンドウの最小の横幅 ( 内側 = 描画領域の横幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
 
-**関連:** [Window.width](Window.md#width) / [Window.minHeight](Window.md#minheight) / [Window.maxWidth](Window.md#maxwidth) / [Window.maxHeight](Window.md#maxheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
+**関連:** [Window.innerWidth](Window.md#innerwidth) / [Window.minHeight](Window.md#minheight) / [Window.maxWidth](Window.md#maxwidth) / [Window.maxHeight](Window.md#maxheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -224,9 +226,9 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの最小の縦幅
 
-ウィンドウの最小の縦幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
+ウィンドウの最小の縦幅 ( 内側 = 描画領域の縦幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
 
-**関連:** [Window.height](Window.md#height) / [Window.minWidth](Window.md#minwidth) / [Window.maxWidth](Window.md#maxwidth) / [Window.maxHeight](Window.md#maxheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
+**関連:** [Window.innerHeight](Window.md#innerheight) / [Window.minWidth](Window.md#minwidth) / [Window.maxWidth](Window.md#maxwidth) / [Window.maxHeight](Window.md#maxheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -238,9 +240,9 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの最大の横幅
 
-ウィンドウの最大の横幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
+ウィンドウの最大の横幅 ( 内側 = 描画領域の横幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
 
-**関連:** [Window.width](Window.md#width) / [Window.maxHeight](Window.md#maxheight) / [Window.minWidth](Window.md#minwidth) / [Window.minHeight](Window.md#minheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
+**関連:** [Window.innerWidth](Window.md#innerwidth) / [Window.maxHeight](Window.md#maxheight) / [Window.minWidth](Window.md#minwidth) / [Window.minHeight](Window.md#minheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -252,9 +254,9 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの最大の縦幅
 
-ウィンドウの最大の縦幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
+ウィンドウの最大の縦幅 ( 内側 = 描画領域の縦幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
 
-**関連:** [Window.height](Window.md#height) / [Window.maxWidth](Window.md#maxwidth) / [Window.minWidth](Window.md#minwidth) / [Window.minHeight](Window.md#minheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
+**関連:** [Window.innerHeight](Window.md#innerheight) / [Window.maxWidth](Window.md#maxwidth) / [Window.minWidth](Window.md#minwidth) / [Window.minHeight](Window.md#minheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -357,6 +359,42 @@ Window クラスのオブジェクトを構築します。
 値を設定することもできます。
 
 **関連:** [Window.innerWidth](Window.md#innerwidth) / [Window.setInnerSize](Window.md#setinnersize)
+
+---
+
+### frameWidth
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ウィンドウ装飾の横幅
+
+ウィンドウの外形と内側 ( 描画領域 ) の横幅の差 ( = [Window.width](Window.md#width) - [Window.innerWidth](Window.md#innerwidth) ) を表します。左右の枠を合わせた値です。
+
+ウィンドウ装飾を持たない環境 ( モバイル / コンソール、および [Window.borderStyle](Window.md#borderstyle) が `bsNone` のとき ) は 0 になります。
+
+外形基準で書かれたコードを内側基準へ移すときの変換に使えます。読み出し専用です。
+
+**関連:** [Window.frameHeight](Window.md#frameheight) / [Window.width](Window.md#width) / [Window.innerWidth](Window.md#innerwidth)
+
+---
+
+### frameHeight
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ウィンドウ装飾の縦幅
+
+ウィンドウの外形と内側 ( 描画領域 ) の縦幅の差 ( = [Window.height](Window.md#height) - [Window.innerHeight](Window.md#innerheight) ) を表します。タイトルバーと上下の枠を合わせた値です。
+
+ウィンドウ装飾を持たない環境 ( モバイル / コンソール、および [Window.borderStyle](Window.md#borderstyle) が `bsNone` のとき ) は 0 になります。
+
+外形基準で書かれたコードを内側基準へ移すときの変換に使えます。読み出し専用です。
+
+**関連:** [Window.frameWidth](Window.md#framewidth) / [Window.height](Window.md#height) / [Window.innerHeight](Window.md#innerheight)
 
 ---
 
@@ -852,9 +890,13 @@ oriUnknown (取得失敗/不明), oriPortrait(縦向き), oriLandscape(横向き
 
 画面密度(dpi)
 
-dpi値を返します。
+dpi 値を返します ( 96 が等倍 = 100%、192 なら 200% )。
 読み取りのみ可能です。
-GetDeviceCapsで得られる値です。
+
+ウィンドウが乗っているディスプレイの値を返します。 マルチディスプレイで
+拡大率の異なるモニタへ移動すると値が変わります。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で
+実際の値を返します ( SDL3 側は 2026-08-17 まで 96 固定でした )。
 
 ---
 
@@ -1203,6 +1245,13 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用
 
 ウィンドウの最小サイズを指定します。ウィンドウはこのメソッドで指定したサイズより小さくなることはできません。
 
+!!! note "基準は内側 ( 描画領域 ) サイズ"
+指定する値は [Window.innerWidth](Window.md#innerwidth) /
+[Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた
+描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない
+プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は
+[Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。
+
 **関連:** [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize) / [Window.minWidth](Window.md#minwidth) / [Window.minHeight](Window.md#minheight)
 
 ---
@@ -1223,6 +1272,13 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用
 ウィンドウの最大サイズの設定
 
 ウィンドウの最大サイズを指定します。ウィンドウはこのメソッドで指定したサイズより大きくなることはできません。
+
+!!! note "基準は内側 ( 描画領域 ) サイズ"
+指定する値は [Window.innerWidth](Window.md#innerwidth) /
+[Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた
+描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない
+プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は
+[Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。
 
 **関連:** [Window.setMinSize](Window.md#setminsize) / [Window.setSize](Window.md#setsize) / [Window.maxWidth](Window.md#maxwidth) / [Window.maxHeight](Window.md#maxheight)
 

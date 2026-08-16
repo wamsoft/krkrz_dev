@@ -642,6 +642,13 @@ class Window {
 	 * ウィンドウの最小サイズの設定
 	 *
 	 * ウィンドウの最小サイズを指定します。ウィンドウはこのメソッドで指定したサイズより小さくなることはできません。
+	 *
+	 * !!! note "基準は内側 ( 描画領域 ) サイズ"
+	 *     指定する値は [Window.innerWidth](Window.md#innerwidth) /
+	 *     [Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた
+	 *     描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない
+	 *     プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は
+	 *     [Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。
 	 * @param width ウィンドウの最小の横幅を指定します。0を指定すると制限は無くなります。
 	 * @param height ウィンドウの最小の縦幅を指定します。0を指定すると制限は無くなります。
 	 * @see Window.setMaxSize
@@ -655,6 +662,13 @@ class Window {
 	 * ウィンドウの最大サイズの設定
 	 *
 	 * ウィンドウの最大サイズを指定します。ウィンドウはこのメソッドで指定したサイズより大きくなることはできません。
+	 *
+	 * !!! note "基準は内側 ( 描画領域 ) サイズ"
+	 *     指定する値は [Window.innerWidth](Window.md#innerwidth) /
+	 *     [Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた
+	 *     描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない
+	 *     プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は
+	 *     [Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。
 	 * @param width ウィンドウの最大の横幅を指定します。0を指定すると制限は無くなります。
 	 * @param height ウィンドウの最大の縦幅を指定します。0を指定すると制限は無くなります。
 	 * @see Window.setMinSize
@@ -976,8 +990,8 @@ class Window {
 	/**
 	 * ウィンドウの最小の横幅
 	 *
-	 * ウィンドウの最小の横幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
-	 * @see Window.width
+	 * ウィンドウの最小の横幅 ( 内側 = 描画領域の横幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
+	 * @see Window.innerWidth
 	 * @see Window.minHeight
 	 * @see Window.maxWidth
 	 * @see Window.maxHeight
@@ -990,8 +1004,8 @@ class Window {
 	/**
 	 * ウィンドウの最小の縦幅
 	 *
-	 * ウィンドウの最小の縦幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
-	 * @see Window.height
+	 * ウィンドウの最小の縦幅 ( 内側 = 描画領域の縦幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
+	 * @see Window.innerHeight
 	 * @see Window.minWidth
 	 * @see Window.maxWidth
 	 * @see Window.maxHeight
@@ -1004,8 +1018,8 @@ class Window {
 	/**
 	 * ウィンドウの最大の横幅
 	 *
-	 * ウィンドウの最大の横幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
-	 * @see Window.width
+	 * ウィンドウの最大の横幅 ( 内側 = 描画領域の横幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
+	 * @see Window.innerWidth
 	 * @see Window.maxHeight
 	 * @see Window.minWidth
 	 * @see Window.minHeight
@@ -1018,8 +1032,8 @@ class Window {
 	/**
 	 * ウィンドウの最大の縦幅
 	 *
-	 * ウィンドウの最大の縦幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
-	 * @see Window.height
+	 * ウィンドウの最大の縦幅 ( 内側 = 描画領域の縦幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
+	 * @see Window.innerHeight
 	 * @see Window.maxWidth
 	 * @see Window.minWidth
 	 * @see Window.minHeight
@@ -1099,6 +1113,34 @@ class Window {
 	 * @see Window.setInnerSize
 	 */
 	property innerHeight;
+
+	/**
+	 * ウィンドウ装飾の横幅
+	 *
+	 * ウィンドウの外形と内側 ( 描画領域 ) の横幅の差 ( = [Window.width](Window.md#width) - [Window.innerWidth](Window.md#innerwidth) ) を表します。左右の枠を合わせた値です。
+	 *
+	 * ウィンドウ装飾を持たない環境 ( モバイル / コンソール、および [Window.borderStyle](Window.md#borderstyle) が `bsNone` のとき ) は 0 になります。
+	 *
+	 * 外形基準で書かれたコードを内側基準へ移すときの変換に使えます。読み出し専用です。
+	 * @see Window.frameHeight
+	 * @see Window.width
+	 * @see Window.innerWidth
+	 */
+	property frameWidth;
+
+	/**
+	 * ウィンドウ装飾の縦幅
+	 *
+	 * ウィンドウの外形と内側 ( 描画領域 ) の縦幅の差 ( = [Window.height](Window.md#height) - [Window.innerHeight](Window.md#innerheight) ) を表します。タイトルバーと上下の枠を合わせた値です。
+	 *
+	 * ウィンドウ装飾を持たない環境 ( モバイル / コンソール、および [Window.borderStyle](Window.md#borderstyle) が `bsNone` のとき ) は 0 になります。
+	 *
+	 * 外形基準で書かれたコードを内側基準へ移すときの変換に使えます。読み出し専用です。
+	 * @see Window.frameWidth
+	 * @see Window.height
+	 * @see Window.innerHeight
+	 */
+	property frameHeight;
 
 	/**
 	 * レイヤ拡大倍率(分子)
@@ -1441,9 +1483,13 @@ class Window {
 
 	/**
 	 * 画面密度(dpi)
-	 * @description dpi値を返します。
+	 * @description dpi 値を返します ( 96 が等倍 = 100%、192 なら 200% )。
 	 * 読み取りのみ可能です。
-	 * GetDeviceCapsで得られる値です。
+	 *
+	 * ウィンドウが乗っているディスプレイの値を返します。 マルチディスプレイで
+	 * 拡大率の異なるモニタへ移動すると値が変わります。
+	 * Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で
+	 * 実際の値を返します ( SDL3 側は 2026-08-17 まで 96 固定でした )。
 	 */
 	property displayDensity;
 
