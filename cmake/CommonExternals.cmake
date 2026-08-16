@@ -133,6 +133,27 @@ function(krkrz_setup_harfbuzz)
     message(STATUS "Downloading HarfBuzz ${HB_VERSION} (HB_HAVE_ICU=${_hb_have_icu})...")
     FetchContent_MakeAvailable(harfbuzz_source)
 
+    # Emscripten (emsdk の clang) では、HarfBuzz 自身が hb.hh で
+    #   #pragma GCC diagnostic error "-Wunused"
+    # と書いているため、このコンパイラが出す -Wunused-template (グループ -Wunused に
+    # 含まれる) がエラーへ格上げされてビルドが止まる。HarfBuzz が用意している
+    # エスケープハッチで「error への格上げ」だけ無効化する (警告は残る)。
+    # ※ コマンドラインの -Wno-... では後続の pragma に上書きされるので効かない。
+    if(EMSCRIPTEN)
+        # ターゲット名は HarfBuzz のバージョンで増減する (harfbuzz / -raster /
+        # -vector / -subset ...) ので、取得した BUILDSYSTEM_TARGETS 全部へ入れる。
+        get_property(_hb_targets DIRECTORY "${harfbuzz_source_SOURCE_DIR}"
+                     PROPERTY BUILDSYSTEM_TARGETS)
+        foreach(_hb_target IN LISTS _hb_targets)
+            get_target_property(_hb_type ${_hb_target} TYPE)
+            if(NOT _hb_type STREQUAL "INTERFACE_LIBRARY" AND
+               NOT _hb_type STREQUAL "UTILITY")
+                target_compile_definitions(${_hb_target}
+                    PRIVATE HB_NO_PRAGMA_GCC_DIAGNOSTIC_ERROR)
+            endif()
+        endforeach()
+    endif()
+
     # ThorVG / elements / その他は harfbuzz::harfbuzz / HarfBuzz::HarfBuzz
     # 双方の名前で参照することがあるので両方エイリアスを張る。
     if(NOT TARGET harfbuzz::harfbuzz)
