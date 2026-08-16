@@ -545,7 +545,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenHeight
 	 * @see System.desktopLeft
 	 * @see System.desktopTop
@@ -561,7 +563,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenWidth
 	 * @see System.desktopLeft
 	 * @see System.desktopTop
@@ -583,7 +587,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenWidth
 	 * @see System.screenHeight
 	 * @see System.desktopTop
@@ -599,7 +605,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenWidth
 	 * @see System.screenHeight
 	 * @see System.desktopLeft
@@ -615,7 +623,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenWidth
 	 * @see System.screenHeight
 	 * @see System.desktopLeft
@@ -631,7 +641,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenWidth
 	 * @see System.screenHeight
 	 * @see System.desktopLeft

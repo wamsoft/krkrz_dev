@@ -363,7 +363,9 @@ Vista, 7, 8 の場合
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenHeight](System.md#screenheight) / [System.desktopLeft](System.md#desktopleft) / [System.desktopTop](System.md#desktoptop) / [System.desktopWidth](System.md#desktopwidth) / [System.desktopHeight](System.md#desktopheight)
 
@@ -381,7 +383,9 @@ Vista, 7, 8 の場合
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenWidth](System.md#screenwidth) / [System.desktopLeft](System.md#desktopleft) / [System.desktopTop](System.md#desktoptop) / [System.desktopWidth](System.md#desktopwidth) / [System.desktopHeight](System.md#desktopheight)
 
@@ -405,7 +409,9 @@ SDL3 / 汎用ビルドには存在しません。画面解像度だけであれ�
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenWidth](System.md#screenwidth) / [System.screenHeight](System.md#screenheight) / [System.desktopTop](System.md#desktoptop) / [System.desktopWidth](System.md#desktopwidth) / [System.desktopHeight](System.md#desktopheight)
 
@@ -423,7 +429,9 @@ SDL3 / 汎用ビルドには存在しません。画面解像度だけであれ�
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenWidth](System.md#screenwidth) / [System.screenHeight](System.md#screenheight) / [System.desktopLeft](System.md#desktopleft) / [System.desktopWidth](System.md#desktopwidth) / [System.desktopHeight](System.md#desktopheight)
 
@@ -441,7 +449,9 @@ SDL3 / 汎用ビルドには存在しません。画面解像度だけであれ�
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenWidth](System.md#screenwidth) / [System.screenHeight](System.md#screenheight) / [System.desktopLeft](System.md#desktopleft) / [System.desktopTop](System.md#desktoptop) / [System.desktopHeight](System.md#desktopheight)
 
@@ -459,7 +469,9 @@ SDL3 / 汎用ビルドには存在しません。画面解像度だけであれ�
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenWidth](System.md#screenwidth) / [System.screenHeight](System.md#screenheight) / [System.desktopLeft](System.md#desktopleft) / [System.desktopTop](System.md#desktoptop) / [System.desktopWidth](System.md#desktopwidth)
 
