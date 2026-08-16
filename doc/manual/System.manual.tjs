@@ -468,6 +468,12 @@ class System {
 	 * `C:\Users\<ユーザ名>\AppData\Roaming` ( C: の部分は環境によって異なります )
 	 * 何らかの理由で レジストリキー ( 上記参照 ) を読み出せなかった場合
 	 * 吉里吉里の実行可能ファイルのあるフォルダ ([System.exePath](System.md#exepath))になります
+	 *
+	 * !!! warning "Windows ネイティブ ( WINVER ) ビルド限定"
+	 *     このプロパティは SDL3 / 汎用ビルドには存在しません。全ビルドで動く
+	 *     スクリプトでは `typeof System.appDataPath` で存在を確認するか、
+	 *     保存先には [System.dataPath](System.md#datapath) を使用してください。
+	 * @see System.dataPath
 	 * @see System.exePath
 	 * @see System.personalPath
 	 */
@@ -481,6 +487,12 @@ class System {
 	 * 標準では、ログなどがすべてここに出力されます。
 	 *
 	 * ユーザスクリプトがデータを保存する場合は、ここに保存することを推奨します。
+	 *
+	 * **全ビルドに存在する**ため、保存先の取得はこのプロパティを使うのが安全です
+	 * ( [System.appDataPath](System.md#appdatapath) /
+	 * [System.personalPath](System.md#personalpath) は Windows ネイティブ
+	 * ビルド限定 )。
+	 * @see System.appDataPath
 	 */
 	property dataPath { getter; }
 
@@ -535,6 +547,12 @@ class System {
 	 * デスクトップ左端位置
 	 *
 	 * デスクトップ ( ウィンドウを表示可能な領域 ) の左端位置をピクセル単位で表します。
+	 *
+	 * !!! warning "Windows ネイティブ ( WINVER ) ビルド限定"
+	 *     `desktopLeft` / `desktopTop` / `desktopWidth` / `desktopHeight` は
+	 *     SDL3 / 汎用ビルドには存在しません。画面解像度だけであれば全ビルドに
+	 *     ある [System.screenWidth](System.md#screenwidth) /
+	 *     [System.screenHeight](System.md#screenheight) を使用してください。
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
@@ -829,11 +847,16 @@ class System {
 	 * | `texUploadUs` | 転送呼び出しの累計時間 (マイクロ秒) |
 	 * | `texUploads` | 転送回数 (ダーティ矩形単位) |
 	 * | `texUploadBytes` | 転送した累計バイト数 |
-	 * | `frames` | 転送フェーズの実行回数 (≒ 画面更新フレーム数) |
+	 * | `frames` | 合成フレームを描いた回数 (転送の有無に依らず) |
 	 *
 	 * すべて累積値なので、**2 回読んで差分を取り、経過実時間との比**で
 	 * 「1 秒あたり転送に何ミリ秒使ったか」を見ます。
 	 * `System.renderStatsReset()` で 0 に戻せます。
+	 *
+	 * 画面に変化が無いフレームでは転送そのものを行わないため、静止中は
+	 * `texUploads` が増えません ( `frames` は増えます )。逆に静止しているのに
+	 * `texUploadBytes` が毎フレーム画面サイズぶん増えていく場合は、どこかが
+	 * 全面更新を出しています。
 	 *
 	 * 転送はドライバの都合でブロックすることがあり (転送先テクスチャを
 	 * GPU がまだ参照している場合など)、その待ちもこの時間に含まれます。
@@ -844,6 +867,14 @@ class System {
 	 * ビルドオプションは不要で常に計測されます (1 フレームに数回の
 	 * カウンタ加算のみ)。オーバーレイダイアログ側の内訳は
 	 * `Dialog.renderStats` を参照してください。
+	 *
+	 * !!! tip "数値の読み方"
+	 *     転送率 ( 転送時間 / 経過実時間 ) が高くても **fps が出ていれば、
+	 *     待ちの大半は vsync 同期ぶん**です ( ドライバが転送呼び出しの中で
+	 *     次フレームを待つ )。本当に転送が足を引っ張っている場合は fps が
+	 *     落ちます。この判定基準や経路ごとの違い、計測の進め方は
+	 *     コアデモ `perf_stats` と、エンジン付属文書
+	 *     `src/core/doc/ScreenTransfer.md` にまとめてあります。
 	 *
 	 * @type Dictionary
 	 * @see System.renderStatsReset

@@ -72,6 +72,8 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [defaultFontFamily](#defaultfontfamily)
 - [active](#active)
 - [language](#language)
+- [virtualKeyboard](#virtualkeyboard)
+- [hasPhysicalKeyboard](#hasphysicalkeyboard)
 - [focusRing](#focusring)
 - [renderScale](#renderscale)
 - [renderCache](#rendercache)
@@ -188,6 +190,59 @@ global.Dialog.language = "en";     // 表示中の画面もその場で切り替
 
 読み出すと設定済みの言語を返します。未設定なら空文字 ( = 各画面 JSON の
 `lang` 指定に従う ) です。`strings` を持たない画面では何も起きません。
+
+---
+
+### virtualKeyboard
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+内蔵仮想キーボードの動作モード
+
+テキスト欄 ( `input_box` 等 ) に focus が入ったとき、OS のソフトウェア
+キーボードの代わりに Elements 内蔵の英数キーボードを出すかどうかを
+指定します。設定できる値は次の通りです。
+
+| 値 | 意味 |
+|---|---|
+| `"auto"` | 既定。物理キーボードが接続されていないときだけ出す |
+| `"always"` | 物理キーボードがあっても常に出す ( テスト用。デスクトップでも出る ) |
+| `"never"` | 出さない ( OS 側に任せる )。表示中なら閉じる |
+
+初期値は環境変数 `KRKRZ_FORCE_VIRTUAL_KEYBOARD=1` があれば `"always"`、
+無ければ `"auto"` です。
+
+出るのは **Elements のテキスト欄に focus が入ったとき**で、ゲーム側が
+自前で描いている入力欄では出ません。押鍵は貯めずにその場で入力先へ
+流し込まれるため、入力欄がリアルタイムに更新されます。
+現バージョンでは大文字英数字のみ対応です。
+
+動作を確認できるコアデモは `softkey_ime` です。
+
+**関連:** [Dialog.hasPhysicalKeyboard](Dialog.md#hasphysicalkeyboard)
+
+---
+
+### hasPhysicalKeyboard
+
+プロパティ \ アクセス: `r`
+
+**型**: `Boolean`
+
+**解説**
+
+物理キーボードの有無
+
+物理 ( ハードウェア ) キーボードが接続されているかを返します。読み出し専用。
+デスクトップでは常に真、コンソール機等では USB キーボードの接続状態に
+なります。ゲーム側が独自のソフトウェアキーボードを出すかどうかの判断に
+使用します。
+
+**関連:** [Dialog.virtualKeyboard](Dialog.md#virtualkeyboard)
 
 ---
 

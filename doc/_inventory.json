@@ -215,12 +215,14 @@
       "active",
       "defaultFontFamily",
       "focusRing",
+      "hasPhysicalKeyboard",
       "language",
       "partialRedraw",
       "renderCache",
       "renderCount",
       "renderScale",
-      "renderStats"
+      "renderStats",
+      "virtualKeyboard"
     ]
   },
   "Font": {

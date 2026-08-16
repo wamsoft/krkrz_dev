@@ -270,6 +270,7 @@ nav:
       - 吉里吉里Zで削除された機能: topics/tjs2/deleted.md
       - サポートするファイルフォーマット: topics/tjs2/fileformat.md
       - 型指定構文: topics/tjs2/type_specified.md
+      - よくある落とし穴: topics/tjs2/pitfalls.md
     - ツール:
       - Releaser: topics/tools/releaser.md
     - 本体 (exe) 変更者向け情報:
