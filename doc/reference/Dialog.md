@@ -42,12 +42,19 @@ JSON 1 引数だけで呼ぶと、独立ウィンドウを開かずに既存の�
 [registerHotKey](#registerhotkey) で確保できます。
 
 JSON 仕様の要素タイプ ( label / button / input_box / checkbox / toggle /
-vtile / htile / vspacer / hspacer 等 ) や属性、レイアウト密度指定
-( `"gap"` / top-level `"style"` ブロック ) の詳細は
+text_box / text_area / vtile / htile / vspacer / hspacer 等 ) や属性、
+レイアウト密度指定 ( `"gap"` / top-level `"style"` ブロック ) の詳細は
 [elements_modal の README](https://github.com/wamsoft/elements/blob/develop/external/elements_modal/README.md)、
 `"input"` ノードによるキーボード / ゲームパッド操作の設定詳細は
 [キーボードナビゲーション仕様](https://github.com/wamsoft/elements/blob/develop/docs/keyboard-navigation.md)
 を参照してください。
+
+矩形へ本文を流し込むなら `text_area` を使います。折り返し・行頭行末禁則・
+文字送りが [Layer.drawShapedTextArea](Layer.md#drawshapedtextarea) と同じ
+ロジックなので、**同じ本文・同じ幅なら改行位置が一致します**。
+`"count_var"` に変数名を与えると [setVar](#setvar) で文字送りが進み、
+折り返しは全文で確定済みなので送ってもリフローしません
+( 字幕やセリフ窓向け。従来からある `text_box` は互換のためそのまま )。
 
 `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では Dialog クラスは利用できません。
 WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用できます
@@ -64,7 +71,15 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 
 - [defaultFontFamily](#defaultfontfamily)
 - [active](#active)
+- [language](#language)
+- [virtualKeyboard](#virtualkeyboard)
+- [hasPhysicalKeyboard](#hasphysicalkeyboard)
+- [focusRing](#focusring)
 - [renderScale](#renderscale)
+- [renderCache](#rendercache)
+- [partialRedraw](#partialredraw)
+- [renderCount](#rendercount)
+- [renderStats](#renderstats)
 
 ### メソッド
 
@@ -91,6 +106,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [setVar](#setvar)
 - [setPadIconBase](#setpadiconbase)
 - [setPadTheme](#setpadtheme)
+- [renderStatsReset](#renderstatsreset)
 
 ### イベント
 
@@ -149,6 +165,117 @@ Elements ランタイムが初期化されたあと ( 最初のダイアログ�
 
 ---
 
+### language
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+i18n の表示言語
+
+画面 JSON の top-level `strings` ( textID → 言語別文字列 ) を引くときのキーです
+( クラス全体に効く static 相当 )。`"ja"` / `"en"` / `"tc"` / `"sc"` など、
+`strings` 側で使っているキーをそのまま指定します。
+
+```tjs
+global.Dialog.language = "en";     // 表示中の画面もその場で切り替わる
+```
+
+代入すると**表示中の全ダイアログへ即時適用**されます ( `text_id` / `text_list_id` /
+`options_id` を持つ widget が再解決され、画面を開き直さずに表示が変わります )。
+以後に開く画面の既定にもなります。picker 系は選択 index を維持したまま
+表示文字列だけ差し替わります。
+
+読み出すと設定済みの言語を返します。未設定なら空文字 ( = 各画面 JSON の
+`lang` 指定に従う ) です。`strings` を持たない画面では何も起きません。
+
+---
+
+### virtualKeyboard
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+内蔵仮想キーボードの動作モード
+
+テキスト欄 ( `input_box` 等 ) に focus が入ったとき、OS のソフトウェア
+キーボードの代わりに Elements 内蔵の英数キーボードを出すかどうかを
+指定します。設定できる値は次の通りです。
+
+| 値 | 意味 |
+|---|---|
+| `"auto"` | 既定。物理キーボードが接続されていないときだけ出す |
+| `"always"` | 物理キーボードがあっても常に出す ( テスト用。デスクトップでも出る ) |
+| `"never"` | 出さない ( OS 側に任せる )。表示中なら閉じる |
+
+初期値は環境変数 `KRKRZ_FORCE_VIRTUAL_KEYBOARD=1` があれば `"always"`、
+無ければ `"auto"` です。
+
+出るのは **Elements のテキスト欄に focus が入ったとき**で、ゲーム側が
+自前で描いている入力欄では出ません。押鍵は貯めずにその場で入力先へ
+流し込まれるため、入力欄がリアルタイムに更新されます。
+現バージョンでは大文字英数字のみ対応です。
+
+動作を確認できるコアデモは `softkey_ime` です。
+
+**関連:** [Dialog.hasPhysicalKeyboard](Dialog.md#hasphysicalkeyboard)
+
+---
+
+### hasPhysicalKeyboard
+
+プロパティ \ アクセス: `r`
+
+**型**: `Boolean`
+
+**解説**
+
+物理キーボードの有無
+
+物理 ( ハードウェア ) キーボードが接続されているかを返します。読み出し専用。
+デスクトップでは常に真、コンソール機等では USB キーボードの接続状態に
+なります。ゲーム側が独自のソフトウェアキーボードを出すかどうかの判断に
+使用します。
+
+**関連:** [Dialog.virtualKeyboard](Dialog.md#virtualkeyboard)
+
+---
+
+### focusRing
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Boolean`
+
+**解説**
+
+フォーカス枠の表示
+
+フォーカス中の要素に Elements が描く汎用の枠 ( 青い角丸 ) の表示です
+( クラス全体に効く static 相当 )。既定は true。
+
+```tjs
+global.Dialog.focusRing = false;    // アプリ全体で消す
+```
+
+button / slider / dial / thumbwheel の枠がまとめて消えます。状態別の絵
+( 通常 / オーバー / 押し下げ / 無効 ) を素材として持つ画像 UI では、汎用の枠が
+絵に重なって邪魔になるので切ります。**フォーカス自体は生きている**ので、
+キー/パッドのナビゲーションと hilite フレームへの切替は従来どおり動きます。
+
+画面単位ではなくアプリ全体の設定です ( グローバルテーマのフラグ )。
+
+クラス内から触るときは `global.Dialog.focusRing` と書きます。Dialog を継承した
+クラスのメソッド内で素の `Dialog` と書くと親クラス参照になり、static プロパティへの
+代入が「メンバが見つかりません」になります。
+
+---
+
 ### renderScale
 
 プロパティ \ アクセス: `r/w`
@@ -164,6 +291,82 @@ overlay の描画密度モードです ( クラス全体に効く static 相当 
 2.0 = supersampling 相当 )。
 
 表示中の画面にも次フレームから反映されます ( 描画品質/負荷の比較用 )。
+
+---
+
+### renderCache
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+オーバーレイの再ラスタライズ抑止
+
+true ( 既定 ) の間、変化の無いフレームはダイアログの再ラスタライズ ( CPU ) と
+テクスチャ再アップロードを省略し、前回の描画結果をそのまま提示します
+( クラス全体に効く static 相当 )。アイドル中の CPU 負荷が大きく下がります。
+
+入力イベント・フォーカス/ホバー変化・パーツ演出再生中・setVar の実変化・
+テキスト欄キャレットの点滅・画面遷移エフェクト中などは自動的に再描画されます。
+false にすると従来どおり毎フレーム再描画します ( 負荷比較・問題切り分け用 )。
+
+---
+
+### partialRedraw
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+オーバーレイの部分再描画
+
+true ( 既定 ) の間、変化した範囲が矩形で特定できる場合は**その矩形だけ**を
+再ラスタライズしてテクスチャへ部分転送します ( クラス全体に効く static 相当 )。
+矩形が特定できるのはテキスト欄のキャレット点滅などに限られ、入力・フォーカス
+変化・パーツ演出・setVar などは従来どおり全面再描画になります。
+
+[Dialog.renderCache](Dialog.md#rendercache) が有効なときのみ機能します
+( 前回の描画結果が残っていることが前提 )。false にすると変化フレームは
+常に全面再描画します ( 負荷比較・問題切り分け用 )。実際に部分再描画できた
+回数は [Dialog.renderStats](Dialog.md#renderstats) の "partials" で確認できます。
+
+---
+
+### renderCount
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ラスタライズ累計回数 ( 読み取り専用 )
+
+実際にラスタライズ ( 再描画 ) を行った累計回数です ( クラス全体で共通 )。
+アイドル時に増えていなければ renderCache が効いています ( 検証・負荷比較用 )。
+
+---
+
+### renderStats
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+描画パイプラインの区間計測 ( 読み取り専用 )
+
+オーバーレイ描画の負荷内訳を Dictionary で返します ( クラス全体で共通の累積値 )。
+時間はすべてマイクロ秒です:
+%[ "frames" => 提示フレーム数, "updates" => 状態更新回数,
+"rasters" => ラスタライズ回数, "partials" => うち部分再描画だった回数,
+"cachedPresents" => ラスタ省略提示回数,
+"presents" => 提示回数, "totalUs" => 描画処理全体, "updateUs" => 状態更新,
+"rasterUs" => CPU ラスタライズ, "acquireUs" => バッファ確保,
+"uploadUs" => テクスチャ転送, "presentUs" => 提示 ]
+
+累積値なので 2 回読んで差分を取り、経過実時間との比で
+「Elements が消費した時間・割合」を計算します
+( [Dialog.renderStatsReset](Dialog.md#renderstatsreset) で 0 クリア )。
+計測用のベンチ画面がコアデモ `elements_bench` にあります
+( シナリオ切替 + renderCache A/B + 500ms ごとの内訳表示 )。
 
 ---
 
@@ -801,6 +1004,19 @@ pad_icon の全体テーマを設定する
 
 pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"none"` ) を
 設定します。画面 JSON の top-level `"pad_theme"` が指定されていればそちらが優先されます。
+
+---
+
+### renderStatsReset
+
+メソッド
+
+**解説**
+
+描画計測カウンタのリセット
+
+[Dialog.renderStats](Dialog.md#renderstats) の累積カウンタを 0 クリアします。
+計測区間の開始時に呼びます。
 
 ---
 

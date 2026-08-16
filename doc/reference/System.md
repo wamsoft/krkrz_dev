@@ -40,6 +40,8 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [licenseText](#licensetext)
 - [openGLESVersion](#openglesversion)
 - [processorNum](#processornum)
+- [renderStats](#renderstats)
+- [texUploadUsePBO](#texuploadusepbo)
 - [touchDevice](#touchdevice)
 - [buildVariantName](#buildvariantname)
 - [padAxisLeftX](#padaxisleftx)
@@ -74,6 +76,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [showVersion](#showversion)
 - [dumpHeap](#dumpheap)
 - [captureScreen](#capturescreen)
+- [renderStatsReset](#renderstatsreset)
 - [addFont](#addfont)
 - [clearGraphicCache](#cleargraphiccache)
 - [getJoypadType](#getjoypadtype)
@@ -256,7 +259,12 @@ Vista, 7, 8 の場合
 何らかの理由で レジストリキー ( 上記参照 ) を読み出せなかった場合
 吉里吉里の実行可能ファイルのあるフォルダ ([System.exePath](System.md#exepath))になります
 
-**関連:** [System.exePath](System.md#exepath) / [System.personalPath](System.md#personalpath)
+!!! warning "Windows ネイティブ ( WINVER ) ビルド限定"
+このプロパティは SDL3 / 汎用ビルドには存在しません。全ビルドで動く
+スクリプトでは `typeof System.appDataPath` で存在を確認するか、
+保存先には [System.dataPath](System.md#datapath) を使用してください。
+
+**関連:** [System.dataPath](System.md#datapath) / [System.exePath](System.md#exepath) / [System.personalPath](System.md#personalpath)
 
 ---
 
@@ -273,6 +281,13 @@ Vista, 7, 8 の場合
 標準では、ログなどがすべてここに出力されます。
 
 ユーザスクリプトがデータを保存する場合は、ここに保存することを推奨します。
+
+**全ビルドに存在する**ため、保存先の取得はこのプロパティを使うのが安全です
+( [System.appDataPath](System.md#appdatapath) /
+[System.personalPath](System.md#personalpath) は Windows ネイティブ
+ビルド限定 )。
+
+**関連:** [System.appDataPath](System.md#appdatapath)
 
 ---
 
@@ -347,6 +362,12 @@ Vista, 7, 8 の場合
 デスクトップ左端位置
 
 デスクトップ ( ウィンドウを表示可能な領域 ) の左端位置をピクセル単位で表します。
+
+!!! warning "Windows ネイティブ ( WINVER ) ビルド限定"
+`desktopLeft` / `desktopTop` / `desktopWidth` / `desktopHeight` は
+SDL3 / 汎用ビルドには存在しません。画面解像度だけであれば全ビルドに
+ある [System.screenWidth](System.md#screenwidth) /
+[System.screenHeight](System.md#screenheight) を使用してください。
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
@@ -707,6 +728,91 @@ OpenGL ES のバージョン
 
 OS から認識されている論理プロセッサ数を返します。
 描画スレッド数の自動決定などに利用されます。読み出し専用。
+
+---
+
+### renderStats
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Dictionary`
+
+**解説**
+
+画面転送コストの計測値
+
+合成済みの画面バッファを GPU テクスチャへ転送するのにかかった時間を
+返します。読み出し専用。返る辞書のキーは次の通りです。
+
+| キー | 意味 |
+|---|---|
+| `texUploadUs` | 転送呼び出しの累計時間 (マイクロ秒) |
+| `texUploads` | 転送回数 (ダーティ矩形単位) |
+| `texUploadBytes` | 転送した累計バイト数 |
+| `frames` | 合成フレームを描いた回数 (転送の有無に依らず) |
+
+すべて累積値なので、**2 回読んで差分を取り、経過実時間との比**で
+「1 秒あたり転送に何ミリ秒使ったか」を見ます。
+`System.renderStatsReset()` で 0 に戻せます。
+
+画面に変化が無いフレームでは転送そのものを行わないため、静止中は
+`texUploads` が増えません ( `frames` は増えます )。逆に静止しているのに
+`texUploadBytes` が毎フレーム画面サイズぶん増えていく場合は、どこかが
+全面更新を出しています。
+
+転送はドライバの都合でブロックすることがあり (転送先テクスチャを
+GPU がまだ参照している場合など)、その待ちもこの時間に含まれます。
+描画デバイスによって転送方法が違う (OpenGL = glTexSubImage2D /
+SDLDrawDevice = SDL_UpdateTexture / Windows ネイティブ =
+UpdateSubresource) ので、実機で詰まっていないかの一次指標として使います。
+
+ビルドオプションは不要で常に計測されます (1 フレームに数回の
+カウンタ加算のみ)。オーバーレイダイアログ側の内訳は
+`Dialog.renderStats` を参照してください。
+
+!!! tip "数値の読み方"
+転送率 ( 転送時間 / 経過実時間 ) が高くても **fps が出ていれば、
+待ちの大半は vsync 同期ぶん**です ( ドライバが転送呼び出しの中で
+次フレームを待つ )。本当に転送が足を引っ張っている場合は fps が
+落ちます。この判定基準や経路ごとの違い、計測の進め方は
+コアデモ `perf_stats` と、エンジン付属文書
+`src/core/doc/ScreenTransfer.md` にまとめてあります。
+
+**関連:** [System.renderStatsReset](System.md#renderstatsreset)
+
+---
+
+### texUploadUsePBO
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Boolean`
+
+**解説**
+
+テクスチャ転送に PBO を使うかの強制指定
+
+画面バッファを GPU テクスチャへ転送する経路を、計測・比較のために
+強制します。設定できる値は次の通りです。
+
+| 値 | 意味 |
+|---|---|
+| `void` (既定) | 用途ごとの既定に従う (本画面 = 転送サイズで自動判定 / オーバーレイ = 直接転送) |
+| `true` | 常に PBO 経由で転送する |
+| `false` | 常に `glTexSubImage2D` で直接転送する |
+
+既定では転送バイト数が 256KB 以上なら PBO、それ未満なら直接転送を
+選びます。小さい矩形を多数更新する画面では PBO の固定コストが効いて
+不利になるためです。また ANGLE 実装 (Windows の GLES → D3D11
+エミュレーション) ではサイズによらず常に直接転送になります。
+
+A/B 比較には `System.renderStatsReset()` と `System.renderStats` を
+併用します。環境変数 `KRKRZ_GLTEXUP=pbo|direct` でも同じ指定が
+できますが、環境変数を渡せない環境ではこちらを使います。
+
+OpenGL 描画を有効にしたビルドでのみ存在します (既定で有効)。
+
+**関連:** [System.renderStats](System.md#renderstats)
 
 ---
 
@@ -1378,6 +1484,21 @@ WINVER でも使えるよう REPL 有効時に用意される、テスト/検証
 
 ---
 
+### renderStatsReset
+
+メソッド
+
+**解説**
+
+画面転送コストの計測値をリセットする
+
+`System.renderStats` の累積カウンタを 0 に戻します。
+計測区間の開始点として呼びます。
+
+**関連:** [System.renderStats](System.md#renderstats)
+
+---
+
 ### addFont
 
 メソッド
@@ -1593,8 +1714,11 @@ System.endAllocTag();
 メモリ状態オーバレイの設定
 
 画面右上にエンジンのメモリ状態をリアルタイム表示するオーバレイの
-表示有無を切り替えます。SDL3 ビルド限定で、その他のビルドでは
-何も行いません。
+表示有無を切り替えます。フラグ自体は全ビルドで切り替わりますが、
+**描画するのは OGL 系 DrawDevice ( `OGLDrawDevice` / `SDLOGLDrawDevice` )
+と SDL の `SDLDrawDevice`** です。Windows ネイティブ ( WINVER ) ビルドの
+既定 `BasicDrawDevice` (D3D11) には描画フックが無いため表示されませんが、
+WINVER でも `Window.drawDevice` を OGL 系へ切り替えれば表示されます。
 
 ---
 
@@ -1617,8 +1741,13 @@ System.endAllocTag();
 ゲームパッド状態オーバレイの設定
 
 画面左上にゲームパッド 16 ボタンと 6 軸のアナログ値のオーバレイを
-表示するかを切り替えます。SDL3 ビルド限定で、その他のビルドでは
-何も行いません。
+表示するかを切り替えます。フラグ自体は全ビルドで切り替わりますが、
+**描画するのは OGL 系 DrawDevice ( `OGLDrawDevice` / `SDLOGLDrawDevice` )
+と SDL の `SDLDrawDevice`** です。Windows ネイティブ ( WINVER ) ビルドの
+既定 `BasicDrawDevice` (D3D11) には描画フックが無いため表示されませんが、
+WINVER でも `Window.drawDevice` を OGL 系へ切り替えれば表示されます
+( パッドの状態取得は全ビルド共通の論理層を使うため、WINVER でも
+XInput のパッド名・ボタン・軸が表示されます )。
 
 ---
 

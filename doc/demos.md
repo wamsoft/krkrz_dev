@@ -1,7 +1,7 @@
 # デモ (ブラウザ実行)
 
 吉里吉里Z のコアデモ + プラグイン横断デモを **ブラウザ上でそのまま実行**できます。
-`krkrz_dev/data` の統合デモギャラリー（全 12 デモ）を Emscripten (wasm) でビルドし、
+`krkrz_dev/data` の統合デモギャラリーを Emscripten (wasm) でビルドし、
 このページに埋め込んでいます。メニューからデモを選ぶと **再起動なし**で切り替わり、
 **ESC でメニューに戻ります**（デスクトップ版とまったく同じ hub 動作）。
 
@@ -10,6 +10,10 @@
     - 初回アクセス時は Service Worker 登録のため **一度自動リロード**が入ります。
     - 起動時に **約 37 MB**（wasm + データ + 日本語/絵文字フォント）を読み込みます。下の「▶ 実行」を押したときだけロードします。
     - Elements パネルを使うデモはマウス操作、その他は下部バーやキーボード（各デモの操作説明を参照）で動きます。
+    - **埋め込まれているのはビルド時点のデモ一式**です。その後に追加されたデモ
+      （`window_multi` / `perf_stats` / `system_debug` / `webui` / `softkey_ime` /
+      `pad_advanced` など）は wasm 再ビルド後に反映されます。最新の一覧は
+      リポジトリの `data/ROADMAP.md` を参照してください。
 
 <div id="krkrz-demo-holder" markdown="0" style="margin:1.5em 0;">
   <button id="krkrz-demo-run"

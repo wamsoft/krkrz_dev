@@ -54,7 +54,7 @@ OpenGL(ES) コンテキストごとに 1 つ生成する。
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `oglbase` | `&nbsp;` | GLGetProcAddress を保持するオブジェクト (GetProcAddress提供元)<br>以下のいずれかを指定できる:<br>- krkrgles プラグインの GLESAdaptor<br>- 新しい吉里吉里Z の OGLDrawDevice (本体組み込みの OpenGL 描画デバイス)<br>現在の OpenGL ES コンテキストに対して初期化される。<br>※コンテキストが current な状態で生成すること |
+| `oglbase` | `&nbsp;` | GLGetProcAddress を保持するオブジェクト (GetProcAddress提供元)<br>以下のいずれかを指定できる:<br>- krkrgles プラグインの GLESAdaptor<br>- Window (本体組み込みの OpenGL 描画 = OGLDrawDevice を使う構成の場合)<br>※ 実装は渡されたオブジェクトの GLGetProcAddress プロパティを引くだけ。<br>OGLDrawDevice 自身はこのプロパティを持たないので Window を渡すこと<br>(threepp の GLRenderer に渡すものと同じ)<br>現在の OpenGL ES コンテキストに対して初期化される。<br>※コンテキストが current な状態で生成すること |
 
 **解説**
 

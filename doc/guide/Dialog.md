@@ -83,6 +83,27 @@ GPU ( OpenGL 描画 ) 側で同等のトランジションを行いたい場合�
 
 いずれも省略すれば従来と完全に一致します。
 
+## 矩形テキスト ( text_area )
+
+字幕やセリフ窓のように「決まった矩形に本文を流し込み、文字送りする」用途には `text_area` を使います。
+
+```jsonc
+{ "type": "text_area",
+  "text": "…本文…",
+  "size": 36,                    // px
+  "font": "Noto Sans JP",        // 省略時はテーマ既定
+  "align": "left",               // left / center / right
+  "line_spacing": 12,            // 行間追加 px
+  "count_var": "sub_count" }     // 文字送り ( -1 = 全部 )
+```
+
+- 折り返し・行頭行末禁則・文字送りの単位が [Layer.drawShapedTextArea](../reference/Layer.md#drawshapedtextarea) と**同じロジック**です。同じ本文・同じ幅・同じフォント / サイズなら**改行位置が一致**します ( レイヤ描画と Elements で字幕を出し分けても行組みがずれません )。
+- `"count_var"` に変数名を与えると、ホストが [setVar](../reference/Dialog.md#setvar) で数値を書くだけで文字送りが進みます。**折り返しは全文で確定してから count を適用する**ので、送っている途中でリフローしません。数える単位は [Layer.shapedTextCount](../reference/Layer.md#shapedtextcount) と同じクラスタ ( 合字・結合文字・絵文字 ZWJ シーケンスで 1 ) です。
+- 本文の差し替えは `"text_var"` / `"text_id"`、リストからの指定番号表示は `"text_list_id"` + `"index_var"` で、いずれも `label` と同じ規約です。
+- 従来からある `text_box` は互換のためそのまま残っています ( 素朴なワード折り返し・禁則なし )。既存画面の改行位置は変わりません。
+
+⚠ 絶対座標で置く ( `floating` の `"at"` を使う ) 場合は、top-level に `"size": [w, h]` を明示してください。省略するとダイアログが内容の最小サイズまで縮み、絶対座標がその外に出て何も表示されません。
+
 ## 非モーダルの複数同時表示とフォーカス
 
 非モーダルダイアログ ( [showJson](../reference/Dialog.md#showjson) / [startFlow](../reference/Dialog.md#startflow) 系 ) は z-order 付きのインスタンスリストとして管理され、複数同時に表示できます。マウスは最前面からヒットテストし、キーボード / ゲームパッドはフォーカスを保持しているインスタンス ( z-order 末尾優先 ) に届きます。モーダルダイアログを重ねた場合、下のインスタンスは描画は維持されたまま入力だけがブロックされます。

@@ -1032,13 +1032,13 @@ class Layer {
 	function drawGlyph(x, y, glyph, color, opa = 255, aa = true, shadowlevel = 0, shadowcolor = 0x000000, shadowwidth = 0, shadowofsx = 0, shadowofsy = 0);
 
 	/**
-	 * 文字描画 ( glyphware / 統一フォントエンジン )
+	 * 文字描画 ( シェイピング / 統一フォントエンジン )
 	 *
 	 * 統一フォントエンジン glyphware ( FreeType + HarfBuzz ) を用いて、メインイメージの
 	 * ベースライン原点 (x, y) にテキストを描画します。[Layer.drawText](Layer.md#drawtext)
 	 * とは独立した描画経路で、**BiDi ( 双方向テキスト )・複雑スクリプトのシェイピング・
-	 * フォントフォールバック** に対応します ( アラビア語・ヘブライ語等 )。戻り値は前進幅
-	 * ( ピクセル ) です。
+	 * フォントフォールバック** に対応します ( アラビア語・ヘブライ語等 )。戻り値は
+	 * 描画した部分の前進幅 ( ピクセル ) です。
 	 *
 	 * **注意:** これは段階移行用に既存 drawText と並存する新経路です。既存 drawText の
 	 * 挙動 ( 1 コードポイントずつの cell-stepping ) を glyphware に切り替えたい場合は
@@ -1047,40 +1047,88 @@ class Layer {
 	 * @param y 描画するベースライン原点の y 座標をピクセル単位で指定します。
 	 * @param text 描画する文字列を指定します。
 	 * @param color 描画する文字の色を 0xAARRGGBB 形式で指定します ( 上位 8bit のα省略 = 不透明 )。
-	 * @param fontKey フォントを指定します。data/fonts.json で宣言したフォント名・ストレージパス・
-	 * ( WINVER の ) インストール済みシステムフォント名のいずれか。カンマ区切りで複数指定すると
+	 * @param font 描画属性をまとめて指定します。以下のいずれかです。
+	 *
+	 * + [Font](Font.md) オブジェクト … face ( フォント指定 )・height ( サイズ px )・
+	 * bold・italic・underline・strikeout・angle ( 1/10 度単位・反時計回り。カラー絵文字は
+	 * 変換非対応のため直立のまま ) を使用します
+	 * + 文字列 … 自レイヤの font の face のみ差し替えて使用します
+	 * + void ( 省略 ) … 自レイヤの [Layer.font](Layer.md#font) をそのまま使用します
+	 *
+	 * face ( フォント指定 ) は data/fonts.json で宣言したフォント名・ストレージパス・
+	 * ( WINVER の ) インストール済みシステムフォント名のいずれかで、カンマ区切りで複数指定すると
 	 * フォールバック連鎖になります ( コードポイント毎に最初に収録する face を使用。例:
 	 * "メイリオ,Segoe UI Emoji" )。
-	 * @param size フォントの高さをピクセル単位で指定します。
 	 * @param base 基本方向を指定します。0 = 自動判定 / 1 = 左横書き ( LTR ) / 2 = 右横書き ( RTL )。
-	 * @param bold 太字 ( 合成 ) にするかどうかを指定します。
-	 * @param italic 斜体 ( 合成 ) にするかどうかを指定します。
-	 * @param underline 下線を引くかどうかを指定します。
-	 * @param strikeout 打ち消し線を引くかどうかを指定します。
-	 * @param angle テキストの回転角を 1/10 度単位・反時計回りで指定します ( [Font.angle](Font.md#angle) 準拠 )。
-	 * グリフの送り位置が回転します。カラー絵文字は変換非対応のため直立のままです。
-	 * @return 前進幅 ( ピクセル ) を返します。失敗時は -1 を返します。
+	 * @param count 0 以上を指定すると、論理順 ( 読み順 ) で先頭 count 「文字」だけを描画します
+	 * ( タイプライタ表示用 )。「文字」は描画時に一塊として扱われるクラスタ単位で、
+	 * [Layer.shapedTextCount](Layer.md#shapedtextcount) と同じ数え方です ( 合字・結合文字・
+	 * 絵文字 ZWJ シーケンスで 1 )。全文をシェイピングしてから先頭部分だけを描くため、
+	 * 表示途中でもアラビア語の文脈字形などは変化しません。省略時 ( -1 ) は全体を描画します。
+	 * @return 描画した部分の前進幅 ( ピクセル ) を返します。失敗時は -1 を返します。
 	 */
-	function drawGlyphwareText(x, y, text, color, fontKey, size, base = 0, bold = false, italic = false, underline = false, strikeout = false, angle = 0);
+	function drawShapedText(x, y, text, color, font = void, base = 0, count = -1);
 
 	/**
-	 * 文字列計測 ( glyphware / 統一フォントエンジン )
+	 * 矩形内文字描画 ( シェイピング / 簡易折り返し )
+	 *
+	 * 統一フォントエンジン glyphware を用いて、矩形 (x, y, width, height) の内側に
+	 * 簡易折り返し付きでテキストを描画します。\n ( \r\n / \r ) は明示改行として扱い、
+	 * 空白で区切られる言語 ( 英語等 ) はワード単位、日本語等の CJK は文字単位で
+	 * 折り返します ( 行頭・行末の簡易禁則処理付き )。矩形の下端を超える行は描画されず、
+	 * 描画は矩形内にクリップされます。font の angle は無視されます。
+	 * @param x 矩形の左端をピクセル単位で指定します。
+	 * @param y 矩形の上端をピクセル単位で指定します。
+	 * @param width 矩形の幅をピクセル単位で指定します。
+	 * @param height 矩形の高さをピクセル単位で指定します。
+	 * @param text 描画する文字列を指定します。
+	 * @param color 描画する文字の色を 0xAARRGGBB 形式で指定します ( 上位 8bit のα省略 = 不透明 )。
+	 * @param font 描画属性をまとめて指定します ( [Layer.drawShapedText](Layer.md#drawshapedtext) と同じ )。
+	 * @param base 基本方向を指定します ( 0 = 自動 / 1 = LTR / 2 = RTL )。
+	 * @param count 0 以上を指定すると、全体を通して先頭 count 「文字」( クラスタ ) だけを
+	 * 描画します ( タイプライタ表示用 )。折り返し位置は全文で確定してから描画するため、
+	 * 表示途中に行の組み替え ( リフロー ) は起こりません。省略時 ( -1 ) は全体を描画します。
+	 * @param lineSpacing 行間に追加するピクセル数を指定します ( 負値も可 )。
+	 * @param align 行揃えを指定します。0 = 左揃え / 1 = 中央揃え / 2 = 右揃え。
+	 * @return 描画結果の Dictionary を返します ( 失敗時は void ):
+	 * %[ "height" => 消費した高さ ( px ), "lines" => 描画した行数,
+	 * "count" => 実際に描画したクラスタ数 ]
+	 */
+	function drawShapedTextArea(x, y, width, height, text, color, font = void, base = 0, count = -1, lineSpacing = 0, align = 0);
+
+	/**
+	 * 文字列計測 ( シェイピング / 統一フォントエンジン )
 	 *
 	 * 統一フォントエンジン glyphware でテキストを計測し、結果を Dictionary で返します。
-	 * 描画は行いません。[Layer.drawGlyphwareText](Layer.md#drawglyphwaretext) と同じ
+	 * 描画は行いません。[Layer.drawShapedText](Layer.md#drawshapedtext) と同じ
 	 * フォント指定・シェイピングで計測します。
 	 * @param text 計測する文字列を指定します。
-	 * @param fontKey フォントを指定します ( drawGlyphwareText と同じ形式・フォールバック連鎖可 )。
-	 * @param size フォントの高さをピクセル単位で指定します。
+	 * @param font 描画属性をまとめて指定します ( [Layer.drawShapedText](Layer.md#drawshapedtext) と同じ )。
 	 * @param base 基本方向を指定します ( 0 = 自動 / 1 = LTR / 2 = RTL )。
-	 * @param bold 太字 ( 合成 ) として計測するかどうかを指定します。
-	 * @param italic 斜体 ( 合成 ) として計測するかどうかを指定します。
 	 * @return 計測結果の Dictionary を返します ( 失敗時は void )。すべてベースライン原点 (0,0)
 	 * 基準のピクセル値です:
 	 * %[ "width" => 前進幅, "left" => インク左, "top" => インク上 ( 負 = ベースラインより上 ),
-	 * "right" => インク右, "bottom" => インク下, "ascent" => アセント, "descent" => ディセント ]
+	 * "right" => インク右, "bottom" => インク下, "ascent" => アセント, "descent" => ディセント,
+	 * "count" => 描画クラスタ数 ( [Layer.shapedTextCount](Layer.md#shapedtextcount) と同じ ) ]
 	 */
-	function measureGlyphwareText(text, fontKey, size, base = 0, bold = false, italic = false);
+	function measureShapedText(text, font = void, base = 0);
+
+	/**
+	 * 描画文字数 ( クラスタ数 ) の取得
+	 *
+	 * テキストの「描画時に一塊として扱われる文字数 ( クラスタ数 )」を返します。
+	 * [Layer.drawShapedText](Layer.md#drawshapedtext) /
+	 * [Layer.drawShapedTextArea](Layer.md#drawshapedtextarea) の count 引数が制限する
+	 * 単位と同じです。合字・基底文字 + 結合文字・絵文字 ZWJ シーケンスがそれぞれ
+	 * 1 と数えられるため、コードポイント数 ( 文字列の length ) とは一致しないことが
+	 * あります。改行文字は行を分割し、それ自身は数えられません。
+	 * @param text 数える文字列を指定します。
+	 * @param font 描画属性をまとめて指定します ( [Layer.drawShapedText](Layer.md#drawshapedtext) と同じ。
+	 * 合字の有無などフォントによってクラスタ数が変わることがあります )。
+	 * @param base 基本方向を指定します ( 0 = 自動 / 1 = LTR / 2 = RTL )。
+	 * @return クラスタ数を返します。失敗時は -1 を返します。
+	 */
+	function shapedTextCount(text, font = void, base = 0);
 
 	/**
 	 * 矩形コピー

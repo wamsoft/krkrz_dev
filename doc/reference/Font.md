@@ -181,7 +181,7 @@ FreeType + HarfBuzz )。GDI 既定を変えず、選択時のみ drawText のグ
 経由になります ( 埋め込みビットマップではなくアウトライン描画・カラー絵文字対応 )。
 なお drawText 経路は 1 コードポイントずつの cell-stepping で**シェイピングは行いません**
 ( BiDi / 複雑スクリプトのシェイピングが必要な場合は
-[Layer.drawGlyphwareText](Layer.md#drawglyphwaretext) を用います )。
+[Layer.drawShapedText](Layer.md#drawshapedtext) を用います )。
 
 FreeType / glyphware を指定した場合、横書きにのみ対応しています。その他は未対応です。
 

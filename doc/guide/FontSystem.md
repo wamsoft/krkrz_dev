@@ -123,7 +123,7 @@ Font.registerFontFile("fonts/big_cjk.ttf", "MyCJK");   // 遅延 (初回使用�
 ### ④ システムフォント (Windows ネイティブ版)
 
 WINVER では OS にインストール済みのフォントを**フォント名だけで**使えます
-(GDI 名前解決)。glyphware 系の経路 (rasterizer=2 / drawGlyphwareText /
+(GDI 名前解決)。glyphware 系の経路 (rasterizer=2 / drawShapedText /
 Elements) でも `"メイリオ"` `"MS PGothic"` 等の名前がそのまま解決され、
 TTC のフェイス番号も正しく選択されます。`addFont` プラグインで登録した
 埋め込みフォントも同様に名前で使えます。
@@ -174,19 +174,35 @@ var r = Font.queryFonts(%[ containsText : "あ", weight : 700 ]);
 ## 多言語シェイピング描画 (glyphware)
 
 `Layer.drawText` は従来どおり「1 文字ずつのセル送り」ですが、
-[Layer.drawGlyphwareText](../reference/Layer.md#drawglyphwaretext) は
+[Layer.drawShapedText](../reference/Layer.md#drawshapedtext) は
 **HarfBuzz シェイピング + BiDi** による本格的な多言語 1 行描画を行います:
 
 - アラビア文字の連結・合字・カーニング、ヘブライ/アラビアの右→左 (BiDi)
-- コードポイント単位のフォールバック連鎖 (fontKey カンマ区切り)
+- コードポイント単位のフォールバック連鎖 (Font.face カンマ区切り)
 - カラー絵文字、合成 bold/italic、下線/取消線、回転 (angle)
+- 描画属性は [Font](../reference/Font.md) オブジェクト 1 個で渡します
+  (void = レイヤ自身の font / 文字列 = face のみ差し替え)
 
-計測は [Layer.measureGlyphwareText](../reference/Layer.md#measureglyphwaretext)
-で行います (インク境界と ascent/descent を返します)。
+[Layer.drawShapedTextArea](../reference/Layer.md#drawshapedtextarea) は
+矩形内への**簡易折り返し描画**です。`\n` の明示改行、英語等のワード単位
+折り返し、日本語の文字単位折り返し (行頭/行末の簡易禁則付き)、行揃え
+(左/中央/右)、行間調整に対応します。
+
+`count` 引数 (drawShapedText / drawShapedTextArea 共通) に 0 以上を渡すと
+先頭 count 「文字」だけを描画でき、タイプライタ表示に使えます。この
+「文字」は描画時に一塊として扱われる**クラスタ単位** (合字・結合文字・
+絵文字 ZWJ シーケンスで 1) で、総数は
+[Layer.shapedTextCount](../reference/Layer.md#shapedtextcount) で取得します。
+全文をシェイピング/折り返し確定してから先頭部分だけを描くため、表示途中で
+字形や折り返し位置が変化 (リフロー) しません。
+
+計測は [Layer.measureShapedText](../reference/Layer.md#measureshapedtext)
+で行います (インク境界と ascent/descent、クラスタ数を返します)。
 
 動作サンプル: コアデモギャラリー (`src/core/data`) の
 「多言語シェイピング (glyphware)」シーンで、アラビア語/ヘブライ語 (RTL)・
-BiDi 混在・絵文字混在・計測の実例を確認できます。
+BiDi 混在・絵文字混在・計測・矩形内折り返し・タイプライタ表示 (RTL 混在文の
+自動再生 — RTL 区間が論理順で 1 クラスタずつ現れます) の実例を確認できます。
 
 ## UI 系 (Elements) と layerExVector のフォント
 
@@ -196,6 +212,11 @@ BiDi 混在・絵文字混在・計測の実例を確認できます。
   `Dialog.registerFont(family, storage[, weight, slant, stretch])` /
   `Dialog.registerFontDir(dir)` で登録します。ストレージパス (XP3 内・
   `resource://` 含む) をそのまま渡せます。
+- 矩形への流し込みは**折り返しロジックも共有**します。ダイアログの
+  `text_area` ウィジェットは上記 `drawShapedTextArea` と同じ折り返し・
+  行頭行末禁則・クラスタ単位の文字送りを通るため、同じ本文・同じ幅なら
+  レイヤ描画と Elements で**改行位置が一致**します
+  (従来からある `text_box` は互換のため素朴な折り返しのまま)。
 - **layerExVector プラグイン** (`GdiPlus.loadFont(storage, name)`) も同じ
   エンジンを共有します。`resource://./notosansjp-regular.otf` のように
   本体埋め込みフォントを指定でき、フォントを同梱しなくてもアウトライン

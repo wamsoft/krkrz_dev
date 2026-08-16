@@ -82,7 +82,21 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
       (`src/core/data/elements_flow/`)。斜めワイプ (vague 大小) / サークル
       (開閉、反転 rule) / クロスフェードの 3 系統。core gallery / data hub /
       単体起動の 3 経路に登録。実機キャプチャ検証済。
-- [ ] `tools/collect_samples.py` + `make samples`: plugin `sample/` 集約 → `samples_auto.tjs` 生成
+- [x] **text_glyphware シーンをシェイピング API 刷新へ追従** (2026-08-12)。
+      `drawShapedText` 系改名 (旧 drawGlyphwareText) + Font オブジェクト渡しを
+      反映し、`drawShapedTextArea` の矩形内折り返し (禁則/align) と
+      `shapedTextCount` + count 制限の**自動再生タイプライタ** (RTL 混在文が
+      論理順で 1 クラスタずつ現れる) を追加。実機キャプチャ検証済。
+      ※ doc 埋め込み wasm デモ (doc/_assets/demo) への反映は krkrz_web
+      再ビルドが必要 (別リポ作業、未実施)。
+- [x] **elements_bench (Elements 負荷計測) 追加** (2026-08-12)。
+      `Dialog.renderStats` (描画パイプラインの区間計測: update/raster/
+      acquire/upload/present の累積時間+回数) を新設し、更新パターン別
+      シナリオ (静的/キャレット点滅/毎フレーム setVar/アニメ小/広域/複合) と
+      renderCache A/B トグル付きのベンチ画面を core デモに追加
+      (`src/core/data/elements_bench/`)。NX 実測・部分再描画の before/after
+      確認用。実測で Windows SDL は再ラスタ時の upload (テクスチャ転送) が
+      サイズ非依存 ~10ms 級で支配的と判明 (ElementsDialog.md に記録)。
 - [ ] doc/ にデモ一覧ページ (topics/samples.md 等) 新設、以後デモ追加ごとに更新
 - [ ] krkrz_web: ランチャの起動トークンが `core/<demo>` 形式 (スラッシュ入り) に
       なったため、pre.js の ?sample= 対応を krkrz_web 側で確認 (別リポ作業)
@@ -155,6 +169,35 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       VK 名+コード+修飾キー+履歴、マウス座標/ボタン/ホイール/ドラッグ軌跡、
       パッド軸 (System.padAxis*)。postInputEvent で demotest 注入
 - [x] timer_async — Timer/AsyncTrigger/連続ハンドラのタイミング可視化 (2026-07-20)
+- [x] pad_advanced — ゲームパッド (多パッド / 軸 / 振動) (2026-08-16)。論理番号
+      (0=最後に操作したパッド / 1..N)、getPadAxis のスティック升目 + トリガバー
+      可視化、VK_PAD* のイベント + getKeyState マトリクス、rumblePad (弱/強/両方
+      + 時間)、padEnabled、setPadOverlay、onJoypadChange。資材不要 (実パッドは要)。
+      ※ Elements パネル表示中は VK_PAD* がパネルに消費されるため、
+        Dialog.registerHotKey で全ボタンを確保してバイパスさせている
+        (パネルのチェックで ON/OFF を切り替えて挙動差を確認できる)
+- [x] layer_tree — レイヤツリー / ヒットテスト / フォーカス (2026-08-16)。
+      htMask + hitThreshold の 3 帯、htProvince (領域画像をコード生成した円)、
+      onHitTest による最終判定、親の visible/enabled が子の nodeVisible/
+      nodeEnabled に伝わる様子、bringToFront/bringToBack と Tab フォーカス連鎖。
+      資材不要。※ hitType は htMask / htProvince の 2 値で htRect は無い
+      (矩形全面は hitThreshold = 0)
+- [x] window_multi — 複数ウィンドウ / モーダル / 画面情報 (2026-08-16)。
+      サブウィンドウ生成、showModal のブロッキング時間計測、borderStyle /
+      stayOnTop / setZoom / fullScreen、screen 解像度と displayDensity、
+      System.captureScreen による PNG 保存。資材不要。
+      ※ 作成中に engine 側 3 件を修正: SDL のウィンドウ位置/サイズ/枠/最前面/
+      全画面/zoom が未実装だったのを実装、2 枚目の Window を閉じるとメイン画面が
+      更新されなくなる GL コンテキスト問題、サブウィンドウ提示で Elements
+      overlay が移設され閉じると消える問題。
+      ※ WINVER の setZoom は windowed で見た目が変わらない (TODO.md に記載)
+- [x] perf_stats — 転送コストとメモリ計測 (2026-08-16)。System.renderStats の
+      差分で提示フレーム/転送回数/転送量/転送率を 500ms ごとに表示し、負荷
+      パターン (なし / 小矩形多数 / 全面塗り / 動いた所だけ更新) で比較する。
+      texUploadUsePBO の A/B、getSystemAllocatorInfo、doCompact /
+      clearGraphicCache / resetMemoryPeak / setMemoryOverlay。資材不要。
+      ※ 実測: 全面塗り = 転送率 92.8% に対し、動いた矩形だけ update なら 3.2%
+      ※ WINVER は本画面を毎フレーム全画面転送する実装 (TODO.md に記録)
 - [ ] sound — WaveSoundBuffer: 再生・ループ・ラベル・fade・pan、PhaseVocoder
       (現デモから移設)、SoundBuffer、**ゲインコントロール** (setGainQueryCallback で
       曲別 dB / CLI 全体ゲイン -opus_gain・-ogg_gain / ReplayGain -*_rg の効果を実聴。
@@ -163,11 +206,31 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       距離減衰/ドップラー/減衰モデル。現 startup.tjs のホットキー実装を専用シーン化
       (前/後/左/右の離散位置サンプルも)。詳細は project_wavesound_3d_spatializer
 - [ ] video — VideoOverlay: layer / overlay モード、シーク、ループ
+- [x] softkey_ime — 文字入力 / 仮想キーボード / IME (2026-08-16)。onKeyPress で
+      文字を受ける自前入力欄、Layer.imeMode + setAttentionPoint、内蔵仮想
+      キーボード (Dialog.virtualKeyboard の auto/always/never と
+      hasPhysicalKeyboard)、System.inputString、Clipboard。資材不要。
+      ※ 作成中に SDL のクリップボードが空実装だったのを SDL3 API で実装
+      ※ demolib に onKeyPress フックを追加
+      ※ doc の ElementsDialog.md が ElementsDialog.virtualKeyboard と誤記
+        (正しくは Dialog.virtualKeyboard) → 修正
 - [ ] storage — Storages / autoPath / アーカイブ / BinaryStream / セーブデータ
       (Web では IDBFS 永続化の確認を兼ねる)
+- [x] webui — ブラウザ UI (WebServer) (2026-08-16)。内蔵 HTTP + SSE サーバで
+      ブラウザ側にツール UI を置く最小構成。静的配信 (serveStatic で同梱
+      web/index.html)、動的エンドポイント (GET /api/state / POST /api/message /
+      /api/color / /api/bump?by=N)、ゲーム → ブラウザ push (broadcast + SSE)。
+      -replweb 稼働中は相乗り、単体なら 8900 で start。資材不要 (HTML 自作)。
+      ※ マルチバイトの値は body で受ける (System.urldecode は Windows 拡張)
+      ※ TJS の文字取り出しは s[i]。s[i,1] はカンマ式になり常に s[1] を返す
 - [ ] ui_flow — Elements 画面遷移 (screens / navigator): 現 flowdemo.jsonc +
       menu/*.json を整理してタイトル→設定→ダイアログの一連フローに
-- [ ] system_debug — System 情報 / Debug.console / Scripts.eval / 例外ハンドラ挙動
+- [x] system_debug — デバッグ支援 (2026-08-16)。Scripts.eval + Debug.prettyPrint
+      で式をその場評価、例外オブジェクト (message / trace) を種類別に確認、
+      System.exceptionHandler を差し替えて未捕捉例外を自前処理 (true を返して
+      既定動作を抑止)、Debug.addLoggingHandler でエンジンのログを画面へ。
+      資材不要。※ TJS2 の組込例外クラスは Exception のみ / e.trace は -debug
+      起動時のみ中身が入る
 
 ### ③ 横断デモ (data/、複数プラグイン組み合わせ)
 
