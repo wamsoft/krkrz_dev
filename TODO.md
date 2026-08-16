@@ -19,7 +19,6 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
-| 高 | WINVER 本画面転送の差分更新化 | `BasicDrawDevice::DrawCompositedFrame` がシャドウバッファ全体を毎フレーム `UpdateSubresource` している (コード内 NOTE のとおり「まずは全面転送で正確性優先」)。1280x720 で 3.5MB×fps を無条件に転送。GL 側と同様にダーティ矩形 (union もしくは矩形ごと) だけ転送する。効果測定は `perf_stats` デモ (現状 WINVER は負荷を変えても 421.9MB/秒・転送率 5% で一定) |
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
@@ -62,6 +61,11 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 ---
 
 ## 最近クローズしたもの
+
+- ✅ WINVER 本画面転送の差分更新化 (src/core `5597496d`)
+  `BasicDrawDevice` がダーティ矩形単位で `UpdateSubresource` するようになり、
+  静止画面 421.9MB/秒 → 1.8MB/秒 (転送率 5.0% → 0.0%)、動きのある画面でも
+  -87〜-98%。詳細 = [src/core/doc/D3D11Migration.md](src/core/doc/D3D11Migration.md) 追補節
 
 - ✅ WINVER のモーダルウィンドウがマウス操作を受け付けない (src/core `49fdd011`)
   D3D9 → D3D11 移行の回帰。vblank 待ちをメインスレッドから VSync タイミング
