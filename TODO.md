@@ -25,7 +25,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 中 | リリースのバージョン運用を確定する | 番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する |
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
-| 中 | Window ジオメトリ仕様の統一 **P1** (DestRect を viewport 共通計算へ + viewport API 全バリアント公開 + WINVER 入力座標の DestRect オフセット対応) | 方針確定済。SSOT = [WindowGeometry.md](src/core/doc/WindowGeometry.md)。既定値は fit=`contain` / align=中央 / DPI は inner の物理サイズ維持。**P1 は等価変換なので挙動不変** |
+| ✅ | Window ジオメトリ仕様の統一 **P1** | DestRect 算出を `TVPCalcViewportDestRect` 共通計算へ + viewport の配置 API を全バリアント公開 + WINVER 入力座標の DestRect オフセット対応。等価変換で**挙動不変を実測確認済**。SSOT = [WindowGeometry.md](src/core/doc/WindowGeometry.md)。余白塗り (`viewportBgColor`/壁紙) は DrawDevice 実装が要るため Generic 限定のまま |
 | 中 | 同 **P2** (WINVER `setZoom` を `SetInnerSize(layer×zoom)` 方式へ + 既定 align を中央へ) | 旧 WIN の「`inner == layer×zoom`」不変条件をエンジン側で保証する形にする。同梱スクリプトへの影響は KAG3 `YesNoDialog` の同値再設定のみ。**P1 の入力座標修正が前提** |
 | 中 | 同 **P3** (基準面を inner へ統一) | SDL の `innerWidth` 実値化 / WINVER の min/max を inner 基準へ / WINVER `borderStyle` 変更を inner 維持へ / SDL `displayDensity` の `96` 固定を実 DPI へ / WINVER `SetClientSize` を `AdjustWindowRectExForDpi` へ / `frameWidth`・`frameHeight` 追加。同梱スクリプトでの `setMinSize`/`setMaxSize`/`setSize` 使用は 0 件 |
 | 中 | 同 **P4** (DPI ポリシー = inner の物理ピクセルサイズ維持) | WINVER の `WM_DPICHANGED` を「client 物理サイズ維持 + 位置だけ提案矩形へ」に変更 / SDL はプログラム移動の前後で client サイズを退避・再適用。**P3 の後** |
