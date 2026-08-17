@@ -113,7 +113,7 @@ if (obj.name !== void) { ... }                          // 正しい
 | `System.urldecode` / `readRegValue` 等 | Windows 拡張。SDL3 ビルドには無い |
 | `System.setMemoryOverlay` / `setPadOverlay` | フラグは全ビルド共通だが、描画するのは OGL 系 / SDL の DrawDevice ( WINVER 既定の D3D11 では出ない ) |
 | `Layer.imeMode` / `setAttentionPoint` | 値は全ビルドで保持されるが、実際に効くのは WINVER |
-| `Window.setZoom` | 挙動が異なる ( SDL3 はウィンドウがリサイズされる。[Window.setZoom](../../reference/Window.md#setzoom) 参照 ) |
+| `Window.setZoom` | 2026-08-17 に両ビルドで挙動を統一済 ( 「レイヤサイズ × 倍率」をウィンドウの内側サイズにする )。それ以前の WINVER は倍率を覚えるだけだったので、古いエンジンも対象にするなら [Window.setInnerSize](../../reference/Window.md#setinnersize) を併用する |
 | `Dialog` 系 / `WebServer` | ビルドオプション ( `KRKRZ_USE_ELEMENTS` / `KRKRZ_REPL_WEB` ) 次第 |
 
 ---

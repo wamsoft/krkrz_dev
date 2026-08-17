@@ -1,19 +1,26 @@
 # ゲーム画面の表示画角制御 (ビューポート)
 
-SDL3 ビルドのエンジンでは、外側ウインドウ ( surface ) の中に内側ゲーム画面を
-任意のサイズ・位置・倍率で配置し、周囲の余白を背景色や壁紙画像で埋めることが
-できます。ゲーム本来の解像度を保ったままウインドウサイズに合わせてレターボックス
+外側ウインドウ ( surface ) の中に内側ゲーム画面を任意のサイズ・位置・倍率で
+配置し、周囲の余白を背景色や壁紙画像で埋めることができます。ゲーム本来の解像度を保ったままウインドウサイズに合わせてレターボックス
 表示・整数倍拡大・センタリングなどを行いたいときに使います。
 
 内部構造の詳細は src/core 側のガイドを参照:
 
 - [doc/Viewport.md](https://github.com/wamsoft/krkrz_develop/blob/master/doc/Viewport.md)
 
-!!! note "対応ビルド"
-    この機能は **SDL ビルド ( `__GENERIC__` ) でのみ** 利用できます。3 つの
-    DrawDevice ( [SDLDrawDevice](../../reference/SDLDrawDevice.md) / SDLOGL /
-    [OGLDrawDevice](../../reference/OGLDrawDevice.md) ) すべてで動作します。
-    WINVER ビルドでは API が登録されず、従来の zoom ロック動作のままです。
+!!! note "対応ビルド / 対応 DrawDevice"
+    配置の指定 ( fit / zoom / align / offset ) は **Windows ネイティブ ( WINVER )
+    ビルドと SDL3 / 汎用ビルドの双方**で利用できます ( WINVER 対応は 2026-08-17 )。
+
+    余白の**塗り分け** ( [Window.viewportBgColor](../../reference/Window.md#viewportbgcolor) /
+    [Window.setViewportWallpaper](../../reference/Window.md#setviewportwallpaper) ) は、
+    描画デバイスが対応している場合のみ効きます。同梱の
+    [BasicDrawDevice](../../reference/Window.BasicDrawDevice.md) ( WINVER 既定 ) /
+    [SDLDrawDevice](../../reference/SDLDrawDevice.md) / SDLOGL /
+    [OGLDrawDevice](../../reference/OGLDrawDevice.md) はすべて対応しています。
+    対応していない描画デバイス ( NullDrawDevice やプラグイン製のもの ) では
+    余白はそのデバイス既定の塗りつぶしのままになります
+    ( 判定は `drawDevice.viewportBackgroundHost` が非 0 かどうか )。
 
 ---
 

@@ -48,7 +48,8 @@
       "d3d11Device",
       "dialogRendererHost",
       "interface",
-      "videoPresenterHost"
+      "videoPresenterHost",
+      "viewportBackgroundHost"
     ]
   },
   "Bitmap": {
@@ -463,6 +464,7 @@
       "interface",
       "matrix",
       "texture",
+      "viewportBackgroundHost",
       "window"
     ]
   },
@@ -512,6 +514,7 @@
       "dialogRendererHost",
       "interface",
       "sdlVideoPresenterHost",
+      "viewportBackgroundHost",
       "window"
     ]
   },
@@ -963,6 +966,8 @@
       "enableTouchMouse",
       "focusable",
       "focusedLayer",
+      "frameHeight",
+      "frameWidth",
       "fullScreen",
       "height",
       "hintDelay",

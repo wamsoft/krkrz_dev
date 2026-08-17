@@ -21,6 +21,7 @@ OGLDrawDevice クラスは、このインスタンスを [Window.drawDevice](Win
 - [matrix](#matrix)
 - [glVideoPresenterHost](#glvideopresenterhost)
 - [dialogRendererHost](#dialogrendererhost)
+- [viewportBackgroundHost](#viewportbackgroundhost)
 
 ### メソッド
 
@@ -137,6 +138,23 @@ Elements ダイアログ renderer host (ポインタ値)
 
 Elements のオーバーレイ描画アダプタを取得するための host へのポインタ値です。
 通常はエンジン内部/プラグインが使用します。
+
+---
+
+### viewportBackgroundHost
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+ビューポート余白塗り登録口 (ポインタ値)
+
+ゲーム画面が描画領域全体を覆わないときの余白 ( [Window.viewportBgColor](Window.md#viewportbgcolor) /
+[Window.setViewportWallpaper](Window.md#setviewportwallpaper) ) を受け取る
+`iTVPViewportBackgroundHost` へのポインタ値です。 Window はこのプロパティが非 0 の
+ときだけ余白設定を反映します ( プロパティを持たない描画デバイスでは余白の塗り分けは
+効かず、そのデバイス既定の塗りつぶしのままになります )。 通常はエンジン内部/プラグインが
+使用します。
 
 ---
 
