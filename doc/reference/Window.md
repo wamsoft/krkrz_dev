@@ -449,7 +449,7 @@ Window クラスのオブジェクトを構築します。
 
 `"contain"`(アスペクト維持で収まる最大・レターボックス。既定) / `"cover"`(アスペクト維持で埋める最小・はみ出しは clip) / `"fill"`(アスペクト無視で全面引き伸ばし) / `"none"`(原寸) / `"integer"`(収まる範囲で最大の整数倍。最低 1 倍) / `"custom"`([Window.viewportZoom](Window.md#viewportzoom) の倍率を使用) のいずれか。
 
-配置の指定は Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.setViewport](Window.md#setviewport) / [Window.viewportZoom](Window.md#viewportzoom)
 
@@ -466,7 +466,7 @@ Window クラスのオブジェクトを構築します。
 [Window.viewportFit](Window.md#viewportfit) が `"custom"` のときに使用する拡大倍率を表す実数です(例 1.8 = 180%)。既定は 1.0。
 値を設定することもできます。
 
-配置の指定は Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportFit](Window.md#viewportfit) / [Window.setViewport](Window.md#setviewport)
 
@@ -483,7 +483,7 @@ Window クラスのオブジェクトを構築します。
 余白が生じたときの内側ゲーム画面の水平配置を表す実数です。0=左 / 0.5=中央 / 1=右。既定は 0.5。
 値を設定することもできます。
 
-配置の指定は Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportAlignY](Window.md#viewportaligny) / [Window.setViewport](Window.md#setviewport)
 
@@ -500,7 +500,7 @@ Window クラスのオブジェクトを構築します。
 余白が生じたときの内側ゲーム画面の垂直配置を表す実数です。0=上 / 0.5=中央 / 1=下。既定は 0.5。
 値を設定することもできます。
 
-配置の指定は Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportAlignX](Window.md#viewportalignx) / [Window.setViewport](Window.md#setviewport)
 
@@ -517,7 +517,7 @@ Window クラスのオブジェクトを構築します。
 align 後に加算する内側ゲーム画面の水平オフセットを表す整数です(px・surface 座標)。
 値を設定することもできます。
 
-配置の指定は Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportOffsetY](Window.md#viewportoffsety) / [Window.setViewport](Window.md#setviewport)
 
@@ -534,7 +534,7 @@ align 後に加算する内側ゲーム画面の水平オフセットを表す�
 align 後に加算する内側ゲーム画面の垂直オフセットを表す整数です(px・surface 座標)。
 値を設定することもできます。
 
-配置の指定は Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportOffsetX](Window.md#viewportoffsetx) / [Window.setViewport](Window.md#setviewport)
 
@@ -551,7 +551,7 @@ align 後に加算する内側ゲーム画面の垂直オフセットを表す�
 ビューポートで生じた余白を塗る背景色を `0xRRGGBB` 形式の整数で表します(上位 8bit は alpha)。既定は黒。
 値を設定することもできます。壁紙([Window.setViewportWallpaper](Window.md#setviewportwallpaper))が設定されている場合は壁紙が優先されます。
 
-このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.setViewportWallpaper](Window.md#setviewportwallpaper) / [Window.setViewport](Window.md#setviewport)
 
@@ -1405,13 +1405,13 @@ OS の最小ウィンドウサイズを下回る指定では、内側サイズ�
 
 ビューポート(表示画角)の一括設定
 
-外側ウインドウ([Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) で表される surface)の中に、内側ゲーム画面(primaryLayer のサイズ)をどのように配置するかをまとめて設定します。両者のサイズが一致していれば従来どおり全面等倍で表示され、異なるサイズにすると本設定に従ってゲームが surface 内へ配置され、余白が生じます。余白は [Window.viewportBgColor](Window.md#viewportbgcolor) や [Window.setViewportWallpaper](Window.md#setviewportwallpaper) で埋められます ( 余白の塗り分けは SDL3 / 汎用ビルドのみ。Windows ネイティブ ( WINVER ) ビルドでは余白は黒で塗られます )。
+外側ウインドウ([Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) で表される surface)の中に、内側ゲーム画面(primaryLayer のサイズ)をどのように配置するかをまとめて設定します。両者のサイズが一致していれば従来どおり全面等倍で表示され、異なるサイズにすると本設定に従ってゲームが surface 内へ配置され、余白が生じます。余白は [Window.viewportBgColor](Window.md#viewportbgcolor) や [Window.setViewportWallpaper](Window.md#setviewportwallpaper) で埋められます ( Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます。WINVER 対応は 2026-08-17 )。
 
 マウス座標は配置に応じて自動的にゲーム論理座標へ補正されるため、どの設定でも入力は正しくゲーム内部へ届きます。
 
 各引数は対応するプロパティ([Window.viewportFit](Window.md#viewportfit) など)を個別に設定するのと同じです。省略した引数は変更されません。
 
-配置の指定は Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportFit](Window.md#viewportfit) / [Window.viewportZoom](Window.md#viewportzoom) / [Window.viewportAlignX](Window.md#viewportalignx) / [Window.viewportAlignY](Window.md#viewportaligny) / [Window.viewportOffsetX](Window.md#viewportoffsetx) / [Window.viewportOffsetY](Window.md#viewportoffsety) / [Window.setViewportWallpaper](Window.md#setviewportwallpaper)
 
@@ -1436,7 +1436,7 @@ OS の最小ウィンドウサイズを下回る指定では、内側サイズ�
 
 ビューポートで生じた余白(内側ゲーム画面の外側)を埋める壁紙画像を設定します。ゲーム描画より前に背景として描かれます。
 
-このメソッドは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.clearViewportWallpaper](Window.md#clearviewportwallpaper) / [Window.viewportBgColor](Window.md#viewportbgcolor) / [Window.setViewport](Window.md#setviewport)
 
@@ -1452,7 +1452,7 @@ OS の最小ウィンドウサイズを下回る指定では、内側サイズ�
 
 [Window.setViewportWallpaper](Window.md#setviewportwallpaper) で設定した壁紙を解除します。以降、余白は [Window.viewportBgColor](Window.md#viewportbgcolor) の背景色のみで塗られます。
 
-このメソッドは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.setViewportWallpaper](Window.md#setviewportwallpaper) / [Window.viewportBgColor](Window.md#viewportbgcolor)
 

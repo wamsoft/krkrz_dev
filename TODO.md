@@ -25,10 +25,11 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 中 | リリースのバージョン運用を確定する | 番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する |
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
-| ✅ | Window ジオメトリ仕様の統一 **P1** | DestRect 算出を `TVPCalcViewportDestRect` 共通計算へ + viewport の配置 API を全バリアント公開 + WINVER 入力座標の DestRect オフセット対応。等価変換で**挙動不変を実測確認済**。SSOT = [WindowGeometry.md](src/core/doc/WindowGeometry.md)。余白塗り (`viewportBgColor`/壁紙) は DrawDevice 実装が要るため Generic 限定のまま |
+| ✅ | Window ジオメトリ仕様の統一 **P1** | DestRect 算出を `TVPCalcViewportDestRect` 共通計算へ + viewport の配置 API を全バリアント公開 + WINVER 入力座標の DestRect オフセット対応。等価変換で**挙動不変を実測確認済**。SSOT = [WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | ✅ | 同 **P2** | WINVER `setZoom` が `SetInnerSize(layer×zoom)` を行うようになり (旧 WIN / SDL と同じ意味論)、既定 align も両バリアント中央に統一。倍率・入力座標・フルスクリーン往復・KAG3 相当の呼び方を実測確認済 |
 | ✅ | 同 **P3** (基準面を inner へ統一) | SDL の `innerWidth` 実値化 (+ min/max getter が 0 固定だったのを修正) / WINVER の min/max を inner 基準へ / WINVER `borderStyle` 変更を inner 維持へ / SDL `displayDensity` を実 DPI へ / WINVER `SetClientSize` を `AdjustWindowRectExForDpi` へ / `frameWidth`・`frameHeight` 追加。**サイズ挙動マトリクスは生成直後を除き全項目で両バリアント一致**。残る差 = キャプション付きウィンドウの Windows 由来の最小幅 (内側 ~116 論理px 未満) のみ、既知の差として記載 |
 | ✅ | 同 **P4** (DPI ポリシー = inner の物理ピクセルサイズ維持) | WINVER の `WM_DPICHANGED` を「client 物理サイズ維持 + 位置だけ提案矩形へ」に変更 / SDL は `TVPSDLSetWindowPositionKeepingSize()` を新設してプログラム移動を全て経由させた。200%⇔100% 往復で inner 320x240 維持・枠だけ 26x71⇔16x39 を両バリアントで実測確認 |
+| ✅ | 同 **P5** (余白塗りを全バリアントへ) | `viewportBgColor` / `setViewportWallpaper` / `clearViewportWallpaper` を `__GENERIC__` から解放し、`BasicDrawDevice` (D3D11) に「余白背景色クリア + 壁紙クアッド」を実装。`OGLDrawDevice` の既存実装も全バリアントへ開放。※`iTVPDrawDevice` の vtable 末尾に 3 スロット追加 = カスタム描画デバイスを実装する WINVER プラグインは要再ビルド (同梱には該当なし)。tp_stub 再生成・plugins へ反映済 |
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
 | 低 | プラグイン向けログレベル個別 IF | `TVPLogMsg` を tp_stub に収録するだけ。important = WARNING は維持 |
 | 低 | レイヤ系プラグインの Bitmap 両対応 | `Bitmap` に Layer 同名の read-only プロパティ 5 件を追加済みなので、プラグイン側の対象判定 (`IsInstanceOf`) を Layer 限定から Layer/Bitmap 両対応にしたい。事前調査済 (障害は `hasImage` の有無 / class dispatch 経路 / Layer 専用メンバの使用の 3 点)。プラグインごとに要否が分かれるので、対応する価値のあるものから個別に |
