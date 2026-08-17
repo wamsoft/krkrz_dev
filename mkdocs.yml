@@ -83,6 +83,7 @@ nav:
     - サブシステム:
       - イベントシステム: guide/EventSystem.md
       - グラフィックシステム: guide/GraphicSystem.md
+      - Layer と Bitmap と ImageFunction: guide/LayerAndBitmap.md
       - 3Dグラフィックシステム: guide/Graphic3DSystem.md
       - サウンドシステム: guide/SoundSystem.md
       - ストレージシステム: guide/StorageSystem.md

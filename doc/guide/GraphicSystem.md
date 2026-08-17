@@ -10,6 +10,8 @@
 
 重ね合わされたレイヤは、描画デバイスと呼ばれる機構にて、ウィンドウに描画されます。デフォルトでは BasicDrawDevice と呼ばれる、単純にレイヤの出力をウィンドウに描画するだけのデバイスが使用されます。描画デバイスは[Window.drawDevice](../reference/Window.md#drawdevice)プロパティを操作することで自由に差し替えられるようになっており、用途に応じた演出効果などをユーザが独自に(プラグインの形式で)定義することとができますが、吉里吉里Zが内蔵しているのは前述の BasicDrawDevice のみです。
 
+表示されない作業用の画像は [Bitmap](../reference/Bitmap.md) クラスで扱い、その加工には [ImageFunction](../reference/ImageFunction.md) クラスを使います。三者の関係と使い分けは [Layer と Bitmap と ImageFunction](LayerAndBitmap.md) を参照してください。
+
 ## 読み書き可能な画像形式
 
 標準状態の吉里吉里で、[Layer.loadImages](../reference/Layer.md#loadimages) でレイヤに読み込む、レイヤに書きこむことのできる形式は以下の通りです。
