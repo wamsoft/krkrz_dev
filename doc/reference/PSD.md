@@ -273,12 +273,12 @@ text         テキストレイヤ情報(テキストレイヤ layer_type==layer
 %[ text:          // 本文全体(改行は復帰文字 CR)
 orientation:   // "horizontal" または "vertical"(縦書き)
 justification: // 先頭段落の行揃え 0=左 1=右 2=中央
-transform:     // アフィン変換 [ xx, xy, yx, yy, tx, ty ](tx,ty=平行移動)
+transform:     // アフィン変換 `[ xx, xy, yx, yy, tx, ty ]` (tx,ty=平行移動)
 runs: [        // 文字スタイルのラン配列(本文の並び順)
 %[ length:       // 適用文字数(UTF-16 コードユニット。絵文字等サロゲートは2)
 font:         // 解決済みフォント名
 size_px:      // フォントサイズ(pt)
-color:        // RGBA 各 0..1 の配列 [ r, g, b, a ](未指定なら存在しない)
+color:        // RGBA 各 0..1 の配列 `[ r, g, b, a ]` (未指定なら存在しない)
 tracking:     // トラッキング(字送り, 1/1000 em)
 kerning:      // 手動カーニング
 auto_kerning: // 自動カーニング(メトリクス/オプティカル)有効か
@@ -906,7 +906,7 @@ Layer のサイズは canvas サイズ(width×height)と一致している必要
 // (getLayerFonts() が返す PostScript 風の名前。表示名では
 //  ないことに注意。手元に無い名前は Photoshop 側で代替される)
 size_px:   // フォントサイズ(px)
-color:     // RGBA 各 0..1 の配列 [ r, g, b, a ](a 省略で [ r, g, b ] も可)
+color:     // RGBA 各 0..1 の配列 `[ r, g, b, a ]` (a 省略で `[ r, g, b ]` も可)
 tracking:  // トラッキング(1/1000 em)
 kerning:   // 手動カーニング
 bold:      // 疑似ボールド(FauxBold) true/false
@@ -1004,7 +1004,7 @@ setLayerRunStyle / setLayerRichText の font に渡せる名前。
 
 **戻り値**
 
-[ xx, xy, yx, yy, tx, ty ](tx,ty=平行移動)
+`[ xx, xy, yx, yy, tx, ty ]` (tx,ty=平行移動)
 
 **解説**
 

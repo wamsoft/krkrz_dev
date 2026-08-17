@@ -2560,17 +2560,27 @@ FOLDERIDが文字列の場合は FOLDERID_{} の {} 部分の文字列を指定�
 
 **解説**
 
-TVPProcessApplicationMessages(), TVPHandleApplicationMessage() 呼び出し
+メッセージの処理 ( 本体の TVPProcessApplicationMessages() 呼び出し )
 
-メッセージの処理（※System.breathe()と違い吉里吉里のイベントも処理される）
-基本的にprocessApplicationMessagesはアプリが終了するまで返らないので注意
-[TODO] イベントでの例外発生時はどうなるか確認
+System.breathe() と違い吉里吉里のイベントも処理されます。
+基本的に processApplicationMessages はアプリが終了するまで返らないので注意。
+
+イベントハンドラ内で例外が発生した場合、このメソッドからは伝播しません。
+プラグイン側は本体呼び出しをそのまま通すだけで、例外は本体のイベント配送側が
+捕捉し、通常の未処理スクリプト例外として処理されます ( 例外ダイアログ / ログ
+出力、System.exceptionHandler が設定されていればそちらへ通知 )。
 
 ---
 
 ### handleApplicationMessage
 
 メソッド
+
+**解説**
+
+メッセージを 1 件処理する ( 本体の TVPHandleApplicationMessage() 呼び出し )
+
+例外の扱いは processApplicationMessages と同じです。
 
 ---
 
