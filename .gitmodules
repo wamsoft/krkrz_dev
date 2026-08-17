@@ -187,3 +187,6 @@
 [submodule "src/plugins/krkrthreepp"]
 	path = src/plugins/krkrthreepp
 	url = https://github.com/wamsoft/krkrthreepp.git
+[submodule "src/plugins/clipfile"]
+	path = src/plugins/clipfile
+	url = https://github.com/wamsoft/clipfile.git

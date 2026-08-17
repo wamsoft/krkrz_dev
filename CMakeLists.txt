@@ -18,6 +18,7 @@ set(SIMPLEBIND_DIR ${PLUGINS_DIR}/simplebinder)
 # プラグイン一覧
 list(APPEND TVP_PLUGINS
 KAGParserEx
+clipfile
 csvParser
 getSample
 json
@@ -40,6 +41,11 @@ AlphaMovie
 expat
 #krkrlua
 )
+
+# clipfile (CLIP STUDIO PAINT .clip の読み込み/編集) が取り込む clipparse は、
+# sqlite3 の amalgamation を find_package ではなく FetchContent でソース取得する
+# (zlib は vcpkg から拾う)。**このため configure 時にネットワークが必要**。
+# 取得結果は build ツリーにキャッシュされるので 2 回目以降は走らない。
 
 # 非同期通知(worker スレッド + ウィンドウメッセージ通知)イディオムを全バリアント
 # 対応化したもの。`_beginthread`→std::thread、`::PostMessage`→TVPPostWindowMessage、
