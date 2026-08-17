@@ -184,9 +184,19 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの横幅
 
-ウィンドウの横幅を表します。値を設定することもできます。
+ウィンドウの横幅 ( ウィンドウ装飾を含む外形の横幅 ) を表します。値を設定することもできます。
 
-**関連:** [Window.height](Window.md#height) / [Window.setSize](Window.md#setsize)
+!!! tip "内側 ( 描画領域 ) 基準の API を推奨します"
+    この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは
+    プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で
+    変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では
+    内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する
+    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /
+    [Window.setInnerSize](Window.md#setinnersize) を使ってください。
+    枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /
+    [Window.frameHeight](Window.md#frameheight) を足せます。
+
+**関連:** [Window.innerWidth](Window.md#innerwidth) / [Window.frameWidth](Window.md#framewidth) / [Window.height](Window.md#height) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -198,9 +208,19 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの縦幅
 
-ウィンドウの縦幅を表します。値を設定することもできます。
+ウィンドウの縦幅 ( ウィンドウ装飾を含む外形の縦幅 ) を表します。値を設定することもできます。
 
-**関連:** [Window.width](Window.md#width) / [Window.setSize](Window.md#setsize)
+!!! tip "内側 ( 描画領域 ) 基準の API を推奨します"
+    この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは
+    プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で
+    変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では
+    内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する
+    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /
+    [Window.setInnerSize](Window.md#setinnersize) を使ってください。
+    枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /
+    [Window.frameHeight](Window.md#frameheight) を足せます。
+
+**関連:** [Window.innerHeight](Window.md#innerheight) / [Window.frameHeight](Window.md#frameheight) / [Window.width](Window.md#width) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -448,6 +468,21 @@ Window クラスのオブジェクトを構築します。
 値を設定することもできます。
 
 `"contain"`(アスペクト維持で収まる最大・レターボックス。既定) / `"cover"`(アスペクト維持で埋める最小・はみ出しは clip) / `"fill"`(アスペクト無視で全面引き伸ばし) / `"none"`(原寸) / `"integer"`(収まる範囲で最大の整数倍。最低 1 倍) / `"custom"`([Window.viewportZoom](Window.md#viewportzoom) の倍率を使用) のいずれか。
+
+
+!!! note "旧来 ( 吉里吉里2 / 吉里吉里Z ) と同じ表示にしたい場合"
+    既定の `"contain"` は、ウインドウが内側ゲーム画面と違うサイズになったときに
+    アスペクト維持で拡大縮小します。 ウインドウを広げてもゲームを原寸のまま
+    左上へ置く**旧来どおりの表示**にしたいときは、
+    `viewportFit = "none"` と [Window.viewportAlignX](Window.md#viewportalignx) /
+    [Window.viewportAlignY](Window.md#viewportaligny) `= 0` を明示してください。
+
+    なお [Window.setInnerSize](Window.md#setinnersize) でウインドウの内側サイズを
+    常に「primaryLayer のサイズ × [Window.setZoom](Window.md#setzoom) の倍率」に
+    保っている限り、どのフィット方式でも等倍 1:1 で表示されるため違いは出ません。
+    差が出るのは、ユーザがウインドウをリサイズ / 最大化した場合、拡大率の異なる
+    モニタへ移動した場合、およびウインドウサイズを変更できない環境
+    ( モバイル / コンソール ) です。
 
 Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
@@ -1231,6 +1266,16 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用
 [Window.height](Window.md#height) プロパティを個々に設定するよりも
 このメソッドで一気に指定した方が効率的です。
 
+!!! tip "内側 ( 描画領域 ) 基準の API を推奨します"
+    この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは
+    プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で
+    変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では
+    内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する
+    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /
+    [Window.setInnerSize](Window.md#setinnersize) を使ってください。
+    枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /
+    [Window.frameHeight](Window.md#frameheight) を足せます。
+
 **関連:** [Window.width](Window.md#width) / [Window.height](Window.md#height) / [Window.setPos](Window.md#setpos) / [Window.setInnerSize](Window.md#setinnersize) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize)
 
 ---
@@ -1253,11 +1298,11 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用
 ウィンドウの最小サイズを指定します。ウィンドウはこのメソッドで指定したサイズより小さくなることはできません。
 
 !!! note "基準は内側 ( 描画領域 ) サイズ"
-指定する値は [Window.innerWidth](Window.md#innerwidth) /
-[Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた
-描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない
-プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は
-[Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。
+    指定する値は [Window.innerWidth](Window.md#innerwidth) /
+    [Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた
+    描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない
+    プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は
+    [Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。
 
 **関連:** [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize) / [Window.minWidth](Window.md#minwidth) / [Window.minHeight](Window.md#minheight)
 
@@ -1281,11 +1326,11 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用
 ウィンドウの最大サイズを指定します。ウィンドウはこのメソッドで指定したサイズより大きくなることはできません。
 
 !!! note "基準は内側 ( 描画領域 ) サイズ"
-指定する値は [Window.innerWidth](Window.md#innerwidth) /
-[Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた
-描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない
-プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は
-[Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。
+    指定する値は [Window.innerWidth](Window.md#innerwidth) /
+    [Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた
+    描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない
+    プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は
+    [Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。
 
 **関連:** [Window.setMinSize](Window.md#setminsize) / [Window.setSize](Window.md#setsize) / [Window.maxWidth](Window.md#maxwidth) / [Window.maxHeight](Window.md#maxheight)
 
@@ -1377,10 +1422,10 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドで挙動�
 明示的に指定する必要がありました )。
 
 !!! note "リサイズできない場合"
-ウィンドウサイズを変更できない環境 ( モバイル / コンソール等 ) や、
-OS の最小ウィンドウサイズを下回る指定では、内側サイズが指定どおりに
-ならないことがあります。その場合でもゲーム画面は
-[Window.setViewport](Window.md#setviewport) の設定に従って内側へ配置されます。
+    ウィンドウサイズを変更できない環境 ( モバイル / コンソール等 ) や、
+    OS の最小ウィンドウサイズを下回る指定では、内側サイズが指定どおりに
+    ならないことがあります。その場合でもゲーム画面は
+    [Window.setViewport](Window.md#setviewport) の設定に従って内側へ配置されます。
 
 **関連:** [Window.zoomNumer](Window.md#zoomnumer) / [Window.zoomDenom](Window.md#zoomdenom)
 
@@ -1410,6 +1455,10 @@ OS の最小ウィンドウサイズを下回る指定では、内側サイズ�
 マウス座標は配置に応じて自動的にゲーム論理座標へ補正されるため、どの設定でも入力は正しくゲーム内部へ届きます。
 
 各引数は対応するプロパティ([Window.viewportFit](Window.md#viewportfit) など)を個別に設定するのと同じです。省略した引数は変更されません。
+
+旧来 ( 吉里吉里2 / 吉里吉里Z ) と同じ「ウインドウを広げてもゲームは原寸・左上」の
+表示にしたい場合は `setViewport("none", 1.0, 0, 0)` を指定します
+( 詳しくは [Window.viewportFit](Window.md#viewportfit) を参照 )。
 
 Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 

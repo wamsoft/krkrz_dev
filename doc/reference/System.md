@@ -294,9 +294,9 @@ Vista, 7, 8 の場合
 吉里吉里の実行可能ファイルのあるフォルダ ([System.exePath](System.md#exepath))になります
 
 !!! warning "Windows ネイティブ ( WINVER ) ビルド限定"
-このプロパティは SDL3 / 汎用ビルドには存在しません。全ビルドで動く
-スクリプトでは `typeof System.appDataPath` で存在を確認するか、
-保存先には [System.dataPath](System.md#datapath) を使用してください。
+    このプロパティは SDL3 / 汎用ビルドには存在しません。全ビルドで動く
+    スクリプトでは `typeof System.appDataPath` で存在を確認するか、
+    保存先には [System.dataPath](System.md#datapath) を使用してください。
 
 **関連:** [System.dataPath](System.md#datapath) / [System.exePath](System.md#exepath) / [System.personalPath](System.md#personalpath)
 
@@ -402,10 +402,10 @@ Vista, 7, 8 の場合
 デスクトップ ( ウィンドウを表示可能な領域 ) の左端位置をピクセル単位で表します。
 
 !!! warning "Windows ネイティブ ( WINVER ) ビルド限定"
-`desktopLeft` / `desktopTop` / `desktopWidth` / `desktopHeight` は
-SDL3 / 汎用ビルドには存在しません。画面解像度だけであれば全ビルドに
-ある [System.screenWidth](System.md#screenwidth) /
-[System.screenHeight](System.md#screenheight) を使用してください。
+    `desktopLeft` / `desktopTop` / `desktopWidth` / `desktopHeight` は
+    SDL3 / 汎用ビルドには存在しません。画面解像度だけであれば全ビルドに
+    ある [System.screenWidth](System.md#screenwidth) /
+    [System.screenHeight](System.md#screenheight) を使用してください。
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
@@ -817,12 +817,12 @@ UpdateSubresource) ので、実機で詰まっていないかの一次指標と�
 `Dialog.renderStats` を参照してください。
 
 !!! tip "数値の読み方"
-転送率 ( 転送時間 / 経過実時間 ) が高くても **fps が出ていれば、
-待ちの大半は vsync 同期ぶん**です ( ドライバが転送呼び出しの中で
-次フレームを待つ )。本当に転送が足を引っ張っている場合は fps が
-落ちます。この判定基準や経路ごとの違い、計測の進め方は
-コアデモ `perf_stats` と、エンジン付属文書
-`src/core/doc/ScreenTransfer.md` にまとめてあります。
+    転送率 ( 転送時間 / 経過実時間 ) が高くても **fps が出ていれば、
+    待ちの大半は vsync 同期ぶん**です ( ドライバが転送呼び出しの中で
+    次フレームを待つ )。本当に転送が足を引っ張っている場合は fps が
+    落ちます。この判定基準や経路ごとの違い、計測の進め方は
+    コアデモ `perf_stats` と、エンジン付属文書
+    `src/core/doc/ScreenTransfer.md` にまとめてあります。
 
 **関連:** [System.renderStatsReset](System.md#renderstatsreset)
 

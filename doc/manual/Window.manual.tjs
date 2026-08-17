@@ -627,6 +627,16 @@ class Window {
 	 * ウィンドウのサイズを指定するときには、[Window.width](Window.md#width) や
 	 * [Window.height](Window.md#height) プロパティを個々に設定するよりも
 	 * このメソッドで一気に指定した方が効率的です。
+	 *
+	 * !!! tip "内側 ( 描画領域 ) 基準の API を推奨します"
+	 *     この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは
+	 *     プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で
+	 *     変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では
+	 *     内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する
+	 *     [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /
+	 *     [Window.setInnerSize](Window.md#setinnersize) を使ってください。
+	 *     枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /
+	 *     [Window.frameHeight](Window.md#frameheight) を足せます。
 	 * @param width ウィンドウの横幅を指定します。
 	 * @param height ウィンドウの縦幅を指定します。
 	 * @see Window.width
@@ -752,6 +762,10 @@ class Window {
 	 * マウス座標は配置に応じて自動的にゲーム論理座標へ補正されるため、どの設定でも入力は正しくゲーム内部へ届きます。
 	 *
 	 * 各引数は対応するプロパティ([Window.viewportFit](Window.md#viewportfit) など)を個別に設定するのと同じです。省略した引数は変更されません。
+	 *
+	 * 旧来 ( 吉里吉里2 / 吉里吉里Z ) と同じ「ウインドウを広げてもゲームは原寸・左上」の
+	 * 表示にしたい場合は `setViewport("none", 1.0, 0, 0)` を指定します
+	 * ( 詳しくは [Window.viewportFit](Window.md#viewportfit) を参照 )。
 	 *
 	 * Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 	 * @param fit フィット方式を文字列で指定します。`"contain"`(アスペクト維持で収まる最大・レターボックス。既定) / `"cover"`(アスペクト維持で埋める最小・はみ出しは clip) / `"fill"`(アスペクト無視で全面引き伸ばし) / `"none"`(原寸) / `"integer"`(収まる範囲で最大の整数倍。最低 1 倍) / `"custom"`([Window.viewportZoom](Window.md#viewportzoom) の倍率を使用) のいずれか。
@@ -972,7 +986,19 @@ class Window {
 	/**
 	 * ウィンドウの横幅
 	 *
-	 * ウィンドウの横幅を表します。値を設定することもできます。
+	 * ウィンドウの横幅 ( ウィンドウ装飾を含む外形の横幅 ) を表します。値を設定することもできます。
+	 *
+	 * !!! tip "内側 ( 描画領域 ) 基準の API を推奨します"
+	 *     この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは
+	 *     プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で
+	 *     変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では
+	 *     内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する
+	 *     [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /
+	 *     [Window.setInnerSize](Window.md#setinnersize) を使ってください。
+	 *     枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /
+	 *     [Window.frameHeight](Window.md#frameheight) を足せます。
+	 * @see Window.innerWidth
+	 * @see Window.frameWidth
 	 * @see Window.height
 	 * @see Window.setSize
 	 */
@@ -981,7 +1007,19 @@ class Window {
 	/**
 	 * ウィンドウの縦幅
 	 *
-	 * ウィンドウの縦幅を表します。値を設定することもできます。
+	 * ウィンドウの縦幅 ( ウィンドウ装飾を含む外形の縦幅 ) を表します。値を設定することもできます。
+	 *
+	 * !!! tip "内側 ( 描画領域 ) 基準の API を推奨します"
+	 *     この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは
+	 *     プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で
+	 *     変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では
+	 *     内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する
+	 *     [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /
+	 *     [Window.setInnerSize](Window.md#setinnersize) を使ってください。
+	 *     枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /
+	 *     [Window.frameHeight](Window.md#frameheight) を足せます。
+	 * @see Window.innerHeight
+	 * @see Window.frameHeight
 	 * @see Window.width
 	 * @see Window.setSize
 	 */
@@ -1177,6 +1215,21 @@ class Window {
 	 * 値を設定することもできます。
 	 *
 	 * `"contain"`(アスペクト維持で収まる最大・レターボックス。既定) / `"cover"`(アスペクト維持で埋める最小・はみ出しは clip) / `"fill"`(アスペクト無視で全面引き伸ばし) / `"none"`(原寸) / `"integer"`(収まる範囲で最大の整数倍。最低 1 倍) / `"custom"`([Window.viewportZoom](Window.md#viewportzoom) の倍率を使用) のいずれか。
+	 *
+	 *
+	 * !!! note "旧来 ( 吉里吉里2 / 吉里吉里Z ) と同じ表示にしたい場合"
+	 *     既定の `"contain"` は、ウインドウが内側ゲーム画面と違うサイズになったときに
+	 *     アスペクト維持で拡大縮小します。 ウインドウを広げてもゲームを原寸のまま
+	 *     左上へ置く**旧来どおりの表示**にしたいときは、
+	 *     `viewportFit = "none"` と [Window.viewportAlignX](Window.md#viewportalignx) /
+	 *     [Window.viewportAlignY](Window.md#viewportaligny) `= 0` を明示してください。
+	 *
+	 *     なお [Window.setInnerSize](Window.md#setinnersize) でウインドウの内側サイズを
+	 *     常に「primaryLayer のサイズ × [Window.setZoom](Window.md#setzoom) の倍率」に
+	 *     保っている限り、どのフィット方式でも等倍 1:1 で表示されるため違いは出ません。
+	 *     差が出るのは、ユーザがウインドウをリサイズ / 最大化した場合、拡大率の異なる
+	 *     モニタへ移動した場合、およびウインドウサイズを変更できない環境
+	 *     ( モバイル / コンソール ) です。
 	 *
 	 * Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 	 * @see Window.setViewport

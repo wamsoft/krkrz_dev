@@ -280,6 +280,7 @@ def parse_doc_block(comment_block):
     doc = Doc()
     summary_lines = []
     desc_lines = []
+    in_admonition = False
     line_only = []
     in_tag = None
     tag_buffer = ""
@@ -331,6 +332,7 @@ def parse_doc_block(comment_block):
                     tag_buffer = m.group(2) or ""
                     continue
                 if in_tag:
+                    in_admonition = False
                     cont = ln.lstrip()
                     tag_buffer += ("\n" + cont) if cont else "\n"
                 else:
@@ -338,7 +340,19 @@ def parse_doc_block(comment_block):
                         if not summary_lines:
                             summary_lines.append(ln.strip())
                         else:
-                            desc_lines.append(ln.strip())
+                            # MkDocs の admonition (!!! note 等) は本文が 4 スペース
+                            # 字下げされていないと展開されないので、!!! 行に続く
+                            # 字下げ行だけは行頭の空白を残す (それ以外は従来どおり
+                            # 詰める)。
+                            stripped = ln.strip()
+                            if stripped.startswith("!!! "):
+                                in_admonition = True
+                                desc_lines.append(stripped)
+                            elif in_admonition and ln[:1] in (" ", "	"):
+                                desc_lines.append(ln.rstrip())
+                            else:
+                                in_admonition = False
+                                desc_lines.append(stripped)
                     else:
                         if desc_lines:
                             desc_lines.append("")
