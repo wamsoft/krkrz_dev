@@ -62,7 +62,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 - web REPL の modal 転送 / 重複プラグインの削除
 - Elements WINVER 展開のクリーンアップ
 - ゲームパッド実機での最終確認
-- glyphware: richtext 統合 (保留) / ThorVG 系のバイト共有最適化 / `fonts.json` スキーマ拡張
+- glyphware: ThorVG 系のバイト共有最適化 / `fonts.json` スキーマ拡張 (✅ richtext 統合は完了 — 本体 `FontServiceIntf` をバックエンド注入し、richtext から thorvg 依存も除去)
 - krkreffekseer の macOS (GLES3) 実機確認 (⏸ ビルド対応済)
 - tjsDataPack のライセンス収集 IF 対応 (保留)
 - リップシンクの母音判定精度向上とデモ

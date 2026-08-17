@@ -114,6 +114,7 @@ if (obj.name !== void) { ... }                          // 正しい
 | `System.setMemoryOverlay` / `setPadOverlay` | フラグは全ビルド共通だが、描画するのは OGL 系 / SDL の DrawDevice ( WINVER 既定の D3D11 では出ない ) |
 | `Layer.imeMode` / `setAttentionPoint` | 値は全ビルドで保持されるが、実際に効くのは WINVER |
 | `Window.setZoom` | 2026-08-17 に両ビルドで挙動を統一済 ( 「レイヤサイズ × 倍率」をウィンドウの内側サイズにする )。それ以前の WINVER は倍率を覚えるだけだったので、古いエンジンも対象にするなら [Window.setInnerSize](../../reference/Window.md#setinnersize) を併用する |
+| `System.padButtonMapping` | SDL3 / 汎用ビルド限定。WINVER は XInput ベースで刻印が Xbox 系固定のため設定自体が不要 |
 | `Dialog` 系 / `WebServer` | ビルドオプション ( `KRKRZ_USE_ELEMENTS` / `KRKRZ_REPL_WEB` ) 次第 |
 
 ---

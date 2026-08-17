@@ -217,6 +217,11 @@ BiDi 混在・絵文字混在・計測・矩形内折り返し・タイプライ
   行頭行末禁則・クラスタ単位の文字送りを通るため、同じ本文・同じ幅なら
   レイヤ描画と Elements で**改行位置が一致**します
   (従来からある `text_box` は互換のため素朴な折り返しのまま)。
+- **richtext プラグイン** ([RichText](../reference/RichText.md)) の組版は minikin
+  ですが、フォントの実体取得とグリフのラスタライズは本体の glyphware を通ります。
+  face とフォントのバイト列を本体と共有するため、`Layer.drawText` や Elements と
+  **同じフォント・同じ見た目**になります ( 可変フォントの軸を使う場合だけは、
+  共有 face の状態を汚さないよう専用の face が開かれます )。
 - **layerExVector プラグイン** (`GdiPlus.loadFont(storage, name)`) も同じ
   エンジンを共有します。`resource://./notosansjp-regular.otf` のように
   本体埋め込みフォントを指定でき、フォントを同梱しなくてもアウトライン

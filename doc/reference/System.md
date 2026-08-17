@@ -44,6 +44,8 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [renderStats](#renderstats)
 - [texUploadUsePBO](#texuploadusepbo)
 - [touchDevice](#touchdevice)
+- [platformTag](#platformtag)
+- [padButtonMapping](#padbuttonmapping)
 - [buildVariantName](#buildvariantname)
 - [padAxisLeftX](#padaxisleftx)
 - [padAxisLeftY](#padaxislefty)
@@ -874,6 +876,71 @@ OpenGL 描画を有効にしたビルドでのみ存在します (既定で有�
 
 実行環境にタッチ入力デバイスが存在する場合に真を返します。
 読み出し専用。
+
+---
+
+### platformTag
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+プラットフォームタグ
+
+実行中のプラットフォームを表す短い識別子です ( `"windows"` / `"android"` /
+`"macos"` / `"linux"` / `"web"` など )。読み出し専用。
+
+[System.platformName](System.md#platformname) は OS から得た生の文字列で
+空白や表記ゆれを含むため、ファイル名や条件分岐には使いにくいのに対し、
+こちらは**小文字・空白無しに正規化**されているので、そのまま機種分岐に使えます。
+
+複数のタグが該当する環境 ( 世代違いのコンソールなど ) では、**最も具体的なもの**が
+返ります。
+
+!!! info "機種別のエンジン設定 `config_<tag>.cf`"
+    リソース内の設定ファイルは、共通の `config.cf` に加えて
+    `config_<タグ>.cf` を置くと機種別に上書きできます。
+    読み込みは「具体的なタグ → 一般的なタグ → 共通 `config.cf`」の順で、
+    先に読まれたものが優先されます。存在しないファイルは単に読み飛ばされます。
+
+**関連:** [System.platformName](System.md#platformname) / [System.osName](System.md#osname)
+
+---
+
+### padButtonMapping
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+パッドのボタン割り当て方式
+
+ゲームパッドの物理ボタンを `VK_PAD1`〜`VK_PAD4` へどう割り当てるかを表す
+文字列です。値を設定することもできます。
+
+- `"label"` ( 既定 ) … **ボタンの刻印**で割り当てます。`VK_PAD1` = 刻印 A
+( PlayStation では ✕ )、`VK_PAD2` = B ( ○ )、`VK_PAD3` = X ( □ )、
+`VK_PAD4` = Y ( △ )。任天堂系のように A/B・X/Y の**位置が入れ替わっている**
+コントローラでも、画面表示と実際に押すボタンが一致します。
+- `"position"` … 従来どおり**位置**で割り当てます ( 下 = `VK_PAD1`、
+右 = `VK_PAD2`、左 = `VK_PAD3`、上 = `VK_PAD4` )。
+
+刻印が判定できないコントローラでは自動的に位置基準へフォールバックします。
+PlayStation / Xbox 系はどちらの方式でも結果が同じです。
+
+起動オプション `-padbuttons=label|position` ( `config.cf` でも可 ) でも
+指定できます。`"label"` / `"position"` 以外を代入すると例外になります。
+
+!!! warning "SDL3 / 汎用ビルド限定"
+    このプロパティは SDL3 / 汎用ビルドにのみ存在します。Windows ネイティブ
+    ( WINVER ) ビルドのパッド入力は XInput ベースで、ボタンの刻印が
+    Xbox 系に固定されているため位置と刻印が食い違いません。
+
+**関連:** [System.getJoypadType](System.md#getjoypadtype)
 
 ---
 
