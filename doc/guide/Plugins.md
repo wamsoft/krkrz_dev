@@ -80,6 +80,7 @@ Takechin 氏作の画像ビューア「Susie32」用のプラグインを利用�
 | プラグイン | 説明 |
 |---|---|
 | **AlphaMovie** | アルファチャンネル付き動画 ( .amv ) を再生する [AlphaMovie](../reference/AlphaMovie.md) クラスを追加します。 |
+| **clipfile** | CLIP STUDIO PAINT ファイル ( .clip ) の読み込み・編集・保存を行う [CLIP](../reference/CLIP.md) / [CLIPWriter](../reference/CLIPWriter.md) クラスを追加します。`clip://` でレイヤ画像を直接ロードすることもできます。 |
 | **csvParser** | CSV ファイルを解析する [CSVParser](../reference/CSVParser.md) クラスを追加します。 |
 | **expat** | XML を解析する [XMLParser](../reference/XMLParser.md) クラスを追加します。 |
 | **extrans** | wave / mosaic / turn / rotatezoom / rotatevanish / rotateswap / ripple の追加トランジション 7 種を登録します。詳細は [トランジション](Transition.md) を参照してください。 |
@@ -97,7 +98,7 @@ Takechin 氏作の画像ビューア「Susie32」用のプラグインを利用�
 | **layerExVector** | thorvg による SVG などのベクター描画を [Layer](../reference/Layer.md) に追加します ( [GdiPlus](../reference/GdiPlus.md) 互換 API )。 |
 | **lineParser** | 行単位のテキスト解析を行う [LineParser](../reference/LineParser.md) クラスを追加します。 |
 | **minizip** | ZIP アーカイブの読み込み ( zip:// 自動検索パス ) と作成を行う [Zip](../reference/Zip.md) / [Unzip](../reference/Unzip.md) クラスを追加します。 |
-| **psdfile** | Photoshop PSD ファイルの読み込み・編集・保存を行う [PSD](../reference/PSD.md) クラスを追加します。 |
+| **psdfile** | Photoshop PSD ファイルの読み込み・編集・保存を行う [PSD](../reference/PSD.md) クラスを追加します。`psd://` でレイヤ画像を直接ロードすることもできます。 |
 | **saveStruct** | Array / Dictionary の saveStruct を拡張し、UTF-8 など出力エンコーディングを指定可能にします ( [Scripts](../reference/Scripts.md) 参照 )。 |
 | **scriptsEx** | スクリプト実行系のユーティリティを [Scripts](../reference/Scripts.md) に追加します。 |
 | **shrinkCopy** | 高速な縮小コピーを [Layer](../reference/Layer.md) に追加します。 |

@@ -186,6 +186,8 @@ nav:
     - プラグイン拡張クラス:
       - reference/AlphaMovie.md
       - reference/BinaryStream.md
+      - reference/CLIP.md
+      - reference/CLIPWriter.md
       - reference/Console.md
       - reference/CSVParser.md
       - reference/HttpRequest.md
