@@ -1201,6 +1201,63 @@ class System {
 	function setDrawStatsLog(enable);
 
 	/**
+	 * GL テクスチャメモリ使用量の取得
+	 *
+	 * GL 系 DrawDevice が確保しているテクスチャ類のメモリ使用量を辞書で返します。
+	 * [System.getFreeMemory](System.md#getfreememory) 等が扱う CPU 側のメモリには
+	 * GL ドライバが確保するテクスチャは含まれないため、こちらで別途計測します。
+	 *
+	 * 返される辞書のメンバは次の通りです ( 単位はバイト )。
+	 *
+	 * | メンバ | 内容 |
+	 * |---|---|
+	 * | `texture` | [Texture](Texture.md) ( GL テクスチャ ) 実体の合計 |
+	 * | `pbo` | アップロード用 PBO の合計。**更新されるテクスチャだけが持ちます** ( 遅延確保 ) |
+	 * | `total` | `texture` + `pbo` |
+	 * | `peak` | 合計の最大値 |
+	 * | `textureCount` | 生存しているテクスチャ数 |
+	 * | `pboCount` | 生存している PBO 数 |
+	 *
+	 * `peak` は [Offscreen](Offscreen.md) が使う FBO のぶんも含んだ合計の最大値なので、
+	 * FBO を使っている場合は `total` より大きい値になります ( `total` は FBO を含みません )。
+	 *
+	 * **SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+	 * WINVER ビルドには現在ありません。
+	 * @param tag 文字列を渡すと、その名前付きで使用量を 1 行ログにも出力します。
+	 *
+	 * シーンの境界などに目印を打ちたいときに使います。省略時はログを出力しません。
+	 * @return 使用量の辞書配列
+	 * @see System.setTextureMemoryLog
+	 * @see System.resetTextureMemoryPeak
+	 */
+	function getTextureMemory(tag);
+
+	/**
+	 * GL テクスチャメモリログ出力の設定
+	 *
+	 * GL テクスチャメモリの合計が 8MiB 増減するたびに、使用量をログへ書き出す
+	 * モードを切り替えます。既定は無効です。
+	 *
+	 * **SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+	 * @param enable 真でログ出力、偽で停止。引数を省略 ( または void ) すると
+	 * 現在の状態をトグルします。
+	 * @return 設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。
+	 * @see System.getTextureMemory
+	 */
+	function setTextureMemoryLog(enable);
+
+	/**
+	 * GL テクスチャメモリのピーク値のリセット
+	 *
+	 * [System.getTextureMemory](System.md#gettexturememory) が返す `peak` を現在値へ
+	 * リセットします。「ここから先の最大値」を測りたいときに使います。
+	 *
+	 * **SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+	 * @see System.getTextureMemory
+	 */
+	function resetTextureMemoryPeak();
+
+	/**
 	 * 接続中のゲームパッド数の取得
 	 *
 	 * 現在接続が認識されているゲームパッドの数を返します。

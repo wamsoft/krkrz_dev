@@ -92,6 +92,9 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [setMemoryOverlay](#setmemoryoverlay)
 - [setPadOverlay](#setpadoverlay)
 - [setDrawStatsLog](#setdrawstatslog)
+- [getTextureMemory](#gettexturememory)
+- [setTextureMemoryLog](#settexturememorylog)
+- [resetTextureMemoryPeak](#resettexturememorypeak)
 - [getJoypadCount](#getjoypadcount)
 - [hasJoypad](#hasjoypad)
 - [getPadAxis](#getpadaxis)
@@ -1887,6 +1890,93 @@ XInput のパッド名・ボタン・軸が表示されます )。
 実機 ( Switch 等 ) でリアルタイム表示が速く流れて読めない場合に
 利用します。OFF ビルドや MemoryOverlay 非表示時に呼んでも実害は
 ありませんが、ログは出力されません。
+
+---
+
+### getTextureMemory
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `tag` | `&nbsp;` | 文字列を渡すと、その名前付きで使用量を 1 行ログにも出力します。<br>シーンの境界などに目印を打ちたいときに使います。省略時はログを出力しません。 |
+
+**戻り値**
+
+使用量の辞書配列
+
+**解説**
+
+GL テクスチャメモリ使用量の取得
+
+GL 系 DrawDevice が確保しているテクスチャ類のメモリ使用量を辞書で返します。
+[System.getFreeMemory](System.md#getfreememory) 等が扱う CPU 側のメモリには
+GL ドライバが確保するテクスチャは含まれないため、こちらで別途計測します。
+
+返される辞書のメンバは次の通りです ( 単位はバイト )。
+
+| メンバ | 内容 |
+|---|---|
+| `texture` | [Texture](Texture.md) ( GL テクスチャ ) 実体の合計 |
+| `pbo` | アップロード用 PBO の合計。**更新されるテクスチャだけが持ちます** ( 遅延確保 ) |
+| `total` | `texture` + `pbo` |
+| `peak` | 合計の最大値 |
+| `textureCount` | 生存しているテクスチャ数 |
+| `pboCount` | 生存している PBO 数 |
+
+`peak` は [Offscreen](Offscreen.md) が使う FBO のぶんも含んだ合計の最大値なので、
+FBO を使っている場合は `total` より大きい値になります ( `total` は FBO を含みません )。
+
+**SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+WINVER ビルドには現在ありません。
+
+**関連:** [System.setTextureMemoryLog](System.md#settexturememorylog) / [System.resetTextureMemoryPeak](System.md#resettexturememorypeak)
+
+---
+
+### setTextureMemoryLog
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `enable` | `&nbsp;` | 真でログ出力、偽で停止。引数を省略 ( または void ) すると<br>現在の状態をトグルします。 |
+
+**戻り値**
+
+設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。
+
+**解説**
+
+GL テクスチャメモリログ出力の設定
+
+GL テクスチャメモリの合計が 8MiB 増減するたびに、使用量をログへ書き出す
+モードを切り替えます。既定は無効です。
+
+**SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+
+**関連:** [System.getTextureMemory](System.md#gettexturememory)
+
+---
+
+### resetTextureMemoryPeak
+
+メソッド
+
+**解説**
+
+GL テクスチャメモリのピーク値のリセット
+
+[System.getTextureMemory](System.md#gettexturememory) が返す `peak` を現在値へ
+リセットします。「ここから先の最大値」を測りたいときに使います。
+
+**SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+
+**関連:** [System.getTextureMemory](System.md#gettexturememory)
 
 ---
 
