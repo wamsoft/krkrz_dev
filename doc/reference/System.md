@@ -45,6 +45,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [texUploadUsePBO](#texuploadusepbo)
 - [touchDevice](#touchdevice)
 - [platformTag](#platformtag)
+- [systemLanguage](#systemlanguage)
 - [padButtonMapping](#padbuttonmapping)
 - [buildVariantName](#buildvariantname)
 - [padAxisLeftX](#padaxisleftx)
@@ -909,6 +910,44 @@ OpenGL 描画を有効にしたビルドでのみ存在します (既定で有�
     先に読まれたものが優先されます。存在しないファイルは単に読み飛ばされます。
 
 **関連:** [System.platformName](System.md#platformname) / [System.osName](System.md#osname)
+
+---
+
+### systemLanguage
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+本体の表示言語
+
+OS ( 家庭用ゲーム機ならハード ) に設定されている表示言語を
+[BCP-47](https://www.rfc-editor.org/info/bcp47) の言語タグで返します。
+読み出し専用。`"ja-JP"` / `"en-US"` / `"zh-Hant"` / `"zh-Hans"` のような
+値になります。
+
+ゲームの**既定**言語をハードの設定に合わせるための口です。言語の選択と
+保存はゲーム側の責務で、このプロパティは「本体が何語設定か」だけを返します。
+地域まで要らない場合は `-` より前を見てください。
+
+```tjs
+var lang = System.systemLanguage;
+var code = lang.indexOf("-") >= 0 ? lang.substring(0, lang.indexOf("-")) : lang;
+if(code == "") code = "ja";   // 取得できない環境はゲーム既定へ
+```
+
+!!! warning "取得できない環境では空文字列"
+    言語を取得する手段が無い環境では空文字列を返します。
+    呼び出し側でゲームの既定言語へフォールバックしてください。
+
+取得元は環境ごとに異なります ( Windows ネイティブ版 =
+`GetUserDefaultLocaleName` / SDL3 版 = `SDL_GetPreferredLocales` の先頭。
+家庭用ゲーム機は各ハードの API )。SDL3 版では地域が取れない場合、
+`"ja"` のように言語のみが返ります。
+
+**関連:** [System.platformTag](System.md#platformtag)
 
 ---
 
