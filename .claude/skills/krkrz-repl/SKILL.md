@@ -96,11 +96,13 @@ exe は krkrz_dev のビルド出力を使う (リポジトリルート相対):
 
 プロセスの起動・停止は skill `appctl` の規約に従うこと (PID を記録し、停止は
 その PID のみ・exe パス照合付き。`taskkill /IM krkrz64.exe` のようなイメージ名
-一括 kill は並行セッションを巻き添えにするため禁止)。
+一括 kill は並行セッションを巻き添えにするため禁止)。`appctl` は別配布の
+スキルなので、同梱ヘルパ `scripts/appctl.sh` の位置はそちらの SKILL.md を見る
+(`$APPCTL` に入れてある想定で以下は書く)。
 
 ```bash
 export APPCTL_DIR="$SCRATCHPAD/appctl"
-S=~/.claude/skills/appctl/scripts/appctl.sh
+S="$APPCTL"                    # appctl スキルの scripts/appctl.sh
 CH="$SCRATCHPAD/replchan"
 
 bash "$S" start krkr \
