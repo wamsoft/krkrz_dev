@@ -1,6 +1,31 @@
 # スキル配布形 (install.sh) の課題メモ
 
-作成: 2026-08-19 / 指摘元: `nexton_amakano2pe` 案件での利用側検査
+作成: 2026-08-19 / 指摘元: 利用側 (案件) での検査
+
+## ✅ 解消済み (2026-08-19)
+
+`--user` / `--dist` とも **切れリンク 0 件**。対応は以下:
+
+- `BUNDLE` の宛先に「スキル直下」(`/guide` のような先頭スラッシュ表記) を追加し、
+  krkrz スキルへ `doc/guide` → `guide/`、`doc/topics/core` → `topics/core/` を同梱。
+  elements へ `src/core/doc/Gamepad.md` を追加
+- `LINKFIX` テーブルを新設。同梱でディレクトリ名が変わる分
+  (`../reference/` → `../references/` 等) をスキル内の全 md に対して張り替える
+- `tools/skills/flatten_links.py` を新設。**飛び先が実際に在るかを確かめ、
+  無いものだけ**リンク書式を外して案内文へ落とす (画像は常に落とす)。
+  パターン列挙ではなく実在チェックなので、同梱範囲を変えても破綻しない
+- **画像は同梱しない方針**に決定 (参照用の図であって、スキルの読み手には本文で足りる)。
+  `doc/_assets` は 38MB のうち 38MB 近くが `_assets/demo` (wasm デモ) なので
+  そもそも同梱に向かない。図は `( 図 X.png は省略 — オンライン版ドキュメント参照 )` になる
+- 正本 `.claude/skills/krkrz/SKILL.md` の ``[`tjs2`](tjs2)`` を素テキストへ
+
+検査スクリプトの注意: **fenced code block を除外しないと誤検出する**
+(`doc/tjs2/function.md` の `func_array[i](i, *);` が「切れリンク」に数えられていた。
+47 件のうち 1 件はこれ)。下のスクリプトは除外済み。
+
+以下は当時の分析。記録として残す。
+
+---
 
 正本 `.claude/skills/` は krkrz_dev の中では全リンクが解決するが、
 **`tools/skills/install.sh` が組み立てた自己完結版のほうで内部リンクが 47 件切れている**。
@@ -24,6 +49,7 @@ for root, dirs, files in os.walk('.'):
         if not f.endswith('.md'): continue
         p = os.path.join(root, f)
         t = open(p, encoding='utf-8', errors='replace').read()
+        t = re.sub(r'```.*?```', '', t, flags=re.S)   # コードブロックは対象外
         for m in re.finditer(r'\]\(([^)]+)\)', t):
             l = m.group(1).split('#')[0].strip()
             if not l or l.startswith(('http', 'mailto:')): continue

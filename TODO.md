@@ -14,7 +14,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | WINVER モダン化 | [src/core/doc/ModernizationRoadmap.md](src/core/doc/ModernizationRoadmap.md) |
 | 動画 (Media Foundation 移行) | [src/core/doc/MovieMFMigration.md](src/core/doc/MovieMFMigration.md) |
 | リファレンスとコードの差分 | [doc/_missing.md](doc/_missing.md) (生成物。現在 0 件) |
-| Claude Code スキルの配布形 (install.sh) | [tools/skills/TODO-skills.md](tools/skills/TODO-skills.md) |
+| ✅ Claude Code スキルの配布形 (install.sh) | [tools/skills/TODO-skills.md](tools/skills/TODO-skills.md) (切れリンク 0 件に解消済み) |
 
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 

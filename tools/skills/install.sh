@@ -35,6 +35,18 @@ die() { echo "error: $*" >&2; exit 1; }
 say() { echo "$*"; }
 run() { if [ "$DRYRUN" = 1 ]; then echo "  [dry-run] $*"; else "$@"; fi; }
 
+# 同梱によってディレクトリ名が変わった分の相対リンク張り替え。
+#   <skill>|<置換前>|<置換後>   (スキル内の全 md に適用)
+# doc/reference/ は references/ という名前で同梱されるので、同梱した guide や
+# topics が指す `../reference/` を `../references/` へ寄せる。
+# これを掛けておかないと、後段の flatten_links.py が有用なリンクまで
+# 素テキストに落としてしまう。
+LINKFIX=(
+  "krkrz|](../reference/|](../references/"
+  "krkrz|](../../reference/|](../../references/"
+  "tjs2|](../../tjs2/|](../"
+)
+
 usage() {
   sed -n '3,20p' "${BASH_SOURCE[0]}" | sed 's/^# \?//'
   exit 1
@@ -55,14 +67,26 @@ done
 [ -d "$SRC" ] || die "スキルの正本が見つからない: $SRC"
 
 # ---------------------------------------------------------------------------
-# 同梱テーブル:  <skill>|<repo からの元パス>|<references 配下の宛先>|<書き換え前>|<書き換え後>
+# 同梱テーブル:  <skill>|<repo からの元パス>|<宛先>|<書き換え前>|<書き換え後>
 # 元パスがディレクトリなら中身を、ファイルならそれ自体をコピーする。
+#
+# <宛先> の書き方:
+#   "."      … references/ 直下
+#   "foo"    … references/foo/
+#   "/foo"   … スキル直下の foo/ (先頭スラッシュで references を経由しない)
+#
+# スキル直下へ置くのは、同梱した md の中の相対リンクをそのまま当てるため。
+# 例: references/Layer.md の `../guide/GraphicSystem.md` は <skill>/guide/… を
+#     指すので、doc/guide をスキル直下へ置けば書き換え無しで解決する。
 # ---------------------------------------------------------------------------
 BUNDLE=(
   "krkrz|doc/reference|.|doc/reference/|references/"
+  "krkrz|doc/guide|/guide|doc/guide/|guide/"
+  "krkrz|doc/topics/core|/topics/core|doc/topics/core/|topics/core/"
   "tjs2|doc/tjs2|.|doc/tjs2/|references/"
   "tjs2|doc/topics/tjs2|topics|doc/topics/tjs2/|references/topics/"
   "elements|src/core/doc/ElementsDialog.md|.|doc/ElementsDialog.md|references/ElementsDialog.md"
+  "elements|src/core/doc/Gamepad.md|.|doc/Gamepad.md|references/Gamepad.md"
   "krkrz-webui|src/core/doc/REPL.md|.|doc/REPL.md|references/REPL.md"
 )
 
@@ -134,15 +158,19 @@ for s in "${SKILLS[@]}"; do
       say "  ! 同梱元が見つからない (スキップ): $from"
       continue
     fi
-    if [ "$to" = "." ]; then dst="$OUT/$s/references"; else dst="$OUT/$s/references/$to"; fi
+    case "$to" in
+      .)  dst="$OUT/$s/references";     label="references/" ;;
+      /*) dst="$OUT/$s/${to#/}";        label="${to#/}/" ;;
+      *)  dst="$OUT/$s/references/$to"; label="references/$to/" ;;
+    esac
     run mkdir -p "$dst"
     if [ -d "$src_path" ]; then
       run cp -r "$src_path"/. "$dst/"
       n=$(find "$src_path" -type f | wc -l)
-      say "  + $from → references/${to#.}  ($n files)"
+      say "  + $from → $label  ($n files)"
     else
       run cp "$src_path" "$dst/"
-      say "  + $from → references/${to#.}"
+      say "  + $from → $label"
     fi
   done
 
@@ -162,6 +190,23 @@ for s in "${SKILLS[@]}"; do
       /^---$/ { n++; print; if (n == 2 && !done) { print note; done = 1 }; next }
       { print }
     ' "$OUT/$s/SKILL.md" > "$OUT/$s/SKILL.md.tmp" && mv "$OUT/$s/SKILL.md.tmp" "$OUT/$s/SKILL.md"
+
+    # 5. 同梱でディレクトリ名が変わった分の相対リンクを張り替える
+    for row in "${LINKFIX[@]}"; do
+      IFS='|' read -r sk before after <<<"$row"
+      [ "$sk" = "$s" ] || continue
+      find "$OUT/$s" -type f -name '*.md' -exec \
+        sed -i "s@$(printf '%s' "$before" | sed 's@[].[^$*/\\]@\\&@g')@${after}@g" {} +
+    done
+
+    # 6. 残った「飛び先が同梱されていないリンク」と画像を素テキストへ落とす
+    if command -v python3 >/dev/null 2>&1; then
+      python3 "$REPO_ROOT/tools/skills/flatten_links.py" "$OUT/$s"
+    elif command -v python >/dev/null 2>&1; then
+      python "$REPO_ROOT/tools/skills/flatten_links.py" "$OUT/$s"
+    else
+      say "  ! python が無いのでリンク整理をスキップ (死にリンクが残ります)"
+    fi
   fi
   say "  ✓ $OUT/$s"
 done

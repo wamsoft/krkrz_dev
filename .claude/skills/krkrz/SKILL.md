@@ -259,7 +259,7 @@ var tex = new Texture(window, "image.png");
 
 ## 関連スキル
 
-- [`tjs2`](tjs2) — TJS2 言語仕様と組込クラス (Array / Dictionary / Math / Date / RegExp / Exception 等)
+- skill `tjs2` — TJS2 言語仕様と組込クラス (Array / Dictionary / Math / Date / RegExp / Exception 等)
 - (未作成) 吉里吉里Z 内部構造 / engine internals — C++ 実装、レンダリングパイプライン、SIMD、プラグインローダ等
 
 エンジン内部は別 skill 化予定。本スキルは TJS から見える表層 API のみ。
