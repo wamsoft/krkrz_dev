@@ -36,7 +36,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | ✅ | 同 **P5** (余白塗りを全バリアントへ) | `viewportBgColor` / `setViewportWallpaper` / `clearViewportWallpaper` を全バリアントで有効化。**`iTVPDrawDevice` には載せず `iTVPViewportBackgroundHost` を新設し、対応デバイスが TJS プロパティ `viewportBackgroundHost` でポインタを公開する実行時検出方式** (動画の `videoPresenterHost` と同じ規約) にしたので、**`iTVPDrawDevice` の vtable は不変 = プラグインの再ビルド不要**。`BasicDrawDevice` に D3D11 実装 (背景色クリア + 壁紙クアッド) を追加、`OGLDrawDevice` の既存実装も開放 |
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
 | 低 | プラグイン向けログレベル個別 IF | `TVPLogMsg` を tp_stub に収録するだけ。important = WARNING は維持 |
-| 低 | レイヤ系プラグインの Bitmap 両対応 | `Bitmap` に Layer 同名の read-only プロパティ 5 件を追加済みなので、プラグイン側の対象判定 (`IsInstanceOf`) を Layer 限定から Layer/Bitmap 両対応にしたい。事前調査済 (障害は `hasImage` の有無 / class dispatch 経路 / Layer 専用メンバの使用の 3 点)。プラグインごとに要否が分かれるので、対応する価値のあるものから個別に |
+| — | ~~レイヤ系プラグインの Bitmap 両対応~~ | 上の **Layer / Bitmap / ImageFunction の統合** に統合。同じ作業の別名で、統合ロードマップの **P3 (プラグイン対応)** がこれにあたる。事前調査の内容 (Layer 参照 26 ファイル、詰まりは `hasImage` の有無 / class dispatch 経路 / Layer 専用メンバの使用の 3 種類) は [ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) 「課題 B」に取り込み済み。プラグイン単体で先に直すより、P1 (tp_stub 共通アクセス口) を入れてからの方が 26 本の分岐がほぼ解ける |
 | — | ~~WINVER の `Window.setZoom` が事実上効かない~~ | 上の **P2** に統合。調査の結果、旧来の契約は「`setZoom` は倍率を覚えるだけで `inner == layer×zoom` はスクリプトが維持する」(KAG3 `YesNoDialog.tjs:51-59` が実例) であり、この不変条件が守られていれば現 WINVER も 1:1 で正しく出る。差が出るのは `setInnerSize` を伴わず `setZoom` だけ呼んだ場合。詳細 = [WindowGeometry.md](src/core/doc/WindowGeometry.md) §3 |
 
 ## 将来課題
