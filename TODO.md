@@ -89,7 +89,7 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 ## 最近クローズしたもの
 
 - ✅ 設定ファイル (`.cf` / `.cfu`) の行正規化と、デスクトップ SDL の探索規約を
-  WINVER へ統一 (src/core `7dc9aed0`)
+  WINVER へ統一 (src/core `43a0a827`)
   行末の改行が値に混入していた (win32 = `fgets` で LF が残る / generic =
   `getline` で CRLF の CR が残る)。素の値の比較が静かに失敗し、値省略行は
   参照不能だった。`common/base/ConfigLine.h` で解釈直前に改行・前後の空白・BOM を
