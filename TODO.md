@@ -14,6 +14,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | WINVER モダン化 | [src/core/doc/ModernizationRoadmap.md](src/core/doc/ModernizationRoadmap.md) |
 | 動画 (Media Foundation 移行) | [src/core/doc/MovieMFMigration.md](src/core/doc/MovieMFMigration.md) |
 | リファレンスとコードの差分 | [doc/_missing.md](doc/_missing.md) (生成物。現在 0 件) |
+| Claude Code スキルの配布形 (install.sh) | [tools/skills/TODO-skills.md](tools/skills/TODO-skills.md) |
 
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 
@@ -25,6 +26,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 |---|---|---|
 | 中 | リリースのバージョン運用を確定する | 番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する |
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
+| 中 | 固定長パスバッファ (`MAX_PATH`) の全体点検 | `common/utils/DebugIntf.cpp:533` に `tjs_char filename[MAX_PATH]` へ `Application->ExePath()` を長さ検査なしで `TJS_strcpy` している箇所がある (`TVPTJS2StartDump`)。Windows のパスは `MAX_PATH` を超えうるので、**同種の固定長バッファ + 無検査コピーが他にどれだけあるかを全体で洗い出し**、`tjs_string` / `ttstr` 化するか長さチェックを入れる。2026-08-19 の設定ファイル調査中に発見 (この件自体は今回の変更とは無関係の既存コード) |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
 | 中 | Layer / Bitmap / ImageFunction の統合 | ImageFunction の API 二重化と、プラグインが Bitmap を扱えない問題 (Layer 参照 26 ファイル) の再整理。**方針決定済 = P1 (tp_stub 共通アクセス口) → P2 (Bitmap へメソッド追加・ImageFunction は shim 化) → P3 (プラグイン対応) → P4 で共通基底 `ImageBuffer` の要否を判断**。B案はプロトタイプ実測済み (パッチ同梱)。着手は後日。SSOT = [ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
 | ✅ | Window ジオメトリ仕様の統一 **P1** | DestRect 算出を `TVPCalcViewportDestRect` 共通計算へ + viewport の配置 API を全バリアント公開 + WINVER 入力座標の DestRect オフセット対応。等価変換で**挙動不変を実測確認済**。SSOT = [WindowGeometry.md](src/core/doc/WindowGeometry.md) |
@@ -86,6 +88,17 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 
 ## 最近クローズしたもの
 
+- ✅ 設定ファイル (`.cf` / `.cfu`) の行正規化と、デスクトップ SDL の探索規約を
+  WINVER へ統一 (src/core `7dc9aed0`)
+  行末の改行が値に混入していた (win32 = `fgets` で LF が残る / generic =
+  `getline` で CRLF の CR が残る)。素の値の比較が静かに失敗し、値省略行は
+  参照不能だった。`common/base/ConfigLine.h` で解釈直前に改行・前後の空白・BOM を
+  落とすようにした。あわせて generic のデスクトップを WINVER と同じ規約にし
+  (`<exe名>.cfu` > `<exe名>.cf` > `config.cf` > 埋め込み)、無効化されていた `.cfu`
+  読み込みを有効化 (sdl3 の `-userconf` は書いていたのに誰も読んでいなかった)。
+  sdl3 の `ExePath` が固定文字列 `"krkrz.exe"` だったのも実パス解決に修正。
+  非デスクトップ (Android/iOS/wasm/組込み機) は挙動を変えていない。
+  仕様 = [doc/guide/CommandLine.md](doc/guide/CommandLine.md)
 - ✅ `System.screenWidth` / `screenHeight` の仕様を WINVER / SDL で揃えた
   SDL/generic は常にプライマリディスプレイを返していて、リファレンスの記述
   「メインウィンドウのあるディスプレイを対象」と食い違っていた。
