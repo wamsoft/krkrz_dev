@@ -138,7 +138,7 @@ navigator)。こちらは**吉里吉里Z のゲーム (KAG/kag 機構) に実際
 ## 8. 実機検証 (REPL / Agent)
 
 ```
-<exe> -replfile=<チャネルdir>        # skill appctl の作法で起動・停止する
+<exe> -replfile=<チャネルdir>        # skill dev-toolkit:appctl の作法で起動・停止する
 ```
 
 - `Agent.dialogs()` … 表示中ダイアログ一覧 (index / modal / screen / focused / rect)

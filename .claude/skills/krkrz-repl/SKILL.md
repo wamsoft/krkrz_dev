@@ -94,15 +94,19 @@ exe は krkrz_dev のビルド出力を使う (リポジトリルート相対):
 - SDL3 版:   `build/x64-windows/core/Release/krkrz64.exe`
 - WINVER 版: `build/x64-windows-win/core/Release/krkrz64.exe`
 
-プロセスの起動・停止は skill `appctl` の規約に従うこと (PID を記録し、停止は
+プロセスの起動・停止は skill `dev-toolkit:appctl` の規約に従うこと (PID を記録し、停止は
 その PID のみ・exe パス照合付き。`taskkill /IM krkrz64.exe` のようなイメージ名
-一括 kill は並行セッションを巻き添えにするため禁止)。`appctl` は別配布の
-スキルなので、同梱ヘルパ `scripts/appctl.sh` の位置はそちらの SKILL.md を見る
-(`$APPCTL` に入れてある想定で以下は書く)。
+一括 kill は並行セッションを巻き添えにするため禁止)。`dev-toolkit:appctl` は
+プラグイン `dev-toolkit` 収録なので、同梱ヘルパ `scripts/appctl.sh` の位置は
+そちらの SKILL.md を見る (`$APPCTL` に入れてある想定で以下は書く)。
+
+シェル操作そのものは skill `dev-toolkit:msys2` の起動定型に従う
+(`MSYSTEM=MSYS /c/msys64/usr/bin/bash.exe -lc '...'`)。素の `bash` 呼びは
+Git Bash を引いてしまう。
 
 ```bash
 export APPCTL_DIR="$SCRATCHPAD/appctl"
-S="$APPCTL"                    # appctl スキルの scripts/appctl.sh
+S="$APPCTL"                    # dev-toolkit:appctl の scripts/appctl.sh
 CH="$SCRATCHPAD/replchan"
 
 bash "$S" start krkr \

@@ -204,4 +204,4 @@ VRM 立ち絵/箱庭エディタの完全な実例:
   (5 モード編集 + サイドバー + REPL コンソール)。設計詳細は `threepp/docs/webui.md`
 
 関連スキル: `krkrz-repl` (REPL/Agent 駆動・-replweb 起動) / `elements` (ネイティブ UI) /
-`krkrz` (本体 API: Storages/System/Plugins) / `tjs2` (言語仕様) / `msys2` (シェル)。
+`krkrz` (本体 API: Storages/System/Plugins) / `tjs2` (言語仕様) / `dev-toolkit:msys2` (シェル)。
