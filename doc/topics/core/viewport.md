@@ -81,6 +81,41 @@ window.setViewport("none", 1.0, 0, 0);   // fit=none, zoom=1.0, alignX=0, alignY
 
 ---
 
+## ウインドウの縦横比を固定する ( aspectLock )
+
+ビューポートが決めるのは「**外側 surface の中でゲーム画面をどう置くか**」で、
+外側 surface の**形そのもの**は、ユーザのリサイズやプラットフォームまかせです。
+これを固定したいときに [Window.aspectLock](../../reference/Window.md#aspectlock)
+を使います。
+
+```tjs
+window.aspectLock = "16:9";        // ウインドウの内側を 16:9 に固定
+window.viewportFit = "integer";    // その中にゲーム画面をドットバイドットで配置
+window.aspectLock = "";            // 固定を解除
+```
+
+ゲーム画面 ( primaryLayer ) の比率と、ウインドウ全体の比率を**分けたい**ときに
+効きます。たとえばゲーム画面が 640x400 ( 8:5 ) でも、ウインドウ全体は 16:9 に
+保ったままその中へ整数倍で置く、という構成です。UI ( Elements のオーバレイ等 ) を
+16:9 の基本サイズで作っている場合、ウインドウが 16:9 に保たれていないと
+UI とゲーム画面の枠がずれてしまうため、この固定が要ります。
+
+有効にすると次の 2 つが変わります。
+
+- ユーザによるウインドウのリサイズがこの比率へ拘束されます ( ドラッグ操作中も
+  比率が保たれます )。
+- [Window.setZoom](../../reference/Window.md#setzoom) が高さをこの比率から
+  決めるようになります ( 従来は「primaryLayer のサイズ × 倍率」だったため、
+  倍率を設定するたびにレイヤの比率へ戻っていました )。
+
+設定した時点の内側サイズも、**幅を基準に**この比率へ合わせられます。
+
+!!! warning "SDL3 / 汎用ビルド専用"
+    Windows ネイティブ ( WINVER ) ビルドでは何も行いません。設定しても無視され、
+    読み出すと常に空文字列が返ります。
+
+---
+
 ## TJS API
 
 [Window](../../reference/Window.md) クラスに以下のメンバーが追加されています。
@@ -96,6 +131,7 @@ window.setViewport("none", 1.0, 0, 0);   // fit=none, zoom=1.0, alignX=0, alignY
 | [viewportOffsetX](../../reference/Window.md#viewportoffsetx) | 水平オフセット ( px ) |
 | [viewportOffsetY](../../reference/Window.md#viewportoffsety) | 垂直オフセット ( px ) |
 | [viewportBgColor](../../reference/Window.md#viewportbgcolor) | 余白の背景色 `0xRRGGBB` |
+| [aspectLock](../../reference/Window.md#aspectlock) | ウインドウ自体の縦横比を固定 ( `"16:9"` 等 )。既定 `""` = 固定なし。**SDL3 / 汎用ビルド専用** |
 
 ### メソッド
 

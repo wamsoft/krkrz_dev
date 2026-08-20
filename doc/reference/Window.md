@@ -28,6 +28,7 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [frameHeight](#frameheight)
 - [zoomNumer](#zoomnumer)
 - [zoomDenom](#zoomdenom)
+- [aspectLock](#aspectlock)
 - [viewportFit](#viewportfit)
 - [viewportZoom](#viewportzoom)
 - [viewportAlignX](#viewportalignx)
@@ -453,6 +454,39 @@ Window クラスのオブジェクトを構築します。
 詳しくは [Window.setZoom](Window.md#setzoom) メソッドを参照してください。
 
 **関連:** [Window.setZoom](Window.md#setzoom) / [Window.zoomNumer](Window.md#zoomnumer)
+
+---
+
+### aspectLock
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ウインドウの縦横比の固定
+
+ウインドウの内側 ( [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) ) の縦横比を固定します。`"16:9"` のように `"幅:高さ"` 形式の文字列で指定し、空文字列 `""` を設定すると解除されます。既定は `""` ( 固定なし )。値を取得することもできます。
+
+ゲーム画面 ( primaryLayer ) の比率と、ウインドウ全体の比率を**分離したいとき**に使います。たとえばウインドウ全体を 16:9 に保ったまま、その中へ 640x400 ( 8:5 ) のゲーム画面をドットバイドット ( `viewportFit = "integer"` ) やフィット ( `"contain"` ) で置く、という構成が作れます。UI ( Elements 等 ) を 16:9 の基本サイズで作っている場合、ウインドウが 16:9 に保たれていないと UI とゲーム画面の枠がずれてしまいます。
+
+固定を有効にすると、
+
+- ユーザによるウインドウのリサイズがこの比率へ拘束されます ( ドラッグ操作中も比率が保たれます )。
+- [Window.setZoom](Window.md#setzoom) が高さをこの比率から決めるようになります ( 従来は「primaryLayer のサイズ × 倍率」だったため、倍率を設定するたびにレイヤの比率へ戻っていました )。
+- 設定した時点の内側サイズも、**幅を基準に**この比率へ合わせられます。
+
+ゲーム画面をその枠の中へどう配置するかは、従来どおり [Window.viewportFit](Window.md#viewportfit) などのビューポート設定が行います。本プロパティは「ウインドウの形」だけを決めます。
+
+```
+window.aspectLock = "16:9";        // ウインドウを 16:9 に固定
+window.viewportFit = "integer";    // その中にゲーム画面をドットバイドットで配置
+window.aspectLock = "";            // 固定を解除
+```
+
+!!! warning "SDL3 / 汎用ビルド専用"
+    Windows ネイティブ ( WINVER ) ビルドでは**何も行いません**。設定しても無視され、読み出すと常に空文字列が返ります。
+
+**関連:** [Window.viewportFit](Window.md#viewportfit) / [Window.setZoom](Window.md#setzoom) / [Window.setInnerSize](Window.md#setinnersize)
 
 ---
 

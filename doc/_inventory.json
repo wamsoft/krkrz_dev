@@ -962,6 +962,7 @@
     "properties": [
       "GLGetProcAddress",
       "HWND",
+      "aspectLock",
       "borderStyle",
       "caption",
       "displayDensity",

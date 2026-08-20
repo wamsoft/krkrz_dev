@@ -195,6 +195,7 @@ dlg.startFlow("ui/menu/app.jsonc");   // 即 return(戻り値=起動成否)
 - **キーボードフォーカス**: modal または `wants_focus` の最前面が保持。後から開いた focus-grab が自然に前面、閉じると直前へ戻る。テキスト入力ウィジェット focus 中は grabFocus=false でもキー/テキストが届く(focus_consumes_text フォールバック)。
 - **ホストホットキー `Dialog.registerHotKey(key, shift=0, duringTextInput=false)`** / `unregisterHotKey` / `clearHotKeys`: 登録キー(VK_PAD*・VK_RBUTTON 等マウスも同じ空間)はパネルへ渡らず `Window.onKeyDown/onMouseDown` へ直行(バイパス方式・専用イベント無し)。テキスト入力中は既定抑止(`duringTextInput=true` で有効)。モーダル中は無効。ESC/PgUp/PgDn 等「シェルが必ず受けたいキー」の確保に使う(実例=demolib DemoShell)。
 - `input`(top-level)で矢印/パッドナビ(`arrow_focus_nav` / `dpad_mode` / `shortcuts`〔key/pad→id〕/ `pad_bindings`)を設定。既定 bind: A=Enter / B=Esc / X=Shift+Tab / Y=Tab / D-Pad=矢印。
+- **フォーカス無しから方向キーで入る位置**: `input.arrow_focus_enter` = `"first"`(既定・収集順の先頭)/ `"directional"`(押した方向の端。右キーなら一番右)。`initial_focus` を置かない確認ダイアログ向け。
 - 複数 Dialog の ownership: `close()` は**自分のインスタンスだけ**閉じる(`IsHandlerActive(this)` ゲート)。ブロッキング pump も自分の handler で終了判定。
 
 ---
