@@ -51,4 +51,17 @@ When you need to modify plugin code itself, remember each `src/plugins/<name>/` 
 
 ## Conventions
 
+**Never put project/client-identifying information in this repository.** This is a
+shared, publicly-released umbrella repo. Titles, product names, client names, private
+repo names, and issue keys (`ABCD-123` style tracker keys) must not appear **anywhere
+that persists**: source code, **comments**, docs, file names, **commit messages
+(subject and body)**, branch names, tags, PR/issue text. This applies to every
+submodule under this umbrella as well.
+
+Motivation for a change is worth writing down — just generalize it. Write "a title
+screen name entry" instead of naming the game, "verified on the target hardware"
+instead of naming the client. An issue key belongs in the client-side repo's commit;
+here, the change must explain itself. When in doubt, ask "will someone outside this
+project read this repo?" — the answer is yes.
+
 Source is UTF-8; comments, identifiers, and commit messages are frequently in Japanese — keep that style when editing existing files. The default branch here is `develop` (not `master`); PRs typically target `master` only for releases.
