@@ -47,6 +47,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [platformTag](#platformtag)
 - [systemLanguage](#systemlanguage)
 - [padButtonMapping](#padbuttonmapping)
+- [padStyle](#padstyle)
 - [buildVariantName](#buildvariantname)
 - [padAxisLeftX](#padaxisleftx)
 - [padAxisLeftY](#padaxislefty)
@@ -983,6 +984,28 @@ PlayStation / Xbox 系はどちらの方式でも結果が同じです。
     Xbox 系に固定されているため位置と刻印が食い違いません。
 
 **関連:** [System.getJoypadType](System.md#getjoypadtype)
+
+---
+
+### padStyle
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+接続パッドのボタン表記の系統 ( 読み取り専用 )
+
+「最後に操作したパッド」のボタン表記の系統を表す文字列です。
+`"xbox"` / `"ps"` / `"switch"` のいずれかで、判定できない場合は
+空文字列になります。
+
+画面に表示するボタン絵 ( 操作ガイドなど ) をどの系統にするかの判断に
+使えます。[Dialog.setPadTheme](Dialog.md#setpadtheme) に `"auto"` を
+指定した場合の自動選択も、このプロパティと同じ判定を参照します。
+
+**関連:** [System.padButtonMapping](System.md#padbuttonmapping) / [System.getJoypadType](System.md#getjoypadtype)
 
 ---
 

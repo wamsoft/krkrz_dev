@@ -1051,6 +1051,22 @@ class System {
 	property padButtonMapping;
 
 	/**
+	 * 接続パッドのボタン表記の系統 ( 読み取り専用 )
+	 *
+	 * 「最後に操作したパッド」のボタン表記の系統を表す文字列です。
+	 * `"xbox"` / `"ps"` / `"switch"` のいずれかで、判定できない場合は
+	 * 空文字列になります。
+	 *
+	 * 画面に表示するボタン絵 ( 操作ガイドなど ) をどの系統にするかの判断に
+	 * 使えます。[Dialog.setPadTheme](Dialog.md#setpadtheme) に `"auto"` を
+	 * 指定した場合の自動選択も、このプロパティと同じ判定を参照します。
+	 * @type String
+	 * @see System.padButtonMapping
+	 * @see System.getJoypadType
+	 */
+	property padStyle;
+
+	/**
 	 * フォントの追加
 	 *
 	 * ストレージ内のフォントファイルをエンジンに追加します。

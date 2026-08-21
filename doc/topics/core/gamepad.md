@@ -66,6 +66,38 @@ Xbox 系に固定されているため位置と刻印が食い違いません ( 
 ゲーム側の `padKeyMap` と Elements ダイアログのパネル操作の**両方に同時に効きます**。
 解決結果はパッドごとに 1 回ログへ出るので、実機での確認に使えます。
 
+### 位置で指したいボタンは `VK_PAD_FACE_*`
+
+フェイスボタン 4 つには、刻印基準の `VK_PAD1`〜`VK_PAD4` とは別に、**位置**で指す
+仮想キーがあります。
+
+| キーコード | 位置 | Xbox 系の刻印 | 任天堂系の刻印 |
+|---|---|---|---|
+| `VK_PAD_FACE_SOUTH` (0x1D4) | 下 | A | B |
+| `VK_PAD_FACE_EAST` (0x1D5) | 右 | B | A |
+| `VK_PAD_FACE_WEST` (0x1D6) | 左 | X | Y |
+| `VK_PAD_FACE_NORTH` (0x1D7) | 上 | Y | X |
+
+同じ物理ボタンの 1 回の押下で**刻印側と位置側の両方のキーイベントが届く**ので、
+割り当てる側がボタンごとに「刻印で揃える」「位置で揃える」を選べます
+(例: 決定は刻印の A = `VK_PAD1`、「上のボタンで開くメニュー」は
+`VK_PAD_FACE_NORTH`)。`padButtonMapping` の設定にかかわらず、位置側は常に
+物理的な配置を指します。
+
+ボタンガイドの表示側も同じ 2 系統を持っています (Elements の `pad_icon` は
+`face_north` と `y` の両方の名前を受けます)。割り当てと表示は同じ基準どうしで
+組にしてください。
+
+### `System.padStyle` — ボタン絵をどの系統にするか
+
+接続しているパッドのボタン表記の系統は
+[System.padStyle](../../reference/System.md#padstyle) (読み取り専用) で取得
+できます。`"xbox"` / `"ps"` / `"switch"` のいずれか、判定できないときは
+空文字列です。操作ガイドに表示するボタン絵の選択に使えます。Elements の
+[Dialog.setPadTheme](../../reference/Dialog.md#setpadtheme) に `"auto"` を
+指定すると、この判定に基づいてボタン絵テーマが自動選択されます (画面を開く
+たびに決め直されるため、コントローラの差し替えにも追従します)。
+
 ### Elements ダイアログとの関係
 
 [Dialog](../../reference/Dialog.md) のパネルがキーボードフォーカスを持っていると、
@@ -73,7 +105,10 @@ Xbox 系に固定されているため位置と刻印が食い違いません ( 
 cancel) に消費されます。「このパッドボタンだけは必ずゲーム側で受けたい」場合は
 [Dialog.registerHotKey](../../reference/Dialog.md#registerhotkey) で登録すると、
 ダイアログをバイパスして `Window.onKeyDown` へ直行します (入力の配送優先順位は
-[Dialog ガイド](../../guide/Dialog.md) を参照)。
+[Dialog ガイド](../../guide/Dialog.md) を参照)。逆に画面 JSON 側から
+「この入力はゲームのもの」と宣言するには、`"bindings"` で
+`"action": "passthrough"` を指定します (パネルが消費せず素通しになります。
+`"none"` は消費した上で何もしない点が違います)。
 
 コアデモ `pad_advanced` にはこの確保を ON/OFF するチェックがあり、同じボタンが
 「ゲームに届く」「パネルに吸われる」と切り替わる様子をその場で比較できます。
@@ -105,6 +140,8 @@ var t = System.getPadAxis(0, System.padAxisLeftTrigger); //  0.0 〜 +1.0
 - `System.hasJoypad(no)` … 指定番号が有効か
 - `System.getJoypadType(no)` … 機種名の文字列 (環境依存。SDL 版は認識名、WINVER 版は
   `"XInput Controller"`)
+- `System.padStyle` … 最後に操作したパッドのボタン表記の系統 (`"xbox"` / `"ps"` /
+  `"switch"`、不明なら空文字列)。ボタン絵の選択に使う (前節)
 - `System.onJoypadChange(no, name)` … 最後に操作したパッドの識別名が変化したときに
   呼ばれるコールバック (パッドが無くなったときは `name` が空文字列)
 - `System.rumblePad(no, low, high, durationMs)` / `System.stopRumblePad(no)` …

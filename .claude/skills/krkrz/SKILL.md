@@ -254,7 +254,7 @@ var tex = new Texture(window, "image.png");
 ## 関連ドキュメント
 
 - ガイド (概念解説): `doc/guide/EventSystem.md`, `doc/guide/StorageSystem.md`, `doc/guide/GraphicSystem.md`, `doc/guide/SoundSystem.md`, `doc/guide/CommandLine.md`
-- 周辺情報: `doc/topics/core/*.md` (memory_observation, draw_stats, pad_overlay, repl, logging)
+- 周辺情報: `doc/topics/core/*.md` (gamepad〔刻印/位置 2 系統・padStyle〕, viewport, engine_setting, memory_observation, low_memory, draw_stats, pad_overlay, repl, logging, anti_cracking)
 - TJS2 言語本体は別 skill (`tjs2`)
 
 ## 関連スキル

@@ -687,6 +687,7 @@
       "padAxisRightY",
       "padButtonMapping",
       "padEnabled",
+      "padStyle",
       "personalPath",
       "platformName",
       "platformTag",

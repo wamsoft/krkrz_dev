@@ -111,7 +111,7 @@ dlg.showDict(%[
 - **i18n**: top-level `strings`(`{id:{lang:str}}`) + `lang`。`text_id`/`options_id`/`text_list_id` が現在言語で解決される。**TJS からの実行中切替は `Dialog.language = "en"`**(表示中の全ダイアログへ即時反映・開き直し不要、picker は選択 index 維持。以後開く画面の既定にもなる)。
 - **変数連動**: picker `index_var`(**双方向**: 選択変更で書き + setVar で quiet 追従) ↔ `text_list`/`rect_list` の `index_var`(読み) を同名にすると選択連動(機種選択→SPEC/スクショ等)。`value_var`=10進小数、`at_var`=`"x,y[,w,h]"`。picker `enabled_var`=選択肢の有効/無効 mask(`'0'/'1'`文字列、step/click が無効 index をスキップ。未開放機種の出し分け)。choice (`atlas_choice`/`radio_button`) の `selected_var`+`selected_value`=ラジオグループ変数(グループ全員同じ var + 異なる value、var==value の1個が選択、双方向)。TJS からは `dlg.setVar(name, value)` で駆動。
 - **モーダルへの初期 vars 注入**: `dlg.showModalFile(path, %[name=>value,...])`(showModalJson/Dict も同様、第2引数 Dictionary)。build 直後・pump 前に変数 store へ流し込む(モーダル中は TJS がブロックされ setVar 不可のため)。モーダル中も onAction は同期で届く。
-- **pad_icon/フォント setup (static)**: `Dialog.setPadIconBase(dir)`(Kenney SVG のベース storage パス。未設定だと灰色プレースホルダ)/`Dialog.setPadTheme("xbox"|"ps"|"switch"|"keyboard")`/`Dialog.registerFontDir(dir)`/`Dialog.defaultFontFamily = "Open Sans, Roboto, Noto Sans JP, ..."`(明示設定は自動 theme 並びに上書きされない。Emoji 系は必ず末尾に)。
+- **pad_icon/フォント setup (static)**: `Dialog.setPadIconBase(dir)`(Kenney SVG のベース storage パス。未設定だと灰色プレースホルダ)/`Dialog.setPadTheme("xbox"|"ps"|"switch"|"keyboard"|"auto")`(`"auto"`=接続パッドの系統〔`System.padStyle`〕から自動選択、画面を開くたび決め直し)/`Dialog.registerFontDir(dir)`/`Dialog.defaultFontFamily = "Open Sans, Roboto, Noto Sans JP, ..."`(明示設定は自動 theme 並びに上書きされない。Emoji 系は必ず末尾に)。
 - **要素の有効/無効を変数連動**: button 系(`button`/`atlas_button`/`invert_button`/`ring_button`)の `enabled_var`。値 `"0"` で無効、それ以外(既定)で有効。無効中はクリック/キー決定が効かず、描画は `disabled` frame があればそれ、無ければ半透明。進行で開放されるメニュー項目(未クリアなら「おまけ」を灰色)等に。
 
 ### static 設定一覧 (クラス全体に効く。`Dialog.xxx`)
@@ -194,7 +194,7 @@ dlg.startFlow("ui/menu/app.jsonc");   // 即 return(戻り値=起動成否)
 - **用途 3 態**: モーダル `showJson(json)` / **操作パネル `showJson(json, true, false)`**(キー/パッドがパネルへ届き、未処理分はホストへ素通し。パッド十字=フォーカスナビ/A=決定) / 表示専用 HUD `showJson(json, false)`(キーを一切受けない)。
 - **キーボードフォーカス**: modal または `wants_focus` の最前面が保持。後から開いた focus-grab が自然に前面、閉じると直前へ戻る。テキスト入力ウィジェット focus 中は grabFocus=false でもキー/テキストが届く(focus_consumes_text フォールバック)。
 - **ホストホットキー `Dialog.registerHotKey(key, shift=0, duringTextInput=false)`** / `unregisterHotKey` / `clearHotKeys`: 登録キー(VK_PAD*・VK_RBUTTON 等マウスも同じ空間)はパネルへ渡らず `Window.onKeyDown/onMouseDown` へ直行(バイパス方式・専用イベント無し)。テキスト入力中は既定抑止(`duringTextInput=true` で有効)。モーダル中は無効。ESC/PgUp/PgDn 等「シェルが必ず受けたいキー」の確保に使う(実例=demolib DemoShell)。
-- `input`(top-level)で矢印/パッドナビ(`arrow_focus_nav` / `dpad_mode` / `shortcuts`〔key/pad→id〕/ `pad_bindings`)を設定。既定 bind: A=Enter / B=Esc / X=Shift+Tab / Y=Tab / D-Pad=矢印。
+- `input`(top-level)で矢印/パッドナビ(`arrow_focus_nav` / `dpad_mode` / `shortcuts`〔key/pad→id〕/ `pad_bindings`)を設定。既定 bind: A=Enter / B=Esc / X=Shift+Tab / Y=Tab / D-Pad=矢印。`"bindings": [{key|pad|mouse|wheel, action}]` で named-action を差替(`"none"`=消費して無効化、`"passthrough"`=消費せずホストへ素通し=常駐オーバレイが「この入力は下のゲームのもの」と宣言する用)。pad のフェイスボタンは刻印(`"a"`/`"b"`/`"x"`/`"y"`)と位置(`"face_south"`/`"face_east"`/`"face_west"`/`"face_north"`)の 2 系統で、1 押下で両方届く。表示側 `pad_icon` の name も同 2 系統を持つので割り当てと表示は同じ基準で組にする(任天堂系は X/Y の位置が Xbox と逆)。
 - **フォーカス無しから方向キーで入る位置**: `input.arrow_focus_enter` = `"first"`(既定・収集順の先頭)/ `"directional"`(押した方向の端。右キーなら一番右)。`initial_focus` を置かない確認ダイアログ向け。
 - 複数 Dialog の ownership: `close()` は**自分のインスタンスだけ**閉じる(`IsHandlerActive(this)` ゲート)。ブロッキング pump も自分の handler で終了判定。
 
