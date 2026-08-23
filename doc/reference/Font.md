@@ -19,6 +19,9 @@ Font クラスは、**フォント**を管理するためのクラスです。
 - [angle](#angle)
 - [rasterizer](#rasterizer)
 - [emojiMode](#emojimode)
+- [weight](#weight)
+- [variations](#variations)
+- [defaultUseVarStyle](#defaultusevarstyle)
 - [defaultEmojiMode](#defaultemojimode)
 - [emojiFaceName](#emojifacename)
 - [colorEmojiFaceName](#coloremojifacename)
@@ -41,6 +44,9 @@ Font クラスは、**フォント**を管理するためのクラスです。
 - [registerFontFile](#registerfontfile)
 - [queryFonts](#queryfonts)
 - [getFontInfo](#getfontinfo)
+- [getVarAxes](#getvaraxes)
+- [setDefaultVariations](#setdefaultvariations)
+- [getDefaultVariations](#getdefaultvariations)
 
 ---
 
@@ -70,6 +76,17 @@ Layerメンバのfontは、引数にLayerを渡す特殊版。
 カンマで区切って複数の候補を指定することができます。この場合は、実際に存在するフォントが使用され、先頭に書いたものほど優先されます。実際に存在するフォントかどうかは OS のフォントのリストを参照することにより行われます。どの候補にも合致しなかった場合は、デフォルトのフォントが使用されます (現バージョンでは "ＭＳ Ｐゴシック" 固定)。
 
 先頭をカンマにし、直後にフォント名を書くと、実際にそのフォントをOSが列挙しなくても、OSにそのフォントを指定しようとします (たとえば ",My Original Font" )。これにより AddFontResource Win32 API 等で登録した列挙不可能なフォントを使用することができます。
+
+バリアブルフォントでは、フォント名に `#tag=val[,tag=val...]` を後置して
+可変軸インスタンスを指定できます ( 例 `"MyFont#wght=700"`、
+`"MyFont#wght=700,wdth=75"` )。フォールバック連鎖の各要素に個別に指定でき、
+[variations](#variations) と異なり face 単位で効きます。glyphware 経路
+( [Layer.drawShapedText](Layer.md#drawshapedtext) 系と [rasterizer](#rasterizer) = 2 )
+でのみ有効です。
+
+軸を付けずにバリアブルフォントを参照した場合は wght=400 相当
+( CSS の font-weight 既定と同じ ) に正規化されます。無指定時の既定を
+変えたい場合は [setDefaultVariations](#setdefaultvariations) を使います。
 
 ---
 
@@ -169,24 +186,25 @@ Layerメンバのfontは、引数にLayerを渡す特殊版。
 [Layer.drawText](Layer.md#drawtext) で使用するラスタライザ ( 文字列描画方式 ) を
 表します。値を設定することもできます。
 
-値は整数のインデックスで、利用可能な値と番号は**ビルドによって異なります**:
+値は整数のインデックスで、番号は**全ビルド共通**です:
 
-`**0**` : FreeType ラスタライザ ( 全ビルド。SDL / 汎用ビルドの既定 )
+`**0**` : FreeType ラスタライザ ( 全ビルドに搭載。SDL / 汎用ビルドの既定 )
 
-`**1**` ( WINVER のみ ) : GDI ラスタライザ ( WINVER の既定 )。SDL / 汎用ビルドでは
-この番号が glyphware になります。
+`**1**` : GDI ラスタライザ ( WINVER のみ搭載。WINVER の既定 )
 
-`**2**` ( WINVER ) / `**1**` ( 非 WINVER ) : glyphware ( 統一フォントエンジン。
-FreeType + HarfBuzz )。GDI 既定を変えず、選択時のみ drawText のグリフ生成が glyphware
-経由になります ( 埋め込みビットマップではなくアウトライン描画・カラー絵文字対応 )。
+`**2**` : glyphware ( 統一フォントエンジン。FreeType + HarfBuzz )。既定を変えず、
+選択時のみ drawText のグリフ生成が glyphware 経由になります ( 埋め込みビットマップ
+ではなくアウトライン描画・カラー絵文字対応 )。
 なお drawText 経路は 1 コードポイントずつの cell-stepping で**シェイピングは行いません**
 ( BiDi / 複雑スクリプトのシェイピングが必要な場合は
 [Layer.drawShapedText](Layer.md#drawshapedtext) を用います )。
 
-FreeType / glyphware を指定した場合、横書きにのみ対応しています。その他は未対応です。
+そのビルドに搭載されていない番号 ( 例: SDL / 汎用ビルドで 1 ) を設定した場合は
+FreeType ( 0 ) へフォールバックし、読み戻すとフォールバック後の実効値が返ります。
+このため「設定して読み戻し、値が一致しない = そのラスタライザは未搭載」で検出
+できます。
 
-利用可能な番号は [System.buildVariantName](System.md#buildvariantname) で判定するか、
-番号を設定してから読み戻して ( 設定が反映されない = 未対応 ) 検出できます。
+FreeType / glyphware を指定した場合、横書きにのみ対応しています。その他は未対応です。
 
 このプロパティはスタティックです。Font.rasterizer を用いて値を設定してください。
 
@@ -226,6 +244,65 @@ GDI ラスタライザ ( WINVER 既定 ) では効果がありません。
 優先し、**VS15** ( U+FE0E ) を付けると元フォント ( テキスト表示 ) を強制します。
 ( 例: "❤"+U+FE0F でカラー、"❤"+U+FE0E でモノクロ )。セレクタ無しでの自動判定
 ( Emoji_Presentation 既定 ) は行いません ( 高度な多言語処理は対象外 )。
+
+---
+
+### weight
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+フォントウェイト ( バリアブルフォント )
+
+フォントのウェイトを表します。値を設定することもできます。100〜900 の数値、
+または void ( 未指定 = フォント既定 ) を指定します。
+
+バリアブルフォントで `wght` 軸を持つ face に対して可変軸として効きます
+( [variations](#variations) に `wght` を明示した場合はそちらが優先 )。
+
+効くのは glyphware 経路 — [Layer.drawShapedText](Layer.md#drawshapedtext) 系
+( 常時 ) と、[rasterizer](#rasterizer) = 2 のときの [Layer.drawText](Layer.md#drawtext)
+— のみです。旧 FreeType / GDI ラスタライザでは無視されます ( 起動後 1 回警告 )。
+
+---
+
+### variations
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+可変軸指定 ( バリアブルフォント )
+
+バリアブルフォントの可変軸を `"wght=700,wdth=87.5"` 形式で指定します。
+値を設定することもできます。void または空文字列でクリアします。
+
+設定時に正規化されます: タグは小文字化、タグ昇順に並べ替え、同タグは後勝ち、
+値は量子化 ( `wght` は 1 刻み、その他の軸は 0.5 刻み — 軸アニメーションで
+キャッシュが際限なく増えないため )。不正な書式は例外になります。
+
+実際に適用されるのは「フォールバック連鎖の各 face が実際に持つ同名軸」だけです。
+利用できる軸は [getVarAxes](#getvaraxes) で調べられます。適用範囲 ( glyphware
+経路のみ ) は [weight](#weight) と同じです。
+
+---
+
+### defaultUseVarStyle
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+bold / italic の可変軸マッピング ( クラスプロパティ )
+
+真にすると、`bold` / `italic` 指定を可変軸で表現できる face ( `wght` /
+`slnt` / `ital` 軸を持つバリアブルフォント ) では、合成ボールド / 合成
+イタリックの代わりに軸 ( wght=700 / slnt=-10 / ital=1 ) を使い、二重適用を
+防ぐため合成スタイルを無効化します。既定は偽 ( 既存の見た目を変えないため )。
+
+軸の有無はフォールバック連鎖の先頭 ( primary ) face で判定されます。
+glyphware 経路でのみ効きます。
 
 ---
 
@@ -674,5 +751,96 @@ SFNT メタデータの辞書を返します。解決できない場合は void 
 + `weight` : 100〜900
 + `slant` : 0=normal, 1=italic, 2=oblique
 + `bold` / `color` / `monospace` / `scalable` : 属性 ( 0/1 )
+
+バリアブルフォントの場合は次も入ります ( 非 VF では省略 ):
++ `axes` : 可変軸の配列 ( [getVarAxes](#getvaraxes) と同形式 )
++ `namedInstances` : fvar named instance の配列
+`%[ name : "SemiBold", coords : %[ wght : 600, ... ] ]`
+
+( `queryFonts` は「フォントを開かず宣言値で判定する」性質を守るため、
+軸情報は返しません。軸は本メソッドか getVarAxes で取得してください )
+
+---
+
+### getVarAxes
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `nameOrPath` | `&nbsp;` | フォント名またはストレージパス |
+
+**戻り値**
+
+可変軸の配列 ( 解決できなければ void )
+
+**解説**
+
+バリアブルフォントの可変軸一覧を取得する。
+
+フォント名 ( 宣言名・SFNT 実名 ) またはストレージパスを解決し、fvar の
+可変軸を配列で返します。各要素は
+`%[ tag : "wght", name : "Weight", min : 300, default : 400, max : 700 ]`
+の辞書です。バリアブルフォントでなければ空配列、解決できない場合は void を
+返します。
+
+```tjs
+var axes = Font.getVarAxes("MyFont");
+for (var i = 0; i < axes.count; i++)
+Debug.message(axes[i].tag + ": " + axes[i].min + ".." + axes[i].max);
+```
+
+---
+
+### setDefaultVariations
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `nameOrPath` | `&nbsp;` | フォント名またはストレージパス ( face 指定と同じ表記、サフィックス抜き ) |
+| `axes` | `&nbsp;` | 既定軸 ( "tag=val,..." 形式 / void・空文字列で解除 ) |
+
+**解説**
+
+可変フォントの既定軸を登録する ( クラスメソッド )。
+
+軸が明示されていないときにフォント名単位で補われる既定の可変軸を登録します。
+`axes` は `"wght=300,wdth=87.5"` 形式です。void または空文字列で解除します。
+
+可変フォントを wght 未指定で参照した場合の既定は wght=400 相当
+( CSS の font-weight 既定と同じ規則。fvar の既定インスタンスが Regular で
+ないフォントも無指定で Regular 相当に表示されます )。この登録はそれより
+強く、`#tag=val` サフィックス / [variations](#variations) /
+[weight](#weight) / fonts.json の宣言軸はさらに強く勝ちます。
+
+```tjs
+Font.setDefaultVariations("Noto Sans JP", "wght=350");  // 無指定を少し細く
+Font.setDefaultVariations("Noto Sans JP", void);        // 解除 (=400 に戻る)
+```
+
+---
+
+### getDefaultVariations
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `nameOrPath` | `&nbsp;` | フォント名またはストレージパス |
+
+**戻り値**
+
+登録されている既定軸文字列 ( 無ければ空文字列 )
+
+**解説**
+
+setDefaultVariations の現在の登録値を取得する ( クラスメソッド )。
 
 ---

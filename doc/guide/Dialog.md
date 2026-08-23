@@ -106,6 +106,8 @@ GPU ( OpenGL 描画 ) 側で同等のトランジションを行いたい場合�
 
 ## 非モーダルの複数同時表示とフォーカス
 
+非モーダル ( オーバーレイ ) パネルの配置は画面 JSON の top-level `"align"` / `"margin"` で指定し、配置と拡縮の基準領域は top-level `"base"` で選べます — `"window"` ( 既定、ウィンドウ全面基準 ) / `"content"` ( ゲーム画像の表示領域基準。字幕窓のようにゲーム画像へ追従させたい場合 )。拡縮はゲームの基準面に対するウィンドウ ( または表示領域 ) の比率に追従するため、フルスクリーン等ではゲームと同率で拡大されます。
+
 非モーダルダイアログ ( [showJson](../reference/Dialog.md#showjson) / [startFlow](../reference/Dialog.md#startflow) 系 ) は z-order 付きのインスタンスリストとして管理され、複数同時に表示できます。マウスは最前面からヒットテストし、キーボード / ゲームパッドはフォーカスを保持しているインスタンス ( z-order 末尾優先 ) に届きます。モーダルダイアログを重ねた場合、下のインスタンスは描画は維持されたまま入力だけがブロックされます。
 
 非モーダル開始系 ( [startFlow](../reference/Dialog.md#startflow) / [startFlowScreens](../reference/Dialog.md#startflowscreens) ) には `grabFocus` 引数があり、偽を指定すると「フォーカスを取らない常駐 HUD」として動きます。常駐 UI がゲームのホットキーまで食ってしまうのを防ぎたい場合に利用します。

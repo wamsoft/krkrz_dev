@@ -1,5 +1,18 @@
 /**
  * Bitmap クラスは、画像情報を保持するクラスです。
+ *
+ * [Layer](Layer.md) と異なり表示要素ではないため、ウィンドウやレイヤツリーとは無関係に単体で生成でき、
+ * 描画しても再描画通知は発生しません。画面に出さない作業用画像や素材の保持に用います。
+ *
+ * Bitmap 自身は描画メソッドを持ちません。合成・塗りつぶし・文字描画・フィルタなどを行うには
+ * [ImageFunction](ImageFunction.md) クラスのメソッドに Bitmap オブジェクトを渡します。
+ *
+ * Layer との受け渡しは [Layer.copyToBitmapFromMainImage](Layer.md#copytobitmapfrommainimage) /
+ * [Layer.copyFromBitmapToMainImage](Layer.md#copyfrombitmaptomainimage) で行うほか、
+ * Layer の `copyRect` / `operateRect` / `stretchCopy` / `operateStretch` / `affineCopy` / `operateAffine` /
+ * `copy9Patch` にはコピー元 ( 演算元 ) として Bitmap を直接指定できます。
+ *
+ * 三者の関係と使い分けは [Layer と Bitmap と ImageFunction](../guide/LayerAndBitmap.md) を参照してください。
  */
 class Bitmap {
 	/**

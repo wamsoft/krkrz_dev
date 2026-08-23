@@ -13,6 +13,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [platformName](#platformname)
 - [osName](#osname)
 - [exePath](#exepath)
+- [resourcePath](#resourcepath)
 - [replWebURL](#replweburl)
 - [personalPath](#personalpath)
 - [appDataPath](#appdatapath)
@@ -43,6 +44,10 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [renderStats](#renderstats)
 - [texUploadUsePBO](#texuploadusepbo)
 - [touchDevice](#touchdevice)
+- [platformTag](#platformtag)
+- [systemLanguage](#systemlanguage)
+- [padButtonMapping](#padbuttonmapping)
+- [padStyle](#padstyle)
 - [buildVariantName](#buildvariantname)
 - [padAxisLeftX](#padaxisleftx)
 - [padAxisLeftY](#padaxislefty)
@@ -89,6 +94,9 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [setMemoryOverlay](#setmemoryoverlay)
 - [setPadOverlay](#setpadoverlay)
 - [setDrawStatsLog](#setdrawstatslog)
+- [getTextureMemory](#gettexturememory)
+- [setTextureMemoryLog](#settexturememorylog)
+- [resetTextureMemoryPeak](#resettexturememorypeak)
 - [getJoypadCount](#getjoypadcount)
 - [hasJoypad](#hasjoypad)
 - [getPadAxis](#getpadaxis)
@@ -207,6 +215,39 @@ OS 名
 
 ---
 
+### resourcePath
+
+プロパティ \ アクセス: `r`
+
+**解説**
+
+エンジン組み込みリソースのあるパス
+
+`config.cf` / `messages.json` / 同梱フォント (`notosansjp-regular.otf` 等) といった
+エンジン組み込みリソースが置かれている場所を、末尾に `/` の付いた統一ストレージ名で
+返します。
+
+実体はプラットフォームで異なります。
+
+| プラットフォーム | 値 | 実体 |
+|---|---|---|
+| WINVER / デスクトップ SDL3 | `resource://./` | exe 埋め込み / OS リソース |
+| ブラウザ (wasm) | `file://./resource/` | 起動時に MEMFS へ preload |
+
+ブラウザビルドには `resource://` メディア自体が存在しないため、`resource://...` を
+直書きしたスクリプトは [Storages.isExistentStorage](Storages.md#isexistentstorage) の
+時点で「対応していないメディアタイプです」例外になります。同梱フォントなどを参照する
+ときは必ずこのプロパティを前置してください。
+
+```tjs
+// 同梱の日本語フォントを参照する
+var path = System.resourcePath + "notosansjp-regular.otf";
+```
+
+**関連:** [System.exePath](System.md#exepath)
+
+---
+
 ### replWebURL
 
 プロパティ \ アクセス: `r`
@@ -260,9 +301,9 @@ Vista, 7, 8 の場合
 吉里吉里の実行可能ファイルのあるフォルダ ([System.exePath](System.md#exepath))になります
 
 !!! warning "Windows ネイティブ ( WINVER ) ビルド限定"
-このプロパティは SDL3 / 汎用ビルドには存在しません。全ビルドで動く
-スクリプトでは `typeof System.appDataPath` で存在を確認するか、
-保存先には [System.dataPath](System.md#datapath) を使用してください。
+    このプロパティは SDL3 / 汎用ビルドには存在しません。全ビルドで動く
+    スクリプトでは `typeof System.appDataPath` で存在を確認するか、
+    保存先には [System.dataPath](System.md#datapath) を使用してください。
 
 **関連:** [System.dataPath](System.md#datapath) / [System.exePath](System.md#exepath) / [System.personalPath](System.md#personalpath)
 
@@ -329,7 +370,9 @@ Vista, 7, 8 の場合
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenHeight](System.md#screenheight) / [System.desktopLeft](System.md#desktopleft) / [System.desktopTop](System.md#desktoptop) / [System.desktopWidth](System.md#desktopwidth) / [System.desktopHeight](System.md#desktopheight)
 
@@ -347,7 +390,9 @@ Vista, 7, 8 の場合
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenWidth](System.md#screenwidth) / [System.desktopLeft](System.md#desktopleft) / [System.desktopTop](System.md#desktoptop) / [System.desktopWidth](System.md#desktopwidth) / [System.desktopHeight](System.md#desktopheight)
 
@@ -364,14 +409,16 @@ Vista, 7, 8 の場合
 デスクトップ ( ウィンドウを表示可能な領域 ) の左端位置をピクセル単位で表します。
 
 !!! warning "Windows ネイティブ ( WINVER ) ビルド限定"
-`desktopLeft` / `desktopTop` / `desktopWidth` / `desktopHeight` は
-SDL3 / 汎用ビルドには存在しません。画面解像度だけであれば全ビルドに
-ある [System.screenWidth](System.md#screenwidth) /
-[System.screenHeight](System.md#screenheight) を使用してください。
+    `desktopLeft` / `desktopTop` / `desktopWidth` / `desktopHeight` は
+    SDL3 / 汎用ビルドには存在しません。画面解像度だけであれば全ビルドに
+    ある [System.screenWidth](System.md#screenwidth) /
+    [System.screenHeight](System.md#screenheight) を使用してください。
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenWidth](System.md#screenwidth) / [System.screenHeight](System.md#screenheight) / [System.desktopTop](System.md#desktoptop) / [System.desktopWidth](System.md#desktopwidth) / [System.desktopHeight](System.md#desktopheight)
 
@@ -389,7 +436,9 @@ SDL3 / 汎用ビルドには存在しません。画面解像度だけであれ�
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenWidth](System.md#screenwidth) / [System.screenHeight](System.md#screenheight) / [System.desktopLeft](System.md#desktopleft) / [System.desktopWidth](System.md#desktopwidth) / [System.desktopHeight](System.md#desktopheight)
 
@@ -407,7 +456,9 @@ SDL3 / 汎用ビルドには存在しません。画面解像度だけであれ�
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenWidth](System.md#screenwidth) / [System.screenHeight](System.md#screenheight) / [System.desktopLeft](System.md#desktopleft) / [System.desktopTop](System.md#desktoptop) / [System.desktopHeight](System.md#desktopheight)
 
@@ -425,7 +476,9 @@ SDL3 / 汎用ビルドには存在しません。画面解像度だけであれ�
 
 値はメインウィンドウのあるディスプレイを対象としたものです。
 
-メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+メインウィンドウがない場合はプライマリーディスプレイが対象となります
+( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 
 **関連:** [System.screenWidth](System.md#screenwidth) / [System.screenHeight](System.md#screenheight) / [System.desktopLeft](System.md#desktopleft) / [System.desktopTop](System.md#desktoptop) / [System.desktopWidth](System.md#desktopwidth)
 
@@ -771,12 +824,12 @@ UpdateSubresource) ので、実機で詰まっていないかの一次指標と�
 `Dialog.renderStats` を参照してください。
 
 !!! tip "数値の読み方"
-転送率 ( 転送時間 / 経過実時間 ) が高くても **fps が出ていれば、
-待ちの大半は vsync 同期ぶん**です ( ドライバが転送呼び出しの中で
-次フレームを待つ )。本当に転送が足を引っ張っている場合は fps が
-落ちます。この判定基準や経路ごとの違い、計測の進め方は
-コアデモ `perf_stats` と、エンジン付属文書
-`src/core/doc/ScreenTransfer.md` にまとめてあります。
+    転送率 ( 転送時間 / 経過実時間 ) が高くても **fps が出ていれば、
+    待ちの大半は vsync 同期ぶん**です ( ドライバが転送呼び出しの中で
+    次フレームを待つ )。本当に転送が足を引っ張っている場合は fps が
+    落ちます。この判定基準や経路ごとの違い、計測の進め方は
+    コアデモ `perf_stats` と、エンジン付属文書
+    `src/core/doc/ScreenTransfer.md` にまとめてあります。
 
 **関連:** [System.renderStatsReset](System.md#renderstatsreset)
 
@@ -828,6 +881,135 @@ OpenGL 描画を有効にしたビルドでのみ存在します (既定で有�
 
 実行環境にタッチ入力デバイスが存在する場合に真を返します。
 読み出し専用。
+
+---
+
+### platformTag
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+プラットフォームタグ
+
+実行中のプラットフォームを表す短い識別子です ( `"windows"` / `"android"` /
+`"macos"` / `"linux"` / `"web"` など )。読み出し専用。
+
+[System.platformName](System.md#platformname) は OS から得た生の文字列で
+空白や表記ゆれを含むため、ファイル名や条件分岐には使いにくいのに対し、
+こちらは**小文字・空白無しに正規化**されているので、そのまま機種分岐に使えます。
+
+複数のタグが該当する環境 ( 世代違いのコンソールなど ) では、**最も具体的なもの**が
+返ります。
+
+!!! info "機種別のエンジン設定 `config_<tag>.cf`"
+    リソース内の設定ファイルは、共通の `config.cf` に加えて
+    `config_<タグ>.cf` を置くと機種別に上書きできます。
+    読み込みは「具体的なタグ → 一般的なタグ → 共通 `config.cf`」の順で、
+    先に読まれたものが優先されます。存在しないファイルは単に読み飛ばされます。
+
+**関連:** [System.platformName](System.md#platformname) / [System.osName](System.md#osname)
+
+---
+
+### systemLanguage
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+本体の表示言語
+
+OS ( 家庭用ゲーム機ならハード ) に設定されている表示言語を
+[BCP-47](https://www.rfc-editor.org/info/bcp47) の言語タグで返します。
+読み出し専用。`"ja-JP"` / `"en-US"` / `"zh-Hant"` / `"zh-Hans"` のような
+値になります。
+
+ゲームの**既定**言語をハードの設定に合わせるための口です。言語の選択と
+保存はゲーム側の責務で、このプロパティは「本体が何語設定か」だけを返します。
+地域まで要らない場合は `-` より前を見てください。
+
+```tjs
+var lang = System.systemLanguage;
+var code = lang.indexOf("-") >= 0 ? lang.substring(0, lang.indexOf("-")) : lang;
+if(code == "") code = "ja";   // 取得できない環境はゲーム既定へ
+```
+
+!!! warning "取得できない環境では空文字列"
+    言語を取得する手段が無い環境では空文字列を返します。
+    呼び出し側でゲームの既定言語へフォールバックしてください。
+
+取得元は環境ごとに異なります ( Windows ネイティブ版 =
+`GetUserDefaultLocaleName` / SDL3 版 = `SDL_GetPreferredLocales` の先頭。
+家庭用ゲーム機は各ハードの API )。SDL3 版では地域が取れない場合、
+`"ja"` のように言語のみが返ります。
+
+エンジン自身のメッセージ ( エラー文言等 ) とオプション解説の言語選択
+( ja / en / chs / cht ) もこの値に追従します。起動オプション `-language` で
+明示指定して上書きできます ( [コマンドラインオプション](../guide/CommandLine.md) )。
+
+**関連:** [System.platformTag](System.md#platformtag)
+
+---
+
+### padButtonMapping
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+パッドのボタン割り当て方式
+
+ゲームパッドの物理ボタンを `VK_PAD1`〜`VK_PAD4` へどう割り当てるかを表す
+文字列です。値を設定することもできます。
+
+- `"label"` ( 既定 ) … **ボタンの刻印**で割り当てます。`VK_PAD1` = 刻印 A
+( PlayStation では ✕ )、`VK_PAD2` = B ( ○ )、`VK_PAD3` = X ( □ )、
+`VK_PAD4` = Y ( △ )。任天堂系のように A/B・X/Y の**位置が入れ替わっている**
+コントローラでも、画面表示と実際に押すボタンが一致します。
+- `"position"` … 従来どおり**位置**で割り当てます ( 下 = `VK_PAD1`、
+右 = `VK_PAD2`、左 = `VK_PAD3`、上 = `VK_PAD4` )。
+
+刻印が判定できないコントローラでは自動的に位置基準へフォールバックします。
+PlayStation / Xbox 系はどちらの方式でも結果が同じです。
+
+起動オプション `-padbuttons=label|position` ( `config.cf` でも可 ) でも
+指定できます。`"label"` / `"position"` 以外を代入すると例外になります。
+
+!!! warning "SDL3 / 汎用ビルド限定"
+    このプロパティは SDL3 / 汎用ビルドにのみ存在します。Windows ネイティブ
+    ( WINVER ) ビルドのパッド入力は XInput ベースで、ボタンの刻印が
+    Xbox 系に固定されているため位置と刻印が食い違いません。
+
+**関連:** [System.getJoypadType](System.md#getjoypadtype)
+
+---
+
+### padStyle
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+接続パッドのボタン表記の系統 ( 読み取り専用 )
+
+「最後に操作したパッド」のボタン表記の系統を表す文字列です。
+`"xbox"` / `"ps"` / `"switch"` のいずれかで、判定できない場合は
+空文字列になります。
+
+画面に表示するボタン絵 ( 操作ガイドなど ) をどの系統にするかの判断に
+使えます。[Dialog.setPadTheme](Dialog.md#setpadtheme) に `"auto"` を
+指定した場合の自動選択も、このプロパティと同じ判定を参照します。
+
+**関連:** [System.padButtonMapping](System.md#padbuttonmapping) / [System.getJoypadType](System.md#getjoypadtype)
 
 ---
 
@@ -1777,6 +1959,93 @@ XInput のパッド名・ボタン・軸が表示されます )。
 
 ---
 
+### getTextureMemory
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `tag` | `&nbsp;` | 文字列を渡すと、その名前付きで使用量を 1 行ログにも出力します。<br>シーンの境界などに目印を打ちたいときに使います。省略時はログを出力しません。 |
+
+**戻り値**
+
+使用量の辞書配列
+
+**解説**
+
+GL テクスチャメモリ使用量の取得
+
+GL 系 DrawDevice が確保しているテクスチャ類のメモリ使用量を辞書で返します。
+[System.getFreeMemory](System.md#getfreememory) 等が扱う CPU 側のメモリには
+GL ドライバが確保するテクスチャは含まれないため、こちらで別途計測します。
+
+返される辞書のメンバは次の通りです ( 単位はバイト )。
+
+| メンバ | 内容 |
+|---|---|
+| `texture` | [Texture](Texture.md) ( GL テクスチャ ) 実体の合計 |
+| `pbo` | アップロード用 PBO の合計。**更新されるテクスチャだけが持ちます** ( 遅延確保 ) |
+| `total` | `texture` + `pbo` |
+| `peak` | 合計の最大値 |
+| `textureCount` | 生存しているテクスチャ数 |
+| `pboCount` | 生存している PBO 数 |
+
+`peak` は [Offscreen](Offscreen.md) が使う FBO のぶんも含んだ合計の最大値なので、
+FBO を使っている場合は `total` より大きい値になります ( `total` は FBO を含みません )。
+
+**SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+WINVER ビルドには現在ありません。
+
+**関連:** [System.setTextureMemoryLog](System.md#settexturememorylog) / [System.resetTextureMemoryPeak](System.md#resettexturememorypeak)
+
+---
+
+### setTextureMemoryLog
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `enable` | `&nbsp;` | 真でログ出力、偽で停止。引数を省略 ( または void ) すると<br>現在の状態をトグルします。 |
+
+**戻り値**
+
+設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。
+
+**解説**
+
+GL テクスチャメモリログ出力の設定
+
+GL テクスチャメモリの合計が 8MiB 増減するたびに、使用量をログへ書き出す
+モードを切り替えます。既定は無効です。
+
+**SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+
+**関連:** [System.getTextureMemory](System.md#gettexturememory)
+
+---
+
+### resetTextureMemoryPeak
+
+メソッド
+
+**解説**
+
+GL テクスチャメモリのピーク値のリセット
+
+[System.getTextureMemory](System.md#gettexturememory) が返す `peak` を現在値へ
+リセットします。「ここから先の最大値」を測りたいときに使います。
+
+**SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+
+**関連:** [System.getTextureMemory](System.md#gettexturememory)
+
+---
+
 ### getJoypadCount
 
 メソッド
@@ -2447,17 +2716,27 @@ FOLDERIDが文字列の場合は FOLDERID_{} の {} 部分の文字列を指定�
 
 **解説**
 
-TVPProcessApplicationMessages(), TVPHandleApplicationMessage() 呼び出し
+メッセージの処理 ( 本体の TVPProcessApplicationMessages() 呼び出し )
 
-メッセージの処理（※System.breathe()と違い吉里吉里のイベントも処理される）
-基本的にprocessApplicationMessagesはアプリが終了するまで返らないので注意
-[TODO] イベントでの例外発生時はどうなるか確認
+System.breathe() と違い吉里吉里のイベントも処理されます。
+基本的に processApplicationMessages はアプリが終了するまで返らないので注意。
+
+イベントハンドラ内で例外が発生した場合、このメソッドからは伝播しません。
+プラグイン側は本体呼び出しをそのまま通すだけで、例外は本体のイベント配送側が
+捕捉し、通常の未処理スクリプト例外として処理されます ( 例外ダイアログ / ログ
+出力、System.exceptionHandler が設定されていればそちらへ通知 )。
 
 ---
 
 ### handleApplicationMessage
 
 メソッド
+
+**解説**
+
+メッセージを 1 件処理する ( 本体の TVPHandleApplicationMessage() 呼び出し )
+
+例外の扱いは processApplicationMessages と同じです。
 
 ---
 

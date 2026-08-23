@@ -1,5 +1,11 @@
 /**
  * Layer クラスは、**レイヤ**を管理するためのクラスです。
+ *
+ * 画像バッファ ( メイン画像と領域画像 ) に加えて、親子ツリー・表示位置・不透明度・入力イベントを持つ
+ * 「表示される画像」です。表示を伴わない作業用の画像は [Bitmap](Bitmap.md) クラスで扱い、その加工には
+ * [ImageFunction](ImageFunction.md) クラスを使います。
+ *
+ * 三者の関係と使い分けは [Layer と Bitmap と ImageFunction](../guide/LayerAndBitmap.md) を参照してください。
  */
 class Layer {
 	/**

@@ -24,8 +24,11 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [trapKey](#trapkey)
 - [innerWidth](#innerwidth)
 - [innerHeight](#innerheight)
+- [frameWidth](#framewidth)
+- [frameHeight](#frameheight)
 - [zoomNumer](#zoomnumer)
 - [zoomDenom](#zoomdenom)
+- [aspectLock](#aspectlock)
 - [viewportFit](#viewportfit)
 - [viewportZoom](#viewportzoom)
 - [viewportAlignX](#viewportalignx)
@@ -182,9 +185,19 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの横幅
 
-ウィンドウの横幅を表します。値を設定することもできます。
+ウィンドウの横幅 ( ウィンドウ装飾を含む外形の横幅 ) を表します。値を設定することもできます。
 
-**関連:** [Window.height](Window.md#height) / [Window.setSize](Window.md#setsize)
+!!! tip "内側 ( 描画領域 ) 基準の API を推奨します"
+    この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは
+    プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で
+    変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では
+    内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する
+    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /
+    [Window.setInnerSize](Window.md#setinnersize) を使ってください。
+    枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /
+    [Window.frameHeight](Window.md#frameheight) を足せます。
+
+**関連:** [Window.innerWidth](Window.md#innerwidth) / [Window.frameWidth](Window.md#framewidth) / [Window.height](Window.md#height) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -196,9 +209,19 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの縦幅
 
-ウィンドウの縦幅を表します。値を設定することもできます。
+ウィンドウの縦幅 ( ウィンドウ装飾を含む外形の縦幅 ) を表します。値を設定することもできます。
 
-**関連:** [Window.width](Window.md#width) / [Window.setSize](Window.md#setsize)
+!!! tip "内側 ( 描画領域 ) 基準の API を推奨します"
+    この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは
+    プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で
+    変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では
+    内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する
+    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /
+    [Window.setInnerSize](Window.md#setinnersize) を使ってください。
+    枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /
+    [Window.frameHeight](Window.md#frameheight) を足せます。
+
+**関連:** [Window.innerHeight](Window.md#innerheight) / [Window.frameHeight](Window.md#frameheight) / [Window.width](Window.md#width) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -210,9 +233,9 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの最小の横幅
 
-ウィンドウの最小の横幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
+ウィンドウの最小の横幅 ( 内側 = 描画領域の横幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
 
-**関連:** [Window.width](Window.md#width) / [Window.minHeight](Window.md#minheight) / [Window.maxWidth](Window.md#maxwidth) / [Window.maxHeight](Window.md#maxheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
+**関連:** [Window.innerWidth](Window.md#innerwidth) / [Window.minHeight](Window.md#minheight) / [Window.maxWidth](Window.md#maxwidth) / [Window.maxHeight](Window.md#maxheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -224,9 +247,9 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの最小の縦幅
 
-ウィンドウの最小の縦幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
+ウィンドウの最小の縦幅 ( 内側 = 描画領域の縦幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
 
-**関連:** [Window.height](Window.md#height) / [Window.minWidth](Window.md#minwidth) / [Window.maxWidth](Window.md#maxwidth) / [Window.maxHeight](Window.md#maxheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
+**関連:** [Window.innerHeight](Window.md#innerheight) / [Window.minWidth](Window.md#minwidth) / [Window.maxWidth](Window.md#maxwidth) / [Window.maxHeight](Window.md#maxheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -238,9 +261,9 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの最大の横幅
 
-ウィンドウの最大の横幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
+ウィンドウの最大の横幅 ( 内側 = 描画領域の横幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
 
-**関連:** [Window.width](Window.md#width) / [Window.maxHeight](Window.md#maxheight) / [Window.minWidth](Window.md#minwidth) / [Window.minHeight](Window.md#minheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
+**関連:** [Window.innerWidth](Window.md#innerwidth) / [Window.maxHeight](Window.md#maxheight) / [Window.minWidth](Window.md#minwidth) / [Window.minHeight](Window.md#minheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -252,9 +275,9 @@ Window クラスのオブジェクトを構築します。
 
 ウィンドウの最大の縦幅
 
-ウィンドウの最大の縦幅を表します。値を設定することもできます。0を指定すると制限は無くなります。
+ウィンドウの最大の縦幅 ( 内側 = 描画領域の縦幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。
 
-**関連:** [Window.height](Window.md#height) / [Window.maxWidth](Window.md#maxwidth) / [Window.minWidth](Window.md#minwidth) / [Window.minHeight](Window.md#minheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
+**関連:** [Window.innerHeight](Window.md#innerheight) / [Window.maxWidth](Window.md#maxwidth) / [Window.minWidth](Window.md#minwidth) / [Window.minHeight](Window.md#minheight) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize)
 
 ---
 
@@ -360,6 +383,42 @@ Window クラスのオブジェクトを構築します。
 
 ---
 
+### frameWidth
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ウィンドウ装飾の横幅
+
+ウィンドウの外形と内側 ( 描画領域 ) の横幅の差 ( = [Window.width](Window.md#width) - [Window.innerWidth](Window.md#innerwidth) ) を表します。左右の枠を合わせた値です。
+
+ウィンドウ装飾を持たない環境 ( モバイル / コンソール、および [Window.borderStyle](Window.md#borderstyle) が `bsNone` のとき ) は 0 になります。
+
+外形基準で書かれたコードを内側基準へ移すときの変換に使えます。読み出し専用です。
+
+**関連:** [Window.frameHeight](Window.md#frameheight) / [Window.width](Window.md#width) / [Window.innerWidth](Window.md#innerwidth)
+
+---
+
+### frameHeight
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ウィンドウ装飾の縦幅
+
+ウィンドウの外形と内側 ( 描画領域 ) の縦幅の差 ( = [Window.height](Window.md#height) - [Window.innerHeight](Window.md#innerheight) ) を表します。タイトルバーと上下の枠を合わせた値です。
+
+ウィンドウ装飾を持たない環境 ( モバイル / コンソール、および [Window.borderStyle](Window.md#borderstyle) が `bsNone` のとき ) は 0 になります。
+
+外形基準で書かれたコードを内側基準へ移すときの変換に使えます。読み出し専用です。
+
+**関連:** [Window.frameWidth](Window.md#framewidth) / [Window.height](Window.md#height) / [Window.innerHeight](Window.md#innerheight)
+
+---
+
 ### zoomNumer
 
 プロパティ \ アクセス: `r/w`
@@ -398,6 +457,39 @@ Window クラスのオブジェクトを構築します。
 
 ---
 
+### aspectLock
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+ウインドウの縦横比の固定
+
+ウインドウの内側 ( [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) ) の縦横比を固定します。`"16:9"` のように `"幅:高さ"` 形式の文字列で指定し、空文字列 `""` を設定すると解除されます。既定は `""` ( 固定なし )。値を取得することもできます。
+
+ゲーム画面 ( primaryLayer ) の比率と、ウインドウ全体の比率を**分離したいとき**に使います。たとえばウインドウ全体を 16:9 に保ったまま、その中へ 640x400 ( 8:5 ) のゲーム画面をドットバイドット ( `viewportFit = "integer"` ) やフィット ( `"contain"` ) で置く、という構成が作れます。UI ( Elements 等 ) を 16:9 の基本サイズで作っている場合、ウインドウが 16:9 に保たれていないと UI とゲーム画面の枠がずれてしまいます。
+
+固定を有効にすると、
+
+- ユーザによるウインドウのリサイズがこの比率へ拘束されます ( ドラッグ操作中も比率が保たれます )。
+- [Window.setZoom](Window.md#setzoom) が高さをこの比率から決めるようになります ( 従来は「primaryLayer のサイズ × 倍率」だったため、倍率を設定するたびにレイヤの比率へ戻っていました )。
+- 設定した時点の内側サイズも、**幅を基準に**この比率へ合わせられます。
+
+ゲーム画面をその枠の中へどう配置するかは、従来どおり [Window.viewportFit](Window.md#viewportfit) などのビューポート設定が行います。本プロパティは「ウインドウの形」だけを決めます。
+
+```
+window.aspectLock = "16:9";        // ウインドウを 16:9 に固定
+window.viewportFit = "integer";    // その中にゲーム画面をドットバイドットで配置
+window.aspectLock = "";            // 固定を解除
+```
+
+!!! warning "SDL3 / 汎用ビルド専用"
+    Windows ネイティブ ( WINVER ) ビルドでは**何も行いません**。設定しても無視され、読み出すと常に空文字列が返ります。
+
+**関連:** [Window.viewportFit](Window.md#viewportfit) / [Window.setZoom](Window.md#setzoom) / [Window.setInnerSize](Window.md#setinnersize)
+
+---
+
 ### viewportFit
 
 プロパティ \ アクセス: `r/w`
@@ -411,7 +503,22 @@ Window クラスのオブジェクトを構築します。
 
 `"contain"`(アスペクト維持で収まる最大・レターボックス。既定) / `"cover"`(アスペクト維持で埋める最小・はみ出しは clip) / `"fill"`(アスペクト無視で全面引き伸ばし) / `"none"`(原寸) / `"integer"`(収まる範囲で最大の整数倍。最低 1 倍) / `"custom"`([Window.viewportZoom](Window.md#viewportzoom) の倍率を使用) のいずれか。
 
-このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+
+!!! note "旧来 ( 吉里吉里2 / 吉里吉里Z ) と同じ表示にしたい場合"
+    既定の `"contain"` は、ウインドウが内側ゲーム画面と違うサイズになったときに
+    アスペクト維持で拡大縮小します。 ウインドウを広げてもゲームを原寸のまま
+    左上へ置く**旧来どおりの表示**にしたいときは、
+    `viewportFit = "none"` と [Window.viewportAlignX](Window.md#viewportalignx) /
+    [Window.viewportAlignY](Window.md#viewportaligny) `= 0` を明示してください。
+
+    なお [Window.setInnerSize](Window.md#setinnersize) でウインドウの内側サイズを
+    常に「primaryLayer のサイズ × [Window.setZoom](Window.md#setzoom) の倍率」に
+    保っている限り、どのフィット方式でも等倍 1:1 で表示されるため違いは出ません。
+    差が出るのは、ユーザがウインドウをリサイズ / 最大化した場合、拡大率の異なる
+    モニタへ移動した場合、およびウインドウサイズを変更できない環境
+    ( モバイル / コンソール ) です。
+
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.setViewport](Window.md#setviewport) / [Window.viewportZoom](Window.md#viewportzoom)
 
@@ -428,7 +535,7 @@ Window クラスのオブジェクトを構築します。
 [Window.viewportFit](Window.md#viewportfit) が `"custom"` のときに使用する拡大倍率を表す実数です(例 1.8 = 180%)。既定は 1.0。
 値を設定することもできます。
 
-このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportFit](Window.md#viewportfit) / [Window.setViewport](Window.md#setviewport)
 
@@ -445,7 +552,7 @@ Window クラスのオブジェクトを構築します。
 余白が生じたときの内側ゲーム画面の水平配置を表す実数です。0=左 / 0.5=中央 / 1=右。既定は 0.5。
 値を設定することもできます。
 
-このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportAlignY](Window.md#viewportaligny) / [Window.setViewport](Window.md#setviewport)
 
@@ -462,7 +569,7 @@ Window クラスのオブジェクトを構築します。
 余白が生じたときの内側ゲーム画面の垂直配置を表す実数です。0=上 / 0.5=中央 / 1=下。既定は 0.5。
 値を設定することもできます。
 
-このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportAlignX](Window.md#viewportalignx) / [Window.setViewport](Window.md#setviewport)
 
@@ -479,7 +586,7 @@ Window クラスのオブジェクトを構築します。
 align 後に加算する内側ゲーム画面の水平オフセットを表す整数です(px・surface 座標)。
 値を設定することもできます。
 
-このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportOffsetY](Window.md#viewportoffsety) / [Window.setViewport](Window.md#setviewport)
 
@@ -496,7 +603,7 @@ align 後に加算する内側ゲーム画面の水平オフセットを表す�
 align 後に加算する内側ゲーム画面の垂直オフセットを表す整数です(px・surface 座標)。
 値を設定することもできます。
 
-このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportOffsetX](Window.md#viewportoffsetx) / [Window.setViewport](Window.md#setviewport)
 
@@ -513,7 +620,7 @@ align 後に加算する内側ゲーム画面の垂直オフセットを表す�
 ビューポートで生じた余白を塗る背景色を `0xRRGGBB` 形式の整数で表します(上位 8bit は alpha)。既定は黒。
 値を設定することもできます。壁紙([Window.setViewportWallpaper](Window.md#setviewportwallpaper))が設定されている場合は壁紙が優先されます。
 
-このプロパティは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.setViewportWallpaper](Window.md#setviewportwallpaper) / [Window.setViewport](Window.md#setviewport)
 
@@ -532,9 +639,12 @@ align 後に加算する内側ゲーム画面の垂直オフセットを表す�
 値を設定することもできます。値を設定すると、以前このウィンドウに指定されていた描画デバイスは自動的に
 無効になります (invalidateされます)。
 
-デフォルトでは、Window.BasicDrawDevice というクラスのインスタンスが指定されています。
-
-Window.BasicDrawDevice の詳細については、吉里吉里ソースの core/visual/win32/BasicDrawDevice.cpp 内の説明も参照してください。
+デフォルトで指定されているインスタンスはビルドによって異なります。Windows ネイティブ ( WINVER ) ビルドでは
+[Window.BasicDrawDevice](Window.BasicDrawDevice.md) ( Direct3D 11 )、SDL3 ビルドでは
+[SDLOGLDrawDevice](SDLOGLDrawDevice.md) ( OpenGL 有効ビルド時。無効ビルドでは
+[SDLDrawDevice](SDLDrawDevice.md) ) です。起動オプション `-drawdevice` で起動時の既定を
+選択できます ( [コマンドラインオプション](../guide/CommandLine.md) )。なお SDL3 ビルドを
+`-drawdevice=sdl` で起動した場合、実行中に OpenGL 系のデバイスへ切り替えることはできません。
 
 独自の描画デバイス (プラグインで提供される物) を指定する場合は、そのプラグインのドキュメントに
 従ってください。
@@ -852,9 +962,20 @@ oriUnknown (取得失敗/不明), oriPortrait(縦向き), oriLandscape(横向き
 
 画面密度(dpi)
 
-dpi値を返します。
+dpi 値を返します ( 96 が等倍 = 100%、192 なら 200% )。
 読み取りのみ可能です。
-GetDeviceCapsで得られる値です。
+
+ウィンドウが乗っているディスプレイの値を返します。 マルチディスプレイで
+拡大率の異なるモニタへ移動すると値が変わります。
+
+!!! note "モニタを移動してもウィンドウの大きさは変わりません"
+拡大率の異なるモニタへ移動しても、
+[Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight)
+( 描画領域のピクセルサイズ ) は維持されます。変化するのは枠の太さだけで、
+ゲーム画面の見え方も変わりません。 その代わり、拡大率の高いモニタでは
+ウィンドウが見かけ上小さくなります。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で
+実際の値を返します ( SDL3 側は 2026-08-17 まで 96 固定でした )。
 
 ---
 
@@ -1182,6 +1303,16 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用
 [Window.height](Window.md#height) プロパティを個々に設定するよりも
 このメソッドで一気に指定した方が効率的です。
 
+!!! tip "内側 ( 描画領域 ) 基準の API を推奨します"
+    この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは
+    プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で
+    変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では
+    内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する
+    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /
+    [Window.setInnerSize](Window.md#setinnersize) を使ってください。
+    枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /
+    [Window.frameHeight](Window.md#frameheight) を足せます。
+
 **関連:** [Window.width](Window.md#width) / [Window.height](Window.md#height) / [Window.setPos](Window.md#setpos) / [Window.setInnerSize](Window.md#setinnersize) / [Window.setMinSize](Window.md#setminsize) / [Window.setMaxSize](Window.md#setmaxsize)
 
 ---
@@ -1203,6 +1334,13 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用
 
 ウィンドウの最小サイズを指定します。ウィンドウはこのメソッドで指定したサイズより小さくなることはできません。
 
+!!! note "基準は内側 ( 描画領域 ) サイズ"
+    指定する値は [Window.innerWidth](Window.md#innerwidth) /
+    [Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた
+    描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない
+    プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は
+    [Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。
+
 **関連:** [Window.setMaxSize](Window.md#setmaxsize) / [Window.setSize](Window.md#setsize) / [Window.minWidth](Window.md#minwidth) / [Window.minHeight](Window.md#minheight)
 
 ---
@@ -1223,6 +1361,13 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用
 ウィンドウの最大サイズの設定
 
 ウィンドウの最大サイズを指定します。ウィンドウはこのメソッドで指定したサイズより大きくなることはできません。
+
+!!! note "基準は内側 ( 描画領域 ) サイズ"
+    指定する値は [Window.innerWidth](Window.md#innerwidth) /
+    [Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた
+    描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない
+    プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は
+    [Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。
 
 **関連:** [Window.setMinSize](Window.md#setminsize) / [Window.setSize](Window.md#setsize) / [Window.maxWidth](Window.md#maxwidth) / [Window.maxHeight](Window.md#maxheight)
 
@@ -1305,12 +1450,19 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用
 
 オプションによっては、吉里吉里は拡大・縮小に使用可能なハードウェアを、倍率が変更されるたびに調査するため、このメソッドは拡大率を連続的に変化させて演出を行うような用途には適していません。
 
-!!! warning "ビルドによる挙動の違い"
-SDL3 / 汎用ビルドは「レイヤサイズ × 倍率」をウィンドウの内側サイズに
-します ( ウィンドウがリサイズされ、中身が拡縮されます )。
-Windows ネイティブ ( WINVER ) ビルドは倍率を描画先矩形の計算にしか
-使わないため、**ウィンドウ表示中は倍率を変えても見た目が変わりません**。
-この差異は既知で、扱いを検討中です。
+このメソッドは「ウィンドウの内側サイズ ( [Window.innerWidth](Window.md#innerwidth) /
+[Window.innerHeight](Window.md#innerheight) ) をレイヤサイズ × 倍率にする」という意味を持ちます。
+ウィンドウがその大きさへリサイズされ、中身が倍率どおりに拡縮されて表示されます。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドで挙動は同じです
+( WINVER 側は 2026-08-17 に揃えました。それ以前は倍率を覚えるだけで
+ウィンドウはリサイズされず、[Window.setInnerSize](Window.md#setinnersize) で
+明示的に指定する必要がありました )。
+
+!!! note "リサイズできない場合"
+    ウィンドウサイズを変更できない環境 ( モバイル / コンソール等 ) や、
+    OS の最小ウィンドウサイズを下回る指定では、内側サイズが指定どおりに
+    ならないことがあります。その場合でもゲーム画面は
+    [Window.setViewport](Window.md#setviewport) の設定に従って内側へ配置されます。
 
 **関連:** [Window.zoomNumer](Window.md#zoomnumer) / [Window.zoomDenom](Window.md#zoomdenom)
 
@@ -1335,13 +1487,17 @@ Windows ネイティブ ( WINVER ) ビルドは倍率を描画先矩形の計算
 
 ビューポート(表示画角)の一括設定
 
-外側ウインドウ([Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) で表される surface)の中に、内側ゲーム画面(primaryLayer のサイズ)をどのように配置するかをまとめて設定します。両者のサイズが一致していれば従来どおり全面等倍で表示され、異なるサイズにすると本設定に従ってゲームが surface 内へ配置され、余白が生じます。余白は [Window.viewportBgColor](Window.md#viewportbgcolor) や [Window.setViewportWallpaper](Window.md#setviewportwallpaper) で埋められます。
+外側ウインドウ([Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) で表される surface)の中に、内側ゲーム画面(primaryLayer のサイズ)をどのように配置するかをまとめて設定します。両者のサイズが一致していれば従来どおり全面等倍で表示され、異なるサイズにすると本設定に従ってゲームが surface 内へ配置され、余白が生じます。余白は [Window.viewportBgColor](Window.md#viewportbgcolor) や [Window.setViewportWallpaper](Window.md#setviewportwallpaper) で埋められます ( Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます。WINVER 対応は 2026-08-17 )。
 
 マウス座標は配置に応じて自動的にゲーム論理座標へ補正されるため、どの設定でも入力は正しくゲーム内部へ届きます。
 
 各引数は対応するプロパティ([Window.viewportFit](Window.md#viewportfit) など)を個別に設定するのと同じです。省略した引数は変更されません。
 
-このメソッドは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+旧来 ( 吉里吉里2 / 吉里吉里Z ) と同じ「ウインドウを広げてもゲームは原寸・左上」の
+表示にしたい場合は `setViewport("none", 1.0, 0, 0)` を指定します
+( 詳しくは [Window.viewportFit](Window.md#viewportfit) を参照 )。
+
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.viewportFit](Window.md#viewportfit) / [Window.viewportZoom](Window.md#viewportzoom) / [Window.viewportAlignX](Window.md#viewportalignx) / [Window.viewportAlignY](Window.md#viewportaligny) / [Window.viewportOffsetX](Window.md#viewportoffsetx) / [Window.viewportOffsetY](Window.md#viewportoffsety) / [Window.setViewportWallpaper](Window.md#setviewportwallpaper)
 
@@ -1366,7 +1522,7 @@ Windows ネイティブ ( WINVER ) ビルドは倍率を描画先矩形の計算
 
 ビューポートで生じた余白(内側ゲーム画面の外側)を埋める壁紙画像を設定します。ゲーム描画より前に背景として描かれます。
 
-このメソッドは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.clearViewportWallpaper](Window.md#clearviewportwallpaper) / [Window.viewportBgColor](Window.md#viewportbgcolor) / [Window.setViewport](Window.md#setviewport)
 
@@ -1382,7 +1538,7 @@ Windows ネイティブ ( WINVER ) ビルドは倍率を描画先矩形の計算
 
 [Window.setViewportWallpaper](Window.md#setviewportwallpaper) で設定した壁紙を解除します。以降、余白は [Window.viewportBgColor](Window.md#viewportbgcolor) の背景色のみで塗られます。
 
-このメソッドは SDL ビルド(__GENERIC__)でのみ利用できます。WINVER ビルドでは登録されません。
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.setViewportWallpaper](Window.md#setviewportwallpaper) / [Window.viewportBgColor](Window.md#viewportbgcolor)
 

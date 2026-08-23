@@ -6,6 +6,8 @@ Alt キーは `VK_MENU` です。
 
 VK_PAD???? はパッド(ジョイスティック)からの入力を、あたかもキーボードからの入力であるかのようにエミュレートするための仮想キーコードです。VK_PADANYは、[System.getKeyState](../reference/System.md#getkeystate) メソッドでこのキーコードの状態を取得しようとすると、パッドのどれか一つでもキーが押されているかどうかを取得できます。
 
+フェイスボタン 4 つは、刻印基準の `VK_PAD1`〜`VK_PAD4` (A/B/X/Y) と位置基準の `VK_PAD_FACE_SOUTH`〜`VK_PAD_FACE_NORTH` (下/右/左/上) の 2 系統で届きます。使い分けは [ゲームパッド](../topics/core/gamepad.md) を参照してください。
+
 ```
  VK_LBUTTON        =0x01;
  VK_RBUTTON        =0x02;
@@ -160,6 +162,10 @@ VK_PAD???? はパッド(ジョイスティック)からの入力を、あたか�
  VK_PAD_R_UP       =0x1D1;
  VK_PAD_R_RIGHT    =0x1D2;
  VK_PAD_R_DOWN     =0x1D3;
+ VK_PAD_FACE_SOUTH =0x1D4;
+ VK_PAD_FACE_EAST  =0x1D5;
+ VK_PAD_FACE_WEST  =0x1D6;
+ VK_PAD_FACE_NORTH =0x1D7;
  VK_PADANY         =0x1DF;
  VK_PROCESSKEY     =0xE5;
  VK_ATTN           =0xF6;

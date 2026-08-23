@@ -1003,7 +1003,11 @@ pad_icon ( Kenney input prompts ) のベースディレクトリを設定しま�
 pad_icon の全体テーマを設定する
 
 pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"none"` ) を
-設定します。画面 JSON の top-level `"pad_theme"` が指定されていればそちらが優先されます。
+設定します。`"auto"` を指定すると、接続しているパッドの系統
+( [System.padStyle](System.md#padstyle) ) からテーマを自動選択します。
+パッドが無い場合は動作プラットフォームから決まり、画面を開くたびに決め直される
+ため、途中でコントローラを差し替えても次に開く画面から追従します。
+画面 JSON の top-level `"pad_theme"` が指定されていればそちらが優先されます。
 
 ---
 

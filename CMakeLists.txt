@@ -27,6 +27,7 @@ set(SIMPLEBIND_DIR ${PLUGINS_DIR}/simplebinder)
 # プラグイン一覧
 list(APPEND TVP_PLUGINS
 KAGParserEx
+clipfile
 csvParser
 getSample
 json
@@ -51,6 +52,11 @@ psbfile          # wamsoft_work 由来 (PSBファイル読取 + Storages.mountPS
 psbwriter        # wamsoft_work 由来 (PSBファイル生成。psbwriter.dll 復元版)
 #krkrlua
 )
+
+# clipfile (CLIP STUDIO PAINT .clip の読み込み/編集) が取り込む clipparse は、
+# sqlite3 の amalgamation を find_package ではなく FetchContent でソース取得する
+# (zlib は vcpkg から拾う)。**このため configure 時にネットワークが必要**。
+# 取得結果は build ツリーにキャッシュされるので 2 回目以降は走らない。
 
 # ワムソフト追加分 (plugins_utf8 由来) のうち Win32 非依存を確認できたもの。
 # 全バリアント (WIN/SDL/LIB) 共通でビルドする。

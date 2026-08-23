@@ -1,0 +1,55 @@
+# steamdev project 定義: Steam Deck へのビルド・デプロイ構成
+# 使い方 (steamdev リポジトリの CLI から):
+#   steamdev project -p . build linux     # sniper コンテナで Linux ビルド
+#   steamdev -d <deck> project -p . ship linux    # build+stage+deploy+起動
+#   steamdev -d <deck> project -p . deploy windows --start
+
+[project]
+gameid = "krkrz"
+
+# ---- Linux (steamrt sniper コンテナビルド → Deck ネイティブ実行) ----
+
+[targets.linux.build]
+kind = "deckbuild"
+preset = "x64-linux"
+build_type = "Release"
+cmakeopt = "-DKRKRZ_USE_SJIS=YES"
+
+[targets.linux.stage]
+# krkrz_android app-config / krkrz_web web-config の assetPack.sources と同書式
+# (mirror/flatten + include/exclude、重複は先勝ち、配置はハードリンク自動判定)
+sources = [
+    { type = "mirror", from = "bin/x64-linux/Release", to = "" },
+    { type = "mirror", from = "src/core/data", to = "data", exclude = ["**/*.bak", "**/*.psd"] },
+]
+# install は libSDL3.so.0.4.0 実体のみで soname (libSDL3.so.0) が無いので補完する
+script = "python -c \"import glob,os,shutil; d=os.environ['STEAMDEV_STAGE_DIR']; src=glob.glob(os.path.join(d,'libSDL3.so.0.*'))[0]; shutil.copy(src, os.path.join(d,'libSDL3.so.0'))\""
+
+[targets.linux.deploy]
+# -replweb: 127.0.0.1:8899 に REPL サーバ (steamdev tunnel -L 18899:8899 で駆動)。
+# 不要なら "./krkrz data" に戻す。引数変更は再デプロイで反映される点に注意。
+command = "./krkrz data -replweb -loglevel=info"
+# exe に RPATH が無いので同梱 SDL3 をカレントから拾わせる
+env = { LD_LIBRARY_PATH = "." }
+# Steam 配布と同一環境で検証する場合は sniper コンテナ実行:
+# settings = { compat_tool = "SteamLinuxRuntime_sniper" }
+
+# ---- Windows (既存の VS ビルドを Proton で実行) ----
+# build は VS 環境前提なので手元の通常フロー (make) をそのまま書いておく。
+# ビルド済みなら stage/deploy だけでよい。
+
+[targets.windows.build]
+kind = "shell"
+command = "make PRESET=x64-windows prebuild build install"
+
+[targets.windows.stage]
+sources = [
+    { type = "mirror", from = "bin/x64-windows/Release", to = "", exclude = ["**/*.bak_*", "**/*.pdb"] },
+    { type = "mirror", from = "src/core/data", to = "data", exclude = ["**/*.bak", "**/*.psd"] },
+]
+
+[targets.windows.deploy]
+command = "krkrz64.exe data"
+# compat_tool は Deck にインストール済みの Proton を指定すること
+# (proton-experimental は未インストールだと起動が無言で失敗する)
+settings = { steam_play = "1", compat_tool = "proton-stable" }

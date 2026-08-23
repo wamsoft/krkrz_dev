@@ -110,6 +110,19 @@ make
 make install
 ```
 
+### OpenGL 用 ANGLE DLL の配置
+
+エンジンの OpenGL (GLES) 機能を Windows で使うには ANGLE の
+`libEGL.dll` / `libGLESv2.dll` が必要です (WINVER ビルドは必須。SDL3 ビルドは
+OpenGL ドライバの ES プロファイルが使えない環境向けのフォールバック)。
+これらはリポジトリに含まれないため、リポジトリルートの `plugin/` (32bit) /
+`plugin64/` (64bit) フォルダへ手動で配置してください。`make run` がビルド出力へ
+自動コピーします。
+
+入手先は [mmozeiko/build-angle](https://github.com/mmozeiko/build-angle) の
+Releases (毎日ビルド、x64 / arm64) が手軽です。詳細と注意点 (PATH 上の別 ANGLE を
+拾う問題等) は `src/core/README.md` の「OpenGL ES の実行環境」を参照してください。
+
 ### プラグイン作成
 
 TVP_PLUGIN_FOLDERS から、TVP_PLUGINS で定義された名称の
@@ -178,3 +191,91 @@ make install
 - `"<basename>:<dep>"` — そのフォルダ末尾名のサブからのみ除外
 
 (現在は `movie-player:glew` / `movie-player:glfw3` をサンプル用として除外)
+
+## Claude Code 用スキル
+
+このリポジトリには吉里吉里Z 開発向けの [Claude Code](https://claude.com/claude-code)
+スキルが同梱されています。Claude に「TJS2 の書き方」「Layer の API」「REPL でどう
+検証するか」を毎回説明しなくても済むようにするためのリファレンス群です。
+
+| スキル | 内容 |
+|---|---|
+| `krkrz` | 本体クラス API (Layer / Window / Bitmap / Storages / DrawDevice / OpenGL 描画 / サウンド / 主要プラグイン) |
+| `tjs2` | TJS2 言語仕様と組み込みクラス。JS との差異にフォーカス |
+| `elements` | Elements ベースのダイアログ / 画面 UI の作り方 |
+| `krkrz-repl` | `-repl` / `-replfile` によるエージェント駆動、Agent API、画面キャプチャ |
+| `krkrz-webui` | `-replweb` HTTP+SSE サーバにブラウザ UI を載せる方法論 |
+
+正本は `.claude/skills/` にあります。**このリポジトリで作業している間は追加の
+セットアップなしでそのまま有効**です (Claude Code がプロジェクトスキルとして
+自動的に読み込みます)。
+
+### 他の場所でも使う (インストール)
+
+`krkrz` / `tjs2` の SKILL.md は詳細リファレンスを `doc/reference/`、`doc/tjs2/`
+といった**このリポジトリ相対のパス**で参照しています。そのため他のリポジトリへ
+そのままコピーしても参照が解決しません。
+
+`tools/skills/install.sh` が、参照ドキュメントをスキル内 `references/` へ同梱し、
+SKILL.md 内のパスを書き換えて、**どこに置いても壊れない自己完結形**に組み立てます。
+実行には bash が必要です (msys2 / Git Bash)。
+
+**自分用にインストールする** — 以降どのリポジトリで作業していても有効になります。
+案件のリポジトリで TJS2 を書くときにも使いたい場合はこちら。
+
+```
+bash tools/skills/install.sh --user
+```
+
+`~/.claude/skills/` へ配置されます。既存の同名スキルがある場合は確認を求めます
+(`--force` で確認なし)。**このスクリプトが触るのは上記 5 スキルだけ**で、
+そこにある他のスキルには手を出しません。
+
+**案件リポジトリにインストールする** — その案件で作業する人全員に配りたい場合。
+
+```
+bash tools/skills/install.sh --project /path/to/project
+```
+
+`<project>/.claude/skills/` へ配置されます。案件リポジトリに commit すれば、
+clone した人はセットアップなしで使えます。案件側の `.gitignore` が `.claude` を
+無視していることが多いので、その場合は本リポジトリと同様に
+
+```
+.claude/*
+!.claude/skills/
+```
+
+としてください。
+
+**配布用に書き出す** — krkrz_dev を持っていない人へ配る場合。
+
+```
+bash tools/skills/install.sh --dist /path/to/dist-repo
+```
+
+プラグイン構造 (`.claude-plugin/marketplace.json` + `plugins/krkrz-skills/`) で
+出力します。これを git リポジトリとして push すると、受け取る側は次で導入できます。
+
+```
+/plugin marketplace add <owner>/<repo>
+/plugin install krkrz-skills@krkrz-skills
+```
+
+`--dry-run` を付けると、何をどこへ書くかだけ表示して終了します。
+
+### 更新
+
+スキルやリファレンスを更新したら、インストール済みの環境では
+`install.sh` を同じオプションで再実行してください (`--force` 推奨)。
+同梱されるリファレンスは実行時点のリポジトリの内容です。
+
+### スキルを編集するとき
+
+- 編集するのは `.claude/skills/` の**正本**です。インストール先を直接直しても
+  次の `install.sh` で上書きされます。
+- リファレンスはリポジトリ相対パス (`doc/reference/<Name>.md` 等) で参照します。
+  同梱時のパス書き換えは `install.sh` の `BUNDLE` テーブルが担当するので、
+  新しい参照先ディレクトリを増やしたときはそこに 1 行足してください。
+- **案件固有の情報 (取引先名・案件リポジトリのパス・案件の設定値) は書かない**こと。
+  スキルは案件をまたいで配布されます。

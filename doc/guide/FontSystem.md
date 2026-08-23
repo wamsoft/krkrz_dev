@@ -86,6 +86,14 @@ Noto Emoji / elements_basic)。ゲーム側で増やすものではなく、エ�
   `weight` (100-900) / `width` (1-9) / `italic` / `faceIndex` / `languages` /
   `aliases` / `flags` (`emoji` `color` `monospace`) / `ranges` (収録コード
   ポイント区間) を宣言できます。
+- **バリアブルフォント**は `instance` (fvar named instance 名) または `axes`
+  (軸値の直書き) で「名前 = 特定の軸設定」を宣言できます。同じファイルを別名 +
+  別軸で複数宣言できます (下の「バリアブルフォント」節)。
+
+```json
+{ "file": "myfont.ttf", "family": "MyFont SemiBold", "instance": "SemiBold" }
+{ "file": "myfont.ttf", "family": "MyFont Narrow",   "axes": { "wdth": 75 } }
+```
 - 宣言した `scripts` / `ranges` / スタイルは [Font.queryFonts](../reference/Font.md#queryfonts)
   が**フォントファイルを開かずに**検索へ使います。
 - **生成ツール**で自動生成できます (要 `pip install fonttools`):
@@ -171,6 +179,50 @@ var r = Font.queryFonts(%[ containsText : "あ", weight : 700 ]);
 で取得できます (family / subfamily / weight / color 等)。fonts.json で
 宣言済みの情報はフォントを開かずに応答します。
 
+## バリアブルフォント (可変軸)
+
+可変軸 (fvar) を持つフォントは、TJS のフォントパラメータから軸を指定できます。
+効くのは **glyphware 経路** — [Layer.drawShapedText](../reference/Layer.md#drawshapedtext)
+系 (常時) と、[Font.rasterizer](../reference/Font.md#rasterizer) = 2 のときの
+[Layer.drawText](../reference/Layer.md#drawtext) — のみで、旧 FreeType / GDI
+ラスタライザでは無視されます (起動後 1 回警告が出ます)。
+
+```tjs
+Font.rasterizer = 2;                     // drawText で使う場合
+layer.font.weight = 700;                 // wght 軸 (100-900、void で解除)
+layer.font.variations = "wdth=87.5";     // 汎用軸指定 (複数は "wght=700,wdth=75")
+var axes = Font.getVarAxes("MyFont");    // 利用できる軸の一覧
+Font.defaultUseVarStyle = true;          // bold/italic を軸で表現 (オプトイン)
+```
+
+- [Font.weight](../reference/Font.md#weight) は `wght` 軸として効き、
+  [Font.variations](../reference/Font.md#variations) に `wght` を明示した場合は
+  そちらが優先です。適用されるのはフォールバック連鎖の各 face が**実際に持つ
+  同名軸だけ**なので、日本語フォント + 絵文字フォントのような軸構成の違う連鎖でも
+  安全です。
+- `fonts.json` の `instance` / `axes` 宣言で「名前 = 特定の軸設定」を作れます
+  (上の fonts.json 節)。名前を指すだけで軸込みのフォントが使えるため、
+  スクリプト側で weight / variations に触れる必要がありません。
+- [Font.defaultUseVarStyle](../reference/Font.md#defaultusevarstyle) を真にすると、
+  bold / italic を軸 (wght=700 / slnt=-10 / ital=1) で表現できるフォントでは
+  合成ボールド / イタリックの代わりに軸を使います (既定は偽)。
+- 軸の照会は [Font.getVarAxes](../reference/Font.md#getvaraxes) /
+  [Font.getFontInfo](../reference/Font.md#getfontinfo) (`axes` /
+  `namedInstances`) で行えます。
+- **`#tag=val` サフィックス表記**: フォント名に `#tag=val[,tag=val...]` を
+  後置すると、その名前が指すフォントの軸インスタンスを表します
+  (例 `"MyFont#wght=700"`、`"MyFont#wght=700,wdth=75"`)。
+  [Font.face](../reference/Font.md#face) のフォールバック連鎖の各要素、
+  Elements 画面 JSON の `"font"` (label / text_area とも。折り返し計算も同じ
+  インスタンス) で一様に使えます。`Font.variations` がフォント全体 (連鎖の
+  全 face) に効くのに対し、こちらは連鎖の**要素単位**で効きます。
+- **無指定時の既定は wght=400 相当**: 可変フォントを wght 未指定で参照した
+  場合、fvar の既定インスタンスではなく wght=400 で表示されます (CSS の
+  font-weight 既定と同じ規則)。既定が Thin の VF (Noto VF 等) も、VF 1 本の
+  登録だけで無指定が Regular 相当に読めます。既定を変えたいときは
+  [Font.setDefaultVariations](../reference/Font.md#setdefaultvariations) で
+  名前単位に登録します (明示指定・fonts.json 宣言が常に勝ちます)。
+
 ## 多言語シェイピング描画 (glyphware)
 
 `Layer.drawText` は従来どおり「1 文字ずつのセル送り」ですが、
@@ -217,6 +269,11 @@ BiDi 混在・絵文字混在・計測・矩形内折り返し・タイプライ
   行頭行末禁則・クラスタ単位の文字送りを通るため、同じ本文・同じ幅なら
   レイヤ描画と Elements で**改行位置が一致**します
   (従来からある `text_box` は互換のため素朴な折り返しのまま)。
+- **richtext プラグイン** ([RichText](../reference/RichText.md)) の組版は minikin
+  ですが、フォントの実体取得とグリフのラスタライズは本体の glyphware を通ります。
+  face とフォントのバイト列を本体と共有するため、`Layer.drawText` や Elements と
+  **同じフォント・同じ見た目**になります ( 可変フォントの軸を使う場合だけは、
+  共有 face の状態を汚さないよう専用の face が開かれます )。
 - **layerExVector プラグイン** (`GdiPlus.loadFont(storage, name)`) も同じ
   エンジンを共有します。`resource://./notosansjp-regular.otf` のように
   本体埋め込みフォントを指定でき、フォントを同梱しなくてもアウトライン

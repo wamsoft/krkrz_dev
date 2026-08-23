@@ -83,6 +83,7 @@ nav:
     - サブシステム:
       - イベントシステム: guide/EventSystem.md
       - グラフィックシステム: guide/GraphicSystem.md
+      - Layer と Bitmap と ImageFunction: guide/LayerAndBitmap.md
       - 3Dグラフィックシステム: guide/Graphic3DSystem.md
       - サウンドシステム: guide/SoundSystem.md
       - ストレージシステム: guide/StorageSystem.md
@@ -149,6 +150,7 @@ nav:
       - reference/WaveSoundBuffer.PhaseVocoder.md
       - reference/Window.md
       - reference/Window.BasicDrawDevice.md
+      - reference/SDLOGLDrawDevice.md
       - reference/SDLDrawDevice.md
       - reference/NullDrawDevice.md
     - 吉里吉里Z 3D機能クラス:
@@ -185,6 +187,8 @@ nav:
     - プラグイン拡張クラス:
       - reference/AlphaMovie.md
       - reference/BinaryStream.md
+      - reference/CLIP.md
+      - reference/CLIPWriter.md
       - reference/Console.md
       - reference/CSVParser.md
       - reference/HttpRequest.md

@@ -1,7 +1,16 @@
 /**
  * ImageFunction クラスは、画像を操作するクラスです。
  *
- * このクラスからオブジェクトを作成することはできません。
+ * このクラスからオブジェクトを作成することはできません。すべてのメソッドはクラスメソッド ( static ) として
+ * `ImageFunction.operateRect(...)` のように直接呼び出します。
+ *
+ * 操作対象は [Bitmap](Bitmap.md) オブジェクトのみで、[Layer](Layer.md) オブジェクトは指定できません。
+ * Layer が持つ同名の描画メソッドから、Layer 固有の事情 ( face / holdAlpha / クリップ矩形といった
+ * プロパティ、および描画後の再描画通知 ) を取り除き、すべてを明示引数にしたものと考えてください。
+ * 演算モードに `omAuto` を指定した場合、Bitmap には [Layer.type](Layer.md#type) にあたる情報が無いため
+ * 常に `omAlpha` として扱われます。
+ *
+ * Layer / Bitmap との関係と使い分けは [Layer と Bitmap と ImageFunction](../guide/LayerAndBitmap.md) を参照してください。
  */
 class ImageFunction {
 	/**

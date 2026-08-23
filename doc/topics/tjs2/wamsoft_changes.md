@@ -54,4 +54,8 @@
 | 3D / エフェクトプラグイン | threepp ( three.js 移植 ) / Effekseer / Live2D / GLES ヘルパ |
 | Media Foundation HW 動画 | `IMFMediaEngine` によるハードウェアデコード ( mp4/wmv 既定、`-mediaengine=no` で無効 ) |
 | オンスクリーンデバッグ表示 | ゲームパッド状態 ( PadOverlay )、メモリ観測、描画スレッド利用率 ( DrawStats ) |
-| DPI 対応 / ボーダレスフルスクリーン / 長いパス | PerMonitorV2 DPI 追従、`\\?\` 拡張パス対応 |
+| DPI 対応 / ボーダレスフルスクリーン / 長いパス | PerMonitorV2 DPI 認識 ( 拡大率の異なるモニタへ移動しても描画領域のピクセルサイズは維持し、枠だけ描き直す )、`\\?\` 拡張パス対応 |
+| ゲーム画面の表示画角制御 ( ビューポート ) | 外側ウインドウの中に内側ゲーム画面を fit / zoom / align / offset で配置し、余白を背景色や壁紙で埋める ( [ビューポート](../core/viewport.md) ) |
+| 起動ディスプレイの指定 | マルチディスプレイ環境で最初に表示するモニタを番号 / 名前で選ぶ `-display` ( [コマンドラインオプション](../../guide/CommandLine.md) ) |
+| 起動時 DrawDevice の選択 | `-drawdevice` で起動時の描画デバイスを選択 ( SDL3 の既定は OpenGL ES ベースの [SDLOGLDrawDevice](../../reference/SDLOGLDrawDevice.md) )。GLES コンテキストの EGL 強制 `-forceegl` も指定可能 |
+| メッセージ / 設定 UI の多言語化 | エンジンメッセージとオプション解説 ( `-userconf` ) が OS 言語 ( ja / en / chs / cht ) に追従。`-language` で明示指定 ( [コマンドラインオプション](../../guide/CommandLine.md) ) |

@@ -54,7 +54,7 @@ invalidateすることでテクスチャは無効化されるため、必要な�
 | 引数 | 型 | 既定値 | 説明 |
 | --- | --- | --- | --- |
 | `filename` | `string` | `&nbsp;` | 画像ファイル名 |
-| `format` | `int` | `tcfRGBA` | カラーフォーマット(tcfRGBA or tcfAlpha), tcfAlpha選択時に色情報はグレイスケール化されます |
+| `format` | `int` | `tcfRGBA` | カラーフォーマット(tcfRGBA / tcfAlpha / tcfAlphaChannel)<br>`**tcfAlpha**` 選択時に色情報はグレイスケール化されます ( **輝度**を 8bit テクスチャにします )。<br>`**tcfAlphaChannel**` を選択すると、α チャンネルをそのまま 8bit テクスチャにします。<br>α だけを参照するクリッピングマスク用の画像に適していて、RGBA の 1/4 のメモリで済み、<br>アップロード用 PBO も確保されません。「輝度は白一色でデータは α」という一般的なマスク資材は<br>tcfAlpha では扱えないため、この指定を使います。32bpp でない画像を渡した場合は<br>従来のグレイスケール扱いにフォールバックします。 |
 | `is9patch` | `bool` | `false` | 9patch情報を読み込み、9patch描画用として使用するかどうか |
 
 **解説**
@@ -72,7 +72,7 @@ invalidateすることでテクスチャは無効化されるため、必要な�
 | 引数 | 型 | 既定値 | 説明 |
 | --- | --- | --- | --- |
 | `bitmap` | `Bitmap` | `&nbsp;` | テクスチャの元となるBitmapクラスのインスタンス |
-| `format` | `int` | `tcfRGBA` | カラーフォーマット(tcfRGBA or tcfAlpha), tcfAlpha選択時に色情報はグレイスケール化されます |
+| `format` | `int` | `tcfRGBA` | カラーフォーマット(tcfRGBA / tcfAlpha / tcfAlphaChannel)<br>値の意味はファイル読み込み版コンストラクタと同じです。<br>`**tcfAlpha**` は輝度をグレイスケール化、`**tcfAlphaChannel**` は α チャンネルを<br>そのまま 8bit テクスチャにします。 |
 | `is9patch` | `bool` | `false` | 9patch情報を読み込み、9patch描画用として使用するかどうか |
 
 **解説**
@@ -91,7 +91,7 @@ Bitmapコピー版コンストラクタ
 | --- | --- | --- | --- |
 | `width` | `int` | `&nbsp;` | テクスチャ幅 |
 | `height` | `int` | `&nbsp;` | テクスチャ高さ |
-| `format` | `int` | `tcfRGBA` | カラーフォーマット(tcfRGBA or tcfAlpha) |
+| `format` | `int` | `tcfRGBA` | カラーフォーマット(tcfRGBA / tcfAlpha / tcfAlphaChannel)<br>内容が未初期化の空テクスチャなので、`**tcfAlphaChannel**` は `**tcfAlpha**` と同じ扱いになります。 |
 
 **解説**
 
