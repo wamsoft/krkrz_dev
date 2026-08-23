@@ -84,6 +84,10 @@ Layerメンバのfontは、引数にLayerを渡す特殊版。
 ( [Layer.drawShapedText](Layer.md#drawshapedtext) 系と [rasterizer](#rasterizer) = 2 )
 でのみ有効です。
 
+軸を付けずにバリアブルフォントを参照した場合は wght=400 相当
+( CSS の font-weight 既定と同じ ) に正規化されます。無指定時の既定を
+変えたい場合は [setDefaultVariations](#setdefaultvariations) を使います。
+
 ---
 
 ### height
