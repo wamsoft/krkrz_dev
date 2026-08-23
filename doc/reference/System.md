@@ -948,6 +948,10 @@ if(code == "") code = "ja";   // 取得できない環境はゲーム既定へ
 家庭用ゲーム機は各ハードの API )。SDL3 版では地域が取れない場合、
 `"ja"` のように言語のみが返ります。
 
+エンジン自身のメッセージ ( エラー文言等 ) とオプション解説の言語選択
+( ja / en / chs / cht ) もこの値に追従します。起動オプション `-language` で
+明示指定して上書きできます ( [コマンドラインオプション](../guide/CommandLine.md) )。
+
 **関連:** [System.platformTag](System.md#platformtag)
 
 ---

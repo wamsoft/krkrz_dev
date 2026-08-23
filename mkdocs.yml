@@ -150,6 +150,7 @@ nav:
       - reference/WaveSoundBuffer.PhaseVocoder.md
       - reference/Window.md
       - reference/Window.BasicDrawDevice.md
+      - reference/SDLOGLDrawDevice.md
       - reference/SDLDrawDevice.md
       - reference/NullDrawDevice.md
     - 吉里吉里Z 3D機能クラス:

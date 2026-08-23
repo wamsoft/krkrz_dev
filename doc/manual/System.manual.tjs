@@ -1017,6 +1017,10 @@ class System {
 	 * `GetUserDefaultLocaleName` / SDL3 版 = `SDL_GetPreferredLocales` の先頭。
 	 * 家庭用ゲーム機は各ハードの API )。SDL3 版では地域が取れない場合、
 	 * `"ja"` のように言語のみが返ります。
+	 *
+	 * エンジン自身のメッセージ ( エラー文言等 ) とオプション解説の言語選択
+	 * ( ja / en / chs / cht ) もこの値に追従します。起動オプション `-language` で
+	 * 明示指定して上書きできます ( [コマンドラインオプション](../guide/CommandLine.md) )。
 	 * @type String
 	 * @see System.platformTag
 	 */

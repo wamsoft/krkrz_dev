@@ -1,7 +1,9 @@
 /**
  * OGLDrawDevice クラスは、このインスタンスを [Window.drawDevice](Window.md#drawdevice) に登録して使用するための DrawDevice で、OpenGL ES (glad / ANGLE / EGL) を用いた描画機能を提供します。
  *
- * 起動時の既定 DrawDevice ではなく、TJS スクリプトで明示的に Window.drawDevice にセットしたタイミングで内部の OpenGL コンテキストが生成され、以降のすべての描画が GL パスを通るようになります。
+ * 起動時の既定 DrawDevice ではなく、TJS スクリプトで明示的に Window.drawDevice にセットしたタイミングで内部の OpenGL コンテキストが生成され、以降のすべての描画が GL パスを通るようになります。起動オプション `-drawdevice=ogl` で起動時からこのデバイスを選ぶこともできます ( [コマンドラインオプション](../guide/CommandLine.md) )。
+ *
+ * 利用には OpenGL ES が使える環境が必要です。WINVER ビルドは常に EGL ( ANGLE の `libEGL.dll` / `libGLESv2.dll` ) 経由なので DLL の同梱が必須です。SDL3 ビルドでは OS の OpenGL ドライバの ES プロファイルが優先され、使えない場合に同じ ANGLE DLL へフォールバックします ( `-forceegl` で EGL 強制も可能 )。また SDL3 ビルドを `-drawdevice=sdl` で起動した場合は、実行中にこのデバイスへ切り替えることはできません。
  *
  * このデバイスがアクティブな間のみ、TJS 公開クラス [Canvas](Canvas.md) / [Texture](Texture.md) / [ShaderProgram](ShaderProgram.md) / [Offscreen](Offscreen.md) / [Matrix32](Matrix32.md) / [VertexBuffer](VertexBuffer.md) / [VertexBinder](VertexBinder.md) が機能します。
  */

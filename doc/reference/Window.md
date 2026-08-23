@@ -639,9 +639,12 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方�
 値を設定することもできます。値を設定すると、以前このウィンドウに指定されていた描画デバイスは自動的に
 無効になります (invalidateされます)。
 
-デフォルトでは、Window.BasicDrawDevice というクラスのインスタンスが指定されています。
-
-Window.BasicDrawDevice の詳細については、吉里吉里ソースの core/visual/win32/BasicDrawDevice.cpp 内の説明も参照してください。
+デフォルトで指定されているインスタンスはビルドによって異なります。Windows ネイティブ ( WINVER ) ビルドでは
+[Window.BasicDrawDevice](Window.BasicDrawDevice.md) ( Direct3D 11 )、SDL3 ビルドでは
+[SDLOGLDrawDevice](SDLOGLDrawDevice.md) ( OpenGL 有効ビルド時。無効ビルドでは
+[SDLDrawDevice](SDLDrawDevice.md) ) です。起動オプション `-drawdevice` で起動時の既定を
+選択できます ( [コマンドラインオプション](../guide/CommandLine.md) )。なお SDL3 ビルドを
+`-drawdevice=sdl` で起動した場合、実行中に OpenGL 系のデバイスへ切り替えることはできません。
 
 独自の描画デバイス (プラグインで提供される物) を指定する場合は、そのプラグインのドキュメントに
 従ってください。
