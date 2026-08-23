@@ -7,3 +7,4 @@ bin
 site
 __pycache__
 .krkrz_history
+.deckstage/

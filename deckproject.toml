@@ -1,0 +1,51 @@
+# steamctl project 定義: Steam Deck へのビルド・デプロイ構成
+# 使い方 (steamctl リポジトリの CLI から):
+#   steamctl project -p . build linux     # sniper コンテナで Linux ビルド
+#   steamctl -d <deck> project -p . ship linux    # build+stage+deploy+起動
+#   steamctl -d <deck> project -p . deploy windows --start
+
+[project]
+gameid = "krkrz"
+
+# ---- Linux (steamrt sniper コンテナビルド → Deck ネイティブ実行) ----
+
+[targets.linux.build]
+kind = "deckbuild"
+preset = "x64-linux"
+build_type = "Release"
+cmakeopt = "-DKRKRZ_USE_SJIS=YES"
+
+[targets.linux.stage]
+copy = [
+    ["bin/x64-linux/Release", "."],
+    ["src/core/data", "data"],
+]
+# install は libSDL3.so.0.4.0 実体のみで soname (libSDL3.so.0) が無いので補完する
+script = "python -c \"import glob,os,shutil; d=os.environ['STEAMCTL_STAGE_DIR']; src=glob.glob(os.path.join(d,'libSDL3.so.0.*'))[0]; shutil.copy(src, os.path.join(d,'libSDL3.so.0'))\""
+
+[targets.linux.deploy]
+command = "./krkrz data"
+# exe に RPATH が無いので同梱 SDL3 をカレントから拾わせる
+env = { LD_LIBRARY_PATH = "." }
+# Steam 配布と同一環境で検証する場合は sniper コンテナ実行:
+# settings = { compat_tool = "SteamLinuxRuntime_sniper" }
+
+# ---- Windows (既存の VS ビルドを Proton で実行) ----
+# build は VS 環境前提なので手元の通常フロー (make) をそのまま書いておく。
+# ビルド済みなら stage/deploy だけでよい。
+
+[targets.windows.build]
+kind = "shell"
+command = "make PRESET=x64-windows prebuild build install"
+
+[targets.windows.stage]
+copy = [
+    ["bin/x64-windows/Release", "."],
+    ["src/core/data", "data"],
+]
+
+[targets.windows.deploy]
+command = "krkrz64.exe data"
+# compat_tool は Deck にインストール済みの Proton を指定すること
+# (proton-experimental は未インストールだと起動が無言で失敗する)
+settings = { steam_play = "1", compat_tool = "proton-stable" }
