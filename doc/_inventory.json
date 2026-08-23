@@ -240,6 +240,7 @@
       "getList",
       "getTextHeight",
       "getTextWidth",
+      "getVarAxes",
       "mapPrerenderedFont",
       "queryFonts",
       "registerFontFile",
@@ -251,6 +252,7 @@
       "colorEmojiFaceName",
       "defaultEmojiMode",
       "defaultFaceName",
+      "defaultUseVarStyle",
       "emojiFaceName",
       "emojiMode",
       "face",
@@ -259,7 +261,9 @@
       "italic",
       "rasterizer",
       "strikeout",
-      "underline"
+      "underline",
+      "variations",
+      "weight"
     ]
   },
   "ImageFunction": {

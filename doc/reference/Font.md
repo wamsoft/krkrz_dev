@@ -19,6 +19,9 @@ Font クラスは、**フォント**を管理するためのクラスです。
 - [angle](#angle)
 - [rasterizer](#rasterizer)
 - [emojiMode](#emojimode)
+- [weight](#weight)
+- [variations](#variations)
+- [defaultUseVarStyle](#defaultusevarstyle)
 - [defaultEmojiMode](#defaultemojimode)
 - [emojiFaceName](#emojifacename)
 - [colorEmojiFaceName](#coloremojifacename)
@@ -41,6 +44,7 @@ Font クラスは、**フォント**を管理するためのクラスです。
 - [registerFontFile](#registerfontfile)
 - [queryFonts](#queryfonts)
 - [getFontInfo](#getfontinfo)
+- [getVarAxes](#getvaraxes)
 
 ---
 
@@ -227,6 +231,65 @@ GDI ラスタライザ ( WINVER 既定 ) では効果がありません。
 優先し、**VS15** ( U+FE0E ) を付けると元フォント ( テキスト表示 ) を強制します。
 ( 例: "❤"+U+FE0F でカラー、"❤"+U+FE0E でモノクロ )。セレクタ無しでの自動判定
 ( Emoji_Presentation 既定 ) は行いません ( 高度な多言語処理は対象外 )。
+
+---
+
+### weight
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+フォントウェイト ( バリアブルフォント )
+
+フォントのウェイトを表します。値を設定することもできます。100〜900 の数値、
+または void ( 未指定 = フォント既定 ) を指定します。
+
+バリアブルフォントで `wght` 軸を持つ face に対して可変軸として効きます
+( [variations](#variations) に `wght` を明示した場合はそちらが優先 )。
+
+効くのは glyphware 経路 — [Layer.drawShapedText](Layer.md#drawshapedtext) 系
+( 常時 ) と、[rasterizer](#rasterizer) = 2 のときの [Layer.drawText](Layer.md#drawtext)
+— のみです。旧 FreeType / GDI ラスタライザでは無視されます ( 起動後 1 回警告 )。
+
+---
+
+### variations
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+可変軸指定 ( バリアブルフォント )
+
+バリアブルフォントの可変軸を `"wght=700,wdth=87.5"` 形式で指定します。
+値を設定することもできます。void または空文字列でクリアします。
+
+設定時に正規化されます: タグは小文字化、タグ昇順に並べ替え、同タグは後勝ち、
+値は量子化 ( `wght` は 1 刻み、その他の軸は 0.5 刻み — 軸アニメーションで
+キャッシュが際限なく増えないため )。不正な書式は例外になります。
+
+実際に適用されるのは「フォールバック連鎖の各 face が実際に持つ同名軸」だけです。
+利用できる軸は [getVarAxes](#getvaraxes) で調べられます。適用範囲 ( glyphware
+経路のみ ) は [weight](#weight) と同じです。
+
+---
+
+### defaultUseVarStyle
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+bold / italic の可変軸マッピング ( クラスプロパティ )
+
+真にすると、`bold` / `italic` 指定を可変軸で表現できる face ( `wght` /
+`slnt` / `ital` 軸を持つバリアブルフォント ) では、合成ボールド / 合成
+イタリックの代わりに軸 ( wght=700 / slnt=-10 / ital=1 ) を使い、二重適用を
+防ぐため合成スタイルを無効化します。既定は偽 ( 既存の見た目を変えないため )。
+
+軸の有無はフォールバック連鎖の先頭 ( primary ) face で判定されます。
+glyphware 経路でのみ効きます。
 
 ---
 
@@ -675,5 +738,45 @@ SFNT メタデータの辞書を返します。解決できない場合は void 
 + `weight` : 100〜900
 + `slant` : 0=normal, 1=italic, 2=oblique
 + `bold` / `color` / `monospace` / `scalable` : 属性 ( 0/1 )
+
+バリアブルフォントの場合は次も入ります ( 非 VF では省略 ):
++ `axes` : 可変軸の配列 ( [getVarAxes](#getvaraxes) と同形式 )
++ `namedInstances` : fvar named instance の配列
+`%[ name : "SemiBold", coords : %[ wght : 600, ... ] ]`
+
+( `queryFonts` は「フォントを開かず宣言値で判定する」性質を守るため、
+軸情報は返しません。軸は本メソッドか getVarAxes で取得してください )
+
+---
+
+### getVarAxes
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `nameOrPath` | `&nbsp;` | フォント名またはストレージパス |
+
+**戻り値**
+
+可変軸の配列 ( 解決できなければ void )
+
+**解説**
+
+バリアブルフォントの可変軸一覧を取得する。
+
+フォント名 ( 宣言名・SFNT 実名 ) またはストレージパスを解決し、fvar の
+可変軸を配列で返します。各要素は
+`%[ tag : "wght", name : "Weight", min : 300, default : 400, max : 700 ]`
+の辞書です。バリアブルフォントでなければ空配列、解決できない場合は void を
+返します。
+
+```tjs
+var axes = Font.getVarAxes("MyFont");
+for (var i = 0; i < axes.count; i++)
+Debug.message(axes[i].tag + ": " + axes[i].min + ".." + axes[i].max);
+```
 
 ---

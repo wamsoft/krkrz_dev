@@ -86,6 +86,14 @@ Noto Emoji / elements_basic)。ゲーム側で増やすものではなく、エ�
   `weight` (100-900) / `width` (1-9) / `italic` / `faceIndex` / `languages` /
   `aliases` / `flags` (`emoji` `color` `monospace`) / `ranges` (収録コード
   ポイント区間) を宣言できます。
+- **バリアブルフォント**は `instance` (fvar named instance 名) または `axes`
+  (軸値の直書き) で「名前 = 特定の軸設定」を宣言できます。同じファイルを別名 +
+  別軸で複数宣言できます (下の「バリアブルフォント」節)。
+
+```json
+{ "file": "myfont.ttf", "family": "MyFont SemiBold", "instance": "SemiBold" }
+{ "file": "myfont.ttf", "family": "MyFont Narrow",   "axes": { "wdth": 75 } }
+```
 - 宣言した `scripts` / `ranges` / スタイルは [Font.queryFonts](../reference/Font.md#queryfonts)
   が**フォントファイルを開かずに**検索へ使います。
 - **生成ツール**で自動生成できます (要 `pip install fonttools`):
@@ -170,6 +178,37 @@ var r = Font.queryFonts(%[ containsText : "あ", weight : 700 ]);
 単一フォントの SFNT メタデータは [Font.getFontInfo](../reference/Font.md#getfontinfo)
 で取得できます (family / subfamily / weight / color 等)。fonts.json で
 宣言済みの情報はフォントを開かずに応答します。
+
+## バリアブルフォント (可変軸)
+
+可変軸 (fvar) を持つフォントは、TJS のフォントパラメータから軸を指定できます。
+効くのは **glyphware 経路** — [Layer.drawShapedText](../reference/Layer.md#drawshapedtext)
+系 (常時) と、[Font.rasterizer](../reference/Font.md#rasterizer) = 2 のときの
+[Layer.drawText](../reference/Layer.md#drawtext) — のみで、旧 FreeType / GDI
+ラスタライザでは無視されます (起動後 1 回警告が出ます)。
+
+```tjs
+Font.rasterizer = 2;                     // drawText で使う場合
+layer.font.weight = 700;                 // wght 軸 (100-900、void で解除)
+layer.font.variations = "wdth=87.5";     // 汎用軸指定 (複数は "wght=700,wdth=75")
+var axes = Font.getVarAxes("MyFont");    // 利用できる軸の一覧
+Font.defaultUseVarStyle = true;          // bold/italic を軸で表現 (オプトイン)
+```
+
+- [Font.weight](../reference/Font.md#weight) は `wght` 軸として効き、
+  [Font.variations](../reference/Font.md#variations) に `wght` を明示した場合は
+  そちらが優先です。適用されるのはフォールバック連鎖の各 face が**実際に持つ
+  同名軸だけ**なので、日本語フォント + 絵文字フォントのような軸構成の違う連鎖でも
+  安全です。
+- `fonts.json` の `instance` / `axes` 宣言で「名前 = 特定の軸設定」を作れます
+  (上の fonts.json 節)。名前を指すだけで軸込みのフォントが使えるため、
+  スクリプト側で weight / variations に触れる必要がありません。
+- [Font.defaultUseVarStyle](../reference/Font.md#defaultusevarstyle) を真にすると、
+  bold / italic を軸 (wght=700 / slnt=-10 / ital=1) で表現できるフォントでは
+  合成ボールド / イタリックの代わりに軸を使います (既定は偽)。
+- 軸の照会は [Font.getVarAxes](../reference/Font.md#getvaraxes) /
+  [Font.getFontInfo](../reference/Font.md#getfontinfo) (`axes` /
+  `namedInstances`) で行えます。
 
 ## 多言語シェイピング描画 (glyphware)
 
