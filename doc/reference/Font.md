@@ -45,6 +45,8 @@ Font クラスは、**フォント**を管理するためのクラスです。
 - [queryFonts](#queryfonts)
 - [getFontInfo](#getfontinfo)
 - [getVarAxes](#getvaraxes)
+- [setDefaultVariations](#setdefaultvariations)
+- [getDefaultVariations](#getdefaultvariations)
 
 ---
 
@@ -785,5 +787,56 @@ var axes = Font.getVarAxes("MyFont");
 for (var i = 0; i < axes.count; i++)
 Debug.message(axes[i].tag + ": " + axes[i].min + ".." + axes[i].max);
 ```
+
+---
+
+### setDefaultVariations
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `nameOrPath` | `&nbsp;` | フォント名またはストレージパス ( face 指定と同じ表記、サフィックス抜き ) |
+| `axes` | `&nbsp;` | 既定軸 ( "tag=val,..." 形式 / void・空文字列で解除 ) |
+
+**解説**
+
+可変フォントの既定軸を登録する ( クラスメソッド )。
+
+軸が明示されていないときにフォント名単位で補われる既定の可変軸を登録します。
+`axes` は `"wght=300,wdth=87.5"` 形式です。void または空文字列で解除します。
+
+可変フォントを wght 未指定で参照した場合の既定は wght=400 相当
+( CSS の font-weight 既定と同じ規則。fvar の既定インスタンスが Regular で
+ないフォントも無指定で Regular 相当に表示されます )。この登録はそれより
+強く、`#tag=val` サフィックス / [variations](#variations) /
+[weight](#weight) / fonts.json の宣言軸はさらに強く勝ちます。
+
+```tjs
+Font.setDefaultVariations("Noto Sans JP", "wght=350");  // 無指定を少し細く
+Font.setDefaultVariations("Noto Sans JP", void);        // 解除 (=400 に戻る)
+```
+
+---
+
+### getDefaultVariations
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `nameOrPath` | `&nbsp;` | フォント名またはストレージパス |
+
+**戻り値**
+
+登録されている既定軸文字列 ( 無ければ空文字列 )
+
+**解説**
+
+setDefaultVariations の現在の登録値を取得する ( クラスメソッド )。
 
 ---

@@ -216,6 +216,12 @@ Font.defaultUseVarStyle = true;          // bold/italic を軸で表現 (オプ�
   Elements 画面 JSON の `"font"` (label / text_area とも。折り返し計算も同じ
   インスタンス) で一様に使えます。`Font.variations` がフォント全体 (連鎖の
   全 face) に効くのに対し、こちらは連鎖の**要素単位**で効きます。
+- **無指定時の既定は wght=400 相当**: 可変フォントを wght 未指定で参照した
+  場合、fvar の既定インスタンスではなく wght=400 で表示されます (CSS の
+  font-weight 既定と同じ規則)。既定が Thin の VF (Noto VF 等) も、VF 1 本の
+  登録だけで無指定が Regular 相当に読めます。既定を変えたいときは
+  [Font.setDefaultVariations](../reference/Font.md#setdefaultvariations) で
+  名前単位に登録します (明示指定・fonts.json 宣言が常に勝ちます)。
 
 ## 多言語シェイピング描画 (glyphware)
 
