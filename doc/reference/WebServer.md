@@ -29,11 +29,11 @@ WebServer クラスは吉里吉里Z に組み込まれた HTTP + SSE サーバ�
 - `GET /sub/<channel>` ... 任意チャンネルの SSE 購読
 
 !!! warning "日本語などマルチバイトの値は body で受ける"
-`query` は percent-encoding されたままの文字列です。これを戻す
-`System.urldecode` は Windows ネイティブビルド限定なので、
-**SDL3 ビルドではクエリで非 ASCII を受け取れません**。
-文字列の受け渡しは `body` ( UTF-8 ) を使い、`query` は数値や識別子など
-ASCII の指定にとどめるのが安全です。
+    `query` は percent-encoding されたままの文字列です。これを戻す
+    `System.urldecode` は Windows ネイティブビルド限定なので、
+    **SDL3 ビルドではクエリで非 ASCII を受け取れません**。
+    文字列の受け渡しは `body` ( UTF-8 ) を使い、`query` は数値や識別子など
+    ASCII の指定にとどめるのが安全です。
 
 最小構成の実装例はコアデモ `webui` にあります ( 静的配信 + 動的
 エンドポイント + ゲームからの push を 1 画面にまとめたもの )。

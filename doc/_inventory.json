@@ -48,7 +48,8 @@
       "d3d11Device",
       "dialogRendererHost",
       "interface",
-      "videoPresenterHost"
+      "videoPresenterHost",
+      "viewportBackgroundHost"
     ]
   },
   "Bitmap": {
@@ -239,6 +240,7 @@
       "getList",
       "getTextHeight",
       "getTextWidth",
+      "getVarAxes",
       "mapPrerenderedFont",
       "queryFonts",
       "registerFontFile",
@@ -250,6 +252,7 @@
       "colorEmojiFaceName",
       "defaultEmojiMode",
       "defaultFaceName",
+      "defaultUseVarStyle",
       "emojiFaceName",
       "emojiMode",
       "face",
@@ -258,7 +261,9 @@
       "italic",
       "rasterizer",
       "strikeout",
-      "underline"
+      "underline",
+      "variations",
+      "weight"
     ]
   },
   "ImageFunction": {
@@ -463,6 +468,7 @@
       "interface",
       "matrix",
       "texture",
+      "viewportBackgroundHost",
       "window"
     ]
   },
@@ -512,6 +518,7 @@
       "dialogRendererHost",
       "interface",
       "sdlVideoPresenterHost",
+      "viewportBackgroundHost",
       "window"
     ]
   },
@@ -628,6 +635,7 @@
       "getLicenseText",
       "getPadAxis",
       "getSystemAllocatorInfo",
+      "getTextureMemory",
       "getTickCount",
       "hasJoypad",
       "inform",
@@ -637,11 +645,13 @@
       "removeContinuousHandler",
       "renderStatsReset",
       "resetMemoryPeak",
+      "resetTextureMemoryPeak",
       "rumblePad",
       "setArgument",
       "setDrawStatsLog",
       "setMemoryOverlay",
       "setPadOverlay",
+      "setTextureMemoryLog",
       "shellExecute",
       "showVersion",
       "stopRumblePad",
@@ -679,15 +689,20 @@
       "padAxisRightTrigger",
       "padAxisRightX",
       "padAxisRightY",
+      "padButtonMapping",
       "padEnabled",
+      "padStyle",
       "personalPath",
       "platformName",
+      "platformTag",
       "processorNum",
       "renderStats",
       "replWebURL",
+      "resourcePath",
       "savedGamesPath",
       "screenHeight",
       "screenWidth",
+      "systemLanguage",
       "texUploadUsePBO",
       "title",
       "touchDevice",
@@ -952,6 +967,7 @@
     "properties": [
       "GLGetProcAddress",
       "HWND",
+      "aspectLock",
       "borderStyle",
       "caption",
       "displayDensity",
@@ -962,6 +978,8 @@
       "enableTouchMouse",
       "focusable",
       "focusedLayer",
+      "frameHeight",
+      "frameWidth",
       "fullScreen",
       "height",
       "hintDelay",

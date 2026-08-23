@@ -8,7 +8,21 @@
 
 
 
-重ね合わされたレイヤは、描画デバイスと呼ばれる機構にて、ウィンドウに描画されます。デフォルトでは BasicDrawDevice と呼ばれる、単純にレイヤの出力をウィンドウに描画するだけのデバイスが使用されます。描画デバイスは[Window.drawDevice](../reference/Window.md#drawdevice)プロパティを操作することで自由に差し替えられるようになっており、用途に応じた演出効果などをユーザが独自に(プラグインの形式で)定義することとができますが、吉里吉里Zが内蔵しているのは前述の BasicDrawDevice のみです。
+重ね合わされたレイヤは、描画デバイスと呼ばれる機構にて、ウィンドウに描画されます。描画デバイスは[Window.drawDevice](../reference/Window.md#drawdevice)プロパティを操作することで自由に差し替えられるようになっており、用途に応じた演出効果などをユーザが独自に(プラグインの形式で)定義することもできます。
+
+本体には次の描画デバイスが内蔵されており、起動時の既定はビルドによって異なります (起動オプション `-drawdevice` で選択できます。詳細は[コマンドラインオプション](CommandLine.md))。
+
+| クラス | 内容 | 備考 |
+|---|---|---|
+| [BasicDrawDevice](../reference/Window.BasicDrawDevice.md) | Direct3D 11 による標準描画 | Windows ネイティブ (WINVER) ビルドの既定 |
+| [SDLOGLDrawDevice](../reference/SDLOGLDrawDevice.md) | OpenGL ES 直接描画 | SDL3 ビルドの既定 (OpenGL 有効ビルド時) |
+| [SDLDrawDevice](../reference/SDLDrawDevice.md) | SDL_Renderer による標準描画 | SDL3 ビルド。OpenGL 無効ビルドの既定 |
+| [OGLDrawDevice](../reference/OGLDrawDevice.md) | OpenGL ES + [Canvas](../reference/Canvas.md) 等の GL クラス群を含むフル機能版 | 両ビルドで利用可 |
+| [NullDrawDevice](../reference/NullDrawDevice.md) | 描画を行わない | 検証用 |
+
+OpenGL 系のデバイスを使うには OpenGL ES が利用できる環境が必要です。また SDL3 ビルドを `-drawdevice=sdl` で起動した場合、実行中に OpenGL 系へ切り替えることはできません。
+
+表示されない作業用の画像は [Bitmap](../reference/Bitmap.md) クラスで扱い、その加工には [ImageFunction](../reference/ImageFunction.md) クラスを使います。三者の関係と使い分けは [Layer と Bitmap と ImageFunction](LayerAndBitmap.md) を参照してください。
 
 ## 読み書き可能な画像形式
 

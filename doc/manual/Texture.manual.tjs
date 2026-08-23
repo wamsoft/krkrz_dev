@@ -8,7 +8,15 @@ class Texture {
 	/**
 	 * ファイル読み込み版コンストラクタ
 	 * @param filename 画像ファイル名
-	 * @param format カラーフォーマット(tcfRGBA or tcfAlpha), tcfAlpha選択時に色情報はグレイスケール化されます
+	 * @param format カラーフォーマット(tcfRGBA / tcfAlpha / tcfAlphaChannel)
+	 *
+	 * `**tcfAlpha**` 選択時に色情報はグレイスケール化されます ( **輝度**を 8bit テクスチャにします )。
+	 *
+	 * `**tcfAlphaChannel**` を選択すると、α チャンネルをそのまま 8bit テクスチャにします。
+	 * α だけを参照するクリッピングマスク用の画像に適していて、RGBA の 1/4 のメモリで済み、
+	 * アップロード用 PBO も確保されません。「輝度は白一色でデータは α」という一般的なマスク資材は
+	 * tcfAlpha では扱えないため、この指定を使います。32bpp でない画像を渡した場合は
+	 * 従来のグレイスケール扱いにフォールバックします。
 	 * @param is9patch 9patch情報を読み込み、9patch描画用として使用するかどうか
 	 */
 	function Texture( filename:string, format:int=tcfRGBA, is9patch:bool=false );
@@ -16,7 +24,11 @@ class Texture {
 	/**
 	 * Bitmapコピー版コンストラクタ
 	 * @param bitmap テクスチャの元となるBitmapクラスのインスタンス
-	 * @param format カラーフォーマット(tcfRGBA or tcfAlpha), tcfAlpha選択時に色情報はグレイスケール化されます
+	 * @param format カラーフォーマット(tcfRGBA / tcfAlpha / tcfAlphaChannel)
+	 *
+	 * 値の意味はファイル読み込み版コンストラクタと同じです。
+	 * `**tcfAlpha**` は輝度をグレイスケール化、`**tcfAlphaChannel**` は α チャンネルを
+	 * そのまま 8bit テクスチャにします。
 	 * @param is9patch 9patch情報を読み込み、9patch描画用として使用するかどうか
 	 */
 	function Texture( bitmap:Bitmap, format:int=tcfRGBA, is9patch:bool=false );
@@ -26,7 +38,9 @@ class Texture {
 	 * @description テクスチャの内容は未初期化なのでごみが入っています。
 	 * @param width テクスチャ幅
 	 * @param height テクスチャ高さ
-	 * @param format カラーフォーマット(tcfRGBA or tcfAlpha)
+	 * @param format カラーフォーマット(tcfRGBA / tcfAlpha / tcfAlphaChannel)
+	 *
+	 * 内容が未初期化の空テクスチャなので、`**tcfAlphaChannel**` は `**tcfAlpha**` と同じ扱いになります。
 	 */
 	function Texture( width:int, height:int, format:int=tcfRGBA );
 

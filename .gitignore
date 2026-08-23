@@ -2,7 +2,9 @@ build
 bin
 .vscode
 .venv
-.claude
+.claude/*
+!.claude/skills/
 site
 __pycache__
 .krkrz_history
+.deckstage/

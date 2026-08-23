@@ -418,6 +418,33 @@ class System {
 	property exePath { getter; }
 
 	/**
+	 * エンジン組み込みリソースのあるパス
+	 *
+	 * `config.cf` / `messages.json` / 同梱フォント (`notosansjp-regular.otf` 等) といった
+	 * エンジン組み込みリソースが置かれている場所を、末尾に `/` の付いた統一ストレージ名で
+	 * 返します。
+	 *
+	 * 実体はプラットフォームで異なります。
+	 *
+	 * | プラットフォーム | 値 | 実体 |
+	 * |---|---|---|
+	 * | WINVER / デスクトップ SDL3 | `resource://./` | exe 埋め込み / OS リソース |
+	 * | ブラウザ (wasm) | `file://./resource/` | 起動時に MEMFS へ preload |
+	 *
+	 * ブラウザビルドには `resource://` メディア自体が存在しないため、`resource://...` を
+	 * 直書きしたスクリプトは [Storages.isExistentStorage](Storages.md#isexistentstorage) の
+	 * 時点で「対応していないメディアタイプです」例外になります。同梱フォントなどを参照する
+	 * ときは必ずこのプロパティを前置してください。
+	 *
+	 * ```tjs
+	 * // 同梱の日本語フォントを参照する
+	 * var path = System.resourcePath + "notosansjp-regular.otf";
+	 * ```
+	 * @see System.exePath
+	 */
+	property resourcePath { getter; }
+
+	/**
 	 * 実画面を PNG 保存する
 	 *
 	 * 次フレームの present 直前に、オーバーレイ込みの実画面を読み戻して path へ PNG 保存する
@@ -518,7 +545,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenHeight
 	 * @see System.desktopLeft
 	 * @see System.desktopTop
@@ -534,7 +563,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenWidth
 	 * @see System.desktopLeft
 	 * @see System.desktopTop
@@ -556,7 +587,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenWidth
 	 * @see System.screenHeight
 	 * @see System.desktopTop
@@ -572,7 +605,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenWidth
 	 * @see System.screenHeight
 	 * @see System.desktopLeft
@@ -588,7 +623,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenWidth
 	 * @see System.screenHeight
 	 * @see System.desktopLeft
@@ -604,7 +641,9 @@ class System {
 	 *
 	 * 値はメインウィンドウのあるディスプレイを対象としたものです。
 	 *
-	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります。
+	 * メインウィンドウがない場合はプライマリーディスプレイが対象となります
+	 * ( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、
+	 * メインウィンドウができるまでの間はそのディスプレイが対象となります )。
 	 * @see System.screenWidth
 	 * @see System.screenHeight
 	 * @see System.desktopLeft
@@ -929,6 +968,109 @@ class System {
 	property touchDevice;
 
 	/**
+	 * プラットフォームタグ
+	 *
+	 * 実行中のプラットフォームを表す短い識別子です ( `"windows"` / `"android"` /
+	 * `"macos"` / `"linux"` / `"web"` など )。読み出し専用。
+	 *
+	 * [System.platformName](System.md#platformname) は OS から得た生の文字列で
+	 * 空白や表記ゆれを含むため、ファイル名や条件分岐には使いにくいのに対し、
+	 * こちらは**小文字・空白無しに正規化**されているので、そのまま機種分岐に使えます。
+	 *
+	 * 複数のタグが該当する環境 ( 世代違いのコンソールなど ) では、**最も具体的なもの**が
+	 * 返ります。
+	 *
+	 * !!! info "機種別のエンジン設定 `config_<tag>.cf`"
+	 *     リソース内の設定ファイルは、共通の `config.cf` に加えて
+	 *     `config_<タグ>.cf` を置くと機種別に上書きできます。
+	 *     読み込みは「具体的なタグ → 一般的なタグ → 共通 `config.cf`」の順で、
+	 *     先に読まれたものが優先されます。存在しないファイルは単に読み飛ばされます。
+	 * @type String
+	 * @see System.platformName
+	 * @see System.osName
+	 */
+	property platformTag;
+
+	/**
+	 * 本体の表示言語
+	 *
+	 * OS ( 家庭用ゲーム機ならハード ) に設定されている表示言語を
+	 * [BCP-47](https://www.rfc-editor.org/info/bcp47) の言語タグで返します。
+	 * 読み出し専用。`"ja-JP"` / `"en-US"` / `"zh-Hant"` / `"zh-Hans"` のような
+	 * 値になります。
+	 *
+	 * ゲームの**既定**言語をハードの設定に合わせるための口です。言語の選択と
+	 * 保存はゲーム側の責務で、このプロパティは「本体が何語設定か」だけを返します。
+	 * 地域まで要らない場合は `-` より前を見てください。
+	 *
+	 * ```tjs
+	 * var lang = System.systemLanguage;
+	 * var code = lang.indexOf("-") >= 0 ? lang.substring(0, lang.indexOf("-")) : lang;
+	 * if(code == "") code = "ja";   // 取得できない環境はゲーム既定へ
+	 * ```
+	 *
+	 * !!! warning "取得できない環境では空文字列"
+	 *     言語を取得する手段が無い環境では空文字列を返します。
+	 *     呼び出し側でゲームの既定言語へフォールバックしてください。
+	 *
+	 * 取得元は環境ごとに異なります ( Windows ネイティブ版 =
+	 * `GetUserDefaultLocaleName` / SDL3 版 = `SDL_GetPreferredLocales` の先頭。
+	 * 家庭用ゲーム機は各ハードの API )。SDL3 版では地域が取れない場合、
+	 * `"ja"` のように言語のみが返ります。
+	 *
+	 * エンジン自身のメッセージ ( エラー文言等 ) とオプション解説の言語選択
+	 * ( ja / en / chs / cht ) もこの値に追従します。起動オプション `-language` で
+	 * 明示指定して上書きできます ( [コマンドラインオプション](../guide/CommandLine.md) )。
+	 * @type String
+	 * @see System.platformTag
+	 */
+	property systemLanguage;
+
+	/**
+	 * パッドのボタン割り当て方式
+	 *
+	 * ゲームパッドの物理ボタンを `VK_PAD1`〜`VK_PAD4` へどう割り当てるかを表す
+	 * 文字列です。値を設定することもできます。
+	 *
+	 * - `"label"` ( 既定 ) … **ボタンの刻印**で割り当てます。`VK_PAD1` = 刻印 A
+	 *   ( PlayStation では ✕ )、`VK_PAD2` = B ( ○ )、`VK_PAD3` = X ( □ )、
+	 *   `VK_PAD4` = Y ( △ )。任天堂系のように A/B・X/Y の**位置が入れ替わっている**
+	 *   コントローラでも、画面表示と実際に押すボタンが一致します。
+	 * - `"position"` … 従来どおり**位置**で割り当てます ( 下 = `VK_PAD1`、
+	 *   右 = `VK_PAD2`、左 = `VK_PAD3`、上 = `VK_PAD4` )。
+	 *
+	 * 刻印が判定できないコントローラでは自動的に位置基準へフォールバックします。
+	 * PlayStation / Xbox 系はどちらの方式でも結果が同じです。
+	 *
+	 * 起動オプション `-padbuttons=label|position` ( `config.cf` でも可 ) でも
+	 * 指定できます。`"label"` / `"position"` 以外を代入すると例外になります。
+	 *
+	 * !!! warning "SDL3 / 汎用ビルド限定"
+	 *     このプロパティは SDL3 / 汎用ビルドにのみ存在します。Windows ネイティブ
+	 *     ( WINVER ) ビルドのパッド入力は XInput ベースで、ボタンの刻印が
+	 *     Xbox 系に固定されているため位置と刻印が食い違いません。
+	 * @type String
+	 * @see System.getJoypadType
+	 */
+	property padButtonMapping;
+
+	/**
+	 * 接続パッドのボタン表記の系統 ( 読み取り専用 )
+	 *
+	 * 「最後に操作したパッド」のボタン表記の系統を表す文字列です。
+	 * `"xbox"` / `"ps"` / `"switch"` のいずれかで、判定できない場合は
+	 * 空文字列になります。
+	 *
+	 * 画面に表示するボタン絵 ( 操作ガイドなど ) をどの系統にするかの判断に
+	 * 使えます。[Dialog.setPadTheme](Dialog.md#setpadtheme) に `"auto"` を
+	 * 指定した場合の自動選択も、このプロパティと同じ判定を参照します。
+	 * @type String
+	 * @see System.padButtonMapping
+	 * @see System.getJoypadType
+	 */
+	property padStyle;
+
+	/**
 	 * フォントの追加
 	 *
 	 * ストレージ内のフォントファイルをエンジンに追加します。
@@ -1108,6 +1250,63 @@ class System {
 	 * @return 設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。
 	 */
 	function setDrawStatsLog(enable);
+
+	/**
+	 * GL テクスチャメモリ使用量の取得
+	 *
+	 * GL 系 DrawDevice が確保しているテクスチャ類のメモリ使用量を辞書で返します。
+	 * [System.getFreeMemory](System.md#getfreememory) 等が扱う CPU 側のメモリには
+	 * GL ドライバが確保するテクスチャは含まれないため、こちらで別途計測します。
+	 *
+	 * 返される辞書のメンバは次の通りです ( 単位はバイト )。
+	 *
+	 * | メンバ | 内容 |
+	 * |---|---|
+	 * | `texture` | [Texture](Texture.md) ( GL テクスチャ ) 実体の合計 |
+	 * | `pbo` | アップロード用 PBO の合計。**更新されるテクスチャだけが持ちます** ( 遅延確保 ) |
+	 * | `total` | `texture` + `pbo` |
+	 * | `peak` | 合計の最大値 |
+	 * | `textureCount` | 生存しているテクスチャ数 |
+	 * | `pboCount` | 生存している PBO 数 |
+	 *
+	 * `peak` は [Offscreen](Offscreen.md) が使う FBO のぶんも含んだ合計の最大値なので、
+	 * FBO を使っている場合は `total` より大きい値になります ( `total` は FBO を含みません )。
+	 *
+	 * **SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+	 * WINVER ビルドには現在ありません。
+	 * @param tag 文字列を渡すと、その名前付きで使用量を 1 行ログにも出力します。
+	 *
+	 * シーンの境界などに目印を打ちたいときに使います。省略時はログを出力しません。
+	 * @return 使用量の辞書配列
+	 * @see System.setTextureMemoryLog
+	 * @see System.resetTextureMemoryPeak
+	 */
+	function getTextureMemory(tag);
+
+	/**
+	 * GL テクスチャメモリログ出力の設定
+	 *
+	 * GL テクスチャメモリの合計が 8MiB 増減するたびに、使用量をログへ書き出す
+	 * モードを切り替えます。既定は無効です。
+	 *
+	 * **SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+	 * @param enable 真でログ出力、偽で停止。引数を省略 ( または void ) すると
+	 * 現在の状態をトグルします。
+	 * @return 設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。
+	 * @see System.getTextureMemory
+	 */
+	function setTextureMemoryLog(enable);
+
+	/**
+	 * GL テクスチャメモリのピーク値のリセット
+	 *
+	 * [System.getTextureMemory](System.md#gettexturememory) が返す `peak` を現在値へ
+	 * リセットします。「ここから先の最大値」を測りたいときに使います。
+	 *
+	 * **SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。
+	 * @see System.getTextureMemory
+	 */
+	function resetTextureMemoryPeak();
 
 	/**
 	 * 接続中のゲームパッド数の取得
