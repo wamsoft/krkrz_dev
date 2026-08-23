@@ -185,6 +185,12 @@ lowpri
   設定可能な値は **'no' (しない)** あるいは **'yes' (する)** で、このオプションを指定しないと 'no' が指定されたものと見なされます。
   
   'yes' にすると、トランジションを実行中など、吉里吉里のメインスレッドが連続して CPU を使用する場面になると、メインスレッドの実行優先度を下げるようになります。これにより、トランジション中の音飛びや、トランジション中に他のアプリケーションが操作しづらくなるなどの症状が改善される場合があります。
+- **-**language** (メッセージ言語 / 表示言語の明示指定)**  
+  エンジンのメッセージ ( エラー文言等 ) とオプション解説 ( `-userconf` の設定 UI ) の言語を明示指定します。
+  
+  設定可能な値は BCP-47 形式 ( **'ja-JP'**, **'en-US'**, **'zh-Hans'** など ) または短縮形 ( **'ja'**, **'en'**, **'chs'**, **'cht'** ) です。指定しない場合は OS の言語設定 ( [System.systemLanguage](../reference/System.md#systemlanguage) ) に追従します。対応言語は ja / en / chs / cht で、対応する資材がない言語は英語 ( それも無ければ日本語 ) へフォールバックします。
+  
+  Windows ネイティブ ( WINVER ) ビルドでは PE リソースの言語解決 ( メッセージ文字列・設定ダイアログ ) に、SDL3 ビルドでは `messages*.json` / `optiondesc*.json` の選択に反映されます。**メッセージ文字列への反映はコマンドラインで直接指定した場合のみ**です ( 設定ファイル内の指定はオプション解説の言語にのみ反映されます )。
 - **-**exceptionexe** (例外時起動エディタ)**  
   例外発生時に起動するエディタを指定します。
 - **-**exceptionarg** (例外時起動エディタオプション)**  
@@ -328,7 +334,9 @@ lowpri
 - **-**fsres** (フルスクリーン時の画面解像度)**  
   フルスクリーン時の画面解像度の設定です。
   
-  設定可能な値は  **'auto' (自動)**, **'proportional' (縦横比が同じ解像度)** , **'nearest' (最も近い解像度)** , **'nochange' (解像度を変えない)** のいずれかで、このオプションを指定しないと 'auto' が指定されたものと見なされます。
+  設定可能な値は  **'auto' (自動)**, **'proportional' (縦横比が同じ解像度)** , **'nearest' (最も近い解像度)** , **'nochange' (解像度を変えない)** のいずれかで、このオプションを指定しないと 'nochange' が指定されたものと見なされます。
+  
+  ※ Windows ネイティブ ( WINVER ) ビルドのみ有効です ( -fszoom も同様 )。SDL3 ビルドのフルスクリーンは解像度を変更しないボーダーレス方式で、表示倍率は Window のジオメトリ設定に従います。
   
   'auto' を選択すると、最も適している画面解像度を自動的に選択して使用します。この場合は、縦横比が同じ解像度のうち、プログラム内で指定されている解像度にフィットする解像度があればそれを選択しますが、そのような解像度がない場合は解像度を変えずにエンジン側で拡大表示をします。この設定の場合は、-fszoom (フルスクリーン時のエンジンによる拡大表示) オプションに 'no' (しない) が指定されていても、常に 'outer' (モニタ内にフィットさせる) であるとみなされます。
   
@@ -432,14 +440,26 @@ lowpri
   
   指定しなかった場合は `basic` です。どちらのビルドでも、未知の値を指定すると警告を出して既定値へフォールバックします。
   
-  これは**起動時の既定**の指定で、実行中に [Window.drawDevice](../reference/Window.md#drawdevice) へ代入して切り替えるのは従来どおり可能です。
+  これは**起動時の既定**の指定で、実行中に [Window.drawDevice](../reference/Window.md#drawdevice) へ代入して切り替えるのは従来どおり可能です。ただし **SDL3 ビルドを 'sdl' で起動した場合、実行中に OpenGL 系 ( sdlogl / ogl ) へ切り替えることはできません** ( OpenGL の初期化が通りません )。OpenGL 機能 ( Canvas 等 ) を使う場合は最初から 'sdlogl' / 'ogl' で起動してください。
+  
+  OpenGL 系の DrawDevice を使うには OpenGL ES が利用できる環境が必要です。WINVER は常に EGL ( ANGLE の libEGL.dll / libGLESv2.dll ) 経由なので DLL の同梱が必須、SDL3 の Windows では OS の OpenGL ドライバの ES プロファイルが優先され、使えない場合に同じ ANGLE DLL へフォールバックします ( 下記 -forceegl も参照 )。
 - **-**renderer** (SDL3 backend の明示指定 / SDL3 ビルド限定)**  
   SDLDrawDevice が利用する SDL_Renderer の backend 名を明示します。
   ( 例: `direct3d11`, `vulkan`, `opengl`, `software` 等 )。
   
   指定しなかった場合は SDL3 の自動選択に任されます。
   
-  SDL3 ビルド + SDLDrawDevice ( = `-drawdevice=sdl` か既定 ) 使用時のみ意味を持ちます。
+  SDL3 ビルド + SDLDrawDevice ( = `-drawdevice=sdl` 指定時 ) 使用時のみ意味を持ちます。
+- **-**forceegl** (OpenGL ES コンテキストの EGL 強制 / SDL3 ビルド限定)**  
+  OpenGL ES コンテキストを、最初から EGL ( Windows では ANGLE の libEGL.dll / libGLESv2.dll ) で作成させます。
+  
+  設定可能な値は **'no' (既定, 強制しない)** または **'yes' (EGL を強制する)** です。
+  
+  SDL3 ビルドは既定で、グラフィックドライバの OpenGL 実装が ES プロファイル ( `WGL_EXT_create_context_es2_profile` ) に対応していればそちらを優先し、対応していない場合のみ EGL へフォールバックします。ドライバの ES プロファイル実装に問題があり描画が乱れる・初期化に失敗するような環境では、'yes' を指定すると EGL ( ANGLE ) 経由に固定して切り分け・回避ができます ( 内部的には SDL のヒント `SDL_OPENGL_ES_DRIVER=1` を設定します。同名の環境変数でも同じ効果が得られます )。
+  
+  コンテキストの要求バージョンは ES 3.2 で、作れない場合は 3.1 → 3.0 → 2.0 と自動的に下げて再試行します ( ANGLE の D3D11 バックエンドは ES 3.0/3.1 までのため、EGL 経由ではこの再試行で成立します )。実際に得られたバージョンは起動ログの `Loaded GLES x.y` で確認できます。
+  
+  WINVER ビルドの OpenGL は常に EGL ( ANGLE ) 経由のため、このオプションは SDL3 ビルドでのみ意味を持ちます。
 - **-**mediaengine** (動画のハードウェアデコード / Windows 限定)**  
   [VideoOverlay](../reference/VideoOverlay.md) のオーバーレイ再生 ( `vomOverlay` ) で、
   mp4/H.264/HEVC/wmv/asf などの MF-native 形式を Media Foundation ( IMFMediaEngine ) で
