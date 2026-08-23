@@ -16,9 +16,11 @@ build_type = "Release"
 cmakeopt = "-DKRKRZ_USE_SJIS=YES"
 
 [targets.linux.stage]
-copy = [
-    ["bin/x64-linux/Release", "."],
-    ["src/core/data", "data"],
+# krkrz_android app-config / krkrz_web web-config の assetPack.sources と同書式
+# (mirror/flatten + include/exclude、重複は先勝ち、配置はハードリンク自動判定)
+sources = [
+    { type = "mirror", from = "bin/x64-linux/Release", to = "" },
+    { type = "mirror", from = "src/core/data", to = "data", exclude = ["**/*.bak", "**/*.psd"] },
 ]
 # install は libSDL3.so.0.4.0 実体のみで soname (libSDL3.so.0) が無いので補完する
 script = "python -c \"import glob,os,shutil; d=os.environ['STEAMCTL_STAGE_DIR']; src=glob.glob(os.path.join(d,'libSDL3.so.0.*'))[0]; shutil.copy(src, os.path.join(d,'libSDL3.so.0'))\""
@@ -41,9 +43,9 @@ kind = "shell"
 command = "make PRESET=x64-windows prebuild build install"
 
 [targets.windows.stage]
-copy = [
-    ["bin/x64-windows/Release", "."],
-    ["src/core/data", "data"],
+sources = [
+    { type = "mirror", from = "bin/x64-windows/Release", to = "", exclude = ["**/*.bak_*", "**/*.pdb"] },
+    { type = "mirror", from = "src/core/data", to = "data", exclude = ["**/*.bak", "**/*.psd"] },
 ]
 
 [targets.windows.deploy]
