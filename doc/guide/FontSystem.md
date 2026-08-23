@@ -209,6 +209,13 @@ Font.defaultUseVarStyle = true;          // bold/italic を軸で表現 (オプ�
 - 軸の照会は [Font.getVarAxes](../reference/Font.md#getvaraxes) /
   [Font.getFontInfo](../reference/Font.md#getfontinfo) (`axes` /
   `namedInstances`) で行えます。
+- **`#tag=val` サフィックス表記**: フォント名に `#tag=val[,tag=val...]` を
+  後置すると、その名前が指すフォントの軸インスタンスを表します
+  (例 `"MyFont#wght=700"`、`"MyFont#wght=700,wdth=75"`)。
+  [Font.face](../reference/Font.md#face) のフォールバック連鎖の各要素、
+  Elements 画面 JSON の `"font"` (label / text_area とも。折り返し計算も同じ
+  インスタンス) で一様に使えます。`Font.variations` がフォント全体 (連鎖の
+  全 face) に効くのに対し、こちらは連鎖の**要素単位**で効きます。
 
 ## 多言語シェイピング描画 (glyphware)
 

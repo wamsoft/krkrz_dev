@@ -75,6 +75,13 @@ Layerメンバのfontは、引数にLayerを渡す特殊版。
 
 先頭をカンマにし、直後にフォント名を書くと、実際にそのフォントをOSが列挙しなくても、OSにそのフォントを指定しようとします (たとえば ",My Original Font" )。これにより AddFontResource Win32 API 等で登録した列挙不可能なフォントを使用することができます。
 
+バリアブルフォントでは、フォント名に `#tag=val[,tag=val...]` を後置して
+可変軸インスタンスを指定できます ( 例 `"MyFont#wght=700"`、
+`"MyFont#wght=700,wdth=75"` )。フォールバック連鎖の各要素に個別に指定でき、
+[variations](#variations) と異なり face 単位で効きます。glyphware 経路
+( [Layer.drawShapedText](Layer.md#drawshapedtext) 系と [rasterizer](#rasterizer) = 2 )
+でのみ有効です。
+
 ---
 
 ### height
