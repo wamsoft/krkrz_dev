@@ -24,7 +24,9 @@ copy = [
 script = "python -c \"import glob,os,shutil; d=os.environ['STEAMCTL_STAGE_DIR']; src=glob.glob(os.path.join(d,'libSDL3.so.0.*'))[0]; shutil.copy(src, os.path.join(d,'libSDL3.so.0'))\""
 
 [targets.linux.deploy]
-command = "./krkrz data"
+# -replweb: 127.0.0.1:8899 に REPL サーバ (steamctl tunnel -L 18899:8899 で駆動)。
+# 不要なら "./krkrz data" に戻す。引数変更は再デプロイで反映される点に注意。
+command = "./krkrz data -replweb -loglevel=info"
 # exe に RPATH が無いので同梱 SDL3 をカレントから拾わせる
 env = { LD_LIBRARY_PATH = "." }
 # Steam 配布と同一環境で検証する場合は sniper コンテナ実行:
