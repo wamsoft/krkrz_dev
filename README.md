@@ -110,6 +110,19 @@ make
 make install
 ```
 
+### OpenGL 用 ANGLE DLL の配置
+
+エンジンの OpenGL (GLES) 機能を Windows で使うには ANGLE の
+`libEGL.dll` / `libGLESv2.dll` が必要です (WINVER ビルドは必須。SDL3 ビルドは
+OpenGL ドライバの ES プロファイルが使えない環境向けのフォールバック)。
+これらはリポジトリに含まれないため、リポジトリルートの `plugin/` (32bit) /
+`plugin64/` (64bit) フォルダへ手動で配置してください。`make run` がビルド出力へ
+自動コピーします。
+
+入手先は [mmozeiko/build-angle](https://github.com/mmozeiko/build-angle) の
+Releases (毎日ビルド、x64 / arm64) が手軽です。詳細と注意点 (PATH 上の別 ANGLE を
+拾う問題等) は `src/core/README.md` の「OpenGL ES の実行環境」を参照してください。
+
 ### プラグイン作成
 
 TVP_PLUGIN_FOLDERS から、TVP_PLUGINS で定義された名称の
