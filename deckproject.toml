@@ -1,8 +1,8 @@
-# steamctl project 定義: Steam Deck へのビルド・デプロイ構成
-# 使い方 (steamctl リポジトリの CLI から):
-#   steamctl project -p . build linux     # sniper コンテナで Linux ビルド
-#   steamctl -d <deck> project -p . ship linux    # build+stage+deploy+起動
-#   steamctl -d <deck> project -p . deploy windows --start
+# steamdev project 定義: Steam Deck へのビルド・デプロイ構成
+# 使い方 (steamdev リポジトリの CLI から):
+#   steamdev project -p . build linux     # sniper コンテナで Linux ビルド
+#   steamdev -d <deck> project -p . ship linux    # build+stage+deploy+起動
+#   steamdev -d <deck> project -p . deploy windows --start
 
 [project]
 gameid = "krkrz"
@@ -23,10 +23,10 @@ sources = [
     { type = "mirror", from = "src/core/data", to = "data", exclude = ["**/*.bak", "**/*.psd"] },
 ]
 # install は libSDL3.so.0.4.0 実体のみで soname (libSDL3.so.0) が無いので補完する
-script = "python -c \"import glob,os,shutil; d=os.environ['STEAMCTL_STAGE_DIR']; src=glob.glob(os.path.join(d,'libSDL3.so.0.*'))[0]; shutil.copy(src, os.path.join(d,'libSDL3.so.0'))\""
+script = "python -c \"import glob,os,shutil; d=os.environ['STEAMDEV_STAGE_DIR']; src=glob.glob(os.path.join(d,'libSDL3.so.0.*'))[0]; shutil.copy(src, os.path.join(d,'libSDL3.so.0'))\""
 
 [targets.linux.deploy]
-# -replweb: 127.0.0.1:8899 に REPL サーバ (steamctl tunnel -L 18899:8899 で駆動)。
+# -replweb: 127.0.0.1:8899 に REPL サーバ (steamdev tunnel -L 18899:8899 で駆動)。
 # 不要なら "./krkrz data" に戻す。引数変更は再デプロイで反映される点に注意。
 command = "./krkrz data -replweb -loglevel=info"
 # exe に RPATH が無いので同梱 SDL3 をカレントから拾わせる
