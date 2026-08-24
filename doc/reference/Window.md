@@ -116,6 +116,7 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [onKeyDown](#onkeydown)
 - [onKeyUp](#onkeyup)
 - [onKeyPress](#onkeypress)
+- [onTextInput](#ontextinput)
 - [onResize](#onresize)
 - [onFileDrop](#onfiledrop)
 - [onCloseQuery](#onclosequery)
@@ -2142,6 +2143,11 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 仮想キーコードを扱うのに対し、このイベントは文字そのものを扱います。押されたキーが
 文字とは関係のないキー (ファンクションキーなど) の場合はこのイベントは発生しません。
 
+**互換イベントです (WINVER のみ)。** WM_CHAR 相当の 1 文字 (UTF-16 code unit) 単位で、
+BMP 外の文字はサロゲートペアが 2 回に分かれて届きます。SDL 系ビルドではこのイベントは
+発生しません。新規のコードでは文字列単位の [Window.onTextInput](Window.md#ontextinput)
+を使ってください (SDL / WINVER の両方で発生します)。
+
 Ctrlキーと同時に押された場合は、以下に示すようなコントロールコードが送られてきます。
 
 `0x00 : `Ctrl+@
@@ -2207,6 +2213,38 @@ Ctrlキーと同時に押された場合は、以下に示すようなコント�
 `0x1E : `Ctrl+^
 
 `0x1F : `Ctrl+_
+
+---
+
+### onTextInput
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `text` | `&nbsp;` | 入力された文字列です。1 文字以上のことがあります。 |
+
+**解説**
+
+テキストが入力された
+
+テキストが入力されたときに発生します。[Window.onKeyPress](Window.md#onkeypress) の後継で、
+**文字列単位**で届くのが特徴です。IME の確定文字列はまとまって 1 回で届きます
+(1 回の発生で 1 文字とは限りません)。BMP 外の文字 (絵文字・拡張漢字) はサロゲートペアを
+含む文字列としてそのまま届きます。
+
+制御文字 (BackSpace / Enter / Tab / Esc 等) はこのイベントには届きません。編集キーは
+[Window.onKeyDown](Window.md#onkeydown) の仮想キーコード (VK_BACK / VK_RETURN 等) で
+受けてください。
+
+SDL 系ビルド (SDL_EVENT_TEXT_INPUT 由来) と WINVER (WM_CHAR からのサロゲート合成) の
+両方で発生します。フォーカスのあるレイヤへは互換のため従来どおり
+[Layer.onKeyPress](Layer.md#onkeypress) が 1 文字 (UTF-16 code unit) 単位で並行して届きます。
+
+自動テストからは `Agent.text("...")` で実入力と同じ経路に注入できます
+(Elements ダイアログのテキスト欄にフォーカスがあればそちらが消費します)。
 
 ---
 

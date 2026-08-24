@@ -117,3 +117,67 @@ reactive 更新のため `text_var` も行ごと (`status0`, `status1`, ...)。
 外す際の注意として、`label` は明示した改行文字でしか改行しない (自動折返しはしない)
 ので、幅で折り返したい箇所は `text_area` を使うこと。 また `text_var` で**行数が
 変わる**差し替えをすると、次に親がレイアウトし直すまで高さが追従しない。
+
+---
+
+## 2. input_box のキャレット (カーソル) 位置がずれる (優先度: 中)
+
+報告: 2026-08-24、softkey_ime デモの Elements 入力欄 (input_box) で、テキスト入力時の
+キャレット表示位置が実際の挿入位置とずれて見える。**以前からの既知バグ** (今回の
+onTextInput 移行とは無関係、それ以前から発生)。
+
+環境: krkrz SDL3 / WINVER 両ビルドの overlay ダイアログ (`Dialog.showDict` 系 +
+`input_box`)。glyphware 統合後のビルドで確認。
+
+原因候補 (未調査): cycfi elements の `basic_input_box` はキャレット x 座標を自前の
+テキスト計測で求めるが、実描画は krkrz 側 backend (glyphware) が行うため、
+**計測と描画で字幅の計算系が異なる**とずれる (プロポーショナル/日本語で顕著になる
+はず)。elements_modal のテキスト計測 seam と描画 backend の字幅を一致させる必要が
+ありそう。
+
+再現: softkey_ime デモ → パネルの「Elements 入力欄」に日本語/ASCII 混在テキストを
+入力してキャレット位置を目視。
+
+---
+
+## 3. input_box にプログラム的フォーカスが効かない (優先度: 中)
+
+報告: 2026-08-24。overlay モーダルの `"input_box"` に `"initial_focus": true` を
+指定しても、開いた直後の打鍵が入力欄に入らない (クリックすれば入る)。同根で
+`focus_by_id` / `Agent.dialogFocus(i, id)` も input_box には効かない
+(`Agent.dialogs()` の focused が "" のまま)。
+
+確認手順: showModalJson で input_box (initial_focus:true) を開き、クリックせずに
+Agent.text → 入力欄に入らない。クリック後の Agent.text は入る。
+
+実装状況: json_layout の `note_initial_focus` は `ce::input_box()` の外側
+composite を登録し、overlay_session::start が `view->focus(element_ptr)`
+(asio::post デファード) を呼んでいる。ボタンにはフォーカスリングが乗るケースが
+あるので view->focus 自体は動いているが、**input_box の編集フォーカス (キャレット
++ text 受理) に変換されていない**。cycfi の composite focus 連鎖と input_box
+proxy 階層の対応付けを調査する必要あり。
+
+影響: System.inputString overlay (SDL) は開いた直後にそのまま打鍵できず、
+一度クリックが必要。Steam Deck では focus 駆動 OSK が「開いただけでは出ない」
+ことにもつながる (クリック/タップで focus すれば出る)。
+
+---
+
+## 4. overlay ダイアログのマウス反応位置が表示とずれる (優先度: 中)
+
+報告: 2026-08-24。overlay ダイアログ (softkey_ime デモのパネル等) で、ウィジェットの
+見た目の位置とマウス/タッチの反応位置がずれる。**PC (SDL Windows) と Steam Deck の
+両方で再現** = プラットフォーム非依存。報告者の見立て: present fit (拡縮・配置) の
+調整とマウス座標変換の不整合。
+
+関連コード: ElementsDialogManager.cpp の「マウス座標 → session へ渡す座標」変換
+(TranslateWindowToDrawArea で DestRect 原点を引いた描画領域基準 → 原点足し戻し →
+present fit の倍率・配置オフセットの逆変換)。描画側の present 変換
+(present_scale/off) と入力側の逆変換のどちらかが片方だけ更新されている、または
+基準 (window client / DestRect / surface) の取り違えを疑う。
+
+§2 (input_box のキャレット位置ずれ) と原因が同じ可能性あり (両方とも「計測系と
+表示系の座標変換の不一致」)。§2/§4 はまとめて調査するのが良い。
+
+再現: softkey_ime デモのパネルで、ボタンやピッカーの端をクリックして反応位置と
+見た目の対応を観察。
