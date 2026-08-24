@@ -263,7 +263,11 @@ BiDi 混在・絵文字混在・計測・矩形内折り返し・タイプライ
   Noto Emoji) が自動登録され、追加フォントは
   `Dialog.registerFont(family, storage[, weight, slant, stretch])` /
   `Dialog.registerFontDir(dir)` で登録します。ストレージパス (XP3 内・
-  `resource://` 含む) をそのまま渡せます。
+  `resource://` 含む) をそのまま渡せます。多言語 UI で表示言語ごとに
+  フォント (JP/TC/SC 等) を自動で切り替えるには
+  [Dialog.fontLanguages](../reference/Dialog.md#fontlanguages)
+  (言語連動フォント置換) を使います
+  ([ダイアログ](Dialog.md) の「言語連動フォント置換」節参照)。
 - 矩形への流し込みは**折り返しロジックも共有**します。ダイアログの
   `text_area` ウィジェットは上記 `drawShapedTextArea` と同じ折り返し・
   行頭行末禁則・クラスタ単位の文字送りを通るため、同じ本文・同じ幅なら

@@ -216,6 +216,7 @@
       "active",
       "defaultFontFamily",
       "focusRing",
+      "fontLanguages",
       "hasPhysicalKeyboard",
       "language",
       "partialRedraw",
@@ -231,6 +232,7 @@
     "file": "src/core/common/visual/LayerIntf.cpp",
     "methods": [
       "addFont",
+      "getDefaultVariations",
       "getEscHeightX",
       "getEscHeightY",
       "getEscWidthX",
@@ -244,6 +246,7 @@
       "mapPrerenderedFont",
       "queryFonts",
       "registerFontFile",
+      "setDefaultVariations",
       "unmapPrerenderedFont"
     ],
     "properties": [

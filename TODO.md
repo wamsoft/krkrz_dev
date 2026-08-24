@@ -93,6 +93,16 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 
 ## 最近クローズしたもの
 
+- ✅ Elements の言語連動フォント置換 `font_languages` (elements `56d1318d`〜 /
+  src/core `c6444966`)
+  多言語 UI で表示言語に応じて JP/TC/SC 等のフォントを自動で差し替える
+  (共有コードポイントの漢字を正しい地域字形で描画)。宣言は画面 JSON /
+  app.jsonc top-level / `Dialog.fontLanguages` の 3 系統、widget 明示
+  `"locale"` で個別固定可、`#tag=val` 軸サフィックス温存。実装は elements
+  フォント層に一元化 (krkrz は submodule bump + TJS プロパティのみ)。
+  設計 SSOT = [src/core/doc/FontEngine.md](src/core/doc/FontEngine.md)
+  「言語連動フォント置換」節、ガイド = [doc/guide/Dialog.md](doc/guide/Dialog.md)。
+  既知の制限 (text_area 非追従 / グローバル表) も同節に記載
 - ✅ 設定ファイル (`.cf` / `.cfu`) の行正規化と、デスクトップ SDL の探索規約を
   WINVER へ統一 (src/core `43a0a827`)
   行末の改行が値に混入していた (win32 = `fgets` で LF が残る / generic =

@@ -176,6 +176,19 @@ dlg.showJson(json);             // 非モーダル
 
 チェックボックスの ✓ や selection_menu の ▼ などのアイコングリフは、本文フォントではなくアイコンフォント `elements_basic.ttf` ( `resource/` に同梱 ) で描画されます。エンジンが自動登録するため通常は意識不要ですが、リソースを差し替える構成でこのフォントを外すと「枠は出るが ✓ が出ない」状態になります。
 
+### 可変フォント ( ウェイト指定つき登録 )
+
+`registerFont` のパスに `"#tag=val"` サフィックスを付けると、可変フォントの軸インスタンスを別名として登録できます。画面 JSON 側は `"font": "MyFont-Medium"` のような名前だけで、実体は 1 つの可変フォントに集約できます。widget の `"font"` に直接 `"MyFont#wght=700"` と書く指定も同じ表記です。
+
+```tjs
+Dialog.registerFont("MyFont", "fonts/MyFont-VF.ttf");                   // 素の VF ( 無指定 = wght=400 )
+Dialog.registerFont("MyFont-Medium", "fonts/MyFont-VF.ttf#wght=500");   // 別名 = 軸インスタンス
+```
+
+### 言語連動フォント置換 ( 多言語 UI )
+
+日本語 / 繁体字 / 簡体字のように文字体系ごとの別フォントを持つ UI では、[Dialog.fontLanguages](../reference/Dialog.md#fontlanguages) に言語→ファミリの置換表を設定しておくと、[Dialog.language](../reference/Dialog.md#language) の切替に連動してフォント解決時にファミリが差し替わります ( 共有コードポイントの漢字を表示言語に合った地域字形で描画できます )。表は画面 JSON の top-level `"font_languages"` でも宣言でき、特定 widget だけ言語を固定したい場合は widget の `"locale"` を指定します。
+
 ## ビルド構成
 
 ダイアログ機能は `KRKRZ_USE_ELEMENTS=ON` ( デフォルト ) でビルドされたエンジンで利用できます。SDL3 ビルドと WINVER ( Windows ネイティブ / D3D11 ) ビルドの両方に対応します。`KRKRZ_USE_ELEMENTS=OFF` でビルドした場合は [Dialog](../reference/Dialog.md) クラスは登録されず、ダイアログ関連のコードはリンクから除外されて実行ファイルサイズが削減されます。
@@ -190,3 +203,4 @@ dlg.showJson(json);             // 非モーダル
 - [Dialog.onAction](../reference/Dialog.md#onaction) / [onScreen](../reference/Dialog.md#onscreen) / [onScreenLeave](../reference/Dialog.md#onscreenleave) — イベント
 - [Dialog.active](../reference/Dialog.md#active) — 非モーダルの teardown 完了判定
 - [Dialog.registerFont](../reference/Dialog.md#registerfont) / [registerFontDir](../reference/Dialog.md#registerfontdir) / [defaultFontFamily](../reference/Dialog.md#defaultfontfamily) — フォント登録
+- [Dialog.language](../reference/Dialog.md#language) / [fontLanguages](../reference/Dialog.md#fontlanguages) — i18n ( 表示言語と言語連動フォント置換 )
