@@ -72,6 +72,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [defaultFontFamily](#defaultfontfamily)
 - [active](#active)
 - [language](#language)
+- [fontLanguages](#fontlanguages)
 - [virtualKeyboard](#virtualkeyboard)
 - [hasPhysicalKeyboard](#hasphysicalkeyboard)
 - [focusRing](#focusring)
@@ -190,6 +191,48 @@ global.Dialog.language = "en";     // 表示中の画面もその場で切り替
 
 読み出すと設定済みの言語を返します。未設定なら空文字 ( = 各画面 JSON の
 `lang` 指定に従う ) です。`strings` を持たない画面では何も起きません。
+
+---
+
+### fontLanguages
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Object`
+
+**解説**
+
+言語連動フォント置換表
+
+文字体系ごとの別フォント ( Noto Sans JP / TC / SC など ) を持つ多言語 UI で、
+表示言語に応じてフォント解決時にファミリを差し替えるための表です
+( クラス全体に効く static 相当 )。日中で共有しているコードポイントの漢字を、
+表示言語に合った地域字形で描画できます。
+
+言語コードをキーに、`map` ( ファミリ名または [registerFont](#registerfont) の
+別名 → 置換先ファミリ ) と `fallback` ( 任意。その言語のときの theme 既定
+ファミリチェーンの並び ) を持つ辞書 ( または同形の JSON 文字列 ) を代入します。
+
+```tjs
+global.Dialog.fontLanguages = %[
+"tc" => %[ "map" => %[ "Noto Sans JP" => "Noto Sans TC" ] ],
+"sc" => %[ "map" => %[ "Noto Sans JP" => "Noto Sans SC" ] ] ];
+global.Dialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォントで描画
+```
+
+`map` は widget の `"font"` 指定と theme 既定チェーンの各ファミリトークンに
+適用され、`"#tag=val"` の可変軸サフィックスは温存されます ( JP/TC/SC が同じ
+軸を持つ可変フォントならウェイト指定がそのまま引き継がれます )。適用される
+言語は widget の明示 `"locale"` があればそれ、無ければ [language](#language)
+です。表にエントリの無い言語では置換されません。
+
+画面 JSON / app.jsonc の top-level `"font_languages"` と同じ表で、言語単位に
+マージ登録されます ( 後から設定した方が言語ごとに上書き )。読み出すと最後に
+代入した表を JSON 文字列で返します ( 未設定なら空文字。画面 JSON 側の宣言は
+含みません )。
+
+`text_area` はビルド時にフォントが確定するため、表示中の言語切替には追従
+しません ( 画面を開き直すと反映されます )。
 
 ---
 

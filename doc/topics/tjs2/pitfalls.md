@@ -108,7 +108,7 @@ if (obj.name !== void) { ... }                          // 正しい
 
 | API | 状況 |
 |---|---|
-| `System.appDataPath` / `personalPath` | WINVER 限定。保存先は `System.dataPath` を使う |
+| `System.appDataPath` / `personalPath` | 2026-08-25 に SDL3 / 汎用ビルドへも追加済 ( Windows では WINVER と同じ解決、他 OS では `exePath` と同じ値 )。それ以前のエンジンの汎用ビルドには無いので `typeof` 確認。保存先は `System.dataPath` を使う |
 | `System.desktopLeft/Top/Width/Height` | WINVER 限定。解像度だけなら `System.screenWidth/Height` |
 | `System.urldecode` / `readRegValue` 等 | Windows 拡張。SDL3 ビルドには無い |
 | `System.setMemoryOverlay` / `setPadOverlay` | フラグは全ビルド共通だが、描画するのは OGL 系 / SDL の DrawDevice ( WINVER 既定の D3D11 では出ない ) |

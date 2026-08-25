@@ -449,7 +449,7 @@
         "This vertex buffer is constant.",
         "Unable to initialize OpenGL.",
         "Unable to initialize glad EGL.",
-        "Unable to load glad GLES.\n",
+        "Unable to load glad GLES (could not resolve GL functions).\nOpenGL ES context creation may have failed;\ncheck the preceding errors in the log.\nOn Windows this happens when the OpenGL driver lacks ES profile support\nand ANGLE's libEGL.dll / libGLESv2.dll are not found.\n",
         "Unknown data type.",
         "VertexBinder is empty.",
         "cannot get layerEventTargetInterface",

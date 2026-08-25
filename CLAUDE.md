@@ -33,6 +33,10 @@ PRESET=x64-windows-sdl BUILD_TYPE=Debug CMAKEOPT='-DKRKRZ_USE_SJIS=ON' make preb
 
 There are no automated tests at this umbrella level. The only test target is the SIMD parity CTest harness inside `src/core` (`krkrz_simd_parity_test`, CTest name `simd_parity`), described in `src/core/CLAUDE.md`.
 
+**Windows builds**: the verification baseline is **Visual Studio 2022 v17.14 with its bundled CMake / Ninja**; other VS versions or separately installed CMake toolchains are untested.
+
+**Linux builds**: the verification baseline for the `x64-linux` preset (both this umbrella and `src/core`) is the Docker build environment from the [steamdev](https://github.com/wamsoft/steamdev) repo's `deckbuild/` — Valve's Steam Linux Runtime 3.0 "sniper" SDK (Debian 11 / glibc 2.31). Do not treat a direct build on a newer-glibc distro (e.g. WSL Ubuntu) as Linux build confirmation. The root `deckproject.toml` is the steamdev project definition (build → stage → deploy to a Steam Deck). SSOT: `src/core/doc/LinuxBuild.md`.
+
 ## Plugin selection
 
 Plugins to build live in the top-level `CMakeLists.txt` as two lists consumed by `src/core`:
