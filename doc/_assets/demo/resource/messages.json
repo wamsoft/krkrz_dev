@@ -449,7 +449,7 @@
         "この頂点バッファは定数です",
         "OpenGL を初期化できません",
         "glad EGL を初期化できません",
-        "glad GLES を読み込めません\n",
+        "glad GLES を読み込めません (GL 関数を解決できませんでした)。\nOpenGL ES コンテキストの作成に失敗している可能性があります。\n直前のログのエラーを確認してください。\nWindows では OpenGL ドライバが ES プロファイル非対応で\nANGLE の libEGL.dll / libGLESv2.dll も見つからない場合に発生します\n",
         "不明なデータ型です",
         "VertexBinder が空です",
         "layerEventTargetInterface を取得できません",

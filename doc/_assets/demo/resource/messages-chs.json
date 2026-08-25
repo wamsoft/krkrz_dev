@@ -449,7 +449,7 @@
         "此顶点缓冲区是常量",
         "无法初始化 OpenGL",
         "无法初始化 glad EGL",
-        "无法加载 glad GLES\n",
+        "无法加载 glad GLES（无法解析 GL 函数）。\nOpenGL ES 上下文可能创建失败；请检查日志中之前的错误。\n在 Windows 上，当 OpenGL 驱动不支持 ES profile\n且找不到 ANGLE 的 libEGL.dll / libGLESv2.dll 时会发生\n",
         "未知的数据类型",
         "VertexBinder 为空",
         "无法获取 layerEventTargetInterface",
