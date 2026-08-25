@@ -32,6 +32,9 @@ Win32 や各種デスクトップ向けのビルドは本リポジトリ (umbrel
 
 ## ビルド手順
 
+Windows 版のビルド環境は **Visual Studio 2022 (v17.14) およびその同梱 cmake**
+を基準としています。他のバージョン・他のツールチェーンではテストされていません。
+
 Win32 版を作成する場合は、Visual Studio のコマンドラインの x86 版を
 起動してそのコンソールから作業するようにしてください。x86 用の設定に
 なってないと vcpkg が誤動作します
@@ -122,6 +125,29 @@ OpenGL ドライバの ES プロファイルが使えない環境向けのフォ
 入手先は [mmozeiko/build-angle](https://github.com/mmozeiko/build-angle) の
 Releases (毎日ビルド、x64 / arm64) が手軽です。詳細と注意点 (PATH 上の別 ANGLE を
 拾う問題等) は `src/core/README.md` の「OpenGL ES の実行環境」を参照してください。
+
+### Linux ビルド (検証環境)
+
+Linux 版のビルド確認基準は、[steamdev](https://github.com/wamsoft/steamdev)
+リポジトリの `deckbuild/` で構築する Docker ビルド環境です。中身は Valve 公式の
+**Steam Linux Runtime 3.0 "sniper" SDK** (Debian 11 / glibc 2.31) で、ここで
+ビルドしたバイナリは SteamOS ネイティブ / Steam Linux Runtime コンテナ /
+glibc 2.31 以降の一般ディストリビューションで動きます。
+
+```bash
+# WSL2 の docker で。初回のみイメージ作成
+<steamdev>/deckbuild/deckbuild.sh image
+
+# umbrella をビルド (configure + build + install → bin/x64-linux/Release/)
+<steamdev>/deckbuild/deckbuild.sh -s /mnt/d/work/kirikiri/krkrz_dev all
+```
+
+リポジトリルートの `deckproject.toml` は steamdev CLI 用のプロジェクト定義で、
+ビルドから Steam Deck への転送・起動までを一括で回せます
+(`steamdev -d <deck> project -p . ship linux`)。
+
+互換性の考え方・バイナリの合格基準 (要求 glibc シンボル ≤ 2.31 等) の詳細は
+[src/core/doc/LinuxBuild.md](src/core/doc/LinuxBuild.md) を参照してください。
 
 ### プラグイン作成
 

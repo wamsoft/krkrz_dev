@@ -268,11 +268,18 @@ var path = System.resourcePath + "notosansjp-regular.otf";
 
 マイドキュメントのパス
 
-ユーザのマイドキュメントのパスを表します。Windows の場合、レジストリの
-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders の
-Personal で表されるフォルダが返されます。通常これは「マイドキュメント」フォルダを指します。
+ユーザのマイドキュメントのパスを表します。Windows の場合、OS の Known Folder
+「ドキュメント」( FOLDERID_Documents ) のフォルダが返されます ( OneDrive
+リダイレクトも解決されます )。取得できない場合は RoamingAppData、それも
+なければ [System.exePath](System.md#exepath) と同じフォルダを返します。
 
-このフォルダがない場合は [System.exePath](System.md#exepath) と同じフォルダを返します。
+!!! note "SDL3 / 汎用ビルドでの挙動"
+    2026-08-25 以降のエンジンでは SDL3 / 汎用ビルドにも存在します。Windows では
+    WINVER と同じ解決、Windows 以外の OS では専用フォルダを提供しないため
+    [System.exePath](System.md#exepath) と同じ値を返します ( exePath と等値なら
+    「別置き場なし」と判断できます )。それ以前のエンジンの汎用ビルドには
+    存在しないため、古いエンジンも対象にするスクリプトでは
+    `typeof System.personalPath` で存在を確認してください。
 
 **関連:** [System.appDataPath](System.md#appdatapath) / [System.exePath](System.md#exepath)
 
@@ -286,24 +293,20 @@ Personal で表されるフォルダが返されます。通常これは「マ�
 
 ユーザのホームディレクトリのパス
 
-ユーザのホームディレクトリのパスを表します。Windows の場合、レジストリの
-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders の
-AppData で表されるフォルダが返されます。このフォルダがない場合は [System.exePath](System.md#exepath) と同じ
-フォルダを返します。
+ユーザのホームディレクトリのパスを表します。Windows の場合、OS の Known Folder
+「RoamingAppData」( FOLDERID_RoamingAppData ) のフォルダが返されます。通常これは
+`C:\Users\<ユーザ名>\AppData\Roaming` ( C: の部分は環境によって異なります ) で、
+隠しフォルダになっています。取得できなかった場合は
+[System.exePath](System.md#exepath) と同じフォルダになります。
 
-これは、通常、以下の通りになります。
-
-XP の場合
-`C:\Documents and Settings\<ユーザ名>\Application Data\` ( C: の部分は環境によって異なります )
-Vista, 7, 8 の場合
-`C:\Users\<ユーザ名>\AppData\Roaming` ( C: の部分は環境によって異なります )
-何らかの理由で レジストリキー ( 上記参照 ) を読み出せなかった場合
-吉里吉里の実行可能ファイルのあるフォルダ ([System.exePath](System.md#exepath))になります
-
-!!! warning "Windows ネイティブ ( WINVER ) ビルド限定"
-    このプロパティは SDL3 / 汎用ビルドには存在しません。全ビルドで動く
-    スクリプトでは `typeof System.appDataPath` で存在を確認するか、
-    保存先には [System.dataPath](System.md#datapath) を使用してください。
+!!! note "SDL3 / 汎用ビルドでの挙動"
+    2026-08-25 以降のエンジンでは SDL3 / 汎用ビルドにも存在します。Windows では
+    WINVER と同じ解決、Windows 以外の OS では専用フォルダを提供しないため
+    [System.exePath](System.md#exepath) と同じ値を返します ( exePath と等値なら
+    「別置き場なし」と判断できます )。それ以前のエンジンの汎用ビルドには
+    存在しないため、古いエンジンも対象にするスクリプトでは
+    `typeof System.appDataPath` で存在を確認するか、保存先には
+    [System.dataPath](System.md#datapath) を使用してください。
 
 **関連:** [System.dataPath](System.md#datapath) / [System.exePath](System.md#exepath) / [System.personalPath](System.md#personalpath)
 
@@ -325,8 +328,8 @@ Vista, 7, 8 の場合
 
 **全ビルドに存在する**ため、保存先の取得はこのプロパティを使うのが安全です
 ( [System.appDataPath](System.md#appdatapath) /
-[System.personalPath](System.md#personalpath) は Windows ネイティブ
-ビルド限定 )。
+[System.personalPath](System.md#personalpath) は 2026-08-25 より前のエンジンの
+汎用ビルドには存在せず、Windows 以外の OS では `exePath` と同じ値になります )。
 
 **関連:** [System.appDataPath](System.md#appdatapath)
 

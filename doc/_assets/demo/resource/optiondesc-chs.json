@@ -1,0 +1,1730 @@
+[
+	{
+		"category": "系统通用",
+		"options": [
+			{
+				"caption": "文件保存位置",
+				"description": "指定吉里吉里保存各种文件的位置。\n\n在指定的字符串中可以使用以下的特殊字符串。\n\n$(exepath)  此字符串会替换成System.exePath\n\n$(appdatapath)  此字符串会替换成System.appDataPath\n\n$(personalpath)  此字符串会替换成System.personalPath\n\n$(vistapath)  此字符串在Vista以后的环境会替换成$(appdatapath)，在Vista以前环境会替换成$(exepath)\n\n这个值可以通过System.dataPath属性取得。",
+				"name": "datapath",
+				"type": "string",
+				"length": 255,
+				"user": false,
+				"value": "$(exepath)\\savedata"
+			},
+			{
+				"caption": "处理间隔",
+				"description": "这个设定可以让画面切换时的各种处理以一定的时间间隔运行，从而限制CPU的使用，降低CPU使用率。\n\n如果设定成“不等待”，画面切换时CPU的使用率可能会达到100%. \n\n设定成12～120(Hz)的各个数值的话，处理会按此频率运行。数值越小CPU的负载的负担就越小，不过运行可能会显得不流畅。在一些环境中可能没有效果。\n\n如果图形-等待垂直同步是“使用”状态的话，这个设定会被无视。",
+				"name": "contfreq",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "0",
+						"desc": "不等待",
+						"default": true
+					},
+					{
+						"value": "12",
+						"desc": "12Hz"
+					},
+					{
+						"value": "15",
+						"desc": "15Hz"
+					},
+					{
+						"value": "25",
+						"desc": "25Hz"
+					},
+					{
+						"value": "30",
+						"desc": "30Hz"
+					},
+					{
+						"value": "45",
+						"desc": "45Hz"
+					},
+					{
+						"value": "50",
+						"desc": "50Hz"
+					},
+					{
+						"value": "60",
+						"desc": "60Hz"
+					},
+					{
+						"value": "70",
+						"desc": "70Hz"
+					},
+					{
+						"value": "75",
+						"desc": "75Hz"
+					},
+					{
+						"value": "80",
+						"desc": "80Hz"
+					},
+					{
+						"value": "83",
+						"desc": "83Hz"
+					},
+					{
+						"value": "90",
+						"desc": "90Hz"
+					},
+					{
+						"value": "93",
+						"desc": "93Hz"
+					},
+					{
+						"value": "100",
+						"desc": "100Hz"
+					},
+					{
+						"value": "107",
+						"desc": "107Hz"
+					},
+					{
+						"value": "120",
+						"desc": "120Hz"
+					}
+				]
+			},
+			{
+				"caption": "内存使用量",
+				"description": "设定使用的内存量。\n\n选择“低”的话会比选择“普通”时更节约地使用内存，不过性能会下降。选择“低”的时候，“图像-图像缓存限制”会强制设定成“不使用缓存”。",
+				"name": "memusage",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "normal",
+						"desc": "普通",
+						"default": true
+					},
+					{
+						"value": "low",
+						"desc": "低"
+					}
+				]
+			},
+			{
+				"caption": "计时器事件容许量限制",
+				"description": "设定是否限制计时器事件的容许量。\n\n设定成“是”的话，在处理较慢的电脑上可以回避因为系统运行太慢不能对用户操作做出反应的问题。",
+				"name": "laxtimer",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "no",
+						"desc": "否",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "是"
+					}
+				]
+			},
+			{
+				"caption": "低优先度",
+				"description": "设定是否用地低优先度运行切换画面。\n\n选择“是”的话也许可以改善画面切换时漏音的问题。",
+				"name": "lowpri",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "no",
+						"desc": "否",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "是"
+					}
+				]
+			},
+			{
+				"caption": "启动脚本",
+				"description": "设定运行时第一个执行的脚本。",
+				"name": "startup",
+				"type": "string",
+				"length": 255,
+				"user": false,
+				"value": "startup.tjs"
+			},
+			{
+				"caption": "设定发生例外时用的文本编辑器",
+				"description": "设定发生例外时用的文本编辑器。",
+				"name": "exceptionexe",
+				"type": "string",
+				"length": 255,
+				"user": false,
+				"value": "notepad.exe"
+			},
+			{
+				"caption": "发生例外时编辑器的启动参数",
+				"description": "设定发生例外时启动编辑器的参数。\n\n文件路径是 %filepath%，%line% 是行号。",
+				"name": "exceptionarg",
+				"type": "string",
+				"length": 255,
+				"user": false,
+				"value": "%filepath%"
+			},
+			{
+				"caption": "使用LFH",
+				"description": "启用防止内存碎片化的功能。\n\n在发生内存不足等问题时，启用可能会解决问题。在Vista以后的系统上无论选哪个都会启用。\n\n仅在 Windows 上有效。",
+				"name": "uselfh",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "no",
+						"desc": "否",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "是"
+					}
+				]
+			},
+			{
+				"caption": "对进程・CRT堆进行压缩",
+				"description": "在垃圾回收的时候对进程・CRT堆进行压缩。\n\n可能会有效改善内存不足错误频发的情况，不过压缩会占用一点处理时间。\n\n仅在 Windows 原生 (WINVER) 版本有效。",
+				"name": "ghcompact",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "no",
+						"desc": "否",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "是"
+					}
+				]
+			},
+			{
+				"caption": "消息语言",
+				"description": "明确指定引擎消息和选项说明的语言。\n\n可指定 BCP-47 形式（\"ja-JP\" / \"en-US\" / \"zh-Hans\" 等）或简写形式（ja / en / chs / cht）。未指定时遵循操作系统的语言设置 (System.systemLanguage)。\n\n在 WINVER 版本中影响资源的语言解析（消息字符串、设置对话框）；在 SDL3 版本中影响 messages*.json / optiondesc*.json 的选择。要影响消息字符串，必须在命令行中直接指定（配置文件中的指定仅影响选项说明的语言）。",
+				"name": "language",
+				"type": "string",
+				"length": 32,
+				"user": false,
+				"value": ""
+			}
+		]
+	},
+	{
+		"category": "输入",
+		"options": [
+			{
+				"caption": "鼠标滚轮转动检测方法",
+				"description": "设定如何检测鼠标滚轮的转动。\n\n选择「不使用」则无法使用鼠标滚轮。\n\n仅在 Windows 原生 (WINVER) 版本有效。以前的「DirectInput」方式已被废除，指定时按「窗口消息」处理。",
+				"name": "wheel",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "message",
+						"desc": "窗口消息",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "不使用"
+					}
+				]
+			},
+			{
+				"caption": "是否使用游戏手柄",
+				"description": "设定是否使用手柄（游戏手柄）。\n\n选择「不使用」则无法使用手柄。当其他设备被误认为手柄导致误动作时，请指定「不使用」。\n\n手柄输入已改为基于 XInput (WINVER) / SDL_Gamepad (SDL3)。以前的「DirectInput」指定按「使用」处理。",
+				"name": "joypad",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "不使用"
+					}
+				]
+			},
+			{
+				"caption": "手柄按键连击延迟",
+				"description": "设定游戏手柄判断按键连击需要多少毫秒。",
+				"name": "paddelay",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "100",
+						"desc": "100毫秒"
+					},
+					{
+						"value": "200",
+						"desc": "200毫秒"
+					},
+					{
+						"value": "300",
+						"desc": "300毫秒"
+					},
+					{
+						"value": "400",
+						"desc": "400毫秒"
+					},
+					{
+						"value": "500",
+						"desc": "500毫秒",
+						"default": true
+					},
+					{
+						"value": "600",
+						"desc": "600毫秒"
+					},
+					{
+						"value": "700",
+						"desc": "700毫秒"
+					},
+					{
+						"value": "800",
+						"desc": "800毫秒"
+					},
+					{
+						"value": "900",
+						"desc": "900毫秒"
+					},
+					{
+						"value": "1000",
+						"desc": "1000毫秒"
+					},
+					{
+						"value": "-1",
+						"desc": "不使用按键连击"
+					}
+				]
+			},
+			{
+				"caption": "手柄按键连击间隔",
+				"description": "设定游戏手柄按键连击间隔多少毫秒。数值越小速度越快。",
+				"name": "padinterval",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "10",
+						"desc": "10毫秒"
+					},
+					{
+						"value": "20",
+						"desc": "20毫秒"
+					},
+					{
+						"value": "30",
+						"desc": "30毫秒",
+						"default": true
+					},
+					{
+						"value": "40",
+						"desc": "40毫秒"
+					},
+					{
+						"value": "50",
+						"desc": "50毫秒"
+					},
+					{
+						"value": "60",
+						"desc": "60毫秒"
+					},
+					{
+						"value": "70",
+						"desc": "70毫秒"
+					},
+					{
+						"value": "80",
+						"desc": "80毫秒"
+					},
+					{
+						"value": "90",
+						"desc": "90毫秒"
+					},
+					{
+						"value": "100",
+						"desc": "100毫秒"
+					},
+					{
+						"value": "200",
+						"desc": "200毫秒"
+					},
+					{
+						"value": "300",
+						"desc": "300毫秒"
+					},
+					{
+						"value": "400",
+						"desc": "400毫秒"
+					},
+					{
+						"value": "500",
+						"desc": "500毫秒"
+					},
+					{
+						"value": "700",
+						"desc": "700毫秒"
+					},
+					{
+						"value": "1000",
+						"desc": "1000毫秒"
+					}
+				]
+			},
+			{
+				"caption": "输入法状态控制",
+				"description": "设定是否控制输入法的状态。\n\n选择“不控制”的话可能可以回避无法输入语言的问题。\n\n仅在 Windows 原生 (WINVER) 版本有效。",
+				"name": "controlime",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "控制",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "不控制"
+					}
+				]
+			},
+			{
+				"caption": "手柄按钮分配方式",
+				"description": "设定如何将手柄的物理按钮分配到 VK_PAD1〜VK_PAD4。\n\n「按刻印分配」时 VK_PAD1 分配到刻印为 A 的按钮（PlayStation 上为 ✕），即使是任天堂系等位置不同的手柄，画面提示与实际按下的按钮也会一致。\n\n「按位置分配」为传统分配方式：下=VK_PAD1、右=VK_PAD2、左=VK_PAD3、上=VK_PAD4。\n\n仅在 SDL3 版本有效。WINVER 版本基于 XInput，刻印与位置不会不一致。",
+				"name": "padbuttons",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "label",
+						"desc": "按刻印分配",
+						"default": true
+					},
+					{
+						"value": "position",
+						"desc": "按位置分配"
+					}
+				]
+			}
+		]
+	},
+	{
+		"category": "声音",
+		"options": [
+			{
+				"caption": "声音输出频率",
+				"description": "设定声音输出(混音器)的采样频率。\n\n更改设定可能不会改变播放情况。",
+				"name": "wsfreq",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "8000",
+						"desc": "8kHz"
+					},
+					{
+						"value": "11025",
+						"desc": "11kHz"
+					},
+					{
+						"value": "12000",
+						"desc": "12kHz"
+					},
+					{
+						"value": "16000",
+						"desc": "16kHz"
+					},
+					{
+						"value": "22050",
+						"desc": "22kHz"
+					},
+					{
+						"value": "24000",
+						"desc": "24kHz"
+					},
+					{
+						"value": "32000",
+						"desc": "32kHz"
+					},
+					{
+						"value": "44100",
+						"desc": "44.1kHz",
+						"default": true
+					},
+					{
+						"value": "48000",
+						"desc": "48kHz"
+					},
+					{
+						"value": "64000",
+						"desc": "64kHz"
+					},
+					{
+						"value": "88200",
+						"desc": "88.2kHz"
+					},
+					{
+						"value": "96000",
+						"desc": "96kHz"
+					}
+				]
+			},
+			{
+				"caption": "预先初始化音频设备",
+				"description": "在启动时预先初始化音频（声音输出）设备。\n\n如果仅在首次播放声音时才打开设备，播放开始会略有延迟，声音开头可能会被截断。启用此项会在启动时完成初始化，从而避免这种截断。\n\n如果因不稳定的声音驱动等原因希望避免在启动时打开设备，请选择“否”。",
+				"name": "wspreinit",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "是",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "否"
+					}
+				]
+			}
+		]
+	},
+	{
+		"category": "图形",
+		"options": [
+			{
+				"caption": "图形缓存限制",
+				"description": "设定图形缓存所占内存的最大值。\n\n如果运行中频繁交换缓存的话，选择“不使用缓存”可能会改善问题。",
+				"name": "gclim",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "auto",
+						"desc": "自动(推荐)",
+						"default": true
+					},
+					{
+						"value": "0",
+						"desc": "不使用缓存"
+					},
+					{
+						"value": "4",
+						"desc": "4MB"
+					},
+					{
+						"value": "8",
+						"desc": "8MB"
+					},
+					{
+						"value": "12",
+						"desc": "12MB"
+					},
+					{
+						"value": "16",
+						"desc": "16MB"
+					},
+					{
+						"value": "20",
+						"desc": "20MB"
+					},
+					{
+						"value": "24",
+						"desc": "24MB"
+					},
+					{
+						"value": "28",
+						"desc": "28MB"
+					},
+					{
+						"value": "32",
+						"desc": "32MB"
+					},
+					{
+						"value": "36",
+						"desc": "36MB"
+					},
+					{
+						"value": "40",
+						"desc": "40MB"
+					},
+					{
+						"value": "44",
+						"desc": "44MB"
+					},
+					{
+						"value": "48",
+						"desc": "48MB"
+					},
+					{
+						"value": "52",
+						"desc": "52MB"
+					},
+					{
+						"value": "56",
+						"desc": "56MB"
+					},
+					{
+						"value": "60",
+						"desc": "60MB"
+					},
+					{
+						"value": "64",
+						"desc": "64MB"
+					},
+					{
+						"value": "68",
+						"desc": "68MB"
+					},
+					{
+						"value": "72",
+						"desc": "72MB"
+					},
+					{
+						"value": "76",
+						"desc": "76MB"
+					},
+					{
+						"value": "80",
+						"desc": "80MB"
+					},
+					{
+						"value": "84",
+						"desc": "84MB"
+					},
+					{
+						"value": "88",
+						"desc": "88MB"
+					},
+					{
+						"value": "92",
+						"desc": "92MB"
+					},
+					{
+						"value": "96",
+						"desc": "96MB"
+					},
+					{
+						"value": "100",
+						"desc": "100MB"
+					},
+					{
+						"value": "104",
+						"desc": "104MB"
+					},
+					{
+						"value": "108",
+						"desc": "108MB"
+					},
+					{
+						"value": "112",
+						"desc": "112MB"
+					},
+					{
+						"value": "116",
+						"desc": "116MB"
+					},
+					{
+						"value": "120",
+						"desc": "120MB"
+					},
+					{
+						"value": "124",
+						"desc": "124MB"
+					},
+					{
+						"value": "128",
+						"desc": "128MB"
+					},
+					{
+						"value": "132",
+						"desc": "132MB"
+					},
+					{
+						"value": "136",
+						"desc": "136MB"
+					},
+					{
+						"value": "140",
+						"desc": "140MB"
+					},
+					{
+						"value": "144",
+						"desc": "144MB"
+					},
+					{
+						"value": "148",
+						"desc": "148MB"
+					},
+					{
+						"value": "152",
+						"desc": "152MB"
+					},
+					{
+						"value": "156",
+						"desc": "156MB"
+					},
+					{
+						"value": "160",
+						"desc": "160MB"
+					},
+					{
+						"value": "164",
+						"desc": "164MB"
+					},
+					{
+						"value": "168",
+						"desc": "168MB"
+					},
+					{
+						"value": "172",
+						"desc": "172MB"
+					},
+					{
+						"value": "176",
+						"desc": "176MB"
+					},
+					{
+						"value": "180",
+						"desc": "180MB"
+					},
+					{
+						"value": "184",
+						"desc": "184MB"
+					},
+					{
+						"value": "188",
+						"desc": "188MB"
+					},
+					{
+						"value": "192",
+						"desc": "192MB"
+					},
+					{
+						"value": "196",
+						"desc": "196MB"
+					},
+					{
+						"value": "200",
+						"desc": "200MB"
+					},
+					{
+						"value": "204",
+						"desc": "204MB"
+					},
+					{
+						"value": "208",
+						"desc": "208MB"
+					},
+					{
+						"value": "212",
+						"desc": "212MB"
+					},
+					{
+						"value": "216",
+						"desc": "216MB"
+					},
+					{
+						"value": "220",
+						"desc": "220MB"
+					},
+					{
+						"value": "224",
+						"desc": "224MB"
+					},
+					{
+						"value": "228",
+						"desc": "228MB"
+					},
+					{
+						"value": "232",
+						"desc": "232MB"
+					},
+					{
+						"value": "236",
+						"desc": "236MB"
+					},
+					{
+						"value": "240",
+						"desc": "240MB"
+					},
+					{
+						"value": "244",
+						"desc": "244MB"
+					},
+					{
+						"value": "248",
+						"desc": "248MB"
+					},
+					{
+						"value": "252",
+						"desc": "252MB"
+					},
+					{
+						"value": "256",
+						"desc": "256MB"
+					}
+				]
+			},
+			{
+				"caption": "全屏模式的分辨率",
+				"description": "设定全屏时的分辨率。\n\n选择“自动”的话，引擎会自动选择最合适的分辨率。在纵横比相同的各个分辨率之中，如果程序里定义了合适的分辨率，就会使用这个分辨率。如果没有合适的分辨率，引擎就会把原画面拉伸显示。在这种设定下，即使不使用“全屏时让引擎拉伸显示”，也会认定设置是“适应显示器的大小”。\n\n选择“纵横比相同的分辨率”的话，会选用一个跟窗口模式纵横比的分辨率最相近的分辨率。\n\n选择“最相近的分辨率”的话，就会选择程序里定义的最相近的分辨率，但是不保证此时会保持窗口模式的纵横比。在显像管显示器，以及可以有保持画面纵横比拉伸显示的液晶显示器上面，可以用这个设定。\n\n选择“分辨率不变”的话，全屏时会保持非全屏时的分辨率，不会变化。\n\n仅在 Windows 原生 (WINVER) 版本有效。SDL3 版本的全屏为不改变分辨率的无边框方式，缩放遵循 Window 的几何设置。",
+				"name": "fsres",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "auto",
+						"desc": "自动"
+					},
+					{
+						"value": "proportional",
+						"desc": "纵横比相同的分辨率"
+					},
+					{
+						"value": "nearest",
+						"desc": "最相近的分辨率"
+					},
+					{
+						"value": "nochange",
+						"desc": "分辨率不变",
+						"default": true
+					}
+				]
+			},
+			{
+				"caption": "全屏时让引擎拉伸显示",
+				"description": "定义全屏时引擎如何拉伸画面。\n\n选择“拉伸适配”的话引擎会相应地拉伸画面，以让所有内容都能收在显示器的范围内。如果上下或左右出现空隙的话，空隙会呈现黑色。\n\n选择“拉伸填满”的话引擎会相应地拉伸画面，以让显示器上的画面没有空隙。也因此画面可能会超出显示器的范围。\n\n选择“不拉伸”的话引擎不好拉伸画面。\n\n“全屏模式的分辨率”设定成“自动”的时候，这里设定成“不拉伸”也会视为“拉伸适配”。\n\n仅在 Windows 原生 (WINVER) 版本有效。SDL3 版本的全屏为不改变分辨率的无边框方式，缩放遵循 Window 的几何设置。",
+				"name": "fszoom",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "inner",
+						"desc": "拉伸适配",
+						"default": true
+					},
+					{
+						"value": "outer",
+						"desc": "拉伸填满"
+					},
+					{
+						"value": "no",
+						"desc": "不拉伸"
+					}
+				]
+			},
+			{
+				"caption": "图形演算的分割处理",
+				"description": "设定是否把图形演算分割处理。\n\n更改设定可能会解决画面闪烁的问题，但渲染效率可能会降低。\n\n在使用“双缓存”的时候，推荐把这个设定设置成“不使用”之外的选项。\n\n在 SDL3 版本中未指定时默认为「不进行」（在 OpenGL 环境下驱动同步的开销占主导）。WINVER 版本的默认值为「进行」。",
+				"name": "gsplit",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "使用",
+						"default": true
+					},
+					{
+						"value": "int",
+						"desc": "隔行分割"
+					},
+					{
+						"value": "bidi",
+						"desc": "双方向分割"
+					},
+					{
+						"value": "no",
+						"desc": "不使用"
+					}
+				]
+			},
+			{
+				"caption": "拉伸显示时的平滑化",
+				"description": "设定是否在拉伸时进行平滑化。\n\n这里的平滑化指的是引擎按照“全屏模式的分辨率”拉伸画面时“平滑”地拉伸图像。不使用平滑化的话默认为“双缓存”选择了“使用GDI”的设置。",
+				"name": "smoothzoom",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "是",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "否"
+					}
+				]
+			},
+			{
+				"caption": "反锯齿文字渲染",
+				"description": "设定是否用反锯齿渲染文字。\n\n更改设定的话，可能会解决文字无法显示、文字显示出错等问题。\n\n“再采样(4×4)”比“再采样(8×8)”速度快，但是精读更低。\n\n仅在 Windows 原生 (WINVER) 版本使用 GDI 光栅化器 (Font.rasterizer=1，WINVER 的默认值) 时有效。使用 FreeType 光栅化器或 SDL3 版本时无效。",
+				"name": "aamethod",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "auto",
+						"desc": "自動",
+						"default": true
+					},
+					{
+						"value": "res8",
+						"desc": "重采样(8×8)"
+					},
+					{
+						"value": "res4",
+						"desc": "重采样(4×4)"
+					},
+					{
+						"value": "api",
+						"desc": "Windows API"
+					}
+				]
+			},
+			{
+				"caption": "JPEG图像解码精度",
+				"description": "设定JPEG图像的解码(解压)精度。\n\n选择“高”的话精度会提高，但是速度会降低。\n\n选择“低”的话精度会降低，但是速度会提高。",
+				"name": "jpegdec",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "high",
+						"desc": "高"
+					},
+					{
+						"value": "normal",
+						"desc": "标准",
+						"default": true
+					},
+					{
+						"value": "low",
+						"desc": "低"
+					}
+				]
+			},
+			{
+				"caption": "渲染线程数",
+				"description": "设定渲染时使用的线程数。\n\n通过设定多个渲染进程可能会增强渲染性能，不过也可能会降低性能。",
+				"name": "drawthread",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "auto",
+						"desc": "自动(线程与处理器数相同)"
+					},
+					{
+						"value": "1",
+						"desc": "1线程",
+						"default": true
+					},
+					{
+						"value": "2",
+						"desc": "2线程"
+					},
+					{
+						"value": "4",
+						"desc": "4线程"
+					},
+					{
+						"value": "8",
+						"desc": "8线程"
+					}
+				]
+			},
+			{
+				"caption": "位图内存分配方式",
+				"description": "设定如何分配位图用的内存。\n\n一般用processheap就可以。\n\n仅在 Windows 原生 (WINVER) 版本有效。",
+				"name": "bitmapallocator",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "processheap",
+						"desc": "用professheap分配",
+						"default": true
+					},
+					{
+						"value": "globalalloc",
+						"desc": "用GlobalAlloc分配"
+					},
+					{
+						"value": "separateheap",
+						"desc": "用分割堆分配"
+					},
+					{
+						"value": "malloc",
+						"desc": "用malloc分配"
+					}
+				]
+			},
+			{
+				"caption": "堆的初始分割大小",
+				"description": "设定位图内存分配方式选择“分割堆”时的初始大小。\n\n仅在 Windows 原生 (WINVER) 版本有效。",
+				"name": "bitmapheapsize",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "auto",
+						"desc": "自动(推荐)",
+						"default": true
+					},
+					{
+						"value": "0",
+						"desc": "自动扩大"
+					},
+					{
+						"value": "64",
+						"desc": "64MB"
+					},
+					{
+						"value": "128",
+						"desc": "128MB"
+					},
+					{
+						"value": "256",
+						"desc": "256MB"
+					},
+					{
+						"value": "512",
+						"desc": "512MB"
+					},
+					{
+						"value": "1024",
+						"desc": "1GB"
+					},
+					{
+						"value": "2048",
+						"desc": "2GB"
+					}
+				]
+			},
+			{
+				"caption": "启动时的 DrawDevice",
+				"description": "选择启动时使用的默认 DrawDevice。\n\nSDL3 版本：'sdl'（经由 SDL_Renderer）/ 'sdlogl'（直接 OpenGL ES）/ 'ogl'（OpenGL ES + Canvas 等完整功能）。未指定时，启用 OpenGL 的版本默认为 'sdlogl'，否则为 'sdl'。\n\nWINVER 版本：'basic'（Direct3D 11，默认）/ 'ogl'（OpenGL ES）/ 'null'（不绘制，用于验证）。\n\n使用 'ogl' / 'sdlogl' 时需要 OpenGL ES 可用的环境（WINVER 版本，以及 SDL3 上无法原生创建 GLES 上下文的环境，需要 ANGLE 的 libEGL.dll / libGLESv2.dll）。运行中也可以通过给 Window.drawDevice 赋值来切换，但 SDL3 版本以 'sdl' 启动时，运行中无法切换到 OpenGL 系设备。",
+				"name": "drawdevice",
+				"type": "string",
+				"length": 16,
+				"user": false,
+				"value": ""
+			},
+			{
+				"caption": "SDL_Renderer 后端",
+				"description": "明确指定 SDLDrawDevice 使用的 SDL_Renderer 后端名称（例：direct3d11 / vulkan / opengl / software）。未指定时由 SDL3 自动选择。\n\n仅在 SDL3 版本使用 SDLDrawDevice (-drawdevice=sdl) 时有意义。",
+				"name": "renderer",
+				"type": "string",
+				"length": 32,
+				"user": false,
+				"value": ""
+			},
+			{
+				"caption": "强制以 EGL 创建 OpenGL ES 上下文",
+				"description": "使 OpenGL ES 上下文从一开始就通过 EGL（Windows 上为 ANGLE 的 libEGL.dll / libGLESv2.dll）创建。\n\nSDL3 版本默认在显卡驱动的 OpenGL 实现支持 ES profile 时优先使用它，不支持时才回退到 EGL。如果驱动的 ES profile 实现有问题导致画面异常或初始化失败，指定「进行」可固定为经由 EGL (ANGLE)。\n\n仅在 SDL3 版本有效。WINVER 版本的 OpenGL 始终经由 EGL (ANGLE)。",
+				"name": "forceegl",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "no",
+						"desc": "不进行",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "进行"
+					}
+				]
+			},
+			{
+				"caption": "启动显示器",
+				"description": "在多显示器环境中，指定窗口最初显示在哪个显示器上。\n\n可指定从 1 开始的编号、显示器名称的一部分、'primary'（主显示器）、或 'list'（仅将显示器列表输出到日志）。主要用于测试。",
+				"name": "display",
+				"type": "string",
+				"length": 64,
+				"user": false,
+				"value": ""
+			},
+			{
+				"caption": "视频硬件解码",
+				"description": "设定叠加视频播放 (VideoOverlay) 时，是否对 mp4 / wmv 等 Media Foundation 支持的格式使用硬件解码 (IMFMediaEngine)。\n\n指定「不进行」则所有格式都使用软件解码。请在视频播放有问题的环境中用于排查。webm / mpeg 无论此设置如何始终使用软件解码。\n\n仅在 Windows 原生 (WINVER) 版本有效。",
+				"name": "mediaengine",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "进行",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "不进行"
+					}
+				]
+			}
+		]
+	},
+	{
+		"category": "CPU功能",
+		"options": [
+			{
+				"caption": "SIMD (全部)",
+				"description": "禁用所有SIMD优化，回退到C参考实现。用于调试或问题排查。",
+				"name": "cpusimd",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "禁用所有SIMD"
+					}
+				]
+			},
+			{
+				"caption": "MMX",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpummx",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "3DNow!",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpu3dn",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "SSE",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpusse",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "CMOVcc",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpucmov",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "Enhanced 3DNow!",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpue3dn",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "EMMX (MMX2)",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpuemmx",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "SSE2",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpusse2",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "SSE3",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpusse3",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "SSSE3",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpussse3",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "SSE4.1",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpusse41",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "SSE4.2",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpusse42",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "SSE4a",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpusse4a",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "AVX",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpuavx",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "AVX2",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpuavx2",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "FMA3",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpufma3",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "AES",
+				"description": "CPU识别出现问题的时候请进行调整。",
+				"name": "cpuaes",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可以使用的话就使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "可以使用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "Core Limitation",
+				"description": "运行出现问题的时候请进行调整。",
+				"name": "cpucorelimit",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "限制",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "不限制"
+					}
+				]
+			},
+			{
+				"caption": "NEON (ARM)",
+				"description": "发生 CPU 识别问题时请进行调整。仅在 ARM 环境有效。",
+				"name": "cpuneon",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可用时使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "即使可用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			},
+			{
+				"caption": "ASIMD (ARM64)",
+				"description": "发生 CPU 识别问题时请进行调整。仅在 ARM 环境有效。",
+				"name": "cpuasimd",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "可用时使用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "即使可用也不使用"
+					},
+					{
+						"value": "force",
+						"desc": "强制使用"
+					}
+				]
+			}
+		]
+	},
+	{
+		"category": "排错",
+		"options": [
+			{
+				"caption": "排错模式",
+				"description": "设定是否使用排错模式。\n\n选择“有效”的话吉里吉里会以排错模式运行，开启一些排错辅助功能，但是运行速度会下降。",
+				"name": "debug",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "no",
+						"desc": "无效",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "有效"
+					}
+				]
+			},
+			{
+				"caption": "输出记录到文件",
+				"description": "设定是否把命令行的记录输出到文件。\n\n选择“输出”的话会在文件末尾添加内容。\n\n选择“清除”的话会清除文件原内容再写入记录。",
+				"name": "forcelog",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "no",
+						"desc": "不输出",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "输出"
+					},
+					{
+						"value": "clear",
+						"desc": "清除"
+					}
+				]
+			},
+			{
+				"caption": "出错时输出记录到文件",
+				"description": "设定是否在发生错误时自动把命令行的记录输出到文件。\n\n选择“输出”的话会在文件末尾添加内容。\n\n选择“清除”的话会清除文件原内容再写入记录。",
+				"name": "logerror",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "no",
+						"desc": "不输出"
+					},
+					{
+						"value": "yes",
+						"desc": "输出",
+						"default": true
+					},
+					{
+						"value": "clear",
+						"desc": "清楚"
+					}
+				]
+			},
+			{
+				"caption": "日志输出级别",
+				"description": "指定启动时的日志输出级别。\n\n可指定 ERROR / WARNING / INFO / DEBUG / VERBOSE（不区分大小写），仅输出指定级别及以上的日志。\n\n未指定时的默认值：MASTER 版本为 WARNING，其他 Release 版本为 INFO，Debug 版本为 DEBUG。",
+				"name": "loglevel",
+				"type": "string",
+				"length": 16,
+				"user": false,
+				"value": ""
+			}
+		]
+	},
+	{
+		"category": "兼容性",
+		"options": [
+			{
+				"caption": "压缩包分隔符",
+				"description": "设定压缩包文件名和压缩包内存储的分隔符。\n\n从2.19 beta 14开始分隔符从'#'改成了'>'. 2.19 beta 14以下的应用程序中不把分隔符设定成'#'的话可能无法运行。",
+				"name": "arcdelim",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": ">",
+						"desc": "使用'>'",
+						"default": true
+					},
+					{
+						"value": "#",
+						"desc": "使用'#'"
+					}
+				]
+			},
+			{
+				"caption": "后置'!'运算符的行为",
+				"description": "设定后置'!'(eval)运算符的行为。\n\nTJS2中的后置'!'运算符在全局上执行，但是从2.21 beta 9之后会在this上执行。如果应用程序版本低于2.21 beta 9，不设定成“在global上执行”可能会无法运行。",
+				"name": "evalcontext",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "this",
+						"desc": "在this上执行",
+						"default": true
+					},
+					{
+						"value": "global",
+						"desc": "在global上执行"
+					}
+				]
+			},
+			{
+				"caption": "Layer.holdAlpha的默认值",
+				"description": "设定Layer.holdAlpha属性(是否保护alpha值)的默认值。\n\n如果应用程序的版本低于2.23 beta 5，不设定成“真”可能无法正常运行。",
+				"name": "holdalpha",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "false",
+						"desc": "假",
+						"default": true
+					},
+					{
+						"value": "true",
+						"desc": "真"
+					}
+				]
+			},
+			{
+				"caption": "前置'*'运算符的行为",
+				"description": "设定前置'*'运算符(绕过属性获取)的行为。\n\nTJS2中的前置'*'运算符是不通过属性处理函数直接获取属性对象的运算符，从2.25 beta 1以后这个功能的运算符变成了前置'&'，前置'*'运算符改成会调用属性处理函数的运算符了。如果应用程序版本低于2.25 beta 1，不设定成“兼容2.25以前的版本”可能会无法正常运行。",
+				"name": "unaryaster",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "default",
+						"desc": "2.25版本以后的行为",
+						"default": true
+					},
+					{
+						"value": "compat",
+						"desc": "兼容2.25以前的版本"
+					}
+				]
+			},
+			{
+				"caption": "脚本读取编码",
+				"description": "读取脚本时使用的编码。",
+				"name": "readencoding",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "Shift_JIS",
+						"desc": "Shift-JIS"
+					},
+					{
+						"value": "UTF-8",
+						"desc": "UTF-8",
+						"default": true
+					}
+				]
+			},
+			{
+				"caption": "禁用触摸事件",
+				"description": "禁用触摸事件，转而触发鼠标事件。",
+				"name": "ignoretouch",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "false",
+						"desc": "有效",
+						"default": true
+					},
+					{
+						"value": "true",
+						"desc": "无效"
+					}
+				]
+			},
+			{
+				"caption": "禁用文件属性",
+				"description": "禁用文件属性，把prop扩展名的文件当作普通文件处理。",
+				"name": "ignorefileprop",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "有效"
+					},
+					{
+						"value": "no",
+						"desc": "无效",
+						"default": true
+					}
+				]
+			}
+		]
+	}
+]

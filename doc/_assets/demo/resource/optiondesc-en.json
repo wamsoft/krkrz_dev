@@ -1,0 +1,1730 @@
+[
+	{
+		"category": "Generic",
+		"options": [
+			{
+				"caption": "Save data path",
+				"description": "Define where Kirikiri should save all types of data.\n\nThere are some special strings which can be embedded in the definition string.\n\n'$(exepath)' will be replaced by System.exePath\n\n'$(appdatapath)' will be replaced by System.appDataPath\n\n$'(personalpath)' will be replaced by System.personalPath\n\n'$(vistapath)' will be replaced by '$(appdatapath)' in OS higher than Vista, and by '$(exepath)' in OS lower than Vista.\n\nValue of this property can be obtained by 'System.dataPath'",
+				"name": "datapath",
+				"type": "string",
+				"length": 255,
+				"user": false,
+				"value": "$(exepath)\\savedata"
+			},
+			{
+				"caption": "Process wait",
+				"description": "Define if the engine should limit and reduce CPU usage on transition scenes by inserting a wait in processing.\n\n'Do not wait': CPU usage can surge to 100% on transition scenes.\n\nOtherwise processing will execute at a set frequency between 12-120(Hz). CPU usage can be reduced by setting to a lower frequency, but execution may appear disrupted. This setting may not work on some systems.\n\nWhen'V-sync' is set to 'Use V-sync' in graphics section, this setting will be ignored.",
+				"name": "contfreq",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "0",
+						"desc": "Do not wait",
+						"default": true
+					},
+					{
+						"value": "12",
+						"desc": "12Hz"
+					},
+					{
+						"value": "15",
+						"desc": "15Hz"
+					},
+					{
+						"value": "25",
+						"desc": "25Hz"
+					},
+					{
+						"value": "30",
+						"desc": "30Hz"
+					},
+					{
+						"value": "45",
+						"desc": "45Hz"
+					},
+					{
+						"value": "50",
+						"desc": "50Hz"
+					},
+					{
+						"value": "60",
+						"desc": "60Hz"
+					},
+					{
+						"value": "70",
+						"desc": "70Hz"
+					},
+					{
+						"value": "75",
+						"desc": "75Hz"
+					},
+					{
+						"value": "80",
+						"desc": "80Hz"
+					},
+					{
+						"value": "83",
+						"desc": "83Hz"
+					},
+					{
+						"value": "90",
+						"desc": "90Hz"
+					},
+					{
+						"value": "93",
+						"desc": "93Hz"
+					},
+					{
+						"value": "100",
+						"desc": "100Hz"
+					},
+					{
+						"value": "107",
+						"desc": "107Hz"
+					},
+					{
+						"value": "120",
+						"desc": "120Hz"
+					}
+				]
+			},
+			{
+				"caption": "Memory usage",
+				"description": "Set memory usage.\n\nThe 'Low' option will save more memory compared to 'Normal', but performance will be affected. When 'Low' is selected, 'Graphics cache limit' will be treated as 'No caching'.",
+				"name": "memusage",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "normal",
+						"desc": "Normal",
+						"default": true
+					},
+					{
+						"value": "low",
+						"desc": "Low"
+					}
+				]
+			},
+			{
+				"caption": "Timer event tolerance limit",
+				"description": "Set if the engine should limit the tolerance of timer events.\n\nIf enabled, some user control issues caused by slow computers not being able to match the processing speed can sometimes by solved.",
+				"name": "laxtimer",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "no",
+						"desc": "Disabled",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "Enabled"
+					}
+				]
+			},
+			{
+				"caption": "Low priority",
+				"description": "Set if priority is lowered during transition scenes. \n\nEnabling may fix skipping sound issues.",
+				"name": "lowpri",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "no",
+						"desc": "Disabled",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "Enabled"
+					}
+				]
+			},
+			{
+				"caption": "Startup script",
+				"description": "Define the first script loaded on startup.",
+				"name": "startup",
+				"type": "string",
+				"length": 255,
+				"user": false,
+				"value": "startup.tjs"
+			},
+			{
+				"caption": "Text editor to run during exceptions ",
+				"description": "Set text editor to open when exceptions are thrown.",
+				"name": "exceptionexe",
+				"type": "string",
+				"length": 255,
+				"user": false,
+				"value": "notepad.exe"
+			},
+			{
+				"caption": "Text editor launch arguments",
+				"description": "Define launch arguments for text editor when exceptions are thrown.\n\n%filepath% is the file path, %line% is the line number.",
+				"name": "exceptionarg",
+				"type": "string",
+				"length": 255,
+				"user": false,
+				"value": "%filepath%"
+			},
+			{
+				"caption": "Enable LFH",
+				"description": "Enable LFH to prevent memory fragmentation.\n\nInefficient memory errors can sometimes be solved by enabling this option. This option is enabled regardless of user choice in Vista or later.\n\nEffective on Windows only.",
+				"name": "uselfh",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "no",
+						"desc": "Disabled",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "Enabled"
+					}
+				]
+			},
+			{
+				"caption": "Enable process CRT heap compaction",
+				"description": "Compress process CRT heap during garbage collection.\n\nThis may stop  inefficient memory errors from occurring constantly, but compaction will take some time.\n\nEffective only on the Windows native (WINVER) build.",
+				"name": "ghcompact",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "no",
+						"desc": "Disabled",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "Enabled"
+					}
+				]
+			},
+			{
+				"caption": "Message language",
+				"description": "Explicitly specifies the language of engine messages and option descriptions.\n\nAccepts BCP-47 tags (\"ja-JP\" / \"en-US\" / \"zh-Hans\" etc.) or the short forms ja / en / chs / cht. When not specified, the OS language (System.systemLanguage) is used.\n\nOn the WINVER build this affects resource language resolution (message strings and the settings dialog); on the SDL3 build it selects messages*.json / optiondesc*.json. To affect message strings the option must be given directly on the command line (a configuration-file setting only affects the language of option descriptions).",
+				"name": "language",
+				"type": "string",
+				"length": 32,
+				"user": false,
+				"value": ""
+			}
+		]
+	},
+	{
+		"category": "Input",
+		"options": [
+			{
+				"caption": "Mouse wheel detection",
+				"description": "Defines how mouse wheel rotation is detected.\n\nSelect 'disabled' to disable the mouse wheel.\n\nEffective only on the Windows native (WINVER) build. The former 'DirectInput' method has been removed; specifying it is treated as 'window message'.",
+				"name": "wheel",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "message",
+						"desc": "Window message",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Disabled"
+					}
+				]
+			},
+			{
+				"caption": "Enable joystick input",
+				"description": "Defines whether to use gamepads.\n\nSelect 'disabled' to disable gamepads, e.g. when another device is misdetected as a gamepad and causes problems.\n\nGamepad input is now based on XInput (WINVER) / SDL_Gamepad (SDL3). The former 'DirectInput' value is treated as 'enabled'.",
+				"name": "joypad",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Enabled",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Disabled"
+					}
+				]
+			},
+			{
+				"caption": "Joystick key repeat delay",
+				"description": "Define joystick key repeat delay by milliseconds.",
+				"name": "paddelay",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "100",
+						"desc": "100ms"
+					},
+					{
+						"value": "200",
+						"desc": "200ms"
+					},
+					{
+						"value": "300",
+						"desc": "300ms"
+					},
+					{
+						"value": "400",
+						"desc": "400ms"
+					},
+					{
+						"value": "500",
+						"desc": "500ms",
+						"default": true
+					},
+					{
+						"value": "600",
+						"desc": "600ms"
+					},
+					{
+						"value": "700",
+						"desc": "700ms"
+					},
+					{
+						"value": "800",
+						"desc": "800ms"
+					},
+					{
+						"value": "900",
+						"desc": "900ms"
+					},
+					{
+						"value": "1000",
+						"desc": "1000ms"
+					},
+					{
+						"value": "-1",
+						"desc": "Disable key repeat"
+					}
+				]
+			},
+			{
+				"caption": "Joystick key repeat interval",
+				"description": "Define joystick key repeat interval by milliseconds. The smaller the value, the faster the repeated input.",
+				"name": "padinterval",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "10",
+						"desc": "10ms"
+					},
+					{
+						"value": "20",
+						"desc": "20ms"
+					},
+					{
+						"value": "30",
+						"desc": "30ms",
+						"default": true
+					},
+					{
+						"value": "40",
+						"desc": "40ms"
+					},
+					{
+						"value": "50",
+						"desc": "50ms"
+					},
+					{
+						"value": "60",
+						"desc": "60ms"
+					},
+					{
+						"value": "70",
+						"desc": "70ms"
+					},
+					{
+						"value": "80",
+						"desc": "80ms"
+					},
+					{
+						"value": "90",
+						"desc": "90ms"
+					},
+					{
+						"value": "100",
+						"desc": "100ms"
+					},
+					{
+						"value": "200",
+						"desc": "200ms"
+					},
+					{
+						"value": "300",
+						"desc": "300ms"
+					},
+					{
+						"value": "400",
+						"desc": "400ms"
+					},
+					{
+						"value": "500",
+						"desc": "500ms"
+					},
+					{
+						"value": "700",
+						"desc": "700ms"
+					},
+					{
+						"value": "1000",
+						"desc": "1000ms"
+					}
+				]
+			},
+			{
+				"caption": "Enable input method control",
+				"description": "Set if the engine should control state of input methods.\n\nDisabling may help solve problems related to input of Japanese and other languages.\n\nEffective only on the Windows native (WINVER) build.",
+				"name": "controlime",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Enabled",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Disabled"
+					}
+				]
+			},
+			{
+				"caption": "Gamepad button mapping",
+				"description": "Defines how physical gamepad buttons are mapped to VK_PAD1..VK_PAD4.\n\nWith 'by label', VK_PAD1 maps to the button labeled A (✕ on PlayStation), so on controllers with a different layout (e.g. Nintendo) the on-screen prompts match the button actually pressed.\n\n'By position' is the legacy mapping: bottom=VK_PAD1, right=VK_PAD2, left=VK_PAD3, top=VK_PAD4.\n\nEffective only on the SDL3 build. The WINVER build uses XInput, where label and position never disagree.",
+				"name": "padbuttons",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "label",
+						"desc": "By label",
+						"default": true
+					},
+					{
+						"value": "position",
+						"desc": "By position"
+					}
+				]
+			}
+		]
+	},
+	{
+		"category": "Sound",
+		"options": [
+			{
+				"caption": "Sound output frequency",
+				"description": "Set the sound output (mixer) sampling frequency.\n\nIn some cases playback will manifest some change.",
+				"name": "wsfreq",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "8000",
+						"desc": "8kHz"
+					},
+					{
+						"value": "11025",
+						"desc": "11kHz"
+					},
+					{
+						"value": "12000",
+						"desc": "12kHz"
+					},
+					{
+						"value": "16000",
+						"desc": "16kHz"
+					},
+					{
+						"value": "22050",
+						"desc": "22kHz"
+					},
+					{
+						"value": "24000",
+						"desc": "24kHz"
+					},
+					{
+						"value": "32000",
+						"desc": "32kHz"
+					},
+					{
+						"value": "44100",
+						"desc": "44.1kHz",
+						"default": true
+					},
+					{
+						"value": "48000",
+						"desc": "48kHz"
+					},
+					{
+						"value": "64000",
+						"desc": "64kHz"
+					},
+					{
+						"value": "88200",
+						"desc": "88.2kHz"
+					},
+					{
+						"value": "96000",
+						"desc": "96kHz"
+					}
+				]
+			},
+			{
+				"caption": "Pre-initialize audio device",
+				"description": "Initializes the audio (sound output) device at startup.\n\nIf the device is opened only when the first sound plays, playback can start slightly late and the beginning of the sound may be clipped. Enabling this performs the initialization at startup and avoids that clipping.\n\nChoose 'No' if you want to avoid opening the device at startup (e.g. with an unstable sound driver).",
+				"name": "wspreinit",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Yes",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "No"
+					}
+				]
+			}
+		]
+	},
+	{
+		"category": "Graphics",
+		"options": [
+			{
+				"caption": "Graphics cache limit",
+				"description": "Define maximum memory for which the graphics cache can use.\n\nIf swap occurs constantly, 'No caching' can sometimes solve the problem.",
+				"name": "gclim",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "auto",
+						"desc": "Auto(recommended)",
+						"default": true
+					},
+					{
+						"value": "0",
+						"desc": "No caching"
+					},
+					{
+						"value": "4",
+						"desc": "4MB"
+					},
+					{
+						"value": "8",
+						"desc": "8MB"
+					},
+					{
+						"value": "12",
+						"desc": "12MB"
+					},
+					{
+						"value": "16",
+						"desc": "16MB"
+					},
+					{
+						"value": "20",
+						"desc": "20MB"
+					},
+					{
+						"value": "24",
+						"desc": "24MB"
+					},
+					{
+						"value": "28",
+						"desc": "28MB"
+					},
+					{
+						"value": "32",
+						"desc": "32MB"
+					},
+					{
+						"value": "36",
+						"desc": "36MB"
+					},
+					{
+						"value": "40",
+						"desc": "40MB"
+					},
+					{
+						"value": "44",
+						"desc": "44MB"
+					},
+					{
+						"value": "48",
+						"desc": "48MB"
+					},
+					{
+						"value": "52",
+						"desc": "52MB"
+					},
+					{
+						"value": "56",
+						"desc": "56MB"
+					},
+					{
+						"value": "60",
+						"desc": "60MB"
+					},
+					{
+						"value": "64",
+						"desc": "64MB"
+					},
+					{
+						"value": "68",
+						"desc": "68MB"
+					},
+					{
+						"value": "72",
+						"desc": "72MB"
+					},
+					{
+						"value": "76",
+						"desc": "76MB"
+					},
+					{
+						"value": "80",
+						"desc": "80MB"
+					},
+					{
+						"value": "84",
+						"desc": "84MB"
+					},
+					{
+						"value": "88",
+						"desc": "88MB"
+					},
+					{
+						"value": "92",
+						"desc": "92MB"
+					},
+					{
+						"value": "96",
+						"desc": "96MB"
+					},
+					{
+						"value": "100",
+						"desc": "100MB"
+					},
+					{
+						"value": "104",
+						"desc": "104MB"
+					},
+					{
+						"value": "108",
+						"desc": "108MB"
+					},
+					{
+						"value": "112",
+						"desc": "112MB"
+					},
+					{
+						"value": "116",
+						"desc": "116MB"
+					},
+					{
+						"value": "120",
+						"desc": "120MB"
+					},
+					{
+						"value": "124",
+						"desc": "124MB"
+					},
+					{
+						"value": "128",
+						"desc": "128MB"
+					},
+					{
+						"value": "132",
+						"desc": "132MB"
+					},
+					{
+						"value": "136",
+						"desc": "136MB"
+					},
+					{
+						"value": "140",
+						"desc": "140MB"
+					},
+					{
+						"value": "144",
+						"desc": "144MB"
+					},
+					{
+						"value": "148",
+						"desc": "148MB"
+					},
+					{
+						"value": "152",
+						"desc": "152MB"
+					},
+					{
+						"value": "156",
+						"desc": "156MB"
+					},
+					{
+						"value": "160",
+						"desc": "160MB"
+					},
+					{
+						"value": "164",
+						"desc": "164MB"
+					},
+					{
+						"value": "168",
+						"desc": "168MB"
+					},
+					{
+						"value": "172",
+						"desc": "172MB"
+					},
+					{
+						"value": "176",
+						"desc": "176MB"
+					},
+					{
+						"value": "180",
+						"desc": "180MB"
+					},
+					{
+						"value": "184",
+						"desc": "184MB"
+					},
+					{
+						"value": "188",
+						"desc": "188MB"
+					},
+					{
+						"value": "192",
+						"desc": "192MB"
+					},
+					{
+						"value": "196",
+						"desc": "196MB"
+					},
+					{
+						"value": "200",
+						"desc": "200MB"
+					},
+					{
+						"value": "204",
+						"desc": "204MB"
+					},
+					{
+						"value": "208",
+						"desc": "208MB"
+					},
+					{
+						"value": "212",
+						"desc": "212MB"
+					},
+					{
+						"value": "216",
+						"desc": "216MB"
+					},
+					{
+						"value": "220",
+						"desc": "220MB"
+					},
+					{
+						"value": "224",
+						"desc": "224MB"
+					},
+					{
+						"value": "228",
+						"desc": "228MB"
+					},
+					{
+						"value": "232",
+						"desc": "232MB"
+					},
+					{
+						"value": "236",
+						"desc": "236MB"
+					},
+					{
+						"value": "240",
+						"desc": "240MB"
+					},
+					{
+						"value": "244",
+						"desc": "244MB"
+					},
+					{
+						"value": "248",
+						"desc": "248MB"
+					},
+					{
+						"value": "252",
+						"desc": "252MB"
+					},
+					{
+						"value": "256",
+						"desc": "256MB"
+					}
+				]
+			},
+			{
+				"caption": "Fullscreen mode resolution",
+				"description": "Set resolution of fullscreen mode.\n\nAuto: Use the most optimal resolution. In this case use a resolution defined in the application with the same aspect ratio as the current one if such option exists. Otherwise the engine will scretch the image. Even if 'Scale image by engine in fullscreen mode' is set to 'Disabled', this setting is treated as 'Fit in screen'.\n\nKeep apect ratio: Use the closest resolution that has the same aspect ratio as in window mode.\n\nClosest resolution: Use the closest resolution defined in the application but its aspect ratio is not guranteed to be identical to window mode. This option works for CRT monitors and some LCD panels that support scaled display while keeping aspect issue.\n\nNo change: Resolution will remain the same as in window mode.\n\nEffective only on the Windows native (WINVER) build. Fullscreen on the SDL3 build is borderless without changing the display resolution; scaling follows the Window geometry settings.",
+				"name": "fsres",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "auto",
+						"desc": "Auto"
+					},
+					{
+						"value": "proportional",
+						"desc": "Keep aspect ratio"
+					},
+					{
+						"value": "nearest",
+						"desc": "Closest resolution"
+					},
+					{
+						"value": "nochange",
+						"desc": "No change",
+						"default": true
+					}
+				]
+			},
+			{
+				"caption": "Scale image by engine in fullscreen mode",
+				"description": "Set how the engine should scale image in fullscreen mode.\n\nFit in monitor: Scale the image to fit in the monitor. Black gaps may appear in this case.\n\nFill in monitor: Stretch the image to aviod showing any gaps. Parts of the image can sometimes be outside of display range\n\nNo scaling: The engine will not scale any image.\n\nWhen 'Fullscreen mode resolution' is set to 'Auto', this setting is treated as 'Fit in monitor' even if 'No scaling' is selected.\n\nEffective only on the Windows native (WINVER) build. Fullscreen on the SDL3 build is borderless without changing the display resolution; scaling follows the Window geometry settings.",
+				"name": "fszoom",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "inner",
+						"desc": "Fit in monitor",
+						"default": true
+					},
+					{
+						"value": "outer",
+						"desc": "Fill in monitor"
+					},
+					{
+						"value": "no",
+						"desc": "No scaling"
+					}
+				]
+			},
+			{
+				"caption": "Divided processing of graphics rendering",
+				"description": "Set if the engine should divide and process graphics rendering.\n\nAdjusting this setting can sometimes stop the screen from blinking, but rendering performance can be affected.\n\nIf 'Double buffering' is enabled, set to options other than 'Disabled' here.\n\nOn the SDL3 build the default is 'disabled' (driver-synchronization overhead dominates in OpenGL environments). On the WINVER build the default is 'enabled'.",
+				"name": "gsplit",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Enabled",
+						"default": true
+					},
+					{
+						"value": "int",
+						"desc": "Interlaced division"
+					},
+					{
+						"value": "bidi",
+						"desc": "Bi-directional division"
+					},
+					{
+						"value": "no",
+						"desc": "Disabled"
+					}
+				]
+			},
+			{
+				"caption": "Scaled display smoothing",
+				"description": "Set if smoothing is applied when scaling the display.\n\n'Smoothing' refers to smoothed scaling when image is scaled according to settings of 'Fullscreen mode resolution'. When disabled, 'Double buffering' is treated as 'Use GDI'.",
+				"name": "smoothzoom",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Enabled",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Disabled"
+					}
+				]
+			},
+			{
+				"caption": "Anti-aliasing text rendering",
+				"description": "Settings of anti-aliasing text rendering.\n\nAdjusting this setting can sometimes solve issues of text not being displayed or not properly rendered. \n\nResampling(4x4) is faster than resampling(8x8), but less accurate.\n\nEffective only when the GDI rasterizer (Font.rasterizer=1, the WINVER default) is used on the Windows native (WINVER) build. Has no effect with the FreeType rasterizer or on the SDL3 build.",
+				"name": "aamethod",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "auto",
+						"desc": "Auto",
+						"default": true
+					},
+					{
+						"value": "res8",
+						"desc": "Resampleing(8×8)"
+					},
+					{
+						"value": "res4",
+						"desc": "Resampling(4×4)"
+					},
+					{
+						"value": "api",
+						"desc": "Windows API"
+					}
+				]
+			},
+			{
+				"caption": "JPEG decode accuracy",
+				"description": "Set the accuracy of JPEG image decoding (decompressing).\n\nHigh: High accuracy but decoding is slower.\n\nLow: Low accuracy but decoding is faster.",
+				"name": "jpegdec",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "high",
+						"desc": "High"
+					},
+					{
+						"value": "normal",
+						"desc": "Normal",
+						"default": true
+					},
+					{
+						"value": "low",
+						"desc": "Low"
+					}
+				]
+			},
+			{
+				"caption": "Graphics rendering thread count",
+				"description": "Set thread count of graphics rendering.\n\nRendering performance on multi-core systems can be improved by setting multiple rendering threads, but performance can also be worse in some cases.",
+				"name": "drawthread",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "auto",
+						"desc": "Auto(equal to processor count)"
+					},
+					{
+						"value": "1",
+						"desc": "1 thread",
+						"default": true
+					},
+					{
+						"value": "2",
+						"desc": "2 threads"
+					},
+					{
+						"value": "4",
+						"desc": "4 threads"
+					},
+					{
+						"value": "8",
+						"desc": "8 threads"
+					}
+				]
+			},
+			{
+				"caption": "Bitmap memory allocation",
+				"description": "Set how the engine should allocate memory for bitmap.\n\nProcess heap normally works fine.\n\nEffective only on the Windows native (WINVER) build.",
+				"name": "bitmapallocator",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "processheap",
+						"desc": "Use Process heap",
+						"default": true
+					},
+					{
+						"value": "globalalloc",
+						"desc": "Use globalAlloc"
+					},
+					{
+						"value": "separateheap",
+						"desc": "Use separate heaps"
+					},
+					{
+						"value": "malloc",
+						"desc": "Use malloc"
+					}
+				]
+			},
+			{
+				"caption": "Initial heap size",
+				"description": "Set initial heap size when using separate heaps when allocating memory for bitmap.\n\nEffective only on the Windows native (WINVER) build.",
+				"name": "bitmapheapsize",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "auto",
+						"desc": "Auto(recommended)",
+						"default": true
+					},
+					{
+						"value": "0",
+						"desc": "Resize automatically"
+					},
+					{
+						"value": "64",
+						"desc": "64MB"
+					},
+					{
+						"value": "128",
+						"desc": "128MB"
+					},
+					{
+						"value": "256",
+						"desc": "256MB"
+					},
+					{
+						"value": "512",
+						"desc": "512MB"
+					},
+					{
+						"value": "1024",
+						"desc": "1GB"
+					},
+					{
+						"value": "2048",
+						"desc": "2GB"
+					}
+				]
+			},
+			{
+				"caption": "Startup DrawDevice",
+				"description": "Selects the default DrawDevice used at startup.\n\nSDL3 build: 'sdl' (via SDL_Renderer) / 'sdlogl' (direct OpenGL ES) / 'ogl' (OpenGL ES with Canvas etc.). When not specified, builds with OpenGL enabled default to 'sdlogl', otherwise 'sdl'.\n\nWINVER build: 'basic' (Direct3D 11, default) / 'ogl' (OpenGL ES) / 'null' (no drawing, for testing).\n\n'ogl' / 'sdlogl' require an environment where OpenGL ES is available (the WINVER build, and SDL3 environments without a native GLES-capable driver, need ANGLE's libEGL.dll / libGLESv2.dll). The DrawDevice can also be switched at runtime by assigning to Window.drawDevice, but when the SDL3 build is started with 'sdl' it cannot be switched to an OpenGL device at runtime.",
+				"name": "drawdevice",
+				"type": "string",
+				"length": 16,
+				"user": false,
+				"value": ""
+			},
+			{
+				"caption": "SDL_Renderer backend",
+				"description": "Explicitly specifies the SDL_Renderer backend used by SDLDrawDevice (e.g. direct3d11 / vulkan / opengl / software). When not specified, SDL3 chooses automatically.\n\nOnly meaningful on the SDL3 build when SDLDrawDevice (-drawdevice=sdl) is used.",
+				"name": "renderer",
+				"type": "string",
+				"length": 32,
+				"user": false,
+				"value": ""
+			},
+			{
+				"caption": "Force EGL for OpenGL ES",
+				"description": "Creates the OpenGL ES context via EGL from the start (on Windows, ANGLE's libEGL.dll / libGLESv2.dll).\n\nBy default the SDL3 build prefers the ES profile of the graphics driver's OpenGL implementation when available, and falls back to EGL only when it is not. If the driver's ES profile implementation is broken (corrupted rendering or failed initialization), enabling this option pins context creation to EGL (ANGLE).\n\nEffective only on the SDL3 build. OpenGL on the WINVER build always goes through EGL (ANGLE).",
+				"name": "forceegl",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "no",
+						"desc": "Disabled",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "Enabled"
+					}
+				]
+			},
+			{
+				"caption": "Startup display",
+				"description": "Specifies the display (monitor) on which the window first appears in a multi-display environment.\n\nAccepts a 1-based display number, part of a monitor name, 'primary' (the primary display), or 'list' (only prints the display list to the log). Intended mainly for testing.",
+				"name": "display",
+				"type": "string",
+				"length": 64,
+				"user": false,
+				"value": ""
+			},
+			{
+				"caption": "Hardware video decoding",
+				"description": "Defines whether overlay video playback (VideoOverlay) uses hardware decoding (IMFMediaEngine) for Media Foundation formats such as mp4 / wmv.\n\nSelect 'disabled' to decode all formats in software; use this to isolate video playback problems. webm / mpeg are always decoded in software regardless of this setting.\n\nEffective only on the Windows native (WINVER) build.",
+				"name": "mediaengine",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Enabled",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Disabled"
+					}
+				]
+			}
+		]
+	},
+	{
+		"category": "CPU functions",
+		"options": [
+			{
+				"caption": "SIMD (all)",
+				"description": "Disable all SIMD optimizations and fall back to C reference implementation. Use for debugging or isolating issues.",
+				"name": "cpusimd",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Disable all SIMD"
+					}
+				]
+			},
+			{
+				"caption": "MMX",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpummx",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "3DNow!",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpu3dn",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "SSE",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpusse",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "CMOVcc",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpucmov",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "Enhanced 3DNow!",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpue3dn",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "EMMX (MMX2)",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpuemmx",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "SSE2",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpusse2",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "SSE3",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpusse3",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "SSSE3",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpussse3",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "SSE4.1",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpusse41",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "SSE4.2",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpusse42",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "SSE4a",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpusse4a",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "AVX",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpuavx",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "AVX2",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpuavx2",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "FMA3",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpufma3",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "AES",
+				"description": "Adjust this setting when CPU cannot be detected properly.",
+				"name": "cpuaes",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Use forcely"
+					}
+				]
+			},
+			{
+				"caption": "Core limit",
+				"description": "Adjust this setting when something goes wrong",
+				"name": "cpucorelimit",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Enabled",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Disabled"
+					}
+				]
+			},
+			{
+				"caption": "NEON (ARM)",
+				"description": "Adjust this when CPU detection problems occur. Effective only on ARM environments.",
+				"name": "cpuneon",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Force use"
+					}
+				]
+			},
+			{
+				"caption": "ASIMD (ARM64)",
+				"description": "Adjust this when CPU detection problems occur. Effective only on ARM environments.",
+				"name": "cpuasimd",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Use if available",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "Do not use even if available"
+					},
+					{
+						"value": "force",
+						"desc": "Force use"
+					}
+				]
+			}
+		]
+	},
+	{
+		"category": "Debug",
+		"options": [
+			{
+				"caption": "Debug mode",
+				"description": "Set if debug mode is enabled.\n\nSome auxiliary functions are available in debug mode of Kirikiri, but execution will become slower.",
+				"name": "debug",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "no",
+						"desc": "Disabled",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "Enabled"
+					}
+				]
+			},
+			{
+				"caption": "Write log to file",
+				"description": "Set if the engine should write console log to a file.\n\nEnabled: Append log to the log file.\n\nClear: Clear the log file before writing new log.",
+				"name": "forcelog",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "no",
+						"desc": "Disabled",
+						"default": true
+					},
+					{
+						"value": "yes",
+						"desc": "Enabled"
+					},
+					{
+						"value": "clear",
+						"desc": "Clear"
+					}
+				]
+			},
+			{
+				"caption": "Write log to file when error occurs",
+				"description": "Set if the engine should write console log to a file automatically when an error occurs.\n\nEnabled: Append log to the log file.\n\nClear: Clear the log file before writing new log.",
+				"name": "logerror",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "no",
+						"desc": "Disabled"
+					},
+					{
+						"value": "yes",
+						"desc": "Enabled",
+						"default": true
+					},
+					{
+						"value": "clear",
+						"desc": "Clear"
+					}
+				]
+			},
+			{
+				"caption": "Log level",
+				"description": "Specifies the log output level at startup.\n\nAccepts ERROR / WARNING / INFO / DEBUG / VERBOSE (case-insensitive); only logs at or above the specified level are output.\n\nThe default is WARNING for MASTER builds, INFO for other Release builds, and DEBUG for Debug builds.",
+				"name": "loglevel",
+				"type": "string",
+				"length": 16,
+				"user": false,
+				"value": ""
+			}
+		]
+	},
+	{
+		"category": "Compatibility",
+		"options": [
+			{
+				"caption": "Archive delimiter",
+				"description": "Set the delimiter used in archive names and storage in archives.\n\nSince 2.19 beta 14, the default symbol has been changed from '#' to '>'. If the application is expceted to run on version earlier than 2.19 beta 14, it may not work if delimiter it not set to '#'.",
+				"name": "arcdelim",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": ">",
+						"desc": "Use '>'",
+						"default": true
+					},
+					{
+						"value": "#",
+						"desc": "Use '#'"
+					}
+				]
+			},
+			{
+				"caption": "Behavior of post-operator '!'",
+				"description": "Set the behavior of post-operator '!' (eval).\n\nIn TJS2 post-operator '!' is evaluated on global context, while it is evaluated on 'this' context since 2.21 beta 9. If the application is expected to run on version lower than 2.21 beta 9, it may not work if this setting is not set to 'Evaluate on global'.",
+				"name": "evalcontext",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "this",
+						"desc": "Evaluate on this",
+						"default": true
+					},
+					{
+						"value": "global",
+						"desc": "Evaluate on global"
+					}
+				]
+			},
+			{
+				"caption": "Default value of Layer.holdAlpha",
+				"description": "Set default value of Layer.holdAlpha property (Protect alpha value or not).\n\nIf the application if excepted to run on version lower than 2.23 beta 5, it may not work it this setting is not set to 'True'.",
+				"name": "holdalpha",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "false",
+						"desc": "False",
+						"default": true
+					},
+					{
+						"value": "true",
+						"desc": "True"
+					}
+				]
+			},
+			{
+				"caption": "Behavior of pre-operator '*'",
+				"description": "Set the behavior of pre-operator '*' (Bypass property access).\n\nIn TJS2 pre-operator '*' can provide access to a property object without using property handler. Since 2.25 beta 1, this functionality is assigned to pre-operator'&', while pre-oprerator '*' will call property handler when accessing a property object. If the application is expected to run on version lower than 2.25 beta 1, it may not work if this setting is not 'Compatible with lower than 2.25'.",
+				"name": "unaryaster",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "default",
+						"desc": "Higher than 2.25",
+						"default": true
+					},
+					{
+						"value": "compat",
+						"desc": "Compatible with lower than 2.25"
+					}
+				]
+			},
+			{
+				"caption": "Script encoding",
+				"description": "Script encoding when reading from files.",
+				"name": "readencoding",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "Shift_JIS",
+						"desc": "Shift-JIS"
+					},
+					{
+						"value": "UTF-8",
+						"desc": "UTF-8",
+						"default": true
+					}
+				]
+			},
+			{
+				"caption": "Disable touch pad",
+				"description": "Disable touch events and trigger mouse events instead.",
+				"name": "ignoretouch",
+				"type": "select",
+				"user": true,
+				"values": [
+					{
+						"value": "false",
+						"desc": "Enabled",
+						"default": true
+					},
+					{
+						"value": "true",
+						"desc": "Disabled"
+					}
+				]
+			},
+			{
+				"caption": "Disable file property",
+				"description": "Disable file property, treat files with 'prop' extension as a normal file.",
+				"name": "ignorefileprop",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "Enabled"
+					},
+					{
+						"value": "no",
+						"desc": "Disabled",
+						"default": true
+					}
+				]
+			}
+		]
+	}
+]
