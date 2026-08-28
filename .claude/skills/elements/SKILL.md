@@ -158,9 +158,17 @@ class D extends Dialog {
     function onClose(action)            { /* teardown 完了。action=閉じた button id(外部要因は空) */ }
     function onScreen(name)             { /* フロー: 画面 enter */ }
     function onScreenLeave(name, act)   { /* フロー: 画面 leave */ }
+    function onDrag(e)                  { /* ドラッグ。e=%[id,phase,x,y,dx,dy,startX,startY,modifiers] */ }
 }
 ```
 - `onAction` は **全 button click と state widget 値変化**で発火(TVPPostEvent 経由)。
+- **`onDrag`** は画面 JSON で `"drag_events": true` を書いた widget の 押下→移動→離す で発火。
+  `e.phase` は `"begin"` / `"move"` / `"end"`(TJS Dictionary に bool が無いので文字列)。
+  座標は画面 JSON の座標系。溜まった `move` は最新 1 件へ畳まれる(`begin`/`end` は畳まない)。
+  ⚠ **掴んだ絵をついてこさせるだけなら `onDrag` は要らない**: widget に
+  `"drag_at_var": "名前"` を書くと位置が `"x,y"` で変数へ書かれ、canvas 子の `"at_var"` に
+  同じ変数を挿すだけで追従する(C++ 内で完結しフレーム同期)。`"drag_bounds": [x,y,w,h]` で
+  可動域も制限できる。`onDrag` は「どこで離したか」等の**判断**用。
 - **サブクラスは必ず `super.Dialog()` を呼ぶ**(コンストラクタ)。呼ばないと native インスタンスが未初期化になる。
 - ホスト→UI の値反映: **`dlg.setVar(name, value)`**(`vars`/`text_var` を subscribe した label が次フレームで更新)。ソフトキーボードの入力表示等。
 
