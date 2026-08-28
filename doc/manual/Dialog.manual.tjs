@@ -425,6 +425,21 @@ class Dialog {
 	property active { getter; }
 
 	/**
+	 * モーダルなダイアログが表示中かどうか ( 読み取り専用 )
+	 *
+	 * [showModalJson](#showmodaljson) 系やモーダルフローで開いたインスタンスが
+	 * 1 つでもアクティブなら真になります ( どのインスタンスから読んでもプロセス
+	 * 全体の状態を返します )。フォーカスを取らない常駐オーバレイ ( 字幕・HUD 等 )
+	 * は含みません。
+	 *
+	 * 最上位ホットキー ( [System.registerHotKey](System.md#registerhotkey) ) の
+	 * コールバックで「モーダル表示中は何もせず素通しする」判定に使います。
+	 * @type bool
+	 * @see Dialog.active
+	 */
+	property modalActive { getter; }
+
+	/**
 	 * フロー画面遷移通知 ( 画面に入った )
 	 *
 	 * [showFlow](#showflow) / [startFlow](#startflow) 系で実行している
@@ -471,6 +486,30 @@ class Dialog {
 	 * @kind event
 	 */
 	function onAction(id, payload);
+
+	/**
+	 * ドラッグ通知
+	 *
+	 * 画面 JSON で `"drag_events": true` を指定した widget の 押下 → 移動 →
+	 * 離す が届くイベントです。TJS 側で override してください。
+	 *
+	 * payload は Dictionary で、`id` ( 発生元 widget の id )、`phase`
+	 * ( `"begin"` / `"move"` / `"end"` )、`x` / `y` ( 現在位置 )、`dx` / `dy`
+	 * ( 前回からの差分 )、`startX` / `startY` ( 押下位置 )、`modifiers`
+	 * ( シフト状態 ) を持ちます。座標は画面 JSON に書いた座標系です。
+	 *
+	 * 溜まった `"move"` は最新の 1 件へ畳まれます ( `"begin"` / `"end"` は
+	 * 畳まれません )。
+	 *
+	 * **絵をドラッグに追従させるだけならこのイベントは不要です**。widget に
+	 * `"drag_at_var"` を書いてドラッグ位置を変数へ出し、canvas 子の `"at_var"`
+	 * へ同じ変数を挿すとエンジン内で完結します ( `"drag_bounds"` で可動域も
+	 * 制限できます )。このイベントは「どこで離したか」のような判断を TJS 側で
+	 * 行う用途に使います。
+	 * @param payload ドラッグ状態を表す Dictionary ( 上記参照 )。
+	 * @kind event
+	 */
+	function onDrag(payload);
 
 	/**
 	 * ダイアログ teardown 完了通知
@@ -671,6 +710,24 @@ class Dialog {
 	 * @type Boolean
 	 */
 	property focusRing;
+
+	/**
+	 * UI の author 基準面サイズ
+	 *
+	 * オーバレイ表示の拡縮率 ( fit ) の分母になる基準面のサイズを `[w, h]` の
+	 * 配列で指定します。void ( または要素の無い配列 ) を設定すると既定 =
+	 * ゲームの基準面 ( primaryLayer のサイズ ) に戻ります。設定していないときの
+	 * getter は void です。
+	 *
+	 * ゲーム画面と別解像度で UI を author しているタイトル ( ゲーム画面
+	 * 640x400 / UI 1920x1080 等 ) で設定すると、部分パネルの拡縮が author 基準
+	 * どおりになり、ゲーム側の primaryLayer サイズ変更 ( 低解像度機種の
+	 * エミュレーション等 ) にも巻き込まれません。表示中の画面にも次のフレーム
+	 * から反映されます。
+	 * @type Array
+	 * @see Dialog.renderScale
+	 */
+	property baseSize;
 
 	/**
 	 * オーバーレイの描画密度モード

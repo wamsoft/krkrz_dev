@@ -178,6 +178,7 @@
     "events": [
       "onAction",
       "onClose",
+      "onDrag",
       "onScreen",
       "onScreenLeave"
     ],
@@ -214,11 +215,13 @@
     ],
     "properties": [
       "active",
+      "baseSize",
       "defaultFontFamily",
       "focusRing",
       "fontLanguages",
       "hasPhysicalKeyboard",
       "language",
+      "modalActive",
       "partialRedraw",
       "renderCache",
       "renderCount",
@@ -645,6 +648,7 @@
       "inputString",
       "nullpo",
       "readRegValue",
+      "registerHotKey",
       "removeContinuousHandler",
       "renderStatsReset",
       "resetMemoryPeak",
@@ -661,7 +665,8 @@
       "system",
       "terminate",
       "toActualColor",
-      "touchImages"
+      "touchImages",
+      "unregisterHotKey"
     ],
     "properties": [
       "appDataPath",
@@ -906,6 +911,7 @@
       "onPointerUp",
       "onPopupHide",
       "onResize",
+      "onTextInput",
       "onTouchDown",
       "onTouchMove",
       "onTouchRotate",

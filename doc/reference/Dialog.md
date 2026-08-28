@@ -71,11 +71,13 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 
 - [defaultFontFamily](#defaultfontfamily)
 - [active](#active)
+- [modalActive](#modalactive)
 - [language](#language)
 - [fontLanguages](#fontlanguages)
 - [virtualKeyboard](#virtualkeyboard)
 - [hasPhysicalKeyboard](#hasphysicalkeyboard)
 - [focusRing](#focusring)
+- [baseSize](#basesize)
 - [renderScale](#renderscale)
 - [renderCache](#rendercache)
 - [partialRedraw](#partialredraw)
@@ -114,6 +116,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [onScreen](#onscreen)
 - [onScreenLeave](#onscreenleave)
 - [onAction](#onaction)
+- [onDrag](#ondrag)
 - [onClose](#onclose)
 
 ---
@@ -163,6 +166,28 @@ Elements ランタイムが初期化されたあと ( 最初のダイアログ�
 
 非モーダル UI を閉じてから次のモーダルダイアログを起動したい、
 といったタイミング制御に使います。
+
+---
+
+### modalActive
+
+プロパティ \ アクセス: `r`
+
+**型**: `bool`
+
+**解説**
+
+モーダルなダイアログが表示中かどうか ( 読み取り専用 )
+
+[showModalJson](#showmodaljson) 系やモーダルフローで開いたインスタンスが
+1 つでもアクティブなら真になります ( どのインスタンスから読んでもプロセス
+全体の状態を返します )。フォーカスを取らない常駐オーバレイ ( 字幕・HUD 等 )
+は含みません。
+
+最上位ホットキー ( [System.registerHotKey](System.md#registerhotkey) ) の
+コールバックで「モーダル表示中は何もせず素通しする」判定に使います。
+
+**関連:** [Dialog.active](Dialog.md#active)
 
 ---
 
@@ -316,6 +341,31 @@ button / slider / dial / thumbwheel の枠がまとめて消えます。状態�
 クラス内から触るときは `global.Dialog.focusRing` と書きます。Dialog を継承した
 クラスのメソッド内で素の `Dialog` と書くと親クラス参照になり、static プロパティへの
 代入が「メンバが見つかりません」になります。
+
+---
+
+### baseSize
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Array`
+
+**解説**
+
+UI の author 基準面サイズ
+
+オーバレイ表示の拡縮率 ( fit ) の分母になる基準面のサイズを `[w, h]` の
+配列で指定します。void ( または要素の無い配列 ) を設定すると既定 =
+ゲームの基準面 ( primaryLayer のサイズ ) に戻ります。設定していないときの
+getter は void です。
+
+ゲーム画面と別解像度で UI を author しているタイトル ( ゲーム画面
+640x400 / UI 1920x1080 等 ) で設定すると、部分パネルの拡縮が author 基準
+どおりになり、ゲーム側の primaryLayer サイズ変更 ( 低解像度機種の
+エミュレーション等 ) にも巻き込まれません。表示中の画面にも次のフレーム
+から反映されます。
+
+**関連:** [Dialog.renderScale](Dialog.md#renderscale)
 
 ---
 
@@ -1141,6 +1191,39 @@ payload の内容は widget の種類によって変わります。
 - checkbox / toggle ... bool ( 変更後の値 )
 - input_box ... string ( 編集後のテキスト )
 - slider 等 ... 各 widget が渡す値
+
+---
+
+### onDrag
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `payload` | `&nbsp;` | ドラッグ状態を表す Dictionary ( 上記参照 )。 |
+
+**解説**
+
+ドラッグ通知
+
+画面 JSON で `"drag_events": true` を指定した widget の 押下 → 移動 →
+離す が届くイベントです。TJS 側で override してください。
+
+payload は Dictionary で、`id` ( 発生元 widget の id )、`phase`
+( `"begin"` / `"move"` / `"end"` )、`x` / `y` ( 現在位置 )、`dx` / `dy`
+( 前回からの差分 )、`startX` / `startY` ( 押下位置 )、`modifiers`
+( シフト状態 ) を持ちます。座標は画面 JSON に書いた座標系です。
+
+溜まった `"move"` は最新の 1 件へ畳まれます ( `"begin"` / `"end"` は
+畳まれません )。
+
+**絵をドラッグに追従させるだけならこのイベントは不要です**。widget に
+`"drag_at_var"` を書いてドラッグ位置を変数へ出し、canvas 子の `"at_var"`
+へ同じ変数を挿すとエンジン内で完結します ( `"drag_bounds"` で可動域も
+制限できます )。このイベントは「どこで離したか」のような判断を TJS 側で
+行う用途に使います。
 
 ---
 
