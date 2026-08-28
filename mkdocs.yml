@@ -283,6 +283,7 @@ nav:
       - メモリ不足対策: topics/core/low_memory.md
       - メモリ観測・リーク調査: topics/core/memory_observation.md
       - 描画スレッドプール利用率の計測 (DrawStats): topics/core/draw_stats.md
+      - Elements UI 機構の全体像: topics/core/elements.md
       - ゲームパッド入力: topics/core/gamepad.md
       - ゲームパッド状態の観察 (PadOverlay): topics/core/pad_overlay.md
       - REPL (対話型 TJS シェル): topics/core/repl.md

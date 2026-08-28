@@ -24,6 +24,7 @@
 
 ## 本体 (exe) 変更者向け情報
 
+- [Elements UI 機構の全体像](core/elements.md)
 - [エンジン設定の追加/編集](core/engine_setting.md)
 - [吉里吉里Z固有のクラッキング対策](core/anti_cracking.md)
 - [メモリ不足対策](core/low_memory.md)
