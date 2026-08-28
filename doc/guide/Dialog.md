@@ -125,6 +125,56 @@ class DragDialog extends Dialog {
 
 座標は画面 JSON に書いた座標系です。溜まった `"move"` は最新の 1 件へ畳まれます ( `"begin"` / `"end"` は畳まれません )。**見た目を追従させるだけなら onDrag は不要**で、`drag_at_var` + `at_var` の組み合わせで済みます。
 
+## 一覧とスクロールバー ( list / atlas_scrollbar )
+
+行が並ぶ画面は `"type": "list"` で組みます。**1 行分のテンプレートを行数ぶん複製**する仕組みで、行の位置・当たり判定・hover・選択・「データが足りない行の後始末」までウィジェット側が持ちます。TJS 側はデータを流し込むだけです。
+
+```tjs
+var layout = %[
+  "content" => %[
+    "type" => "list", "id" => "files",
+    "rows" => 6, "row_size" => [676, 36], "pitch" => [0, 40],
+    "index_offset_var" => "top", "count_var" => "n",
+    "select_var" => "sel", "row_hover_var" => "rhov#index",
+    "row" => %[ "type" => "label", "id" => "row#index",
+                "text_list_var" => "items" ]
+  ]
+];
+dlg.showDict(layout);
+dlg.setVar("items", "file 0\nfile 1\nfile 2");   // 一覧データ
+dlg.setVar("n", "3");                             // 総件数
+```
+
+- 文字列の中の `#index` が行番号へ置換されます ( `"id": "row#index"` → `row0` / `row1` … )。`text_list_var` を持つ要素には行番号と先頭位置が自動で挿さるので、テンプレートに 1 行書くだけで一覧になります
+- 行をクリックすると [onAction](../reference/Dialog.md#onaction) が **`payload` = データ index** で発火します ( 行の中にボタンがあればそちらが優先 )
+- `count_var` を渡すと、データが無い行は描画も当たり判定も消えます
+- hover / 選択の色は、行ごとのフラグ変数 ( `row_hover_var` / `row_select_var` を `"visible_var"` で受ける ) か、[onVar](../reference/Dialog.md#onvar) で `hover_var` / `select_var` を拾ってホスト側のレイヤを差し替える形のどちらでも組めます
+
+スクロールバーは `"type": "atlas_scrollbar"` に**同じ `index_offset_var`** を挿すだけです。つまみの長さは「見えている行数 ÷ 総件数」に比例し、つまみのドラッグ・溝クリックでのページ送り・ホイールまで内蔵しています ( 本文が `scroller` に載っている画面なら `scroller` の `pos_var` で足ります )。
+
+## 変数の読み書きと変化通知 ( setVar / getVar / onVar )
+
+画面 JSON の変数は 1 本の store にぶら下がっていて、[setVar](../reference/Dialog.md#setvar) で書けるだけでなく [getVar](../reference/Dialog.md#getvar) で読み出せます。読めるのは自分が書いた値だけではありません — `"vars_on_hover"` / `"vars_on_focus"`、slider の `"value_var"`、`"drag_at_var"`、一覧の `"index_offset_var"` のように**画面側が書いた値も同じ store**なので、そのまま読めます。
+
+変化した時点で知りたい場合は [onVar](../reference/Dialog.md#onvar) を実装します。
+
+```tjs
+class ListDialog extends Dialog {
+    function onVar(name, value) {
+        if (name == "row_hover") {
+            // カーソルが乗っている行が変わった → ホスト側のレイヤを差し替える
+            highlightRow(+value);
+        }
+    }
+}
+```
+
+これで「**絵はホスト側のレイヤ、当たり判定だけダイアログ**」という構成が組めます。1 枚絵が大きすぎて atlas に積めない一覧画面などで、ダイアログには透明なボタンだけを並べて hover を受け取り、表示はゲーム側のレイヤで行う、という分担です。
+
+- 通知は 1 フレーム遅延し、同じ変数の連続変化は最新の 1 件へ畳まれます。「いまの値」が要るときは [getVar](../reference/Dialog.md#getvar) を読みます
+- **onVar を実装したダイアログだけが観測対象**になります ( 実装していなければコストはかかりません )。受け取る変数を絞りたいときは [watchVars](../reference/Dialog.md#watchvars) に名前を並べます — hover 連動変数やドラッグ位置は毎フレーム書き換わるためです
+- 画面にどんな変数があるかは [listVars](../reference/Dialog.md#listvars) で一覧できます ( 変数名・現在値・参照している widget の id と種類 )。デバッグパネルや画面 JSON の検証に使えます
+
 ## 非モーダルの複数同時表示とフォーカス
 
 非モーダル ( オーバーレイ ) パネルの配置は画面 JSON の top-level `"align"` / `"margin"` で指定し、配置と拡縮の基準領域は top-level `"base"` で選べます — `"window"` ( 既定、ウィンドウ全面基準 ) / `"content"` ( ゲーム画像の表示領域基準。字幕窓のようにゲーム画像へ追従させたい場合 )。拡縮はゲームの基準面に対するウィンドウ ( または表示領域 ) の比率に追従するため、フルスクリーン等ではゲームと同率で拡大されます。ゲーム画面と別解像度で UI を author しているタイトル ( ゲーム画面 640x400 / UI 1920x1080 等 ) では、[Dialog.baseSize](../reference/Dialog.md#basesize) に author 基準面のサイズを設定すると拡縮の分母がそちらになり、ゲーム側の基準面サイズの変更にも巻き込まれません。
@@ -151,6 +201,30 @@ class DragDialog extends Dialog {
 - モーダル表示中はホットキーも無効です ( 確認ダイアログの ESC = cancel を奪いません )
 - マウスボタン ( VK_RBUTTON 等 ) も登録でき、全画面透過 HUD が右クリックを拾って閉じてしまう問題の回避にも使えます
 - 最上位ホットキー側のコールバックで「モーダルが出ている間は何もしない」と分岐したい場合は [Dialog.modalActive](../reference/Dialog.md#modalactive) を見ます ( モーダルインスタンスの有無。フォーカスを取らない常駐オーバレイは含みません )
+
+### 入力バインドと named action
+
+`"input"` ブロックの `"bindings"` で、キー / パッド / マウス / ホイールに**名前付きアクション** ( named action ) を割り当てられます。`"accept"` / `"cancel"` / `"nav_up"` … のような**組込名はダイアログ内で処理される**ため TJS へは届きません。組込以外の任意の名前を書いた場合だけ、その入力がホストへ通知されます。
+
+```jsonc
+"input": { "bindings": [
+    { "wheel": "up",   "action": "prev_page" },   // 任意名 = ホストへ通知
+    { "key": "escape", "action": "cancel" } ] }   // 組込名 = ダイアログ内で処理
+```
+
+通知は [onAction](../reference/Dialog.md#onaction) で受けますが、**`id` は `"<action>"` 固定で、付けた名前は `payload` に入ります**。
+
+```tjs
+function onAction(id, payload) {
+    if (id == "<action>") {
+        switch (payload) {
+        case "prev_page": /* ホイール上で前ページ */ break;
+        }
+    }
+}
+```
+
+`id` に自分で付けた名前が来るものと思って書くと、**その入力だけが黙って無反応**になり原因に気づきにくいので注意してください。
 
 ## ミニマルな利用例
 

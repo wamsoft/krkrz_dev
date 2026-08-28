@@ -155,6 +155,13 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 - ✅ モーダル表示中にタイマーが完全停止する / wake 投函失敗でタイマーが永久停止する
   / WINVER の Agent 入力がモーダルへ届かない (src/core `90698ee1`)
   詳細 = [src/core/doc/ModalWindow.md](src/core/doc/ModalWindow.md)
+- ✅ Elements 画面資材そのまま移植の拡張要望 7 件 (elements `365bc122` / `a2a36319`
+  / `06c39b99` / `bd7b607d` / src/core `fcae740b` / `7352157f`)
+  変数の読出と変化通知 (`Dialog.getVar` / `listVars` / `onVar` / `watchVars`)、
+  行テンプレート方式の一覧 `list`、スクロールバー `atlas_scrollbar`、つまみの
+  9-slice と `at_var_offset`、named action の通知形をドキュメント化。OS フォントの
+  family→ファイル解決 (5-7) は engine 側の課題として見送り。
+  詳細 = [TODO-elements.md](TODO-elements.md)
 - ✅ Elements の複数行テキストがレイアウトで壊れる (elements `c98276e1` / src/core `c5e156fa`)
   `default_label_styler` の limits / draw を改行対応に。`text_area` の高さ (1-b) は
   報告後の修正で解決済みだったことを実機確認、dialog の `size` (1-c) は仕様どおりで
