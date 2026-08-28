@@ -105,8 +105,8 @@ dlg.showDict(%[
 **注意**: `hsize`/`vsize` の指定値は **child の limits に clamp される** (cycfi fixed_size 仕様)。label 等の固定 max を持つ child を直接包んでも希望サイズまで広がらない → 全体サイズを確定したい画面は各パーツ幅を明示して自然サイズ=希望値にするのが確実。
 **長文テキスト**: `text_box` — 複数行・自動折返しの静的テキスト (`text`,`size`|`size_scale`,`color`,`mono`=等幅,`text_var`=setVar で本文丸ごと差替え)。幅は親 (`hsize`) が決め、高さは折返しに追従。長文は親に `scroller`。行 label 大量生成より軽い。実例=`data/ui/license_dialog.tjs` (showLicenseDialog: 左=一覧/右=text_box の 2 ペイン全画面モーダル、モーダル中も onAction→setVar が同期で効く)。
 **矩形テキスト/字幕**: `text_area` — 矩形へ流し込む静的テキスト (`text`/`text_id`/`text_var`/`text_list_id`+`index_var` は label と同規約, `size`|`size_scale`, `color`, `font`=comma区切りfamilies, `align`=left/center/right, `line_spacing`=行間追加px, `base`=auto/ltr/rtl, **`count_var`=文字送り** (-1=全部))。**折返し・行頭行末禁則・count が本体 `Layer.drawShapedTextArea` と同一ロジック**なので同じ本文・同じ幅なら**改行位置が一致**する (glyphware `layoutBlock`)。折返しは全文で確定してから count を適用=送ってもリフローしない。数える単位はクラスタ (`Layer.shapedTextCount` と同じ)。`text_box` は従来互換 (素朴な折返し・禁則なし) で据置なので**既存画面の改行は変わらない**。⚠`floating` の絶対座標で置くなら top-level `"size":[w,h]` を必ず書く (省略するとダイアログが内容最小サイズまで縮み**何も見えない**)。仕様=elements `docs/block-text.md`。
-**入力/state**: `label`(`text`,`size`=px絶対 or `size_scale`=倍率,`color`,`text_var`,`text_id`=i18n,`text_list`+`index_var`=指定番号表示) / `button`(`text`,`id`) / `checkbox`|`check_box`(`text`,`id`,`value`) / `toggle_button` / `input_box`(`placeholder`,`id`,`size`) / `selection_menu`(`id`,`options`,`selected`) / `invert_button` / `ring_button` / `labeled_row`(`label`,`label_width`,`child`) / `tab_view`(`tabs`,`initial`) / picker 系 `cycle_picker`/`framed_cycle_picker`/`segmented_picker`(`options`|`options_id`=i18n,`initial`,`font_size`,`index_var`=選択indexを変数へ)。
-**装飾/画像**: `pad_icon`(コントローラアイコン) / `sprite_button` / `atlas_image`(`rect` or `rect_list`+`index_var`=変数で矩形切替)/`atlas_button`/`atlas_toggle`/`atlas_choice`(排他)/`atlas_slider`(thumb 形式 or `fill`+`fill_at` ゲージ形式、`value_var`)/`atlas_progress`/`atlas_cycle_picker`(画像矢印ピッカー、フォーカス=矢印hilite)/`animated_sprite` / `gizmo_image`(9patch)。
+**入力/state**: `label`(`text`,`size`=px絶対 or `size_scale`=倍率,`color`,`text_var`,`text_id`=i18n,`text_list`+`index_var`=指定番号表示、`index`+`index_offset_var`=«N 行の窓»〔行ごと固定 index + 行共有の先頭位置。引く位置=index+offset、窓モードの範囲外は空文字〕、`text_list_var`=一覧データ自体の差替え) / `button`(`text`,`id`) / `checkbox`|`check_box`(`text`,`id`,`value`) / `toggle_button` / `input_box`(`placeholder`,`id`,`size`) / `selection_menu`(`id`,`options`,`selected`) / `slider`(0..1 の素のスライダ。`id`,`initial`,`vertical`,`thumb_color`/`track_color`〔既定=テーマ予約色 `@slider_thumb` 白 / `@slider_track` 黒〕,`value_var`,`display`/`display_var`) / `invert_button` / `ring_button` / `labeled_row`(`label`,`label_width`,`child`) / `tab_view`(`tabs`,`initial`) / picker 系 `cycle_picker`/`framed_cycle_picker`/`segmented_picker`(`options`|`options_id`=i18n,`initial`,`font_size`,`font`=表示テキストの family[#axes]・省略でテーマ既定,`index_var`=選択indexを変数へ)。
+**装飾/画像**: `pad_icon`(コントローラアイコン) / `sprite_button` / `atlas_image`(`rect` or `rect_list`+`index_var`=変数で矩形切替、`focus_link`=リンク先 id のフォーカスで `frames.normal`/`frames.hilite` を切替える飾り〔`normal` 省略可=非フォーカス時は何も描かない・素材1枚のフォーカスインジケータ用。既定で「飾りに hover→リンク先へフォーカス」プロキシが付きクリックも奪うので、コントロールに重なる配置は `"hover_focus_link": false`〕)/`atlas_button`/`atlas_toggle`/`atlas_choice`(排他)/`atlas_slider`(thumb 形式 or `fill`+`fill_at` ゲージ形式、`value_var`)/`atlas_progress`/`atlas_cycle_picker`(画像矢印ピッカー、フォーカス=矢印hilite、`font` 指定可)/`animated_sprite` / `gizmo_image`(9patch)。
 - 色は `[r,g,b,a]` 配列(0–255)。フォントサイズは **`size`=px絶対 / `size_scale`=倍率**(テーマ既定≒14px 比)。JSON/JSONC(コメント+末尾カンマ)可。
 - **i18n**: top-level `strings`(`{id:{lang:str}}`) + `lang`。`text_id`/`options_id`/`text_list_id` が現在言語で解決される。**TJS からの実行中切替は `Dialog.language = "en"`**(表示中の全ダイアログへ即時反映・開き直し不要、picker は選択 index 維持。以後開く画面の既定にもなる)。
 - **変数連動**: picker `index_var`(**双方向**: 選択変更で書き + setVar で quiet 追従) ↔ `text_list`/`rect_list` の `index_var`(読み) を同名にすると選択連動(機種選択→SPEC/スクショ等)。`value_var`=10進小数、`at_var`=`"x,y[,w,h]"`。picker `enabled_var`=選択肢の有効/無効 mask(`'0'/'1'`文字列、step/click が無効 index をスキップ。未開放機種の出し分け)。choice (`atlas_choice`/`radio_button`) の `selected_var`+`selected_value`=ラジオグループ変数(グループ全員同じ var + 異なる value、var==value の1個が選択、双方向)。TJS からは `dlg.setVar(name, value)` で駆動。
@@ -121,16 +121,17 @@ dlg.showDict(%[
 | プロパティ | 既定 | 用途 |
 |---|---|---|
 | `language` | `""` | i18n 表示言語。代入で表示中の全画面へ即時反映(上記 i18n 参照) |
-| `focusRing` | `true` | フォーカス中要素に描かれる汎用の枠(青い角丸)。**状態別の絵を持つ画像 UI では `false`** にする(枠が素材に重なるため)。button/slider/dial/thumbwheel が対象。フォーカス自体は生きるのでキー/パッド操作と `hilite` 切替は不変 |
+| `focusRing` | `false` | フォーカス中要素に描かれる汎用の枠(青い角丸)。**krkrz ホスト初期化で OFF が既定**(authored 画面は focused frame / focus_link 装飾で表現する方針)。使いたい場合に `true`(起動時の明示設定は初期化に上書きされない)。button/slider/dial/thumbwheel が対象。OFF でもフォーカス自体は生きるのでキー/パッド操作と `hilite` 切替は不変 |
 | `renderCache` | `true` | 変化の無いフレームの再ラスタ+再アップロードを省略。アイドルがゼロコストになる。`false` は負荷比較用 |
 | `partialRedraw` | `true` | 変化した矩形だけ描き直す(ダーティ矩形)。`false` は全面 |
+| `baseSize` | 未設定 | UI の author 基準面サイズ `[w,h]`(overlay 拡縮 fit の分母)。void で既定=ゲーム基準面(primaryLayer)へ戻る。**ゲーム画面と別解像度で UI を author しているとき**に設定すると、部分パネルの拡縮が author 基準になりゲーム側の基準面変更に巻き込まれない |
 | `renderScale` | `0` | ラスタライズ密度。0=auto(present サイズで直接)/`>0`=authored×倍率で描いて拡縮 |
 | `renderStats` / `renderStatsReset()` | — | 描画パイプラインの区間計測(frames/rasters/partials/updateUs/rasterUs/uploadUs/presentUs 等)。累積値なので2回読んで差分を取る。計測画面=`data/elements_bench`(`-benchauto` で無操作スイープ) |
 | `renderCount` | — | 累計ラスタライズ回数。アイドルで増えなければ renderCache が効いている |
 
 ### interactive 属性 (focusable widget 共通)
 - **`"id"`** — `onAction` / `result.values` / shortcut / setVar の参照キー。
-- **`"initial_focus": true`** — 起動時フォーカス候補(複数なら build 順で先勝ち)。
+- **`"initial_focus": true`** — 起動時フォーカス候補。**複数指定可**で、先頭候補が `enabled_var` で無効なら次の有効候補へ落ちる。数値を書くと明示優先度(小さいほど優先・`true`=0、同値は build 順)。候補確定は表示直後の idle まで遅延するので、show 後に `setVar` で有効/無効を注入する運用でも注入後の状態で判定される。
 - **`"close_on_click": true`** — **既定 false**。true の button だけが click で「閉じて確定」する(`result.action=id`)。false は `onAction` を発火するだけで閉じない → OK/Cancel 等の「閉じるボタン」にだけ付ける。
 
 ---
@@ -195,14 +196,15 @@ dlg.startFlow("ui/menu/app.jsonc");   // 即 return(戻り値=起動成否)
 ---
 
 ## 6. 入力・フォーカス・モーダル・複数インスタンス
-- **配送優先順位 (2026-08-11 整理)**: `モーダル(全消費) > ホストホットキー(バイパス) > フォーカスパネル(handled素通し) > ゲーム`。
+- **配送優先順位**: `最上位ホットキー(System.registerHotKey・ポンプ入口) > モーダル(全消費) > ホストホットキー(Dialog.registerHotKey・バイパス) > フォーカスパネル(handled素通し) > ゲーム`。
 - **複数インスタンス同時表示 OK**(z-order。先頭=最背面/末尾=最前面)。各インスタンスは `modal` フラグを持つ。
   - `modal=true`(showJson 既定/showModal*/showFlow): 全入力を独占(下・ゲームに通さない)。
   - `modal=false`(startFlow/startFlowScreens、showJson 系は第3引数で指定可): ヒットしない入力は下/ゲームへ**素通し**。
 - **用途 3 態**: モーダル `showJson(json)` / **操作パネル `showJson(json, true, false)`**(キー/パッドがパネルへ届き、未処理分はホストへ素通し。パッド十字=フォーカスナビ/A=決定) / 表示専用 HUD `showJson(json, false)`(キーを一切受けない)。
 - **キーボードフォーカス**: modal または `wants_focus` の最前面が保持。後から開いた focus-grab が自然に前面、閉じると直前へ戻る。テキスト入力ウィジェット focus 中は grabFocus=false でもキー/テキストが届く(focus_consumes_text フォールバック)。
+- **最上位ホットキー `System.registerHotKey(key, mods, callback)`** / `System.unregisterHotKey(key, mods)`: イベントポンプ入口で照合するので **モーダル表示中・テキスト入力中でも効く**唯一の層(下の Dialog.registerHotKey より上流)。callback が `false` を返せば消費せず通常 dispatch へ素通し。リピートは消費のみ・up は key のみ照合。モーダルの有無は **`Dialog.modalActive`**(読取専用・常駐オーバレイは含まない)で判定。SDL3 ビルドのみ(WINVER 未配線)。
 - **ホストホットキー `Dialog.registerHotKey(key, shift=0, duringTextInput=false)`** / `unregisterHotKey` / `clearHotKeys`: 登録キー(VK_PAD*・VK_RBUTTON 等マウスも同じ空間)はパネルへ渡らず `Window.onKeyDown/onMouseDown` へ直行(バイパス方式・専用イベント無し)。テキスト入力中は既定抑止(`duringTextInput=true` で有効)。モーダル中は無効。ESC/PgUp/PgDn 等「シェルが必ず受けたいキー」の確保に使う(実例=demolib DemoShell)。
-- `input`(top-level)で矢印/パッドナビ(`arrow_focus_nav` / `dpad_mode` / `shortcuts`〔key/pad→id〕/ `pad_bindings`)を設定。既定 bind: A=Enter / B=Esc / X=Shift+Tab / Y=Tab / D-Pad=矢印。`"bindings": [{key|pad|mouse|wheel, action}]` で named-action を差替(`"none"`=消費して無効化、`"passthrough"`=消費せずホストへ素通し=常駐オーバレイが「この入力は下のゲームのもの」と宣言する用)。pad のフェイスボタンは刻印(`"a"`/`"b"`/`"x"`/`"y"`)と位置(`"face_south"`/`"face_east"`/`"face_west"`/`"face_north"`)の 2 系統で、1 押下で両方届く。表示側 `pad_icon` の name も同 2 系統を持つので割り当てと表示は同じ基準で組にする(任天堂系は X/Y の位置が Xbox と逆)。
+- `input`(top-level)で矢印/パッドナビ(`arrow_focus_nav` / `dpad_mode` / `shortcuts`〔key/pad→id〕/ `pad_bindings`)を設定。既定 bind: A=Enter / B=Esc / X=Shift+Tab / Y=Tab / D-Pad=矢印。`"bindings": [{key|pad|mouse|wheel, action}]` で named-action を差替(`"none"`=消費して無効化、`"passthrough"`=消費せずホストへ素通し=常駐オーバレイが「この入力は下のゲームのもの」と宣言する用)。pad 名はフェイス以外に `"lb"`(`"l1"`)/`"rb"`(`"r1"`)/**`"lt"`(`"l2"`/`"lt_click"`)/`"rt"`(`"r2"`/`"rt_click"`)**/`"l3"`/`"r3"`/`"back"`/`"start"`/`"dpad_*"` が使える(トリガ 2 つは krkrz 側の VK_PAD7/VK_PAD8 変換が入って初めて届くようになった)。フェイスボタンは刻印(`"a"`/`"b"`/`"x"`/`"y"`)と位置(`"face_south"`/`"face_east"`/`"face_west"`/`"face_north"`)の 2 系統で、1 押下で両方届く。表示側 `pad_icon` の name も同 2 系統を持つので割り当てと表示は同じ基準で組にする(任天堂系は X/Y の位置が Xbox と逆)。
 - **フォーカス無しから方向キーで入る位置**: `input.arrow_focus_enter` = `"first"`(既定・収集順の先頭)/ `"directional"`(押した方向の端。右キーなら一番右)。`initial_focus` を置かない確認ダイアログ向け。
 - 複数 Dialog の ownership: `close()` は**自分のインスタンスだけ**閉じる(`IsHandlerActive(this)` ゲート)。ブロッキング pump も自分の handler で終了判定。
 
