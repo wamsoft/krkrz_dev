@@ -114,6 +114,61 @@ class System {
 	function getKeyState(code);
 
 	/**
+	 * 最上位ホットキーの登録
+	 *
+	 * イベントポンプの入口でキーを照合し、**フォーカス中のレイヤ / テキスト入力 /
+	 * [Dialog](Dialog.md) ( モーダル含む ) より先に** callback を同期呼び出しします。
+	 * Alt+Enter のフルスクリーン切替や Esc の終了確認のように「画面が何であっても
+	 * 効いてほしい」キーを 1 箇所で扱うための仕組みです。
+	 *
+	 * 同一の key + mods への再登録は差し替えになります。登録テーブルはプロセス共有で
+	 * ( Window 単位ではありません )、エンジン終了時に解放されます。
+	 *
+	 * ```tjs
+	 * // Esc は終了確認。ただしモーダルダイアログ表示中は素通しする
+	 * System.registerHotKey(VK_ESCAPE, 0, function(key, shift) {
+	 *     if(Dialog.modalActive) return false;   // 消費せず通常の dispatch へ
+	 *     askQuit();
+	 *     return true;
+	 * });
+	 * ```
+	 *
+	 * 押しっぱなしのリピートではコールバックは再発火せず ( 消費だけされます )、
+	 * up は key のみで照合して対応する down を消費したキーは必ず消費します
+	 * ( 修飾キーを先に離しても片割れが入力レイヤへ漏れません )。コールバックが
+	 * 例外を投げてもポンプは壊れず、ログへ残して続行します。
+	 *
+	 * **プラットフォームによる差異**
+	 *
+	 * フックは SDL3 系ビルドのイベントポンプ入口のみに配線されています。WINVER
+	 * ( Windows ネイティブ ) ビルドでは登録しても発火しません。
+	 *
+	 * ダイアログにフォーカスを渡したまま特定のキーだけホスト側で受けたい場合は、
+	 * 用途の違う [Dialog.registerHotKey](Dialog.md#registerhotkey) ( ダイアログへ
+	 * 渡さず通常のゲーム入力経路へ素通しする。モーダル中は無効 ) を使います。
+	 * @param key 仮想キーコード ( `VK_RETURN` / `VK_ESCAPE` / `VK_F1` 等 )。
+	 * @param mods `ssShift` / `ssAlt` / `ssCtrl` の組み合わせ。照合はこの 3 ビットのみで、
+	 *   NumLock / CapsLock 等の状態は無視します。
+	 * @param callback 押下時に呼ばれる関数。`callback(key, shift)` の形で呼ばれ、
+	 *   **false ( または 0 ) を返すと消費せず**通常の dispatch へ流します
+	 *   ( void を含むそれ以外の戻り値は消費 )。
+	 * @see System.unregisterHotKey
+	 * @see Dialog.modalActive
+	 */
+	function registerHotKey(key, mods, callback);
+
+	/**
+	 * 最上位ホットキーの解除
+	 *
+	 * [registerHotKey](#registerhotkey) で登録したホットキーを解除します。
+	 * @param key 登録時に指定した仮想キーコード。
+	 * @param mods 登録時に指定した修飾キーの組み合わせ。
+	 * @return 解除できたかどうか ( 登録が無ければ偽 )。
+	 * @see System.registerHotKey
+	 */
+	function unregisterHotKey(key, mods);
+
+	/**
 	 * ファイル/プログラムの実行
 	 *
 	 * target で指定したファイルやソフトウェアを**実行**します。

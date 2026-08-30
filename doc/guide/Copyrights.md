@@ -17,6 +17,9 @@ var text = System.getLicenseText("FreeType");
   組めます (例: `group == "font"` で絞り込み)。
 - 詳細はリファレンスの [System.getLicenseList](../reference/System.md#getlicenselist) /
   [System.getLicenseText](../reference/System.md#getlicensetext) を参照してください。
+- **どのコンポーネントがどのライセンスか**は
+  [同梱ライセンス一覧](BundledLicenses.md) にまとまっています
+  (本体 / プラグイン / フォントの三分割。manifest から自動生成)。
 - Elements Dialog が使えるビルドでは、サンプル実装
   `src/core/data/ui/license_dialog.tjs` の `showLicenseDialog(win)` で
   「左=ジャンル別一覧 / 右=本文」の全画面モーダルビューアをそのまま

@@ -68,6 +68,8 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [inputString](#inputstring)
 - [getTickCount](#gettickcount)
 - [getKeyState](#getkeystate)
+- [registerHotKey](#registerhotkey)
+- [unregisterHotKey](#unregisterhotkey)
 - [shellExecute](#shellexecute)
 - [readRegValue](#readregvalue)
 - [getArgument](#getargument)
@@ -268,18 +270,11 @@ var path = System.resourcePath + "notosansjp-regular.otf";
 
 マイドキュメントのパス
 
-ユーザのマイドキュメントのパスを表します。Windows の場合、OS の Known Folder
-「ドキュメント」( FOLDERID_Documents ) のフォルダが返されます ( OneDrive
-リダイレクトも解決されます )。取得できない場合は RoamingAppData、それも
-なければ [System.exePath](System.md#exepath) と同じフォルダを返します。
+ユーザのマイドキュメントのパスを表します。Windows の場合、レジストリの
+HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders の
+Personal で表されるフォルダが返されます。通常これは「マイドキュメント」フォルダを指します。
 
-!!! note "SDL3 / 汎用ビルドでの挙動"
-    2026-08-25 以降のエンジンでは SDL3 / 汎用ビルドにも存在します。Windows では
-    WINVER と同じ解決、Windows 以外の OS では専用フォルダを提供しないため
-    [System.exePath](System.md#exepath) と同じ値を返します ( exePath と等値なら
-    「別置き場なし」と判断できます )。それ以前のエンジンの汎用ビルドには
-    存在しないため、古いエンジンも対象にするスクリプトでは
-    `typeof System.personalPath` で存在を確認してください。
+このフォルダがない場合は [System.exePath](System.md#exepath) と同じフォルダを返します。
 
 **関連:** [System.appDataPath](System.md#appdatapath) / [System.exePath](System.md#exepath)
 
@@ -293,20 +288,24 @@ var path = System.resourcePath + "notosansjp-regular.otf";
 
 ユーザのホームディレクトリのパス
 
-ユーザのホームディレクトリのパスを表します。Windows の場合、OS の Known Folder
-「RoamingAppData」( FOLDERID_RoamingAppData ) のフォルダが返されます。通常これは
-`C:\Users\<ユーザ名>\AppData\Roaming` ( C: の部分は環境によって異なります ) で、
-隠しフォルダになっています。取得できなかった場合は
-[System.exePath](System.md#exepath) と同じフォルダになります。
+ユーザのホームディレクトリのパスを表します。Windows の場合、レジストリの
+HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders の
+AppData で表されるフォルダが返されます。このフォルダがない場合は [System.exePath](System.md#exepath) と同じ
+フォルダを返します。
 
-!!! note "SDL3 / 汎用ビルドでの挙動"
-    2026-08-25 以降のエンジンでは SDL3 / 汎用ビルドにも存在します。Windows では
-    WINVER と同じ解決、Windows 以外の OS では専用フォルダを提供しないため
-    [System.exePath](System.md#exepath) と同じ値を返します ( exePath と等値なら
-    「別置き場なし」と判断できます )。それ以前のエンジンの汎用ビルドには
-    存在しないため、古いエンジンも対象にするスクリプトでは
-    `typeof System.appDataPath` で存在を確認するか、保存先には
-    [System.dataPath](System.md#datapath) を使用してください。
+これは、通常、以下の通りになります。
+
+XP の場合
+`C:\Documents and Settings\<ユーザ名>\Application Data\` ( C: の部分は環境によって異なります )
+Vista, 7, 8 の場合
+`C:\Users\<ユーザ名>\AppData\Roaming` ( C: の部分は環境によって異なります )
+何らかの理由で レジストリキー ( 上記参照 ) を読み出せなかった場合
+吉里吉里の実行可能ファイルのあるフォルダ ([System.exePath](System.md#exepath))になります
+
+!!! warning "Windows ネイティブ ( WINVER ) ビルド限定"
+    このプロパティは SDL3 / 汎用ビルドには存在しません。全ビルドで動く
+    スクリプトでは `typeof System.appDataPath` で存在を確認するか、
+    保存先には [System.dataPath](System.md#datapath) を使用してください。
 
 **関連:** [System.dataPath](System.md#datapath) / [System.exePath](System.md#exepath) / [System.personalPath](System.md#personalpath)
 
@@ -328,8 +327,8 @@ var path = System.resourcePath + "notosansjp-regular.otf";
 
 **全ビルドに存在する**ため、保存先の取得はこのプロパティを使うのが安全です
 ( [System.appDataPath](System.md#appdatapath) /
-[System.personalPath](System.md#personalpath) は 2026-08-25 より前のエンジンの
-汎用ビルドには存在せず、Windows 以外の OS では `exePath` と同じ値になります )。
+[System.personalPath](System.md#personalpath) は Windows ネイティブ
+ビルド限定 )。
 
 **関連:** [System.appDataPath](System.md#appdatapath)
 
@@ -1342,6 +1341,82 @@ code で指定したキーコードに対応するキーが、このメソッド
 
 ---
 
+### registerHotKey
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `key` | `&nbsp;` | 仮想キーコード ( `VK_RETURN` / `VK_ESCAPE` / `VK_F1` 等 )。 |
+| `mods` | `&nbsp;` | `ssShift` / `ssAlt` / `ssCtrl` の組み合わせ。照合はこの 3 ビットのみで、<br>NumLock / CapsLock 等の状態は無視します。 |
+| `callback` | `&nbsp;` | 押下時に呼ばれる関数。`callback(key, shift)` の形で呼ばれ、<br>**false ( または 0 ) を返すと消費せず**通常の dispatch へ流します<br>( void を含むそれ以外の戻り値は消費 )。 |
+
+**解説**
+
+最上位ホットキーの登録
+
+イベントポンプの入口でキーを照合し、**フォーカス中のレイヤ / テキスト入力 /
+[Dialog](Dialog.md) ( モーダル含む ) より先に** callback を同期呼び出しします。
+Alt+Enter のフルスクリーン切替や Esc の終了確認のように「画面が何であっても
+効いてほしい」キーを 1 箇所で扱うための仕組みです。
+
+同一の key + mods への再登録は差し替えになります。登録テーブルはプロセス共有で
+( Window 単位ではありません )、エンジン終了時に解放されます。
+
+```tjs
+// Esc は終了確認。ただしモーダルダイアログ表示中は素通しする
+System.registerHotKey(VK_ESCAPE, 0, function(key, shift) {
+if(Dialog.modalActive) return false;   // 消費せず通常の dispatch へ
+askQuit();
+return true;
+});
+```
+
+押しっぱなしのリピートではコールバックは再発火せず ( 消費だけされます )、
+up は key のみで照合して対応する down を消費したキーは必ず消費します
+( 修飾キーを先に離しても片割れが入力レイヤへ漏れません )。コールバックが
+例外を投げてもポンプは壊れず、ログへ残して続行します。
+
+**プラットフォームによる差異**
+
+フックは SDL3 系ビルドのイベントポンプ入口のみに配線されています。WINVER
+( Windows ネイティブ ) ビルドでは登録しても発火しません。
+
+ダイアログにフォーカスを渡したまま特定のキーだけホスト側で受けたい場合は、
+用途の違う [Dialog.registerHotKey](Dialog.md#registerhotkey) ( ダイアログへ
+渡さず通常のゲーム入力経路へ素通しする。モーダル中は無効 ) を使います。
+
+**関連:** [System.unregisterHotKey](System.md#unregisterhotkey) / [Dialog.modalActive](Dialog.md#modalactive)
+
+---
+
+### unregisterHotKey
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `key` | `&nbsp;` | 登録時に指定した仮想キーコード。 |
+| `mods` | `&nbsp;` | 登録時に指定した修飾キーの組み合わせ。 |
+
+**戻り値**
+
+解除できたかどうか ( 登録が無ければ偽 )。
+
+**解説**
+
+最上位ホットキーの解除
+
+[registerHotKey](#registerhotkey) で登録したホットキーを解除します。
+
+**関連:** [System.registerHotKey](System.md#registerhotkey)
+
+---
+
 ### shellExecute
 
 メソッド
@@ -2254,9 +2329,24 @@ GL テクスチャメモリのピーク値のリセット
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `target` | `&nbsp;` |  |
-| `param` | `&nbsp;` |  |
-| `timeout` | `0` |  |
+| `target` | `&nbsp;` | プログラム |
+| `param` | `&nbsp;` | 引数 |
+| `timeout` | `0` | タイムアウト時間(ms) |
+
+**戻り値**
+
+%[
+status:   ok/error/timeoutのいずれかの文字列,
+stdout:   コンソール出力文字列配列(改行で分離)
+exitcode: 終了コード(status=="ok"時のみ),
+message:  エラーメッセージ(status!="ok"時のみ)
+];
+
+**解説**
+
+コンソール出力取得つきコマンドラインプログラムの実行
+
+バックグラウンド処理はありません。実行対象のプログラムが終了するまで吉里吉里が停止します。
 
 ---
 
@@ -2504,6 +2594,8 @@ System クラスへの標準入出力拡張
 
 環境変数を取得
 
+レジストリの読み込みは、組み込みの System.readRegValue を使用のこと
+
 ---
 
 ### writeEnvValue
@@ -2686,6 +2778,7 @@ void or %[ major, minor, build, platform, spmajor, spminor, servevicepack, suite
 OSのバージョン情報詳細を取得
 
 RtlGetVersion API および RTL_OSVERSIONINFOW 構造体を参照のこと
+(October 2018 update or later)
 
 ---
 
@@ -2781,6 +2874,8 @@ setDefaultDllDirectoriesでllsUserDirsフラグを立てておくこと
 **解説**
 
 ::AddDllDirectoryラッパー
+
+0x00000400
 
 ---
 

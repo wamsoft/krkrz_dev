@@ -100,13 +100,84 @@ GPU ( OpenGL 描画 ) 側で同等のトランジションを行いたい場合�
 - 折り返し・行頭行末禁則・文字送りの単位が [Layer.drawShapedTextArea](../reference/Layer.md#drawshapedtextarea) と**同じロジック**です。同じ本文・同じ幅・同じフォント / サイズなら**改行位置が一致**します ( レイヤ描画と Elements で字幕を出し分けても行組みがずれません )。
 - `"count_var"` に変数名を与えると、ホストが [setVar](../reference/Dialog.md#setvar) で数値を書くだけで文字送りが進みます。**折り返しは全文で確定してから count を適用する**ので、送っている途中でリフローしません。数える単位は [Layer.shapedTextCount](../reference/Layer.md#shapedtextcount) と同じクラスタ ( 合字・結合文字・絵文字 ZWJ シーケンスで 1 ) です。
 - 本文の差し替えは `"text_var"` / `"text_id"`、リストからの指定番号表示は `"text_list_id"` + `"index_var"` で、いずれも `label` と同じ規約です。
+- 行ごとに固定の `"index"` と、行で共有する `"index_offset_var"` ( 先頭位置 ) を組み合わせると「N 行の窓」になります。ホストは [setVar](../reference/Dialog.md#setvar) で**先頭位置の変数 1 個を動かすだけで一覧が送れる**ので、行ごとに変数を用意する必要がありません ( 一覧データ自体の差し替えは `"text_list_var"` )。
 - 従来からある `text_box` は互換のためそのまま残っています ( 素朴なワード折り返し・禁則なし )。既存画面の改行位置は変わりません。
 
 ⚠ 絶対座標で置く ( `floating` の `"at"` を使う ) 場合は、top-level に `"size": [w, h]` を明示してください。省略するとダイアログが内容の最小サイズまで縮み、絶対座標がその外に出て何も表示されません。
 
+## ドラッグ操作 ( drag_at_var / onDrag )
+
+widget に `"drag_at_var"` を書くと、ドラッグ中の位置が `"x,y"` 形式でその変数へ書き込まれます。canvas の子の `"at_var"` に同じ変数を挿せば、TJS を介さずに**絵がドラッグへ追従**します ( エンジン内で完結するのでイベント配送の遅延を受けません )。可動域は `"drag_bounds": [x, y, w, h]` で制限できます。
+
+「どこで離したか」のような判断を TJS 側で行いたい場合は、その widget に `"drag_events": true` を指定して [onDrag](../reference/Dialog.md#ondrag) を実装します。
+
+```tjs
+class DragDialog extends Dialog {
+    function onDrag(e) {
+        // e.id / e.phase ( "begin" | "move" | "end" ) / e.x / e.y
+        // e.dx / e.dy ( 前回からの差分 ) / e.startX / e.startY / e.modifiers
+        if (e.phase == "end") {
+            // 離した位置で当たり判定を取る、といった判断はここで
+        }
+    }
+}
+```
+
+座標は画面 JSON に書いた座標系です。溜まった `"move"` は最新の 1 件へ畳まれます ( `"begin"` / `"end"` は畳まれません )。**見た目を追従させるだけなら onDrag は不要**で、`drag_at_var` + `at_var` の組み合わせで済みます。
+
+## 一覧とスクロールバー ( list / atlas_scrollbar )
+
+行が並ぶ画面は `"type": "list"` で組みます。**1 行分のテンプレートを行数ぶん複製**する仕組みで、行の位置・当たり判定・hover・選択・「データが足りない行の後始末」までウィジェット側が持ちます。TJS 側はデータを流し込むだけです。
+
+```tjs
+var layout = %[
+  "content" => %[
+    "type" => "list", "id" => "files",
+    "rows" => 6, "row_size" => [676, 36], "pitch" => [0, 40],
+    "index_offset_var" => "top", "count_var" => "n",
+    "select_var" => "sel", "row_hover_var" => "rhov#index",
+    "row" => %[ "type" => "label", "id" => "row#index",
+                "text_list_var" => "items" ]
+  ]
+];
+dlg.showDict(layout);
+dlg.setVar("items", "file 0\nfile 1\nfile 2");   // 一覧データ
+dlg.setVar("n", "3");                             // 総件数
+```
+
+- 文字列の中の `#index` が行番号へ置換されます ( `"id": "row#index"` → `row0` / `row1` … )。`text_list_var` を持つ要素には行番号と先頭位置が自動で挿さるので、テンプレートに 1 行書くだけで一覧になります
+- 行をクリックすると [onAction](../reference/Dialog.md#onaction) が **`payload` = データ index** で発火します ( 行の中にボタンがあればそちらが優先 )
+- `count_var` を渡すと、データが無い行は描画も当たり判定も消えます
+- hover / 選択の色は、行ごとのフラグ変数 ( `row_hover_var` / `row_select_var` を `"visible_var"` で受ける ) か、[onVar](../reference/Dialog.md#onvar) で `hover_var` / `select_var` を拾ってホスト側のレイヤを差し替える形のどちらでも組めます
+
+スクロールバーは `"type": "atlas_scrollbar"` に**同じ `index_offset_var`** を挿すだけです。つまみの長さは「見えている行数 ÷ 総件数」に比例し、つまみのドラッグ・溝クリックでのページ送り・ホイールまで内蔵しています ( 本文が `scroller` に載っている画面なら `scroller` の `pos_var` で足ります )。
+
+## 変数の読み書きと変化通知 ( setVar / getVar / onVar )
+
+画面 JSON の変数は 1 本の store にぶら下がっていて、[setVar](../reference/Dialog.md#setvar) で書けるだけでなく [getVar](../reference/Dialog.md#getvar) で読み出せます。読めるのは自分が書いた値だけではありません — `"vars_on_hover"` / `"vars_on_focus"`、slider の `"value_var"`、`"drag_at_var"`、一覧の `"index_offset_var"` のように**画面側が書いた値も同じ store**なので、そのまま読めます。
+
+変化した時点で知りたい場合は [onVar](../reference/Dialog.md#onvar) を実装します。
+
+```tjs
+class ListDialog extends Dialog {
+    function onVar(name, value) {
+        if (name == "row_hover") {
+            // カーソルが乗っている行が変わった → ホスト側のレイヤを差し替える
+            highlightRow(+value);
+        }
+    }
+}
+```
+
+これで「**絵はホスト側のレイヤ、当たり判定だけダイアログ**」という構成が組めます。1 枚絵が大きすぎて atlas に積めない一覧画面などで、ダイアログには透明なボタンだけを並べて hover を受け取り、表示はゲーム側のレイヤで行う、という分担です。
+
+- 通知は 1 フレーム遅延し、同じ変数の連続変化は最新の 1 件へ畳まれます。「いまの値」が要るときは [getVar](../reference/Dialog.md#getvar) を読みます
+- **onVar を実装したダイアログだけが観測対象**になります ( 実装していなければコストはかかりません )。受け取る変数を絞りたいときは [watchVars](../reference/Dialog.md#watchvars) に名前を並べます — hover 連動変数やドラッグ位置は毎フレーム書き換わるためです
+- 画面にどんな変数があるかは [listVars](../reference/Dialog.md#listvars) で一覧できます ( 変数名・現在値・参照している widget の id と種類 )。デバッグパネルや画面 JSON の検証に使えます
+
 ## 非モーダルの複数同時表示とフォーカス
 
-非モーダル ( オーバーレイ ) パネルの配置は画面 JSON の top-level `"align"` / `"margin"` で指定し、配置と拡縮の基準領域は top-level `"base"` で選べます — `"window"` ( 既定、ウィンドウ全面基準 ) / `"content"` ( ゲーム画像の表示領域基準。字幕窓のようにゲーム画像へ追従させたい場合 )。拡縮はゲームの基準面に対するウィンドウ ( または表示領域 ) の比率に追従するため、フルスクリーン等ではゲームと同率で拡大されます。
+非モーダル ( オーバーレイ ) パネルの配置は画面 JSON の top-level `"align"` / `"margin"` で指定し、配置と拡縮の基準領域は top-level `"base"` で選べます — `"window"` ( 既定、ウィンドウ全面基準 ) / `"content"` ( ゲーム画像の表示領域基準。字幕窓のようにゲーム画像へ追従させたい場合 )。拡縮はゲームの基準面に対するウィンドウ ( または表示領域 ) の比率に追従するため、フルスクリーン等ではゲームと同率で拡大されます。ゲーム画面と別解像度で UI を author しているタイトル ( ゲーム画面 640x400 / UI 1920x1080 等 ) では、[Dialog.baseSize](../reference/Dialog.md#basesize) に author 基準面のサイズを設定すると拡縮の分母がそちらになり、ゲーム側の基準面サイズの変更にも巻き込まれません。
 
 非モーダルダイアログ ( [showJson](../reference/Dialog.md#showjson) / [startFlow](../reference/Dialog.md#startflow) 系 ) は z-order 付きのインスタンスリストとして管理され、複数同時に表示できます。マウスは最前面からヒットテストし、キーボード / ゲームパッドはフォーカスを保持しているインスタンス ( z-order 末尾優先 ) に届きます。モーダルダイアログを重ねた場合、下のインスタンスは描画は維持されたまま入力だけがブロックされます。
 
@@ -118,16 +189,42 @@ GPU ( OpenGL 描画 ) 側で同等のトランジションを行いたい場合�
 
 入力は次の優先順位で配送されます。
 
-1. **モーダルダイアログ** — 全入力を独占 ( 下にもゲームにも通しません )
-2. **ホストホットキー** ( [registerHotKey](../reference/Dialog.md#registerhotkey) ) — 登録キーはダイアログへ渡らず [Window.onKeyDown](../reference/Window.md#onkeydown) 等へ直行
-3. **フォーカスを持つ非モーダルパネル** — キー / パッドを受け、未処理分のみ素通し
-4. **ゲーム / レイヤ** — 未消費の落ち先
+1. **最上位ホットキー** ( [System.registerHotKey](../reference/System.md#registerhotkey) ) — イベントポンプの入口。**モーダル表示中でも効く**唯一の層です ( フックは SDL3 系ビルドのみ配線されており、WINVER ビルドでは発火しません )
+2. **モーダルダイアログ** — 全入力を独占 ( 下にもゲームにも通しません )
+3. **ホストホットキー** ( [registerHotKey](../reference/Dialog.md#registerhotkey) ) — 登録キーはダイアログへ渡らず [Window.onKeyDown](../reference/Window.md#onkeydown) 等へ直行
+4. **フォーカスを持つ非モーダルパネル** — キー / パッドを受け、未処理分のみ素通し
+5. **ゲーム / レイヤ** — 未消費の落ち先
 
 単発表示系 ( [showJson](../reference/Dialog.md#showjson) / showFile / showDict ) は第 3 引数 `modal` で「非モーダル + フォーカスあり」( `showJson(json, true, false)` ) を指定できます。slider や picker を含む操作パネルはこの形で出すと、パッドの十字 / A ボタンやキーボードでウィジェットを操作しつつ、パネルが使わないキーはゲームへ流れます。その上で ESC ( シーン復帰 ) や PageUp/Down ( 画面切替 ) のような「必ずホストが受けたいキー」を registerHotKey で確保するのが定石です ( 実例: `data/demolib/demo_common.tjs` の DemoShell )。
 
 - ホットキーはテキスト入力ウィジェットにキャレットがある間は既定で抑止されます ( `duringTextInput = true` で入力中も有効化 )
 - モーダル表示中はホットキーも無効です ( 確認ダイアログの ESC = cancel を奪いません )
 - マウスボタン ( VK_RBUTTON 等 ) も登録でき、全画面透過 HUD が右クリックを拾って閉じてしまう問題の回避にも使えます
+- 最上位ホットキー側のコールバックで「モーダルが出ている間は何もしない」と分岐したい場合は [Dialog.modalActive](../reference/Dialog.md#modalactive) を見ます ( モーダルインスタンスの有無。フォーカスを取らない常駐オーバレイは含みません )
+
+### 入力バインドと named action
+
+`"input"` ブロックの `"bindings"` で、キー / パッド / マウス / ホイールに**名前付きアクション** ( named action ) を割り当てられます。`"accept"` / `"cancel"` / `"nav_up"` … のような**組込名はダイアログ内で処理される**ため TJS へは届きません。組込以外の任意の名前を書いた場合だけ、その入力がホストへ通知されます。
+
+```jsonc
+"input": { "bindings": [
+    { "wheel": "up",   "action": "prev_page" },   // 任意名 = ホストへ通知
+    { "key": "escape", "action": "cancel" } ] }   // 組込名 = ダイアログ内で処理
+```
+
+通知は [onAction](../reference/Dialog.md#onaction) で受けますが、**`id` は `"<action>"` 固定で、付けた名前は `payload` に入ります**。
+
+```tjs
+function onAction(id, payload) {
+    if (id == "<action>") {
+        switch (payload) {
+        case "prev_page": /* ホイール上で前ページ */ break;
+        }
+    }
+}
+```
+
+`id` に自分で付けた名前が来るものと思って書くと、**その入力だけが黙って無反応**になり原因に気づきにくいので注意してください。
 
 ## ミニマルな利用例
 
@@ -200,7 +297,9 @@ Dialog.registerFont("MyFont-Medium", "fonts/MyFont-VF.ttf#wght=500");   // 別�
 - [Dialog.showModalJson](../reference/Dialog.md#showmodaljson) / [showModalFile](../reference/Dialog.md#showmodalfile) — モーダル
 - [Dialog.showFlow](../reference/Dialog.md#showflow) / [showFlowScreens](../reference/Dialog.md#showflowscreens) — ブロッキングフロー
 - [Dialog.startFlow](../reference/Dialog.md#startflow) / [startFlowScreens](../reference/Dialog.md#startflowscreens) — 非モーダル ( 常駐 ) フロー
-- [Dialog.onAction](../reference/Dialog.md#onaction) / [onScreen](../reference/Dialog.md#onscreen) / [onScreenLeave](../reference/Dialog.md#onscreenleave) — イベント
-- [Dialog.active](../reference/Dialog.md#active) — 非モーダルの teardown 完了判定
+- [Dialog.onAction](../reference/Dialog.md#onaction) / [onScreen](../reference/Dialog.md#onscreen) / [onScreenLeave](../reference/Dialog.md#onscreenleave) / [onDrag](../reference/Dialog.md#ondrag) — イベント
+- [Dialog.active](../reference/Dialog.md#active) — 非モーダルの teardown 完了判定 / [modalActive](../reference/Dialog.md#modalactive) — モーダル表示中かどうか
+- [Dialog.registerHotKey](../reference/Dialog.md#registerhotkey) — ホストホットキー ( ダイアログをバイパス ) / [System.registerHotKey](../reference/System.md#registerhotkey) — 最上位ホットキー ( モーダル中でも効く )
+- [Dialog.baseSize](../reference/Dialog.md#basesize) — UI の author 基準面サイズ / [renderScale](../reference/Dialog.md#renderscale) — 描画密度
 - [Dialog.registerFont](../reference/Dialog.md#registerfont) / [registerFontDir](../reference/Dialog.md#registerfontdir) / [defaultFontFamily](../reference/Dialog.md#defaultfontfamily) — フォント登録
 - [Dialog.language](../reference/Dialog.md#language) / [fontLanguages](../reference/Dialog.md#fontlanguages) — i18n ( 表示言語と言語連動フォント置換 )

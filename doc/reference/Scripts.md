@@ -688,6 +688,8 @@ TJSDoRehash()が呼ばれているので特に気にする必要はありませ�
 
 (const)つき辞書／配列を安全に評価する
 
+TJS_STATICMEMBER
+
 ---
 
 ## プラグイン拡張: windowEx

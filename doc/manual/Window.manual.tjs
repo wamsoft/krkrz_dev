@@ -396,6 +396,35 @@ class Window {
 	function onKeyPress(key);
 
 	/**
+	 * テキスト入力イベント
+	 *
+	 * 確定した入力文字列が届くイベントです。IME で変換確定した文字列は
+	 * まとめて 1 回で届き、BMP 外の文字 ( 絵文字等 ) もサロゲートペアに
+	 * 分解されず 1 回で届きます。
+	 *
+	 * 従来の [onKeyPress](#onkeypress) は UTF-16 の符号単位ごとの配信なので、
+	 * **文字単位で受けたい入力欄の実装にはこちらを使います**。制御文字
+	 * ( BS / Enter / Tab / Esc 等 ) はこのイベントへは流れません
+	 * ( [onKeyDown](#onkeydown) / onKeyPress で受けてください )。
+	 *
+	 * [Dialog](Dialog.md) のテキスト入力欄がフォーカスを持っている間は、
+	 * ダイアログ側が入力を消費するのでこのイベントは発生しません。
+	 *
+	 * **プラットフォームによる差異**
+	 *
+	 * SDL3 系ビルドでは OS のテキスト入力イベントをそのまま配信します。
+	 * WINVER ( Windows ネイティブ ) ビルドでは `WM_CHAR` から合成するため、
+	 * onKeyPress と併発します ( 内容は同じ文字 )。
+	 *
+	 * Layer 側へは互換のため従来どおり UTF-16 符号単位へ分解した
+	 * [Layer.onKeyPress](Layer.md#onkeypress) が配送されます。
+	 * @param text 入力された文字列。
+	 * @kind event
+	 * @see Window.onKeyPress
+	 */
+	function onTextInput(text);
+
+	/**
 	 * ウィンドウのサイズが変化した
 	 *
 	 * ウィンドウのサイズが変化した時に発生します。

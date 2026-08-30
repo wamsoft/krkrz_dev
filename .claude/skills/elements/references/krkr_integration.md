@@ -46,11 +46,13 @@ navigator)。こちらは**吉里吉里Z のゲーム (KAG/kag 機構) に実際
   (engine 側で `Owner` がコンストラクタ経由でしか設定されないため)。
 - **`showFile` は Storages の autopath 探索に乗っていない** — ファイル名だけでは
   失敗する。パス付き (`"system/foo.jsonc"`) で渡す。★engine 側 要調査
-- **overlay の表示サイズ制約** — overlay 経路にはサイズ引数が無く、
-  `min(measure_content, top-level "size" または既定 400x220)` で決まる。
-  さらに top-level `"size"` の抽出が JSON 文字列の素朴検索で、widget の
-  `"size":32` (フォントサイズ) を誤読する既知バグがある。**全画面級の画面は
-  この制約を踏む前提**で組む (下記 §10)。★engine 側 要対応
+- **overlay の表示サイズ** — overlay 経路にはサイズ引数が無く、画面 JSON の
+  top-level `"size"` が上限になる。**`"size"` を書かなければ surface (ゲーム画面)
+  全面が上限**なので、全画面級の画面も普通に組める (旧: 既定 400x220 きめうちで
+  クリップされていた)。実サイズは fit-to-content で決まる (`size` は上限指定)。
+  top-level `"size"` の抽出は **深さ 1 のキーだけ**を見る (2026-08-29 修正、
+  src/core `7352157f`)。以前は入れ子の配列 `"size"` — `spacer` の `[w,h]` や
+  9-slice thumb の `[w,h]` — を先に拾ってダイアログがその大きさに縮んだ。
 
 ## 3. KAG のダイアログ / パネル枠に乗せる (ホストレイヤ方式)
 
@@ -166,8 +168,8 @@ navigator)。こちらは**吉里吉里Z のゲーム (KAG/kag 機構) に実際
 
 | 項目 | 状態 |
 |---|---|
-| overlay が surface 全面に広がらない (既定上限 400x220、サイズ引数が無い) | ★最重要・要 engine 対応 |
-| top-level `"size"` の peek が widget の `"size"` を誤読 | ★要調査 (上と同時に解消が本筋) |
+| overlay が surface 全面に広がらない (既定上限 400x220) | ✅ 解消済み。`"size"` 未指定なら surface 全面が上限 |
+| top-level `"size"` の peek が widget の `"size"` を誤読 | ✅ 解消済み (2026-08-29 src/core `7352157f`)。深さ 1 のキーだけを見る |
 | `showFile` が autopath 探索に乗らない | ★要調査。当面はパス付きで回避 |
 | サブクラスで明示 `super.Dialog()` が無いとイベントが来ない | ★要調査。当面は必ず書く |
 | `Agent.dialogClick` が activate しない条件がある | ★要調査 (Agent ツール側)。実運用に影響なし |

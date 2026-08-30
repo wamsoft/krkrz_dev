@@ -71,11 +71,14 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 
 - [defaultFontFamily](#defaultfontfamily)
 - [active](#active)
+- [modalActive](#modalactive)
+- [watchVars](#watchvars)
 - [language](#language)
 - [fontLanguages](#fontlanguages)
 - [virtualKeyboard](#virtualkeyboard)
 - [hasPhysicalKeyboard](#hasphysicalkeyboard)
 - [focusRing](#focusring)
+- [baseSize](#basesize)
 - [renderScale](#renderscale)
 - [renderCache](#rendercache)
 - [partialRedraw](#partialredraw)
@@ -105,6 +108,8 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [unregisterImage](#unregisterimage)
 - [clearImages](#clearimages)
 - [setVar](#setvar)
+- [getVar](#getvar)
+- [listVars](#listvars)
 - [setPadIconBase](#setpadiconbase)
 - [setPadTheme](#setpadtheme)
 - [renderStatsReset](#renderstatsreset)
@@ -114,6 +119,8 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [onScreen](#onscreen)
 - [onScreenLeave](#onscreenleave)
 - [onAction](#onaction)
+- [onDrag](#ondrag)
+- [onVar](#onvar)
 - [onClose](#onclose)
 
 ---
@@ -166,7 +173,29 @@ Elements ランタイムが初期化されたあと ( 最初のダイアログ�
 
 ---
 
-### language
+### modalActive
+
+プロパティ \ アクセス: `r`
+
+**型**: `bool`
+
+**解説**
+
+モーダルなダイアログが表示中かどうか ( 読み取り専用 )
+
+[showModalJson](#showmodaljson) 系やモーダルフローで開いたインスタンスが
+1 つでもアクティブなら真になります ( どのインスタンスから読んでもプロセス
+全体の状態を返します )。フォーカスを取らない常駐オーバレイ ( 字幕・HUD 等 )
+は含みません。
+
+最上位ホットキー ( [System.registerHotKey](System.md#registerhotkey) ) の
+コールバックで「モーダル表示中は何もせず素通しする」判定に使います。
+
+**関連:** [Dialog.active](Dialog.md#active)
+
+---
+
+### watchVars
 
 プロパティ \ アクセス: `r/w`
 
@@ -191,6 +220,27 @@ global.Dialog.language = "en";     // 表示中の画面もその場で切り替
 
 読み出すと設定済みの言語を返します。未設定なら空文字 ( = 各画面 JSON の
 `lang` 指定に従う ) です。`strings` を持たない画面では何も起きません。
+
+
+変数変化通知の対象
+
+[onVar](#onvar) で受け取る変数を絞る / 明示指定するプロパティです。
+
+- 変数名の配列 ... その変数だけ通知する
+- `"*"` ... すべての変数を通知する
+- 空配列 ... 通知しない ( 明示的に止める )
+- void ... 既定へ戻す
+
+既定 ( 未設定 ) は「[onVar](#onvar) を実装していればすべての変数」です。
+`"vars_on_hover"` の変数やドラッグ位置は毎フレーム書き換わるため、
+特定の変数だけ必要なら名前を並べたほうが軽くなります。表示中に設定しても
+即座に反映されます。
+
+---
+
+### language
+
+プロパティ \ アクセス: `r/w`
 
 ---
 
@@ -316,6 +366,31 @@ button / slider / dial / thumbwheel の枠がまとめて消えます。状態�
 クラス内から触るときは `global.Dialog.focusRing` と書きます。Dialog を継承した
 クラスのメソッド内で素の `Dialog` と書くと親クラス参照になり、static プロパティへの
 代入が「メンバが見つかりません」になります。
+
+---
+
+### baseSize
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Array`
+
+**解説**
+
+UI の author 基準面サイズ
+
+オーバレイ表示の拡縮率 ( fit ) の分母になる基準面のサイズを `[w, h]` の
+配列で指定します。void ( または要素の無い配列 ) を設定すると既定 =
+ゲームの基準面 ( primaryLayer のサイズ ) に戻ります。設定していないときの
+getter は void です。
+
+ゲーム画面と別解像度で UI を author しているタイトル ( ゲーム画面
+640x400 / UI 1920x1080 等 ) で設定すると、部分パネルの拡縮が author 基準
+どおりになり、ゲーム側の primaryLayer サイズ変更 ( 低解像度機種の
+エミュレーション等 ) にも巻き込まれません。表示中の画面にも次のフレーム
+から反映されます。
+
+**関連:** [Dialog.renderScale](Dialog.md#renderscale)
 
 ---
 
@@ -1007,6 +1082,59 @@ label 等が次フレームで更新されます。自分のインスタンス�
 
 ---
 
+### getVar
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 変数名。 |
+
+**戻り値**
+
+変数の値 ( 文字列 )。未知の変数なら void。
+
+**解説**
+
+表示中ダイアログの変数を読み出す
+
+表示中ダイアログの変数 store から値を読み出します。[setVar](#setvar) で
+書いた値だけでなく、画面側が書いた値 ( `"vars_on_hover"` /
+`"vars_on_focus"` / slider の `"value_var"` / `"drag_at_var"` /
+一覧の `"index_offset_var"` 等 ) も同じ store から読めます。
+
+未知の変数名、または自分のインスタンスが非アクティブなら void を返します
+( 空文字列と区別できます )。変化した時点で知りたい場合は
+[onVar](#onvar) を実装します。
+
+---
+
+### listVars
+
+メソッド
+
+**戻り値**
+
+変数記述 Dictionary の配列。非アクティブなら空配列。
+
+**解説**
+
+表示中ダイアログの変数一覧を取得する
+
+表示中ダイアログが使っている変数を名前順の配列で返します。要素は
+`name` / `value` / `usedBy` を持つ Dictionary で、`usedBy` は
+`id` ( いちばん近い祖先の widget id ) と `kind` ( 参照している JSON の
+キー。`"text_var"` / `"visible_var"` / `"value_var"` 等 ) を持つ
+Dictionary の配列です。
+
+参照だけあって一度も書かれていない変数、逆に参照は無いが
+[setVar](#setvar) で作った変数も載ります。デバッグパネルや画面 JSON の
+検証に使います。
+
+---
+
 ### setPadIconBase
 
 メソッド
@@ -1141,6 +1269,74 @@ payload の内容は widget の種類によって変わります。
 - checkbox / toggle ... bool ( 変更後の値 )
 - input_box ... string ( 編集後のテキスト )
 - slider 等 ... 各 widget が渡す値
+
+---
+
+### onDrag
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `payload` | `&nbsp;` | ドラッグ状態を表す Dictionary ( 上記参照 )。 |
+
+**解説**
+
+ドラッグ通知
+
+画面 JSON で `"drag_events": true` を指定した widget の 押下 → 移動 →
+離す が届くイベントです。TJS 側で override してください。
+
+payload は Dictionary で、`id` ( 発生元 widget の id )、`phase`
+( `"begin"` / `"move"` / `"end"` )、`x` / `y` ( 現在位置 )、`dx` / `dy`
+( 前回からの差分 )、`startX` / `startY` ( 押下位置 )、`modifiers`
+( シフト状態 ) を持ちます。座標は画面 JSON に書いた座標系です。
+
+溜まった `"move"` は最新の 1 件へ畳まれます ( `"begin"` / `"end"` は
+畳まれません )。
+
+**絵をドラッグに追従させるだけならこのイベントは不要です**。widget に
+`"drag_at_var"` を書いてドラッグ位置を変数へ出し、canvas 子の `"at_var"`
+へ同じ変数を挿すとエンジン内で完結します ( `"drag_bounds"` で可動域も
+制限できます )。このイベントは「どこで離したか」のような判断を TJS 側で
+行う用途に使います。
+
+---
+
+### onVar
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 変化した変数名。 |
+| `value` | `&nbsp;` | 変化後の値 ( 文字列 )。 |
+
+**解説**
+
+変数変化通知
+
+表示中ダイアログの変数 store の値が変わったときに届くイベントです。
+TJS 側で override してください。[setVar](#setvar) による自分の書き込み
+だけでなく、画面側が書いた値 ( `"vars_on_hover"` / `"vars_on_focus"` /
+slider の `"value_var"` / `"drag_at_var"` / 一覧の `"index_offset_var"`
+等 ) でも発火します。
+
+「絵はホスト側のレイヤ、当たり判定だけダイアログ」という構成で、hover や
+選択の変化をホスト処理へ繋ぐのに使います ( 大きすぎて atlas に積めない
+一枚絵を並べる一覧など )。
+
+通知は 1 フレーム遅延し、同じ変数の連続変化 ( hover 移動やドラッグ中の
+座標書き込み ) は最新の 1 件へ畳まれます。「いまの値」が必要なときは
+通知を待たず [getVar](#getvar) で読んでください。
+
+**このイベントを実装したダイアログだけが観測対象になります**。
+実装していないダイアログには一切コストがかかりません。受け取る変数を
+絞りたい場合は [watchVars](#watchvars) を使います。
 
 ---
 

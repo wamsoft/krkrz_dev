@@ -425,6 +425,21 @@ class Dialog {
 	property active { getter; }
 
 	/**
+	 * モーダルなダイアログが表示中かどうか ( 読み取り専用 )
+	 *
+	 * [showModalJson](#showmodaljson) 系やモーダルフローで開いたインスタンスが
+	 * 1 つでもアクティブなら真になります ( どのインスタンスから読んでもプロセス
+	 * 全体の状態を返します )。フォーカスを取らない常駐オーバレイ ( 字幕・HUD 等 )
+	 * は含みません。
+	 *
+	 * 最上位ホットキー ( [System.registerHotKey](System.md#registerhotkey) ) の
+	 * コールバックで「モーダル表示中は何もせず素通しする」判定に使います。
+	 * @type bool
+	 * @see Dialog.active
+	 */
+	property modalActive { getter; }
+
+	/**
 	 * フロー画面遷移通知 ( 画面に入った )
 	 *
 	 * [showFlow](#showflow) / [startFlow](#startflow) 系で実行している
@@ -471,6 +486,56 @@ class Dialog {
 	 * @kind event
 	 */
 	function onAction(id, payload);
+
+	/**
+	 * ドラッグ通知
+	 *
+	 * 画面 JSON で `"drag_events": true` を指定した widget の 押下 → 移動 →
+	 * 離す が届くイベントです。TJS 側で override してください。
+	 *
+	 * payload は Dictionary で、`id` ( 発生元 widget の id )、`phase`
+	 * ( `"begin"` / `"move"` / `"end"` )、`x` / `y` ( 現在位置 )、`dx` / `dy`
+	 * ( 前回からの差分 )、`startX` / `startY` ( 押下位置 )、`modifiers`
+	 * ( シフト状態 ) を持ちます。座標は画面 JSON に書いた座標系です。
+	 *
+	 * 溜まった `"move"` は最新の 1 件へ畳まれます ( `"begin"` / `"end"` は
+	 * 畳まれません )。
+	 *
+	 * **絵をドラッグに追従させるだけならこのイベントは不要です**。widget に
+	 * `"drag_at_var"` を書いてドラッグ位置を変数へ出し、canvas 子の `"at_var"`
+	 * へ同じ変数を挿すとエンジン内で完結します ( `"drag_bounds"` で可動域も
+	 * 制限できます )。このイベントは「どこで離したか」のような判断を TJS 側で
+	 * 行う用途に使います。
+	 * @param payload ドラッグ状態を表す Dictionary ( 上記参照 )。
+	 * @kind event
+	 */
+	function onDrag(payload);
+
+	/**
+	 * 変数変化通知
+	 *
+	 * 表示中ダイアログの変数 store の値が変わったときに届くイベントです。
+	 * TJS 側で override してください。[setVar](#setvar) による自分の書き込み
+	 * だけでなく、画面側が書いた値 ( `"vars_on_hover"` / `"vars_on_focus"` /
+	 * slider の `"value_var"` / `"drag_at_var"` / 一覧の `"index_offset_var"`
+	 * 等 ) でも発火します。
+	 *
+	 * 「絵はホスト側のレイヤ、当たり判定だけダイアログ」という構成で、hover や
+	 * 選択の変化をホスト処理へ繋ぐのに使います ( 大きすぎて atlas に積めない
+	 * 一枚絵を並べる一覧など )。
+	 *
+	 * 通知は 1 フレーム遅延し、同じ変数の連続変化 ( hover 移動やドラッグ中の
+	 * 座標書き込み ) は最新の 1 件へ畳まれます。「いまの値」が必要なときは
+	 * 通知を待たず [getVar](#getvar) で読んでください。
+	 *
+	 * **このイベントを実装したダイアログだけが観測対象になります**。
+	 * 実装していないダイアログには一切コストがかかりません。受け取る変数を
+	 * 絞りたい場合は [watchVars](#watchvars) を使います。
+	 * @param name 変化した変数名。
+	 * @param value 変化後の値 ( 文字列 )。
+	 * @kind event
+	 */
+	function onVar(name, value);
 
 	/**
 	 * ダイアログ teardown 完了通知
@@ -523,6 +588,38 @@ class Dialog {
 	function setVar(name, value);
 
 	/**
+	 * 表示中ダイアログの変数を読み出す
+	 *
+	 * 表示中ダイアログの変数 store から値を読み出します。[setVar](#setvar) で
+	 * 書いた値だけでなく、画面側が書いた値 ( `"vars_on_hover"` /
+	 * `"vars_on_focus"` / slider の `"value_var"` / `"drag_at_var"` /
+	 * 一覧の `"index_offset_var"` 等 ) も同じ store から読めます。
+	 *
+	 * 未知の変数名、または自分のインスタンスが非アクティブなら void を返します
+	 * ( 空文字列と区別できます )。変化した時点で知りたい場合は
+	 * [onVar](#onvar) を実装します。
+	 * @param name 変数名。
+	 * @returns 変数の値 ( 文字列 )。未知の変数なら void。
+	 */
+	function getVar(name);
+
+	/**
+	 * 表示中ダイアログの変数一覧を取得する
+	 *
+	 * 表示中ダイアログが使っている変数を名前順の配列で返します。要素は
+	 * `name` / `value` / `usedBy` を持つ Dictionary で、`usedBy` は
+	 * `id` ( いちばん近い祖先の widget id ) と `kind` ( 参照している JSON の
+	 * キー。`"text_var"` / `"visible_var"` / `"value_var"` 等 ) を持つ
+	 * Dictionary の配列です。
+	 *
+	 * 参照だけあって一度も書かれていない変数、逆に参照は無いが
+	 * [setVar](#setvar) で作った変数も載ります。デバッグパネルや画面 JSON の
+	 * 検証に使います。
+	 * @returns 変数記述 Dictionary の配列。非アクティブなら空配列。
+	 */
+	function listVars();
+
+	/**
 	 * pad_icon のベースディレクトリを設定する
 	 *
 	 * pad_icon ( Kenney input prompts ) のベースディレクトリを設定します。dir は統一ストレージ
@@ -567,6 +664,23 @@ class Dialog {
 	 *
 	 * @type String
 	 */
+	/**
+	 * 変数変化通知の対象
+	 *
+	 * [onVar](#onvar) で受け取る変数を絞る / 明示指定するプロパティです。
+	 *
+	 * - 変数名の配列 ... その変数だけ通知する
+	 * - `"*"` ... すべての変数を通知する
+	 * - 空配列 ... 通知しない ( 明示的に止める )
+	 * - void ... 既定へ戻す
+	 *
+	 * 既定 ( 未設定 ) は「[onVar](#onvar) を実装していればすべての変数」です。
+	 * `"vars_on_hover"` の変数やドラッグ位置は毎フレーム書き換わるため、
+	 * 特定の変数だけ必要なら名前を並べたほうが軽くなります。表示中に設定しても
+	 * 即座に反映されます。
+	 */
+	property watchVars;
+
 	property language;
 
 	/**
@@ -671,6 +785,24 @@ class Dialog {
 	 * @type Boolean
 	 */
 	property focusRing;
+
+	/**
+	 * UI の author 基準面サイズ
+	 *
+	 * オーバレイ表示の拡縮率 ( fit ) の分母になる基準面のサイズを `[w, h]` の
+	 * 配列で指定します。void ( または要素の無い配列 ) を設定すると既定 =
+	 * ゲームの基準面 ( primaryLayer のサイズ ) に戻ります。設定していないときの
+	 * getter は void です。
+	 *
+	 * ゲーム画面と別解像度で UI を author しているタイトル ( ゲーム画面
+	 * 640x400 / UI 1920x1080 等 ) で設定すると、部分パネルの拡縮が author 基準
+	 * どおりになり、ゲーム側の primaryLayer サイズ変更 ( 低解像度機種の
+	 * エミュレーション等 ) にも巻き込まれません。表示中の画面にも次のフレーム
+	 * から反映されます。
+	 * @type Array
+	 * @see Dialog.renderScale
+	 */
+	property baseSize;
 
 	/**
 	 * オーバーレイの描画密度モード

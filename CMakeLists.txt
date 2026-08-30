@@ -176,12 +176,17 @@ endif()
 
 # krkrlive2d は上記に加えて Live2D Cubism Core を必要とする。SDK パスは環境変数
 # CUBISM_SDK (ドライバ側 CMake が $ENV{CUBISM_SDK}/Core を参照) で与えられ、未設定では
-# ビルドできないため、設定されているときだけビルド対象に含める。
-if(DEFINED ENV{CUBISM_SDK})
-list(APPEND TVP_PLUGINS
-krkrlive2d
-)
-endif()
+# ビルドできないため、設定されているときだけビルド対象に含めていた。
+#
+# ただしドライバ側ソースはローカルパス (環境変数 LIVE2DLIB_FOLDER 等) を直接参照する
+# 作りで、そのフォルダの版がずれると configure が通らなくなる (例: ドライバ側が
+# find_package(minizip) を要求するようになったが本体の vcpkg マニフェストには無い)。
+# 版を固定して取得する形へ直すまで、いったんビルド対象から外す。
+#if(DEFINED ENV{CUBISM_SDK})
+#list(APPEND TVP_PLUGINS
+#krkrlive2d
+#)
+#endif()
 
 # 特殊プラグイン
 # STEAMプラグインはSDKパスが環境変数で提供された場合のみビルド
