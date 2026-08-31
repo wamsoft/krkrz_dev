@@ -56,6 +56,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 中〜高 | WaveSoundBuffer 3D 定位 API (F-1) | miniaudio の spatializer で全バリアント横断の 3D 定位 API を新設 |
 | 中 | Elements を WINVER のネイティブ経路へ | 中立イベント型の導入 / manager のテキスト入力・ウィンドウ取得の seam 化 / WndProc → manager 転送 + IME / OGLDrawDevice への renderer 配線 / elements_gallery の実機確認。[data/ROADMAP.md](data/ROADMAP.md) 参照 |
 | 中 | フォントラスタライザを glyphware へ一本化 | 現状の既定は WINVER=GDI / 非 WINVER=旧 FreeType で、glyphware (`rasterizer=2`) はどちらでも既定ではない。可変軸・シェイピング・BiDi・カラー絵文字・フォールバックが既定で効くようにするには一本化が本筋だが、**全案件の文字描画の見た目が変わりうる**ためパリティ検証が前提。→ [FontEngine.md](src/core/doc/FontEngine.md) |
+| 中 | SDL 版に `-about` のダイアログが無い | バージョン情報ダイアログは WINVER だけの実装 (`TVPCheckAbout()` → `TVPShowVersionForm()` = Win32 `DialogBox`)。SDL3 は `-about` を処理しておらず、`System.showVersion()` も WINVER のみ。**表示する文字列は全バリアント共通で用意済み** (`TVPGetAboutString()` = バージョン行 + LICENSE + 収録一覧 + 環境情報。SSOT = [LicenseSystem.md](src/core/doc/LicenseSystem.md)) なので、残るのは表示手段だけ。素直には `-userconf` と同じくゲームウィンドウ生成前の独立 SDL_Window + Elements overlay だが、**gamescope (Steam Deck) はセカンダリウィンドウを出せない**ので、その環境での代替 (標準出力へ落とす等) も併せて決める必要がある。現状の代替手段 = `-license` (標準出力) と `System.licenseText` |
 | 中 | SDL ビルドの SEH 捕捉 | ゼロ除算・アクセス違反でログを残さず即死する。WINVER は translator + minidump あり |
 | 低 | WINVER モダン化の残 | F-3 (入力)、HW mixer の直描画 |
 | 低 | macOS (Retina) の point / pixel の使い分け | `SDL3WindowForm::GetSurfaceSize` が `SDL_GetWindowSize` (macOS では **point**) を使っているため、Retina では描画解像度が半分になる可能性がある。`SDL_GetWindowSizeInPixels` との使い分けを整理する必要あり。**未検証 (macOS 実機確認が前提)**。サイズ API の単位定義とあわせて判断する → [WindowGeometry.md](src/core/doc/WindowGeometry.md) §8 |
