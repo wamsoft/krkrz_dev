@@ -180,7 +180,8 @@
       "onClose",
       "onDrag",
       "onScreen",
-      "onScreenLeave"
+      "onScreenLeave",
+      "onVar"
     ],
     "file": "src/core/common/visual/elements/DialogIntf.cpp",
     "methods": [
@@ -188,6 +189,8 @@
       "clearImages",
       "close",
       "dictToJson",
+      "getVar",
+      "listVars",
       "onAction",
       "onClose",
       "onScreen",
@@ -227,7 +230,8 @@
       "renderCount",
       "renderScale",
       "renderStats",
-      "virtualKeyboard"
+      "virtualKeyboard",
+      "watchVars"
     ]
   },
   "Font": {
