@@ -27,6 +27,7 @@ set(SIMPLEBIND_DIR ${PLUGINS_DIR}/simplebinder)
 # プラグイン一覧
 list(APPEND TVP_PLUGINS
 KAGParserEx
+KAGSceneParser   # krkrtemplate/plugins_utf8 由来 (シナリオ変換専用パーサ)
 clipfile
 csvParser
 getSample
