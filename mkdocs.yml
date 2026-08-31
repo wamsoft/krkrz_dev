@@ -79,6 +79,7 @@ nav:
       - デバッグ: guide/Debug.md
       - 環境依存の不具合: guide/ComputerDependentProblems.md
       - 著作権など: guide/Copyrights.md
+      - ライセンス情報の取得と表示: guide/Licenses.md
       - 同梱ライセンス一覧: guide/BundledLicenses.md
       - ファイル一覧: guide/Files.md
     - サブシステム:
