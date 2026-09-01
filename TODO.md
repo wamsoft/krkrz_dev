@@ -24,20 +24,23 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 15 | Elements/UI 5 (高 2) / エンジン基盤 7 / ビルド・運用 3 |
+| 予定・未着手 | 14 | Elements/UI 4 (高 1) / エンジン基盤 7 / ビルド・運用 3 |
 | 将来課題 | 8 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
 | デモ整備 | 10 + 1 | 未着手デモは多くが資材待ち |
 
-**いま効いている焦点は Elements / UI の 2 件** (どちらも優先度 高、
-ホスト案件の画面が実際に困っている):
+**いま効いている焦点は Elements / UI の 1 件** (優先度 高、ホスト案件の
+画面が実際に困っている):
 
-1. **overlay の出力先をホストのレイヤへ向けられるようにする** — overlay が
-   常に最前面でレイヤツリーの外にいるため、テキストを出す画面 (メッセージ窓 /
-   バックログ) を elements で組めない。ここを決めると入力の帰属も一緒に片付く
-2. **画面データ側で UI を完結させる (不足 4 点)** — 複数のホスト案件が
+1. **画面データ側で UI を完結させる (不足 4 点)** — 複数のホスト案件が
    それぞれ独自の UI フレームワークを書き始めているのを止めるための整備
+
+> 「**overlay の出力先をホストのレイヤへ**」は 2026-09-01 に対応
+> (`ElementsPanel`)。overlay が常に最前面でレイヤツリーの外にいるという制約を
+> 外したので、テキストを出す画面 (メッセージ窓 / バックログ) も elements で
+> 組める土台ができた。z 順・`[trans]`・`piledCopy`・入力の帰属はレイヤの
+> 仕組みに従う。
 
 > 「**ホストの描画中に文字だけ出ない**」は 2026-09-01 に解決 (`src/core`
 > 3310a2d0)。条件は「ホストの描画中」ではなく **実行中にテーマの書体の並びを
@@ -55,7 +58,6 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
-| 高 | Elements: overlay の出力先をホストのレイヤへ向けられるようにする | overlay はレイヤツリーの外にいて**常に最前面**なので、本文の上に窓の絵が被る / `piledCopy` に写らない / 表裏に属せず `[trans]` に乗らない / **下のレイヤの入力を食べる**。`render_to_buffer` の書き込み先はもともと ARGB8888 の素の CPU バッファ (= 吉里吉里の Layer と同じ画素形式、premultiplied なので `ltAddAlpha` の Layer にそのまま置ける) なので、**書き込み先を Layer にするだけ**で z 順・トランジション・スクリーンショット・入力の帰属が一度に片付く見込み。ホスト案件が「絵はホストのレイヤ / 当たり判定だけ elements」で逃げているのもこれが理由。詳細 = [TODO-elements.md](TODO-elements.md) §8 |
 | 高 | Elements: 画面データ側で UI を完結させる | 複数のホスト案件がそれぞれ独自の UI フレームワークを書き始めているため、**UI の処理は画面データ側 (elements_modal + 画面 JSON) で完結させ、ホストは「呼ぶ / 値を供給する / アクションを実行する」だけ**にする方針へ。 実測した不足は 4 点 (画面をまたぐ変数 / 動的画像の実行時差替 / 画面契約 / 標準ロールの語彙) で、いずれも elements 側の作業。 詳細 = [TODO-elements.md](TODO-elements.md) §7 |
 | 低 | Elements の観測・操作 API を TJS へ公開 (残り) | **変数系は 2026-08-29 に公開済み** (`Dialog.getVar` / `listVars` / `onVar` / `watchVars` = elements_modal の `get_var` / `list_vars` / `set_var_watcher` に対応。src/core `fcae740b`)。 残りは **navigator の `push` / `pop` / `replace` / `stack`** と `languages`。 要素を名指しで動かす `focus_by_id` / `activate_by_id` は検証用に `Agent.dialogFocus` / `dialogClick` として出ている。 用途は検証ツールから「この画面へ飛ぶ」を実装すること。 当たり判定やフォーカスナビの確認は実入力を流す API でないと意味が無い点に注意 |
 | 中 | Elements: `input_box` にプログラム的フォーカスが効かない | `"initial_focus": true` を書いても開いた直後の打鍵が入力欄に入らない (クリックすれば入る)。`focus_by_id` / `Agent.dialogFocus` も input_box には効かない。`view->focus` 自体は動いているが **input_box の編集フォーカス (キャレット + text 受理) に変換されていない**。ホスト案件の名前入力画面 (入力欄 1 個) で実際に踏んでおり、`System.inputString` overlay (SDL) と Steam Deck の focus 駆動 OSK にも波及する。詳細 = [TODO-elements.md](TODO-elements.md) §3 |
@@ -214,6 +216,16 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 - ✅ モーダル表示中にタイマーが完全停止する / wake 投函失敗でタイマーが永久停止する
   / WINVER の Agent 入力がモーダルへ届かない (src/core `90698ee1`)
   詳細 = [src/core/doc/ModalWindow.md](src/core/doc/ModalWindow.md)
+- ✅ Elements: overlay の出力先をホストのレイヤへ向けられるようにする
+  (src/core `e2f05dbc` / `06085168` / `fbd51004` / `029c9413`)
+  `ElementsPanel` を追加 (overlay とは別枠。manager のインスタンス列に入らない
+  ので入力インターセプトのゲートもウィンドウクローズ抑止もダイアログ列挙にも
+  影響しない)。`render_to_buffer` の書き込み先をレイヤのビットマップにするだけで
+  z 順・トランジション・スクリーンショット・入力の帰属が一度に片付いた。
+  入力の座標変換は不要 (surface を 0,0 にすると view local = レイヤ local)。
+  **副産物として、overlay の提示が straight alpha でアルファを二重に掛けていた
+  のを直した** (半透明の画素だけが薄く出ていた)。詳細 =
+  [TODO-elements.md](TODO-elements.md) §8 / `src/core/doc/ElementsDialog.md`
 - ✅ Elements: 同じチャンネルの `animate` が連ならない (elements `8f5f0145` /
   src/core `58cc0a81`) `delay` 中の束縛が自分の `from` を書き続けて先行の動きを
   打ち消していた。チャンネルごとに「いま支配している束縛 1 本」だけを反映する
