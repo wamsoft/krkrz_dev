@@ -461,5 +461,8 @@
         "Not found %1 in shader.",
         "Cannot retrive %1 instance.",
         "Parameter require %1 class instance.",
-        "unimplemented: tTVPCharacterData::%1 for FullColored"
+        "unimplemented: tTVPCharacterData::%1 for FullColored",
+        "Bundled component licenses (%1)",
+        "Run with -license=<name> to print the full text to standard output.",
+        "license information not found: %1"
 ]

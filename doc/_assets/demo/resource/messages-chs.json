@@ -461,5 +461,8 @@
         "着色器中未找到 %1",
         "无法获取 %1 实例",
         "参数需要 %1 类的实例",
-        "未实现: tTVPCharacterData::%1 (FullColored)"
+        "未实现: tTVPCharacterData::%1 (FullColored)",
+        "内置组件许可证（%1 项）",
+        "使用 -license=<名称> 启动可将许可证全文输出到标准输出。",
+        "未找到许可证信息：%1"
 ]

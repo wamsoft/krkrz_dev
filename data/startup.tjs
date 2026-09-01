@@ -54,6 +54,7 @@ function tryScene(path, ctor)
 var coreBase = demolibPath + "../";
 tryScene(coreBase + "sysinfo/scene.tjs",      function() { return new SysInfoScene(); });
 tryScene(coreBase + "text_font/scene.tjs",    function() { return new TextFontScene(); });
+tryScene(coreBase + "text_font/scene.tjs",    function() { return new TextVerticalScene(); });
 tryScene(coreBase + "image_ops/scene.tjs",    function() { return new ImageOpsScene(); });
 tryScene(coreBase + "layer_basic/scene.tjs",  function() { return new LayerBasicScene(); });
 tryScene(coreBase + "layer_tree/scene.tjs",   function() { return new LayerTreeScene(); });
