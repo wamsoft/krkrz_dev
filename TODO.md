@@ -24,7 +24,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 15 | Elements/UI 5 (高 2) / エンジン基盤 7 / ビルド・運用 3 |
+| 予定・未着手 | 16 | Elements/UI 6 (高 2) / エンジン基盤 7 / ビルド・運用 3 |
 | 将来課題 | 8 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
@@ -33,10 +33,16 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 **いま効いている焦点は Elements / UI の 2 件** (どちらも優先度 高、
 ホスト案件の画面が実際に困っている):
 
-1. **ホストの描画中に文字だけ出ない** — 絵は出るのに文字が全部消えるので、
-   ゲーム中の環境設定・名前入力の画面がそのまま使えない。原因未特定
+1. **overlay の出力先をホストのレイヤへ向けられるようにする** — overlay が
+   常に最前面でレイヤツリーの外にいるため、テキストを出す画面 (メッセージ窓 /
+   バックログ) を elements で組めない。ここを決めると入力の帰属も一緒に片付く
 2. **画面データ側で UI を完結させる (不足 4 点)** — 複数のホスト案件が
    それぞれ独自の UI フレームワークを書き始めているのを止めるための整備
+
+> 「**ホストの描画中に文字だけ出ない**」は 2026-09-01 に解決 (`src/core`
+> 3310a2d0)。条件は「ホストの描画中」ではなく **実行中にテーマの書体の並びを
+> 入れ直すこと**で、theme が families を string_view で所有せずに持つのに
+> engine 側が実体を static な 1 本で使い回していたのが原因だった。
 
 この 2 件のほかに、同じホスト案件から出た `input_box` の 2 件 (フォーカス /
 最大長) が実運用の詰まりとして残っている。
@@ -49,7 +55,8 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
-| 高 | Elements: ホストの描画中に文字だけ出ない | ホスト案件で、シーン再生中に開いた overlay は `label` / `button` / `input_box` の**文字だけ**描かれない (絵は出る)。 同じ画面をタイトルから開くと出る。 GL 描画 off / フォント再登録 / レイヤ非表示 のいずれも効かず、当たりは**テキスト描画のバックエンド (glyphware / ThorVG 経路) がホストの描画中だけ使えなくなっている**線。 詳細 = [TODO-elements.md](TODO-elements.md) §6 |
+| 高 | Elements: overlay の出力先をホストのレイヤへ向けられるようにする | overlay はレイヤツリーの外にいて**常に最前面**なので、本文の上に窓の絵が被る / `piledCopy` に写らない / 表裏に属せず `[trans]` に乗らない / **下のレイヤの入力を食べる**。`render_to_buffer` の書き込み先はもともと ARGB8888 の素の CPU バッファ (= 吉里吉里の Layer と同じ画素形式、premultiplied なので `ltAddAlpha` の Layer にそのまま置ける) なので、**書き込み先を Layer にするだけ**で z 順・トランジション・スクリーンショット・入力の帰属が一度に片付く見込み。ホスト案件が「絵はホストのレイヤ / 当たり判定だけ elements」で逃げているのもこれが理由。詳細 = [TODO-elements.md](TODO-elements.md) §8 |
+| 中 | Elements: 同じチャンネルの `animate` が連ならない | `delay` 違いの `move` を 2 本並べても折れ線にならず動き出さない。`anim_binding::apply()` が毎フレーム無条件にチャンネルへ書くので、後ろのエントリが `delay` 中の `from` で先行の動きを上書きしている。チャンネルごとに「いま支配している binding」を 1 本決めて apply すれば `delay` 昇順に並べるだけで折れ線になる (1 本しか無いチャンネルは挙動不変)。詳細 = [TODO-elements.md](TODO-elements.md) §9 |
 | 高 | Elements: 画面データ側で UI を完結させる | 複数のホスト案件がそれぞれ独自の UI フレームワークを書き始めているため、**UI の処理は画面データ側 (elements_modal + 画面 JSON) で完結させ、ホストは「呼ぶ / 値を供給する / アクションを実行する」だけ**にする方針へ。 実測した不足は 4 点 (画面をまたぐ変数 / 動的画像の実行時差替 / 画面契約 / 標準ロールの語彙) で、いずれも elements 側の作業。 詳細 = [TODO-elements.md](TODO-elements.md) §7 |
 | 低 | Elements の観測・操作 API を TJS へ公開 (残り) | **変数系は 2026-08-29 に公開済み** (`Dialog.getVar` / `listVars` / `onVar` / `watchVars` = elements_modal の `get_var` / `list_vars` / `set_var_watcher` に対応。src/core `fcae740b`)。 残りは **navigator の `push` / `pop` / `replace` / `stack`** と `languages`。 要素を名指しで動かす `focus_by_id` / `activate_by_id` は検証用に `Agent.dialogFocus` / `dialogClick` として出ている。 用途は検証ツールから「この画面へ飛ぶ」を実装すること。 当たり判定やフォーカスナビの確認は実入力を流す API でないと意味が無い点に注意 |
 | 中 | Elements: `input_box` にプログラム的フォーカスが効かない | `"initial_focus": true` を書いても開いた直後の打鍵が入力欄に入らない (クリックすれば入る)。`focus_by_id` / `Agent.dialogFocus` も input_box には効かない。`view->focus` 自体は動いているが **input_box の編集フォーカス (キャレット + text 受理) に変換されていない**。ホスト案件の名前入力画面 (入力欄 1 個) で実際に踏んでおり、`System.inputString` overlay (SDL) と Steam Deck の focus 駆動 OSK にも波及する。詳細 = [TODO-elements.md](TODO-elements.md) §3 |
@@ -208,6 +215,14 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 - ✅ モーダル表示中にタイマーが完全停止する / wake 投函失敗でタイマーが永久停止する
   / WINVER の Agent 入力がモーダルへ届かない (src/core `90698ee1`)
   詳細 = [src/core/doc/ModalWindow.md](src/core/doc/ModalWindow.md)
+- ✅ Elements: テーマの書体の並びを差し替えると以後のテキストが描かれなくなる
+  (src/core `3310a2d0`) theme の `font_descr` は families を string_view で
+  所有せずに持つ仕様なのに、engine 側が実体を static な `std::string` 1 本で
+  使い回していたため、差し替えのたびに旧バッファが解放されて font_descr の
+  コピーが宙を指していた。`clear()` はバッファを解放しないので「並びが長く
+  なって再確保が起きた回でだけ壊れる」未定義動作で、ビルドによって出方が
+  変わり不可解な症状に見えていた。**`font` を明示した widget だけ無事なら
+  theme の書体の並びを疑う**。詳細 = [TODO-elements.md](TODO-elements.md) §6
 - ✅ Elements 画面資材そのまま移植の拡張要望 7 件 (elements `365bc122` / `a2a36319`
   / `06c39b99` / `bd7b607d` / src/core `fcae740b` / `7352157f`)
   変数の読出と変化通知 (`Dialog.getVar` / `listVars` / `onVar` / `watchVars`)、
