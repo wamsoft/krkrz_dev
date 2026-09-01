@@ -621,35 +621,207 @@ PresentOverlay(layer, ...)  → DrawDevice::Show() 終端で貼る (= 常に最�
   **`type` を `ltAddAlpha` (additive alpha = premultiplied) にした Layer**
   にそのまま置ける。 変換は不要。 `ltAlpha` (straight) の Layer に置きたい
   場合だけ un-premultiply が要る (どちらを既定にするかは決めどころ)
-- **駆動**。 いまは manager が DrawDevice::Show の中で tick している。
-  Layer 出力のダイアログも同じ場所で tick して、 present の代わりに
-  `Layer.update` を呼べば足りるはず (部分再描画は
-  `render_to_buffer_partial` の `out_updated_px` をそのまま更新矩形に使える)
+- **駆動**。 毎フレーム tick して、 present の代わりに `Layer.update` を呼ぶ
+  (部分再描画は `render_to_buffer_partial` の `out_updated_px` を
+  そのまま更新矩形に使える)
 - **サイズ**。 Layer のサイズ = buffer サイズ = 画面の logical サイズにして、
   拡縮は Layer 側 (`stretchCopy` / `Layer.setPos`) に任せるのが素直
 - **入力の受け口**。 Layer の `onMouseDown` / `onMouseMove` / `onKeyDown` を
   session の `on_mouse_*` / `on_key` へ流す。 フォーカスやドラッグの状態は
-  session が持っているので、 座標変換だけで足りる見込み
-- **TJS の口**。 `Dialog` に「出力先の Layer」を渡す形 (例:
-  `dlg.targetLayer = lay` / `showJson(json, %[ layer: lay ])`)。
-  **既定は今の overlay のまま**にして、 既存の画面に影響を出さない
+  session が持っているので、 座標をそのまま渡すだけで足りる
+- **TJS の口**。 今の overlay とは**別のクラス**にする (既定の overlay の
+  挙動には一切触らない)
+
+> 以下は 2026-09-01 に決めた。 上の段落は「案」として残す。
 
 **この案件だけの話ではない**: 「elements で組んだパネルをゲームのレイヤ構成の
 中に置きたい」は、 KAG のメッセージ窓 / ステータス表示 / マップ画面など、
 どのホスト案件でも出る形。 §7 (画面データ側で UI を完結させる) とも噛み合う
 (画面 JSON はそのままで、 **どこに出るか**だけホストが決められる)。
 
-**聞きたいこと**:
+### 決まったこと (2026-09-01)
 
-1. 「Layer で受けて座標を session へ投げる」で入力は足りるか
-   (フォーカス移動・ドラッグ・IME も含めて)。 いまの overlay の入力経路は
-   manager が surface 座標を `get_current_rect()` で view local へ直しているので、
-   Layer 出力では **Layer local 座標 = view local** になり、 変換すら要らない?
-2. Layer 出力のダイアログを「モーダルではないもの」として扱うと、
-   `Agent.dialogs()` / `closeAllDialogs` / navigator フローの扱いはどうなるか
-3. 段取りとして「今の overlay を残したまま Layer 出力を足す」で良いか、
-   それとも出力先の抽象を先に切るのが素直か
+1. **座標変換は要らない**。 Layer のマウスハンドラへ来る座標は
+   **Layer 左上原点に補正済み**。 `render_to_buffer` へ渡す `surface_w/h` を
+   0 にすれば `out_rect = (0,0,コンテンツ実寸)` になり (manager が既に使って
+   いる手)、 **Layer local 座標 = view local 座標**でそのまま
+   `on_mouse_*` へ投げられる
+2. **ダイアログ系とは独立に、 別枠で自前に処理する**。 下の「なぜ独立させるか」
+3. **今の overlay を残したまま足す**。 出力先の抽象を先に切る形は取らない
 
+### なぜ「ダイアログ系とは独立」が妥当か (内部構造の調査結果)
+
+`tTVPElementsDialogManager::Impl::Instance` が持っているものを数えると、
+**大半が「overlay として画面へ提示する」ための状態**で、 Layer に描く
+パネルには意味が無い:
+
+| Instance の状態 | Layer パネルでは |
+|---|---|
+| `modal` / `wants_focus` / `armed_vks` | **不要**。 入力の帰属は krkrz の当たり判定が決める |
+| `present_scale` / `present_off_*` / `dest_offset_*` | **不要**。 拡縮は Layer 側 (`setPos` / `stretchCopy`) |
+| `cache_*` (前回の present 引数一式 11 個) | **不要**。 提示は `Layer.update` |
+| `last_rect` / `has_rect` / `cursor_inside` | **不要**。 ヒットテストは Layer |
+| `nav` / `screen_jsons` / `trans_*` / `last_frame` | **要らない** (画面遷移は `[trans]` に任せる) |
+| `session` / `handler` | **これだけ共通** |
+
+さらに manager 側のプロセス全体の状態 — `IsModalActive()` (DrawDevice の
+入力インターセプトのゲート) / `HasModalInstance()` (ウィンドウクローズ抑止) /
+ホストホットキー表 / 仮想キーボード / `TakeLastModalResult` /
+`DescribeInstances` (= `Agent.dialogs()`) — は **すべて「overlay が入力を
+独占する」前提**の仕組み。 ここに Layer パネルを混ぜると
+
+- パネルを出しただけでゲームの入力インターセプトが有効になる
+- パネルがあるとウィンドウを閉じられなくなる
+- `Agent.closeAllDialogs()` が常駐パネルまで畳む
+- `Agent.dialogs()` の index がずれて既存の検証コードが壊れる
+
+という「変な影響」が出る。 **`Impl::instances` には入れない**。
+
+一方で **プロセス全体で共有すべきもの**はある: ThorVG / フォントの初期化
+(`EnsureRuntimeInitialized`)、 テーマ (`defaultFontFamily` / `focusRing` /
+pad テーマ)、 表示言語 (`SetLanguage`)、 `registerImage` の mem:// store。
+これらは既に `StoragesResourceLoader` 側でプロセス全体なので、
+**パネルは同じものを使い、 言語変更と `InvalidateOverlays` の fan-out 先に
+パネルの registry を足すだけ**で足りる。
+
+### 実装スケッチ (どういうクラスがどう生えるか)
+
+**A. 共有部の切り出し** (既存 .cpp の匿名 namespace から出すだけ。 挙動不変)
+
+| 新規 | 中身 | 出どころ |
+|---|---|---|
+| `ElementsInputMap.h` | `MouseButtonToElements` / `FlagsToElementsMods` / `RouteVk` / `MouseButtonToVk` | `ElementsDialogManager.cpp` 匿名 namespace |
+| `ElementsSessionBuild.h/.cpp` | `BuildSession(json, w, h, resource_base, handler, lang)` → `unique_ptr<overlay_session>`。 bridge callback / drag callback / `set_language` / var watch の配線 | `Impl::BeginScreen` の後半 (前半の「surface 全面を既定サイズにする」は overlay 固有なので manager に残す) |
+| `ElementsActionQueue.h/.cpp` | `pending_actions` + `OnContinuousCallback` での drain (paint 中に発火した通知を window update の外へ逃がす) | `Impl::pending_actions` + `Impl::ActionDrainHook` |
+
+> `ElementsActionQueue` は **1 本を manager とパネルで共用**する
+> (ダイアログとパネルの通知順序が入れ替わらないように)。 いまの drain は
+> 「`FindByHandler` で生きているインスタンスがあるか」で捨て判定をしている
+> ので、 **owner ごとに「この handler はまだ生きているか」の述語を登録する**
+> 形へ一般化する。
+
+**B. パネル本体** (`common/visual/elements/ElementsLayerPanel.h/.cpp`)
+
+```
+class tTVPElementsLayerPanel : public tTVPContinuousEventCallbackIntf
+    unique_ptr<overlay_session>  session
+    tTJSNI_BaseLayer*            layer        // 弱参照。 描画先
+    iTVPDialogEventHandler*      handler
+    vector<tjs_uint32>           staging      // w*h。 連続 pitch (部分再描画の前提)
+    int w, h                                  // = Layer のサイズ
+
+    bool Open(json_utf8, resource_base)       // BuildSession → staging 確保 →
+                                              //   TVPAddContinuousEventHook(this)
+    void Close()                              // Hook 解除 → session 破棄 → OnClosed
+
+    void OnContinuousCallback(tick) override   // ★ 自前で毎フレーム回す
+        session->update(dt)
+        dirty なら render_to_buffer_partial(staging, w, h, 0, 0, rect, updated)
+        updated の矩形だけ staging → layer の bitmap へ行コピー
+          (layer が ltAlpha なら行ごとに TVPConvertAdditiveAlphaToAlpha)
+        layer->Update(updated 矩形)
+
+    // 入力。 座標は Layer local のまま渡す (変換なし)
+    void MouseDown/Up/Move/Wheel(x, y, btn, flags)
+    void KeyDown/KeyUp/Char/Text(...)         // 呼ばれたときだけ = 既定では鍵を取らない
+
+    // 状態
+    bool SetVar/GetVar/DescribeVars/RefreshVarWatch/SetLanguage/Invalidate
+    bool FocusById/ActivateById
+```
+
+要点:
+
+- **`PaintOverlay` を一切通らない**。 駆動は継続イベントフック
+  (manager の `ActionDrainHook` と同じ仕組み) で、 krkrz のアニメーション
+  レイヤと同じ「毎フレーム描いて `Update`」の作り
+- **画素形式**: elements は premultiplied な `0xAARRGGBB` を書く
+  (tvg `ColorSpace::ARGB8888` = alpha-premultiplied, A,R,G,B の順)。
+  krkrz の Layer が
+  - `ltAddAlpha` … **そのまま行コピー**でよい (変換ゼロ)
+  - `ltAlpha` (既定) … 行ごとに既存の `TVPConvertAdditiveAlphaToAlpha`
+    (SIMD 実装あり) を通す。 ダーティ矩形だけなので負荷は小さい
+- **pitch**: Layer の bitmap は `GetMainImagePixelBufferPitch()` が `w*4` と
+  一致しない (アラインされる) ことがあるので staging を挟んで行コピーする。
+  staging を持つのは `render_to_buffer_partial` の「前回描画が残っている」
+  前提を満たすためにも要る
+
+**C. パネルの registry** (`tTVPElementsPanelRegistry`。 小さい)
+
+開いているパネルの一覧だけ持つ。 用途は **プロセス全体の fan-out に限る**:
+`SetLanguage` / `InvalidateOverlays` (`registerImage` の差替反映) /
+テーマの再適用 / 将来の `Agent.panels()`。 **z 順も入力の調停も持たない**
+(そこは krkrz のレイヤツリーの仕事)。
+
+**D. TJS の口** (`common/visual/elements/PanelIntf.h/.cpp`。 `DialogIntf` の写し)
+
+```
+tTJSNC_ElementsPanel / tTJSNI_ElementsPanel : iTVPDialogEventHandler
+    new ElementsPanel(layer)      // tTJSNC_Layer::ClassID で tTJSNI_BaseLayer* を取る
+    openFile(path) / openJson(str) / close()
+    setVar / getVar / listVars / registerImage / unregisterImage / invalidate
+    mouseDown(x,y,btn,shift) / mouseUp / mouseMove / mouseWheel(delta,x,y)
+    keyDown(key,shift) / keyUp / text(str)        // 呼ばなければ鍵を取らない
+    focusById(id) / activateById(id)
+    property active / watchVars
+    イベント: onAction(id, payload) / onDrag(e) / onVar(name, value) / onClosed(action)
+```
+
+**イベント名と引数は `Dialog` と同じ**にする。 既存のドライバ (ホスト案件の
+画面ドライバ群) がほぼそのまま載る。 `iTVPDialogEventHandler` をそのまま
+実装するので、 `BuildSession` と通知キューは無改造で使える。
+
+**E. 使う側の便利クラス** (スクリプト。 KAG3 か sample ライブラリ)
+
+```tjs
+class ElementsPanelLayer extends Layer {
+    var panel;
+    function ElementsPanelLayer(win, par) {
+        super.Layer(win, par);
+        type = ltAlpha;  hitThreshold = 0;      // 全部のマウスメッセージを受ける
+        panel = new ElementsPanel(this);
+    }
+    function open(path) { return panel.openFile(path); }
+    function onMouseDown(x, y, b, f) { panel.mouseDown(x, y, b, f); }
+    function onMouseUp  (x, y, b, f) { panel.mouseUp  (x, y, b, f); }
+    function onMouseMove(x, y, f)    { panel.mouseMove(x, y, f); }
+    function onMouseWheel(sh, d, x, y) { panel.mouseWheel(d, x, y); }
+    function onAction(id, payload) {}           // 使う側が override
+}
+```
+
+ネイティブ側でクラス継承 (`ElementsLayer extends Layer` を C++ で作る) は
+**やらない**。 krkrz にネイティブクラスがネイティブクラスを継承する前例が
+無く、 スクリプトのクラスで足りる (使う側が自由に派生できる利点もある)。
+
+**初回に入れないもの** (別枠で足す前提を守るため。 要ると分かってから足す)
+
+- **キー / パッドのフォーカス調停**。 鍵はスクリプトが明示的に流したときだけ。
+  「複数のパネルのうちどれがキーを取るか」は krkrz 側に既存の枠が無いので、
+  先に入れると必ず「変な影響」になる
+- **navigator フロー / `transitions`**。 1 パネル = 1 画面。 画面の切替は
+  `openJson` を呼び直す。 クロスフェードは Layer を 2 枚にして krkrz の
+  `[trans]` に任せる (それができるのがこの案の狙いなので)
+- **`close_on_click` の自動 finish / モーダル結果**。 `onAction` だけ
+- **仮想キーボード / IME**。 `input_box` を置くパネルは後回し
+
+**F. 既存コードへの触り方**
+
+| ファイル | 変更 |
+|---|---|
+| `ElementsDialogManager.cpp` | 匿名 namespace の入力変換を `ElementsInputMap.h` へ移動。 `Impl::BeginScreen` の後半を `BuildSession` 呼出へ。 `pending_actions` を共有キューへ。 **挙動は変えない** |
+| `ElementsDialogManager.cpp` (`SetLanguage` / `InvalidateOverlays`) | パネル registry へも fan-out |
+| `LayerIntf.h` | 変更なし (`GetMainImagePixelBufferForWrite` / `GetMainImagePixelBufferPitch` / `Update(rect)` は既に公開) |
+| CMake | 新規 3 + 2 ファイルを `KRKRZ_USE_ELEMENTS` の枠に追加 |
+
+**残る確認点**
+
+- `overlay_session::update()` に渡す dt を継続イベントの tick 差分で作るが、
+  **継続イベントの間隔はフレームと一致しない**。 演出のなめらかさに影響する
+  なら `Update` を打つ頻度を別に絞る余地がある
+- Layer のサイズが変わったとき (`setSize`) は staging 再確保 +
+  `notify_view_resize`。 スクリプトから呼ばせるか、
+  `ElementsPanelLayer.onResize` を用意するか
 ---
 
 ## 9. 同じチャンネルの `animate` が連ならない — ✅ 対応済み
