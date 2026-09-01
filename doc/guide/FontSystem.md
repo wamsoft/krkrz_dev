@@ -256,6 +256,56 @@ Font.defaultUseVarStyle = true;          // bold/italic を軸で表現 (オプ�
 BiDi 混在・絵文字混在・計測・矩形内折り返し・タイプライタ表示 (RTL 混在文の
 自動再生 — RTL 区間が論理順で 1 クラスタずつ現れます) の実例を確認できます。
 
+## 縦組み (日本語縦書き)
+
+[Layer.drawVerticalTextArea](../reference/Layer.md#drawverticaltextarea) は
+矩形へ**縦組み (縦書き)** で本文を流し込みます。横組みの
+`drawShapedTextArea` とは別経路で、日本語組版規則 (JLReq) のアキ量表に従って
+組みます:
+
+- 和文は正立・欧文/数字は横倒しに組み分け (`orientation` で全正立/全横倒しにも変更可)
+- 縦字形 (`vert` / `vrt2`) と縦アドバンス (`vmtx` / `VORG`) を使うので、
+  括弧・長音符・句読点が縦向きの字形になる
+- 約物 (句読点・括弧類) の詰め、和欧間のアキ
+- 行頭行末禁則、追い込み / 追い出し、行末揃え、句読点のぶら下げ (任意)
+
+列の長さは矩形の height、列の送りは「フォントサイズ + lineSpacing」です。
+既定は右から左 (1 列目が矩形の右端) で、`verticalLr` で左から右にできます。
+矩形に入りきらない列は描画されません。フォント指定 (`font` 引数) と色の扱いは
+`drawShapedText` と共通なので、横組みと同じ Font オブジェクトで見た目が揃います。
+
+```tjs
+var opt = %[ "hanging" => true, "letterSpacing" => 0.05 ];
+// (x, y, width, height, text, color, font, count, lineSpacing, options)
+var r = layer.drawVerticalTextArea(20, 20, 400, 560, text, 0x000000,
+                                   font, -1, 6, opt);
+// r.lines = 組んだ列数 / r.width = 使った幅 / r.count = 描いたクラスタ数
+```
+
+`options` の全キーと既定値は
+[Layer.drawVerticalTextArea](../reference/Layer.md#drawverticaltextarea) を
+参照してください (`orientation` / `verticalLr` / `punctuation` / `latinGap` /
+`hanging` / `justify` / `letterSpacing`)。
+
+`count` はタイプライタ表示用で、横組みと同じく**行分割を全文で確定してから**
+制限を掛けるので途中でリフローしません。ただし数える単位は「描画される文字」で、
+欧文の単語間空白は数えないため
+[Layer.shapedTextCount](../reference/Layer.md#shapedtextcount) の値とは
+一致しないことがあります。総数は戻り値の `totalCount` を使ってください。
+
+描画せずに列数や必要な幅だけ知りたいときは
+[Layer.measureVerticalTextArea](../reference/Layer.md#measureverticaltextarea)
+を使います (引数から x / y / color を除いたもので、戻り値は同じ)。
+
+**未対応**: ルビ・縦中横・圏点・割注・字取り、段組、下線 / 打ち消し線、
+[Font.angle](../reference/Font.md#angle)。現状の対応範囲は本文の組版のみです。
+
+動作サンプル: コアデモギャラリー (`src/core/data`) の
+「縦組み (drawVerticalTextArea)」シーンで、本文の流し込み・`options` のキー切替
+(ぶら下げ / 行末揃え / 約物の詰め / 列送りの向き / 字間)・`orientation` による
+和欧の組み分け・同じ本文を横組みで並べた対比・タイプライタ表示 (count 制限) の
+実例を確認できます。
+
 ## UI 系 (Elements) と layerExVector のフォント
 
 - **Elements ダイアログ** ([ダイアログ](Dialog.md)) のテキストは glyphware で

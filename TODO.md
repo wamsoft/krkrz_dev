@@ -20,11 +20,11 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 完了したものは末尾の「完了 (記録として残す)」へ移す。
 
-## 現況 (2026-08-31 時点)
+## 現況 (2026-09-01 時点)
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 14 | Elements/UI 5 (高 2) / エンジン基盤 6 / ビルド・運用 3 |
+| 予定・未着手 | 15 | Elements/UI 5 (高 2) / エンジン基盤 7 / ビルド・運用 3 |
 | 将来課題 | 8 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
@@ -63,6 +63,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
 | 中 | 固定長パスバッファ (`MAX_PATH`) の全体点検 | `common/utils/DebugIntf.cpp:533` に `tjs_char filename[MAX_PATH]` へ `Application->ExePath()` を長さ検査なしで `TJS_strcpy` している箇所がある (`TVPTJS2StartDump`)。Windows のパスは `MAX_PATH` を超えうるので、**同種の固定長バッファ + 無検査コピーが他にどれだけあるかを全体で洗い出し**、`tjs_string` / `ttstr` 化するか長さチェックを入れる。2026-08-19 の設定ファイル調査中に発見 (この件自体は今回の変更とは無関係の既存コード) |
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
+| 低 | 縦組みの組版拡張 (ルビ / 縦中横 / 圏点 / 割注 / 字取り・段組・傍線) | `Layer.drawVerticalTextArea` の対応範囲は本文の組版のみ。ルビ等は行の中へ**入れ子の組版ボックス**を埋める話で、`LineItem` の拡張と入力マークアップ (本文文字列 1 本では表現できない) の設計がセットになる。段組は「入りきらない列を次へ渡す継続位置」、傍線は縦組み固有の位置決めが要る。必要になった時点で層から決める。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「縦組み (drawVerticalTextArea) の未対応」 |
 | 低 | プラグイン向けログレベル個別 IF | `TVPLogMsg` を tp_stub に収録するだけ。important = WARNING は維持 |
 | 低 | フォントエンジンの未対応 (計画) 4 件 | ①収録範囲を使った**言語別フォールバックの自動選択** (Elements は宣言式の `font_languages` で対応済みだが `Layer.drawText` / `Font.face` 側は未対応) ②圧縮 cmap/bitset による包含判定の最適化 ③`TVPGetAllFontList` へメタデータ名を合流 (設定 UI のフォント一覧反映) ④システムフォント全列挙 (`allowSystem`) の検索統合。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「未対応 (計画)」 |
 
