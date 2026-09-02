@@ -157,7 +157,24 @@ onTextInput 移行とは無関係、それ以前から発生)。
 
 ---
 
-## 3. input_box にプログラム的フォーカスが効かない (優先度: 中)
+## 3. input_box にプログラム的フォーカスが効かない (優先度: 中) — ✅ 対応済み (2026-09-02)
+
+**原因**: `view::focus(element_ptr)` の `descend_set_focus` はターゲット**まで**の
+composite に focus index を張るが、ターゲット**の内側**は張らない。input_box は
+`layer(margin(scroller(hold(basic_input_box))))` の包みなので、layer composite の
+`_focus` / `_saved_focus` が両方 -1 のまま `begin_focus(restore_previous)` が
+そこで return し、編集フォーカスに届かなかった (クリックすると `_saved_focus` が
+入るので以後は効く = 「一度クリックすれば入る」の正体)。
+
+**対応**: `descend_set_focus` がターゲットに到達したら、その内側も
+`wants_focus()` の先頭の葉まで focus index を張る (`descend_focus_first`)。
+`initial_focus` / `focus_by_id` / `Agent.dialogFocus` すべて同根で解決。
+あわせて **`Dialog.focus(id)`** (instance 版の focus_by_id) を追加 —
+画面の組み替え (at_var の park/unpark) の後に入力先を移せる。
+既定値入りの input_box は **build 時に全選択**にした (initial_focus で
+そのまま打つと置き換え。OS の入力ダイアログと同じ挙動)。
+ホスト案件の名前入力画面で実機確認 (開いた直後に打てる / 2 段目切替も
+クリック不要)。
 
 報告: 2026-08-24。overlay モーダルの `"input_box"` に `"initial_focus": true` を
 指定しても、開いた直後の打鍵が入力欄に入らない (クリックすれば入る)。同根で
@@ -408,17 +425,20 @@ id に自分で付けた名前が来ると思って書くと **その入力だ�
 (組込名は届かないこと / `id` は `"<action>"` 固定で名前は payload に入ること /
 自分の名前が id に来ると思って書くと黙って無反応になること)。
 
-### 5-8. `input_box` に最大長が無い (優先度: 中)
+### 5-8. `input_box` に最大長が無い (優先度: 中) — ✅ 対応済み (2026-09-02)
 
-入力の文字数を縛る口が無い (`build_input_box` は `placeholder` / `text` /
-`size` だけ)。 名前欄のように **«全角 4 文字まで» が仕様**の画面では、
-ホスト側で «決定を押したときに切る» しかなく、 打っている間は制限が見えない。
-`"maxlength"` (文字数。 クラスタ単位が望ましい) が欲しい。
+`basic_input_box` に `max_length` (Unicode codepoint 単位、 0 = 無制限) を
+足し、 JSON は **`"max_chars"`** (別名 `"maxlength"`) で指定できるようにした。
+満杯での打鍵は消費して無視 (選択があれば置き換えなので通す)、 paste は
+codepoint 境界で収まる分だけ入る。 初期値 (`"text"`) はプログラム的投入
+なので制限しない。 ホスト案件の名前入力 (全角 4 文字仕様) で実機確認。
+クラスタ単位ではなく codepoint 単位 (結合文字は個別に数える) — 日本語の
+名前入力用途では実質同じ。
 
-ついでに: **プログラムから入力欄の中身を差し替える口も無い**。 初期値は
-ビルド時の `"text"` だけなので、 «同じ画面で 2 つの既定を出し分ける» には
-入力欄を 2 個置いて片方を画面外へ逃がすことになった。 `text_var` が
-`input_box` にも効くと素直。
+ついでの「**プログラムから入力欄の中身を差し替える口も無い**」は**未対応のまま**:
+初期値はビルド時の `"text"` だけなので、 «同じ画面で 2 つの既定を出し分ける»
+には入力欄を 2 個置いて片方を画面外へ逃がすことになる。 `text_var` が
+`input_box` にも効くと素直。 (ホストは 2 個 + park で回避済み、 急ぎでない)
 
 ### 5-7. OS にインストール済みのフォントは family 名から引けない — 見送り (engine 側の課題へ集約)
 
