@@ -24,7 +24,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 14 | Elements/UI 4 (高 1) / エンジン基盤 7 / ビルド・運用 3 |
+| 予定・未着手 | 15 | Elements/UI 4 (高 1) / エンジン基盤 8 / ビルド・運用 3 |
 | 将来課題 | 8 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
@@ -69,6 +69,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 |---|---|---|
 | 中 | Layer / Bitmap / ImageFunction の統合 | ImageFunction の API 二重化と、プラグインが Bitmap を扱えない問題 (Layer 参照 26 ファイル) の再整理。**方針決定済 = P1 (tp_stub 共通アクセス口) → P2 (Bitmap へメソッド追加・ImageFunction は shim 化) → P3 (プラグイン対応) → P4 で共通基底 `ImageBuffer` の要否を判断**。B案はプロトタイプ実測済み (パッチ同梱)。着手は後日。SSOT = [ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
+| 中 | Emote/Motion リソースマネージャの共有 (再読込の削減) | `data/system/AffineSourceMotion.tjs` の `SimpleEmotePlayer` はプレイヤー生成のたびに `MotionResourceManager` を new しており、リソースキャッシュ (`Motion.ResourceManager`、既定 20MB、`motionCacheSize` で可変) が効かず、立ち絵 psb (数十 MB) を表示/アクションのたびにフル再読込している。**アクション毎のカクつきと、メモリ枯渇 (特に 32-bit) を招く**。ウィンドウ単位で 1 つの ResourceManager を共有すれば解消するが、単純な共有化 (window に持たせて addRef/共有) を試すと **emoteplayer プラグイン内部 (`V2Unlink`) が AV で即死**した — 複数 `EmotePlayer` が同一 ResourceManager を参照する構成をプラグインが想定していない疑い。**要調査**: (1) `Motion.ResourceManager` / `EmotePlayer` の参照所有モデル (unload が他プレイヤーの参照中リソースを解放していないか)、(2) 共有可能にするためのプラグイン側 IF、(3) 併せて `SwitchEmotePlayer` の base 別プレイヤーも同一 psb を二重ロードしていないか。回避として `motionCacheSize` 拡大 + 32-bit の pool 縮小 + LAA で当座の枯渇は解消済み (別項)。実機再現は E-mote 立ち絵のアクションが連続する場面 |
 | 中 | 固定長パスバッファ (`MAX_PATH`) の全体点検 | `common/utils/DebugIntf.cpp:533` に `tjs_char filename[MAX_PATH]` へ `Application->ExePath()` を長さ検査なしで `TJS_strcpy` している箇所がある (`TVPTJS2StartDump`)。Windows のパスは `MAX_PATH` を超えうるので、**同種の固定長バッファ + 無検査コピーが他にどれだけあるかを全体で洗い出し**、`tjs_string` / `ttstr` 化するか長さチェックを入れる。2026-08-19 の設定ファイル調査中に発見 (この件自体は今回の変更とは無関係の既存コード) |
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
 | 低 | 縦組みの組版拡張 (ルビ / 縦中横 / 圏点 / 割注 / 字取り・段組・傍線) | `Layer.drawVerticalTextArea` の対応範囲は本文の組版のみ。ルビ等は行の中へ**入れ子の組版ボックス**を埋める話で、`LineItem` の拡張と入力マークアップ (本文文字列 1 本では表現できない) の設計がセットになる。段組は「入りきらない列を次へ渡す継続位置」、傍線は縦組み固有の位置決めが要る。必要になった時点で層から決める。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「縦組み (drawVerticalTextArea) の未対応」 |
