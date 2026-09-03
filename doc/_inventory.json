@@ -189,6 +189,7 @@
       "clearImages",
       "close",
       "dictToJson",
+      "focus",
       "getVar",
       "listVars",
       "onAction",

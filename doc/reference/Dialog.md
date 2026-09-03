@@ -110,6 +110,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [setVar](#setvar)
 - [getVar](#getvar)
 - [listVars](#listvars)
+- [focus](#focus)
 - [setPadIconBase](#setpadiconbase)
 - [setPadTheme](#setpadtheme)
 - [renderStatsReset](#renderstatsreset)
@@ -1132,6 +1133,34 @@ Dictionary の配列です。
 参照だけあって一度も書かれていない変数、逆に参照は無いが
 [setVar](#setvar) で作った変数も載ります。デバッグパネルや画面 JSON の
 検証に使います。
+
+---
+
+### focus
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `id` | `&nbsp;` | フォーカスを移す widget の id。 |
+
+**戻り値**
+
+依頼できたかどうか。非アクティブなら false。
+
+**解説**
+
+指定 id の widget へフォーカスを移す
+
+表示中ダイアログの widget ( JSON の `"id"` で指定 ) へフォーカスを
+移します。input_box は編集フォーカス ( キャレット表示 + テキスト受理 )
+になります。`at_var` の park / unpark などで画面を組み替えた後に、
+入力先を明示的に移す用途を想定しています。
+
+戻り値は「インスタンスへフォーカス移動を依頼できたか」で、id の存在
+確認はしません。自分のインスタンスが非アクティブなら false を返します。
 
 ---
 

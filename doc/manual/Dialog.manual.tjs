@@ -620,6 +620,21 @@ class Dialog {
 	function listVars();
 
 	/**
+	 * 指定 id の widget へフォーカスを移す
+	 *
+	 * 表示中ダイアログの widget ( JSON の `"id"` で指定 ) へフォーカスを
+	 * 移します。input_box は編集フォーカス ( キャレット表示 + テキスト受理 )
+	 * になります。`at_var` の park / unpark などで画面を組み替えた後に、
+	 * 入力先を明示的に移す用途を想定しています。
+	 *
+	 * 戻り値は「インスタンスへフォーカス移動を依頼できたか」で、id の存在
+	 * 確認はしません。自分のインスタンスが非アクティブなら false を返します。
+	 * @param id フォーカスを移す widget の id。
+	 * @returns 依頼できたかどうか。非アクティブなら false。
+	 */
+	function focus(id);
+
+	/**
 	 * pad_icon のベースディレクトリを設定する
 	 *
 	 * pad_icon ( Kenney input prompts ) のベースディレクトリを設定します。dir は統一ストレージ

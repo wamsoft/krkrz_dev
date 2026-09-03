@@ -53,7 +53,7 @@ ActiveX が IDispatch で持つメソッドを直接呼び出すことができ�
 
 ### isValidWindow
 
-プロパティ \ アクセス: `r/w`
+プロパティ \ アクセス: `r`
 
 **解説**
 
