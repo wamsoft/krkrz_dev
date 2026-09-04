@@ -25,7 +25,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 区分 | 件数 | 中身 |
 |---|---|---|
 | 予定・未着手 | 13 | Elements/UI 2 (高 1) / エンジン基盤 8 / ビルド・運用 3 |
-| 将来課題 | 8 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
+| 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
 | デモ整備 | 10 + 1 | 未着手デモは多くが資材待ち |
@@ -100,6 +100,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 中 | SDL 版に `-about` のダイアログが無い | バージョン情報ダイアログは WINVER だけの実装 (`TVPCheckAbout()` → `TVPShowVersionForm()` = Win32 `DialogBox`)。SDL3 は `-about` を処理しておらず、`System.showVersion()` も WINVER のみ。**表示する文字列は全バリアント共通で用意済み** (`TVPGetAboutString()` = バージョン行 + LICENSE + 収録一覧 + 環境情報。SSOT = [LicenseSystem.md](src/core/doc/LicenseSystem.md)) なので、残るのは表示手段だけ。素直には `-userconf` と同じくゲームウィンドウ生成前の独立 SDL_Window + Elements overlay だが、**gamescope (Steam Deck) はセカンダリウィンドウを出せない**ので、その環境での代替 (標準出力へ落とす等) も併せて決める必要がある。現状の代替手段 = `-license` (標準出力) と `System.licenseText` |
 | 中 | SDL ビルドの SEH 捕捉 | ゼロ除算・アクセス違反でログを残さず即死する。WINVER は translator + minidump あり |
 | 低 | WINVER モダン化の残 | F-3 (入力)、HW mixer の直描画 |
+| 低 | WINVER に繁体字のメッセージ文字列が無い | `messages.csv` の `cht` 列は SDL3/LIB へ `resource/messages-cht.json` として届くが、WINVER の PE 文字列テーブル (`win32/vcproj/string_table_*.rc`) は jp / en / chs の 3 種のみ。zh-Hant UI では PE リソースの言語解決でフォールバックする。`gen_messages.py` に `string_table_cht.rc` の出力を足し、`tvpwin32.rc` の Chinese (Traditional) ブロックへ `#include` すれば埋まる (設定ダイアログの文字列は既に繁体字あり)。→ `src/core/common/msg/text/README.md` |
 | 低 | macOS (Retina) の point / pixel の使い分け | `SDL3WindowForm::GetSurfaceSize` が `SDL_GetWindowSize` (macOS では **point**) を使っているため、Retina では描画解像度が半分になる可能性がある。`SDL_GetWindowSizeInPixels` との使い分けを整理する必要あり。**未検証 (macOS 実機確認が前提)**。サイズ API の単位定義とあわせて判断する → [WindowGeometry.md](src/core/doc/WindowGeometry.md) §8 |
 | 低 | generic フラグの 3 種区別 | `kirikiriz_generic` が導入当時「CS (コンシューマ) 版」の意味だったため、案件スクリプトは generic = プラグイン静的リンク前提で分岐している。PC の SDL ビルドは CS でも WINVER でもない第 3 の形態なのに区別する手段が無い。案件側スクリプトにも影響するため改定は慎重に |
 

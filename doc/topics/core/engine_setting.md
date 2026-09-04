@@ -43,7 +43,7 @@ DLL に隣接する `<basename>.options.json` ( 例: `myplugin.options.json` ) �
 ### JSON のフォーマット
 
 トップレベルは**カテゴリの配列**で、各カテゴリが `options` にオプション定義の配列を持つ。
-本体の実物は `src/core/resource/optiondesc.json` ( 7 カテゴリ / 65 オプション ) を参照。
+本体の実物は `src/core/resource/optiondesc.json` ( 7 カテゴリ / 66 オプション ) を参照。
 
 ```json
 [
