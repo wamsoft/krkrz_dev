@@ -63,6 +63,7 @@ Layer には対応するメソッドがありません。読み込んだあと
 | 文字描画 | `drawText` | `drawText` (Font を明示指定) | — |
 | グリフ描画 | `drawGlyph` | `drawGlyph` | — |
 | シェイピング文字描画 | `drawShapedText` / `drawShapedTextArea` | **なし** | — |
+| 縦組み文字描画 | `drawVerticalTextArea` | **なし** | — |
 | 矩形コピー | `copyRect` | `operateRect` + `omOpaque` / `dfOpaque` | — |
 | 矩形演算合成 | `operateRect` | `operateRect` | — |
 | 拡大縮小コピー | `stretchCopy` | `operateStretch` + `omOpaque` / `dfOpaque` | — |
@@ -186,7 +187,8 @@ Layer のコンストラクタ第 1 引数に Window の代わりに渡すと、
   指定を忘れると結果が真っ黒になる (アルファが 0 になる) といった症状になります。
 
 **シェイピング文字描画は Layer のみ**
-: `drawShapedText` / `drawShapedTextArea` / `measureShapedText` 系は Layer にしかありません。
+: `drawShapedText` / `drawShapedTextArea` / `measureShapedText` 系、および縦組みの
+  `drawVerticalTextArea` / `measureVerticalTextArea` は Layer にしかありません。
   Bitmap に対する複雑なテキストレイアウトが必要な場合は、いったん Layer に描いてから Bitmap へ受けることになります。
 
 ## 典型パターン

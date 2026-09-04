@@ -89,6 +89,17 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
       論理順で 1 クラスタずつ現れる) を追加。実機キャプチャ検証済。
       ※ doc 埋め込み wasm デモ (doc/_assets/demo) への反映は krkrz_web
       再ビルドが必要 (別リポ作業)。**2026-08-16 に再ビルド・再ステージング済**。
+- [x] **text_vertical (縦組み) シーン追加** (2026-09-01)。`drawVerticalTextArea` /
+      `measureVerticalTextArea` を使う縦書きシーンを text_font デモへ追加
+      (4→5 シーン、core gallery にも登録)。本文の流し込み + options のキー切替
+      (1:ぶら下げ 2:行末揃え 3:約物の詰め 4:列送りの向き 5:orientation
+      ←/→:字間)、同じ本文を横組み (`drawShapedTextArea`) で並置した対比、
+      orientation 0/1/2 の組み分け、count 制限の自動再生タイプライタ。
+      実機キャプチャ検証済。data/ ハブ (トップランチャ) にも登録したので
+      19 → 20 デモ。
+      ※ doc 埋め込み wasm デモ (doc/_assets/demo) は krkrz_web で再ビルドして
+      差し替え済み (2026-09-01)。ブラウザ (Edge) 実機でハブ → 縦組みシーンの
+      表示まで確認済み。
 - [x] **elements_bench (Elements 負荷計測) 追加** (2026-08-12)。
       `Dialog.renderStats` (描画パイプラインの区間計測: update/raster/
       acquire/upload/present の累積時間+回数) を新設し、更新パターン別

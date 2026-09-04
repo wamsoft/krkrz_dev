@@ -1,6 +1,6 @@
 // -*- mode:tjs2 -*-
 // ======================================================================
-//  トランジション表示サンプル (Elements UI / Dialog 版)
+//  トランジション表示サンプル (Elements UI / ElementsDialog 版)
 // ----------------------------------------------------------------------
 //  吉里吉里Z 標準トランジション + extrans + extNagano プラグインの
 //  トランジションを Elements UI で「選んで・パラメータ設定して・実行」する。
@@ -9,7 +9,7 @@
 //  束ね起動 (data/ ランチャ) では scene.tjs だけを読み込む。
 //
 //  ■ 動かすには
-//    - Elements Dialog は SDL3 ビルド + KRKRZ_USE_ELEMENTS=ON のみ利用可。
+//    - ElementsDialog は KRKRZ_USE_ELEMENTS=ON (既定) のビルドで利用可 (SDL3 / WINVER 両対応)。
 //    - extrans / extNagano を使うには extrans.dll / extNagano.dll を exe と
 //      同じ場所に置く。無い場合は canLink 判定で該当項目を自動除外する。
 //  ■ 使い方

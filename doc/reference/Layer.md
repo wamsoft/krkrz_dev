@@ -107,6 +107,8 @@ Layer クラスは、**レイヤ**を管理するためのクラスです。
 - [drawShapedTextArea](#drawshapedtextarea)
 - [measureShapedText](#measureshapedtext)
 - [shapedTextCount](#shapedtextcount)
+- [drawVerticalTextArea](#drawverticaltextarea)
+- [measureVerticalTextArea](#measureverticaltextarea)
 - [copyRect](#copyrect)
 - [copy9Patch](#copy9patch)
 - [piledCopy](#piledcopy)
@@ -2095,6 +2097,83 @@ dfOpaque (またはdfMain) を指定した場合、描画先のマスクが破�
 単位と同じです。合字・基底文字 + 結合文字・絵文字 ZWJ シーケンスがそれぞれ
 1 と数えられるため、コードポイント数 ( 文字列の length ) とは一致しないことが
 あります。改行文字は行を分割し、それ自身は数えられません。
+
+---
+
+### drawVerticalTextArea
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 矩形の左端をピクセル単位で指定します。 |
+| `y` | `&nbsp;` | 矩形の上端をピクセル単位で指定します。 |
+| `width` | `&nbsp;` | 矩形の幅をピクセル単位で指定します ( 列が並ぶ方向の長さ )。 |
+| `height` | `&nbsp;` | 矩形の高さをピクセル単位で指定します ( 1 列の長さ )。 |
+| `text` | `&nbsp;` | 描画する文字列を指定します。 |
+| `color` | `&nbsp;` | 描画する文字の色を 0xAARRGGBB 形式で指定します ( 上位 8bit のα省略 = 不透明 )。 |
+| `font` | `void` | 描画属性をまとめて指定します ( [Layer.drawShapedText](Layer.md#drawshapedtext) と同じ )。 |
+| `count` | `-1` | 0 以上を指定すると、全体を通して先頭 count 「文字」( クラスタ ) だけを<br>描画します ( タイプライタ表示用 )。行分割は全文で確定してから制限を掛けるため、<br>表示途中に列の組み替え ( リフロー ) は起こりません。欧文の単語間空白はここでは<br>数えません ( 数える単位は描画される文字そのものです )。省略時 ( -1 ) は全体を描画します。 |
+| `lineSpacing` | `0` | 列間 ( 行間 ) に追加するピクセル数を指定します ( 負値も可 )。 |
+| `options` | `void` | 組版オプションを Dictionary で指定します ( 省略可 )。指定しなかった<br>キーは既定値のままです:<br>+ "orientation" => 正立 / 横倒しの指定。0 = 和文は正立・欧文は横倒し ( 既定 ) /<br>1 = すべて正立 / 2 = すべて横倒し<br>+ "verticalLr" => 真で列を左から右へ進めます ( 既定は偽 = 右から左 )<br>+ "punctuation" => 約物の詰め ( JLReq のアキ量表 ) を行います ( 既定は真。偽ならベタ組み )<br>+ "latinGap" => 和文と欧文の間にアキを入れます ( 既定は真 )<br>+ "hanging" => 行末に来た句読点を版面の外へ出します ( ぶら下げ組み。既定は偽 )<br>+ "justify" => 行末を揃えます ( 既定は真 )。偽でも溢れる分の詰めは行われます<br>+ "letterSpacing" => 字間を em 単位の実数で指定します ( 既定は 0 ) |
+
+**戻り値**
+
+描画結果の Dictionary を返します ( 失敗時は void ):
+%[ "width" => 使用した幅 ( px。列が並ぶ方向の厚み ), "lines" => 描画した列数,
+"count" => 実際に描画したクラスタ数,
+"totalCount" => count 制限が無いときのクラスタ総数 ]
+
+**解説**
+
+矩形内縦組み描画 ( シェイピング / 日本語縦書き )
+
+統一フォントエンジン glyphware を用いて、矩形 (x, y, width, height) の内側に
+**縦組み ( 縦書き )** でテキストを描画します。横組みの
+[Layer.drawShapedTextArea](Layer.md#drawshapedtextarea) とは別経路で、
+和文は正立・欧文は横倒しに組み分け、約物 ( 句読点・括弧類 ) の詰め・行頭行末禁則・
+追い込み / 追い出しを日本語組版規則 ( JLReq ) のアキ量に従って処理します。
+
+列の長さは height、列の送り ( 行送り ) は「フォントサイズ + lineSpacing」です。
+既定 ( 縦組み右から左 ) では 1 列目が矩形の右端に来て左へ進みます。矩形に入りきらない
+列は描画されず、描画は矩形内にクリップされます。\n ( \r\n / \r ) は明示改行 ( 段落の
+区切り ) として扱われます。
+
+**対応範囲は本文のみです。** ルビ・縦中横・圏点・割注・字取り、段組には対応していません。
+font の angle・underline ( 下線 )・strikeout ( 打ち消し線 ) は無視されます。
+
+---
+
+### measureVerticalTextArea
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `width` | `&nbsp;` | 矩形の幅をピクセル単位で指定します。 |
+| `height` | `&nbsp;` | 矩形の高さをピクセル単位で指定します。 |
+| `text` | `&nbsp;` | 計測する文字列を指定します。 |
+| `font` | `void` | 描画属性をまとめて指定します ( [Layer.drawShapedText](Layer.md#drawshapedtext) と同じ )。 |
+| `count` | `-1` | 0 以上を指定すると先頭 count クラスタだけを計測対象にします<br>( 省略時 ( -1 ) は全体 )。 |
+| `lineSpacing` | `0` | 列間 ( 行間 ) に追加するピクセル数を指定します ( 負値も可 )。 |
+| `options` | `void` | 組版オプションを Dictionary で指定します<br>( [Layer.drawVerticalTextArea](Layer.md#drawverticaltextarea) と同じ )。 |
+
+**戻り値**
+
+計測結果の Dictionary を返します ( 失敗時は void )。内容は
+[Layer.drawVerticalTextArea](Layer.md#drawverticaltextarea) の戻り値と同じです。
+
+**解説**
+
+矩形内縦組みの計測
+
+[Layer.drawVerticalTextArea](Layer.md#drawverticaltextarea) と同じ組版を描画せずに
+行い、結果を Dictionary で返します。何列必要か / 全部で何文字あるかを、描画前に
+調べる用途に使います。
 
 ---
 

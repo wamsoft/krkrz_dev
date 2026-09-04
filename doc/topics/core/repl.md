@@ -120,7 +120,7 @@ TJS クラスが組み込まれています。`System` クラスと同じくク�
 | 画面キャプチャ | `Agent.captureScreen(path[, x, y, w, h])` / `Agent.lastCapture()` |
 
 `Agent` 経由の入力は実入力と同じ `TTVPWindowForm::Send*` 経路を通るので、
-ゲームにも [Dialog](../../reference/Dialog.md) にも届きます。
+ゲームにも [Dialog](../../reference/ElementsDialog.md) にも届きます。
 `captureScreen` は overlay 込みの実画面を次フレームの present 直前に
 読み戻して PNG 保存します ( 要求した時点でアイドルでも 1 フレーム後に
 保存される )。

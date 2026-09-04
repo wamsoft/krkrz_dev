@@ -17,7 +17,7 @@ navigator)。こちらは**吉里吉里Z のゲーム (KAG/kag 機構) に実際
         │ extends / show() / setVar()
  基盤 TJS (例 ElementsUI.tjs)               ← 触る頻度は低い。基底クラスと初期化
         │ showFile / onAction / onClose
- native Dialog クラス (elements_modal)      ← engine
+ native ElementsDialog クラス (elements_modal)      ← engine
         │ 読む
  画面資材 <name>.jsonc + atlas PNG          ← uitool で生成
 ```
@@ -27,8 +27,11 @@ navigator)。こちらは**吉里吉里Z のゲーム (KAG/kag 機構) に実際
 
 ## 1. 起動と存在判定
 
-- ゲーム本体が `global.Dialog` を別用途で占有している場合がある。その場合は
-  初期化時に **`global.ElementsDialog` へ退避**して、以後そちらを使う。
+- **クラス名は `ElementsDialog`** (2026-09-04 に旧名 `Dialog` から改名。ゲーム側
+  TJS のクラス名と実際に衝突したため。互換エイリアスなし)。旧 exe (クラス名
+  `Dialog`) と混在する期間は、初期化時に
+  `if (typeof global.ElementsDialog != "Object" && typeof global.Dialog == "Object") global.ElementsDialog = global.Dialog;`
+  で新名へ寄せてから、以後 `ElementsDialog` だけを使うと両対応になる。
 - ロードは条件付きにして非対応 exe を守る:
   `KAGLoadScript("...") if (typeof global.ElementsDialog == "Object");`
 - **フォント登録 (`setupFont()` 相当) は show の前に一度**。krkr は複数フォルダの
@@ -41,8 +44,9 @@ navigator)。こちらは**吉里吉里Z のゲーム (KAG/kag 機構) に実際
   `showModal*` はネストポンプに入るため **REPL やイベントが止まる**。
 - `{"type":"button","close_on_click":true}` の決定は **`onClose(action=ボタンid)`**
   で来る (`onAction` ではない)。Esc/× は `action=""`。選択系メニューはこの形が定石。
-- **TJS サブクラスは明示 `super.Dialog()` が必要**。明示コンストラクタ無しで `new`
-  すると表示とナビは効くのに `onAction`/`onClose`/`onScreen` が一切来ない
+- **TJS サブクラスは明示 `super.ElementsDialog()` (旧 exe は `super.Dialog()`) が
+  必要**。明示コンストラクタ無しで `new` すると表示とナビは効くのに
+  `onAction`/`onClose`/`onScreen` が一切来ない
   (engine 側で `Owner` がコンストラクタ経由でしか設定されないため)。
 - **`showFile` は Storages の autopath 探索に乗っていない** — ファイル名だけでは
   失敗する。パス付き (`"system/foo.jsonc"`) で渡す。★engine 側 要調査
@@ -67,10 +71,15 @@ navigator)。こちらは**吉里吉里Z のゲーム (KAG/kag 機構) に実際
   (`onKeyDown`/`onRightClicked`) のどちらが先に食うか exe 差があり得る。
   `_done` フラグ + `isvalid` で守る。
 - conductor は `openDialog` が interrupt するので、「開く=停止 / 閉じる=再開」が自動。
-- **z オーダーの構造的制約**: Elements は native overlay なので**常に KAG レイヤ群より
-  上**に出る。Elements パネル表示中に旧 DialogLayer を開くと論理 z と見た目が食い違う。
-  → 旧ダイアログ表示中だけ Elements 側を一時 hide するフックを用意するか、
-  同時使用を避ける運用にする。
+- **z オーダーの構造的制約**: overlay (ElementsDialog) は native overlay なので
+  **常に KAG レイヤ群より上**に出る。Elements パネル表示中に旧 DialogLayer を
+  開くと論理 z と見た目が食い違う。
+  → **本命は `ElementsPanel`** (2026-09 以降の exe): 同じ画面 JSON を KAG レイヤの
+  ビットマップへ描くので z 順・`[trans]`・piledCopy がレイヤの仕組みに従い、
+  この制約自体が消える (skill 本文 §3 参照)。イベント / 変数 API は同形なので
+  ドライバはほぼ流用できる (入力はホストレイヤの onMouse* から `panel.mouse*` へ
+  流す)。旧 exe では従来どおり「旧ダイアログ表示中だけ Elements 側を一時 hide
+  するフック」か同時使用回避で運用する。
 
 ## 4. 画面ドライバの型
 
@@ -111,8 +120,11 @@ navigator)。こちらは**吉里吉里Z のゲーム (KAG/kag 機構) に実際
   lay.saveLayerImage(tmp, "png");            // ★engine のデコーダは krkr の BMP を読めない
   ElementsDialog.registerImage("id", tmp);   // "mem://id" で参照
   ```
-  `image` widget は **build 時に一度だけ**読む。差し替えたら **再 register →
-  画面を開き直す**。
+  差し替えは **再 register するだけで表示中の画面にも即時反映**される
+  (2026-09 以降の exe。engine が `refresh_mem_image` で構築済み widget を
+  再デコードする)。旧 exe では build 時に一度だけ読むため、再 register 後に
+  画面を開き直す。いずれも**登録前に build した widget は空表示**なので、
+  初回は画面を開く前に register する。
 
 ## 6. 資材の探索とファイル I/O
 
@@ -133,7 +145,7 @@ navigator)。こちらは**吉里吉里Z のゲーム (KAG/kag 機構) に実際
   指定できる (`rule` 画像 + `vague`)。CPU 合成なので全 DrawDevice で同じに出る。
 - **旧画面は last_frame 方式** (finish 後の session は再描画できないため、直近フレームの
   複製を遷移元に使う)。遷移中に旧画面が動くことは期待しない。
-- **退場 (exit) 演出は `Dialog.close()` と協調**する (`close_after_exit`)。
+- **退場 (exit) 演出は `ElementsDialog.close()` と協調**する (`close_after_exit`)。
   即時 teardown が要るときは ForceClose 系。
 - GPU 側で自前に混ぜたいときは `Canvas.drawTransition(front, back, phase, rule, vague)`。
 
@@ -171,7 +183,7 @@ navigator)。こちらは**吉里吉里Z のゲーム (KAG/kag 機構) に実際
 | overlay が surface 全面に広がらない (既定上限 400x220) | ✅ 解消済み。`"size"` 未指定なら surface 全面が上限 |
 | top-level `"size"` の peek が widget の `"size"` を誤読 | ✅ 解消済み (2026-08-29 src/core `7352157f`)。深さ 1 のキーだけを見る |
 | `showFile` が autopath 探索に乗らない | ★要調査。当面はパス付きで回避 |
-| サブクラスで明示 `super.Dialog()` が無いとイベントが来ない | ★要調査。当面は必ず書く |
+| サブクラスで明示 `super.ElementsDialog()` が無いとイベントが来ない | ★要調査。当面は必ず書く (2026-09-04 のクラス改名でコンストラクタ名も ElementsDialog に) |
 | `Agent.dialogClick` が activate しない条件がある | ★要調査 (Agent ツール側)。実運用に影響なし |
 | DrawDevice overlay 描画口の汎用開放 | 【予定】未着手 |
 | 遷移の GPU present 拡張 (Phase C) | 将来 optional (CPU で足りている) |

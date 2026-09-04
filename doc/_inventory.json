@@ -174,20 +174,25 @@
       "logToFileOnError"
     ]
   },
-  "Dialog": {
+  "ElementsDialog": {
     "events": [
       "onAction",
       "onClose",
       "onDrag",
       "onScreen",
-      "onScreenLeave"
+      "onScreenLeave",
+      "onVar"
     ],
     "file": "src/core/common/visual/elements/DialogIntf.cpp",
     "methods": [
+      "activate",
       "clearHotKeys",
       "clearImages",
       "close",
       "dictToJson",
+      "focus",
+      "getVar",
+      "listVars",
       "onAction",
       "onClose",
       "onScreen",
@@ -227,7 +232,43 @@
       "renderCount",
       "renderScale",
       "renderStats",
-      "virtualKeyboard"
+      "virtualKeyboard",
+      "watchVars"
+    ]
+  },
+  "ElementsPanel": {
+    "events": [
+      "onAction",
+      "onClose",
+      "onDrag",
+      "onVar"
+    ],
+    "file": "src/core/common/visual/elements/PanelIntf.cpp",
+    "methods": [
+      "activate",
+      "close",
+      "focus",
+      "getVar",
+      "invalidate",
+      "keyDown",
+      "keyUp",
+      "listVars",
+      "mouseDown",
+      "mouseLeave",
+      "mouseMove",
+      "mouseUp",
+      "mouseWheel",
+      "notifyResized",
+      "setVar",
+      "showDict",
+      "showFile",
+      "showJson",
+      "text"
+    ],
+    "properties": [
+      "active",
+      "focused",
+      "watchVars"
     ]
   },
   "Font": {
@@ -314,6 +355,7 @@
       "drawShapedText",
       "drawShapedTextArea",
       "drawText",
+      "drawVerticalTextArea",
       "dump",
       "fillRect",
       "flipLR",
@@ -330,6 +372,7 @@
       "loadImages",
       "loadProvinceImage",
       "measureShapedText",
+      "measureVerticalTextArea",
       "moveBefore",
       "moveBehind",
       "onBeforeFocus",

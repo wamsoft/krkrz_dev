@@ -2,7 +2,7 @@
 
 ## サードパーティライセンスの確認と表示
 
-エンジン・プラグインが内蔵する第三者コンポーネント (ライブラリ/フォント) の
+エンジン・プラグインが内蔵する第三者コンポーネント ( ライブラリ / フォント ) の
 ライセンス文は、実行時に TJS から取得できます:
 
 ```tjs
@@ -10,46 +10,16 @@ var list = System.getLicenseList();   // [%[name, group, source], ...]
 var text = System.getLicenseText("FreeType");
 ```
 
-- 本体内蔵分に加え、プラグインが登録した分と、**プロジェクトの `licenses/`
-  フォルダに置いたテキスト** (`licenses/*.txt`、追加フォントのライセンス等)
-  も同じ一覧に合流します。
-- ゲーム内のライセンス表示画面 (フォント選択画面等) はこの API で自由に
-  組めます (例: `group == "font"` で絞り込み)。
-- 詳細はリファレンスの [System.getLicenseList](../reference/System.md#getlicenselist) /
-  [System.getLicenseText](../reference/System.md#getlicensetext) を参照してください。
+本体内蔵分に加えて、プラグインが登録した分と、**プロジェクトの `licenses`
+フォルダに置いたテキスト** ( 追加フォントのライセンス等 ) も同じ一覧に
+合流します。取得方法・表示のしかた・資材の追加手順は
+**[ライセンス情報の取得と表示](Licenses.md)** にまとめてあります。
+
+- 起動オプション [-license](CommandLine.md) でも一覧 / 全文を確認できます
+  ( `-about` のダイアログにも一覧が載ります )。
 - **どのコンポーネントがどのライセンスか**は
   [同梱ライセンス一覧](BundledLicenses.md) にまとまっています
-  (本体 / プラグイン / フォントの三分割。manifest から自動生成)。
-- Elements Dialog が使えるビルドでは、サンプル実装
-  `src/core/data/ui/license_dialog.tjs` の `showLicenseDialog(win)` で
-  「左=ジャンル別一覧 / 右=本文」の全画面モーダルビューアをそのまま
-  利用できます (プロジェクトへコピーして利用可)。
-
-### プロジェクトで追加資材を同梱する場合の記述例
-
-プロジェクトの `licenses/` フォルダに 1 資材 = 1 テキストで置くと、
-`System.getLicenseList()` の一覧 (source = `storage`) に自動で載ります。
-例として、ゲームパッドのボタン表示によく使う
-[Kenney Input Prompts](https://kenney.nl/assets/input-prompts) (CC0) を
-同梱するなら `licenses/kenney-input-prompts.txt` として:
-
-```
-Input Prompts (Kenney)
-
-This product includes "Input Prompts" by Kenney (www.kenney.nl),
-released under Creative Commons Zero (CC0 1.0 Universal).
-
-  https://kenney.nl/assets/input-prompts
-  https://creativecommons.org/publicdomain/zero/1.0/
-
-Attribution is not required, but appreciated:
-  "Input Prompts" by Kenney (www.kenney.nl)
-```
-
-pack 同梱の License.txt をそのまま置いてもかまいません
-(Elements の `copy_kenney_assets.sh` はコピー先に License.txt を
-一緒に配置します)。CC0 は表記義務がないため省略も可能ですが、
-一覧に載せておくと資材の出所管理とクレジット表示が楽になります。
+  ( 本体 / プラグイン / フォントの三分割。manifest から自動生成 )。
 
 ## 著作権/ライセンス
 
