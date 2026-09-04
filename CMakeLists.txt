@@ -93,9 +93,10 @@ if (KRKRZ_VARIANT STREQUAL "WIN")
 # L"..." リテラル、TVPCreateIStream、SetDllDirectory/HWND 等)。generic 変種への
 # 移植 (TJS_W 化ほか「旧Win32プラグイン近代化」パターン) が済むまで WIN 専用。
 # フォルダ名とターゲット名は一致しない (krkrz_plugin() 登録名で解決される):
-#   motion → krkrmotion + krkremote / live2d → krkrlive2d / gles → krkrgles
-#   libpsd → psd (libpsd 同梱。ファイル I/O は TVPCreateStream 化済だが実機未検証のため WIN 限定)
-# live2d は環境変数 CUBISM_SDK (CubismNativeSamples のパス) が必要。
+#   motion → krkrmotion + krkremote
+# ※ live2d / effekseer / gles は src/plugins へ公式化されたのでここには無い
+#   (krkrlive2d / krkreffekseer / krkrgles)。libpsd (→ psd.dll) は今後使わない
+#   方針のため除外 — PSD 読み込みは psdparse ベースの psdfile のみ。
 # ----------------------------------------------------
 list(APPEND TVP_PLUGINS
 motion           # M2Motion/Emote

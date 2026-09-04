@@ -179,7 +179,7 @@ win32ole(COM) / k2compat(GUI/WM_TOUCH) / wvdecoder(COM/TSS) / msdfrender(GDI fon
 | DLL | 状況 |
 |---|---|
 | AlphaMovie / extrans / psbfile / motionplayer | 別リポジトリ (未取得) |
-| psd | **対応済 (2026-07-21)**: `wamsoft_work/libpsd` を近代化して取込 (WIN 専用、フォルダ名 libpsd → ターゲット psd)。TVPCreateStream 化 + libpsd の x64 ポインタ切り捨て修正 (`psd_uintptr`)。src/plugins/psdfile は別物の `psdfile.dll` |
+| psd | **除外 (user 判断 2026-09-04)**: `wamsoft_work/libpsd` を近代化して一度取込んだ (2026-07-21) が、今後は使わない方針。§6 参照。PSD 読み込みは `src/plugins/psdfile` (psdparse ベースの `psdfile.dll`) のみ |
 | PackinOne | `plugins_utf8/packinone` はあるが `_makefile` が svn switch のみでソース未取得 (`/branches/plugin_PackInOne`) |
 | krmovie | 本体側 (`src/core` win32 movie) |
 | krkrsteam | `src/plugins/steam` にあり (既定コメントアウト・`STEAMWORKS_SDK` 必須) |
@@ -190,6 +190,18 @@ win32ole(COM) / k2compat(GUI/WM_TOUCH) / wvdecoder(COM/TSS) / msdfrender(GDI fon
 
 - **wuopus / wuvorbis** (および `_plain` 版) … 機能は **krkrz 本体に既にある**
   ため対象外 (user 指示)。
+- **libpsd (→ psd.dll) … 除外 (user 判断 2026-09-04)**
+  - 2026-07-21 に `wamsoft_work/libpsd` を近代化して WIN ゲートへ入れたが
+    (TVPCreateStream 化 + x64 ポインタ切り捨て修正 `psd_uintptr`)、
+    **今後は使わない方針**。PSD 読み込みは `src/plugins/psdfile`
+    (psdparse ベース、全バリアント対応) に一本化する。
+  - **除外理由**: 用途が psdfile と重複していること、および
+    **libpsd が LGPL-2.0** (`wamsoft_work/libpsd/libpsd/COPYING`) で、
+    静的リンクの配布に追加の表記・再リンク条項が付いてくること。
+    psdparse は MIT なのでその制約が無い。
+  - CMakeLists.txt のプラグイン一覧からは 2026-08-10 (ec14667) の時点で既に
+    外れている。ソースは `wamsoft_work/libpsd` に残置 (SVN)。
+    ビルド済み `psd.dll` が `bin/*/plugin*/` に残っている場合は消すこと。
 - **k2compat … 除外 (user 判断 2026-07-01)**
   - 吉里吉里2互換のウィンドウ/ダイアログ/タッチ・マウス補助プラグイン。生 Win32 GUI
     (`WNDCLASSEXW`/`CreateWindowExW`/`DefWindowProc`) + `WM_TOUCH` サブクラス + comctl32 依存。
