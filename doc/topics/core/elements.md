@@ -1,9 +1,9 @@
 # Elements UI 機構の全体像
 
-吉里吉里Z の [Dialog](../../reference/Dialog.md) ( Elements ベースの UI ) は、**4 つの層**が
+吉里吉里Z の [ElementsDialog](../../reference/ElementsDialog.md) ( Elements ベースの UI ) は、**4 つの層**が
 積み重なってできています。どの層に何があるか、どの層を直せばよいか、どの文書を読めば
-よいかをここにまとめます。個々の使い方は [ダイアログ ( ガイド )](../../guide/Dialog.md)、
-API は [Dialog クラスリファレンス](../../reference/Dialog.md) を参照してください。
+よいかをここにまとめます。個々の使い方は [ダイアログ ( ガイド )](../../guide/ElementsDialog.md)、
+API は [ElementsDialog クラスリファレンス](../../reference/ElementsDialog.md) を参照してください。
 
 ## 層構造
 
@@ -14,7 +14,7 @@ API は [Dialog クラスリファレンス](../../reference/Dialog.md) を参�
 │    ※ 共有の枠組みは無く、プロジェクトごとに書かれている         │
 ├─────────────────────────────────────────────────────────────┤
 │ ③ krkrz 本体 ( src/core/common/visual/elements/ )             │
-│    TJS Dialog クラス / DrawDevice への描画接続 / 入力ルーティング │
+│    TJS ElementsDialog クラス / DrawDevice への描画接続 / 入力ルーティング │
 │    複数インスタンスと z-order / モーダルの nested ループ         │
 │    ホスト資源との接続 ( Storages・フォント・ソフトキーボード )    │
 ├─────────────────────────────────────────────────────────────┤
@@ -39,7 +39,7 @@ API は [Dialog クラスリファレンス](../../reference/Dialog.md) を参�
 | ウィジェットを増やす / 既存ウィジェットに属性を足す | ② | `json_layout.cpp` + elements_modal README |
 | 変数連動・入力バインド・画面遷移の仕様を変える | ② | 同上 |
 | ウィジェットの描画そのもの・レイアウト計算・フォーカス移動 | ① | elements 本体 (`lib/`) |
-| TJS の API を増やす ( `Dialog.*` ) | ③ | `DialogIntf.cpp` + `doc/manual/Dialog.manual.tjs` |
+| TJS の API を増やす ( `ElementsDialog.*` ) | ③ | `DialogIntf.cpp` + `doc/manual/ElementsDialog.manual.tjs` |
 | 表示先 ( DrawDevice ) や入力経路、複数インスタンスの扱い | ③ | `ElementsDialogManager.cpp` |
 | 画面をどう出し入れするか、ゲーム状態とどう繋ぐか | ④ | ゲーム側スクリプト |
 
@@ -57,17 +57,17 @@ D3D11 ) へ転送してゲーム画面の上に出します。再描画が不要
 渡します。②が処理しなかった入力だけがゲーム ( レイヤ ) へ流れます ( 非モーダル時 )。
 
 **値**: 画面 JSON の中の変数は 1 本のストアにぶら下がります。TJS からは
-[setVar](../../reference/Dialog.md#setvar) で書き、[getVar](../../reference/Dialog.md#getvar) で
-読み、[onVar](../../reference/Dialog.md#onvar) で変化を受け取れます。ボタン押下や値変更は
-[onAction](../../reference/Dialog.md#onaction) で届きます。**この 4 つが③と④の間の
+[setVar](../../reference/ElementsDialog.md#setvar) で書き、[getVar](../../reference/ElementsDialog.md#getvar) で
+読み、[onVar](../../reference/ElementsDialog.md#onvar) で変化を受け取れます。ボタン押下や値変更は
+[onAction](../../reference/ElementsDialog.md#onaction) で届きます。**この 4 つが③と④の間の
 インターフェースの全て**です。
 
 ## ドキュメント地図
 
 | 文書 | 層 | 内容 |
 |---|---|---|
-| [ダイアログ ( ガイド )](../../guide/Dialog.md) | ③④ | 表示モード、フロー、一覧、変数、入力バインドの使い方 |
-| [Dialog クラスリファレンス](../../reference/Dialog.md) | ③ | TJS API の全メンバー |
+| [ダイアログ ( ガイド )](../../guide/ElementsDialog.md) | ③④ | 表示モード、フロー、一覧、変数、入力バインドの使い方 |
+| [ElementsDialog クラスリファレンス](../../reference/ElementsDialog.md) | ③ | TJS API の全メンバー |
 | [ElementsDialog.md](https://github.com/wamsoft/krkrz_develop/blob/master/doc/ElementsDialog.md) | ③ | **本体側の実装 SSOT**。DrawDevice 接続、入力ルーティング、複数インスタンス、部分再描画、計測 |
 | [elements_modal README](https://github.com/wamsoft/elements/blob/develop/external/elements_modal/README.md) | ② | **画面 JSON 仕様の SSOT**。ウィジェット一覧、変数連動、テーマ、アトラス、遷移、演出 |
 | [elements リポジトリ](https://github.com/wamsoft/elements) | ① | ライブラリ本体 ( 派生元は cycfi/elements ) |

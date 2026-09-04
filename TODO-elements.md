@@ -19,7 +19,7 @@ Elements (`src/core/external/elements` = wamsoft/elements、その中の
 報告元: rpgsys (吉里吉里Z + threepp の RPG テンプレート) のメインメニュー。
 2026-08-14 に実機調査。詳細メモ = `D:\work\kirikiri\krkrz_rpgsys\docs\elements-feedback-multiline.md`。
 
-環境: krkrz SDL3 ビルド (2026-08-13 ビルド、glyphware 統合後) + `Dialog.showDict`。
+環境: krkrz SDL3 ビルド (2026-08-13 ビルド、glyphware 統合後) + `ElementsDialog.showDict`。
 **glyphware は無関係** (1 行/矩形テキストの整形・描画のみを担い、ウィジェットの
 高さ = limits には関与しない)。原因はレイアウト層。
 
@@ -137,7 +137,7 @@ reactive 更新のため `text_var` も行ごと (`status0`, `status1`, ...)。
 キャレット表示位置が実際の挿入位置とずれて見える。**以前からの既知バグ** (今回の
 onTextInput 移行とは無関係、それ以前から発生)。
 
-環境: krkrz SDL3 / WINVER 両ビルドの overlay ダイアログ (`Dialog.showDict` 系 +
+環境: krkrz SDL3 / WINVER 両ビルドの overlay ダイアログ (`ElementsDialog.showDict` 系 +
 `input_box`)。glyphware 統合後のビルドで確認。
 
 原因候補 (未調査): cycfi elements の `basic_input_box` はキャレット x 座標を自前の
@@ -169,7 +169,7 @@ composite に focus index を張るが、ターゲット**の内側**は張ら�
 **対応**: `descend_set_focus` がターゲットに到達したら、その内側も
 `wants_focus()` の先頭の葉まで focus index を張る (`descend_focus_first`)。
 `initial_focus` / `focus_by_id` / `Agent.dialogFocus` すべて同根で解決。
-あわせて **`Dialog.focus(id)`** (instance 版の focus_by_id) を追加 —
+あわせて **`ElementsDialog.focus(id)`** (instance 版の focus_by_id) を追加 —
 画面の組み替え (at_var の park/unpark) の後に入力先を移せる。
 既定値入りの input_box は **build 時に全選択**にした (initial_focus で
 そのまま打つと置き換え。OS の入力ダイアログと同じ挙動)。
@@ -251,7 +251,7 @@ present fit の倍率・配置オフセットの逆変換)。描画側の presen
 
 **1 巡目 (同日に対応済み)**: `label` の `color_var` / `vars_on_hover` /
 `atlas_image` の `native` / `scroller` の `pos_var` 双方向 / `font_families()` /
-`drag_at_var` + `drag_events` (`Dialog.onDrag`) / 一覧の «窓»
+`drag_at_var` + `drag_events` (`ElementsDialog.onDrag`) / 一覧の «窓»
 (`index` + `index_offset_var` / `text_list_var`)。 **これで逃げの実装は全部畳めた**。
 以下は **その口を実際に使って組んでみて出たもの** = «片側だけだったもの» と
 «使って初めて分かった不足»。
@@ -259,7 +259,7 @@ present fit の倍率・配置オフセットの逆変換)。描画側の presen
 ### 5-1. 変数をホストから読めない / 変わったことを知れない (優先度: 高) — ✅ 対応済み
 
 `vars_on_hover` / `vars_on_focus` の書き込み先は elements の変数で、 ホストからは
-**書けるだけ** (`Dialog.setVar`)。 読み出しも変化通知も無い。
+**書けるだけ** (`ElementsDialog.setVar`)。 読み出しも変化通知も無い。
 
 そのため «**絵はホスト側のレイヤ、 当たり判定だけ elements**» という構成
 (大きすぎて atlas に積めない一枚絵を並べる一覧など) では **hover を活かせない**。
@@ -273,15 +273,15 @@ present fit の倍率・配置オフセットの逆変換)。描画側の presen
 
 - `tTJSNI_Dialog` に `SetVar` しか無い (`common/visual/elements/DialogIntf.cpp`)。
   `getVar(name)` を足す
-- 変化通知は `set_var_watcher` を `Dialog.onVar(name, value)` へ流すか、
+- 変化通知は `set_var_watcher` を `ElementsDialog.onVar(name, value)` へ流すか、
   画面 JSON の `"watch_vars": [...]` で対象を絞って通知する
 
 **✅ 採った対応 (2026-08-29、 `src/core` fcae740b)**: ホスト側バインドを 4 つ追加。
 
-- `Dialog.getVar(name)` … 1 件読出 (未知 / 非アクティブは void)
-- `Dialog.listVars()` … 変数一覧 (`name` / `value` / `usedBy` = `%[id, kind]`)
-- `Dialog.onVar(name, value)` … 変化通知
-- `Dialog.watchVars` … 通知対象を絞る (`"*"` / 名前配列 / `[]` / void)
+- `ElementsDialog.getVar(name)` … 1 件読出 (未知 / 非アクティブは void)
+- `ElementsDialog.listVars()` … 変数一覧 (`name` / `value` / `usedBy` = `%[id, kind]`)
+- `ElementsDialog.onVar(name, value)` … 変化通知
+- `ElementsDialog.watchVars` … 通知対象を絞る (`"*"` / 名前配列 / `[]` / void)
 
 観測は **opt-in**: `BeginScreen` が `WantsVarNotify()` を問い合わせ、
 「`watchVars` が明示されていればそれに従う / 未指定なら **TJS 側に `onVar` が
@@ -310,7 +310,7 @@ present fit の倍率・配置オフセットの逆変換)。描画側の presen
   実装は「`watchVars` が明示されていればそれに従う / 未指定なら **TJS 側に
   `onVar` があるときだけ全変数**」なので、 **そう書いてあると迷わない**。
   ここは engine 側ではなくドキュメントの話
-- **中継は KAG (KAGEX) 側の話**として整理したほうが良い。 `Dialog` を
+- **中継は KAG (KAGEX) 側の話**として整理したほうが良い。 `ElementsDialog` を
   ラップしているダイアログ実装のクラスに `onVar` を書くと
   `WantsVarNotify()` が全画面で true になってしまうので、 そのままでは
   置けない。 **`onVar` の中継と同時に `watchVars` の既定を `[]` (止める)
@@ -414,14 +414,14 @@ atlas_slider と同じ 2 形式 (単一矩形 / 9-slice)。
 組込以外の action は `onAction` の **id が `"<action>"` で、 名前は payload** に入る
 (`overlay_session` の `dispatch_action` → `external_cb("<action>", …)`)。
 配布スキルの `references/ElementsDialog.md` にはあるが、
-**`.claude/skills/elements/SKILL.md` と `doc/guide/Dialog.md` には無い**。
+**`.claude/skills/elements/SKILL.md` と `doc/guide/ElementsDialog.md` には無い**。
 
 id に自分で付けた名前が来ると思って書くと **その入力だけ黙って無反応**になり、
 原因に気づきにくい (ホイールを `{"wheel":"up","action":"..."}` で付け替えたときに
 踏んだ)。 ドキュメント追記だけで足りる。
 
 **✅ 採った対応 (2026-08-29)**: `.claude/skills/elements/SKILL.md` に 1 項目、
-`doc/guide/Dialog.md` に「入力バインドと named action」節を追加した
+`doc/guide/ElementsDialog.md` に「入力バインドと named action」節を追加した
 (組込名は届かないこと / `id` は `"<action>"` 固定で名前は payload に入ること /
 自分の名前が id に来ると思って書くと黙って無反応になること)。
 
@@ -555,7 +555,7 @@ README に「読める形式」を明記しておくと踏まない。
 
 ### 7-3. 画面契約 (要求する変数 / 出るアクション) を束ねる形が無い (優先度: 中)
 
-`Dialog.listVars()` (§5-1 で追加) で「画面が読む変数」は機械的に取れるようになった。
+`ElementsDialog.listVars()` (§5-1 で追加) で「画面が読む変数」は機械的に取れるようになった。
 出る側は widget id + named action で決まる。 これを**契約として束ねて外へ出す**と、
 
 - ホスト非依存の確認ツールが、契約からスタブ値を流し込んで操作確認できる
@@ -810,7 +810,7 @@ tTJSNC_ElementsPanel / tTJSNI_ElementsPanel : iTVPDialogEventHandler
     イベント: onAction(id, payload) / onDrag(e) / onVar(name, value) / onClosed(action)
 ```
 
-**イベント名と引数は `Dialog` と同じ**にする。 既存のドライバ (ホスト案件の
+**イベント名と引数は `ElementsDialog` と同じ**にする。 既存のドライバ (ホスト案件の
 画面ドライバ群) がほぼそのまま載る。 `iTVPDialogEventHandler` をそのまま
 実装するので、 `BuildSession` と通知キューは無改造で使える。
 

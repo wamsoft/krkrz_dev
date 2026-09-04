@@ -162,7 +162,7 @@ canvas.drawTransition(front, back, phase, ruleTex, 128);   // vague 指定
 | `vague` | 境界ぼかし幅 ( rule 値スケール 0〜255、既定 64 ) |
 
 - 配置・変形・ブレンドは `drawTexture` と同じ規約 ( `canvas.matrix` / `blendMode` / クリップに従う ) です。
-- ユニバーサルの閾値は `phase * (1 + vague/255)` をスイープします ( phase=1 で必ず全画素 back )。[ダイアログ](Dialog.md) のフロー画面切替エフェクト ( JSON `transitions` の `effect` / `rule` / `vague` ) と同じ意味論で、同じ rule 資材が使えます。
+- ユニバーサルの閾値は `phase * (1 + vague/255)` をスイープします ( phase=1 で必ず全画素 back )。[ダイアログ](ElementsDialog.md) のフロー画面切替エフェクト ( JSON `transitions` の `effect` / `rule` / `vague` ) と同じ意味論で、同じ rule 資材が使えます。
 - 内蔵シェーダは初回使用時に遅延生成されてキャッシュされます。`a_opacity` uniform ( 既定 1.0 ) で全体不透明度を掛けられます。
 
 ### 使用例 ( 画面遷移 )

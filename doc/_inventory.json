@@ -174,7 +174,7 @@
       "logToFileOnError"
     ]
   },
-  "Dialog": {
+  "ElementsDialog": {
     "events": [
       "onAction",
       "onClose",
@@ -185,6 +185,7 @@
     ],
     "file": "src/core/common/visual/elements/DialogIntf.cpp",
     "methods": [
+      "activate",
       "clearHotKeys",
       "clearImages",
       "close",
@@ -232,6 +233,41 @@
       "renderScale",
       "renderStats",
       "virtualKeyboard",
+      "watchVars"
+    ]
+  },
+  "ElementsPanel": {
+    "events": [
+      "onAction",
+      "onClose",
+      "onDrag",
+      "onVar"
+    ],
+    "file": "src/core/common/visual/elements/PanelIntf.cpp",
+    "methods": [
+      "activate",
+      "close",
+      "focus",
+      "getVar",
+      "invalidate",
+      "keyDown",
+      "keyUp",
+      "listVars",
+      "mouseDown",
+      "mouseLeave",
+      "mouseMove",
+      "mouseUp",
+      "mouseWheel",
+      "notifyResized",
+      "setVar",
+      "showDict",
+      "showFile",
+      "showJson",
+      "text"
+    ],
+    "properties": [
+      "active",
+      "focused",
       "watchVars"
     ]
   },

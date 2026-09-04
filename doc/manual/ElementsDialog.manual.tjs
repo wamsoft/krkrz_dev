@@ -1,5 +1,5 @@
 /**
- * Dialog クラスは、Elements ベースの汎用ダイアログを TJS から駆動するための
+ * ElementsDialog クラスは、Elements ベースの汎用ダイアログを TJS から駆動するための
  * クラスです ( SDL3 / WINVER 両ビルド対応 )。
  *
  * JSON / JSONC ( コメントと末尾カンマを許容 ) 形式のレイアウト定義を渡して、
@@ -54,18 +54,18 @@
  * 折り返しは全文で確定済みなので送ってもリフローしません
  * ( 字幕やセリフ窓向け。従来からある `text_box` は互換のためそのまま )。
  *
- * `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では Dialog クラスは利用できません。
- * WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用できます
+ * `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では ElementsDialog クラスは利用できません。
+ * WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利用できます
  * (非モーダル / overlay モーダル / 独立ウィンドウモーダル / フロー /
  * テキスト入力すべてに対応)。
  */
-class Dialog {
+class ElementsDialog {
 	/**
-	 * Dialog オブジェクトの構築
+	 * ElementsDialog オブジェクトの構築
 	 *
-	 * Dialog クラスのオブジェクトを構築します。
+	 * ElementsDialog クラスのオブジェクトを構築します。
 	 */
-	function Dialog();
+	function ElementsDialog();
 
 	/**
 	 * JSON 文字列で非モーダルダイアログを表示する
@@ -96,10 +96,10 @@ class Dialog {
 	 * 用途 3 態: モーダルダイアログ `showJson(json)` / 操作パネル
 	 * `showJson(json, true, false)` / 表示専用 HUD `showJson(json, false)`。
 	 * @return 表示開始に成功したら真を返します。
-	 * @see Dialog.showFile
-	 * @see Dialog.registerHotKey
-	 * @see Dialog.onAction
-	 * @see Dialog.close
+	 * @see ElementsDialog.showFile
+	 * @see ElementsDialog.registerHotKey
+	 * @see ElementsDialog.onAction
+	 * @see ElementsDialog.close
 	 */
 	function showJson(json, grabFocus = true, modal = grabFocus);
 
@@ -112,7 +112,7 @@ class Dialog {
 	 * @param grabFocus キーボードフォーカスを取得するかどうか ( 既定 true )。詳細は [showJson](#showjson) を参照。
 	 * @param modal モーダルにするかどうか ( 省略時は grabFocus に追従 )。詳細は [showJson](#showjson) を参照。
 	 * @return 表示開始に成功したら真を返します。
-	 * @see Dialog.showJson
+	 * @see ElementsDialog.showJson
 	 */
 	function showFile(path, grabFocus = true, modal = grabFocus);
 
@@ -126,8 +126,8 @@ class Dialog {
 	 * @param grabFocus キーボードフォーカスを取得するかどうか ( 既定 true )。詳細は [showJson](#showjson) を参照。
 	 * @param modal モーダルにするかどうか ( 省略時は grabFocus に追従 )。詳細は [showJson](#showjson) を参照。
 	 * @return 表示開始に成功したら真を返します。
-	 * @see Dialog.showJson
-	 * @see Dialog.dictToJson
+	 * @see ElementsDialog.showJson
+	 * @see ElementsDialog.dictToJson
 	 */
 	function showDict(dict, grabFocus = true, modal = grabFocus);
 
@@ -157,8 +157,8 @@ class Dialog {
 	 * @param width 独立ウィンドウの幅をピクセル単位で指定します ( 既定値 800 )。
 	 * @param height 独立ウィンドウの高さをピクセル単位で指定します ( 既定値 600 )。
 	 * @return action と values を保持する Dictionary が返ります。
-	 * @see Dialog.showModalFile
-	 * @see Dialog.onAction
+	 * @see ElementsDialog.showModalFile
+	 * @see ElementsDialog.onAction
 	 */
 	function showModalJson(json, title = "", width = 800, height = 600);
 
@@ -172,7 +172,7 @@ class Dialog {
 	 * @param width 独立ウィンドウの幅をピクセル単位で指定します ( 既定値 800 )。
 	 * @param height 独立ウィンドウの高さをピクセル単位で指定します ( 既定値 600 )。
 	 * @return action と values を保持する Dictionary が返ります。
-	 * @see Dialog.showModalJson
+	 * @see ElementsDialog.showModalJson
 	 */
 	function showModalFile(path, title = "", width = 800, height = 600);
 
@@ -188,8 +188,8 @@ class Dialog {
 	 * @param width 独立ウィンドウの幅をピクセル単位で指定します ( 既定値 800 )。
 	 * @param height 独立ウィンドウの高さをピクセル単位で指定します ( 既定値 600 )。
 	 * @return action と values を保持する Dictionary が返ります。
-	 * @see Dialog.showModalJson
-	 * @see Dialog.showDict
+	 * @see ElementsDialog.showModalJson
+	 * @see ElementsDialog.showDict
 	 */
 	function showModalDict(dict, title = "", width = 800, height = 600);
 
@@ -199,7 +199,7 @@ class Dialog {
 	 * [showDict](#showdict) / [showModalDict](#showmodaldict) が内部で行う
 	 * 変換をそのまま呼び出すユーティリティです。Dictionary で組み立てた
 	 * レイアウトを JSON 資材として保存する、変換結果を確認する、といった
-	 * 用途に使えます。インスタンスを作らず `Dialog.dictToJson(...)` として
+	 * 用途に使えます。インスタンスを作らず `ElementsDialog.dictToJson(...)` として
 	 * 呼べます。
 	 *
 	 * 対応する値の型は void / Integer / Real / String / Dictionary / Array
@@ -207,7 +207,7 @@ class Dialog {
 	 * は例外になります。
 	 * @param value 変換する値 ( Dictionary / Array / 基本型 ) を指定します。
 	 * @return JSON 文字列が返ります。
-	 * @see Dialog.showDict
+	 * @see ElementsDialog.showDict
 	 */
 	function dictToJson(value);
 
@@ -238,8 +238,8 @@ class Dialog {
 	 * ```
 	 * @param manifestPath app.jsonc マニフェストの Storages パスを指定します。
 	 * @return action と values を保持する Dictionary が返ります。
-	 * @see Dialog.showFlowScreens
-	 * @see Dialog.startFlow
+	 * @see ElementsDialog.showFlowScreens
+	 * @see ElementsDialog.startFlow
 	 */
 	function showFlow(manifestPath);
 
@@ -252,8 +252,8 @@ class Dialog {
 	 * @param screensDict 画面名 ( 文字列 ) をレイアウト定義 ( JSON 文字列、または Dictionary / Array ) にマップする Dictionary。両形式の混在も可能です。
 	 * @param entry 起点画面名 ( screensDict のキー ) を指定します。
 	 * @return action と values を保持する Dictionary が返ります。
-	 * @see Dialog.showFlow
-	 * @see Dialog.startFlowScreens
+	 * @see ElementsDialog.showFlow
+	 * @see ElementsDialog.startFlowScreens
 	 */
 	function showFlowScreens(screensDict, entry);
 
@@ -272,9 +272,9 @@ class Dialog {
 	 * @param manifestPath app.jsonc マニフェストの Storages パスを指定します。
 	 * @param grabFocus 真でキーボード / ゲームパッドフォーカスを取ります ( 既定値 真 )。偽を指定するとフォーカスを取らない常駐 HUD として表示されます。
 	 * @return 開始に成功したら真を返します。
-	 * @see Dialog.startFlowScreens
-	 * @see Dialog.showFlow
-	 * @see Dialog.active
+	 * @see ElementsDialog.startFlowScreens
+	 * @see ElementsDialog.showFlow
+	 * @see ElementsDialog.active
 	 */
 	function startFlow(manifestPath, grabFocus = true);
 
@@ -288,8 +288,8 @@ class Dialog {
 	 * @param entry 起点画面名 ( screensDict のキー ) を指定します。
 	 * @param grabFocus 真でキーボード / ゲームパッドフォーカスを取ります ( 既定値 真 )。偽を指定するとフォーカスを取らない常駐 HUD として表示されます。
 	 * @return 開始に成功したら真を返します。
-	 * @see Dialog.startFlow
-	 * @see Dialog.showFlowScreens
+	 * @see ElementsDialog.startFlow
+	 * @see ElementsDialog.showFlowScreens
 	 */
 	function startFlowScreens(screensDict, entry, grabFocus = true);
 
@@ -307,7 +307,7 @@ class Dialog {
 	 * 場合、close でも退場演出を再生し、完了してから閉じます ( その間も
 	 * [active](#active) は真のままです )。フロー実行中の close は画面遷移
 	 * ( transitions ) を解決せず、フローごと終了します。
-	 * @see Dialog.active
+	 * @see ElementsDialog.active
 	 */
 	function close();
 
@@ -327,7 +327,7 @@ class Dialog {
 	 * @param slant slant 値を指定します ( 既定値 0 = normal )。
 	 * @param stretch stretch 値を指定します ( 既定値 50 = normal )。
 	 * @return 実際に登録された family 名 ( ThorVG embedded 優先 )。
-	 * @see Dialog.registerFontDir
+	 * @see ElementsDialog.registerFontDir
 	 */
 	function registerFont(family, path, weight = 40, slant = 0, stretch = 50);
 
@@ -339,7 +339,7 @@ class Dialog {
 	 * パス指定が使え、XP3 内のディレクトリでも構いません。
 	 * @param dir 登録対象ディレクトリの Storages パスを指定します。
 	 * @return 真が返ります ( ディレクトリが空でも例外にはなりません )。
-	 * @see Dialog.registerFont
+	 * @see ElementsDialog.registerFont
 	 */
 	function registerFontDir(dir);
 
@@ -375,9 +375,9 @@ class Dialog {
 	 * テキスト入力中は抑止され、ESC / BackSpace 等を入力欄から奪いません。
 	 * @return 戻り値はありません。同じ ( key, shift ) の再登録は
 	 * duringTextInput の上書きになります。
-	 * @see Dialog.unregisterHotKey
-	 * @see Dialog.clearHotKeys
-	 * @see Dialog.showJson
+	 * @see ElementsDialog.unregisterHotKey
+	 * @see ElementsDialog.clearHotKeys
+	 * @see ElementsDialog.showJson
 	 */
 	function registerHotKey(key, shift = 0, duringTextInput = false);
 
@@ -388,7 +388,7 @@ class Dialog {
 	 * ( key と shift の両方が一致するエントリを削除 )。
 	 * @param key 仮想キーコードを指定します。
 	 * @param shift 修飾キーの組合せ ( 既定 0 )。
-	 * @see Dialog.registerHotKey
+	 * @see ElementsDialog.registerHotKey
 	 */
 	function unregisterHotKey(key, shift = 0);
 
@@ -396,7 +396,7 @@ class Dialog {
 	 * ホストホットキーの全解除
 	 *
 	 * [registerHotKey](#registerhotkey) で登録したホットキーを全て解除します。
-	 * @see Dialog.registerHotKey
+	 * @see ElementsDialog.registerHotKey
 	 */
 	function clearHotKeys();
 
@@ -412,9 +412,9 @@ class Dialog {
 	property defaultFontFamily;
 
 	/**
-	 * この Dialog インスタンスがアクティブかどうか ( 読み取り専用 )
+	 * この ElementsDialog インスタンスがアクティブかどうか ( 読み取り専用 )
 	 *
-	 * この Dialog で開いた非モーダルダイアログ / フローが現在アクティブな
+	 * この ElementsDialog で開いた非モーダルダイアログ / フローが現在アクティブな
 	 * ときに真になります。[close](#close) を呼んだ直後はまだ teardown が
 	 * 終わっていないため真のままで、teardown 完了後に偽に切り替わります。
 	 *
@@ -435,7 +435,7 @@ class Dialog {
 	 * 最上位ホットキー ( [System.registerHotKey](System.md#registerhotkey) ) の
 	 * コールバックで「モーダル表示中は何もせず素通しする」判定に使います。
 	 * @type bool
-	 * @see Dialog.active
+	 * @see ElementsDialog.active
 	 */
 	property modalActive { getter; }
 
@@ -447,7 +447,7 @@ class Dialog {
 	 * ください。
 	 * @param name 入った画面の名前 ( マニフェストの画面キー ) 。
 	 * @kind event
-	 * @see Dialog.onScreenLeave
+	 * @see ElementsDialog.onScreenLeave
 	 */
 	function onScreen(name);
 
@@ -460,7 +460,7 @@ class Dialog {
 	 * @param name 出た画面の名前 ( マニフェストの画面キー ) 。
 	 * @param action 画面を離れる契機となった button の id ( Esc / × は空文字列 ) 。
 	 * @kind event
-	 * @see Dialog.onScreen
+	 * @see ElementsDialog.onScreen
 	 */
 	function onScreenLeave(name, action);
 
@@ -553,8 +553,10 @@ class Dialog {
 	 *
 	 * 統一ストレージパス path のファイルを name で実行時画像ストアへ登録します。jsonc の
 	 * image ウィジェット等からは `"mem://<name>"` で参照します。セーブサムネイル等、実行時に
-	 * 変わる画像を Elements へ渡すための仕組みです。pixmap は画面 build 時に読み直されるので、
-	 * 再登録 → 画面再オープンで表示が更新されます。
+	 * 変わる画像を Elements へ渡すための仕組みです。表示中の画面に `mem://<name>` の
+	 * image ウィジェットがあれば、再登録した時点で再デコードされ即時反映されます
+	 * ( 画面の開き直しは不要。パネルにも反映されます )。登録前に build した
+	 * ウィジェットは空表示のままなので、初回は画面を開く前に登録してください。
 	 * @param name ストア上の名前 ( `mem://<name>` で参照 )。
 	 * @param path 登録する画像の統一ストレージパス。
 	 * @returns 読込・登録に成功したかどうか。
@@ -635,6 +637,19 @@ class Dialog {
 	function focus(id);
 
 	/**
+	 * 指定 id の widget を実行する
+	 *
+	 * 表示中ダイアログの widget ( JSON の `"id"` で指定 ) へフォーカスを移して
+	 * 実行 ( Enter 相当 ) します。[Agent.dialogClick](Agent.md#dialogclick) の
+	 * インスタンス版で、[ElementsPanel.activate](ElementsPanel.md#activate) と
+	 * 同形です。
+	 * @param id 実行する widget の id。
+	 * @returns 実行できたかどうか。id 不明 / 非アクティブなら false。
+	 * @see ElementsDialog.focus
+	 */
+	function activate(id);
+
+	/**
 	 * pad_icon のベースディレクトリを設定する
 	 *
 	 * pad_icon ( Kenney input prompts ) のベースディレクトリを設定します。dir は統一ストレージ
@@ -666,7 +681,7 @@ class Dialog {
 	 * `strings` 側で使っているキーをそのまま指定します。
 	 *
 	 * ```tjs
-	 * global.Dialog.language = "en";     // 表示中の画面もその場で切り替わる
+	 * global.ElementsDialog.language = "en";     // 表示中の画面もその場で切り替わる
 	 * ```
 	 *
 	 * 代入すると**表示中の全ダイアログへ即時適用**されます ( `text_id` / `text_list_id` /
@@ -711,10 +726,10 @@ class Dialog {
 	 * ファミリチェーンの並び ) を持つ辞書 ( または同形の JSON 文字列 ) を代入します。
 	 *
 	 * ```tjs
-	 * global.Dialog.fontLanguages = %[
+	 * global.ElementsDialog.fontLanguages = %[
 	 *     "tc" => %[ "map" => %[ "Noto Sans JP" => "Noto Sans TC" ] ],
 	 *     "sc" => %[ "map" => %[ "Noto Sans JP" => "Noto Sans SC" ] ] ];
-	 * global.Dialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォントで描画
+	 * global.ElementsDialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォントで描画
 	 * ```
 	 *
 	 * `map` は widget の `"font"` 指定と theme 既定チェーンの各ファミリトークンに
@@ -759,7 +774,7 @@ class Dialog {
 	 * 動作を確認できるコアデモは `softkey_ime` です。
 	 *
 	 * @type String
-	 * @see Dialog.hasPhysicalKeyboard
+	 * @see ElementsDialog.hasPhysicalKeyboard
 	 */
 	property virtualKeyboard;
 
@@ -772,7 +787,7 @@ class Dialog {
 	 * 使用します。
 	 *
 	 * @type Boolean
-	 * @see Dialog.virtualKeyboard
+	 * @see ElementsDialog.virtualKeyboard
 	 */
 	property hasPhysicalKeyboard { getter; }
 
@@ -783,7 +798,7 @@ class Dialog {
 	 * ( クラス全体に効く static 相当 )。既定は true。
 	 *
 	 * ```tjs
-	 * global.Dialog.focusRing = false;    // アプリ全体で消す
+	 * global.ElementsDialog.focusRing = false;    // アプリ全体で消す
 	 * ```
 	 *
 	 * button / slider / dial / thumbwheel の枠がまとめて消えます。状態別の絵
@@ -793,8 +808,8 @@ class Dialog {
 	 *
 	 * 画面単位ではなくアプリ全体の設定です ( グローバルテーマのフラグ )。
 	 *
-	 * クラス内から触るときは `global.Dialog.focusRing` と書きます。Dialog を継承した
-	 * クラスのメソッド内で素の `Dialog` と書くと親クラス参照になり、static プロパティへの
+	 * クラス内から触るときは `global.ElementsDialog.focusRing` と書きます。ElementsDialog を継承した
+	 * クラスのメソッド内で素の `ElementsDialog` と書くと親クラス参照になり、static プロパティへの
 	 * 代入が「メンバが見つかりません」になります。
 	 *
 	 * @type Boolean
@@ -815,7 +830,7 @@ class Dialog {
 	 * エミュレーション等 ) にも巻き込まれません。表示中の画面にも次のフレーム
 	 * から反映されます。
 	 * @type Array
-	 * @see Dialog.renderScale
+	 * @see ElementsDialog.renderScale
 	 */
 	property baseSize;
 
@@ -853,10 +868,10 @@ class Dialog {
 	 * 矩形が特定できるのはテキスト欄のキャレット点滅などに限られ、入力・フォーカス
 	 * 変化・パーツ演出・setVar などは従来どおり全面再描画になります。
 	 *
-	 * [Dialog.renderCache](Dialog.md#rendercache) が有効なときのみ機能します
+	 * [ElementsDialog.renderCache](ElementsDialog.md#rendercache) が有効なときのみ機能します
 	 * ( 前回の描画結果が残っていることが前提 )。false にすると変化フレームは
 	 * 常に全面再描画します ( 負荷比較・問題切り分け用 )。実際に部分再描画できた
-	 * 回数は [Dialog.renderStats](Dialog.md#renderstats) の "partials" で確認できます。
+	 * 回数は [ElementsDialog.renderStats](ElementsDialog.md#renderstats) の "partials" で確認できます。
 	 */
 	property partialRedraw;
 
@@ -882,7 +897,7 @@ class Dialog {
 	 *
 	 * 累積値なので 2 回読んで差分を取り、経過実時間との比で
 	 * 「Elements が消費した時間・割合」を計算します
-	 * ( [Dialog.renderStatsReset](Dialog.md#renderstatsreset) で 0 クリア )。
+	 * ( [ElementsDialog.renderStatsReset](ElementsDialog.md#renderstatsreset) で 0 クリア )。
 	 * 計測用のベンチ画面がコアデモ `elements_bench` にあります
 	 * ( シナリオ切替 + renderCache A/B + 500ms ごとの内訳表示 )。
 	 */
@@ -891,7 +906,7 @@ class Dialog {
 	/**
 	 * 描画計測カウンタのリセット
 	 *
-	 * [Dialog.renderStats](Dialog.md#renderstats) の累積カウンタを 0 クリアします。
+	 * [ElementsDialog.renderStats](ElementsDialog.md#renderstats) の累積カウンタを 0 クリアします。
 	 * 計測区間の開始時に呼びます。
 	 */
 	function renderStatsReset();

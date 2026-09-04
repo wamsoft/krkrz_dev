@@ -1,6 +1,6 @@
-# Dialog
+# ElementsDialog
 
-Dialog クラスは、Elements ベースの汎用ダイアログを TJS から駆動するための
+ElementsDialog クラスは、Elements ベースの汎用ダイアログを TJS から駆動するための
 
 クラスです ( SDL3 / WINVER 両ビルド対応 )。
 
@@ -56,8 +56,8 @@ text_box / text_area / vtile / htile / vspacer / hspacer 等 ) や属性、
 折り返しは全文で確定済みなので送ってもリフローしません
 ( 字幕やセリフ窓向け。従来からある `text_box` は互換のためそのまま )。
 
-`KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では Dialog クラスは利用できません。
-WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用できます
+`KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では ElementsDialog クラスは利用できません。
+WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利用できます
 (非モーダル / overlay モーダル / 独立ウィンドウモーダル / フロー /
 テキスト入力すべてに対応)。
 
@@ -65,7 +65,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 
 ### コンストラクタ
 
-- [Dialog](#dialog)
+- [ElementsDialog](#elementsdialog)
 
 ### プロパティ
 
@@ -111,6 +111,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [getVar](#getvar)
 - [listVars](#listvars)
 - [focus](#focus)
+- [activate](#activate)
 - [setPadIconBase](#setpadiconbase)
 - [setPadTheme](#setpadtheme)
 - [renderStatsReset](#renderstatsreset)
@@ -126,15 +127,15 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 
 ---
 
-### Dialog
+### ElementsDialog
 
 コンストラクタ
 
 **解説**
 
-Dialog オブジェクトの構築
+ElementsDialog オブジェクトの構築
 
-Dialog クラスのオブジェクトを構築します。
+ElementsDialog クラスのオブジェクトを構築します。
 
 ---
 
@@ -163,9 +164,9 @@ Elements ランタイムが初期化されたあと ( 最初のダイアログ�
 
 **解説**
 
-この Dialog インスタンスがアクティブかどうか ( 読み取り専用 )
+この ElementsDialog インスタンスがアクティブかどうか ( 読み取り専用 )
 
-この Dialog で開いた非モーダルダイアログ / フローが現在アクティブな
+この ElementsDialog で開いた非モーダルダイアログ / フローが現在アクティブな
 ときに真になります。[close](#close) を呼んだ直後はまだ teardown が
 終わっていないため真のままで、teardown 完了後に偽に切り替わります。
 
@@ -192,7 +193,7 @@ Elements ランタイムが初期化されたあと ( 最初のダイアログ�
 最上位ホットキー ( [System.registerHotKey](System.md#registerhotkey) ) の
 コールバックで「モーダル表示中は何もせず素通しする」判定に使います。
 
-**関連:** [Dialog.active](Dialog.md#active)
+**関連:** [ElementsDialog.active](ElementsDialog.md#active)
 
 ---
 
@@ -211,7 +212,7 @@ i18n の表示言語
 `strings` 側で使っているキーをそのまま指定します。
 
 ```tjs
-global.Dialog.language = "en";     // 表示中の画面もその場で切り替わる
+global.ElementsDialog.language = "en";     // 表示中の画面もその場で切り替わる
 ```
 
 代入すると**表示中の全ダイアログへ即時適用**されます ( `text_id` / `text_list_id` /
@@ -265,10 +266,10 @@ global.Dialog.language = "en";     // 表示中の画面もその場で切り替
 ファミリチェーンの並び ) を持つ辞書 ( または同形の JSON 文字列 ) を代入します。
 
 ```tjs
-global.Dialog.fontLanguages = %[
+global.ElementsDialog.fontLanguages = %[
 "tc" => %[ "map" => %[ "Noto Sans JP" => "Noto Sans TC" ] ],
 "sc" => %[ "map" => %[ "Noto Sans JP" => "Noto Sans SC" ] ] ];
-global.Dialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォントで描画
+global.ElementsDialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォントで描画
 ```
 
 `map` は widget の `"font"` 指定と theme 既定チェーンの各ファミリトークンに
@@ -317,7 +318,7 @@ global.Dialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォン
 
 動作を確認できるコアデモは `softkey_ime` です。
 
-**関連:** [Dialog.hasPhysicalKeyboard](Dialog.md#hasphysicalkeyboard)
+**関連:** [ElementsDialog.hasPhysicalKeyboard](ElementsDialog.md#hasphysicalkeyboard)
 
 ---
 
@@ -336,7 +337,7 @@ global.Dialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォン
 なります。ゲーム側が独自のソフトウェアキーボードを出すかどうかの判断に
 使用します。
 
-**関連:** [Dialog.virtualKeyboard](Dialog.md#virtualkeyboard)
+**関連:** [ElementsDialog.virtualKeyboard](ElementsDialog.md#virtualkeyboard)
 
 ---
 
@@ -354,7 +355,7 @@ global.Dialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォン
 ( クラス全体に効く static 相当 )。既定は true。
 
 ```tjs
-global.Dialog.focusRing = false;    // アプリ全体で消す
+global.ElementsDialog.focusRing = false;    // アプリ全体で消す
 ```
 
 button / slider / dial / thumbwheel の枠がまとめて消えます。状態別の絵
@@ -364,8 +365,8 @@ button / slider / dial / thumbwheel の枠がまとめて消えます。状態�
 
 画面単位ではなくアプリ全体の設定です ( グローバルテーマのフラグ )。
 
-クラス内から触るときは `global.Dialog.focusRing` と書きます。Dialog を継承した
-クラスのメソッド内で素の `Dialog` と書くと親クラス参照になり、static プロパティへの
+クラス内から触るときは `global.ElementsDialog.focusRing` と書きます。ElementsDialog を継承した
+クラスのメソッド内で素の `ElementsDialog` と書くと親クラス参照になり、static プロパティへの
 代入が「メンバが見つかりません」になります。
 
 ---
@@ -391,7 +392,7 @@ getter は void です。
 エミュレーション等 ) にも巻き込まれません。表示中の画面にも次のフレーム
 から反映されます。
 
-**関連:** [Dialog.renderScale](Dialog.md#renderscale)
+**関連:** [ElementsDialog.renderScale](ElementsDialog.md#renderscale)
 
 ---
 
@@ -444,10 +445,10 @@ true ( 既定 ) の間、変化した範囲が矩形で特定できる場合は*
 矩形が特定できるのはテキスト欄のキャレット点滅などに限られ、入力・フォーカス
 変化・パーツ演出・setVar などは従来どおり全面再描画になります。
 
-[Dialog.renderCache](Dialog.md#rendercache) が有効なときのみ機能します
+[ElementsDialog.renderCache](ElementsDialog.md#rendercache) が有効なときのみ機能します
 ( 前回の描画結果が残っていることが前提 )。false にすると変化フレームは
 常に全面再描画します ( 負荷比較・問題切り分け用 )。実際に部分再描画できた
-回数は [Dialog.renderStats](Dialog.md#renderstats) の "partials" で確認できます。
+回数は [ElementsDialog.renderStats](ElementsDialog.md#renderstats) の "partials" で確認できます。
 
 ---
 
@@ -483,7 +484,7 @@ true ( 既定 ) の間、変化した範囲が矩形で特定できる場合は*
 
 累積値なので 2 回読んで差分を取り、経過実時間との比で
 「Elements が消費した時間・割合」を計算します
-( [Dialog.renderStatsReset](Dialog.md#renderstatsreset) で 0 クリア )。
+( [ElementsDialog.renderStatsReset](ElementsDialog.md#renderstatsreset) で 0 クリア )。
 計測用のベンチ画面がコアデモ `elements_bench` にあります
 ( シナリオ切替 + renderCache A/B + 500ms ごとの内訳表示 )。
 
@@ -514,7 +515,7 @@ JSON 文字列で非モーダルダイアログを表示する
 止まらず、ユーザ操作のたびに [onAction](#onaction) が発火します。
 表示を終わらせるには [close](#close) を呼んでください。
 
-**関連:** [Dialog.showFile](Dialog.md#showfile) / [Dialog.registerHotKey](Dialog.md#registerhotkey) / [Dialog.onAction](Dialog.md#onaction) / [Dialog.close](Dialog.md#close)
+**関連:** [ElementsDialog.showFile](ElementsDialog.md#showfile) / [ElementsDialog.registerHotKey](ElementsDialog.md#registerhotkey) / [ElementsDialog.onAction](ElementsDialog.md#onaction) / [ElementsDialog.close](ElementsDialog.md#close)
 
 ---
 
@@ -541,7 +542,7 @@ JSON 文字列で非モーダルダイアログを表示する
 指定パスから JSON / JSONC レイアウト定義を読み込み、[showJson](#showjson)
 と同じ動作で表示します。パスは Storages 経由のパス指定が使えます。
 
-**関連:** [Dialog.showJson](Dialog.md#showjson)
+**関連:** [ElementsDialog.showJson](ElementsDialog.md#showjson)
 
 ---
 
@@ -569,7 +570,7 @@ Dictionary で非モーダルダイアログを表示する
 Dictionary / Array で直接指定する版です。内部で JSON へ変換して
 同じ経路で表示します ( 変換仕様は [dictToJson](#dicttojson) と同じ )。
 
-**関連:** [Dialog.showJson](Dialog.md#showjson) / [Dialog.dictToJson](Dialog.md#dicttojson)
+**関連:** [ElementsDialog.showJson](ElementsDialog.md#showjson) / [ElementsDialog.dictToJson](ElementsDialog.md#dicttojson)
 
 ---
 
@@ -613,7 +614,7 @@ values: %[ <id>: <値>, ... ]   // state widget の最終値マップ
 閉じるのは `"close_on_click": true` 指定の button が押されたとき
 ( および Esc / × による中断 ) だけです。
 
-**関連:** [Dialog.showModalFile](Dialog.md#showmodalfile) / [Dialog.onAction](Dialog.md#onaction)
+**関連:** [ElementsDialog.showModalFile](ElementsDialog.md#showmodalfile) / [ElementsDialog.onAction](ElementsDialog.md#onaction)
 
 ---
 
@@ -641,7 +642,7 @@ action と values を保持する Dictionary が返ります。
 指定パスから JSON / JSONC レイアウト定義を読み込んで [showModalJson](#showmodaljson)
 と同じ動作で表示します。パスは Storages 経由のパス指定が使えます。
 
-**関連:** [Dialog.showModalJson](Dialog.md#showmodaljson)
+**関連:** [ElementsDialog.showModalJson](ElementsDialog.md#showmodaljson)
 
 ---
 
@@ -671,7 +672,7 @@ Array で直接指定する版です。引数 1 個で呼ぶとオーバーレ�
 以降を渡すと独立ウィンドウで表示する点、および戻り値の形式は
 [showModalJson](#showmodaljson) と同じです。
 
-**関連:** [Dialog.showModalJson](Dialog.md#showmodaljson) / [Dialog.showDict](Dialog.md#showdict)
+**関連:** [ElementsDialog.showModalJson](ElementsDialog.md#showmodaljson) / [ElementsDialog.showDict](ElementsDialog.md#showdict)
 
 ---
 
@@ -696,14 +697,14 @@ Dictionary / Array を JSON 文字列へ変換する
 [showDict](#showdict) / [showModalDict](#showmodaldict) が内部で行う
 変換をそのまま呼び出すユーティリティです。Dictionary で組み立てた
 レイアウトを JSON 資材として保存する、変換結果を確認する、といった
-用途に使えます。インスタンスを作らず `Dialog.dictToJson(...)` として
+用途に使えます。インスタンスを作らず `ElementsDialog.dictToJson(...)` として
 呼べます。
 
 対応する値の型は void / Integer / Real / String / Dictionary / Array
 です。それ以外 ( Octet や一般のオブジェクト、循環参照、非有限の実数 )
 は例外になります。
 
-**関連:** [Dialog.showDict](Dialog.md#showdict)
+**関連:** [ElementsDialog.showDict](ElementsDialog.md#showdict)
 
 ---
 
@@ -748,7 +749,7 @@ rule 画像パス ( 宣言した画面からの相対 / Storages パス / autopa
 }
 ```
 
-**関連:** [Dialog.showFlowScreens](Dialog.md#showflowscreens) / [Dialog.startFlow](Dialog.md#startflow)
+**関連:** [ElementsDialog.showFlowScreens](ElementsDialog.md#showflowscreens) / [ElementsDialog.startFlow](ElementsDialog.md#startflow)
 
 ---
 
@@ -775,7 +776,7 @@ action と values を保持する Dictionary が返ります。
 フローを実行する [showFlow](#showflow) のインライン版です。
 動作と戻り値は [showFlow](#showflow) と同じです。
 
-**関連:** [Dialog.showFlow](Dialog.md#showflow) / [Dialog.startFlowScreens](Dialog.md#startflowscreens)
+**関連:** [ElementsDialog.showFlow](ElementsDialog.md#showflow) / [ElementsDialog.startFlowScreens](ElementsDialog.md#startflowscreens)
 
 ---
 
@@ -808,7 +809,7 @@ TJS 側で処理する場合は、`"close_on_click"` を指定しない button �
 [close](#close) を呼び、teardown が完了したかどうかは
 [active](#active) で判別できます。
 
-**関連:** [Dialog.startFlowScreens](Dialog.md#startflowscreens) / [Dialog.showFlow](Dialog.md#showflow) / [Dialog.active](Dialog.md#active)
+**関連:** [ElementsDialog.startFlowScreens](ElementsDialog.md#startflowscreens) / [ElementsDialog.showFlow](ElementsDialog.md#showflow) / [ElementsDialog.active](ElementsDialog.md#active)
 
 ---
 
@@ -836,7 +837,7 @@ TJS 側で処理する場合は、`"close_on_click"` を指定しない button �
 非モーダル ( 非ブロッキング ) で開始する [startFlow](#startflow) の
 インライン版です。
 
-**関連:** [Dialog.startFlow](Dialog.md#startflow) / [Dialog.showFlowScreens](Dialog.md#showflowscreens)
+**関連:** [ElementsDialog.startFlow](ElementsDialog.md#startflow) / [ElementsDialog.showFlowScreens](ElementsDialog.md#showflowscreens)
 
 ---
 
@@ -860,7 +861,7 @@ TJS 側で処理する場合は、`"close_on_click"` を指定しない button �
 [active](#active) は真のままです )。フロー実行中の close は画面遷移
 ( transitions ) を解決せず、フローごと終了します。
 
-**関連:** [Dialog.active](Dialog.md#active)
+**関連:** [ElementsDialog.active](ElementsDialog.md#active)
 
 ---
 
@@ -894,7 +895,7 @@ Elements ダイアログで使用するフォントを krkrz Storages 経由で�
 weight / slant / stretch は font_constants の整数値です ( 詳細は
 `StoragesResourceLoader.h` を参照 )。
 
-**関連:** [Dialog.registerFontDir](Dialog.md#registerfontdir)
+**関連:** [ElementsDialog.registerFontDir](ElementsDialog.md#registerfontdir)
 
 ---
 
@@ -920,7 +921,7 @@ Elements 用フォントの一括登録
 名から family / weight / slant / stretch を推定 )。dir は Storages 経由の
 パス指定が使え、XP3 内のディレクトリでも構いません。
 
-**関連:** [Dialog.registerFont](Dialog.md#registerfont)
+**関連:** [ElementsDialog.registerFont](ElementsDialog.md#registerfont)
 
 ---
 
@@ -963,7 +964,7 @@ ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を�
 操作パネル ( `showJson(json, true, false)` ) の表示中でも確実に効かせる
 用途を想定しています。
 
-**関連:** [Dialog.unregisterHotKey](Dialog.md#unregisterhotkey) / [Dialog.clearHotKeys](Dialog.md#clearhotkeys) / [Dialog.showJson](Dialog.md#showjson)
+**関連:** [ElementsDialog.unregisterHotKey](ElementsDialog.md#unregisterhotkey) / [ElementsDialog.clearHotKeys](ElementsDialog.md#clearhotkeys) / [ElementsDialog.showJson](ElementsDialog.md#showjson)
 
 ---
 
@@ -985,7 +986,7 @@ ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を�
 [registerHotKey](#registerhotkey) で登録したホットキーを解除します
 ( key と shift の両方が一致するエントリを削除 )。
 
-**関連:** [Dialog.registerHotKey](Dialog.md#registerhotkey)
+**関連:** [ElementsDialog.registerHotKey](ElementsDialog.md#registerhotkey)
 
 ---
 
@@ -999,7 +1000,7 @@ ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を�
 
 [registerHotKey](#registerhotkey) で登録したホットキーを全て解除します。
 
-**関連:** [Dialog.registerHotKey](Dialog.md#registerhotkey)
+**関連:** [ElementsDialog.registerHotKey](ElementsDialog.md#registerhotkey)
 
 ---
 
@@ -1024,8 +1025,10 @@ ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を�
 
 統一ストレージパス path のファイルを name で実行時画像ストアへ登録します。jsonc の
 image ウィジェット等からは `"mem://<name>"` で参照します。セーブサムネイル等、実行時に
-変わる画像を Elements へ渡すための仕組みです。pixmap は画面 build 時に読み直されるので、
-再登録 → 画面再オープンで表示が更新されます。
+変わる画像を Elements へ渡すための仕組みです。表示中の画面に `mem://<name>` の
+image ウィジェットがあれば、再登録した時点で再デコードされ即時反映されます
+( 画面の開き直しは不要。パネルにも反映されます )。登録前に build した
+ウィジェットは空表示のままなので、初回は画面を開く前に登録してください。
 
 ---
 
@@ -1164,6 +1167,33 @@ Dictionary の配列です。
 
 ---
 
+### activate
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `id` | `&nbsp;` | 実行する widget の id。 |
+
+**戻り値**
+
+実行できたかどうか。id 不明 / 非アクティブなら false。
+
+**解説**
+
+指定 id の widget を実行する
+
+表示中ダイアログの widget ( JSON の `"id"` で指定 ) へフォーカスを移して
+実行 ( Enter 相当 ) します。[Agent.dialogClick](Agent.md#dialogclick) の
+インスタンス版で、[ElementsPanel.activate](ElementsPanel.md#activate) と
+同形です。
+
+**関連:** [ElementsDialog.focus](ElementsDialog.md#focus)
+
+---
+
 ### setPadIconBase
 
 メソッド
@@ -1219,7 +1249,7 @@ pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"
 
 描画計測カウンタのリセット
 
-[Dialog.renderStats](Dialog.md#renderstats) の累積カウンタを 0 クリアします。
+[ElementsDialog.renderStats](ElementsDialog.md#renderstats) の累積カウンタを 0 クリアします。
 計測区間の開始時に呼びます。
 
 ---
@@ -1242,7 +1272,7 @@ pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"
 フローの画面に入ったタイミングで発火します。TJS 側で override して
 ください。
 
-**関連:** [Dialog.onScreenLeave](Dialog.md#onscreenleave)
+**関連:** [ElementsDialog.onScreenLeave](ElementsDialog.md#onscreenleave)
 
 ---
 
@@ -1265,7 +1295,7 @@ pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"
 フローの画面から離れるタイミングで発火します。TJS 側で override
 してください。
 
-**関連:** [Dialog.onScreen](Dialog.md#onscreen)
+**関連:** [ElementsDialog.onScreen](ElementsDialog.md#onscreen)
 
 ---
 

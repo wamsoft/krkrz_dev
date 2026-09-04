@@ -826,7 +826,7 @@ UpdateSubresource) ので、実機で詰まっていないかの一次指標と�
 
 ビルドオプションは不要で常に計測されます (1 フレームに数回の
 カウンタ加算のみ)。オーバーレイダイアログ側の内訳は
-`Dialog.renderStats` を参照してください。
+`ElementsDialog.renderStats` を参照してください。
 
 !!! tip "数値の読み方"
     転送率 ( 転送時間 / 経過実時間 ) が高くても **fps が出ていれば、
@@ -1011,7 +1011,7 @@ PlayStation / Xbox 系はどちらの方式でも結果が同じです。
 空文字列になります。
 
 画面に表示するボタン絵 ( 操作ガイドなど ) をどの系統にするかの判断に
-使えます。[Dialog.setPadTheme](Dialog.md#setpadtheme) に `"auto"` を
+使えます。[ElementsDialog.setPadTheme](ElementsDialog.md#setpadtheme) に `"auto"` を
 指定した場合の自動選択も、このプロパティと同じ判定を参照します。
 
 **関連:** [System.padButtonMapping](System.md#padbuttonmapping) / [System.getJoypadType](System.md#getjoypadtype)
@@ -1361,7 +1361,7 @@ code で指定したキーコードに対応するキーが、このメソッド
 最上位ホットキーの登録
 
 イベントポンプの入口でキーを照合し、**フォーカス中のレイヤ / テキスト入力 /
-[Dialog](Dialog.md) ( モーダル含む ) より先に** callback を同期呼び出しします。
+[ElementsDialog](ElementsDialog.md) ( モーダル含む ) より先に** callback を同期呼び出しします。
 Alt+Enter のフルスクリーン切替や Esc の終了確認のように「画面が何であっても
 効いてほしい」キーを 1 箇所で扱うための仕組みです。
 
@@ -1371,7 +1371,7 @@ Alt+Enter のフルスクリーン切替や Esc の終了確認のように「�
 ```tjs
 // Esc は終了確認。ただしモーダルダイアログ表示中は素通しする
 System.registerHotKey(VK_ESCAPE, 0, function(key, shift) {
-if(Dialog.modalActive) return false;   // 消費せず通常の dispatch へ
+if(ElementsDialog.modalActive) return false;   // 消費せず通常の dispatch へ
 askQuit();
 return true;
 });
@@ -1388,10 +1388,10 @@ up は key のみで照合して対応する down を消費したキーは必ず
 ( Windows ネイティブ ) ビルドでは登録しても発火しません。
 
 ダイアログにフォーカスを渡したまま特定のキーだけホスト側で受けたい場合は、
-用途の違う [Dialog.registerHotKey](Dialog.md#registerhotkey) ( ダイアログへ
+用途の違う [ElementsDialog.registerHotKey](ElementsDialog.md#registerhotkey) ( ダイアログへ
 渡さず通常のゲーム入力経路へ素通しする。モーダル中は無効 ) を使います。
 
-**関連:** [System.unregisterHotKey](System.md#unregisterhotkey) / [Dialog.modalActive](Dialog.md#modalactive)
+**関連:** [System.unregisterHotKey](System.md#unregisterhotkey) / [ElementsDialog.modalActive](ElementsDialog.md#modalactive)
 
 ---
 

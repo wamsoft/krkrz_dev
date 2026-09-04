@@ -116,17 +116,17 @@ for (var i = 0; i < list.count; i++) {
 
 ## 内蔵のビューアを使う
 
-Elements Dialog が使えるビルドでは、サンプル実装
+ElementsDialog が使えるビルドでは、サンプル実装
 `data/ui/license_dialog.tjs` をそのまま利用できます。左ペイン = 分類別の
 項目リスト、右ペイン = ライセンス本文の 2 ペイン構成です。
 
 ```tjs
 Scripts.execStorage("ui/license_dialog.tjs");
 showLicenseDialog(win);          // モーダル。閉じるまでブロック
-showLicenseDialog(win, false);   // 非モーダル ( 戻り値 = Dialog )
+showLicenseDialog(win, false);   // 非モーダル ( 戻り値 = ElementsDialog )
 ```
 
-プロジェクトへコピーして改変してかまいません。Elements Dialog が無いビルド
+プロジェクトへコピーして改変してかまいません。ElementsDialog が無いビルド
 ( `KRKRZ_USE_ELEMENTS=OFF` ) では何もせず void を返します。
 
 ## プロジェクトの資材を一覧に載せる

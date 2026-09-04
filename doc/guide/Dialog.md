@@ -2,7 +2,7 @@
 
 ## ダイアログについて
 
-吉里吉里Z は、JSON / Dictionary で記述したレイアウトからボタン・チェックボックス・テキスト入力などを含むダイアログを表示する機構を内蔵しています。TJS からは [Dialog](../reference/Dialog.md) クラスで利用します。
+吉里吉里Z は、JSON / Dictionary で記述したレイアウトからボタン・チェックボックス・テキスト入力などを含むダイアログを表示する機構を内蔵しています。TJS からは [ElementsDialog](../reference/ElementsDialog.md) クラスで利用します ( 旧名 `Dialog`。ゲーム側スクリプトのクラス名と衝突しやすい汎用名だったため改名されました )。
 
 このダイアログは、[Elements](https://github.com/wamsoft/elements) ( ThorVG ベースの C++ GUI ライブラリ ) を組み込んで実現されています。プラットフォーム依存のネイティブダイアログ ( Win32 の WIN32Dialog など ) とは異なり、SDL3 ビルドと Windows ネイティブ ( D3D11 ) ビルドの両方で同じ JSON 定義から同じ見た目のダイアログを表示できるのが特徴です。JSON / JSONC ( コメント付き JSON ) で記述したレイアウトを渡すだけで、レイアウト計算・描画・入力処理はエンジン側が行います。
 
@@ -16,9 +16,10 @@ Windows 標準の GUI に依存しないクロスプラットフォーム UI を
 
 | 表示モード | TJS API | 挙動 |
 |---|---|---|
-| 非モーダル ( オーバーレイ ) | [Dialog.showJson](../reference/Dialog.md#showjson) / [showFile](../reference/Dialog.md#showfile) | 既存ゲーム画面の上にダイアログを描き、メインループを止めません。値の変化・ボタンのクリックは [onAction](../reference/Dialog.md#onaction) で逐次通知されます。[close](../reference/Dialog.md#close) で終了します。 |
-| ブロッキングモーダル ( 独立ウィンドウ ) | [Dialog.showModalJson](../reference/Dialog.md#showmodaljson) / [showModalFile](../reference/Dialog.md#showmodalfile) ( title / w / h を渡す ) | 新しいネイティブウィンドウを開き、閉じるまでブロッキングします。閉じると `%[ action, values ]` 形式の Dictionary を返します。 |
-| ブロッキングモーダル ( オーバーレイ ) | [Dialog.showModalJson](../reference/Dialog.md#showmodaljson) / [showModalFile](../reference/Dialog.md#showmodalfile) ( JSON 1 引数のみ ) | 独立ウィンドウを作らずに既存ゲーム画面に重ねて表示し、閉じるまでブロッキングします。戻り値は独立ウィンドウ版と同じです。 |
+| 非モーダル ( オーバーレイ ) | [ElementsDialog.showJson](../reference/ElementsDialog.md#showjson) / [showFile](../reference/ElementsDialog.md#showfile) | 既存ゲーム画面の上にダイアログを描き、メインループを止めません。値の変化・ボタンのクリックは [onAction](../reference/ElementsDialog.md#onaction) で逐次通知されます。[close](../reference/ElementsDialog.md#close) で終了します。 |
+| ブロッキングモーダル ( 独立ウィンドウ ) | [ElementsDialog.showModalJson](../reference/ElementsDialog.md#showmodaljson) / [showModalFile](../reference/ElementsDialog.md#showmodalfile) ( title / w / h を渡す ) | 新しいネイティブウィンドウを開き、閉じるまでブロッキングします。閉じると `%[ action, values ]` 形式の Dictionary を返します。 |
+| ブロッキングモーダル ( オーバーレイ ) | [ElementsDialog.showModalJson](../reference/ElementsDialog.md#showmodaljson) / [showModalFile](../reference/ElementsDialog.md#showmodalfile) ( JSON 1 引数のみ ) | 独立ウィンドウを作らずに既存ゲーム画面に重ねて表示し、閉じるまでブロッキングします。戻り値は独立ウィンドウ版と同じです。 |
+| ホストレイヤ描画 ( パネル ) | [ElementsPanel](../reference/ElementsPanel.md) ( `new ElementsPanel(layer)` + [showFile](../reference/ElementsPanel.md#showfile) 等 ) | オーバーレイではなく**指定した Layer のビットマップへ描画**します。z 順・トランジション・スクリーンショットへの写り込み・入力の帰属がレイヤの仕組みに従うので、HUD やゲーム画面の一部としての UI に使います。イベント / 変数 API は ElementsDialog と同形です。 |
 
 `showModalJson` / `showModalFile` の戻り値は次の形式です。
 
@@ -29,7 +30,7 @@ Windows 標準の GUI に依存しないクロスプラットフォーム UI を
 ]
 ```
 
-モーダル中も [onAction](../reference/Dialog.md#onaction) は発火しますが、ダイアログを閉じるのは JSON 側で `"close_on_click": true` を指定したボタン ( および Esc / × による中断 ) だけです。
+モーダル中も [onAction](../reference/ElementsDialog.md#onaction) は発火しますが、ダイアログを閉じるのは JSON 側で `"close_on_click": true` を指定したボタン ( および Esc / × による中断 ) だけです。
 
 ### 複数画面フロー
 
@@ -37,10 +38,10 @@ Windows 標準の GUI に依存しないクロスプラットフォーム UI を
 
 | 表示モード | TJS API | 挙動 |
 |---|---|---|
-| ブロッキング ( オーバーレイ ) | [Dialog.showFlow](../reference/Dialog.md#showflow) / [showFlowScreens](../reference/Dialog.md#showflowscreens) | 複数画面の遷移をオーバーレイで実行します。フロー終了まで TJS をブロックし、最後に閉じた画面の `%[ action, values ]` を返します。 |
-| 非モーダル ( 常駐 ) | [Dialog.startFlow](../reference/Dialog.md#startflow) / [startFlowScreens](../reference/Dialog.md#startflowscreens) | 同じフロー定義を非ブロッキングで開始します ( ゲーム画面に常駐 )。`close` で閉じ、teardown ( 後始末 ) の完了は [active](../reference/Dialog.md#active) で判別します。 |
+| ブロッキング ( オーバーレイ ) | [ElementsDialog.showFlow](../reference/ElementsDialog.md#showflow) / [showFlowScreens](../reference/ElementsDialog.md#showflowscreens) | 複数画面の遷移をオーバーレイで実行します。フロー終了まで TJS をブロックし、最後に閉じた画面の `%[ action, values ]` を返します。 |
+| 非モーダル ( 常駐 ) | [ElementsDialog.startFlow](../reference/ElementsDialog.md#startflow) / [startFlowScreens](../reference/ElementsDialog.md#startflowscreens) | 同じフロー定義を非ブロッキングで開始します ( ゲーム画面に常駐 )。`close` で閉じ、teardown ( 後始末 ) の完了は [active](../reference/ElementsDialog.md#active) で判別します。 |
 
-画面が切り替わるタイミングで [onScreen](../reference/Dialog.md#onscreen) / [onScreenLeave](../reference/Dialog.md#onscreenleave)、widget の操作で [onAction](../reference/Dialog.md#onaction) が発火します。
+画面が切り替わるタイミングで [onScreen](../reference/ElementsDialog.md#onscreen) / [onScreenLeave](../reference/ElementsDialog.md#onscreenleave)、widget の操作で [onAction](../reference/ElementsDialog.md#onaction) が発火します。
 
 #### 画面切替エフェクト ( fade / universal )
 
@@ -63,7 +64,7 @@ Windows 標準の GUI に依存しないクロスプラットフォーム UI を
 
 #### 退場 ( exit ) 演出との協調
 
-要素の `"animate"` に `"on": "exit"` を付けると、画面が閉じる / 遷移するときに退場演出を再生してから遷移します。close_on_click / Esc などの画面内トリガに加えて、TJS からの [close](../reference/Dialog.md#close) でも発火します ( 演出完了後に閉じ、フロー実行中は transitions を解決せずフローごと終了します )。
+要素の `"animate"` に `"on": "exit"` を付けると、画面が閉じる / 遷移するときに退場演出を再生してから遷移します。close_on_click / Esc などの画面内トリガに加えて、TJS からの [close](../reference/ElementsDialog.md#close) でも発火します ( 演出完了後に閉じ、フロー実行中は transitions を解決せずフローごと終了します )。
 
 GPU ( OpenGL 描画 ) 側で同等のトランジションを行いたい場合は、[3D グラフィックシステム](Graphic3DSystem.md) の Canvas トランジション描画を参照してください。
 
@@ -98,9 +99,9 @@ GPU ( OpenGL 描画 ) 側で同等のトランジションを行いたい場合�
 ```
 
 - 折り返し・行頭行末禁則・文字送りの単位が [Layer.drawShapedTextArea](../reference/Layer.md#drawshapedtextarea) と**同じロジック**です。同じ本文・同じ幅・同じフォント / サイズなら**改行位置が一致**します ( レイヤ描画と Elements で字幕を出し分けても行組みがずれません )。
-- `"count_var"` に変数名を与えると、ホストが [setVar](../reference/Dialog.md#setvar) で数値を書くだけで文字送りが進みます。**折り返しは全文で確定してから count を適用する**ので、送っている途中でリフローしません。数える単位は [Layer.shapedTextCount](../reference/Layer.md#shapedtextcount) と同じクラスタ ( 合字・結合文字・絵文字 ZWJ シーケンスで 1 ) です。
+- `"count_var"` に変数名を与えると、ホストが [setVar](../reference/ElementsDialog.md#setvar) で数値を書くだけで文字送りが進みます。**折り返しは全文で確定してから count を適用する**ので、送っている途中でリフローしません。数える単位は [Layer.shapedTextCount](../reference/Layer.md#shapedtextcount) と同じクラスタ ( 合字・結合文字・絵文字 ZWJ シーケンスで 1 ) です。
 - 本文の差し替えは `"text_var"` / `"text_id"`、リストからの指定番号表示は `"text_list_id"` + `"index_var"` で、いずれも `label` と同じ規約です。
-- 行ごとに固定の `"index"` と、行で共有する `"index_offset_var"` ( 先頭位置 ) を組み合わせると「N 行の窓」になります。ホストは [setVar](../reference/Dialog.md#setvar) で**先頭位置の変数 1 個を動かすだけで一覧が送れる**ので、行ごとに変数を用意する必要がありません ( 一覧データ自体の差し替えは `"text_list_var"` )。
+- 行ごとに固定の `"index"` と、行で共有する `"index_offset_var"` ( 先頭位置 ) を組み合わせると「N 行の窓」になります。ホストは [setVar](../reference/ElementsDialog.md#setvar) で**先頭位置の変数 1 個を動かすだけで一覧が送れる**ので、行ごとに変数を用意する必要がありません ( 一覧データ自体の差し替えは `"text_list_var"` )。
 - 従来からある `text_box` は互換のためそのまま残っています ( 素朴なワード折り返し・禁則なし )。既存画面の改行位置は変わりません。
 
 ⚠ 絶対座標で置く ( `floating` の `"at"` を使う ) 場合は、top-level に `"size": [w, h]` を明示してください。省略するとダイアログが内容の最小サイズまで縮み、絶対座標がその外に出て何も表示されません。
@@ -109,10 +110,12 @@ GPU ( OpenGL 描画 ) 側で同等のトランジションを行いたい場合�
 
 widget に `"drag_at_var"` を書くと、ドラッグ中の位置が `"x,y"` 形式でその変数へ書き込まれます。canvas の子の `"at_var"` に同じ変数を挿せば、TJS を介さずに**絵がドラッグへ追従**します ( エンジン内で完結するのでイベント配送の遅延を受けません )。可動域は `"drag_bounds": [x, y, w, h]` で制限できます。
 
-「どこで離したか」のような判断を TJS 側で行いたい場合は、その widget に `"drag_events": true` を指定して [onDrag](../reference/Dialog.md#ondrag) を実装します。
+「どこで離したか」のような判断を TJS 側で行いたい場合は、その widget に `"drag_events": true` を指定して [onDrag](../reference/ElementsDialog.md#ondrag) を実装します。
 
 ```tjs
-class DragDialog extends Dialog {
+class DragDialog extends ElementsDialog {
+    // 明示コンストラクタで super を呼ぶこと ( 省略するとイベントが届かない )
+    function DragDialog() { super.ElementsDialog(); }
     function onDrag(e) {
         // e.id / e.phase ( "begin" | "move" | "end" ) / e.x / e.y
         // e.dx / e.dy ( 前回からの差分 ) / e.startX / e.startY / e.modifiers
@@ -146,20 +149,22 @@ dlg.setVar("n", "3");                             // 総件数
 ```
 
 - 文字列の中の `#index` が行番号へ置換されます ( `"id": "row#index"` → `row0` / `row1` … )。`text_list_var` を持つ要素には行番号と先頭位置が自動で挿さるので、テンプレートに 1 行書くだけで一覧になります
-- 行をクリックすると [onAction](../reference/Dialog.md#onaction) が **`payload` = データ index** で発火します ( 行の中にボタンがあればそちらが優先 )
+- 行をクリックすると [onAction](../reference/ElementsDialog.md#onaction) が **`payload` = データ index** で発火します ( 行の中にボタンがあればそちらが優先 )
 - `count_var` を渡すと、データが無い行は描画も当たり判定も消えます
-- hover / 選択の色は、行ごとのフラグ変数 ( `row_hover_var` / `row_select_var` を `"visible_var"` で受ける ) か、[onVar](../reference/Dialog.md#onvar) で `hover_var` / `select_var` を拾ってホスト側のレイヤを差し替える形のどちらでも組めます
+- hover / 選択の色は、行ごとのフラグ変数 ( `row_hover_var` / `row_select_var` を `"visible_var"` で受ける ) か、[onVar](../reference/ElementsDialog.md#onvar) で `hover_var` / `select_var` を拾ってホスト側のレイヤを差し替える形のどちらでも組めます
 
 スクロールバーは `"type": "atlas_scrollbar"` に**同じ `index_offset_var`** を挿すだけです。つまみの長さは「見えている行数 ÷ 総件数」に比例し、つまみのドラッグ・溝クリックでのページ送り・ホイールまで内蔵しています ( 本文が `scroller` に載っている画面なら `scroller` の `pos_var` で足ります )。
 
 ## 変数の読み書きと変化通知 ( setVar / getVar / onVar )
 
-画面 JSON の変数は 1 本の store にぶら下がっていて、[setVar](../reference/Dialog.md#setvar) で書けるだけでなく [getVar](../reference/Dialog.md#getvar) で読み出せます。読めるのは自分が書いた値だけではありません — `"vars_on_hover"` / `"vars_on_focus"`、slider の `"value_var"`、`"drag_at_var"`、一覧の `"index_offset_var"` のように**画面側が書いた値も同じ store**なので、そのまま読めます。
+画面 JSON の変数は 1 本の store にぶら下がっていて、[setVar](../reference/ElementsDialog.md#setvar) で書けるだけでなく [getVar](../reference/ElementsDialog.md#getvar) で読み出せます。読めるのは自分が書いた値だけではありません — `"vars_on_hover"` / `"vars_on_focus"`、slider の `"value_var"`、`"drag_at_var"`、一覧の `"index_offset_var"` のように**画面側が書いた値も同じ store**なので、そのまま読めます。
 
-変化した時点で知りたい場合は [onVar](../reference/Dialog.md#onvar) を実装します。
+変化した時点で知りたい場合は [onVar](../reference/ElementsDialog.md#onvar) を実装します。
 
 ```tjs
-class ListDialog extends Dialog {
+class ListDialog extends ElementsDialog {
+    // 明示コンストラクタで super を呼ぶこと ( 省略するとイベントが届かない )
+    function ListDialog() { super.ElementsDialog(); }
     function onVar(name, value) {
         if (name == "row_hover") {
             // カーソルが乗っている行が変わった → ホスト側のレイヤを差し替える
@@ -171,17 +176,17 @@ class ListDialog extends Dialog {
 
 これで「**絵はホスト側のレイヤ、当たり判定だけダイアログ**」という構成が組めます。1 枚絵が大きすぎて atlas に積めない一覧画面などで、ダイアログには透明なボタンだけを並べて hover を受け取り、表示はゲーム側のレイヤで行う、という分担です。
 
-- 通知は 1 フレーム遅延し、同じ変数の連続変化は最新の 1 件へ畳まれます。「いまの値」が要るときは [getVar](../reference/Dialog.md#getvar) を読みます
-- **onVar を実装したダイアログだけが観測対象**になります ( 実装していなければコストはかかりません )。受け取る変数を絞りたいときは [watchVars](../reference/Dialog.md#watchvars) に名前を並べます — hover 連動変数やドラッグ位置は毎フレーム書き換わるためです
-- 画面にどんな変数があるかは [listVars](../reference/Dialog.md#listvars) で一覧できます ( 変数名・現在値・参照している widget の id と種類 )。デバッグパネルや画面 JSON の検証に使えます
+- 通知は 1 フレーム遅延し、同じ変数の連続変化は最新の 1 件へ畳まれます。「いまの値」が要るときは [getVar](../reference/ElementsDialog.md#getvar) を読みます
+- **onVar を実装したダイアログだけが観測対象**になります ( 実装していなければコストはかかりません )。受け取る変数を絞りたいときは [watchVars](../reference/ElementsDialog.md#watchvars) に名前を並べます — hover 連動変数やドラッグ位置は毎フレーム書き換わるためです
+- 画面にどんな変数があるかは [listVars](../reference/ElementsDialog.md#listvars) で一覧できます ( 変数名・現在値・参照している widget の id と種類 )。デバッグパネルや画面 JSON の検証に使えます
 
 ## 非モーダルの複数同時表示とフォーカス
 
-非モーダル ( オーバーレイ ) パネルの配置は画面 JSON の top-level `"align"` / `"margin"` で指定し、配置と拡縮の基準領域は top-level `"base"` で選べます — `"window"` ( 既定、ウィンドウ全面基準 ) / `"content"` ( ゲーム画像の表示領域基準。字幕窓のようにゲーム画像へ追従させたい場合 )。拡縮はゲームの基準面に対するウィンドウ ( または表示領域 ) の比率に追従するため、フルスクリーン等ではゲームと同率で拡大されます。ゲーム画面と別解像度で UI を author しているタイトル ( ゲーム画面 640x400 / UI 1920x1080 等 ) では、[Dialog.baseSize](../reference/Dialog.md#basesize) に author 基準面のサイズを設定すると拡縮の分母がそちらになり、ゲーム側の基準面サイズの変更にも巻き込まれません。
+非モーダル ( オーバーレイ ) パネルの配置は画面 JSON の top-level `"align"` / `"margin"` で指定し、配置と拡縮の基準領域は top-level `"base"` で選べます — `"window"` ( 既定、ウィンドウ全面基準 ) / `"content"` ( ゲーム画像の表示領域基準。字幕窓のようにゲーム画像へ追従させたい場合 )。拡縮はゲームの基準面に対するウィンドウ ( または表示領域 ) の比率に追従するため、フルスクリーン等ではゲームと同率で拡大されます。ゲーム画面と別解像度で UI を author しているタイトル ( ゲーム画面 640x400 / UI 1920x1080 等 ) では、[ElementsDialog.baseSize](../reference/ElementsDialog.md#basesize) に author 基準面のサイズを設定すると拡縮の分母がそちらになり、ゲーム側の基準面サイズの変更にも巻き込まれません。
 
-非モーダルダイアログ ( [showJson](../reference/Dialog.md#showjson) / [startFlow](../reference/Dialog.md#startflow) 系 ) は z-order 付きのインスタンスリストとして管理され、複数同時に表示できます。マウスは最前面からヒットテストし、キーボード / ゲームパッドはフォーカスを保持しているインスタンス ( z-order 末尾優先 ) に届きます。モーダルダイアログを重ねた場合、下のインスタンスは描画は維持されたまま入力だけがブロックされます。
+非モーダルダイアログ ( [showJson](../reference/ElementsDialog.md#showjson) / [startFlow](../reference/ElementsDialog.md#startflow) 系 ) は z-order 付きのインスタンスリストとして管理され、複数同時に表示できます。マウスは最前面からヒットテストし、キーボード / ゲームパッドはフォーカスを保持しているインスタンス ( z-order 末尾優先 ) に届きます。モーダルダイアログを重ねた場合、下のインスタンスは描画は維持されたまま入力だけがブロックされます。
 
-非モーダル開始系 ( [startFlow](../reference/Dialog.md#startflow) / [startFlowScreens](../reference/Dialog.md#startflowscreens) ) には `grabFocus` 引数があり、偽を指定すると「フォーカスを取らない常駐 HUD」として動きます。常駐 UI がゲームのホットキーまで食ってしまうのを防ぎたい場合に利用します。
+非モーダル開始系 ( [startFlow](../reference/ElementsDialog.md#startflow) / [startFlowScreens](../reference/ElementsDialog.md#startflowscreens) ) には `grabFocus` 引数があり、偽を指定すると「フォーカスを取らない常駐 HUD」として動きます。常駐 UI がゲームのホットキーまで食ってしまうのを防ぎたい場合に利用します。
 
 非モーダルでは、Elements 側で実際に処理されたキーだけを消費し、未処理キーはゲームへ通過させる ( handled pass-through ) ため、メニューを開いたままゲーム本体のホットキーで別のダイアログを開く、といった共存も可能です。
 
@@ -191,16 +196,16 @@ class ListDialog extends Dialog {
 
 1. **最上位ホットキー** ( [System.registerHotKey](../reference/System.md#registerhotkey) ) — イベントポンプの入口。**モーダル表示中でも効く**唯一の層です ( フックは SDL3 系ビルドのみ配線されており、WINVER ビルドでは発火しません )
 2. **モーダルダイアログ** — 全入力を独占 ( 下にもゲームにも通しません )
-3. **ホストホットキー** ( [registerHotKey](../reference/Dialog.md#registerhotkey) ) — 登録キーはダイアログへ渡らず [Window.onKeyDown](../reference/Window.md#onkeydown) 等へ直行
+3. **ホストホットキー** ( [registerHotKey](../reference/ElementsDialog.md#registerhotkey) ) — 登録キーはダイアログへ渡らず [Window.onKeyDown](../reference/Window.md#onkeydown) 等へ直行
 4. **フォーカスを持つ非モーダルパネル** — キー / パッドを受け、未処理分のみ素通し
 5. **ゲーム / レイヤ** — 未消費の落ち先
 
-単発表示系 ( [showJson](../reference/Dialog.md#showjson) / showFile / showDict ) は第 3 引数 `modal` で「非モーダル + フォーカスあり」( `showJson(json, true, false)` ) を指定できます。slider や picker を含む操作パネルはこの形で出すと、パッドの十字 / A ボタンやキーボードでウィジェットを操作しつつ、パネルが使わないキーはゲームへ流れます。その上で ESC ( シーン復帰 ) や PageUp/Down ( 画面切替 ) のような「必ずホストが受けたいキー」を registerHotKey で確保するのが定石です ( 実例: `data/demolib/demo_common.tjs` の DemoShell )。
+単発表示系 ( [showJson](../reference/ElementsDialog.md#showjson) / showFile / showDict ) は第 3 引数 `modal` で「非モーダル + フォーカスあり」( `showJson(json, true, false)` ) を指定できます。slider や picker を含む操作パネルはこの形で出すと、パッドの十字 / A ボタンやキーボードでウィジェットを操作しつつ、パネルが使わないキーはゲームへ流れます。その上で ESC ( シーン復帰 ) や PageUp/Down ( 画面切替 ) のような「必ずホストが受けたいキー」を registerHotKey で確保するのが定石です ( 実例: `data/demolib/demo_common.tjs` の DemoShell )。
 
 - ホットキーはテキスト入力ウィジェットにキャレットがある間は既定で抑止されます ( `duringTextInput = true` で入力中も有効化 )
 - モーダル表示中はホットキーも無効です ( 確認ダイアログの ESC = cancel を奪いません )
 - マウスボタン ( VK_RBUTTON 等 ) も登録でき、全画面透過 HUD が右クリックを拾って閉じてしまう問題の回避にも使えます
-- 最上位ホットキー側のコールバックで「モーダルが出ている間は何もしない」と分岐したい場合は [Dialog.modalActive](../reference/Dialog.md#modalactive) を見ます ( モーダルインスタンスの有無。フォーカスを取らない常駐オーバレイは含みません )
+- 最上位ホットキー側のコールバックで「モーダルが出ている間は何もしない」と分岐したい場合は [ElementsDialog.modalActive](../reference/ElementsDialog.md#modalactive) を見ます ( モーダルインスタンスの有無。フォーカスを取らない常駐オーバレイは含みません )
 
 ### 入力バインドと named action
 
@@ -212,7 +217,7 @@ class ListDialog extends Dialog {
     { "key": "escape", "action": "cancel" } ] }   // 組込名 = ダイアログ内で処理
 ```
 
-通知は [onAction](../reference/Dialog.md#onaction) で受けますが、**`id` は `"<action>"` 固定で、付けた名前は `payload` に入ります**。
+通知は [onAction](../reference/ElementsDialog.md#onaction) で受けますが、**`id` は `"<action>"` 固定で、付けた名前は `payload` に入ります**。
 
 ```tjs
 function onAction(id, payload) {
@@ -228,10 +233,12 @@ function onAction(id, payload) {
 
 ## ミニマルな利用例
 
-[Dialog](../reference/Dialog.md) を継承したクラスで [onAction](../reference/Dialog.md#onaction) を実装し、JSON レイアウトを渡して表示します。
+[Dialog](../reference/ElementsDialog.md) を継承したクラスで [onAction](../reference/ElementsDialog.md#onaction) を実装し、JSON レイアウトを渡して表示します。
 
 ```tjs
-class TestDialog extends Dialog {
+class TestDialog extends ElementsDialog {
+    // 明示コンストラクタで super を呼ぶこと ( 省略するとイベントが届かない )
+    function TestDialog() { super.ElementsDialog(); }
     function onAction(id, payload) {
         switch (id) {
         case "ok":     System.inform("OK!");  close(); break;
@@ -263,11 +270,11 @@ dlg.showJson(json);             // 非モーダル
 // var r = dlg.showModalJson(json);                       // ゲーム画面オーバーレイ
 ```
 
-ボタン・入力欄などの widget を JSON でどう記述するかの一覧は、[Dialog](../reference/Dialog.md) クラスリファレンスを参照してください。
+ボタン・入力欄などの widget を JSON でどう記述するかの一覧は、[Dialog](../reference/ElementsDialog.md) クラスリファレンスを参照してください。
 
 ## フォントの登録
 
-ダイアログ描画に使うフォントは krkrz の Storages ( XP3 含む ) を経由して読み込まれます。スクリプトから明示的に登録するには [Dialog.registerFont](../reference/Dialog.md#registerfont) / [Dialog.registerFontDir](../reference/Dialog.md#registerfontdir) を、既定フォントファミリの確認・上書きには [Dialog.defaultFontFamily](../reference/Dialog.md#defaultfontfamily) プロパティを使います。
+ダイアログ描画に使うフォントは krkrz の Storages ( XP3 含む ) を経由して読み込まれます。スクリプトから明示的に登録するには [ElementsDialog.registerFont](../reference/ElementsDialog.md#registerfont) / [ElementsDialog.registerFontDir](../reference/ElementsDialog.md#registerfontdir) を、既定フォントファミリの確認・上書きには [ElementsDialog.defaultFontFamily](../reference/ElementsDialog.md#defaultfontfamily) プロパティを使います。
 
 エンジン側でも、起動時にリソースパス下の `.ttf` / `.otf` を自動スキャンして登録しています ( ファイル名から family / weight / slant / stretch を推定 )。
 
@@ -278,28 +285,29 @@ dlg.showJson(json);             // 非モーダル
 `registerFont` のパスに `"#tag=val"` サフィックスを付けると、可変フォントの軸インスタンスを別名として登録できます。画面 JSON 側は `"font": "MyFont-Medium"` のような名前だけで、実体は 1 つの可変フォントに集約できます。widget の `"font"` に直接 `"MyFont#wght=700"` と書く指定も同じ表記です。
 
 ```tjs
-Dialog.registerFont("MyFont", "fonts/MyFont-VF.ttf");                   // 素の VF ( 無指定 = wght=400 )
-Dialog.registerFont("MyFont-Medium", "fonts/MyFont-VF.ttf#wght=500");   // 別名 = 軸インスタンス
+ElementsDialog.registerFont("MyFont", "fonts/MyFont-VF.ttf");                   // 素の VF ( 無指定 = wght=400 )
+ElementsDialog.registerFont("MyFont-Medium", "fonts/MyFont-VF.ttf#wght=500");   // 別名 = 軸インスタンス
 ```
 
 ### 言語連動フォント置換 ( 多言語 UI )
 
-日本語 / 繁体字 / 簡体字のように文字体系ごとの別フォントを持つ UI では、[Dialog.fontLanguages](../reference/Dialog.md#fontlanguages) に言語→ファミリの置換表を設定しておくと、[Dialog.language](../reference/Dialog.md#language) の切替に連動してフォント解決時にファミリが差し替わります ( 共有コードポイントの漢字を表示言語に合った地域字形で描画できます )。表は画面 JSON の top-level `"font_languages"` でも宣言でき、特定 widget だけ言語を固定したい場合は widget の `"locale"` を指定します。
+日本語 / 繁体字 / 簡体字のように文字体系ごとの別フォントを持つ UI では、[ElementsDialog.fontLanguages](../reference/ElementsDialog.md#fontlanguages) に言語→ファミリの置換表を設定しておくと、[ElementsDialog.language](../reference/ElementsDialog.md#language) の切替に連動してフォント解決時にファミリが差し替わります ( 共有コードポイントの漢字を表示言語に合った地域字形で描画できます )。表は画面 JSON の top-level `"font_languages"` でも宣言でき、特定 widget だけ言語を固定したい場合は widget の `"locale"` を指定します。
 
 ## ビルド構成
 
-ダイアログ機能は `KRKRZ_USE_ELEMENTS=ON` ( デフォルト ) でビルドされたエンジンで利用できます。SDL3 ビルドと WINVER ( Windows ネイティブ / D3D11 ) ビルドの両方に対応します。`KRKRZ_USE_ELEMENTS=OFF` でビルドした場合は [Dialog](../reference/Dialog.md) クラスは登録されず、ダイアログ関連のコードはリンクから除外されて実行ファイルサイズが削減されます。
+ダイアログ機能は `KRKRZ_USE_ELEMENTS=ON` ( デフォルト ) でビルドされたエンジンで利用できます。SDL3 ビルドと WINVER ( Windows ネイティブ / D3D11 ) ビルドの両方に対応します。`KRKRZ_USE_ELEMENTS=OFF` でビルドした場合は [ElementsDialog](../reference/ElementsDialog.md) / [ElementsPanel](../reference/ElementsPanel.md) クラスは登録されず、ダイアログ関連のコードはリンクから除外されて実行ファイルサイズが削減されます。
 
 ## 関連 API
 
-- [Dialog](../reference/Dialog.md) — TJS バインディングクラス
-- [Dialog.showJson](../reference/Dialog.md#showjson) / [showFile](../reference/Dialog.md#showfile) — 非モーダル
-- [Dialog.showModalJson](../reference/Dialog.md#showmodaljson) / [showModalFile](../reference/Dialog.md#showmodalfile) — モーダル
-- [Dialog.showFlow](../reference/Dialog.md#showflow) / [showFlowScreens](../reference/Dialog.md#showflowscreens) — ブロッキングフロー
-- [Dialog.startFlow](../reference/Dialog.md#startflow) / [startFlowScreens](../reference/Dialog.md#startflowscreens) — 非モーダル ( 常駐 ) フロー
-- [Dialog.onAction](../reference/Dialog.md#onaction) / [onScreen](../reference/Dialog.md#onscreen) / [onScreenLeave](../reference/Dialog.md#onscreenleave) / [onDrag](../reference/Dialog.md#ondrag) — イベント
-- [Dialog.active](../reference/Dialog.md#active) — 非モーダルの teardown 完了判定 / [modalActive](../reference/Dialog.md#modalactive) — モーダル表示中かどうか
-- [Dialog.registerHotKey](../reference/Dialog.md#registerhotkey) — ホストホットキー ( ダイアログをバイパス ) / [System.registerHotKey](../reference/System.md#registerhotkey) — 最上位ホットキー ( モーダル中でも効く )
-- [Dialog.baseSize](../reference/Dialog.md#basesize) — UI の author 基準面サイズ / [renderScale](../reference/Dialog.md#renderscale) — 描画密度
-- [Dialog.registerFont](../reference/Dialog.md#registerfont) / [registerFontDir](../reference/Dialog.md#registerfontdir) / [defaultFontFamily](../reference/Dialog.md#defaultfontfamily) — フォント登録
-- [Dialog.language](../reference/Dialog.md#language) / [fontLanguages](../reference/Dialog.md#fontlanguages) — i18n ( 表示言語と言語連動フォント置換 )
+- [ElementsDialog](../reference/ElementsDialog.md) — TJS バインディングクラス
+- [ElementsPanel](../reference/ElementsPanel.md) — ホストのレイヤへ描くパネル ( イベント / 変数 API は同形 )
+- [ElementsDialog.showJson](../reference/ElementsDialog.md#showjson) / [showFile](../reference/ElementsDialog.md#showfile) — 非モーダル
+- [ElementsDialog.showModalJson](../reference/ElementsDialog.md#showmodaljson) / [showModalFile](../reference/ElementsDialog.md#showmodalfile) — モーダル
+- [ElementsDialog.showFlow](../reference/ElementsDialog.md#showflow) / [showFlowScreens](../reference/ElementsDialog.md#showflowscreens) — ブロッキングフロー
+- [ElementsDialog.startFlow](../reference/ElementsDialog.md#startflow) / [startFlowScreens](../reference/ElementsDialog.md#startflowscreens) — 非モーダル ( 常駐 ) フロー
+- [ElementsDialog.onAction](../reference/ElementsDialog.md#onaction) / [onScreen](../reference/ElementsDialog.md#onscreen) / [onScreenLeave](../reference/ElementsDialog.md#onscreenleave) / [onDrag](../reference/ElementsDialog.md#ondrag) — イベント
+- [ElementsDialog.active](../reference/ElementsDialog.md#active) — 非モーダルの teardown 完了判定 / [modalActive](../reference/ElementsDialog.md#modalactive) — モーダル表示中かどうか
+- [ElementsDialog.registerHotKey](../reference/ElementsDialog.md#registerhotkey) — ホストホットキー ( ダイアログをバイパス ) / [System.registerHotKey](../reference/System.md#registerhotkey) — 最上位ホットキー ( モーダル中でも効く )
+- [ElementsDialog.baseSize](../reference/ElementsDialog.md#basesize) — UI の author 基準面サイズ / [renderScale](../reference/ElementsDialog.md#renderscale) — 描画密度
+- [ElementsDialog.registerFont](../reference/ElementsDialog.md#registerfont) / [registerFontDir](../reference/ElementsDialog.md#registerfontdir) / [defaultFontFamily](../reference/ElementsDialog.md#defaultfontfamily) — フォント登録
+- [ElementsDialog.language](../reference/ElementsDialog.md#language) / [fontLanguages](../reference/ElementsDialog.md#fontlanguages) — i18n ( 表示言語と言語連動フォント置換 )

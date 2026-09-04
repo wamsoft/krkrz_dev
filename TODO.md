@@ -20,11 +20,11 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 完了したものは末尾の「完了 (記録として残す)」へ移す。
 
-## 現況 (2026-09-01 時点)
+## 現況 (2026-09-04 時点)
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 15 | Elements/UI 4 (高 1) / エンジン基盤 8 / ビルド・運用 3 |
+| 予定・未着手 | 13 | Elements/UI 2 (高 1) / エンジン基盤 8 / ビルド・運用 3 |
 | 将来課題 | 8 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
@@ -47,8 +47,14 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 > 入れ直すこと**で、theme が families を string_view で所有せずに持つのに
 > engine 側が実体を static な 1 本で使い回していたのが原因だった。
 
-この 2 件のほかに、同じホスト案件から出た `input_box` の 2 件 (フォーカス /
-最大長) が実運用の詰まりとして残っている。
+> 同じホスト案件から出ていた `input_box` の 2 件 (フォーカス / 最大長) は
+> 2026-09-02 に解決 (elements `de989d18`)。
+>
+> **2026-09-04: TJS クラス `Dialog` を `ElementsDialog` へ改名** (ゲーム側 TJS の
+> クラス名と実際に衝突したため。互換エイリアスなし)。あわせて `ElementsPanel` と
+> API 語彙を統一 (パネルの `open*`→`show*` / `focusById`→`focus` /
+> `activateById`→`activate`、ElementsDialog に `activate(id)` 追加)。
+> 利用側は次回更新時に追従する。
 
 ---
 
@@ -59,9 +65,9 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 優先 | 課題 | 内容 |
 |---|---|---|
 | 高 | Elements: 画面データ側で UI を完結させる | 複数のホスト案件がそれぞれ独自の UI フレームワークを書き始めているため、**UI の処理は画面データ側 (elements_modal + 画面 JSON) で完結させ、ホストは「呼ぶ / 値を供給する / アクションを実行する」だけ**にする方針へ。 実測した不足は 4 点 (画面をまたぐ変数 / 動的画像の実行時差替 / 画面契約 / 標準ロールの語彙) で、いずれも elements 側の作業。 詳細 = [TODO-elements.md](TODO-elements.md) §7 |
-| 低 | Elements の観測・操作 API を TJS へ公開 (残り) | **変数系は 2026-08-29 に公開済み** (`Dialog.getVar` / `listVars` / `onVar` / `watchVars` = elements_modal の `get_var` / `list_vars` / `set_var_watcher` に対応。src/core `fcae740b`)。 残りは **navigator の `push` / `pop` / `replace` / `stack`** と `languages`。 要素を名指しで動かす `focus_by_id` / `activate_by_id` は検証用に `Agent.dialogFocus` / `dialogClick` として出ている。 用途は検証ツールから「この画面へ飛ぶ」を実装すること。 当たり判定やフォーカスナビの確認は実入力を流す API でないと意味が無い点に注意 |
-| 中 | Elements: `input_box` にプログラム的フォーカスが効かない | `"initial_focus": true` を書いても開いた直後の打鍵が入力欄に入らない (クリックすれば入る)。`focus_by_id` / `Agent.dialogFocus` も input_box には効かない。`view->focus` 自体は動いているが **input_box の編集フォーカス (キャレット + text 受理) に変換されていない**。ホスト案件の名前入力画面 (入力欄 1 個) で実際に踏んでおり、`System.inputString` overlay (SDL) と Steam Deck の focus 駆動 OSK にも波及する。詳細 = [TODO-elements.md](TODO-elements.md) §3 |
-| 中 | Elements: `input_box` の最大長と値の差し替え口が無い | 文字数を縛る `maxlength` が無く「全角 4 文字まで」のような仕様はホスト側で決定時に切るしかない。プログラムから中身を差し替える口も無い (`text_var` が input_box に効かない) ため、同じ画面で既定値を出し分けるのに入力欄を 2 個置く回避をしている。詳細 = [TODO-elements.md](TODO-elements.md) §5-8 |
+| 低 | Elements の観測・操作 API を TJS へ公開 (残り) | **変数系は 2026-08-29 に公開済み** (`ElementsDialog.getVar` / `listVars` / `onVar` / `watchVars` = elements_modal の `get_var` / `list_vars` / `set_var_watcher` に対応。src/core `fcae740b`)。 残りは **navigator の `push` / `pop` / `replace` / `stack`** と `languages`。 要素を名指しで動かす instance 版は公開済み (`ElementsDialog.focus(id)` = 2026-09-02 / `activate(id)` = 2026-09-04。検証用の `Agent.dialogFocus` / `dialogClick` は従来どおり)。 用途は検証ツールから「この画面へ飛ぶ」を実装すること。 当たり判定やフォーカスナビの確認は実入力を流す API でないと意味が無い点に注意 |
+| ✅ | Elements: `input_box` にプログラム的フォーカスが効かない | **2026-09-02 に解決** (elements `de989d18`: `descend_focus_first` — composite 包みの内側へフォーカス連鎖を用意)。`initial_focus` / `focus_by_id` / `ElementsDialog.focus(id)` で編集フォーカス (キャレット + text 受理) になる。詳細 = [TODO-elements.md](TODO-elements.md) §3 |
+| ✅ | Elements: `input_box` の最大長と値の差し替え口が無い | **2026-09-02 に解決** (elements `de989d18`): `"max_chars"` (別名 `"maxlength"`、codepoint 単位、0/省略=無制限) を追加。既定値 (`"text"`/`"value"`) 入りは build 時全選択なので initial_focus からそのまま打つと置き換わる (差し替え口の代替)。詳細 = [TODO-elements.md](TODO-elements.md) §5-8 |
 
 ### エンジン基盤
 
@@ -146,7 +152,7 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 | ✅ | 同 **P4** (DPI ポリシー = inner の物理ピクセルサイズ維持) | WINVER の `WM_DPICHANGED` を「client 物理サイズ維持 + 位置だけ提案矩形へ」に変更 / SDL は `TVPSDLSetWindowPositionKeepingSize()` を新設してプログラム移動を全て経由させた。200%⇔100% 往復で inner 320x240 維持・枠だけ 26x71⇔16x39 を両バリアントで実測確認 |
 | ✅ | 同 **P5** (余白塗りを全バリアントへ) | `viewportBgColor` / `setViewportWallpaper` / `clearViewportWallpaper` を全バリアントで有効化。**`iTVPDrawDevice` には載せず `iTVPViewportBackgroundHost` を新設し、対応デバイスが TJS プロパティ `viewportBackgroundHost` でポインタを公開する実行時検出方式** (動画の `videoPresenterHost` と同じ規約) にしたので、**`iTVPDrawDevice` の vtable は不変 = プラグインの再ビルド不要**。`BasicDrawDevice` に D3D11 実装 (背景色クリア + 壁紙クアッド) を追加、`OGLDrawDevice` の既存実装も開放 |
 | ✅ | Steam Deck でオンスクリーンキーボードが意図せず表示される | 原因確定 (2026-08-24 実機計測): Deck (gamescope/Xwayland) では `driver=x11 / screenKB=1 / hasKB=1`。①SDL の `AutoShowingScreenKeyboard()` は環境変数 `SteamDeck=1` のとき物理キーボードの有無に関係なく無条件 true で、`SDL_StartTextInput` が即 `steam://open/keyboard` deeplink で Steam OSK を出す。②Xwayland は常にコアキーボードを提供するため `SDL_HasKeyboard()` は物理キーボード検出に使えず、旧来の「hasKB=true ならベースライン有効化して SDL が抑止してくれる」前提が崩れていた。修正 = Deck を `SDL_GetHintBoolean("SteamDeck")` で検出し、(a) `TVPUpdateBaselineTextInput` はベースライン無効化 + **focus レイヤの `imeMode != imDisable` の間だけ StartTextInput** (`SetImeMode`/`ResetImeMode` を virtual 化して SDL3WindowForm へ配線。ゲーム側入力欄は `Layer.imeMode` で OSK を呼べる)、(b) Elements は `HostHasPhysicalKeyboard()`=false で focus 駆動へ載せ、`HostScreenKeyboardIsFloating()` 新設で内蔵仮想キーボードではなく **OS 側 (Steam OSK) を使う** (NX/PS5 のブロッキングアプレット環境のみ内蔵 VK)。実機確認済み: 起動時 OSK 無し / ベース入力欄 focus で start / Elements 欄で内蔵 VK 非表示。既知の割り切り = Deck に物理キーボードを繋いでも「無し」扱い (SDL 自身と同じ)。 |
-| ✅ | System.inform / confirm / inputString の SDL overlay 化 | gamescope (Steam Deck) がセカンダリウィンドウを表示できないため、SDL 版の 3 API をゲームウィンドウ上の Elements overlay モーダルへ切替 (2026-08-24)。`DialogIntf.cpp` に `TVPInformElements` / `TVPConfirmElements` を新設、`TVPInputStringElements` は独立窓→overlay へ変更。本文は label 行の縦積み (`SplitBodyLines`。text_box / text_area は vtile との高さ折衝で末尾行が切れるため不採用)。window/DrawDevice 未初期化や overlay 起動失敗時は従来の `SDL_ShowMessageBox` へフォールバック。WINVER はネイティブ維持。**REPL 駆動中は 3 API とも従来どおり抑止/チャネル迂回される** (エージェント検証は Dialog.showModalJson で同一スケルトンを確認済み。最終挙動の目視は REPL 無し起動で行う) |
+| ✅ | System.inform / confirm / inputString の SDL overlay 化 | gamescope (Steam Deck) がセカンダリウィンドウを表示できないため、SDL 版の 3 API をゲームウィンドウ上の Elements overlay モーダルへ切替 (2026-08-24)。`DialogIntf.cpp` に `TVPInformElements` / `TVPConfirmElements` を新設、`TVPInputStringElements` は独立窓→overlay へ変更。本文は label 行の縦積み (`SplitBodyLines`。text_box / text_area は vtile との高さ折衝で末尾行が切れるため不採用)。window/DrawDevice 未初期化や overlay 起動失敗時は従来の `SDL_ShowMessageBox` へフォールバック。WINVER はネイティブ維持。**REPL 駆動中は 3 API とも従来どおり抑止/チャネル迂回される** (エージェント検証は ElementsDialog.showModalJson で同一スケルトンを確認済み。最終挙動の目視は REPL 無し起動で行う) |
 | ✅ | onTextInput イベント系の新設 (onKeyPress は WINVER 互換のみ) | 文字入力を文字列単位の `Window.onTextInput(text)` へ一斉移行 (2026-08-24)。SDL は TEXT_INPUT 1 イベント = 1 コール (IME 確定文字列はまとまる)、WINVER は WM_CHAR をサロゲート合成して併発 (制御文字は SDL パリティのため除外)。SDL では `Window.onKeyPress` は発火しない (WINVER のみ互換発火)。Layer 系へは UTF-16 分解して従来 `FireKeyPress` (`Layer.onKeyPress`) で互換配送 = **iTVPDrawDevice / LayerTreeOwner / iTVPLayerManager の vtable 不変・プラグイン再ビルド不要**。`Layer.onTextInput` の新設は DrawDevice ABI 拡張時の課題として保留。`Agent.text` は実入力と同じ経路への注入に変更 (Elements 消費→ゲーム素通しまで一致、SDL/WINVER 両実装)。demolib + softkey_ime デモを onTextInput ベースへ再構築、doc/reference/Window.md に onTextInput 追記。実測: SDL/WINVER 両方で日本語・絵文字 (サロゲートペア)・BS/Enter (onKeyDown 受け) を確認 |
 | ✅ | ブロッキング overlay モーダルのクラッシュ 2 種 (再入 + handler UAF) | System.inputString overlay の実機テストで発覚・修正 (2026-08-24、ElementsDialogManager.cpp)。①**PaintOverlay 再入**: OnAction コールバック (session->update() 中に発火) からネストモーダルの pump が回ると PaintOverlay が再帰し、 ネスト側の teardown (instances erase) が外側 range-for のイテレータを無効化して AV → 全フェーズを index ベース + 生存確認化し、`Instance::in_update` ガードで update 再入とスタック上インスタンスの teardown を抑止。②**handler use-after-free**: finish → teardown は次フレームへ遅延されるが pump は先に脱出するため、 スタック上の短命 handler 解放後に `OnClosed` が飛んで AV → `FlushPendingTeardowns()` 新設、 pump 脱出直後 (SDL/WINVER 両ランナー) に同期破棄。 ③付随修正: WINVER の WM_CHAR 由来制御文字 (BS=0x08 等) を `ForwardKeyPress` がテキストとして input_box に挿入し「BS で消えない」症状 → 制御文字はテキスト転送しない (キーイベント側で処理済み)。 ④**paint 中 OnAction からのブロッキングモーダルが描画不能で固まる**: PaintOverlay → session->update() 内から発火した button click (Deck の touch 経由等) のコールバックで System.inputString を呼ぶと、 nested pump が window update の再入禁止 (`TVPDeliverWindowUpdateEvents` のグローバルフラグ) に阻まれ一切描画されないまま入力だけブロック (Deck 実機で再現、pump 診断ログで確定) → **bridge の OnAction 配送を manager の `DispatchAction` に一本化し、 paint 深度 > 0 のときはキューに積んで continuous イベントフック (window update の外) から配送** (`QueueOrDispatchAction` / `DrainPendingActions`。 入力経路発火の action は従来どおり即時)。 ⑤付随: REPL 中の System.inform/confirm/inputString は「モーダル応答チャネル (-replfile) があるときだけ非ブロッキング迂回、 無い REPL (-replweb / console) は実 UI へフォールスルー」に変更 (generic + win32 の SystemImpl。 Deck の replweb 運用でダイアログが出るように)。 いずれも実機 (SDL Windows/WINVER/Deck) で修正確認済み |
 
@@ -163,11 +169,11 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
   src/core `c6444966`)
   多言語 UI で表示言語に応じて JP/TC/SC 等のフォントを自動で差し替える
   (共有コードポイントの漢字を正しい地域字形で描画)。宣言は画面 JSON /
-  app.jsonc top-level / `Dialog.fontLanguages` の 3 系統、widget 明示
+  app.jsonc top-level / `ElementsDialog.fontLanguages` の 3 系統、widget 明示
   `"locale"` で個別固定可、`#tag=val` 軸サフィックス温存。実装は elements
   フォント層に一元化 (krkrz は submodule bump + TJS プロパティのみ)。
   設計 SSOT = [src/core/doc/FontEngine.md](src/core/doc/FontEngine.md)
-  「言語連動フォント置換」節、ガイド = [doc/guide/Dialog.md](doc/guide/Dialog.md)。
+  「言語連動フォント置換」節、ガイド = [doc/guide/ElementsDialog.md](doc/guide/ElementsDialog.md)。
   既知の制限 (text_area 非追従 / グローバル表) も同節に記載
 - ✅ 設定ファイル (`.cf` / `.cfu`) の行正規化と、デスクトップ SDL の探索規約を
   WINVER へ統一 (src/core `43a0a827`)
@@ -243,7 +249,7 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
   theme の書体の並びを疑う**。詳細 = [TODO-elements.md](TODO-elements.md) §6
 - ✅ Elements 画面資材そのまま移植の拡張要望 7 件 (elements `365bc122` / `a2a36319`
   / `06c39b99` / `bd7b607d` / src/core `fcae740b` / `7352157f`)
-  変数の読出と変化通知 (`Dialog.getVar` / `listVars` / `onVar` / `watchVars`)、
+  変数の読出と変化通知 (`ElementsDialog.getVar` / `listVars` / `onVar` / `watchVars`)、
   行テンプレート方式の一覧 `list`、スクロールバー `atlas_scrollbar`、つまみの
   9-slice と `at_var_offset`、named action の通知形をドキュメント化。OS フォントの
   family→ファイル解決 (5-7) は engine 側の課題として見送り。

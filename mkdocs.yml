@@ -139,7 +139,8 @@ nav:
       - reference/AsyncTrigger.md
       - reference/Bitmap.md
       - reference/BitmapLayerTreeOwner.md
-      - reference/Dialog.md
+      - reference/ElementsDialog.md
+      - reference/ElementsPanel.md
       - reference/Font.md
       - reference/ImageFunction.md
       - reference/Layer.md

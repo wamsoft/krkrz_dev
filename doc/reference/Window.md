@@ -2234,7 +2234,7 @@ Ctrlキーと同時に押された場合は、以下に示すようなコント�
 ( BS / Enter / Tab / Esc 等 ) はこのイベントへは流れません
 ( [onKeyDown](#onkeydown) / onKeyPress で受けてください )。
 
-[Dialog](Dialog.md) のテキスト入力欄がフォーカスを持っている間は、
+[ElementsDialog](ElementsDialog.md) のテキスト入力欄がフォーカスを持っている間は、
 ダイアログ側が入力を消費するのでこのイベントは発生しません。
 
 **プラットフォームによる差異**

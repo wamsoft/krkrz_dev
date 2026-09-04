@@ -308,16 +308,16 @@ var r = layer.drawVerticalTextArea(20, 20, 400, 560, text, 0x000000,
 
 ## UI 系 (Elements) と layerExVector のフォント
 
-- **Elements ダイアログ** ([ダイアログ](Dialog.md)) のテキストは glyphware で
+- **Elements ダイアログ** ([ダイアログ](ElementsDialog.md)) のテキストは glyphware で
   描画されます。テーマフォントには埋め込みフォント (Roboto / Noto Sans JP /
   Noto Emoji) が自動登録され、追加フォントは
-  `Dialog.registerFont(family, storage[, weight, slant, stretch])` /
-  `Dialog.registerFontDir(dir)` で登録します。ストレージパス (XP3 内・
+  `ElementsDialog.registerFont(family, storage[, weight, slant, stretch])` /
+  `ElementsDialog.registerFontDir(dir)` で登録します。ストレージパス (XP3 内・
   `resource://` 含む) をそのまま渡せます。多言語 UI で表示言語ごとに
   フォント (JP/TC/SC 等) を自動で切り替えるには
-  [Dialog.fontLanguages](../reference/Dialog.md#fontlanguages)
+  [ElementsDialog.fontLanguages](../reference/ElementsDialog.md#fontlanguages)
   (言語連動フォント置換) を使います
-  ([ダイアログ](Dialog.md) の「言語連動フォント置換」節参照)。
+  ([ダイアログ](ElementsDialog.md) の「言語連動フォント置換」節参照)。
 - 矩形への流し込みは**折り返しロジックも共有**します。ダイアログの
   `text_area` ウィジェットは上記 `drawShapedTextArea` と同じ折り返し・
   行頭行末禁則・クラスタ単位の文字送りを通るため、同じ本文・同じ幅なら
@@ -359,6 +359,6 @@ tp_stub にフォントサービス API (`TVPCreateFontStream` / `TVPFontAcquire
 ## 関連資料
 
 - リファレンス: [Font](../reference/Font.md) / [Layer](../reference/Layer.md)
-- [ダイアログ (Elements)](Dialog.md)
+- [ダイアログ (Elements)](ElementsDialog.md)
 - レンダリング済みフォント: [FontMaker](FontMaker.md)
 - エンジン内部実装 (開発者向け): `src/core/doc/FontEngine.md`
