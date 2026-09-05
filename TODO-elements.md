@@ -498,7 +498,25 @@ elements 側は今のままでよい。
 
 ---
 
-## 7. 画面データ側で UI を完結させるための不足 (優先度: 高。 未着手)
+## 7. 画面データ側で UI を完結させるための不足 — ✅ 対応済み (2026-09-05)
+
+> **完了記録**: 4 点すべて elements / elements_console 側で実装済み。
+> engine (`src/core`) 側は 2026-09-06 に submodule ref を上げ、
+> ホスト向け API を TJS へ公開した。
+>
+> | | 内容 | 実装 |
+> |---|---|---|
+> | 7-1 | 画面をまたぐ共有変数 | 画面 JSON の `"shared_vars": ["cfg_*"]`。ホスト API = `set_shared_var` / `shared_vars()` / `clear_shared_vars()` (elements `fc3b8f91`)。TJS からは `ElementsDialog.setSharedVar` / `getSharedVars` / `clearSharedVars` |
+> | 7-2 | 動的画像の実行時差替 | `image` の `"image_var"` (elements `e8a7c40d`) と、**差し替え可能アトラス** `"atlases": {..., "swappable": true}` + `set_atlas_image` (elements `99f24b89`)。TJS からは `ElementsDialog.setAtlasImage` / `swappableAtlases` |
+> | 7-3 | 画面契約の宣言と抽出 | elements_console `scripts/contract.py` (export 済み画面 JSON から «変数 (向き付き) + アクション» を抽出)。書式 = `docs/screen_contract.md` |
+> | 7-4 | 標準ロールの語彙 | elements_console `docs/adv_vocabulary.md` が正典。advgame / advatlas が同一契約の 2 スキン |
+>
+> あわせて 2 値トグル (`checkbox` / `toggle_button` / `slide_switch`) に
+> `"value_var"` が入り、ON/OFF もホストのコールバック無しで扱えるようになった。
+> 残りは elements_console 側の積み残し (SSOT = `docs/notes/adv_samples_plan.md`)。
+
+以下は起票時の記録。
+
 
 報告: 2026-08-29。 複数のホスト案件がそれぞれ独自の UI フレームワークを書き始めて
 いる状況を受けての方針転換。

@@ -287,9 +287,11 @@ Scripts.execStorage("mytest.tjs");      // data/ 配下 (autopath)
 
 `-nostartup` で立ち上げてから上記でテストを開始する、が基本フロー。
 
-## ドットコマンド (REPL 専用)
+## ドットコマンド
 
-`.help` で一覧。主なもの:
+`.help` で一覧。**console / `-replfile` / `-replweb` の 3 フロントすべてで使える**
+(ファイルチャネルでは先頭が `.` の行がドットコマンドとして扱われ、出力行が
+応答 JSON の `result` に改行区切りで入る)。主なもの:
 
 | コマンド | 用途 |
 |---|---|
@@ -305,9 +307,33 @@ Scripts.execStorage("mytest.tjs");      // data/ 配下 (autopath)
 | `.cap [path]` | 画面キャプチャ (`Agent.captureScreen`、省略時 agent_cap.png) |
 | `.dlg` / `.dlgclose` | ダイアログ一覧 / 全クローズ (`Agent.dialogs`/`closeAllDialogs`) |
 | `.click X Y` | (X,Y) にクリック注入 (`Agent.click`) |
+| `.watch` | 監視式の一覧を `id: 式 = 値` で表示 (表示前に全件評価) |
+| `.watch add EXPR` | 監視式を追加して即評価 (式は空白を含んでよい) |
+| `.watch rm ID` / `.watch rm all` | 監視式の削除 / 全消し |
+| `.watch edit ID EXPR` | 監視式の差し替え |
+| `.watch auto [ms/on/off]` | 自動更新の間隔 (`on`=500ms / `0`=毎フレーム / 下限 100ms) |
+| `.event [on/off/toggle]` | `System.eventDisabled` の表示 / 切替 |
 
 TJS の評価は dot で始まらない行をそのまま入力する (式・文どちらも可、
 括弧/クォートが閉じるまで複数行継続)。
+
+### 監視式 (`.watch`) — 状態を張り込んで観測する
+
+吉里吉里2 のデバッグ窓「監視式」相当。**毎回同じ式を打ち直さずに状態を見張る**
+ための道具で、値の変化を追う検証に向く。
+
+```
+.watch add win.layer.left
+.watch add ElementsDialog.modalActive
+.watch auto 500      # 自動更新 (0 = 毎フレーム / off で停止)
+.watch               # 一覧 (表示前に全件評価する)
+```
+
+- 評価コンテキストは **global 固定**。式が例外を投げても
+  `(error) <メッセージ>` を**値として**並べるだけで、REPL もアプリも死なない。
+- **一覧表示は評価を伴う**ので、「自動更新だけで評価されたか」を確かめたいときは
+  副作用のある式 (カウンタを増やす等) を仕込んで別コマンドで読む。
+- 式リストは**セッション限り** (永続化しない)。
 
 ## 典型ワークフロー (エージェント)
 

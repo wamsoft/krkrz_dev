@@ -14,28 +14,26 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | フォントエンジン (可変軸・glyphware 統合) | [src/core/doc/FontEngine.md](src/core/doc/FontEngine.md) |
 | WINVER モダン化 | [src/core/doc/ModernizationRoadmap.md](src/core/doc/ModernizationRoadmap.md) |
 | 動画 (Media Foundation 移行) | [src/core/doc/MovieMFMigration.md](src/core/doc/MovieMFMigration.md) |
-| 吉里吉里2 デバッグ窓 (監視式/コントローラ/編集パッド) の REPL・Web 復活 | [src/core/doc/DebugToolsRevival.md](src/core/doc/DebugToolsRevival.md) |
+| 吉里吉里2 デバッグ窓 (監視式/コントローラ/編集パッド) の REPL・Web 復活 | [src/core/doc/DebugToolsRevival.md](src/core/doc/DebugToolsRevival.md) (P1 = 監視式コア + `.watch` / `.event` は 2026-09-06 に実装済み。P2 以降が残り) |
 | リファレンスとコードの差分 | [doc/_missing.md](doc/_missing.md) (生成物。現在 0 件) |
 | ✅ Claude Code スキルの配布形 (install.sh) | [tools/skills/TODO-skills.md](tools/skills/TODO-skills.md) (切れリンク 0 件に解消済み) |
 
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 完了したものは末尾の「完了 (記録として残す)」へ移す。
 
-## 現況 (2026-09-04 時点)
+## 現況 (2026-09-06 時点)
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 13 | Elements/UI 2 (高 1) / エンジン基盤 8 / ビルド・運用 3 |
+| 予定・未着手 | 12 | Elements/UI 1 (低) / エンジン基盤 8 / ビルド・運用 3 |
 | 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
 | デモ整備 | 10 + 1 | 未着手デモは多くが資材待ち |
 
-**いま効いている焦点は Elements / UI の 1 件** (優先度 高、ホスト案件の
-画面が実際に困っている):
-
-1. **画面データ側で UI を完結させる (不足 4 点)** — 複数のホスト案件が
-   それぞれ独自の UI フレームワークを書き始めているのを止めるための整備
+**優先度「高」の項目は現在ゼロ**。最後まで残っていた
+「画面データ側で UI を完結させる (不足 4 点)」は 2026-09-05 に elements 側で
+実装が揃い、2026-09-06 に engine 側 (submodule ref + TJS API 公開) も済んだ。
 
 > 「**overlay の出力先をホストのレイヤへ**」は 2026-09-01 に対応
 > (`ElementsPanel`)。overlay が常に最前面でレイヤツリーの外にいるという制約を
@@ -65,7 +63,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
-| 高 | Elements: 画面データ側で UI を完結させる | 複数のホスト案件がそれぞれ独自の UI フレームワークを書き始めているため、**UI の処理は画面データ側 (elements_modal + 画面 JSON) で完結させ、ホストは「呼ぶ / 値を供給する / アクションを実行する」だけ**にする方針へ。 実測した不足は 4 点 (画面をまたぐ変数 / 動的画像の実行時差替 / 画面契約 / 標準ロールの語彙) で、いずれも elements 側の作業。 詳細 = [TODO-elements.md](TODO-elements.md) §7 |
+| ✅ | Elements: 画面データ側で UI を完結させる | **2026-09-05 に 4 点すべて対応** (画面をまたぐ変数 = `"shared_vars"` / 動的画像の実行時差替 = `"image_var"` + 差し替え可能アトラス / 画面契約 = `contract.py` / 標準ロールの語彙 = `adv_vocabulary.md`)。 engine 側は 2026-09-06 に submodule ref を上げ、ホスト向け API を TJS へ公開 (`ElementsDialog.setSharedVar` / `getSharedVars` / `clearSharedVars` / `setAtlasImage` / `swappableAtlases`)。 詳細 = [TODO-elements.md](TODO-elements.md) §7 |
 | 低 | Elements の観測・操作 API を TJS へ公開 (残り) | **変数系は 2026-08-29 に公開済み** (`ElementsDialog.getVar` / `listVars` / `onVar` / `watchVars` = elements_modal の `get_var` / `list_vars` / `set_var_watcher` に対応。src/core `fcae740b`)。 残りは **navigator の `push` / `pop` / `replace` / `stack`** と `languages`。 要素を名指しで動かす instance 版は公開済み (`ElementsDialog.focus(id)` = 2026-09-02 / `activate(id)` = 2026-09-04。検証用の `Agent.dialogFocus` / `dialogClick` は従来どおり)。 用途は検証ツールから「この画面へ飛ぶ」を実装すること。 当たり判定やフォーカスナビの確認は実入力を流す API でないと意味が無い点に注意 |
 | ✅ | Elements: `input_box` にプログラム的フォーカスが効かない | **2026-09-02 に解決** (elements `de989d18`: `descend_focus_first` — composite 包みの内側へフォーカス連鎖を用意)。`initial_focus` / `focus_by_id` / `ElementsDialog.focus(id)` で編集フォーカス (キャレット + text 受理) になる。詳細 = [TODO-elements.md](TODO-elements.md) §3 |
 | ✅ | Elements: `input_box` の最大長と値の差し替え口が無い | **2026-09-02 に解決** (elements `de989d18`): `"max_chars"` (別名 `"maxlength"`、codepoint 単位、0/省略=無制限) を追加。既定値 (`"text"`/`"value"`) 入りは build 時全選択なので initial_focus からそのまま打つと置き換わる (差し替え口の代替)。詳細 = [TODO-elements.md](TODO-elements.md) §5-8 |

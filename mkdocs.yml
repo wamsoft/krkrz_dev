@@ -89,7 +89,7 @@ nav:
       - 3Dグラフィックシステム: guide/Graphic3DSystem.md
       - サウンドシステム: guide/SoundSystem.md
       - ストレージシステム: guide/StorageSystem.md
-      - ダイアログ: guide/Dialog.md
+      - ダイアログ: guide/ElementsDialog.md
       - フォントシステム: guide/FontSystem.md
       - トランジション: guide/Transition.md
       - プラグイン: guide/Plugins.md

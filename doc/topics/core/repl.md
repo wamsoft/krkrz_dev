@@ -49,9 +49,21 @@ krkrz64 -repl data/    # Win32 版 (親コンソールに AttachConsole)
 | `.dlg` | アクティブダイアログ一覧 |
 | `.dlgclose` | 最前面ダイアログを閉じる |
 | `.click <index> <id>` | id 指定の widget を起動 ( Enter 相当 ) |
+| `.watch` | 監視式の一覧を `id: 式 = 値` で表示 ( 表示前に全件評価 ) |
+| `.watch add EXPR` | 監視式を追加して即評価 |
+| `.watch rm ID` / `.watch rm all` | 監視式の削除 / 全消し |
+| `.watch edit ID EXPR` | 監視式の差し替え |
+| `.watch auto [ms\|on\|off]` | 自動更新の間隔を表示 / 設定 ( `on` = 500ms、`0` = 毎フレーム、下限 100ms ) |
+| `.event [on\|off\|toggle]` | `System.eventDisabled` の表示 / 切替 |
 
 メモリ系コマンドの詳細は [メモリ観測ガイド](memory_observation.md)、パッド
 オーバレイの詳細は [PadOverlay](pad_overlay.md) を参照してください。
+
+`.watch` は吉里吉里2 が本体に持っていたデバッグ窓「監視式」に相当します。
+式を登録しておくと、`.watch` を打つたび ( または自動更新の間隔ごとに ) まとめて
+評価して式と値を並べます。評価コンテキストは global 固定で、式が例外を投げても
+`(error) <メッセージ>` を**値として**表示するだけなので、監視式が 1 本壊れても
+REPL もアプリも死にません。式リストは**セッション限り**で永続化しません。
 
 ---
 
@@ -86,6 +98,10 @@ krkrz -replfile=./replbus data/
 ヘッドレスな自動テストや、別プロセスのエージェントから krkrz を制御
 する用途を想定しています。プロトコル詳細は src/core 側のドキュメントを
 参照してください。
+
+先頭が `.` の行は**特殊コマンド**として扱われ、コンソール REPL と同じ出力が
+応答 JSON の `result` に入ります ( `.watch` / `.mem` / `.cap` などをそのまま
+エージェントから叩けます )。
 
 ---
 
