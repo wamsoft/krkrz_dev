@@ -14,6 +14,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | フォントエンジン (可変軸・glyphware 統合) | [src/core/doc/FontEngine.md](src/core/doc/FontEngine.md) |
 | WINVER モダン化 | [src/core/doc/ModernizationRoadmap.md](src/core/doc/ModernizationRoadmap.md) |
 | 動画 (Media Foundation 移行) | [src/core/doc/MovieMFMigration.md](src/core/doc/MovieMFMigration.md) |
+| 吉里吉里2 デバッグ窓 (監視式/コントローラ/編集パッド) の REPL・Web 復活 | [src/core/doc/DebugToolsRevival.md](src/core/doc/DebugToolsRevival.md) |
 | リファレンスとコードの差分 | [doc/_missing.md](doc/_missing.md) (生成物。現在 0 件) |
 | ✅ Claude Code スキルの配布形 (install.sh) | [tools/skills/TODO-skills.md](tools/skills/TODO-skills.md) (切れリンク 0 件に解消済み) |
 
