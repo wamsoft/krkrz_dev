@@ -115,7 +115,7 @@ layerExDraw
 menu
 msgreceiver
 stdio
-#resourceRW
+resourceRW
 win32dialog
 windowEx
 httprequest
@@ -138,6 +138,7 @@ win32ole
 # ----------------------------------------------------
 list(APPEND TVP_PLUGINS
 getLangName     # getLangName.dll   (CMakeLists 既存)
+layerMultiStore # layerMultiStore.dll (立ち絵パック等の多重画像保存。CMake化 2026-09-05)
 lzfs            # lzfs.dll
 msdfrender      # msdfrender.dll    (GDIフォント使用: Plugin.cpp/kzbackport)
 xlsxWriter      # xlsxWriter.dll    (Excel 読み書き。libxlsxwriter/openxlsx/zlib 同梱, CMake化+x64対応 2026-07-27)
