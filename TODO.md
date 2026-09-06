@@ -27,9 +27,15 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 |---|---|---|
 | 予定・未着手 | 12 | Elements/UI 1 (低) / エンジン基盤 8 / ビルド・運用 3 |
 | 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
-| 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 |
+| 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
 | デモ整備 | 10 + 1 | 未着手デモは多くが資材待ち |
+
+### 次のリリースで移行メモに書くこと
+
+[Versioning.md](src/core/doc/Versioning.md) の「移行メモ」= サマリとタグメッセージの冒頭に置く一覧。 リリース枝へ反映するときに拾う。
+
+- **`RegExp.index` の修正 (src/core `ea363abc`)** — これまで検索開始位置より後ろでマッチすると `index` が `Start + 2×相対オフセット` にずれていた。正しい文字位置を返すようになったので、`index` のずれを前提に補正しているスクリプトがあれば影響する (詳細は末尾の完了欄)。
 
 **優先度「高」の項目は現在ゼロ**。最後まで残っていた
 「画面データ側で UI を完結させる (不足 4 点)」は 2026-09-05 に elements 側で
@@ -145,6 +151,8 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
+| ✅ | `RegExp.index` がマッチ開始位置よりずれる | **原因**: `tjsRegExp.cpp` の `tTJSNC_RegExp::Exec` で `Index` にだけ `/sizeof(tjs_char)` が抜けていた (Oniguruma の `region->beg/end` はバイトオフセット。同じ関数内の `LastIndex` / `LastMatch` / `LastParen` / `LeftContext` は全て割っていた)。UTF-16 なので `Start + 2×相対オフセット` になる。**検索開始位置より後ろでマッチした全ケース**が対象で、`/g` の 2 個目以降だけでなく非 `/g` でも `/b/.exec("aab")` が 4 (正 2) だった。修正 = 該当行に `/sizeof(tjs_char)` を足すだけ (src/core `ea363abc`)。実測: `\[([^\]]*)\]` を `"[a]-[bb]--[c]"` に回して 0 / 4 / 10。**★ TJS の挙動変更なのでリリース時の移行メモに載せること** (`index` を `lastIndex - matches[0].length` で逆算する回避をしているスクリプトがあれば影響する) |
+| ✅ | `POST /pad/exec` が最初の文しか実行しない | **原因**: `ReplMainQueue::Drain()` の «式か文か» 判定が式優先で、`CompileScript(..., isexpression=true)` は `式; 残り...` でも**先頭の式だけ読んで成功を返す**ため式パスに入り、2 文目以降が黙って捨てられていた。修正 = `Submit` に `ExecMode` を追加し、`/pad/exec` は **`Script` (文として通るなら文)** を渡す (src/core `ea363abc`)。`ExecMode::Expression` が既定なので console / `-replfile` / `/cmd` は挙動不変。`1+2` のような «文にならない単発の式» は式パスへ落ちるので pad でも値が返る。あわせて判定プローブ中は TJS コンソールを外し、外れた側の「文法エラーです」が偽ログとして出ないようにした |
 | 中 | ✅ バリアブルフォント (可変軸) の TJS 露出 (P0〜P5) | **全実装済** (P0〜P4 = src/core b48ba3bc 2026-08-23、P5 = src/core 83482f08 2026-08-24)。`Font.weight` / `Font.variations` / `Font.defaultUseVarStyle` / `Font.getVarAxes` / `getFontInfo` の axes・namedInstances / `fonts.json` の `axes`・`instance` 宣言 / `#tag=val` サフィックス表記 (Font.face トークン・Elements JSON "font"・gw ブリッジキーで一様)。glyphware 経路 (`rasterizer=2` の drawText + drawShapedText 系 + Elements) のみ。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「バリアブルフォント (可変軸) の全体展開」 |
 | ✅ | Window ジオメトリ仕様の統一 **P1** | DestRect 算出を `TVPCalcViewportDestRect` 共通計算へ + viewport の配置 API を全バリアント公開 + WINVER 入力座標の DestRect オフセット対応。等価変換で**挙動不変を実測確認済**。SSOT = [WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | ✅ | 同 **P2** | WINVER `setZoom` が `SetInnerSize(layer×zoom)` を行うようになり (旧 WIN / SDL と同じ意味論)、既定 align も両バリアント中央に統一。倍率・入力座標・フルスクリーン往復・KAG3 相当の呼び方を実測確認済 |
