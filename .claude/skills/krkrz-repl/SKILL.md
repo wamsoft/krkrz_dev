@@ -57,7 +57,7 @@ SDL3 専用として残るのは起動時 UserConfig UI (`-userconf`、ゲーム
 |---|---|
 | `-repl` | console REPL (CONIN$ 直読み) を起動。人間の対話向け。`-repl=no/off/false/0` で抑止。 |
 | `-replfile=<dir>` | **ファイルチャネルを起動 (外部エージェント向け、本命)**。`<dir>` の `cmd`/`resp` ファイルで駆動。`-repl` と独立。 |
-| `-replweb[=port]` | HTTP+SSE サーバ (既定 127.0.0.1:8899)。`GET /`=ブラウザ REPL ページ / `GET /events`=ログ SSE / `POST /cmd`=TJS 評価 / `GET /sub/<ch>`=汎用 SSE。**curl でも駆動できる** (`curl -X POST -d 'expr' http://127.0.0.1:8899/cmd`)。 |
+| `-replweb[=port]` | HTTP+SSE サーバ (既定 127.0.0.1:8899)。`GET /`=ブラウザ REPL ページ / `GET /events`=ログ SSE / `POST /cmd`=TJS 評価 / `GET /sub/<ch>`=汎用 SSE / `GET|POST /watch` + `GET /sub/watch`=監視式。**curl でも駆動できる** (`curl -X POST -d 'expr' http://127.0.0.1:8899/cmd`)。 |
 | `-nostartup` | startup.tjs の自動実行を抑止。window 無し起動でも即終了しない。明示的にスクリプトを呼んで初めて処理が始まる。`-nostartup=no/off/false/0` で無効。 |
 | `-loglevel=info` | ログレベル。コンソールに出る量を制御。`MASTER` ビルドだと既定 WARNING。 |
 | `-display=<番号\|名前>` | 起動するディスプレイ (モニタ) の指定。**マルチディスプレイ環境でメインディスプレイを占有せずに検証したいときに使う**。番号は 1 origin (Windows の `\\.\DISPLAYn` の n)、名前はモニタ名の部分一致、`primary` も可。`-display=list` で一覧をログ出力。WINVER / SDL3 両対応。 |
@@ -334,6 +334,11 @@ TJS の評価は dot で始まらない行をそのまま入力する (式・文
 - **一覧表示は評価を伴う**ので、「自動更新だけで評価されたか」を確かめたいときは
   副作用のある式 (カウンタを増やす等) を仕込んで別コマンドで読む。
 - 式リストは**セッション限り** (永続化しない)。
+- **HTTP からも同じコアを触れる** (`-replweb` 併用時):
+  `curl -s -X POST -d 'op=add&expr=…' localhost:8899/watch` /
+  `curl -s localhost:8899/watch` (評価しない。`?eval=1` で評価) /
+  `curl -N localhost:8899/sub/watch` (自動更新の push)。
+  ドットコマンドと同じリストを見るので、**片方で足して片方で観測**できる。
 
 ## 典型ワークフロー (エージェント)
 

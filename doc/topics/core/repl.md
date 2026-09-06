@@ -105,6 +105,30 @@ krkrz -replfile=./replbus data/
 
 ---
 
+## 監視式の HTTP API ( -replweb )
+
+`-replweb` を併用すると、監視式をブラウザや curl からも扱えます。
+
+| ルート | 説明 |
+|---|---|
+| `GET /watch` | 一覧 + 現在値 ( JSON )。**評価しない**のでポーリングしても安全。`?eval=1` で評価してから返す |
+| `POST /watch` | 操作 ( form-urlencoded )。`op=add&expr=…` / `op=rm&id=…` / `op=edit&id=…&expr=…` / `op=clear` / `op=interval&ms=…` / `op=eval` |
+| `GET /sub/watch` | 自動更新の push ( SSE )。値が変わったときと、評価を伴わない変更 ( 削除 / 全消し / 間隔変更 ) のとき |
+
+```bash
+curl -s -X POST -d 'op=add&expr=System.getTickCount()' localhost:8899/watch
+curl -s -X POST -d 'op=interval&ms=500'                localhost:8899/watch
+curl -N localhost:8899/sub/watch
+```
+
+応答と push は同じ形です。
+
+```json
+{"interval":500,"entries":[{"id":1,"expr":"System.getTickCount()","value":"32470","error":false}]}
+```
+
+---
+
 ## ソケットチャネル ( -replsocket / Linux 系限定 )
 
 `-replsocket=<name>` ( または環境変数 `KRKRZ_REPL_SOCKET` ) を指定すると、

@@ -105,7 +105,31 @@ es.onmessage = e => render(JSON.parse(e.data));
 | `WebServer.active` / `WebServer.url` | 稼働中か / 待受 URL |
 
 組み込みルート: `GET /` = 素の REPL ページ / `GET /events` = ログ SSE /
-`POST /cmd` = TJS 評価 / `GET /sub/<ch>` = 汎用 SSE。
+`POST /cmd` = TJS 評価 / `GET /sub/<ch>` = 汎用 SSE /
+**`GET|POST /watch` + `GET /sub/watch` = 監視式** (下記)。
+**組み込みルートは `WebServer.register` より先に判定される**ので、これらのパスは
+自前ハンドラで上書きできない (別名を使う)。
+
+### 監視式 API (`/watch`) — 状態を張り込んで観測する
+
+エンジン組み込み。式のリストを保持して、まとめて評価して返す。自前の
+インスペクターを書く前に、これで足りないか見ると早い。
+
+| ルート | 説明 |
+|---|---|
+| `GET /watch` | 一覧+現在値 (JSON)。**評価しない**のでポーリング安全。`?eval=1` で評価してから返す |
+| `POST /watch` | form-urlencoded。`op=add&expr=…` / `op=rm&id=…` / `op=edit&id=…&expr=…` / `op=clear` / `op=interval&ms=…` / `op=eval`。成功なら GET と同じ JSON |
+| `GET /sub/watch` | 自動更新の push。**値が変わったときだけ**流れる (定数式を張っても無駄な配信は出ない) |
+
+```js
+await fetch('/watch', {method:'POST', body:new URLSearchParams({op:'add', expr:'System.getTickCount()'})});
+await fetch('/watch', {method:'POST', body:new URLSearchParams({op:'interval', ms:'500'})});
+new EventSource('/sub/watch').onmessage = e => render(JSON.parse(e.data));
+```
+
+payload = `{"interval":500,"entries":[{"id":1,"expr":"…","value":"…","error":false}]}`。
+`interval` は `-1`=off / `0`=毎フレーム / 正値=ms (下限 100ms)。式が例外を投げても
+`value` が `"(error) …"` になるだけで一覧は返る。
 
 ## ハンドラ呼び出し規約
 
