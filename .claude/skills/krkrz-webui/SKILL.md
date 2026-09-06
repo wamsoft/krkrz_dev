@@ -106,7 +106,7 @@ es.onmessage = e => render(JSON.parse(e.data));
 
 組み込みルート: `GET /` = 埋め込み UI (**Console / Watch のタブ**) / `GET /events` = ログ SSE /
 `POST /cmd` = TJS 評価 / `GET /sub/<ch>` = 汎用 SSE /
-**`GET|POST /watch` + `GET /sub/watch` = 監視式** (下記)。
+**`GET|POST /watch` + `/sub/watch` = 監視式** / **`POST /pad/exec` + `GET|POST /pad/file` = Pad** / **`GET|POST /state` + `/sub/state` = コントローラ** / **`POST /bye`** (下記)。
 **組み込みルートは `WebServer.register` より先に判定される**ので、これらのパスは
 自前ハンドラで上書きできない (別名を使う)。
 
@@ -146,7 +146,17 @@ es.onmessage = e => render(JSON.parse(e.data));
 出る**ので、捨てプロファイルを使うなら `--disable-sync --no-first-run
 --no-default-browser-check` を添え、**終わったら必ずウィンドウごと片付ける**。
 
-### 監視式 API (`/watch`)### 監視式 API (`/watch`) — 状態を張り込んで観測する
+### 監視式 API (`/watch`)### Pad API (`/pad/*`) — 複数行スクリプトの実行と保存
+
+- `POST /pad/exec` — body を**まるごと 1 回**実行 (`/cmd` の 1 行実行と違い、
+  関数定義やループをそのまま流せる)。`{"ok","result","error"}`
+- `GET /pad/file?path=` — ストレージから読む (text/plain)
+- `POST /pad/file?path=` — ストレージへ書く。**既定は 403**。
+  本体を `-replwebpad=<dir>` で起動したときだけ、その接頭辞の配下へ書ける
+  (⚠ セキュリティ境界ではなく «[保存] のうっかり» を防ぐ柵。`/cmd` で任意 TJS が
+  実行できる時点で全権限は開いている)
+
+### 監視式 API (`/watch`) — 状態を張り込んで観測する
 
 エンジン組み込み。式のリストを保持して、まとめて評価して返す。自前の
 インスペクターを書く前に、これで足りないか見ると早い。
