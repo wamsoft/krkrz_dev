@@ -325,6 +325,13 @@ ElementsDialog.registerFont("MyFont-Medium", "fonts/MyFont-VF.ttf#wght=500");   
 
 ダイアログ機能は `KRKRZ_USE_ELEMENTS=ON` ( デフォルト ) でビルドされたエンジンで利用できます。SDL3 ビルドと WINVER ( Windows ネイティブ / D3D11 ) ビルドの両方に対応します。`KRKRZ_USE_ELEMENTS=OFF` でビルドした場合は [ElementsDialog](../reference/ElementsDialog.md) / [ElementsPanel](../reference/ElementsPanel.md) クラスは登録されず、ダイアログ関連のコードはリンクから除外されて実行ファイルサイズが削減されます。
 
+## 全体像と設計方針
+
+層構造 ( elements / elements_modal / krkrz 本体 / ゲーム側 ) と、
+「**UI の処理は画面データ側で完結させ、ホストは繋ぐだけ**」という方針の
+説明は [Elements UI 機構の全体像](../topics/core/elements.md) にあります。
+どの層を直せばよいか迷ったときはそちらを先に読んでください。
+
 ## 関連 API
 
 - [ElementsDialog](../reference/ElementsDialog.md) — TJS バインディングクラス
@@ -338,4 +345,8 @@ ElementsDialog.registerFont("MyFont-Medium", "fonts/MyFont-VF.ttf#wght=500");   
 - [ElementsDialog.registerHotKey](../reference/ElementsDialog.md#registerhotkey) — ホストホットキー ( ダイアログをバイパス ) / [System.registerHotKey](../reference/System.md#registerhotkey) — 最上位ホットキー ( モーダル中でも効く )
 - [ElementsDialog.baseSize](../reference/ElementsDialog.md#basesize) — UI の author 基準面サイズ / [renderScale](../reference/ElementsDialog.md#renderscale) — 描画密度
 - [ElementsDialog.registerFont](../reference/ElementsDialog.md#registerfont) / [registerFontDir](../reference/ElementsDialog.md#registerfontdir) / [defaultFontFamily](../reference/ElementsDialog.md#defaultfontfamily) — フォント登録
+- [ElementsDialog.setVar](../reference/ElementsDialog.md#setvar) / [getVar](../reference/ElementsDialog.md#getvar) / [listVars](../reference/ElementsDialog.md#listvars) / [onVar](../reference/ElementsDialog.md#onvar) / [watchVars](../reference/ElementsDialog.md#watchvars) — 画面ごとの変数ストア
+- [ElementsDialog.getSharedVars](../reference/ElementsDialog.md#getsharedvars) / [setSharedVar](../reference/ElementsDialog.md#setsharedvar) / [clearSharedVars](../reference/ElementsDialog.md#clearsharedvars) — 画面をまたぐセッション共有変数 ( セーブ / ロード用 )
+- [ElementsDialog.registerImage](../reference/ElementsDialog.md#registerimage) / [unregisterImage](../reference/ElementsDialog.md#unregisterimage) / [clearImages](../reference/ElementsDialog.md#clearimages) — 実行時画像 ( `mem://` )
+- [ElementsDialog.setAtlasImage](../reference/ElementsDialog.md#setatlasimage) / [swappableAtlases](../reference/ElementsDialog.md#swappableatlases) — 差し替え可能アトラス
 - [ElementsDialog.language](../reference/ElementsDialog.md#language) / [fontLanguages](../reference/ElementsDialog.md#fontlanguages) — i18n ( 表示言語と言語連動フォント置換 )

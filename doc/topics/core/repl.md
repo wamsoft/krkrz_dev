@@ -26,6 +26,27 @@ krkrz64 -repl data/    # Win32 版 (親コンソールに AttachConsole)
 `KRKRZ_REPL_LINE_EDIT=OFF` でビルドすれば icline 依存なしの最小モードで
 ビルドできます ( 矢印キー等の行編集機能は無効 )。
 
+### オプション一覧
+
+REPL 関連のオプションはここに集約します ( 詳細は各節、書式は
+[コマンドラインオプション](../../guide/CommandLine.md) )。いずれも独立で、
+同時指定できます。
+
+| オプション | 既定 | 内容 |
+|---|---|---|
+| `-repl[=yes\|no\|new]` | 無効 | コンソール REPL。`new` は新規コンソールを強制 |
+| `-replfile=<dir>` | 無効 | ファイルチャネル ( **エージェント駆動の本命** ) |
+| `-replsocket=<name>` | 無効 | abstract unix socket チャネル ( Linux 系 ) |
+| `-replweb[=[host:]port]` | 無効 | HTTP + SSE サーバ + ブラウザ UI ( 既定 127.0.0.1:8899 ) |
+| `-replwebopen=app\|tab\|no` | 条件付き自動 | ブラウザの自動オープン。**端末起動では既定で開かない** |
+| `-replwebidle=<秒>\|no` | **5 秒** | ブラウザが居なくなってから終了するまで |
+| `-replwebpad=<dir>` | 書込禁止 | Pad タブの [保存] を許すストレージ接頭辞 |
+| `-replwatchfile=<path>\|no` | `.krkrz_watch` | 監視式リストの保存先 |
+| `-replmodaltimeout=<秒>` | 30 | モーダル応答待ちのタイムアウト ( 0 = 無限 ) |
+
+`-nostartup` ( startup.tjs を実行しない ) と `-loglevel=` は REPL 専用では
+ありませんが、エージェント駆動でよく併用します。
+
 ---
 
 ## 主な特殊コマンド
@@ -37,6 +58,9 @@ krkrz64 -repl data/    # Win32 版 (親コンソールに AttachConsole)
 |---|---|
 | `exit` / `quit` / `Ctrl+D` | REPL を抜けてアプリを終了 |
 | `.help` | ヘルプ表示 |
+| `.clear` | 継続入力中のバッファをクリア |
+| `.depth [N]` | 結果表示の展開深さを表示 / 設定 |
+| `.compact [on\|off]` | 結果表示のコンパクトモードを切替 |
 | `.mem` | アロケータ + プロセスメモリの 1 行サマリ |
 | `.memdump` | 詳細メモリ統計をログへダンプ |
 | `.memoverlay [on\|off]` | 画面オーバレイの切替 ( SDL3 ビルド ) |
@@ -48,7 +72,7 @@ krkrz64 -repl data/    # Win32 版 (親コンソールに AttachConsole)
 | `.cap [path]` | 次フレームの実画面 ( overlay 込み ) を PNG 保存 |
 | `.dlg` | アクティブダイアログ一覧 |
 | `.dlgclose` | 最前面ダイアログを閉じる |
-| `.click <index> <id>` | id 指定の widget を起動 ( Enter 相当 ) |
+| `.click X Y` | (X,Y) にマウスクリックを注入 ( `Agent.click` ) |
 | `.watch` | 監視式の一覧を `id: 式 = 値` で表示 ( 表示前に全件評価 ) |
 | `.watch add EXPR` | 監視式を追加して即評価 |
 | `.watch rm ID` / `.watch rm all` | 監視式の削除 / 全消し |
