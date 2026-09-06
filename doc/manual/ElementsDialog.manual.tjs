@@ -58,6 +58,7 @@
  * WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利用できます
  * (非モーダル / overlay モーダル / 独立ウィンドウモーダル / フロー /
  * テキスト入力すべてに対応)。
+ * @experimental Elements ベースの UI 機構はまだ形が固まっていません。2026-09-04 にはクラス名自体を `Dialog` から改名しました ( 互換エイリアス無し )。
  */
 class ElementsDialog {
 	/**
