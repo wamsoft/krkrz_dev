@@ -237,8 +237,20 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       -replweb 稼働中は相乗り、単体なら 8900 で start。資材不要 (HTML 自作)。
       ※ マルチバイトの値は body で受ける (System.urldecode は Windows 拡張)
       ※ TJS の文字取り出しは s[i]。s[i,1] はカンマ式になり常に s[1] を返す
+      ※ 2026-09-06: 組込ルートが増えた (/watch /state /pad/* /bye)。これらは
+        register より先に判定されるので自前ハンドラでは使えない (demo は
+        /ui/ と /api/ なので影響なし)。`-replweb` 起動時のみ働くアイドル終了
+        (-replwebidle) は WebServer.start 経由では武装しない
 - [ ] ui_flow — Elements 画面遷移 (screens / navigator): 現 flowdemo.jsonc +
       menu/*.json を整理してタイトル→設定→ダイアログの一連フローに
+- [ ] **elements_gallery に «データ側で完結» の 4 点を追加** (2026-09-06 起票)。
+      2026-09-05〜06 に入った `shared_vars` (画面をまたぐ変数) / `value_var`
+      (2 値トグルの変数連動) / `image_var` (絵を変数で差し替え) / 差し替え可能
+      アトラスが、ギャラリーのどのページにも載っていない。**ホストのコールバック
+      無しで組める**のが要点なので、vars ページの続きとして「タブを渡り歩いても
+      値が戻らない」「送りボタンでサムネが変わる」を見せるのが分かりやすい。
+      ホスト側 API (`ElementsDialog.getSharedVars` 等) はセーブ用なので添える程度で
+      よい。詳細 = [ElementsDialog ガイド](../doc/guide/ElementsDialog.md)
 - [x] system_debug — デバッグ支援 (2026-08-16)。Scripts.eval + Debug.prettyPrint
       で式をその場評価、例外オブジェクト (message / trace) を種類別に確認、
       System.exceptionHandler を差し替えて未捕捉例外を自前処理 (true を返して

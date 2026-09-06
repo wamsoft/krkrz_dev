@@ -160,6 +160,9 @@ krkrz -replfile=./replbus data/
 | 接続が全部消えた | `<秒>` 後に終了 |
 
 **既定は有効 ( 5 秒 )**。`-replwebidle=no` で無効、`=<秒>` で秒数指定。
+武装するのは **`-replweb` で起動したときだけ**で、TJS の `WebServer.start()` で
+立てたサーバは武装しません ( アプリが自分で管理しているサーバを勝手に落とさない
+ため )。
 **一度でも接続が来てから武装する**ので、ブラウザを開かないエージェント駆動や
 API 面としての利用は影響を受けません。ページを閉じる際は合図 ( `POST /bye` )
 が飛ぶので、通常は 2 秒ほどで終了します。
@@ -202,6 +205,12 @@ API 面としての利用は影響を受けません。ページを閉じる際�
 | `GET /watch` | 一覧 + 現在値 ( JSON )。**評価しない**のでポーリングしても安全。`?eval=1` で評価してから返す |
 | `POST /watch` | 操作 ( form-urlencoded )。`op=add&expr=…` / `op=rm&id=…` / `op=edit&id=…&expr=…` / `op=clear` / `op=interval&ms=…` / `op=eval` |
 | `GET /sub/watch` | 自動更新の push ( SSE )。値が変わったときと、評価を伴わない変更 ( 削除 / 全消し / 間隔変更 ) のとき |
+
+!!! warning "組み込みルートは register より先に判定されます"
+    `/` `/events` `/cmd` `/sub/<ch>` `/watch` `/state` `/pad/exec` `/pad/file`
+    `/bye` は [WebServer.register](../../reference/WebServer.md#register) /
+    [serveStatic](../../reference/WebServer.md#servestatic) で**上書きできません**。
+    自前のエンドポイントには別の接頭辞 ( `/api/` `/ui/` 等 ) を使ってください。
 
 ```bash
 curl -s -X POST -d 'op=add&expr=System.getTickCount()' localhost:8899/watch
