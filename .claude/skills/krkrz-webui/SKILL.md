@@ -104,11 +104,24 @@ es.onmessage = e => render(JSON.parse(e.data));
 | `WebServer.openBrowser([url [, appMode=true]])` | url をブラウザで開く。appMode 時 Edge/Chrome を `--app` で試し不可なら既定ブラウザへ。url 省略で稼働中 URL。**SDL 版でもアプリモード可** |
 | `WebServer.active` / `WebServer.url` | 稼働中か / 待受 URL |
 
-組み込みルート: `GET /` = 素の REPL ページ / `GET /events` = ログ SSE /
+組み込みルート: `GET /` = 埋め込み UI (**Console / Watch のタブ**) / `GET /events` = ログ SSE /
 `POST /cmd` = TJS 評価 / `GET /sub/<ch>` = 汎用 SSE /
 **`GET|POST /watch` + `GET /sub/watch` = 監視式** (下記)。
 **組み込みルートは `WebServer.register` より先に判定される**ので、これらのパスは
 自前ハンドラで上書きできない (別名を使う)。
+
+### ブラウザを閉じたらアプリも終わる (`-replwebidle=<秒>`)
+
+ブラウザを UI にした構成 (`--app` 起動) では、**ウィンドウを閉じたのに本体だけ
+残る**のが実用上こたえる。`-replwebidle=<秒>` で「SSE 購読が 0 本の状態が
+`<秒>` 続いたら終了」の見張りが付く。
+
+- 既定 **0 = 無効**。エージェント駆動 (ブラウザを開かない) を巻き込まないため
+- **一度でも購読が来てから武装する**ので、開く前には落ちない
+- 検知は SSE ハートビート依存なので実際の終了は最大 2 倍遅れる
+  (`=5` → 閉じてから 5〜10 秒)
+- **自前 UI でも効く**。判定は `/sub/<ch>` を含む SSE 購読数なので、
+  `EventSource` を 1 本張っておけばそれが「ブラウザが居る」印になる
 
 ### 監視式 API (`/watch`) — 状態を張り込んで観測する
 
