@@ -32,6 +32,7 @@
 - [描画スレッドプール利用率の計測 (DrawStats)](core/draw_stats.md)
 - [ゲームパッド状態の観察 (PadOverlay)](core/pad_overlay.md)
 - [REPL (対話型 TJS シェル)](core/repl.md)
+- [Steam Deck 実機確認 (リリース前チェック)](core/steamdeck.md)
 - [ログ出力](core/logging.md)
 
 ---
