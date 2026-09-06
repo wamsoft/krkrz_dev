@@ -924,11 +924,13 @@
       "broadcast",
       "openBrowser",
       "register",
+      "registerPanel",
       "serveStatic",
       "start",
       "startAt",
       "stop",
       "unregister",
+      "unregisterPanel",
       "unserveStatic"
     ],
     "properties": [

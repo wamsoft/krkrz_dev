@@ -38,6 +38,7 @@ WebServer クラスは吉里吉里Z に組み込まれた HTTP + SSE サーバ�
 - `GET`/`POST /watch`  ... 監視式の取得 / 操作
 - `GET`/`POST /state`  ... コントローラ ( `System.eventDisabled` / 終了要求 )
 - `POST /pad/exec` , `GET`/`POST /pad/file` ... Pad ( スクリプトエディタ )
+- `GET /panels`      ... 登録されたパネルの一覧 ( 組み込み UI がタブを組むのに使う )
 - `POST /bye`          ... ページを閉じる合図
 
 !!! warning "組み込みルートは register より先に判定されます"
@@ -66,6 +67,8 @@ WebServer クラスは吉里吉里Z に組み込まれた HTTP + SSE サーバ�
 ### メソッド
 
 - [register](#register)
+- [registerPanel](#registerpanel)
+- [unregisterPanel](#unregisterpanel)
 - [unregister](#unregister)
 - [serveStatic](#servestatic)
 - [unserveStatic](#unservestatic)
@@ -125,6 +128,72 @@ WebServer クラスは吉里吉里Z に組み込まれた HTTP + SSE サーバ�
 行われます。同一の prefix に登録した場合は上書きされます。
 
 **関連:** [WebServer.unregister](WebServer.md#unregister)
+
+---
+
+### registerPanel
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `id` | `&nbsp;` | パネルの識別子。上書き・解除のキーになります。 |
+| `label` | `&nbsp;` | タブに表示する名前。 |
+| `path` | `&nbsp;` | パネルの中身の URL パス。**`/` で始まるサーバ上のパス**を<br>指定します ( ローカルのファイルパスではありません )。不正な場合は<br>登録されず、理由がログへ出ます。 |
+
+**解説**
+
+組み込み UI へパネル ( タブ ) を追加する
+
+`-replweb` の組み込みブラウザ UI ( Console / Watch / Pad ) の右へ、
+**案件独自のパネルをタブとして 1 枚足します**。自前のページを
+[serveStatic](WebServer.md#servestatic) で配信しておき、そのパスを
+`path` に渡します。
+
+中身は **iframe で読み込まれます**。組み込みページへスクリプトを差し込む
+方式にしていないのは、案件を組み込み UI の内部 DOM へ依存させないためです
+( こちらの UI を変えるたびに案件が壊れる、を避ける )。パネルは同一
+オリジンなので、`fetch` や `EventSource` でサーバを自由に叩けます
+( 組み込みの `/cmd` `/watch` `/pad/exec` や、自分で
+[register](WebServer.md#register) したエンドポイント )。
+
+同じ `id` で呼び直すと上書きされます。登録・解除は**開いているページへ
+即座に反映**されます ( タブが増減する )。パネルの中身は**そのタブを初めて
+開いたときに読み込まれる**ので、重いツールを登録しても起動は遅くなりません。
+
+```tjs
+WebServer.serveStatic("/tool/", "web/");
+WebServer.registerPanel("mytool", "案件ツール", "/tool/tool.html");
+```
+
+**関連:** [WebServer.unregisterPanel](WebServer.md#unregisterpanel)
+
+---
+
+### unregisterPanel
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `id` | `&nbsp;` | 削除するパネルの識別子。 |
+
+**戻り値**
+
+パネルが見つかって削除できた場合は 1、見つからなかった場合は 0 が返ります。
+
+**解説**
+
+組み込み UI からパネルを外す
+
+[registerPanel](WebServer.md#registerpanel) で追加したタブを削除します。
+開いているページからも即座に消えます。
+
+**関連:** [WebServer.registerPanel](WebServer.md#registerpanel)
 
 ---
 

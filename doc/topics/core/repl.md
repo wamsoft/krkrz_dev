@@ -142,6 +142,19 @@ krkrz -replfile=./replbus data/
 | Watch | 監視式の表 ( 式 / 値 ) + 追加・削除・インライン編集 ( ダブルクリック ) + 自動更新間隔 |
 | Pad | スクリプトエディタ。複数行を Ctrl+Enter で実行、ストレージへの読込 / 保存 |
 
+**案件独自のパネルをタブとして足せます** ( `WebServer.registerPanel` )。自前の
+ページを `serveStatic` で配信しておき、そのパスを渡すと組み込みタブの右へ
+並びます。中身は iframe なので組み込み UI の内部構造に依存せず、パネル側からは
+同一オリジンで `/cmd` `/watch` `/pad/exec` や自前エンドポイントを叩けます。
+
+```tjs
+WebServer.serveStatic("/tool/", "web/");
+WebServer.registerPanel("mytool", "案件ツール", "/tool/tool.html");
+```
+
+自前ページを丸ごと立てる ( `serveStatic` だけ ) と Console / Watch / Pad と
+コントローラを失うので、**観測パネルを足したいだけならこちらが向きます**。
+
 本体埋め込みなので `-replweb` だけで完結します ( プラグインもスクリプトも不要 )。
 自前 UI に差し替えたい場合は `WebServer.serveStatic` を使ってください。
 
