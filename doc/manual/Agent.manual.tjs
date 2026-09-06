@@ -6,6 +6,7 @@
  * このクラスは REPL 機能が有効なとき ( コマンドラインオプションの `-repl` / `-replfile` / `-replweb` のいずれか ) かつ Elements を有効にしたビルドでのみ利用できます ( REPL 駆動については REPL.md を参照 )。
  *
  * 座標はすべて論理座標で指定します。`shift` 引数はシフト状態のビットフラグで、既定値は 0 です。`button` 引数は 0 = 左ボタン / 1 = 右ボタン / 2 = 中ボタンです。`vk` 引数は仮想キーコードの数値です。ダイアログ系のメソッド ( `dialogs` / `dialogTree` / `closeDialog` / `closeAllDialogs` / `dialogClick` / `dialogFocus` / `text` ) は Elements を有効にしたビルドでのみ動作します。
+ * @experimental 開発・検証用の API です。REPL / デバッグ窓の整備にあわせて変わります。
  */
 class Agent {
 	/**

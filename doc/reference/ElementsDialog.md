@@ -1,5 +1,13 @@
 # ElementsDialog
 
+!!! warning "実験中 ( 安定保証の対象外 )"
+    この API はまだ形が固まっていません。**予告なく変更・削除される
+    ことがあります** ( 非互換変更でもメジャー番号は上がりません )。
+    版の上げ方は [バージョン運用](https://github.com/wamsoft/krkrz_develop/blob/master/doc/Versioning.md)
+    を参照してください。
+
+    Elements ベースの UI 機構はまだ形が固まっていません。2026-09-04 にはクラス名自体を `Dialog` から改名しました ( 互換エイリアス無し )。
+
 ElementsDialog クラスは、Elements ベースの汎用ダイアログを TJS から駆動するための
 
 クラスです ( SDL3 / WINVER 両ビルド対応 )。
