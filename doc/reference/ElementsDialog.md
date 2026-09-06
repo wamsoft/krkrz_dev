@@ -1,6 +1,6 @@
-# Dialog
+# ElementsDialog
 
-Dialog クラスは、Elements ベースの汎用ダイアログを TJS から駆動するための
+ElementsDialog クラスは、Elements ベースの汎用ダイアログを TJS から駆動するための
 
 クラスです ( SDL3 / WINVER 両ビルド対応 )。
 
@@ -56,8 +56,8 @@ text_box / text_area / vtile / htile / vspacer / hspacer 等 ) や属性、
 折り返しは全文で確定済みなので送ってもリフローしません
 ( 字幕やセリフ窓向け。従来からある `text_box` は互換のためそのまま )。
 
-`KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では Dialog クラスは利用できません。
-WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用できます
+`KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では ElementsDialog クラスは利用できません。
+WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利用できます
 (非モーダル / overlay モーダル / 独立ウィンドウモーダル / フロー /
 テキスト入力すべてに対応)。
 
@@ -65,17 +65,20 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 
 ### コンストラクタ
 
-- [Dialog](#dialog)
+- [ElementsDialog](#elementsdialog)
 
 ### プロパティ
 
 - [defaultFontFamily](#defaultfontfamily)
 - [active](#active)
+- [modalActive](#modalactive)
+- [watchVars](#watchvars)
 - [language](#language)
 - [fontLanguages](#fontlanguages)
 - [virtualKeyboard](#virtualkeyboard)
 - [hasPhysicalKeyboard](#hasphysicalkeyboard)
 - [focusRing](#focusring)
+- [baseSize](#basesize)
 - [renderScale](#renderscale)
 - [renderCache](#rendercache)
 - [partialRedraw](#partialredraw)
@@ -104,7 +107,16 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [registerImage](#registerimage)
 - [unregisterImage](#unregisterimage)
 - [clearImages](#clearimages)
+- [setSharedVar](#setsharedvar)
+- [getSharedVars](#getsharedvars)
+- [clearSharedVars](#clearsharedvars)
+- [setAtlasImage](#setatlasimage)
+- [swappableAtlases](#swappableatlases)
 - [setVar](#setvar)
+- [getVar](#getvar)
+- [listVars](#listvars)
+- [focus](#focus)
+- [activate](#activate)
 - [setPadIconBase](#setpadiconbase)
 - [setPadTheme](#setpadtheme)
 - [renderStatsReset](#renderstatsreset)
@@ -114,19 +126,21 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも Dialog は利用でき�
 - [onScreen](#onscreen)
 - [onScreenLeave](#onscreenleave)
 - [onAction](#onaction)
+- [onDrag](#ondrag)
+- [onVar](#onvar)
 - [onClose](#onclose)
 
 ---
 
-### Dialog
+### ElementsDialog
 
 コンストラクタ
 
 **解説**
 
-Dialog オブジェクトの構築
+ElementsDialog オブジェクトの構築
 
-Dialog クラスのオブジェクトを構築します。
+ElementsDialog クラスのオブジェクトを構築します。
 
 ---
 
@@ -155,9 +169,9 @@ Elements ランタイムが初期化されたあと ( 最初のダイアログ�
 
 **解説**
 
-この Dialog インスタンスがアクティブかどうか ( 読み取り専用 )
+この ElementsDialog インスタンスがアクティブかどうか ( 読み取り専用 )
 
-この Dialog で開いた非モーダルダイアログ / フローが現在アクティブな
+この ElementsDialog で開いた非モーダルダイアログ / フローが現在アクティブな
 ときに真になります。[close](#close) を呼んだ直後はまだ teardown が
 終わっていないため真のままで、teardown 完了後に偽に切り替わります。
 
@@ -166,7 +180,29 @@ Elements ランタイムが初期化されたあと ( 最初のダイアログ�
 
 ---
 
-### language
+### modalActive
+
+プロパティ \ アクセス: `r`
+
+**型**: `bool`
+
+**解説**
+
+モーダルなダイアログが表示中かどうか ( 読み取り専用 )
+
+[showModalJson](#showmodaljson) 系やモーダルフローで開いたインスタンスが
+1 つでもアクティブなら真になります ( どのインスタンスから読んでもプロセス
+全体の状態を返します )。フォーカスを取らない常駐オーバレイ ( 字幕・HUD 等 )
+は含みません。
+
+最上位ホットキー ( [System.registerHotKey](System.md#registerhotkey) ) の
+コールバックで「モーダル表示中は何もせず素通しする」判定に使います。
+
+**関連:** [ElementsDialog.active](ElementsDialog.md#active)
+
+---
+
+### watchVars
 
 プロパティ \ アクセス: `r/w`
 
@@ -181,7 +217,7 @@ i18n の表示言語
 `strings` 側で使っているキーをそのまま指定します。
 
 ```tjs
-global.Dialog.language = "en";     // 表示中の画面もその場で切り替わる
+global.ElementsDialog.language = "en";     // 表示中の画面もその場で切り替わる
 ```
 
 代入すると**表示中の全ダイアログへ即時適用**されます ( `text_id` / `text_list_id` /
@@ -191,6 +227,27 @@ global.Dialog.language = "en";     // 表示中の画面もその場で切り替
 
 読み出すと設定済みの言語を返します。未設定なら空文字 ( = 各画面 JSON の
 `lang` 指定に従う ) です。`strings` を持たない画面では何も起きません。
+
+
+変数変化通知の対象
+
+[onVar](#onvar) で受け取る変数を絞る / 明示指定するプロパティです。
+
+- 変数名の配列 ... その変数だけ通知する
+- `"*"` ... すべての変数を通知する
+- 空配列 ... 通知しない ( 明示的に止める )
+- void ... 既定へ戻す
+
+既定 ( 未設定 ) は「[onVar](#onvar) を実装していればすべての変数」です。
+`"vars_on_hover"` の変数やドラッグ位置は毎フレーム書き換わるため、
+特定の変数だけ必要なら名前を並べたほうが軽くなります。表示中に設定しても
+即座に反映されます。
+
+---
+
+### language
+
+プロパティ \ アクセス: `r/w`
 
 ---
 
@@ -214,10 +271,10 @@ global.Dialog.language = "en";     // 表示中の画面もその場で切り替
 ファミリチェーンの並び ) を持つ辞書 ( または同形の JSON 文字列 ) を代入します。
 
 ```tjs
-global.Dialog.fontLanguages = %[
+global.ElementsDialog.fontLanguages = %[
 "tc" => %[ "map" => %[ "Noto Sans JP" => "Noto Sans TC" ] ],
 "sc" => %[ "map" => %[ "Noto Sans JP" => "Noto Sans SC" ] ] ];
-global.Dialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォントで描画
+global.ElementsDialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォントで描画
 ```
 
 `map` は widget の `"font"` 指定と theme 既定チェーンの各ファミリトークンに
@@ -266,7 +323,7 @@ global.Dialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォン
 
 動作を確認できるコアデモは `softkey_ime` です。
 
-**関連:** [Dialog.hasPhysicalKeyboard](Dialog.md#hasphysicalkeyboard)
+**関連:** [ElementsDialog.hasPhysicalKeyboard](ElementsDialog.md#hasphysicalkeyboard)
 
 ---
 
@@ -285,7 +342,7 @@ global.Dialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォン
 なります。ゲーム側が独自のソフトウェアキーボードを出すかどうかの判断に
 使用します。
 
-**関連:** [Dialog.virtualKeyboard](Dialog.md#virtualkeyboard)
+**関連:** [ElementsDialog.virtualKeyboard](ElementsDialog.md#virtualkeyboard)
 
 ---
 
@@ -303,7 +360,7 @@ global.Dialog.language = "sc";   // 以後 "Noto Sans JP" 指定は SC フォン
 ( クラス全体に効く static 相当 )。既定は true。
 
 ```tjs
-global.Dialog.focusRing = false;    // アプリ全体で消す
+global.ElementsDialog.focusRing = false;    // アプリ全体で消す
 ```
 
 button / slider / dial / thumbwheel の枠がまとめて消えます。状態別の絵
@@ -313,9 +370,34 @@ button / slider / dial / thumbwheel の枠がまとめて消えます。状態�
 
 画面単位ではなくアプリ全体の設定です ( グローバルテーマのフラグ )。
 
-クラス内から触るときは `global.Dialog.focusRing` と書きます。Dialog を継承した
-クラスのメソッド内で素の `Dialog` と書くと親クラス参照になり、static プロパティへの
+クラス内から触るときは `global.ElementsDialog.focusRing` と書きます。ElementsDialog を継承した
+クラスのメソッド内で素の `ElementsDialog` と書くと親クラス参照になり、static プロパティへの
 代入が「メンバが見つかりません」になります。
+
+---
+
+### baseSize
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Array`
+
+**解説**
+
+UI の author 基準面サイズ
+
+オーバレイ表示の拡縮率 ( fit ) の分母になる基準面のサイズを `[w, h]` の
+配列で指定します。void ( または要素の無い配列 ) を設定すると既定 =
+ゲームの基準面 ( primaryLayer のサイズ ) に戻ります。設定していないときの
+getter は void です。
+
+ゲーム画面と別解像度で UI を author しているタイトル ( ゲーム画面
+640x400 / UI 1920x1080 等 ) で設定すると、部分パネルの拡縮が author 基準
+どおりになり、ゲーム側の primaryLayer サイズ変更 ( 低解像度機種の
+エミュレーション等 ) にも巻き込まれません。表示中の画面にも次のフレーム
+から反映されます。
+
+**関連:** [ElementsDialog.renderScale](ElementsDialog.md#renderscale)
 
 ---
 
@@ -368,10 +450,10 @@ true ( 既定 ) の間、変化した範囲が矩形で特定できる場合は*
 矩形が特定できるのはテキスト欄のキャレット点滅などに限られ、入力・フォーカス
 変化・パーツ演出・setVar などは従来どおり全面再描画になります。
 
-[Dialog.renderCache](Dialog.md#rendercache) が有効なときのみ機能します
+[ElementsDialog.renderCache](ElementsDialog.md#rendercache) が有効なときのみ機能します
 ( 前回の描画結果が残っていることが前提 )。false にすると変化フレームは
 常に全面再描画します ( 負荷比較・問題切り分け用 )。実際に部分再描画できた
-回数は [Dialog.renderStats](Dialog.md#renderstats) の "partials" で確認できます。
+回数は [ElementsDialog.renderStats](ElementsDialog.md#renderstats) の "partials" で確認できます。
 
 ---
 
@@ -407,7 +489,7 @@ true ( 既定 ) の間、変化した範囲が矩形で特定できる場合は*
 
 累積値なので 2 回読んで差分を取り、経過実時間との比で
 「Elements が消費した時間・割合」を計算します
-( [Dialog.renderStatsReset](Dialog.md#renderstatsreset) で 0 クリア )。
+( [ElementsDialog.renderStatsReset](ElementsDialog.md#renderstatsreset) で 0 クリア )。
 計測用のベンチ画面がコアデモ `elements_bench` にあります
 ( シナリオ切替 + renderCache A/B + 500ms ごとの内訳表示 )。
 
@@ -438,7 +520,7 @@ JSON 文字列で非モーダルダイアログを表示する
 止まらず、ユーザ操作のたびに [onAction](#onaction) が発火します。
 表示を終わらせるには [close](#close) を呼んでください。
 
-**関連:** [Dialog.showFile](Dialog.md#showfile) / [Dialog.registerHotKey](Dialog.md#registerhotkey) / [Dialog.onAction](Dialog.md#onaction) / [Dialog.close](Dialog.md#close)
+**関連:** [ElementsDialog.showFile](ElementsDialog.md#showfile) / [ElementsDialog.registerHotKey](ElementsDialog.md#registerhotkey) / [ElementsDialog.onAction](ElementsDialog.md#onaction) / [ElementsDialog.close](ElementsDialog.md#close)
 
 ---
 
@@ -465,7 +547,7 @@ JSON 文字列で非モーダルダイアログを表示する
 指定パスから JSON / JSONC レイアウト定義を読み込み、[showJson](#showjson)
 と同じ動作で表示します。パスは Storages 経由のパス指定が使えます。
 
-**関連:** [Dialog.showJson](Dialog.md#showjson)
+**関連:** [ElementsDialog.showJson](ElementsDialog.md#showjson)
 
 ---
 
@@ -493,7 +575,7 @@ Dictionary で非モーダルダイアログを表示する
 Dictionary / Array で直接指定する版です。内部で JSON へ変換して
 同じ経路で表示します ( 変換仕様は [dictToJson](#dicttojson) と同じ )。
 
-**関連:** [Dialog.showJson](Dialog.md#showjson) / [Dialog.dictToJson](Dialog.md#dicttojson)
+**関連:** [ElementsDialog.showJson](ElementsDialog.md#showjson) / [ElementsDialog.dictToJson](ElementsDialog.md#dicttojson)
 
 ---
 
@@ -537,7 +619,7 @@ values: %[ <id>: <値>, ... ]   // state widget の最終値マップ
 閉じるのは `"close_on_click": true` 指定の button が押されたとき
 ( および Esc / × による中断 ) だけです。
 
-**関連:** [Dialog.showModalFile](Dialog.md#showmodalfile) / [Dialog.onAction](Dialog.md#onaction)
+**関連:** [ElementsDialog.showModalFile](ElementsDialog.md#showmodalfile) / [ElementsDialog.onAction](ElementsDialog.md#onaction)
 
 ---
 
@@ -565,7 +647,7 @@ action と values を保持する Dictionary が返ります。
 指定パスから JSON / JSONC レイアウト定義を読み込んで [showModalJson](#showmodaljson)
 と同じ動作で表示します。パスは Storages 経由のパス指定が使えます。
 
-**関連:** [Dialog.showModalJson](Dialog.md#showmodaljson)
+**関連:** [ElementsDialog.showModalJson](ElementsDialog.md#showmodaljson)
 
 ---
 
@@ -595,7 +677,7 @@ Array で直接指定する版です。引数 1 個で呼ぶとオーバーレ�
 以降を渡すと独立ウィンドウで表示する点、および戻り値の形式は
 [showModalJson](#showmodaljson) と同じです。
 
-**関連:** [Dialog.showModalJson](Dialog.md#showmodaljson) / [Dialog.showDict](Dialog.md#showdict)
+**関連:** [ElementsDialog.showModalJson](ElementsDialog.md#showmodaljson) / [ElementsDialog.showDict](ElementsDialog.md#showdict)
 
 ---
 
@@ -620,14 +702,14 @@ Dictionary / Array を JSON 文字列へ変換する
 [showDict](#showdict) / [showModalDict](#showmodaldict) が内部で行う
 変換をそのまま呼び出すユーティリティです。Dictionary で組み立てた
 レイアウトを JSON 資材として保存する、変換結果を確認する、といった
-用途に使えます。インスタンスを作らず `Dialog.dictToJson(...)` として
+用途に使えます。インスタンスを作らず `ElementsDialog.dictToJson(...)` として
 呼べます。
 
 対応する値の型は void / Integer / Real / String / Dictionary / Array
 です。それ以外 ( Octet や一般のオブジェクト、循環参照、非有限の実数 )
 は例外になります。
 
-**関連:** [Dialog.showDict](Dialog.md#showdict)
+**関連:** [ElementsDialog.showDict](ElementsDialog.md#showdict)
 
 ---
 
@@ -672,7 +754,7 @@ rule 画像パス ( 宣言した画面からの相対 / Storages パス / autopa
 }
 ```
 
-**関連:** [Dialog.showFlowScreens](Dialog.md#showflowscreens) / [Dialog.startFlow](Dialog.md#startflow)
+**関連:** [ElementsDialog.showFlowScreens](ElementsDialog.md#showflowscreens) / [ElementsDialog.startFlow](ElementsDialog.md#startflow)
 
 ---
 
@@ -699,7 +781,7 @@ action と values を保持する Dictionary が返ります。
 フローを実行する [showFlow](#showflow) のインライン版です。
 動作と戻り値は [showFlow](#showflow) と同じです。
 
-**関連:** [Dialog.showFlow](Dialog.md#showflow) / [Dialog.startFlowScreens](Dialog.md#startflowscreens)
+**関連:** [ElementsDialog.showFlow](ElementsDialog.md#showflow) / [ElementsDialog.startFlowScreens](ElementsDialog.md#startflowscreens)
 
 ---
 
@@ -732,7 +814,7 @@ TJS 側で処理する場合は、`"close_on_click"` を指定しない button �
 [close](#close) を呼び、teardown が完了したかどうかは
 [active](#active) で判別できます。
 
-**関連:** [Dialog.startFlowScreens](Dialog.md#startflowscreens) / [Dialog.showFlow](Dialog.md#showflow) / [Dialog.active](Dialog.md#active)
+**関連:** [ElementsDialog.startFlowScreens](ElementsDialog.md#startflowscreens) / [ElementsDialog.showFlow](ElementsDialog.md#showflow) / [ElementsDialog.active](ElementsDialog.md#active)
 
 ---
 
@@ -760,7 +842,7 @@ TJS 側で処理する場合は、`"close_on_click"` を指定しない button �
 非モーダル ( 非ブロッキング ) で開始する [startFlow](#startflow) の
 インライン版です。
 
-**関連:** [Dialog.startFlow](Dialog.md#startflow) / [Dialog.showFlowScreens](Dialog.md#showflowscreens)
+**関連:** [ElementsDialog.startFlow](ElementsDialog.md#startflow) / [ElementsDialog.showFlowScreens](ElementsDialog.md#showflowscreens)
 
 ---
 
@@ -784,7 +866,7 @@ TJS 側で処理する場合は、`"close_on_click"` を指定しない button �
 [active](#active) は真のままです )。フロー実行中の close は画面遷移
 ( transitions ) を解決せず、フローごと終了します。
 
-**関連:** [Dialog.active](Dialog.md#active)
+**関連:** [ElementsDialog.active](ElementsDialog.md#active)
 
 ---
 
@@ -818,7 +900,7 @@ Elements ダイアログで使用するフォントを krkrz Storages 経由で�
 weight / slant / stretch は font_constants の整数値です ( 詳細は
 `StoragesResourceLoader.h` を参照 )。
 
-**関連:** [Dialog.registerFontDir](Dialog.md#registerfontdir)
+**関連:** [ElementsDialog.registerFontDir](ElementsDialog.md#registerfontdir)
 
 ---
 
@@ -844,7 +926,7 @@ Elements 用フォントの一括登録
 名から family / weight / slant / stretch を推定 )。dir は Storages 経由の
 パス指定が使え、XP3 内のディレクトリでも構いません。
 
-**関連:** [Dialog.registerFont](Dialog.md#registerfont)
+**関連:** [ElementsDialog.registerFont](ElementsDialog.md#registerfont)
 
 ---
 
@@ -887,7 +969,7 @@ ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を�
 操作パネル ( `showJson(json, true, false)` ) の表示中でも確実に効かせる
 用途を想定しています。
 
-**関連:** [Dialog.unregisterHotKey](Dialog.md#unregisterhotkey) / [Dialog.clearHotKeys](Dialog.md#clearhotkeys) / [Dialog.showJson](Dialog.md#showjson)
+**関連:** [ElementsDialog.unregisterHotKey](ElementsDialog.md#unregisterhotkey) / [ElementsDialog.clearHotKeys](ElementsDialog.md#clearhotkeys) / [ElementsDialog.showJson](ElementsDialog.md#showjson)
 
 ---
 
@@ -909,7 +991,7 @@ ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を�
 [registerHotKey](#registerhotkey) で登録したホットキーを解除します
 ( key と shift の両方が一致するエントリを削除 )。
 
-**関連:** [Dialog.registerHotKey](Dialog.md#registerhotkey)
+**関連:** [ElementsDialog.registerHotKey](ElementsDialog.md#registerhotkey)
 
 ---
 
@@ -923,7 +1005,7 @@ ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を�
 
 [registerHotKey](#registerhotkey) で登録したホットキーを全て解除します。
 
-**関連:** [Dialog.registerHotKey](Dialog.md#registerhotkey)
+**関連:** [ElementsDialog.registerHotKey](ElementsDialog.md#registerhotkey)
 
 ---
 
@@ -948,8 +1030,10 @@ ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を�
 
 統一ストレージパス path のファイルを name で実行時画像ストアへ登録します。jsonc の
 image ウィジェット等からは `"mem://<name>"` で参照します。セーブサムネイル等、実行時に
-変わる画像を Elements へ渡すための仕組みです。pixmap は画面 build 時に読み直されるので、
-再登録 → 画面再オープンで表示が更新されます。
+変わる画像を Elements へ渡すための仕組みです。表示中の画面に `mem://<name>` の
+image ウィジェットがあれば、再登録した時点で再デコードされ即時反映されます
+( 画面の開き直しは不要。パネルにも反映されます )。登録前に build した
+ウィジェットは空表示のままなので、初回は画面を開く前に登録してください。
 
 ---
 
@@ -983,6 +1067,111 @@ image ウィジェット等からは `"mem://<name>"` で参照します。セ�
 
 ---
 
+### setSharedVar
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 変数名。 |
+| `value` | `&nbsp;` | 設定する値 ( 文字列 )。 |
+
+**解説**
+
+セッション共有変数を書き換える
+
+画面 JSON の `"shared_vars"` が宣言した「画面をまたいで保つ変数」を書き換えます。
+変数 store は画面ごとに作り直されますが、`"shared_vars"` のパターン
+( 完全一致、または末尾 `*` の前方一致 ) に一致する変数はセッション共有ストアと
+双方向になり、次に開く画面へ引き継がれます。画面が未構築でも書けます。
+
+どの値を持ち回るかは画面側が決めるのでホスト実装は不要ですが、ゲームの
+セーブデータへ落とす / ロード後に流し込むときにこのメソッドを使います。
+
+---
+
+### getSharedVars
+
+メソッド
+
+**戻り値**
+
+変数名 => 値 の辞書配列。
+
+**解説**
+
+セッション共有変数をすべて取得する
+
+セッション共有変数の現在値を辞書配列 ( 変数名 => 値 ) で返します。セーブデータへ
+書き出す用途を想定しています。値は文字列です。
+
+共有側へ出るのは「変化として書かれた」値だけで、ウィジェットの初期値
+( `"initial"` / `"value"` ) は出ません。「誰も触っていない項目」が最初に開いた
+画面の既定で固定されるのを避けるためです。
+
+---
+
+### clearSharedVars
+
+メソッド
+
+**解説**
+
+セッション共有変数をすべて捨てる
+
+セッション共有ストアを空にします。タイトルへ戻るとき、セーブデータをロードする
+直前などに呼びます。
+
+---
+
+### setAtlasImage
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 画面 JSON で宣言したアトラス名。 |
+| `path` | `&nbsp;` | 差し替える画像のパス ( 画面の `resource_base` 起点 )。 |
+
+**戻り値**
+
+差し替えられたかどうか ( 未宣言 / 読込失敗なら false。表示は変わりません )。
+
+**解説**
+
+差し替え可能アトラスの絵を差し替える
+
+画面 JSON の `"atlases"` で `"swappable": true` と宣言したアトラスの画像を、
+実行時に別の 1 枚へ差し替えます。ウィジェットは作り直さないので、レイアウトも
+フォーカスもそのまま保たれます。CG 鑑賞のグループタブのように「同じ画面・
+違う絵の束」を切り替える用途向けです。
+
+差し替え先は**同じ矩形割り**である必要があります。ウィジェットが持つ
+frames / rect は変わらないので、絵の位置がずれると別の絵が出ます。
+
+---
+
+### swappableAtlases
+
+メソッド
+
+**戻り値**
+
+アトラス名の配列。
+
+**解説**
+
+差し替え可能なアトラス名の一覧を取得する
+
+いま [setAtlasImage](#setatlasimage) で差し替えられるアトラス名を配列で返します。
+検証パネルや REPL からの確認用です。
+
+---
+
 ### setVar
 
 メソッド
@@ -1004,6 +1193,114 @@ image ウィジェット等からは `"mem://<name>"` で参照します。セ�
 
 表示中ダイアログの変数 store へ値を書き込みます。JSON で `"text_var": name` を指定した
 label 等が次フレームで更新されます。自分のインスタンスが非アクティブなら false を返します。
+
+---
+
+### getVar
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 変数名。 |
+
+**戻り値**
+
+変数の値 ( 文字列 )。未知の変数なら void。
+
+**解説**
+
+表示中ダイアログの変数を読み出す
+
+表示中ダイアログの変数 store から値を読み出します。[setVar](#setvar) で
+書いた値だけでなく、画面側が書いた値 ( `"vars_on_hover"` /
+`"vars_on_focus"` / slider の `"value_var"` / `"drag_at_var"` /
+一覧の `"index_offset_var"` 等 ) も同じ store から読めます。
+
+未知の変数名、または自分のインスタンスが非アクティブなら void を返します
+( 空文字列と区別できます )。変化した時点で知りたい場合は
+[onVar](#onvar) を実装します。
+
+---
+
+### listVars
+
+メソッド
+
+**戻り値**
+
+変数記述 Dictionary の配列。非アクティブなら空配列。
+
+**解説**
+
+表示中ダイアログの変数一覧を取得する
+
+表示中ダイアログが使っている変数を名前順の配列で返します。要素は
+`name` / `value` / `usedBy` を持つ Dictionary で、`usedBy` は
+`id` ( いちばん近い祖先の widget id ) と `kind` ( 参照している JSON の
+キー。`"text_var"` / `"visible_var"` / `"value_var"` 等 ) を持つ
+Dictionary の配列です。
+
+参照だけあって一度も書かれていない変数、逆に参照は無いが
+[setVar](#setvar) で作った変数も載ります。デバッグパネルや画面 JSON の
+検証に使います。
+
+---
+
+### focus
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `id` | `&nbsp;` | フォーカスを移す widget の id。 |
+
+**戻り値**
+
+依頼できたかどうか。非アクティブなら false。
+
+**解説**
+
+指定 id の widget へフォーカスを移す
+
+表示中ダイアログの widget ( JSON の `"id"` で指定 ) へフォーカスを
+移します。input_box は編集フォーカス ( キャレット表示 + テキスト受理 )
+になります。`at_var` の park / unpark などで画面を組み替えた後に、
+入力先を明示的に移す用途を想定しています。
+
+戻り値は「インスタンスへフォーカス移動を依頼できたか」で、id の存在
+確認はしません。自分のインスタンスが非アクティブなら false を返します。
+
+---
+
+### activate
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `id` | `&nbsp;` | 実行する widget の id。 |
+
+**戻り値**
+
+実行できたかどうか。id 不明 / 非アクティブなら false。
+
+**解説**
+
+指定 id の widget を実行する
+
+表示中ダイアログの widget ( JSON の `"id"` で指定 ) へフォーカスを移して
+実行 ( Enter 相当 ) します。[Agent.dialogClick](Agent.md#dialogclick) の
+インスタンス版で、[ElementsPanel.activate](ElementsPanel.md#activate) と
+同形です。
+
+**関連:** [ElementsDialog.focus](ElementsDialog.md#focus)
 
 ---
 
@@ -1062,7 +1359,7 @@ pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"
 
 描画計測カウンタのリセット
 
-[Dialog.renderStats](Dialog.md#renderstats) の累積カウンタを 0 クリアします。
+[ElementsDialog.renderStats](ElementsDialog.md#renderstats) の累積カウンタを 0 クリアします。
 計測区間の開始時に呼びます。
 
 ---
@@ -1085,7 +1382,7 @@ pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"
 フローの画面に入ったタイミングで発火します。TJS 側で override して
 ください。
 
-**関連:** [Dialog.onScreenLeave](Dialog.md#onscreenleave)
+**関連:** [ElementsDialog.onScreenLeave](ElementsDialog.md#onscreenleave)
 
 ---
 
@@ -1108,7 +1405,7 @@ pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"
 フローの画面から離れるタイミングで発火します。TJS 側で override
 してください。
 
-**関連:** [Dialog.onScreen](Dialog.md#onscreen)
+**関連:** [ElementsDialog.onScreen](ElementsDialog.md#onscreen)
 
 ---
 
@@ -1141,6 +1438,74 @@ payload の内容は widget の種類によって変わります。
 - checkbox / toggle ... bool ( 変更後の値 )
 - input_box ... string ( 編集後のテキスト )
 - slider 等 ... 各 widget が渡す値
+
+---
+
+### onDrag
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `payload` | `&nbsp;` | ドラッグ状態を表す Dictionary ( 上記参照 )。 |
+
+**解説**
+
+ドラッグ通知
+
+画面 JSON で `"drag_events": true` を指定した widget の 押下 → 移動 →
+離す が届くイベントです。TJS 側で override してください。
+
+payload は Dictionary で、`id` ( 発生元 widget の id )、`phase`
+( `"begin"` / `"move"` / `"end"` )、`x` / `y` ( 現在位置 )、`dx` / `dy`
+( 前回からの差分 )、`startX` / `startY` ( 押下位置 )、`modifiers`
+( シフト状態 ) を持ちます。座標は画面 JSON に書いた座標系です。
+
+溜まった `"move"` は最新の 1 件へ畳まれます ( `"begin"` / `"end"` は
+畳まれません )。
+
+**絵をドラッグに追従させるだけならこのイベントは不要です**。widget に
+`"drag_at_var"` を書いてドラッグ位置を変数へ出し、canvas 子の `"at_var"`
+へ同じ変数を挿すとエンジン内で完結します ( `"drag_bounds"` で可動域も
+制限できます )。このイベントは「どこで離したか」のような判断を TJS 側で
+行う用途に使います。
+
+---
+
+### onVar
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 変化した変数名。 |
+| `value` | `&nbsp;` | 変化後の値 ( 文字列 )。 |
+
+**解説**
+
+変数変化通知
+
+表示中ダイアログの変数 store の値が変わったときに届くイベントです。
+TJS 側で override してください。[setVar](#setvar) による自分の書き込み
+だけでなく、画面側が書いた値 ( `"vars_on_hover"` / `"vars_on_focus"` /
+slider の `"value_var"` / `"drag_at_var"` / 一覧の `"index_offset_var"`
+等 ) でも発火します。
+
+「絵はホスト側のレイヤ、当たり判定だけダイアログ」という構成で、hover や
+選択の変化をホスト処理へ繋ぐのに使います ( 大きすぎて atlas に積めない
+一枚絵を並べる一覧など )。
+
+通知は 1 フレーム遅延し、同じ変数の連続変化 ( hover 移動やドラッグ中の
+座標書き込み ) は最新の 1 件へ畳まれます。「いまの値」が必要なときは
+通知を待たず [getVar](#getvar) で読んでください。
+
+**このイベントを実装したダイアログだけが観測対象になります**。
+実装していないダイアログには一切コストがかかりません。受け取る変数を
+絞りたい場合は [watchVars](#watchvars) を使います。
 
 ---
 

@@ -79,6 +79,8 @@ nav:
       - デバッグ: guide/Debug.md
       - 環境依存の不具合: guide/ComputerDependentProblems.md
       - 著作権など: guide/Copyrights.md
+      - ライセンス情報の取得と表示: guide/Licenses.md
+      - 同梱ライセンス一覧: guide/BundledLicenses.md
       - ファイル一覧: guide/Files.md
     - サブシステム:
       - イベントシステム: guide/EventSystem.md
@@ -87,7 +89,7 @@ nav:
       - 3Dグラフィックシステム: guide/Graphic3DSystem.md
       - サウンドシステム: guide/SoundSystem.md
       - ストレージシステム: guide/StorageSystem.md
-      - ダイアログ: guide/Dialog.md
+      - ダイアログ: guide/ElementsDialog.md
       - フォントシステム: guide/FontSystem.md
       - トランジション: guide/Transition.md
       - プラグイン: guide/Plugins.md
@@ -137,7 +139,8 @@ nav:
       - reference/AsyncTrigger.md
       - reference/Bitmap.md
       - reference/BitmapLayerTreeOwner.md
-      - reference/Dialog.md
+      - reference/ElementsDialog.md
+      - reference/ElementsPanel.md
       - reference/Font.md
       - reference/ImageFunction.md
       - reference/Layer.md
@@ -283,9 +286,11 @@ nav:
       - メモリ不足対策: topics/core/low_memory.md
       - メモリ観測・リーク調査: topics/core/memory_observation.md
       - 描画スレッドプール利用率の計測 (DrawStats): topics/core/draw_stats.md
+      - Elements UI 機構の全体像: topics/core/elements.md
       - ゲームパッド入力: topics/core/gamepad.md
       - ゲームパッド状態の観察 (PadOverlay): topics/core/pad_overlay.md
       - REPL (対話型 TJS シェル): topics/core/repl.md
+      - Steam Deck 実機確認 (リリース前チェック): topics/core/steamdeck.md
       - ゲーム画面の表示画角制御 (ビューポート): topics/core/viewport.md
       - ログ出力: topics/core/logging.md
     - ライセンス: topics/LICENSE.md

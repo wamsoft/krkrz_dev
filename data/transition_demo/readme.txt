@@ -1,11 +1,11 @@
 ======================================================================
- トランジション表示サンプル (Elements UI / Dialog 版)
+ トランジション表示サンプル (Elements UI / ElementsDialog 版)
 ======================================================================
 
 ■ 概要
 
   吉里吉里Z の標準トランジション + extrans + extNagano プラグインの
-  各トランジションを、組込 Elements UI (Dialog クラス) のパネルから
+  各トランジションを、組込 Elements UI (ElementsDialog クラス) のパネルから
   「選択 → パラメータ設定 → 実行」して確認できるデモです。
 
   画面 A ⇔ 画面 B を、選んだトランジションで切り替えます。実行のたびに
@@ -23,8 +23,8 @@
 
 ■ 動作要件
 
-  - Elements Dialog は SDL3 ビルド + KRKRZ_USE_ELEMENTS=ON でのみ動作
-    します (既定 ON)。WINVER ビルドでは Dialog クラスが登録されず、
+  - ElementsDialog は KRKRZ_USE_ELEMENTS=ON (既定) のビルドで動作
+    します (SDL3 / WINVER 両対応)。OFF ビルドではクラスが登録されず、
     起動時に警告が出ます。
       → プリセット x64-windows (SDL) のビルドを使用してください。
 

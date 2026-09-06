@@ -57,7 +57,7 @@ SDL3 専用として残るのは起動時 UserConfig UI (`-userconf`、ゲーム
 |---|---|
 | `-repl` | console REPL (CONIN$ 直読み) を起動。人間の対話向け。`-repl=no/off/false/0` で抑止。 |
 | `-replfile=<dir>` | **ファイルチャネルを起動 (外部エージェント向け、本命)**。`<dir>` の `cmd`/`resp` ファイルで駆動。`-repl` と独立。 |
-| `-replweb[=port]` | HTTP+SSE サーバ (既定 127.0.0.1:8899)。`GET /`=ブラウザ REPL ページ / `GET /events`=ログ SSE / `POST /cmd`=TJS 評価 / `GET /sub/<ch>`=汎用 SSE。**curl でも駆動できる** (`curl -X POST -d 'expr' http://127.0.0.1:8899/cmd`)。 |
+| `-replweb[=port]` | HTTP+SSE サーバ (既定 127.0.0.1:8899)。`GET /`=ブラウザ REPL ページ / `GET /events`=ログ SSE / `POST /cmd`=TJS 評価 / `GET /sub/<ch>`=汎用 SSE / `GET|POST /watch` + `GET /sub/watch`=監視式。`GET /` は Console / Watch / Pad のタブ UI (上のバーにイベント停止 / 終了)。`POST /pad/exec` は複数行スクリプトをまるごと実行できる。**`-replwebidle` は既定 5 秒で有効** = ブラウザを閉じたらアプリも終了 (`=no` で無効。ただし **一度でも SSE 購読が来てから武装**するので、curl だけ / 未接続の駆動は落ちない)。`-replwebopen=app|tab|no` で端末起動時もブラウザを開ける。**curl でも駆動できる** (`curl -X POST -d 'expr' http://127.0.0.1:8899/cmd`)。 |
 | `-nostartup` | startup.tjs の自動実行を抑止。window 無し起動でも即終了しない。明示的にスクリプトを呼んで初めて処理が始まる。`-nostartup=no/off/false/0` で無効。 |
 | `-loglevel=info` | ログレベル。コンソールに出る量を制御。`MASTER` ビルドだと既定 WARNING。 |
 | `-display=<番号\|名前>` | 起動するディスプレイ (モニタ) の指定。**マルチディスプレイ環境でメインディスプレイを占有せずに検証したいときに使う**。番号は 1 origin (Windows の `\\.\DISPLAYn` の n)、名前はモニタ名の部分一致、`primary` も可。`-display=list` で一覧をログ出力。WINVER / SDL3 両対応。 |
@@ -287,9 +287,11 @@ Scripts.execStorage("mytest.tjs");      // data/ 配下 (autopath)
 
 `-nostartup` で立ち上げてから上記でテストを開始する、が基本フロー。
 
-## ドットコマンド (REPL 専用)
+## ドットコマンド
 
-`.help` で一覧。主なもの:
+`.help` で一覧。**console / `-replfile` / `-replweb` の 3 フロントすべてで使える**
+(ファイルチャネルでは先頭が `.` の行がドットコマンドとして扱われ、出力行が
+応答 JSON の `result` に改行区切りで入る)。主なもの:
 
 | コマンド | 用途 |
 |---|---|
@@ -305,9 +307,40 @@ Scripts.execStorage("mytest.tjs");      // data/ 配下 (autopath)
 | `.cap [path]` | 画面キャプチャ (`Agent.captureScreen`、省略時 agent_cap.png) |
 | `.dlg` / `.dlgclose` | ダイアログ一覧 / 全クローズ (`Agent.dialogs`/`closeAllDialogs`) |
 | `.click X Y` | (X,Y) にクリック注入 (`Agent.click`) |
+| `.watch` | 監視式の一覧を `id: 式 = 値` で表示 (表示前に全件評価) |
+| `.watch add EXPR` | 監視式を追加して即評価 (式は空白を含んでよい) |
+| `.watch rm ID` / `.watch rm all` | 監視式の削除 / 全消し |
+| `.watch edit ID EXPR` | 監視式の差し替え |
+| `.watch auto [ms/on/off]` | 自動更新の間隔 (`on`=500ms / `0`=毎フレーム / 下限 100ms) |
+| `.event [on/off/toggle]` | `System.eventDisabled` の表示 / 切替 |
 
 TJS の評価は dot で始まらない行をそのまま入力する (式・文どちらも可、
 括弧/クォートが閉じるまで複数行継続)。
+
+### 監視式 (`.watch`) — 状態を張り込んで観測する
+
+吉里吉里2 のデバッグ窓「監視式」相当。**毎回同じ式を打ち直さずに状態を見張る**
+ための道具で、値の変化を追う検証に向く。
+
+```
+.watch add win.layer.left
+.watch add ElementsDialog.modalActive
+.watch auto 500      # 自動更新 (0 = 毎フレーム / off で停止)
+.watch               # 一覧 (表示前に全件評価する)
+```
+
+- 評価コンテキストは **global 固定**。式が例外を投げても
+  `(error) <メッセージ>` を**値として**並べるだけで、REPL もアプリも死なない。
+- **一覧表示は評価を伴う**ので、「自動更新だけで評価されたか」を確かめたいときは
+  副作用のある式 (カウンタを増やす等) を仕込んで別コマンドで読む。
+- 式リストと間隔は**カレントディレクトリの `.krkrz_watch` に保存**され、次回起動で
+  読み戻る (`-replwatchfile=<path>` で変更、`=no` で無効)。**検証で消したいときは
+  このファイルを消すか `=no` を付ける**。
+- **HTTP からも同じコアを触れる** (`-replweb` 併用時):
+  `curl -s -X POST -d 'op=add&expr=…' localhost:8899/watch` /
+  `curl -s localhost:8899/watch` (評価しない。`?eval=1` で評価) /
+  `curl -N localhost:8899/sub/watch` (自動更新の push)。
+  ドットコマンドと同じリストを見るので、**片方で足して片方で観測**できる。
 
 ## 典型ワークフロー (エージェント)
 

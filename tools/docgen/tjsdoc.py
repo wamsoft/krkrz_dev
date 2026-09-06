@@ -757,6 +757,21 @@ def iter_inputs(src: Path):
             yield p, infer_source(p)
 
 
+def read_source_text(path: Path) -> str:
+    """UTF-8 で読み、駄目なら cp932 (SJIS) で読む。
+
+    src/plugins には SJIS のまま保守されているプラグインがあり、 UTF-8 決め打ちで
+    読むと解説文が文字化けしたまま md へ出てしまうため。
+    """
+    raw = path.read_bytes()
+    for enc in ("utf-8", "cp932"):
+        try:
+            return raw.decode(enc)
+        except UnicodeDecodeError:
+            continue
+    return raw.decode("utf-8", errors="replace")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--in", dest="src", action="append", required=True,
@@ -775,7 +790,7 @@ def main(argv=None):
             print(f"error: {src} not found", file=sys.stderr)
             return 2
         for path, source in iter_inputs(src):
-            text = path.read_text(encoding="utf-8", errors="replace")
+            text = read_source_text(path)
             classes = parse_file(text)
             if not classes:
                 print(f"warning: no class in {path}", file=sys.stderr)

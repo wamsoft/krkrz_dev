@@ -94,18 +94,18 @@ Xbox 系に固定されているため位置と刻印が食い違いません ( 
 [System.padStyle](../../reference/System.md#padstyle) (読み取り専用) で取得
 できます。`"xbox"` / `"ps"` / `"switch"` のいずれか、判定できないときは
 空文字列です。操作ガイドに表示するボタン絵の選択に使えます。Elements の
-[Dialog.setPadTheme](../../reference/Dialog.md#setpadtheme) に `"auto"` を
+[ElementsDialog.setPadTheme](../../reference/ElementsDialog.md#setpadtheme) に `"auto"` を
 指定すると、この判定に基づいてボタン絵テーマが自動選択されます (画面を開く
 たびに決め直されるため、コントローラの差し替えにも追従します)。
 
 ### Elements ダイアログとの関係
 
-[Dialog](../../reference/Dialog.md) のパネルがキーボードフォーカスを持っていると、
+[Dialog](../../reference/ElementsDialog.md) のパネルがキーボードフォーカスを持っていると、
 `VK_PAD*` はパネルのウィジェット操作 (十字 = フォーカスナビ / A = 決定 / B =
 cancel) に消費されます。「このパッドボタンだけは必ずゲーム側で受けたい」場合は
-[Dialog.registerHotKey](../../reference/Dialog.md#registerhotkey) で登録すると、
+[ElementsDialog.registerHotKey](../../reference/ElementsDialog.md#registerhotkey) で登録すると、
 ダイアログをバイパスして `Window.onKeyDown` へ直行します (入力の配送優先順位は
-[Dialog ガイド](../../guide/Dialog.md) を参照)。逆に画面 JSON 側から
+[Dialog ガイド](../../guide/ElementsDialog.md) を参照)。逆に画面 JSON 側から
 「この入力はゲームのもの」と宣言するには、`"bindings"` で
 `"action": "passthrough"` を指定します (パネルが消費せず素通しになります。
 `"none"` は消費した上で何もしない点が違います)。

@@ -89,6 +89,17 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
       論理順で 1 クラスタずつ現れる) を追加。実機キャプチャ検証済。
       ※ doc 埋め込み wasm デモ (doc/_assets/demo) への反映は krkrz_web
       再ビルドが必要 (別リポ作業)。**2026-08-16 に再ビルド・再ステージング済**。
+- [x] **text_vertical (縦組み) シーン追加** (2026-09-01)。`drawVerticalTextArea` /
+      `measureVerticalTextArea` を使う縦書きシーンを text_font デモへ追加
+      (4→5 シーン、core gallery にも登録)。本文の流し込み + options のキー切替
+      (1:ぶら下げ 2:行末揃え 3:約物の詰め 4:列送りの向き 5:orientation
+      ←/→:字間)、同じ本文を横組み (`drawShapedTextArea`) で並置した対比、
+      orientation 0/1/2 の組み分け、count 制限の自動再生タイプライタ。
+      実機キャプチャ検証済。data/ ハブ (トップランチャ) にも登録したので
+      19 → 20 デモ。
+      ※ doc 埋め込み wasm デモ (doc/_assets/demo) は krkrz_web で再ビルドして
+      差し替え済み (2026-09-01)。ブラウザ (Edge) 実機でハブ → 縦組みシーンの
+      表示まで確認済み。
 - [x] **elements_bench (Elements 負荷計測) 追加** (2026-08-12)。
       `Dialog.renderStats` (描画パイプラインの区間計測: update/raster/
       acquire/upload/present の累積時間+回数) を新設し、更新パターン別
@@ -226,8 +237,20 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       -replweb 稼働中は相乗り、単体なら 8900 で start。資材不要 (HTML 自作)。
       ※ マルチバイトの値は body で受ける (System.urldecode は Windows 拡張)
       ※ TJS の文字取り出しは s[i]。s[i,1] はカンマ式になり常に s[1] を返す
+      ※ 2026-09-06: 組込ルートが増えた (/watch /state /pad/* /bye)。これらは
+        register より先に判定されるので自前ハンドラでは使えない (demo は
+        /ui/ と /api/ なので影響なし)。`-replweb` 起動時のみ働くアイドル終了
+        (-replwebidle) は WebServer.start 経由では武装しない
 - [ ] ui_flow — Elements 画面遷移 (screens / navigator): 現 flowdemo.jsonc +
       menu/*.json を整理してタイトル→設定→ダイアログの一連フローに
+- [ ] **elements_gallery に «データ側で完結» の 4 点を追加** (2026-09-06 起票)。
+      2026-09-05〜06 に入った `shared_vars` (画面をまたぐ変数) / `value_var`
+      (2 値トグルの変数連動) / `image_var` (絵を変数で差し替え) / 差し替え可能
+      アトラスが、ギャラリーのどのページにも載っていない。**ホストのコールバック
+      無しで組める**のが要点なので、vars ページの続きとして「タブを渡り歩いても
+      値が戻らない」「送りボタンでサムネが変わる」を見せるのが分かりやすい。
+      ホスト側 API (`ElementsDialog.getSharedVars` 等) はセーブ用なので添える程度で
+      よい。詳細 = [ElementsDialog ガイド](../doc/guide/ElementsDialog.md)
 - [x] system_debug — デバッグ支援 (2026-08-16)。Scripts.eval + Debug.prettyPrint
       で式をその場評価、例外オブジェクト (message / trace) を種類別に確認、
       System.exceptionHandler を差し替えて未捕捉例外を自前処理 (true を返して

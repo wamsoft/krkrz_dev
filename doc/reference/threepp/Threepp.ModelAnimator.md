@@ -4,6 +4,7 @@
 
 対象 root (通常 model.getScene()) を内部で生かし続けるので、
 ModelAnimator を保持している間はモデルも解放されない。
+============================================================ アニメーション再生 (glTF/GLB 内蔵アニメ) three.js の AnimationMixer 相当。GLTFModel が保持するアニメクリップを ModelAnimator で再生する。root には通常 model.getScene() を渡す。 毎フレーム update(dt秒) を呼ぶこと。 ※ VRM のアニメ(.vrma)は別系統。VRM は VRMLoader/VRMAnimation を使う。 ModelAnimator は「VRM 以外の glTF/GLB モデル自身のアニメ」用。 ============================================================
 
 ## メンバー一覧
 

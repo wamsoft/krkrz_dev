@@ -1137,6 +1137,72 @@ class Layer {
 	function shapedTextCount(text, font = void, base = 0);
 
 	/**
+	 * 矩形内縦組み描画 ( シェイピング / 日本語縦書き )
+	 *
+	 * 統一フォントエンジン glyphware を用いて、矩形 (x, y, width, height) の内側に
+	 * **縦組み ( 縦書き )** でテキストを描画します。横組みの
+	 * [Layer.drawShapedTextArea](Layer.md#drawshapedtextarea) とは別経路で、
+	 * 和文は正立・欧文は横倒しに組み分け、約物 ( 句読点・括弧類 ) の詰め・行頭行末禁則・
+	 * 追い込み / 追い出しを日本語組版規則 ( JLReq ) のアキ量に従って処理します。
+	 *
+	 * 列の長さは height、列の送り ( 行送り ) は「フォントサイズ + lineSpacing」です。
+	 * 既定 ( 縦組み右から左 ) では 1 列目が矩形の右端に来て左へ進みます。矩形に入りきらない
+	 * 列は描画されず、描画は矩形内にクリップされます。\n ( \r\n / \r ) は明示改行 ( 段落の
+	 * 区切り ) として扱われます。
+	 *
+	 * **対応範囲は本文のみです。** ルビ・縦中横・圏点・割注・字取り、段組には対応していません。
+	 * font の angle・underline ( 下線 )・strikeout ( 打ち消し線 ) は無視されます。
+	 * @param x 矩形の左端をピクセル単位で指定します。
+	 * @param y 矩形の上端をピクセル単位で指定します。
+	 * @param width 矩形の幅をピクセル単位で指定します ( 列が並ぶ方向の長さ )。
+	 * @param height 矩形の高さをピクセル単位で指定します ( 1 列の長さ )。
+	 * @param text 描画する文字列を指定します。
+	 * @param color 描画する文字の色を 0xAARRGGBB 形式で指定します ( 上位 8bit のα省略 = 不透明 )。
+	 * @param font 描画属性をまとめて指定します ( [Layer.drawShapedText](Layer.md#drawshapedtext) と同じ )。
+	 * @param count 0 以上を指定すると、全体を通して先頭 count 「文字」( クラスタ ) だけを
+	 * 描画します ( タイプライタ表示用 )。行分割は全文で確定してから制限を掛けるため、
+	 * 表示途中に列の組み替え ( リフロー ) は起こりません。欧文の単語間空白はここでは
+	 * 数えません ( 数える単位は描画される文字そのものです )。省略時 ( -1 ) は全体を描画します。
+	 * @param lineSpacing 列間 ( 行間 ) に追加するピクセル数を指定します ( 負値も可 )。
+	 * @param options 組版オプションを Dictionary で指定します ( 省略可 )。指定しなかった
+	 * キーは既定値のままです:
+	 *
+	 * + "orientation" => 正立 / 横倒しの指定。0 = 和文は正立・欧文は横倒し ( 既定 ) /
+	 * 1 = すべて正立 / 2 = すべて横倒し
+	 * + "verticalLr" => 真で列を左から右へ進めます ( 既定は偽 = 右から左 )
+	 * + "punctuation" => 約物の詰め ( JLReq のアキ量表 ) を行います ( 既定は真。偽ならベタ組み )
+	 * + "latinGap" => 和文と欧文の間にアキを入れます ( 既定は真 )
+	 * + "hanging" => 行末に来た句読点を版面の外へ出します ( ぶら下げ組み。既定は偽 )
+	 * + "justify" => 行末を揃えます ( 既定は真 )。偽でも溢れる分の詰めは行われます
+	 * + "letterSpacing" => 字間を em 単位の実数で指定します ( 既定は 0 )
+	 * @return 描画結果の Dictionary を返します ( 失敗時は void ):
+	 * %[ "width" => 使用した幅 ( px。列が並ぶ方向の厚み ), "lines" => 描画した列数,
+	 * "count" => 実際に描画したクラスタ数,
+	 * "totalCount" => count 制限が無いときのクラスタ総数 ]
+	 */
+	function drawVerticalTextArea(x, y, width, height, text, color, font = void, count = -1, lineSpacing = 0, options = void);
+
+	/**
+	 * 矩形内縦組みの計測
+	 *
+	 * [Layer.drawVerticalTextArea](Layer.md#drawverticaltextarea) と同じ組版を描画せずに
+	 * 行い、結果を Dictionary で返します。何列必要か / 全部で何文字あるかを、描画前に
+	 * 調べる用途に使います。
+	 * @param width 矩形の幅をピクセル単位で指定します。
+	 * @param height 矩形の高さをピクセル単位で指定します。
+	 * @param text 計測する文字列を指定します。
+	 * @param font 描画属性をまとめて指定します ( [Layer.drawShapedText](Layer.md#drawshapedtext) と同じ )。
+	 * @param count 0 以上を指定すると先頭 count クラスタだけを計測対象にします
+	 * ( 省略時 ( -1 ) は全体 )。
+	 * @param lineSpacing 列間 ( 行間 ) に追加するピクセル数を指定します ( 負値も可 )。
+	 * @param options 組版オプションを Dictionary で指定します
+	 * ( [Layer.drawVerticalTextArea](Layer.md#drawverticaltextarea) と同じ )。
+	 * @return 計測結果の Dictionary を返します ( 失敗時は void )。内容は
+	 * [Layer.drawVerticalTextArea](Layer.md#drawverticaltextarea) の戻り値と同じです。
+	 */
+	function measureVerticalTextArea(width, height, text, font = void, count = -1, lineSpacing = 0, options = void);
+
+	/**
 	 * 矩形コピー
 	 *
 	 * 指定されたコピー元レイヤの矩形部分を自分のレイヤの指定位置にコピーします。

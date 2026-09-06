@@ -104,8 +104,78 @@ es.onmessage = e => render(JSON.parse(e.data));
 | `WebServer.openBrowser([url [, appMode=true]])` | url をブラウザで開く。appMode 時 Edge/Chrome を `--app` で試し不可なら既定ブラウザへ。url 省略で稼働中 URL。**SDL 版でもアプリモード可** |
 | `WebServer.active` / `WebServer.url` | 稼働中か / 待受 URL |
 
-組み込みルート: `GET /` = 素の REPL ページ / `GET /events` = ログ SSE /
-`POST /cmd` = TJS 評価 / `GET /sub/<ch>` = 汎用 SSE。
+組み込みルート: `GET /` = 埋め込み UI (**Console / Watch のタブ**) / `GET /events` = ログ SSE /
+`POST /cmd` = TJS 評価 / `GET /sub/<ch>` = 汎用 SSE /
+**`GET|POST /watch` + `/sub/watch` = 監視式** / **`POST /pad/exec` + `GET|POST /pad/file` = Pad** / **`GET|POST /state` + `/sub/state` = コントローラ** / **`POST /bye`** (下記)。
+**組み込みルートは `WebServer.register` より先に判定される**ので、これらのパスは
+自前ハンドラで上書きできない (別名を使う)。
+
+### ブラウザ UI とアプリの寿命をそろえる (両方向)
+
+ブラウザを UI にする構成では**片方だけ残る**のがいちばん困る。engine 側で
+両方向を閉じてある。
+
+**本体 → ブラウザが居なくなったら終了** (`-replwebidle`)
+
+- **既定 5 秒で有効**。`-replwebidle=no` で無効、`=<秒>` で変更
+- **一度でも SSE 購読が来てから武装**する。だから購読を張らない
+  エージェント駆動 / API 面利用は落ちない。**自前 UI は `EventSource` を
+  1 本張っておけばそれが «ブラウザが居る» 印になる**
+- 複数タブは購読数で扱うので最後の 1 枚まで落ちない
+- ページは `pagehide`/`beforeunload` で `navigator.sendBeacon('/bye')` を投げると
+  猶予が ~2 秒へ前倒しされる (**自前 UI でも同じことをすると閉じが速くなる**)。
+  投げなくても `<秒>` で畳まれる
+
+**ブラウザ → 本体が居なくなったら閉じる**
+
+- `/sub/state` に `{"exiting":true}` が来たら即 `window.close()`
+  (engine が `Stop()` で流す)
+- SSE が切れて 5 秒復帰しなければ close (クラッシュ / 強制終了)
+- close が効かない通常タブは全面オーバーレイへフォールバック
+- **自前 UI もこの 2 つを実装しておくと «本体だけ終わってページが残る» を防げる**
+
+### ブラウザの自動オープン (`-replwebopen`)
+
+既定は「ループバック束縛 かつ コンソール無し (GUI 起動)」のときだけ app モード。
+**端末から起動すると開かない**ので、開かせたいときは `-replwebopen=app`
+(`tab` = 通常ウィンドウ / `no` = 抑止)。TJS からは `WebServer.openBrowser`。
+
+⚠ engine の app モードは `msedge.exe --app=<url>` を **ユーザの通常プロファイル**
+で起動する (プロファイル指定なし)。検証で `--user-data-dir=<使い捨て>` を
+自分で渡すと **Edge のオンボーディング (同期を促すダイアログ) がユーザの画面に
+出る**ので、捨てプロファイルを使うなら `--disable-sync --no-first-run
+--no-default-browser-check` を添え、**終わったら必ずウィンドウごと片付ける**。
+
+### 監視式 API (`/watch`)### Pad API (`/pad/*`) — 複数行スクリプトの実行と保存
+
+- `POST /pad/exec` — body を**まるごと 1 回**実行 (`/cmd` の 1 行実行と違い、
+  関数定義やループをそのまま流せる)。`{"ok","result","error"}`
+- `GET /pad/file?path=` — ストレージから読む (text/plain)
+- `POST /pad/file?path=` — ストレージへ書く。**既定は 403**。
+  本体を `-replwebpad=<dir>` で起動したときだけ、その接頭辞の配下へ書ける
+  (⚠ セキュリティ境界ではなく «[保存] のうっかり» を防ぐ柵。`/cmd` で任意 TJS が
+  実行できる時点で全権限は開いている)
+
+### 監視式 API (`/watch`) — 状態を張り込んで観測する
+
+エンジン組み込み。式のリストを保持して、まとめて評価して返す。自前の
+インスペクターを書く前に、これで足りないか見ると早い。
+
+| ルート | 説明 |
+|---|---|
+| `GET /watch` | 一覧+現在値 (JSON)。**評価しない**のでポーリング安全。`?eval=1` で評価してから返す |
+| `POST /watch` | form-urlencoded。`op=add&expr=…` / `op=rm&id=…` / `op=edit&id=…&expr=…` / `op=clear` / `op=interval&ms=…` / `op=eval`。成功なら GET と同じ JSON |
+| `GET /sub/watch` | 自動更新の push。**値が変わったときだけ**流れる (定数式を張っても無駄な配信は出ない) |
+
+```js
+await fetch('/watch', {method:'POST', body:new URLSearchParams({op:'add', expr:'System.getTickCount()'})});
+await fetch('/watch', {method:'POST', body:new URLSearchParams({op:'interval', ms:'500'})});
+new EventSource('/sub/watch').onmessage = e => render(JSON.parse(e.data));
+```
+
+payload = `{"interval":500,"entries":[{"id":1,"expr":"…","value":"…","error":false}]}`。
+`interval` は `-1`=off / `0`=毎フレーム / 正値=ms (下限 100ms)。式が例外を投げても
+`value` が `"(error) …"` になるだけで一覧は返る。
 
 ## ハンドラ呼び出し規約
 

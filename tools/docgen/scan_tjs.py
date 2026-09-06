@@ -57,7 +57,7 @@ CLASSES = {
     "AsyncTrigger", "Plugins", "Rect", "Console", "VideoOverlay",
     "WaveSoundBuffer", "SoundBuffer", "SoundListener",
     "TextWriteStream", "TextReadStream", "BinaryStream",
-    "Dialog", "Agent", "WebServer",
+    "ElementsDialog", "ElementsPanel", "Agent", "WebServer",
 }
 
 # Members present in the C++ binding but intentionally excluded from the
@@ -84,6 +84,13 @@ CTOR_RE = re.compile(
 # Prefer the class actually instantiated so those members map to the documented
 # class. Searched only near the factory opening (the `new` is the first stmt).
 NEW_INSTANCE_RE = re.compile(r"new\s+tTJSNC_(\w+)\s*\(")
+
+# C++ binding-class name (tTJSNC_Xxx) -> TJS-visible class name, for classes
+# whose registration name differs from the C++ token (rename kept the C++
+# internals). Applied to ctor-span names before the CLASSES filter.
+CLASS_ALIASES = {
+    "Dialog": "ElementsDialog",
+}
 DECL_RES = {
     "method":  re.compile(r"TJS_BEGIN_NATIVE_METHOD_DECL\(\s*(?:/\*[^*]*\*/\s*)?(\w+)\s*\)"),
     "property": re.compile(r"TJS_BEGIN_NATIVE_PROP_DECL\(\s*(?:/\*[^*]*\*/\s*)?(\w+)\s*\)"),
@@ -152,7 +159,7 @@ def scan_file(path: Path) -> dict[str, dict]:
             if nm:
                 name = nm.group(1)
         if name:
-            ctor_spans.append((m.start(), name))
+            ctor_spans.append((m.start(), CLASS_ALIASES.get(name, name)))
     if not ctor_spans:
         return {}
     ctor_spans.sort()

@@ -24,6 +24,7 @@
 
 ## 本体 (exe) 変更者向け情報
 
+- [Elements UI 機構の全体像](core/elements.md)
 - [エンジン設定の追加/編集](core/engine_setting.md)
 - [吉里吉里Z固有のクラッキング対策](core/anti_cracking.md)
 - [メモリ不足対策](core/low_memory.md)
@@ -31,6 +32,7 @@
 - [描画スレッドプール利用率の計測 (DrawStats)](core/draw_stats.md)
 - [ゲームパッド状態の観察 (PadOverlay)](core/pad_overlay.md)
 - [REPL (対話型 TJS シェル)](core/repl.md)
+- [Steam Deck 実機確認 (リリース前チェック)](core/steamdeck.md)
 - [ログ出力](core/logging.md)
 
 ---

@@ -174,19 +174,27 @@
       "logToFileOnError"
     ]
   },
-  "Dialog": {
+  "ElementsDialog": {
     "events": [
       "onAction",
       "onClose",
+      "onDrag",
       "onScreen",
-      "onScreenLeave"
+      "onScreenLeave",
+      "onVar"
     ],
     "file": "src/core/common/visual/elements/DialogIntf.cpp",
     "methods": [
+      "activate",
       "clearHotKeys",
       "clearImages",
+      "clearSharedVars",
       "close",
       "dictToJson",
+      "focus",
+      "getSharedVars",
+      "getVar",
+      "listVars",
       "onAction",
       "onClose",
       "onScreen",
@@ -196,8 +204,10 @@
       "registerHotKey",
       "registerImage",
       "renderStatsReset",
+      "setAtlasImage",
       "setPadIconBase",
       "setPadTheme",
+      "setSharedVar",
       "setVar",
       "showDict",
       "showFile",
@@ -209,22 +219,61 @@
       "showModalJson",
       "startFlow",
       "startFlowScreens",
+      "swappableAtlases",
       "unregisterHotKey",
       "unregisterImage"
     ],
     "properties": [
       "active",
+      "baseSize",
       "defaultFontFamily",
       "focusRing",
       "fontLanguages",
       "hasPhysicalKeyboard",
       "language",
+      "modalActive",
       "partialRedraw",
       "renderCache",
       "renderCount",
       "renderScale",
       "renderStats",
-      "virtualKeyboard"
+      "virtualKeyboard",
+      "watchVars"
+    ]
+  },
+  "ElementsPanel": {
+    "events": [
+      "onAction",
+      "onClose",
+      "onDrag",
+      "onVar"
+    ],
+    "file": "src/core/common/visual/elements/PanelIntf.cpp",
+    "methods": [
+      "activate",
+      "close",
+      "focus",
+      "getVar",
+      "invalidate",
+      "keyDown",
+      "keyUp",
+      "listVars",
+      "mouseDown",
+      "mouseLeave",
+      "mouseMove",
+      "mouseUp",
+      "mouseWheel",
+      "notifyResized",
+      "setVar",
+      "showDict",
+      "showFile",
+      "showJson",
+      "text"
+    ],
+    "properties": [
+      "active",
+      "focused",
+      "watchVars"
     ]
   },
   "Font": {
@@ -311,6 +360,7 @@
       "drawShapedText",
       "drawShapedTextArea",
       "drawText",
+      "drawVerticalTextArea",
       "dump",
       "fillRect",
       "flipLR",
@@ -327,6 +377,7 @@
       "loadImages",
       "loadProvinceImage",
       "measureShapedText",
+      "measureVerticalTextArea",
       "moveBefore",
       "moveBehind",
       "onBeforeFocus",
@@ -645,6 +696,7 @@
       "inputString",
       "nullpo",
       "readRegValue",
+      "registerHotKey",
       "removeContinuousHandler",
       "renderStatsReset",
       "resetMemoryPeak",
@@ -661,7 +713,8 @@
       "system",
       "terminate",
       "toActualColor",
-      "touchImages"
+      "touchImages",
+      "unregisterHotKey"
     ],
     "properties": [
       "appDataPath",
@@ -906,6 +959,7 @@
       "onPointerUp",
       "onPopupHide",
       "onResize",
+      "onTextInput",
       "onTouchDown",
       "onTouchMove",
       "onTouchRotate",
