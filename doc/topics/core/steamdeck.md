@@ -86,6 +86,7 @@ steamdev screenshot -o deck.png
 
 ```bash
 steamdev tunnel -L 18899:8899        # 別ターミナルで開いたまま
+# (deckproject.toml で -replwebidle=no にしてあるので、ブラウザを閉じても落ちない)
 curl -s http://127.0.0.1:18899/state                       # コントローラ
 curl -s -X POST -d 'System.getTickCount()' http://127.0.0.1:18899/pad/exec
 curl -s -X POST -d 'op=add&expr=System.osName' http://127.0.0.1:18899/watch
@@ -133,13 +134,13 @@ Proton の初回起動は prefix 生成で数十秒かかるのが正常です�
 
 ### `-replweb` を使うときの注意 ( 2026-09-06〜 )
 
-`-replwebidle` が**既定で有効 ( 5 秒 )** になりました。**ブラウザで
-`http://127.0.0.1:18899/` を開いて閉じると、Deck 上のアプリも終了します**
+`-replwebidle` が**既定で有効 ( 5 秒 )** になりました。素のままだと**ブラウザで
+`http://127.0.0.1:18899/` を開いて閉じた時点で、Deck 上のアプリも終了します**
 ( 一度でも接続が来てから武装するので、curl だけの確認では終了しません )。
 
-- 「ブラウザを閉じたら終わる」で都合がよければそのまま
-- 検証中に落としたくなければ、`deckproject.toml` の起動コマンドへ
-  `-replwebidle=no` を足す
+実機確認は「見て閉じてまた見る」を繰り返すので、`deckproject.toml` の起動
+コマンドには **`-replwebidle=no` を入れてあります**。ブラウザを閉じたら
+終わってほしい使い方をするときだけ外してください。
 
 ---
 
