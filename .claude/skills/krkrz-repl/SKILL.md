@@ -57,7 +57,7 @@ SDL3 専用として残るのは起動時 UserConfig UI (`-userconf`、ゲーム
 |---|---|
 | `-repl` | console REPL (CONIN$ 直読み) を起動。人間の対話向け。`-repl=no/off/false/0` で抑止。 |
 | `-replfile=<dir>` | **ファイルチャネルを起動 (外部エージェント向け、本命)**。`<dir>` の `cmd`/`resp` ファイルで駆動。`-repl` と独立。 |
-| `-replweb[=port]` | HTTP+SSE サーバ (既定 127.0.0.1:8899)。`GET /`=ブラウザ REPL ページ / `GET /events`=ログ SSE / `POST /cmd`=TJS 評価 / `GET /sub/<ch>`=汎用 SSE / `GET|POST /watch` + `GET /sub/watch`=監視式。`GET /` は Console / Watch のタブ UI。`-replwebidle=<秒>` でブラウザを閉じたらアプリも終了 (既定 0=無効)。**curl でも駆動できる** (`curl -X POST -d 'expr' http://127.0.0.1:8899/cmd`)。 |
+| `-replweb[=port]` | HTTP+SSE サーバ (既定 127.0.0.1:8899)。`GET /`=ブラウザ REPL ページ / `GET /events`=ログ SSE / `POST /cmd`=TJS 評価 / `GET /sub/<ch>`=汎用 SSE / `GET|POST /watch` + `GET /sub/watch`=監視式。`GET /` は Console / Watch のタブ UI (上のバーにイベント停止 / 終了)。**`-replwebidle` は既定 5 秒で有効** = ブラウザを閉じたらアプリも終了 (`=no` で無効。ただし **一度でも SSE 購読が来てから武装**するので、curl だけ / 未接続の駆動は落ちない)。`-replwebopen=app|tab|no` で端末起動時もブラウザを開ける。**curl でも駆動できる** (`curl -X POST -d 'expr' http://127.0.0.1:8899/cmd`)。 |
 | `-nostartup` | startup.tjs の自動実行を抑止。window 無し起動でも即終了しない。明示的にスクリプトを呼んで初めて処理が始まる。`-nostartup=no/off/false/0` で無効。 |
 | `-loglevel=info` | ログレベル。コンソールに出る量を制御。`MASTER` ビルドだと既定 WARNING。 |
 | `-display=<番号\|名前>` | 起動するディスプレイ (モニタ) の指定。**マルチディスプレイ環境でメインディスプレイを占有せずに検証したいときに使う**。番号は 1 origin (Windows の `\\.\DISPLAYn` の n)、名前はモニタ名の部分一致、`primary` も可。`-display=list` で一覧をログ出力。WINVER / SDL3 両対応。 |
