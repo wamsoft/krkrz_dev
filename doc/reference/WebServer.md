@@ -23,10 +23,20 @@ WebServer クラスは吉里吉里Z に組み込まれた HTTP + SSE サーバ�
 
 また、以下のルートはサーバ側に組み込まれています ( TJS のメンバではありません )。
 
-- `GET /`            ... ビューワー本体
-- `GET /events`      ... REPL コンソール用の SSE ストリーム
-- `POST /cmd`        ... REPL へのコマンド送信
+- `GET /`              ... ビューワー本体 ( Console / Watch / Pad のタブ UI )
+- `GET /events`        ... REPL コンソール用の SSE ストリーム
+- `POST /cmd`          ... REPL へのコマンド送信
 - `GET /sub/<channel>` ... 任意チャンネルの SSE 購読
+- `GET`/`POST /watch`  ... 監視式の取得 / 操作
+- `GET`/`POST /state`  ... コントローラ ( `System.eventDisabled` / 終了要求 )
+- `POST /pad/exec` , `GET`/`POST /pad/file` ... Pad ( スクリプトエディタ )
+- `POST /bye`          ... ページを閉じる合図
+
+!!! warning "組み込みルートは register より先に判定されます"
+    上のパスは [WebServer.register](WebServer.md#register) や
+    [serveStatic](WebServer.md#servestatic) で**上書きできません**。
+    自前のエンドポイントには別の接頭辞を使ってください
+    ( 例: `/api/` `/ui/` )。
 
 !!! warning "日本語などマルチバイトの値は body で受ける"
     `query` は percent-encoding されたままの文字列です。これを戻す

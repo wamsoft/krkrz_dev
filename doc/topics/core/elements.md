@@ -59,8 +59,37 @@ D3D11 ) へ転送してゲーム画面の上に出します。再描画が不要
 **値**: 画面 JSON の中の変数は 1 本のストアにぶら下がります。TJS からは
 [setVar](../../reference/ElementsDialog.md#setvar) で書き、[getVar](../../reference/ElementsDialog.md#getvar) で
 読み、[onVar](../../reference/ElementsDialog.md#onvar) で変化を受け取れます。ボタン押下や値変更は
-[onAction](../../reference/ElementsDialog.md#onaction) で届きます。**この 4 つが③と④の間の
-インターフェースの全て**です。
+[onAction](../../reference/ElementsDialog.md#onaction) で届きます。**日常的にはこの 4 つが
+③と④の間のインターフェースの全て**です ( ほかに画像やアトラスの差し替え、
+セッション共有変数の読み書きといった「ホストにしかできないこと」の口があります。
+次節参照 )。
+
+## 設計方針: UI の処理は画面データ側で完結させる
+
+複数のプロジェクトがそれぞれ独自の UI フレームワークを④に書き始めたのを受けて、
+**UI の処理は②と画面 JSON で完結させ、④は「呼ぶ / 値を供給する / アクションを
+実行する」だけ**にする方針を採っています。切り分けの原則は「**ゲームの状態に
+触るか**」です。
+
+| 画面データ側 ( ②+ 画面 JSON ) | ホスト側 ( ③④ ) |
+|---|---|
+| 画面遷移・タブ・一覧のスクロールと選択 | 設定値やセーブデータの実体 |
+| 値の整形と出し分け・フォーカス・演出 | セーブ / ロードの実行、SE の実再生 |
+| 画面をまたいで値を保つ ( `shared_vars` ) | ホストのダイアログ機構との調停 |
+
+そのため、次のものは**ホストのコールバックを書かなくても画面 JSON だけで動きます**。
+
+- **`"shared_vars": ["cfg_*"]`** — 一致する変数を画面をまたいで保つ
+  ( 設定画面をタブで渡り歩いてもスライダーが戻らない )
+- **`"value_var"`** — `checkbox` / `toggle_button` / `slide_switch` の ON/OFF を変数連動
+- **`"image_var"`** — `image` の絵そのものを変数で差し替え ( セーブ一覧のページ送り等 )
+- **差し替え可能アトラス** — 同じ画面のまま絵の束だけ入れ替え ( CG 鑑賞のグループタブ等 )
+
+ホスト側に残る仕事は「セーブデータへの落とし込み」だけで、その口が
+[getSharedVars](../../reference/ElementsDialog.md#getsharedvars) /
+[setSharedVar](../../reference/ElementsDialog.md#setsharedvar) /
+[clearSharedVars](../../reference/ElementsDialog.md#clearsharedvars)、
+アトラス差し替えが [setAtlasImage](../../reference/ElementsDialog.md#setatlasimage) です。
 
 ## ドキュメント地図
 
@@ -81,5 +110,7 @@ D3D11 ) へ転送してゲーム画面の上に出します。再描画が不要
   宣言で決まり、ホストは遷移を書かない
 - **画面 JSON** … 1 画面ぶんのレイアウト定義。TJS の Dictionary でも書ける
 - **変数ストア** … 画面の中で共有される名前付きの値。文字列で持つ
+- **セッション共有変数** … 画面をまたいで保たれる変数。画面 JSON の
+  `"shared_vars"` が「どれを持ち回るか」を宣言する ( ホスト実装は不要 )
 - **named action** … キー / パッド / マウスへ割り当てる名前付き操作。組込名は
   ダイアログ内で処理され、それ以外はホストへ通知される

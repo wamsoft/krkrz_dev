@@ -89,7 +89,7 @@ nav:
       - 3Dグラフィックシステム: guide/Graphic3DSystem.md
       - サウンドシステム: guide/SoundSystem.md
       - ストレージシステム: guide/StorageSystem.md
-      - ダイアログ: guide/Dialog.md
+      - ダイアログ: guide/ElementsDialog.md
       - フォントシステム: guide/FontSystem.md
       - トランジション: guide/Transition.md
       - プラグイン: guide/Plugins.md
@@ -290,6 +290,7 @@ nav:
       - ゲームパッド入力: topics/core/gamepad.md
       - ゲームパッド状態の観察 (PadOverlay): topics/core/pad_overlay.md
       - REPL (対話型 TJS シェル): topics/core/repl.md
+      - Steam Deck 実機確認 (リリース前チェック): topics/core/steamdeck.md
       - ゲーム画面の表示画角制御 (ビューポート): topics/core/viewport.md
       - ログ出力: topics/core/logging.md
     - ライセンス: topics/LICENSE.md

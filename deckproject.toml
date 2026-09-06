@@ -28,7 +28,12 @@ script = "python -c \"import glob,os,shutil; d=os.environ['STEAMDEV_STAGE_DIR'];
 [targets.linux.deploy]
 # -replweb: 127.0.0.1:8899 に REPL サーバ (steamdev tunnel -L 18899:8899 で駆動)。
 # 不要なら "./krkrz data" に戻す。引数変更は再デプロイで反映される点に注意。
-command = "./krkrz data -replweb -loglevel=info"
+#
+# -replwebidle=no: 「ブラウザが全部閉じたらアプリも終了」を切る。既定は 5 秒で
+# 有効なので、そのままだとトンネル越しに REPL ページを開いて閉じただけで実機の
+# アプリが落ちてしまい、検証が途切れる。実機確認では見て閉じてまた見る、を
+# 繰り返すので切っておく。
+command = "./krkrz data -replweb -replwebidle=no -loglevel=info"
 # exe に RPATH が無いので同梱 SDL3 をカレントから拾わせる
 env = { LD_LIBRARY_PATH = "." }
 # Steam 配布と同一環境で検証する場合は sniper コンテナ実行:

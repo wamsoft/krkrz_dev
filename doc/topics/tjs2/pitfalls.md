@@ -130,7 +130,7 @@ if (obj.name !== void) { ... }                          // 正しい
 
 `VK_PAD*` はパネルのウィジェット操作 ( 十字 = フォーカス移動 / A = 決定 ) に
 消費され、ゲーム側の `onKeyDown` には届きません。 必ずゲームで受けたいボタンは
-[Dialog.registerHotKey](../../reference/Dialog.md#registerhotkey) で確保すると
+[ElementsDialog.registerHotKey](../../reference/ElementsDialog.md#registerhotkey) で確保すると
 パネルをバイパスします ( コアデモ `pad_advanced` に ON/OFF の比較あり )。
 
 ### アナログスティックは無操作でも 0 にならない

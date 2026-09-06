@@ -42,7 +42,7 @@
 | OpenGL ES 描画パス | 遅延初期化される GPU 描画デバイス [OGLDrawDevice](../../reference/OGLDrawDevice.md) と、[Canvas](../../reference/Canvas.md) / [Texture](../../reference/Texture.md) / [ShaderProgram](../../reference/ShaderProgram.md) / [Offscreen](../../reference/Offscreen.md) / VertexBuffer / Matrix32 / Matrix44 等の GL クラス群 |
 | GLCompositor | 非 GL 描画デバイス下でも裏で OpenGL ES オフスクリーン合成し Layer へ書き戻すクラス ( [GLCompositor](../../reference/GLCompositor.md) ) |
 | Canvas トランジション描画 | `Canvas.drawTransition` による GPU ベースの画面遷移描画 |
-| Elements ベースの汎用ダイアログ | JSON / Dictionary 定義のクロスプラットフォーム UI ( [Dialog](../../reference/Dialog.md) クラス。詳細は [ダイアログ](../../guide/Dialog.md) ) |
+| Elements ベースの汎用ダイアログ | JSON / Dictionary 定義のクロスプラットフォーム UI ( [ElementsDialog](../../reference/ElementsDialog.md) クラス。詳細は [ダイアログ](../../guide/ElementsDialog.md) ) |
 | REPL ( 対話型 TJS シェル ) | `-repl` / `-replfile` によるスクリプト評価・検証 ( [REPL](../core/repl.md) ) |
 | WebServer | 組み込み HTTP + SSE サーバ ( `-replweb` )。TJS からエンドポイントを登録可能 ( [WebServer](../../reference/WebServer.md) ) |
 | Agent | 入力注入・画面キャプチャ・ダイアログ操作の自動化駆動 API ( [Agent](../../reference/Agent.md) ) |

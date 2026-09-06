@@ -1313,7 +1313,7 @@ class System {
 	 * GL テクスチャメモリ使用量の取得
 	 *
 	 * GL 系 DrawDevice が確保しているテクスチャ類のメモリ使用量を辞書で返します。
-	 * [System.getFreeMemory](System.md#getfreememory) 等が扱う CPU 側のメモリには
+	 * アロケータやプロセスの使用量 ( REPL の `.mem` 等 ) が扱う CPU 側のメモリには
 	 * GL ドライバが確保するテクスチャは含まれないため、こちらで別途計測します。
 	 *
 	 * 返される辞書のメンバは次の通りです ( 単位はバイト )。

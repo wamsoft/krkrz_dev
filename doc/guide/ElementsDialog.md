@@ -180,6 +180,34 @@ class ListDialog extends ElementsDialog {
 - **onVar を実装したダイアログだけが観測対象**になります ( 実装していなければコストはかかりません )。受け取る変数を絞りたいときは [watchVars](../reference/ElementsDialog.md#watchvars) に名前を並べます — hover 連動変数やドラッグ位置は毎フレーム書き換わるためです
 - 画面にどんな変数があるかは [listVars](../reference/ElementsDialog.md#listvars) で一覧できます ( 変数名・現在値・参照している widget の id と種類 )。デバッグパネルや画面 JSON の検証に使えます
 
+## 画面をまたいで値を保つ ( shared_vars )
+
+変数 store は**画面ごとに作り直される**ので、設定をタブで渡り歩くと「さっき動かしたスライダー」が既定値へ戻ります。引き継ぎたい値は画面 JSON の top-level に宣言します。
+
+```jsonc
+"shared_vars": ["cfg_*", "ui_lang"]
+```
+
+一致した変数はセッション共有ストアと**双方向**になり、画面を組むときは共有側の値で初期化され ( 画面の `"vars"` 既定より共有側が優先 )、以後変わるたび共有側へ書き戻されます。パターンは完全一致か末尾 `*` の前方一致です。**どの値を持ち回るかは画面側が決めるので、ホスト側の実装は要りません**。
+
+ゲームのセーブデータへ落とす / ロード後に流し込むのはホストの仕事なので、その口だけ用意してあります。
+
+```tjs
+// セーブ
+var cfg = ElementsDialog.getSharedVars();   // %[ "cfg_bgm" => "70", ... ]
+// ロード
+ElementsDialog.clearSharedVars();
+foreach_dict_of(cfg, function(k, v) { ElementsDialog.setSharedVar(k, v); });
+```
+
+値は文字列で出入りします。共有側へ行くのは「変化として書かれた」値だけで、ウィジェットの初期値 ( `"initial"` / `"value"` ) は出ません — 誰も触っていない項目が最初に開いた画面の既定で固定されるのを避けるためです。
+
+## 値と絵を変数で差し替える ( value_var / image_var / 差し替え可能アトラス )
+
+- **2 値トグル** ( `checkbox` / `toggle_button` / `slide_switch` ) は `"value_var"` で変数 store と双方向になります ( `""` / `"0"` / `"false"` = off )。クリックで書き戻り、[setVar](../reference/ElementsDialog.md#setvar) で状態が追従します ( 追従では `onAction` は発火しません )。設定画面の ON/OFF をホストのコールバック無しで扱えます。
+- **`image` ウィジェット**は `"image_var"` で絵そのものを差し替えられます。変数の値がそのまま画像パス ( `"resources/x.png"` / `"mem://thumb_3"` / 空 = 無描画 ) になるので、セーブ一覧のページ送りでサムネイルが変わる、CG ビュワーの絵を送る、といった画面が**再構築なしで**書けます。
+- **アトラスごと**入れ替えたい場合は、画面 JSON で `"atlases": { "cg": { "path": ..., "swappable": true } }` と宣言し、[setAtlasImage](../reference/ElementsDialog.md#setatlasimage) で差し替えます。ウィジェットは作り直さないのでレイアウトもフォーカスも保たれます。**差し替え先は同じ矩形割りであること** ( frames / rect は変わらないので、絵の位置がずれると別の絵が出ます )。差し替えられるアトラス名は [swappableAtlases](../reference/ElementsDialog.md#swappableatlases) で確認できます。
+
 ## 非モーダルの複数同時表示とフォーカス
 
 非モーダル ( オーバーレイ ) パネルの配置は画面 JSON の top-level `"align"` / `"margin"` で指定し、配置と拡縮の基準領域は top-level `"base"` で選べます — `"window"` ( 既定、ウィンドウ全面基準 ) / `"content"` ( ゲーム画像の表示領域基準。字幕窓のようにゲーム画像へ追従させたい場合 )。拡縮はゲームの基準面に対するウィンドウ ( または表示領域 ) の比率に追従するため、フルスクリーン等ではゲームと同率で拡大されます。ゲーム画面と別解像度で UI を author しているタイトル ( ゲーム画面 640x400 / UI 1920x1080 等 ) では、[ElementsDialog.baseSize](../reference/ElementsDialog.md#basesize) に author 基準面のサイズを設定すると拡縮の分母がそちらになり、ゲーム側の基準面サイズの変更にも巻き込まれません。
@@ -297,6 +325,13 @@ ElementsDialog.registerFont("MyFont-Medium", "fonts/MyFont-VF.ttf#wght=500");   
 
 ダイアログ機能は `KRKRZ_USE_ELEMENTS=ON` ( デフォルト ) でビルドされたエンジンで利用できます。SDL3 ビルドと WINVER ( Windows ネイティブ / D3D11 ) ビルドの両方に対応します。`KRKRZ_USE_ELEMENTS=OFF` でビルドした場合は [ElementsDialog](../reference/ElementsDialog.md) / [ElementsPanel](../reference/ElementsPanel.md) クラスは登録されず、ダイアログ関連のコードはリンクから除外されて実行ファイルサイズが削減されます。
 
+## 全体像と設計方針
+
+層構造 ( elements / elements_modal / krkrz 本体 / ゲーム側 ) と、
+「**UI の処理は画面データ側で完結させ、ホストは繋ぐだけ**」という方針の
+説明は [Elements UI 機構の全体像](../topics/core/elements.md) にあります。
+どの層を直せばよいか迷ったときはそちらを先に読んでください。
+
 ## 関連 API
 
 - [ElementsDialog](../reference/ElementsDialog.md) — TJS バインディングクラス
@@ -310,4 +345,8 @@ ElementsDialog.registerFont("MyFont-Medium", "fonts/MyFont-VF.ttf#wght=500");   
 - [ElementsDialog.registerHotKey](../reference/ElementsDialog.md#registerhotkey) — ホストホットキー ( ダイアログをバイパス ) / [System.registerHotKey](../reference/System.md#registerhotkey) — 最上位ホットキー ( モーダル中でも効く )
 - [ElementsDialog.baseSize](../reference/ElementsDialog.md#basesize) — UI の author 基準面サイズ / [renderScale](../reference/ElementsDialog.md#renderscale) — 描画密度
 - [ElementsDialog.registerFont](../reference/ElementsDialog.md#registerfont) / [registerFontDir](../reference/ElementsDialog.md#registerfontdir) / [defaultFontFamily](../reference/ElementsDialog.md#defaultfontfamily) — フォント登録
+- [ElementsDialog.setVar](../reference/ElementsDialog.md#setvar) / [getVar](../reference/ElementsDialog.md#getvar) / [listVars](../reference/ElementsDialog.md#listvars) / [onVar](../reference/ElementsDialog.md#onvar) / [watchVars](../reference/ElementsDialog.md#watchvars) — 画面ごとの変数ストア
+- [ElementsDialog.getSharedVars](../reference/ElementsDialog.md#getsharedvars) / [setSharedVar](../reference/ElementsDialog.md#setsharedvar) / [clearSharedVars](../reference/ElementsDialog.md#clearsharedvars) — 画面をまたぐセッション共有変数 ( セーブ / ロード用 )
+- [ElementsDialog.registerImage](../reference/ElementsDialog.md#registerimage) / [unregisterImage](../reference/ElementsDialog.md#unregisterimage) / [clearImages](../reference/ElementsDialog.md#clearimages) — 実行時画像 ( `mem://` )
+- [ElementsDialog.setAtlasImage](../reference/ElementsDialog.md#setatlasimage) / [swappableAtlases](../reference/ElementsDialog.md#swappableatlases) — 差し替え可能アトラス
 - [ElementsDialog.language](../reference/ElementsDialog.md#language) / [fontLanguages](../reference/ElementsDialog.md#fontlanguages) — i18n ( 表示言語と言語連動フォント置換 )
