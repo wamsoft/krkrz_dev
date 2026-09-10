@@ -21,11 +21,11 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 完了したものは末尾の「完了 (記録として残す)」へ移す。
 
-## 現況 (2026-09-06 時点)
+## 現況 (2026-09-10 時点)
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 12 | Elements/UI 1 (低) / エンジン基盤 8 / ビルド・運用 3 |
+| 予定・未着手 | 14 | Elements/UI 3 (低) / エンジン基盤 8 / ビルド・運用 3 |
 | 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
@@ -35,6 +35,8 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 [Versioning.md](src/core/doc/Versioning.md) の「移行メモ」= サマリとタグメッセージの冒頭に置く一覧。 リリース枝へ反映するときに拾う。
 
+- **Elements のテキスト欄で IME が開くようになった (WINVER)** — テキスト入力ウィジェットが編集フォーカスを持つ間だけ IME を開き、 外れると `Window.imeMode` の既定値へ戻す。 これまでは半角/全角キーを叩かないと日本語が打てなかった。 併せて **`Window.imeMode` の setter を実装** (レイヤツリーオーナ化のときに コメントアウトされたまま残っていたもの)。 SDL3 ビルドは従来どおり。
+- **`Layer.doGrayScale` / `ImageFunction.doGrayScale` に重み指定を追加** — `doGrayScale(0.299, 0.587, 0.114)` のように R/G/B の重みを渡せる。 引数を省略した従来呼び出しは BT.709 相当のままで挙動不変。
 - **`RegExp.index` の修正 (src/core `ea363abc`)** — これまで検索開始位置より後ろでマッチすると `index` が `Start + 2×相対オフセット` にずれていた。正しい文字位置を返すようになったので、`index` のずれを前提に補正しているスクリプトがあれば影響する (詳細は末尾の完了欄)。
 
 **優先度「高」の項目は現在ゼロ**。最後まで残っていた
@@ -73,6 +75,8 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 低 | Elements の観測・操作 API を TJS へ公開 (残り) | **変数系は 2026-08-29 に公開済み** (`ElementsDialog.getVar` / `listVars` / `onVar` / `watchVars` = elements_modal の `get_var` / `list_vars` / `set_var_watcher` に対応。src/core `fcae740b`)。 残りは **navigator の `push` / `pop` / `replace` / `stack`** と `languages`。 要素を名指しで動かす instance 版は公開済み (`ElementsDialog.focus(id)` = 2026-09-02 / `activate(id)` = 2026-09-04。検証用の `Agent.dialogFocus` / `dialogClick` は従来どおり)。 用途は検証ツールから「この画面へ飛ぶ」を実装すること。 当たり判定やフォーカスナビの確認は実入力を流す API でないと意味が無い点に注意 |
 | ✅ | Elements: `input_box` にプログラム的フォーカスが効かない | **2026-09-02 に解決** (elements `de989d18`: `descend_focus_first` — composite 包みの内側へフォーカス連鎖を用意)。`initial_focus` / `focus_by_id` / `ElementsDialog.focus(id)` で編集フォーカス (キャレット + text 受理) になる。詳細 = [TODO-elements.md](TODO-elements.md) §3 |
 | ✅ | Elements: `input_box` の最大長と値の差し替え口が無い | **2026-09-02 に解決** (elements `de989d18`): `"max_chars"` (別名 `"maxlength"`、codepoint 単位、0/省略=無制限) を追加。既定値 (`"text"`/`"value"`) 入りは build 時全選択なので initial_focus からそのまま打つと置き換わる (差し替え口の代替)。詳細 = [TODO-elements.md](TODO-elements.md) §5-8 |
+| 低 | Elements の IME: 未確定文字列と変換候補窓のキャレット追従 | テキスト欄が編集フォーカスを持つ間 IME を開く/閉じるところまでは対応済み (WINVER。`UpdateImeFollowFocus()`)。 残りは **未確定 (変換中) 文字列のインライン表示**と **変換候補ウィンドウを入力欄の位置に出すこと** (今は IME 既定位置)。 後者には `overlay_session` に「フォーカス中のテキスト要素の矩形」を返す API が要る (`focus_consumes_text()` と同じ focus パス走査 + context 経由の bounds 取得)。 それが取れれば `iTVPWindow::SetAttentionPoint` に流すだけ。 SSOT = [ElementsDialog.md](src/core/doc/ElementsDialog.md) 「IME の focus 追従」 |
+| 低 | SDL3 ビルドの IME が開かない | SDL3 は `SDL_StartTextInput` でテキストイベントを有効にするだけで IME の開閉までは面倒を見ないため、 Windows/SDL3 では Elements のテキスト欄に focus しても英数のまま。 WINVER と同じ形 (focus 追従で開閉) にするなら SDL の HWND から imm32 を直に叩くか、 SDL 側に口を足すことになる。 `Window.imeMode` も SDL3 では未実装 (例外) |
 
 ### エンジン基盤
 
