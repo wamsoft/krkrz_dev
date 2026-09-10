@@ -234,7 +234,17 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 **戻り値**
 
 ダイアログ記述子の配列が返ります。各要素は
-`%[index, modal, active, screen, focused, x, y, w, h]` 形式の辞書です。
+`%[index, modal, active, screen, focused, textFocus, x, y, w, h]` 形式の辞書です。
+
+`textFocus` は「テキスト入力ウィジェット ( input_box 等 ) が編集フォーカスを
+持っているか」で、ソフトキーボードや IME を開くかどうかの判断に使われている値
+そのものです。日本語入力が始まらない等の切り分けに使えます。
+
+`screen` はフロー ( navigator ) の現画面名で、単発のダイアログでは空です。
+`focused` はフォーカス中のウィジェット id ですが、**id を追跡する仕掛けを持つ
+画面でのみ埋まります**。空だからフォーカスが無い、という意味ではありません
+( フォーカスの有無を見たいときは `textFocus` か
+[Agent.dialogTree](Agent.md#dialogtree) を使ってください )。
 
 **解説**
 
