@@ -62,6 +62,15 @@ SDL3 専用として残るのは起動時 UserConfig UI (`-userconf`、ゲーム
 | `-loglevel=info` | ログレベル。コンソールに出る量を制御。`MASTER` ビルドだと既定 WARNING。 |
 | `-display=<番号\|名前>` | 起動するディスプレイ (モニタ) の指定。**マルチディスプレイ環境でメインディスプレイを占有せずに検証したいときに使う**。番号は 1 origin (Windows の `\\.\DISPLAYn` の n)、名前はモニタ名の部分一致、`primary` も可。`-display=list` で一覧をログ出力。WINVER / SDL3 両対応。 |
 
+> ⚠ **`-replweb` の既定ポート 8899 は PC 全体で 1 つ**。 別のセッション
+> (あるいは user 本人) の krkrz が先に握っていると、 後から起動した自分の
+> アプリはポートを取れないのに **自分のログには `listening on http://127.0.0.1:8899/` が出る**ので気付けず、 `curl` は
+> **相手のアプリを駆動する**。 検証で起動するときは **`-replweb=<固有ポート>` を明示**すること
+> (ブラウザを開かせたくなければ `-replwebopen=no` も)。 `-replfile` の
+> チャネルは自分のディレクトリなので必ず自分のアプリに届く — **HTTP とファイルチャネルで
+> 結果が食い違ったらこれを疑う**。 確定は `Get-CimInstance Win32_Process -Filter "Name='krkrz64.exe'"` で
+> ExecutablePath / CommandLine を見る。
+
 ### WebServer クラス (`-replweb` の拡張登録口)
 
 `KRKRZ_REPL_WEB` ビルドではスクリプト/プラグインが web サーバへ機能を追加公開できる

@@ -30,6 +30,7 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 - [keyPress](#keypress)
 - [text](#text)
 - [dialogs](#dialogs)
+- [imeStatus](#imestatus)
 - [dialogTree](#dialogtree)
 - [closeDialog](#closedialog)
 - [closeAllDialogs](#closealldialogs)
@@ -234,7 +235,17 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 **戻り値**
 
 ダイアログ記述子の配列が返ります。各要素は
-`%[index, modal, active, screen, focused, x, y, w, h]` 形式の辞書です。
+`%[index, modal, active, screen, focused, textFocus, x, y, w, h]` 形式の辞書です。
+
+`textFocus` は「テキスト入力ウィジェット ( input_box 等 ) が編集フォーカスを
+持っているか」で、ソフトキーボードや IME を開くかどうかの判断に使われている値
+そのものです。日本語入力が始まらない等の切り分けに使えます。
+
+`screen` はフロー ( navigator ) の現画面名で、単発のダイアログでは空です。
+`focused` はフォーカス中のウィジェット id ですが、**id を追跡する仕掛けを持つ
+画面でのみ埋まります**。空だからフォーカスが無い、という意味ではありません
+( フォーカスの有無を見たいときは `textFocus` か
+[Agent.dialogTree](Agent.md#dialogtree) を使ってください )。
 
 **解説**
 
@@ -243,6 +254,53 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 現在アクティブな Elements ダイアログの記述子の配列を返します。
 
 **関連:** [Agent.dialogTree](Agent.md#dialogtree)
+
+---
+
+### imeStatus
+
+メソッド
+
+**戻り値**
+
+各ウィンドウの状態を表す辞書の配列が返ります。主な項目は次のとおりです。
+
+`contextAttached` … 入力コンテキストが結び付いているか。**偽なら IME は完全に
+無効**で、[Window.imeMode](Window.md#imemode) も半角/全角キーも効きません
+( `Window.resetImeContext(false)` 等で切られた状態 )。`conversion` も 0 になります。
+
+`hasFocus` … このウィンドウがキーボードフォーカスを持つか。偽の間は IME モードの
+適用そのものが行われません。
+
+`keyTrapperIsSelf` … 偽の場合、`trapKey` が真の別ウィンドウのモードが適用されます。
+
+`imeMode` … 実際に適用しているモード。`defaultImeMode` は
+[Window.imeMode](Window.md#imemode) が返す既定値です。
+
+`overrideActive` … ElementsDialog のテキスト欄が IME を握っているか。
+`contextForced` はそのために入力コンテキストを結び直したか。
+
+`areaX` / `areaY` / `areaW` / `areaH` / `areaCursor` … IME の変換 / 変換候補
+ウィンドウを寄せるために最後にホストへ渡した矩形 ( ウィンドウクライアント
+座標 px ) と、その左端からのキャレット相対 x です。`areaValid` が偽なら
+テキスト欄に編集フォーカスがありません。
+
+ほかに `visible` / `trapKeys` / `attentionPoint` / `controlImeState` /
+`disabledBySelf` / `imeAvailable` / `open` / `savedImeMode` / `conversion` /
+`sentence` / `index` / `isMain` があります。SDL3 ビルドでは
+`textInputActive` と上記の area 系のみが入ります。
+
+**解説**
+
+IME 状態の取得
+
+ウィンドウごとの IME 関連の状態を返します。「入力欄にキャレットは出ているのに
+日本語が打てない」といった不具合の切り分け用です。
+
+Windows ネイティブ ( WINVER ) ビルドでのみ中身が入ります。他のビルドでは
+常に空の配列が返ります。
+
+**関連:** [Agent.dialogs](Agent.md#dialogs)
 
 ---
 

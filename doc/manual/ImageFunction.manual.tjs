@@ -461,12 +461,19 @@ class ImageFunction {
 	 * グレースケール変換
 	 *
 	 * 画像をグレースケールに変換します。
+	 *
+	 * rweight / gweight / bweight を省略すると BT.709 相当の重み
+	 * (0.2126 / 0.7152 / 0.0722) を使います (従来の挙動)。 重みの扱いは
+	 * [Layer.doGrayScale](Layer.md#dograyscale) と同じです。
 	 * @param bmp グレースケール変換する Bitmap オブジェクトを指定します。
 	 * @param cliprect クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。
 	 *
 	 * 未指定時全体が対象となります。
+	 * @param rweight 赤成分の重みを指定します。3 つとも省略するか 3 つとも指定してください。
+	 * @param gweight 緑成分の重みを指定します。
+	 * @param bweight 青成分の重みを指定します。
 	 */
-	function doGrayScale(bmp, cliprect = null);
+	function doGrayScale(bmp, cliprect = null, rweight, gweight, bweight);
 
 	/**
 	 * 矩形半透明塗りつぶし
