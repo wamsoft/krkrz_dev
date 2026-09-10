@@ -35,6 +35,9 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 [Versioning.md](src/core/doc/Versioning.md) の「移行メモ」= サマリとタグメッセージの冒頭に置く一覧。 リリース枝へ反映するときに拾う。
 
+- **IME の変換 / 変換候補ウィンドウが入力欄の位置に出るようになった (WINVER / SDL3)** —
+  これまでは OS 既定位置 (ウィンドウ左上隅) に出ていた。Elements のテキスト欄の
+  キャレット位置を毎フレーム追従させる。SDL3 は上流実装をそのまま使うので fork は不要。
 - **KAGEX と組み合わせたときに IME が無効化される件に対応 (WINVER)** — KAGEX は
   `data/sysscn/Override.tjs` の初期化で windowEx の `Window.resetImeContext(false)` を
   呼び、ウィンドウの IME 入力コンテキストを切っている。この状態では `Window.imeMode` も
@@ -82,8 +85,9 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 低 | Elements の観測・操作 API を TJS へ公開 (残り) | **変数系は 2026-08-29 に公開済み** (`ElementsDialog.getVar` / `listVars` / `onVar` / `watchVars` = elements_modal の `get_var` / `list_vars` / `set_var_watcher` に対応。src/core `fcae740b`)。 残りは **navigator の `push` / `pop` / `replace` / `stack`** と `languages`。 要素を名指しで動かす instance 版は公開済み (`ElementsDialog.focus(id)` = 2026-09-02 / `activate(id)` = 2026-09-04。検証用の `Agent.dialogFocus` / `dialogClick` は従来どおり)。 用途は検証ツールから「この画面へ飛ぶ」を実装すること。 当たり判定やフォーカスナビの確認は実入力を流す API でないと意味が無い点に注意 |
 | ✅ | Elements: `input_box` にプログラム的フォーカスが効かない | **2026-09-02 に解決** (elements `de989d18`: `descend_focus_first` — composite 包みの内側へフォーカス連鎖を用意)。`initial_focus` / `focus_by_id` / `ElementsDialog.focus(id)` で編集フォーカス (キャレット + text 受理) になる。詳細 = [TODO-elements.md](TODO-elements.md) §3 |
 | ✅ | Elements: `input_box` の最大長と値の差し替え口が無い | **2026-09-02 に解決** (elements `de989d18`): `"max_chars"` (別名 `"maxlength"`、codepoint 単位、0/省略=無制限) を追加。既定値 (`"text"`/`"value"`) 入りは build 時全選択なので initial_focus からそのまま打つと置き換わる (差し替え口の代替)。詳細 = [TODO-elements.md](TODO-elements.md) §5-8 |
-| 低 | Elements の IME: 未確定文字列と変換候補窓のキャレット追従 | テキスト欄が編集フォーカスを持つ間 IME を開く/閉じるところまでは対応済み (WINVER。`UpdateImeFollowFocus()`)。 残りは **未確定 (変換中) 文字列のインライン表示**と **変換候補ウィンドウを入力欄の位置に出すこと** (今は IME 既定位置)。 後者には `overlay_session` に「フォーカス中のテキスト要素の矩形」を返す API が要る (`focus_consumes_text()` と同じ focus パス走査 + context 経由の bounds 取得)。 それが取れれば `iTVPWindow::SetAttentionPoint` に流すだけ。 SSOT = [ElementsDialog.md](src/core/doc/ElementsDialog.md) 「IME の focus 追従」 |
-| 低 | SDL3 ビルドの IME が開かない | SDL3 は `SDL_StartTextInput` でテキストイベントを有効にするだけで IME の開閉までは面倒を見ないため、 Windows/SDL3 では Elements のテキスト欄に focus しても英数のまま。 WINVER と同じ形 (focus 追従で開閉) にするなら SDL の HWND から imm32 を直に叩くか、 SDL 側に口を足すことになる。 `Window.imeMode` も SDL3 では未実装 (例外) |
+| ✅ | Elements の IME: 変換候補窓のキャレット追従 | **対応済み**。elements に `overlay_session::focus_text_caret()` を新設し、engine が毎フレーム surface 座標→クライアント px へ直して WINVER は `ImmSetCompositionWindow`/`ImmSetCandidateWindow`、SDL3 は `SDL_SetTextInputArea` へ渡す。**SDL3 は上流の Windows バックエンドが同等の Imm 呼び出しを実装済みで fork は不要**だった (SDL2 の頃と違う)。残るは未確定文字列のインライン表示のみ (下記)。SSOT = [ElementsDialog.md](src/core/doc/ElementsDialog.md) 「変換ウィンドウの位置」 |
+| 低 | Elements の IME: 未確定文字列のインライン表示 | 変換中の文字列はアプリ側で描かず IME の窓に任せている。入力欄の中に直接出したい場合は `WM_IME_COMPOSITION` (GCS_COMPSTR) / SDL の `SDL_EVENT_TEXT_EDITING` を拾って elements のテキスト要素へ「未確定領域」として流す仕組みが要る。位置は追従済みなので実用上は困らない |
+| 低 | SDL3 ビルドの IME が開かない | SDL3 は `SDL_StartTextInput` でテキストイベントを有効にするだけで IME の開閉までは面倒を見ないため、 Windows/SDL3 では Elements のテキスト欄に focus しても英数のまま (**変換窓の位置追従は対応済み**)。 WINVER と同じ形 (focus 追従で開閉) にするなら SDL の HWND から imm32 を直に叩くか、 SDL 側に口を足すことになる。 `Window.imeMode` も SDL3 では未実装 (例外) |
 
 ### エンジン基盤
 

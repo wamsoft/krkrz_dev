@@ -280,9 +280,15 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 `overrideActive` … ElementsDialog のテキスト欄が IME を握っているか。
 `contextForced` はそのために入力コンテキストを結び直したか。
 
+`areaX` / `areaY` / `areaW` / `areaH` / `areaCursor` … IME の変換 / 変換候補
+ウィンドウを寄せるために最後にホストへ渡した矩形 ( ウィンドウクライアント
+座標 px ) と、その左端からのキャレット相対 x です。`areaValid` が偽なら
+テキスト欄に編集フォーカスがありません。
+
 ほかに `visible` / `trapKeys` / `attentionPoint` / `controlImeState` /
 `disabledBySelf` / `imeAvailable` / `open` / `savedImeMode` / `conversion` /
-`sentence` / `index` / `isMain` があります。
+`sentence` / `index` / `isMain` があります。SDL3 ビルドでは
+`textInputActive` と上記の area 系のみが入ります。
 
 **解説**
 
