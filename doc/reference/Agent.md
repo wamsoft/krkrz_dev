@@ -30,6 +30,7 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 - [keyPress](#keypress)
 - [text](#text)
 - [dialogs](#dialogs)
+- [imeStatus](#imestatus)
 - [dialogTree](#dialogtree)
 - [closeDialog](#closedialog)
 - [closeAllDialogs](#closealldialogs)
@@ -253,6 +254,47 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 現在アクティブな Elements ダイアログの記述子の配列を返します。
 
 **関連:** [Agent.dialogTree](Agent.md#dialogtree)
+
+---
+
+### imeStatus
+
+メソッド
+
+**戻り値**
+
+各ウィンドウの状態を表す辞書の配列が返ります。主な項目は次のとおりです。
+
+`contextAttached` … 入力コンテキストが結び付いているか。**偽なら IME は完全に
+無効**で、[Window.imeMode](Window.md#imemode) も半角/全角キーも効きません
+( `Window.resetImeContext(false)` 等で切られた状態 )。`conversion` も 0 になります。
+
+`hasFocus` … このウィンドウがキーボードフォーカスを持つか。偽の間は IME モードの
+適用そのものが行われません。
+
+`keyTrapperIsSelf` … 偽の場合、`trapKey` が真の別ウィンドウのモードが適用されます。
+
+`imeMode` … 実際に適用しているモード。`defaultImeMode` は
+[Window.imeMode](Window.md#imemode) が返す既定値です。
+
+`overrideActive` … ElementsDialog のテキスト欄が IME を握っているか。
+`contextForced` はそのために入力コンテキストを結び直したか。
+
+ほかに `visible` / `trapKeys` / `attentionPoint` / `controlImeState` /
+`disabledBySelf` / `imeAvailable` / `open` / `savedImeMode` / `conversion` /
+`sentence` / `index` / `isMain` があります。
+
+**解説**
+
+IME 状態の取得
+
+ウィンドウごとの IME 関連の状態を返します。「入力欄にキャレットは出ているのに
+日本語が打てない」といった不具合の切り分け用です。
+
+Windows ネイティブ ( WINVER ) ビルドでのみ中身が入ります。他のビルドでは
+常に空の配列が返ります。
+
+**関連:** [Agent.dialogs](Agent.md#dialogs)
 
 ---
 
