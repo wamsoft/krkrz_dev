@@ -924,7 +924,9 @@ weight / slant / stretch は font_constants の整数値です ( 詳細は
 
 **戻り値**
 
-真が返ります ( ディレクトリが空でも例外にはなりません )。
+登録できたフォントの本数が返ります。0 = 1 本も登録できていない
+( ディレクトリが無い / フォントが無い )。例外にはならず、
+代わりに警告ログを出します。
 
 **解説**
 
@@ -932,7 +934,11 @@ Elements 用フォントの一括登録
 
 指定ディレクトリ配下の .ttf / .otf を全て列挙して登録します ( ファイル
 名から family / weight / slant / stretch を推定 )。dir は Storages 経由の
-パス指定が使え、XP3 内のディレクトリでも構いません。
+パス指定で、相対パス ( "font/" ) も `System.exePath + "data/font/"` の
+ような正規化済みパスも使えます。XP3 内のディレクトリを指すときは
+`"data.xp3>font/"` のようにアーカイブを明示してください
+( addAutoPath でマウントしただけではディレクトリ列挙はできません )。
+OS のパス ( "D:/foo/font/" ) をそのまま渡すと 0 本になります。
 
 **関連:** [ElementsDialog.registerFont](ElementsDialog.md#registerfont)
 
