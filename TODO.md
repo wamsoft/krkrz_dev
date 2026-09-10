@@ -35,6 +35,13 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 [Versioning.md](src/core/doc/Versioning.md) の「移行メモ」= サマリとタグメッセージの冒頭に置く一覧。 リリース枝へ反映するときに拾う。
 
+- **KAGEX と組み合わせたときに IME が無効化される件に対応 (WINVER)** — KAGEX は
+  `data/sysscn/Override.tjs` の初期化で windowEx の `Window.resetImeContext(false)` を
+  呼び、ウィンドウの IME 入力コンテキストを切っている。この状態では `Window.imeMode` も
+  ユーザの 半角/全角 キーも効かず (英数だけ通る)、Elements のテキスト入力を使うと
+  必ず日本語が打てなくなっていた。Elements のテキスト欄が編集フォーカスを持つ間だけ
+  コンテキストを結び直し、外れたら元へ戻すようにしたので、ゲーム側の設定はそのままで
+  日本語入力ができる。切り分け用に `Agent.imeStatus()` を追加 (`contextAttached` 等)。
 - **Elements のテキスト欄で IME が開くようになった (WINVER)** — テキスト入力ウィジェットが編集フォーカスを持つ間だけ IME を開き、 外れると `Window.imeMode` の既定値へ戻す。 これまでは半角/全角キーを叩かないと日本語が打てなかった。 併せて **`Window.imeMode` の setter を実装** (レイヤツリーオーナ化のときに コメントアウトされたまま残っていたもの)。 SDL3 ビルドは従来どおり。
 - **`Layer.doGrayScale` / `ImageFunction.doGrayScale` に重み指定を追加** — `doGrayScale(0.299, 0.587, 0.114)` のように R/G/B の重みを渡せる。 引数を省略した従来呼び出しは BT.709 相当のままで挙動不変。
 - **`RegExp.index` の修正 (src/core `ea363abc`)** — これまで検索開始位置より後ろでマッチすると `index` が `Start + 2×相対オフセット` にずれていた。正しい文字位置を返すようになったので、`index` のずれを前提に補正しているスクリプトがあれば影響する (詳細は末尾の完了欄)。
