@@ -127,6 +127,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利�
 - [activate](#activate)
 - [setPadIconBase](#setpadiconbase)
 - [setPadTheme](#setpadtheme)
+- [setPadIconAlias](#setpadiconalias)
 - [renderStatsReset](#renderstatsreset)
 
 ### イベント
@@ -1358,10 +1359,55 @@ pad_icon の全体テーマを設定する
 
 pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"none"` ) を
 設定します。`"auto"` を指定すると、接続しているパッドの系統
-( [System.padStyle](System.md#padstyle) ) からテーマを自動選択します。
-パッドが無い場合は動作プラットフォームから決まり、画面を開くたびに決め直される
-ため、途中でコントローラを差し替えても次に開く画面から追従します。
+( [System.padStyle](System.md#padstyle) ) からテーマを自動選択します。系統が
+判定できないプラットフォーム ( Windows など ) では、パッドが 1 つでも
+つながっていれば `"xbox"`、1 つも無ければ `"keyboard"` になります
+( パッドが無い状態で pad の絵を出しても、押せるキーが判らないためです )。
+
+`"auto"` の判定はパッドの接続数と系統を見張っていて、**変化したその場で
+決め直します**。コントローラを抜き差ししても画面を開き直す必要はなく、
+表示中の画面の pad_icon も次の描画で新しいテーマの絵に差し替わります。
 画面 JSON の top-level `"pad_theme"` が指定されていればそちらが優先されます。
+
+**関連:** [ElementsDialog.setPadIconAlias](ElementsDialog.md#setpadiconalias)
+
+---
+
+### setPadIconAlias
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `theme` | `&nbsp;` | 対象のテーマ名 ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` )。 |
+| `name` | `&nbsp;` | 上書きする論理名。空文字ならそのテーマの上書きを全解除。 |
+| `basename` | `&nbsp;` | 割り当てる素材の basename。空文字 / 省略でその名前の上書きを解除。 |
+
+**戻り値**
+
+テーマ名を解釈できたかどうか。
+
+**解説**
+
+pad_icon の名前解決をテーマ単位で上書きする
+
+pad_icon の論理名 ( `"a"` / `"b"` / `"dpad"` など ) から実際の素材ファイル名
+( Kenney pack の basename ) への対応表を、テーマ単位で上書きします。既定表
+( `"a"` = Enter / `"b"` = Esc / `"dpad"` = 矢印 … ) がタイトルの実際のキー
+割り当てと違うときに使います。
+
+```tjs
+// キャンセルが Esc ではなく BackSpace のタイトル
+global.ElementsDialog.setPadIconAlias("keyboard", "b", "keyboard_backspace");
+```
+
+上書きは既定表より優先されます。basename に空文字を渡すとその名前の上書き
+だけを解除、name に空文字を渡すとそのテーマの上書きを全解除します。いずれも
+表示中の画面へ次の描画から反映されます。
+
+**関連:** [ElementsDialog.setPadTheme](ElementsDialog.md#setpadtheme)
 
 ---
 
