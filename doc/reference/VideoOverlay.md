@@ -899,6 +899,11 @@ WebM は透過 (アルファ) 付き動画に対応します。MP4 / WMV など�
 メディアの1フレーム目を指定されているレイヤーに描画し、描画終了時にonPeriodイベントを発生させます。
 prepareメソッド コール後の再生は、onPeriodイベントを待機してから行ってください。
 
+modeが `vomLayer` (レイヤーモード) のときのみ意味を持ちます。
+
+準備中は音声を再生しません。準備が終わった時点でメディアは先頭位置で停止しているので、
+onPeriod (perPrepare) を受けてから play を呼べば先頭から再生されます。
+
 **関連:** [VideoOverlay.onPeriod](VideoOverlay.md#onperiod)
 
 ---
