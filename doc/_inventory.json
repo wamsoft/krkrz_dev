@@ -222,11 +222,14 @@
       "startFlow",
       "startFlowScreens",
       "swappableAtlases",
+      "trimAtlasCache",
       "unregisterHotKey",
       "unregisterImage"
     ],
     "properties": [
       "active",
+      "atlasCacheBudget",
+      "atlasCacheStats",
       "baseSize",
       "defaultFontFamily",
       "focusRing",

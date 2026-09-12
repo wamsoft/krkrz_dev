@@ -80,6 +80,8 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利�
 - [defaultFontFamily](#defaultfontfamily)
 - [active](#active)
 - [modalActive](#modalactive)
+- [atlasCacheStats](#atlascachestats)
+- [atlasCacheBudget](#atlascachebudget)
 - [watchVars](#watchvars)
 - [language](#language)
 - [fontLanguages](#fontlanguages)
@@ -125,6 +127,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利�
 - [listVars](#listvars)
 - [focus](#focus)
 - [activate](#activate)
+- [trimAtlasCache](#trimatlascache)
 - [setPadIconBase](#setpadiconbase)
 - [setPadTheme](#setpadtheme)
 - [setPadIconAlias](#setpadiconalias)
@@ -208,6 +211,53 @@ Elements ランタイムが初期化されたあと ( 最初のダイアログ�
 コールバックで「モーダル表示中は何もせず素通しする」判定に使います。
 
 **関連:** [ElementsDialog.active](ElementsDialog.md#active)
+
+---
+
+### atlasCacheStats
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Dictionary`
+
+**解説**
+
+アトラスのデコードキャッシュの常駐量 ( 読み取り専用 )
+
+アトラス画像は「パス + 倍率」をキーにデコード済みの絵をキャッシュして
+使い回します。**画面を切り替えても手放しません** — 長時間プレイでヒープが
+断片化したあと大きな連続領域が取れずデコードに失敗し、絵の無い画面が
+組まれてしまうのを避けるためです。どれだけ抱えているかを場面の切れ目で
+確認するためのプロパティです ( クラス全体に効く static 相当 )。
+
+辞書で `bytes` ( RGBA 展開後の合計バイト数 ) / `count` ( エントリ数 ) /
+`budget` ( 現在の予算 ) を返します。
+
+```tjs
+var st = global.ElementsDialog.atlasCacheStats;
+Debug.message("アトラス常駐 %.1f MB (%d 件)".sprintf(st.bytes / 1048576.0, st.count));
+```
+
+**関連:** [ElementsDialog.trimAtlasCache](ElementsDialog.md#trimatlascache)
+
+---
+
+### atlasCacheBudget
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Integer`
+
+**解説**
+
+アトラスのデコードキャッシュの予算 ( バイト )
+
+代入すると**恒久的に**変わり、下げた場合はその場で切り詰めます。
+0 にするとキャッシュ無効 ( 毎回デコード ) になります。
+既定は 192MB で、1 画面ぶんのアトラスを載せたままにできる大きさです
+( クラス全体に効く static 相当 )。
+
+**関連:** [ElementsDialog.trimAtlasCache](ElementsDialog.md#trimatlascache)
 
 ---
 
@@ -1316,6 +1366,43 @@ Dictionary の配列です。
 同形です。
 
 **関連:** [ElementsDialog.focus](ElementsDialog.md#focus)
+
+---
+
+### trimAtlasCache
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `budget` | `&nbsp;` | 切り詰める上限 ( バイト )。0 / 省略で使われていない分を全解放。 |
+
+**戻り値**
+
+解放できたバイト数。
+
+**解説**
+
+アトラスのデコードキャッシュを切り詰める
+
+アトラスのデコードキャッシュを `budget` バイトまで切り詰めます。
+0 ( 既定 ) を渡すと「使われていないものを全部」手放します。
+戻り値は解放できたバイト数です。
+
+⚠ **表示中の画面が使っているアトラスは参照が残っているので捨てられません。**
+場面の切れ目 ( 画面を閉じた後 ) に呼んでください。
+
+```tjs
+dlg.close();
+var freed = global.ElementsDialog.trimAtlasCache();   // 使っていない分を全部
+```
+
+予算そのものは変わりません ( 一時的な切り詰め )。恒久的に下げたい場合は
+[atlasCacheBudget](#atlascachebudget) へ代入します。
+
+**関連:** [ElementsDialog.atlasCacheStats](ElementsDialog.md#atlascachestats)
 
 ---
 
