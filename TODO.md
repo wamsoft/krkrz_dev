@@ -26,7 +26,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 21 | Elements/UI 10 (高 2 / 中 4 / 低 4) / エンジン基盤 8 / ビルド・運用 3 |
+| 予定・未着手 | 19 | Elements/UI 8 (高 1 / 中 4 / 低 3) / エンジン基盤 8 / ビルド・運用 3 |
 | 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
@@ -50,9 +50,10 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 - **`Layer.doGrayScale` / `ImageFunction.doGrayScale` に重み指定を追加** — `doGrayScale(0.299, 0.587, 0.114)` のように R/G/B の重みを渡せる。 引数を省略した従来呼び出しは BT.709 相当のままで挙動不変。
 - **`RegExp.index` の修正 (src/core `ea363abc`)** — これまで検索開始位置より後ろでマッチすると `index` が `Start + 2×相対オフセット` にずれていた。正しい文字位置を返すようになったので、`index` のずれを前提に補正しているスクリプトがあれば影響する (詳細は末尾の完了欄)。
 
-**優先度「高」は 2 件** — いずれも 2026-09-11 の Elements 仕様精査
-([ElementsAudit.md](src/core/doc/ElementsAudit.md)) で挙がったもの
-(cursor-warp の echo 判定の二重実装 / `list` が部分再描画を無効化)。
+**優先度「高」は 1 件** — 2026-09-11 の Elements 仕様精査
+([ElementsAudit.md](src/core/doc/ElementsAudit.md)) で挙がった
+「単一 widget の変化でダーティ矩形が小さくならない」。
+同じ精査で挙がった cursor-warp の echo 判定の二重実装は 2026-09-12 に対応済み。
 それ以前から残っていた「画面データ側で UI を完結させる (不足 4 点)」は
 2026-09-05 に elements 側で実装が揃い、2026-09-06 に engine 側
 (submodule ref + TJS API 公開) も済んでいる。
@@ -93,7 +94,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 低 | Elements の IME: 未確定文字列のインライン表示 | 変換中の文字列はアプリ側で描かず IME の窓に任せている。入力欄の中に直接出したい場合は `WM_IME_COMPOSITION` (GCS_COMPSTR) / SDL の `SDL_EVENT_TEXT_EDITING` を拾って elements のテキスト要素へ「未確定領域」として流す仕組みが要る。位置は追従済みなので実用上は困らない |
 | 低 | SDL3 ビルドの IME が開かない | SDL3 は `SDL_StartTextInput` でテキストイベントを有効にするだけで IME の開閉までは面倒を見ないため、 Windows/SDL3 では Elements のテキスト欄に focus しても英数のまま (**変換窓の位置追従は対応済み**)。 WINVER と同じ形 (focus 追従で開閉) にするなら SDL の HWND から imm32 を直に叩くか、 SDL 側に口を足すことになる。 `Window.imeMode` も SDL3 では未実装 (例外) |
 | ✅ | Elements: cursor-warp の echo 判定が 2 層に重複 | **2026-09-12 対応**。判定を engine 側 1 箇所に寄せ、結果を `on_mouse_move(..., bool synthetic)` で session へ渡す形にした (elements_modal の `warp_issued` / `warp_target` / ±2px 照合を削除)。レイヤ座標と view 論理座標という倍率の違う 2 つの座標系へ同じ ±2 を当てていた構造が消えた。なお「踏むと直る」ことを実測できた類ではなく、食い違いの窓 (`present_scale=1/2` なら実誤差 1〜2px の範囲) を構造ごと消す修正。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §1 |
-| 高 | Elements: warp の往復誤差で warp モードが勝手に切れる | §1 の計測中に見つかった別問題 (修正前後どちらでも同じように出る)。実マウスに触れていない走行でも `warp guard: MISMATCH (d=3..7)` が頻発し、engine が「実マウスが動いた」と解釈して warp モードを解除してしまう。キー操作中なのに warp が掛からなくなるので、説明文だけ先に進んで hover のハイライトが置いていかれる (commit `6e976b9f` が追っていた症状そのもの)。座標変換の鎖は平行移動のみでスケールが入らないため、倍率による量子化では説明がつかない — DPI 仮想化か、echo 到着前の warp 上書きが疑わしい。次の一手は `-navlog` に warp request と mouse move の対応付け (シーケンス番号) を足すこと。計測 = `data/elements_audit -audittest -navlog` (`mousemoves=0` の回のみ有効)。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §1-b |
+| ✅ | Elements: warp の往復誤差で warp モードが勝手に切れる — **誤報だった (2026-09-12 取り下げ)** | 実マウスに触れていないつもりの走行で `warp guard: MISMATCH (d=3〜7)` が頻発したため新規バグとして起票したが、**実際には実マウスが動いていた**。`-navlog` に warp の通し番号と `SetCursorPos` 直後の `GetCursorPos` 読み戻しを足して切り分けたところ、マウス非接触なら倍率 1/1・1/2 とも `warp landed d=0,0` が 11/11、`warp guard` は 13/13 すべて match で、往復は厳密に一致していた。誤判断の原因は、サンプルの `mousemoves` カウンタを汚染判定に使ったこと — **パネル表示中はオーバーレイがマウス移動を消費してシーンまで届かない**ので 0 のままになる。cursor-warp まわりの測定は `warp guard: MISMATCH` の有無で汚染を判定すること。診断ログは有用なので残置。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §1-b |
 | 高 | Elements: 単一 widget の変化でダーティ矩形が小さくならない | 1 枚のパネル内でラベル 1 個だけを `setVar` しても、ラスタ 1 回のコストが list の行数に比例する (実測 8 行 413us → 64 行 1059us)。`list::draw` が可視判定を落としていた件は交差判定を入れて解消したが、**それだけでは数値が動かない** — `get_port_bounds()` は部分再描画中ダーティ矩形を返すので、矩形自体がパネル全面へ昇格しているということ。partialRedraw の ON/OFF 差 (1059/1585) は viewport とクリアの節約分。作業順は ① 矩形が実際に小さくなるようにする → ② list のカリングが効くのを同じサンプルで確認。副産物として `canvas` (絶対配置) は `vtile` より 1 ラスタが重いことも判明 (8 行で 413 対 180)。計測 = `data/elements_audit -audittest`。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §2 |
 | 中 | Elements: アトラスキャッシュに解放の口が無い | `release_atlas_pixmaps()` は shutdown 専用で、予算 192MB のデコード済み RGBA が**プロセス終了まで居座る**。場面境界で落とす手段と常駐量を見る手段の両方が無い。`ElementsDialog.trimAtlasCache(budget)` + 常駐バイト数の公開を足す。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §3 |
 | 中 | Elements: `text_metrics` キャッシュの全 clear | `canvas.cpp:869` が 4096 件超で `cache.clear()` する。直後のフレームで全テキストの計測をやり直すため再現性のあるフレーム落ちになる。`run_cache` と同じ LRU trim へ揃える。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §4 |
