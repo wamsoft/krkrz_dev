@@ -101,6 +101,7 @@ D3D11 ) へ転送してゲーム画面の上に出します。再描画が不要
 | [elements_modal README](https://github.com/wamsoft/elements/blob/develop/external/elements_modal/README.md) | ② | **画面 JSON 仕様の SSOT**。ウィジェット一覧、変数連動、テーマ、アトラス、遷移、演出 |
 | [elements リポジトリ](https://github.com/wamsoft/elements) | ① | ライブラリ本体 ( 派生元は cycfi/elements ) |
 | [ゲームパッド入力](gamepad.md) | ③ | パッドのキー変換 ( ダイアログのパッド操作もこの上に乗る ) |
+| [仮想カーソル位置](https://github.com/wamsoft/krkrz_develop/blob/master/doc/VirtualCursor.md) | ③ | hover 判定とカーソル参照の基準。キー / パッドのナビは実 OS カーソルを動かさない |
 
 ## 用語
 

@@ -132,6 +132,9 @@ dlg.showDict(%[
 | `renderScale` | `0` | ラスタライズ密度。0=auto(present サイズで直接)/`>0`=authored×倍率で描いて拡縮 |
 | `renderStats` / `renderStatsReset()` | — | 描画パイプラインの区間計測(frames/rasters/partials/updateUs/rasterUs/uploadUs/presentUs 等)。累積値なので2回読んで差分を取る。計測画面=`data/elements_bench`(`-benchauto` で無操作スイープ) |
 | `renderCount` | — | 累計ラスタライズ回数。アイドルで増えなければ renderCache が効いている |
+| `atlasCacheStats` | — | アトラスのデコードキャッシュの常駐量 `%[bytes, count, budget]`。**画面を閉じても手放さない**設計なので、場面の切れ目で抱え込み量を見る用 |
+| `trimAtlasCache(budget=0)` | — | アトラスキャッシュを切り詰める(0=使われていない分を全部)。戻り値=解放バイト数。⚠**表示中の画面が使っている分は参照が残るので落ちない**→画面を閉じた後に呼ぶ |
+| `atlasCacheBudget` | 192MB | アトラスキャッシュの予算。代入で恒久変更(下げたらその場で切り詰め)。0 でキャッシュ無効 |
 
 ### interactive 属性 (focusable widget 共通)
 - **`"id"`** — `onAction` / `result.values` / shortcut / setVar の参照キー。
@@ -250,6 +253,7 @@ dlg.startFlow("ui/menu/app.jsonc");   // 即 return(戻り値=起動成否)
 - **フォーカス奪取 / 共通ホットキー**: ✅解決済(2026-08-11)。操作パネルは `showJson(json, true, false)`+ホスト必須キーを `ElementsDialog.registerHotKey` で確保(§6)。旧回避策の grabFocus=false は表示専用 HUD 用。[[project_elements_global_shortcut]]
 - **サブクラスは `super.ElementsDialog()` 必須**。`showFile` は autopath 未対応な場面あり(相対解決に注意)。
 - **サブクラス内から static を触るときは `global.ElementsDialog.xxx`**。素の `ElementsDialog` は親クラス参照になり `ElementsDialog.focusRing = false` 等が「メンバが見つかりません」で落ちる。
+- **入力/ナビ/部分再描画の切り分けには `-navlog`**(指定するだけで有効)。フォーカス移動・cursor-warp・パッド方向キーの到着を ms 付きで、100ms 超フレームの段別内訳(`slow frame`)、ラスタ 1 回ごとの「部分にできたか/できなかった理由」(`raster partial=` / `no-partial:`)が出る。計測画面=`data/elements_audit`(`-audittest` で自動巡回、`-ignoremouse=yes` を併用すると実マウスに邪魔されない)。
 - **描画が重いと感じたら**まず `ElementsDialog.renderStats` の差分を見る(`renderCount` がアイドルで増えていないかも)。`data/elements_bench` に更新パターン別の計測画面がある。overlay 描画の支配項はテキストのラスタライズで、同内容のテキストは自動でビットマップキャッシュされる(毎フレーム内容が変わる HUD カウンタは意図的に載らない)。
 - **case-name 規約**: 共有/公開リポ(krkrz_dev/elements)に**案件固有名を書かない**。elements リポのコメント等はホストを「SDL を使うホストアプリ」等の汎用表現で。[[feedback_elements_repo_project_agnostic]] [[feedback_no_case_names_in_shared_repo]]
 
