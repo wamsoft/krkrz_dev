@@ -22,7 +22,9 @@
       "text",
       "wheel"
     ],
-    "properties": []
+    "properties": [
+      "ignoreRealMouse"
+    ]
   },
   "AsyncTrigger": {
     "events": [

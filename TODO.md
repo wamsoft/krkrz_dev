@@ -27,7 +27,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 15 | Elements/UI 3 (中 1 / 低 2) / エンジン基盤 9 (高 1) / ビルド・運用 3 |
+| 予定・未着手 | 14 | Elements/UI 3 (中 1 / 低 2) / エンジン基盤 8 / ビルド・運用 3 |
 | 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
@@ -51,13 +51,10 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 - **`Layer.doGrayScale` / `ImageFunction.doGrayScale` に重み指定を追加** — `doGrayScale(0.299, 0.587, 0.114)` のように R/G/B の重みを渡せる。 引数を省略した従来呼び出しは BT.709 相当のままで挙動不変。
 - **`RegExp.index` の修正 (src/core `ea363abc`)** — これまで検索開始位置より後ろでマッチすると `index` が `Start + 2×相対オフセット` にずれていた。正しい文字位置を返すようになったので、`index` のずれを前提に補正しているスクリプトがあれば影響する (詳細は末尾の完了欄)。
 
-**優先度「高」は 1 件** — [仮想カーソル位置の導入](src/core/doc/VirtualCursor.md)
-(実カーソルを直接動かすのをやめる)。2026-09-11 の Elements 仕様精査
-([ElementsAudit.md](src/core/doc/ElementsAudit.md)) で挙がった高優先 2 件
-(cursor-warp の echo 判定の二重実装 / 一覧の更新コストが行数に比例) は
-どちらも 2026-09-12 に対応済みで、前者の作業中に「実カーソルを直接動かす構造
-そのものを置き換えたほうがよい」と判明したのがこの項目。**現在の予定が
-一段落したら着手する。**
+**優先度「高」の項目は現在ゼロ**。2026-09-11 の Elements 仕様精査
+([ElementsAudit.md](src/core/doc/ElementsAudit.md)) の 7 項目と、その作業中に
+判明した [仮想カーソル位置の導入](src/core/doc/VirtualCursor.md) は
+いずれも 2026-09-12 に対応済み。
 それ以前から残っていた「画面データ側で UI を完結させる (不足 4 点)」は
 2026-09-05 に elements 側で実装が揃い、2026-09-06 に engine 側
 (submodule ref + TJS API 公開) も済んでいる。
@@ -112,7 +109,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
-| 高 | 仮想カーソル位置の導入 (実カーソルを直接動かすのをやめる) | ウィンドウごとに仮想カーソル位置を持ち、hover 判定と内部のカーソル参照をそこへ向ける。キー/パッドのナビは仮想位置を更新するだけ (実 OS カーソルは触らない)、実マウスの移動はウィンドウ内なら仮想位置を更新・外なら無視、`Agent` のマウス API も仮想位置のみ。**cursor-warp の «自分が動かしたカーソルか» の判定 (engine の `warp_expect_*` / session の `synthetic`) が丸ごと不要になる** — OS を一往復しなくなるので発生源ごと消える。`last_nav_source` も推測でなく «誰が最後に書いたか» の記録になり、案件で多発した「フォーカスとポインタが 2 項目間で振動して操作不能」の温床が無くなる。テストも決定論的になる (2026-09-12 の計測は実マウスで汚染され、しかもオーバーレイが move を食べて検出できず誤った起票をした)。作業の主体は **読み出し側の棚卸し** (`Window.cursorX/Y` / `Layer.cursorX/Y` / ヒント位置 / IME / ドラッグ / カーソル形状)。Elements 側はほぼ削除になる。**現在の予定が一段落したら着手**。詳細 = [VirtualCursor.md](src/core/doc/VirtualCursor.md) |
+| ✅ | 仮想カーソル位置の導入 (実カーソルを直接動かすのをやめる) | **2026-09-12 実装 (第一段)**。`common/visual/VirtualCursor.h` を追加し、ウィンドウ実装が 1 つずつ持つ。`OnMouseMove` (実マウス) が上書き / `SetCursorPos` は実カーソルと同時に揃える / 新設の `SetVirtualCursorPos` は仮想だけ / `GetCursorPos` は仮想を返す。読み出しは `Layer.cursorX/Y` → LayerManager → LayerTreeOwner → DrawDevice → `Window->GetCursorPos` の一本道だったので、ウィンドウ実装を直すだけで全読み手が追従した。**Elements の cursor-warp は実カーソルを触らなくなり、echo 判定 (engine の `warp_expect_*` と session の `synthetic` 引数) は両側から撤去**。`Agent` のマウス注入は元から form 経由なので自動的に仮想位置のみになった。効果: シナリオ 1 でキー 12〜14 回の注入に対しフォーカス移動が **5/6 → 13/15** (移行前は warp の合成 move が nav 種別を mouse へ倒して大半が流れていた)、`warp guard` ログは 0 件。派生で **`-ignoremouse` / `Agent.ignoreRealMouse`** (実マウス入力を捨てて Agent 注入だけ通す) も追加 — 「人がマウスに触らないこと」という測定の運用制約を外せる (§1-b の誤起票の再発防止)。残り = クリック時に実座標へ合わせる規則の明文化、`mcsTempHidden` まわりの整理、ヒント/IME/カーソル形状の個別検証。詳細 = [VirtualCursor.md](src/core/doc/VirtualCursor.md) |
 | 中 | Layer / Bitmap / ImageFunction の統合 | ImageFunction の API 二重化と、プラグインが Bitmap を扱えない問題 (Layer 参照 26 ファイル) の再整理。**方針決定済 = P1 (tp_stub 共通アクセス口) → P2 (Bitmap へメソッド追加・ImageFunction は shim 化) → P3 (プラグイン対応) → P4 で共通基底 `ImageBuffer` の要否を判断**。B案はプロトタイプ実測済み (パッチ同梱)。着手は後日。SSOT = [ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
 | 中 | Emote/Motion リソースマネージャの共有 (再読込の削減) | `data/system/AffineSourceMotion.tjs` の `SimpleEmotePlayer` はプレイヤー生成のたびに `MotionResourceManager` を new しており、リソースキャッシュ (`Motion.ResourceManager`、既定 20MB、`motionCacheSize` で可変) が効かず、立ち絵 psb (数十 MB) を表示/アクションのたびにフル再読込している。**アクション毎のカクつきと、メモリ枯渇 (特に 32-bit) を招く**。ウィンドウ単位で 1 つの ResourceManager を共有すれば解消するが、単純な共有化 (window に持たせて addRef/共有) を試すと **emoteplayer プラグイン内部 (`V2Unlink`) が AV で即死**した — 複数 `EmotePlayer` が同一 ResourceManager を参照する構成をプラグインが想定していない疑い。**要調査**: (1) `Motion.ResourceManager` / `EmotePlayer` の参照所有モデル (unload が他プレイヤーの参照中リソースを解放していないか)、(2) 共有可能にするためのプラグイン側 IF、(3) 併せて `SwitchEmotePlayer` の base 別プレイヤーも同一 psb を二重ロードしていないか。回避として `motionCacheSize` 拡大 + 32-bit の pool 縮小 + LAA で当座の枯渇は解消済み (別項)。実機再現は E-mote 立ち絵のアクションが連続する場面 |
