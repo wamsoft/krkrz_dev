@@ -26,7 +26,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 18 | Elements/UI 7 (中 4 / 低 3) / エンジン基盤 8 / ビルド・運用 3 |
+| 予定・未着手 | 17 | Elements/UI 6 (中 3 / 低 3) / エンジン基盤 8 / ビルド・運用 3 |
 | 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
@@ -97,7 +97,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | ✅ | Elements: warp の往復誤差で warp モードが勝手に切れる — **誤報だった (2026-09-12 取り下げ)** | 実マウスに触れていないつもりの走行で `warp guard: MISMATCH (d=3〜7)` が頻発したため新規バグとして起票したが、**実際には実マウスが動いていた**。`-navlog` に warp の通し番号と `SetCursorPos` 直後の `GetCursorPos` 読み戻しを足して切り分けたところ、マウス非接触なら倍率 1/1・1/2 とも `warp landed d=0,0` が 11/11、`warp guard` は 13/13 すべて match で、往復は厳密に一致していた。誤判断の原因は、サンプルの `mousemoves` カウンタを汚染判定に使ったこと — **パネル表示中はオーバーレイがマウス移動を消費してシーンまで届かない**ので 0 のままになる。cursor-warp まわりの測定は `warp guard: MISMATCH` の有無で汚染を判定すること。診断ログは有用なので残置。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §1-b |
 | ✅ | Elements: 一覧の更新コストが行数に比例する | **2026-09-12 対応**。真因は `list_rows_element::limits()` の毎フレーム全行走査だった (`view::draw` が無条件に `set_limits()` を呼ぶ cycfi 本体の作りのため、部分再描画でも木全体の limits が走る)。list の limits の戻り値は spec から計算していて子に依存しないので、この走査は純粋に副作用目的 — しかも `text_var` も一覧の «窓» も購読で更新されていて依存実装は見つからなかった。部分再描画中はダーティ矩形に掛かる行だけ一巡する形にして、**行数への比例が消えた** (us/raster: canvas 64 行 1059→304、vtile 64 行 904→93 = 約 10 倍)。実画面も 64 行が全行正しく描けることを確認済み。`list::draw` の可視判定も併せて修正済み。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §2 |
 | 中 | Elements: アトラスキャッシュに解放の口が無い | `release_atlas_pixmaps()` は shutdown 専用で、予算 192MB のデコード済み RGBA が**プロセス終了まで居座る**。場面境界で落とす手段と常駐量を見る手段の両方が無い。`ElementsDialog.trimAtlasCache(budget)` + 常駐バイト数の公開を足す。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §3 |
-| 中 | Elements: `text_metrics` キャッシュの全 clear | `canvas.cpp:869` が 4096 件超で `cache.clear()` する。直後のフレームで全テキストの計測をやり直すため再現性のあるフレーム落ちになる。`run_cache` と同じ LRU trim へ揃える。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §4 |
+| ✅ | Elements: `text_metrics` キャッシュの全 clear | **2026-09-12 対応**。上限 (4096 件) 到達時に `cache.clear()` していたのを、直近の使用が古い順に 1/4 だけ捨てる形へ変更 (`last_use` + `nth_element`)。⚠ **デスクトップでは効果を計測できなかった** — 安定ラベル 120 + 変動 40 で上限を跨がせても、フレーム間のばらつき (平均の 1.5〜2.4 倍) が跨いだフレームの追加コスト (≒1ms) と同じ桁で埋もれる。崖が痛いのは「安定ラベルが大量 + churn がゆっくり」な通常のゲーム画面で、それは 4096 件到達まで数分かかり短い自動テストに載らない。全 clear は構造として working set を丸ごと捨てるので崖が原理的に残る一方、変更は 30 行で定常コストは不変、`measure_text` が高価な低速機では差が大きく出るはず、という理由で残す判断。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §4 |
 | 中 | Elements: 押しっぱなしガードの棚卸し | 「押しっぱなしのボタンが別の画面に効く」1 つの不変条件に 4 機構が当たっている。特に elements の suspend 時 `st.current` クリア (`view.cpp:1500`) と engine の離し全インスタンス配送 (`c23061cb`) は同じ穴を別方向から塞いでおり、前者は冗長の可能性 + 「host がリピートを届けてくれる」暗黙依存を持つ (`-padinterval=0` で壊れる)。実測で切り分ける。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §5 |
 | 中 | Elements: リピート周期が一本化されていない | `-paddelay` / `-padinterval` は Elements のナビ速度に**一切効かない** (軸値の再代入にしかならず、送りを作るのは `view::process_pad_axes` の 400ms/60ms)。オプション名から期待される挙動と食い違う。明示指定時のみ CLI 値を軸リピート既定へ流す (画面 JSON > CLI > 既定)。既定の操作感は変えない。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §6 |
 | 低 | Elements: フェイスボタン 2 系統配送を仕様として明記 | 同じ物理ボタンが刻印基準 (`VK_PAD1..4` → `a`/`b`/`x`/`y`) と位置基準 (`VK_PAD_FACE_*`) の 2 系統で届く。**刻印で指したい / 位置で指したい という概念の違いなので統合はしない**。実害は画面が両系統を同じボタンにバインドしたとき (1 押しで 2 回発火) だけ。ソースコメントにしか書かれていないので README と doc へ明記する。余力があればバインド解決時の警告も。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §7 |
