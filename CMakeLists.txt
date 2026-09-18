@@ -145,6 +145,9 @@ rectpack2D      # RectPack2D.dll    (矩形パッキング。CMake化+x64対応 
 budoux          # BudouX.dll        (分かち書き。CMake化+x64対応 2026-09-18)
 m2vdec          # m2vdec.dll        (MPEG-2 デコード。y262dec 同梱。CMake化+x64対応 2026-09-18)
 wumtrack        # wuMultiTrack.dll  (マルチトラック BGM。CMake化+x64対応 2026-09-18)
+tjsDataPack     # tjsDataPack.dll   (Scripts.saveDataPack / loadDataPack /
+                #                    makeDataPackDigest。UI パックの .pbd と
+                #                    リップシンクデータが使う。2026-09-18)
 msdfrender      # msdfrender.dll    (GDIフォント使用: Plugin.cpp/kzbackport)
 # wamsoft_work 由来で Win32 依存が残るもの
 multiimage      # multiimage.dll    (複数画像/PSB。CMake化+x64対応 2026-09-18)
