@@ -106,6 +106,7 @@ list(APPEND TVP_PLUGINS
 # WIN32固有機能をつかっていて現時点でWIN専用。要改修
 addFont
 binaryStream
+fftgraph        # fftgraph.dll (音声スペクトラム表示 drawFFTGraph。吉里吉里2 SDK から移植 2026-09-19)
 fpslimit
 memfile
 varfile
