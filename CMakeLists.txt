@@ -141,7 +141,16 @@ getLangName     # getLangName.dll   (CMakeLists 既存)
 layerMultiStore # layerMultiStore.dll (立ち絵パック等の多重画像保存。CMake化 2026-09-05)
 msdfatlasgen    # msdfatlasgen.dll  (SDF フォントアトラス生成。msdfgen 同梱 + CMake化 2026-09-05)
 lzfs            # lzfs.dll
+rectpack2D      # RectPack2D.dll    (矩形パッキング。CMake化+x64対応 2026-09-18)
+budoux          # BudouX.dll        (分かち書き。CMake化+x64対応 2026-09-18)
+m2vdec          # m2vdec.dll        (MPEG-2 デコード。y262dec 同梱。CMake化+x64対応 2026-09-18)
+wumtrack        # wuMultiTrack.dll  (マルチトラック BGM。CMake化+x64対応 2026-09-18)
 msdfrender      # msdfrender.dll    (GDIフォント使用: Plugin.cpp/kzbackport)
+# wamsoft_work 由来で Win32 依存が残るもの
+multiimage      # multiimage.dll    (複数画像/PSB。CMake化+x64対応 2026-09-18)
+dmmcloud        # dmmcloud.dll      (DMM クラウドセーブ連携。DMM 提供の
+                #                    libUbiCustomEvent を同梱の import ライブラリ
+                #                    経由で呼ぶ。CMake化+x64対応 2026-09-18)
 xlsxWriter      # xlsxWriter.dll    (Excel 読み書き。libxlsxwriter/openxlsx/zlib 同梱, CMake化+x64対応 2026-07-27)
 # wfstkeff / wfdspfilter は Win32 非依存化して base(全バリアント)へ移動済
 # k2compat は除外 (原則今後は使わない方針。吉里吉里2互換のGUI/WM_TOUCH依存。
