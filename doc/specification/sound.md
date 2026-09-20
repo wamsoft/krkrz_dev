@@ -48,6 +48,8 @@ WaveSoundBuffer で標準対応する形式は以下の通りです。
 | Ogg Vorbis | .ogg | Vorbis デコード。 |
 | Opus | .opus | Opus デコード。 |
 
+整数 PCM はビット深度を落とさずそのまま再生します ( 8bit = 符号無し / 16・24・32bit = 符号付き。24bit は 3 バイト詰めのまま扱います )。WAVE_FORMAT_EXTENSIBLE で有効ビット数がコンテナ幅より小さい場合 ( 32bit コンテナに 24bit を左詰め、等 ) は、コンテナ幅で読みます。
+
 デコーダ側のアロケーションは **SoundAllocator** の TLSF プールを経由します。プールサイズは `-soundpoolsize` で指定でき、既定は 16MB です。
 
 対応形式はプラグインによって拡張することができます。
