@@ -48,7 +48,7 @@ WaveSoundBuffer で標準対応する形式は以下の通りです。
 | Ogg Vorbis | .ogg | Vorbis デコード。 |
 | Opus | .opus | Opus デコード。 |
 
-デコーダ側のアロケーションは **SoundAllocator** の TLSF プールを経由します。プールサイズは `-soundpoolsize` で指定でき、既定は 128MB です。
+デコーダ側のアロケーションは **SoundAllocator** の TLSF プールを経由します。プールサイズは `-soundpoolsize` で指定でき、既定は 16MB です。
 
 対応形式はプラグインによって拡張することができます。
 
