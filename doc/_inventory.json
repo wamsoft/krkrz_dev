@@ -152,7 +152,9 @@
     "events": [],
     "file": "src/core/common/utils/ClipboardIntf.cpp",
     "methods": [
-      "hasFormat"
+      "getAsBitmap",
+      "hasFormat",
+      "setAsBitmap"
     ],
     "properties": [
       "asText"
