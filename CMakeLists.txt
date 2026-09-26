@@ -13,11 +13,19 @@ set(WAMSOFT_PLUGINS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../krkrtemplate/plugins_utf8
 # ワムソフト SVN 作業ツリー (psbfile / psbwriter 等のソース)
 set(WAMSOFT_WORK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../wamsoft_work)
 
+# UTF-8 化していない旧プラグインのソース (packinone 等)。
+# 同名のものは上の 2 つが優先されるよう、リストの最後に置く。
+# ⚠ packinone は Win32 専用 API (TVPGetApplicationWindowHandle / TVPCreateIStream)
+#   を使っていて generic ビルドではコンパイルが通らないため、まだ TVP_PLUGINS に
+#   入れていない (src/core/doc/GenericPluginLoading.md)
+set(WAMSOFT_PLUGINS_SJIS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../krkrtemplate/plugins)
+
 # プラグイン対象フォルダ
 list(APPEND TVP_PLUGIN_FOLDERS
     ${PLUGINS_DIR}
     ${WAMSOFT_PLUGINS_DIR}
     ${WAMSOFT_WORK_DIR}
+    ${WAMSOFT_PLUGINS_SJIS_DIR}
 )
 
 set(TPSTUB_DIR ${PLUGINS_DIR}/tp_stub)
