@@ -19,6 +19,9 @@
             "name": "windows",
             "description": "windows",
             "inherits": "default",
+            "environment": {
+                "VSLANG": "1033"
+            },
             "cacheVariables": {
                 "CMAKE_C_COMPILER":"cl",
                 "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/windows.cmake",
