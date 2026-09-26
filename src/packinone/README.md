@@ -1,6 +1,6 @@
 # packinone 再構築 (調査と実装範囲)
 
-status: **調査済み・未実装** (2026-09-27)
+status: **土台まで実装 (2026-09-27)**。6 個取り込み済み / 残りは下記
 置き場: `src/packinone` (`src/plugins` とは別枠。ここが統合プラグインの唯一の置き場)
 
 ## これは何か
@@ -76,16 +76,79 @@ status: **調査済み・未実装** (2026-09-27)
 5. **packinoneWin32 へ**: process / DpiIconManager / systemEx の Win32 部分
 6. **作らない**: FileSelector / selfile (本体のダイアログを使う)
 
+## 実装した仕組み (動作確認済み)
+
+### 取り込み方: 静的プラグイン機構に寄せた
+
+各プラグインのソースを **per-source の define 付きでそのままコンパイル**する。
+
+```cmake
+packinone_absorb(scriptsEx NCBIND Main.cpp)
+# → TVP_STATIC_PLUGIN / TVP_PLUGIN_NAME=scriptsEx /
+#    V2Link=V2Link_scriptsEx / V2Unlink=... / DllEntryPoint=... を付けてコンパイル
+```
+
+- `TVP_STATIC_PLUGIN` を付けると **ncbind の自動登録リストがプラグインごとに別名**になり
+  (`ncbind.hpp` が `TVP_PLUGIN_NAME` で改名する)、同じ DLL に同居できる
+- 同時に `krkrz_plugin_<名前>()` という登録エントリが生える
+- ⚠ **ncbind を使うプラグインは V2Link も登録エントリも `ncbind.cpp` 側にある**ので、
+  **プラグインごとに ncbind.cpp を別コンパイル**する必要がある
+  (生成した 1 行のラッパ `#include "…/ncbind.cpp"` を per-source define 付きで積む)
+- ⚠ `V2Link` / `V2Unlink` / `DllEntryPoint` は各プラグインが定義するので、
+  define で改名しないと重複定義になる
+
+### 束ね役 (packinone.cpp)
+
+`krkrz_plugin_<名前>()` は本体の `TVPRegisterPlugin()` を呼ぶが、**DLL からは本体の
+それを呼べない** (ヘッダに宣言があるだけ)。そこで **packinone 自身が
+`TVPRegisterPlugin` を定義して横取り**し、集めた `link` を自分の `V2Link` から順に呼ぶ。
+
+### 本体の口: `TVPRegisterBundledPlugin`
+
+```cpp
+TVPRegisterBundledPlugin(ttstr(p->name) + TJS_W(".dll"));
+```
+
+これを呼ぶと本体が「その名前は同梱済み」と覚え、以後
+
+- `Plugins.link("csvParser.dll")` … **何もせず成功**
+- `Plugins.canLink("csvParser.dll")` … **true**
+
+になる。名前はファイル名部分だけを見て大小文字を無視するので
+`tools/plugin64/CSVPARSER.DLL` でも一致する。
+旧 PackinOne が `Plugins.link` を自前で差し替えてやっていたことの置き換え。
+
+### 実測 (SDL ビルド)
+
+```
+(info) Bundled Plugin:csvparser.dll / savestruct.dll / scriptsex.dll /
+       shrinkcopy.dll / layerexbtoa.dll / layerexraster.dll
+PROBE CSVParser = Object / Scripts.getObjectKeys = Object / Layer.doBoxBlur = Object
+PROBE canLink(csvParser.dll) = 1 / canLink(notexist.dll) = 0
+PROBE link(csvParser.dll) は素通り OK / 大小文字・パス違いも OK
+```
+
+## 取り込み状況
+
+| | |
+|---|---|
+| ✅ 取り込み済み (6) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster |
+| ⬜ 次 (そのまま入るはず) | layerExImage (LicensesGen.cpp つき) / tjsDataPack |
+| ⬜ ストリーム置換が要る | fstat / pemachinetype / TriBinPairString |
+| ⬜ 要否再検討 | addFont (本体に `System.addFont` あり) |
+| ⬜ 作り直し | proxyfs / tlgSliceLoader |
+| ⬜ packinoneWin32 へ | process / DpiIconManager / systemEx の Win32 部分 |
+
+⚠ **取り込んだものは `TVP_PLUGINS` から外す** (同じクラスの二重登録を避けるため)。
+外し忘れると個別 DLL と両方ビルドされる。
+
 ## ⚠ ビルド構成の未決事項
 
-- 統合プラグインと個別プラグインを**両方ビルドすると同じクラスが二重登録**になりうる。
-  krkrz_dev_wamsoft では**統合プラグイン (packinone) だけを作る**構成が無難、という方針。
-  `TVP_PLUGINS` から取り込み済みの個別プラグインを外すか、別ターゲット扱いにするかを決める
-- 取り込み方: 旧版は `#include "sub/Main.cpp"` だった。現行ツリーには
-  **静的プラグイン機構** (`TVP_STATIC_PLUGIN` + `krkrz_plugin_<name>()` + `TVPRegisterPlugin`) が
-  あるので、そちらに寄せられないかを先に検討する
-- 旧版がやっていた「`Plugins.link` を乗っ取って同梱名を無視する」ハックを踏襲するか、
-  本体側に「このプラグインは同梱済み」と伝える口を用意するか
+- ✅ 二重登録 → 取り込んだものは `TVP_PLUGINS` から外す (決定・実施済み)
+- ✅ 取り込み方 → 静的プラグイン機構に寄せた (上記)
+- ✅ `Plugins.link` の乗っ取り → 本体に `TVPRegisterBundledPlugin` の口を作った
+- ⬜ `packinoneWin32` の切り出し (WINVER 専用機能)
+- ⬜ 案件への配備をどうするか (いまの案件は旧 PackinOne.dll をそのまま使っている)
 
 ## 参考
 

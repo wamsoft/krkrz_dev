@@ -26,6 +26,7 @@ list(APPEND TVP_PLUGIN_FOLDERS
     ${WAMSOFT_PLUGINS_DIR}
     ${WAMSOFT_WORK_DIR}
     ${WAMSOFT_PLUGINS_SJIS_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src        # 統合プラグイン (src/packinone) の置き場
 )
 
 set(TPSTUB_DIR ${PLUGINS_DIR}/tp_stub)
@@ -34,24 +35,21 @@ set(SIMPLEBIND_DIR ${PLUGINS_DIR}/simplebinder)
 
 # プラグイン一覧
 list(APPEND TVP_PLUGINS
+# ⚠ packinone (src/packinone) に取り込んだプラグインはここに書かない。
+#   同じクラスが二重に登録されるため。取り込み一覧は src/packinone/CMakeLists.txt
+packinone
 KAGParserEx
 KAGSceneParser   # krkrtemplate/plugins_utf8 由来 (シナリオ変換専用パーサ)
 clipfile
-csvParser
 getSample
 json
 layerExAreaAverage
-layerExBTOA
 layerExImage
 layerExLongExposure
-layerExRaster
 layerExVector
 lineParser
 minizip
 psdfile
-saveStruct
-scriptsEx
-shrinkCopy
 krkr_richtext
 extrans
 extNagano
