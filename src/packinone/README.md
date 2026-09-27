@@ -47,7 +47,7 @@ status: **土台まで実装 (2026-09-27)**。10 個取り込み済み / 残り�
 | `layerExRaster` | `src/plugins/layerExRaster` | 無し | ✅ 取り込み済み |
 | `tjsDataPack` | `krkrtemplate/plugins_utf8/tjsDataPack` | 無し | ✅ 取り込み済み |
 | `fstat` | `src/plugins/fstat` | `TVPCreateIStream` (ファイルを開くだけ) | ⚠ ストリームを `TVPCreateStream` へ置換 |
-| `addFont` | `src/plugins/addFont` | `TVPCreateIStream` (フォントを読むだけ) | ⚠ 同上。**本体に `System.addFont` があるので要否から再検討** |
+| `addFont` | `src/plugins/addFont` | `AddFontResourceEx` / テンポラリ展開 | ❌ **不要**。本体の `System.addFont` に寄せた (下記) |
 | `proxyfs` | `krkrtemplate/plugins_utf8/proxyfs` | IStream でストリームを**提供**している | ⚠ 作り直しが要る (本体のストレージメディア API へ) |
 | `tlgSliceLoader` | `krkrtemplate/plugins_utf8/tlgSliceLoader` | 3 ファイル | ⚠ 要調査 |
 | `systemEx` | `src/plugins/systemEx` | `TVPGetApplicationWindowHandle` (メッセージボックスの親) / ntdll の `RtlGetVersion` / `SetDefaultDllDirectories` | ⚠ **分割**。移植可能な部分だけ packinone へ、残りは packinoneWin32 |
@@ -62,7 +62,7 @@ status: **土台まで実装 (2026-09-27)**。10 個取り込み済み / 残り�
 | 機能 | 本体 API | 備考 |
 |---|---|---|
 | ファイル / フォルダ選択ダイアログ | `Storages.selectFile` / `Storages.selectDirectory` | **WINVER / generic の両方にある** (`*/base/StorageImpl.cpp`) |
-| フォント追加 | `System.addFont` / `Font.addFont` | `common/visual/LayerIntf.cpp` / `generic/base/SystemImpl.cpp` |
+| フォント追加 | `System.addFont` / `Font.addFont` | `*/base/SystemImpl.cpp` / `common/visual/LayerIntf.cpp`。**WINVER に `System.addFont` が無かったので足した** |
 | プログラム起動 | `TVPExecuteProgram` (generic にもある) / `System.shellExecute` (WINVER) | `process` の「起動するだけ」の用途はこれで足りる |
 | MD5 | `TVP_md5_init` / `append` / `finish` をプラグインへ export 済み | ⚠ `__WINVER__` ガードが**無い**ので全機種で使える |
 
@@ -73,7 +73,7 @@ status: **土台まで実装 (2026-09-27)**。10 個取り込み済み / 残り�
 2. ✅ **ストリームの置き換えだけ**: pemachinetype / TriBinPairString — **完了**
    (どちらも旧 PackinOne にしか無かったので、`src/plugins/` に個別プラグインとして
     起こし直してから取り込んだ。 単体 DLL は作っていない = `TVP_PLUGINS` に入れていない)
-3. **要否から再検討**: addFont (本体に同等機能あり)
+3. ✅ **要否から再検討**: addFont — **取り込まない** (下記)
 4. **作り直し**: proxyfs (ストリームを提供する側なので設計から)、tlgSliceLoader (要調査)
 5. **packinoneWin32 へ**: process / DpiIconManager / systemEx の Win32 部分
 6. **作らない**: FileSelector / selfile (本体のダイアログを使う)
@@ -146,7 +146,6 @@ PROBE link(layerExImage.dll) は素通り OK / 大小文字・パス違いも OK
 |---|---|
 | ✅ 取り込み済み (10) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack / pemachinetype / TriBinPairString |
 | ⬜ 次 | fstat — ⚠ **見積もり誤り。下記参照** |
-| ⬜ 要否再検討 | addFont (本体に `System.addFont` あり) |
 | ⬜ 作り直し | proxyfs / tlgSliceLoader |
 | ⬜ packinoneWin32 へ | process / DpiIconManager / systemEx の Win32 部分 |
 
@@ -161,6 +160,38 @@ PROBE link(layerExImage.dll) は素通り OK / 大小文字・パス違いも OK
 ⚠ `tjsDataPack` だけは現行ツリーの外 (`krkrtemplate/plugins_utf8`) にある。
 `PACKINONE_TJSDATAPACK_DIR` で差せる。 無い場合は警告を出して**その 1 個だけ落とす**
 (`PACKINONE_HAS_TJSDATAPACK` で packinone.cpp 側も連動する)。
+
+## addFont は取り込まない (本体へ寄せた)
+
+旧 `addFont` プラグインは `System.addFont(file, extract)` を生やし、
+`AddFontResourceEx` / テンポラリ展開という **Win32 の作りそのもの**だった。
+
+本体には既に同じことをする口があるので、そちらへ寄せた。
+
+| | 旧プラグイン | 本体 |
+|---|---|---|
+| 置き場 | `System.addFont(file, extract)` | `Font.addFont(storage)` / `System.addFont(storage)` |
+| アーカイブ内 | `extract` でテンポラリ展開が要る | ストレージが面倒を見るので不要 |
+| 戻り値 | 登録できたフォント数 | 実 face 名の配列 |
+
+やったこと:
+
+- **WINVER の本体に `System.addFont` を足した** (generic には既にあった)。
+  中身は `Font.addFont` と同じ `FontSystem::AddExtraFont`
+- generic の `System.addFont` も face 名の配列を返すようにして戻り値をそろえた
+
+実測:
+
+```
+SDL    : System.addFont("roboto-regular.ttf") -> ["Roboto Regular"]
+WINVER : System.addFont("roboto-regular.ttf") -> []       ← 下記
+両方   : 存在しないファイルは「ストレージ … を開くことができません」
+```
+
+⚠ **WINVER で face 名が返らないのは本体側の既存の穴**で、この変更とは別件。
+`GDIFontRasterizer::AddFont` が `AddFontMemResourceEx` を呼ぶだけで
+`faces` を埋めていない (`Font.addFont` も同じく空配列が返る)。
+埋めるにはフォントの name テーブルを自前で読む必要がある。
 
 ## ⚠ fstat は「ストリームの置き換えだけ」では済まない (見積もり誤り)
 
