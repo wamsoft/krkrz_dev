@@ -21,13 +21,21 @@
 //---------------------------------------------------------------------------
 // 取り込んだプラグインの登録エントリ (各ソースが TVP_STATIC_PLUGIN で生やす)
 //---------------------------------------------------------------------------
+#ifdef PACKINONE_HAS_TJSDATAPACK
+# define PACKINONE_TJSDATAPACK(f) f(tjsDataPack)
+#else
+# define PACKINONE_TJSDATAPACK(f)
+#endif
+
 #define PACKINONE_PLUGINS(f) \
 	f(csvParser)             \
 	f(saveStruct)            \
 	f(scriptsEx)             \
 	f(shrinkCopy)            \
 	f(layerExBTOA)           \
-	f(layerExRaster)
+	f(layerExRaster)         \
+	f(layerExImage)          \
+	PACKINONE_TJSDATAPACK(f)
 
 #define PACKINONE_DECL(name) extern "C" void STDCALL krkrz_plugin_##name();
 PACKINONE_PLUGINS(PACKINONE_DECL)

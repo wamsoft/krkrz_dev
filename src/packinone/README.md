@@ -1,6 +1,6 @@
 # packinone 再構築 (調査と実装範囲)
 
-status: **土台まで実装 (2026-09-27)**。6 個取り込み済み / 残りは下記
+status: **土台まで実装 (2026-09-27)**。8 個取り込み済み / 残りは下記
 置き場: `src/packinone` (`src/plugins` とは別枠。ここが統合プラグインの唯一の置き場)
 
 ## これは何か
@@ -38,14 +38,14 @@ status: **土台まで実装 (2026-09-27)**。6 個取り込み済み / 残り�
 
 | 旧 PackinOne の中身 | 現行ツリーのソース | Win32 依存 | 新 packinone での扱い |
 |---|---|---|---|
-| `csvParser` | `src/plugins/csvParser` | 無し | ✅ そのまま取り込む |
-| `saveStruct` | `src/plugins/saveStruct` | 無し | ✅ そのまま |
-| `scriptsEx` | `src/plugins/scriptsEx` | 無し | ✅ そのまま |
-| `shrinkCopy` | `src/plugins/shrinkCopy` | 無し | ✅ そのまま |
-| `layerExBTOA` | `src/plugins/layerExBTOA` | 無し | ✅ そのまま |
-| `layerExImage` | `src/plugins/layerExImage` | 無し | ✅ そのまま |
-| `layerExRaster` | `src/plugins/layerExRaster` | 無し | ✅ そのまま |
-| `tjsDataPack` | `krkrtemplate/plugins_utf8/tjsDataPack` | 無し | ✅ そのまま |
+| `csvParser` | `src/plugins/csvParser` | 無し | ✅ 取り込み済み |
+| `saveStruct` | `src/plugins/saveStruct` | 無し | ✅ 取り込み済み |
+| `scriptsEx` | `src/plugins/scriptsEx` | 無し | ✅ 取り込み済み |
+| `shrinkCopy` | `src/plugins/shrinkCopy` | 無し | ✅ 取り込み済み |
+| `layerExBTOA` | `src/plugins/layerExBTOA` | 無し | ✅ 取り込み済み |
+| `layerExImage` | `src/plugins/layerExImage` | 無し | ✅ 取り込み済み |
+| `layerExRaster` | `src/plugins/layerExRaster` | 無し | ✅ 取り込み済み |
+| `tjsDataPack` | `krkrtemplate/plugins_utf8/tjsDataPack` | 無し | ✅ 取り込み済み |
 | `fstat` | `src/plugins/fstat` | `TVPCreateIStream` (ファイルを開くだけ) | ⚠ ストリームを `TVPCreateStream` へ置換 |
 | `addFont` | `src/plugins/addFont` | `TVPCreateIStream` (フォントを読むだけ) | ⚠ 同上。**本体に `System.addFont` があるので要否から再検討** |
 | `proxyfs` | `krkrtemplate/plugins_utf8/proxyfs` | IStream でストリームを**提供**している | ⚠ 作り直しが要る (本体のストレージメディア API へ) |
@@ -68,8 +68,8 @@ status: **土台まで実装 (2026-09-27)**。6 個取り込み済み / 残り�
 
 ## 実装範囲 (絞り込み結果)
 
-1. **そのまま取り込むだけ**: csvParser / saveStruct / scriptsEx / shrinkCopy /
-   layerExBTOA / layerExImage / layerExRaster / tjsDataPack (8 個)
+1. ✅ **そのまま取り込むだけ**: csvParser / saveStruct / scriptsEx / shrinkCopy /
+   layerExBTOA / layerExImage / layerExRaster / tjsDataPack (8 個) — **完了**
 2. **ストリームの置き換えだけ**: fstat / pemachinetype / TriBinPairString
 3. **要否から再検討**: addFont (本体に同等機能あり)
 4. **作り直し**: proxyfs (ストリームを提供する側なので設計から)、tlgSliceLoader (要調査)
@@ -83,19 +83,26 @@ status: **土台まで実装 (2026-09-27)**。6 個取り込み済み / 残り�
 各プラグインのソースを **per-source の define 付きでそのままコンパイル**する。
 
 ```cmake
-packinone_absorb(scriptsEx NCBIND Main.cpp)
+packinone_absorb(scriptsEx NCBIND SOURCES Main.cpp)
 # → TVP_STATIC_PLUGIN / TVP_PLUGIN_NAME=scriptsEx /
 #    V2Link=V2Link_scriptsEx / V2Unlink=... / DllEntryPoint=... を付けてコンパイル
+
+packinone_absorb(tjsDataPack SIMPLEBIND      # simplebinder を使うものは SIMPLEBIND
+    DIR      <ツリー外のパス>                 # 既定は ../plugins/<名前>
+    INCLUDES lz4 xxHash                      # DIR からの相対 (絶対も可)
+    SOURCES  Main.cpp …)
 ```
 
-- `TVP_STATIC_PLUGIN` を付けると **ncbind の自動登録リストがプラグインごとに別名**になり
-  (`ncbind.hpp` が `TVP_PLUGIN_NAME` で改名する)、同じ DLL に同居できる
+- `TVP_STATIC_PLUGIN` を付けると **バインダの自動登録リストがプラグインごとに別名**になり
+  (`ncbind.hpp` / `simplebinder.hpp` が `TVP_PLUGIN_NAME` で改名する)、同じ DLL に同居できる
 - 同時に `krkrz_plugin_<名前>()` という登録エントリが生える
-- ⚠ **ncbind を使うプラグインは V2Link も登録エントリも `ncbind.cpp` 側にある**ので、
-  **プラグインごとに ncbind.cpp を別コンパイル**する必要がある
-  (生成した 1 行のラッパ `#include "…/ncbind.cpp"` を per-source define 付きで積む)
+- ⚠ **バインダ本体 (`ncbind.cpp` / simplebinder の `v2link.cpp`) に V2Link と登録エントリが
+  入っている**ので、**プラグインごとに別コンパイル**する必要がある
+  (生成した 1 行のラッパ `#include "…/<バインダ>.cpp"` を per-source define 付きで積む)
 - ⚠ `V2Link` / `V2Unlink` / `DllEntryPoint` は各プラグインが定義するので、
   define で改名しないと重複定義になる
+- ⚠ 取り込むプラグイン自身のディレクトリを **include 順の先頭**に置く
+  (`krkrtemplate/plugins` に転がっている古い `tp_stub.h` を拾わないため)
 
 ### 束ね役 (packinone.cpp)
 
@@ -121,26 +128,37 @@ TVPRegisterBundledPlugin(ttstr(p->name) + TJS_W(".dll"));
 ### 実測 (SDL ビルド)
 
 ```
-(info) Bundled Plugin:csvparser.dll / savestruct.dll / scriptsex.dll /
-       shrinkcopy.dll / layerexbtoa.dll / layerexraster.dll
+(info) Bundled Plugin:csvparser.dll / savestruct.dll / scriptsex.dll / shrinkcopy.dll /
+       layerexbtoa.dll / layerexraster.dll / layereximage.dll / tjsdatapack.dll
 PROBE CSVParser = Object / Scripts.getObjectKeys = Object / Layer.doBoxBlur = Object
+PROBE Layer.gaussianBlur / colorize / modulate = Object            (layerExImage)
+PROBE Scripts.saveDataPack / loadDataPack / makeDataPackDigest = Object
+PROBE saveDataPack→loadDataPack 往復 OK / makeDataPackDigest = 3492451245
 PROBE canLink(csvParser.dll) = 1 / canLink(notexist.dll) = 0
-PROBE link(csvParser.dll) は素通り OK / 大小文字・パス違いも OK
+PROBE link(layerExImage.dll) は素通り OK / 大小文字・パス違いも OK
 ```
 
 ## 取り込み状況
 
 | | |
 |---|---|
-| ✅ 取り込み済み (6) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster |
-| ⬜ 次 (そのまま入るはず) | layerExImage (LicensesGen.cpp つき) / tjsDataPack |
-| ⬜ ストリーム置換が要る | fstat / pemachinetype / TriBinPairString |
+| ✅ 取り込み済み (8) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack |
+| ⬜ 次 (ストリーム置換が要る) | fstat / pemachinetype / TriBinPairString |
 | ⬜ 要否再検討 | addFont (本体に `System.addFont` あり) |
 | ⬜ 作り直し | proxyfs / tlgSliceLoader |
 | ⬜ packinoneWin32 へ | process / DpiIconManager / systemEx の Win32 部分 |
 
 ⚠ **取り込んだものは `TVP_PLUGINS` から外す** (同じクラスの二重登録を避けるため)。
 外し忘れると個別 DLL と両方ビルドされる。
+
+⚠ **外した分は単体 DLL が作られなくなる。** とくに `tjsDataPack.dll` は
+既存プロジェクトが単体で配置して使っている。 このツリーの成果物を配るときは
+`PackinOne.dll` を一緒に置くこと (単体で要るなら、その置き場の
+`krkrtemplate/plugins_utf8/tjsDataPack` を直接ビルドする)。
+
+⚠ `tjsDataPack` だけは現行ツリーの外 (`krkrtemplate/plugins_utf8`) にある。
+`PACKINONE_TJSDATAPACK_DIR` で差せる。 無い場合は警告を出して**その 1 個だけ落とす**
+(`PACKINONE_HAS_TJSDATAPACK` で packinone.cpp 側も連動する)。
 
 ## ⚠ ビルド構成の未決事項
 
