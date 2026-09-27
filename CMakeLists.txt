@@ -35,9 +35,11 @@ set(SIMPLEBIND_DIR ${PLUGINS_DIR}/simplebinder)
 
 # プラグイン一覧
 list(APPEND TVP_PLUGINS
-# ⚠ packinone (src/packinone) に取り込んだプラグインはここに書かない。
-#   同じクラスが二重に登録されるため。取り込み一覧は src/packinone/CMakeLists.txt
+# ⚠ packinone / packinoneWin32 に取り込んだプラグインはここに書かない。
+#   同じクラスが二重に登録されるため。取り込み一覧は
+#   src/packinone/CMakeLists.txt と src/packinoneWin32/CMakeLists.txt
 packinone
+packinoneWin32   # WINVER 以外では自分で return して何も作らない
 KAGParserEx
 KAGSceneParser   # krkrtemplate/plugins_utf8 由来 (シナリオ変換専用パーサ)
 clipfile
@@ -115,7 +117,6 @@ fftgraph        # fftgraph.dll (音声スペクトラム表示 drawFFTGraph。�
 fpslimit
 memfile
 varfile
-fstat
 gamepad
 layerExDraw
 menu
