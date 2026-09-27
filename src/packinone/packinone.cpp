@@ -35,6 +35,8 @@
 	f(layerExBTOA)           \
 	f(layerExRaster)         \
 	f(layerExImage)          \
+	f(pemachinetype)         \
+	f(TriBinPairString)      \
 	PACKINONE_TJSDATAPACK(f)
 
 #define PACKINONE_DECL(name) extern "C" void STDCALL krkrz_plugin_##name();

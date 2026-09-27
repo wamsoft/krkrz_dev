@@ -1,6 +1,6 @@
 # packinone 再構築 (調査と実装範囲)
 
-status: **土台まで実装 (2026-09-27)**。8 個取り込み済み / 残りは下記
+status: **土台まで実装 (2026-09-27)**。10 個取り込み済み / 残りは下記
 置き場: `src/packinone` (`src/plugins` とは別枠。ここが統合プラグインの唯一の置き場)
 
 ## これは何か
@@ -54,8 +54,8 @@ status: **土台まで実装 (2026-09-27)**。8 個取り込み済み / 残り�
 | `process` | `src/plugins/process` | メッセージ専用ウィンドウを `CreateWindowExW` で作る | ❌ **packinoneWin32 へ** |
 | FileSelector / selfile | (旧 packinone のみ) | ファイル選択ダイアログ | ❌ **不要**。本体に `Storages.selectFile` / `selectDirectory` がある (WINVER / generic 両方) |
 | DpiIconManager | (旧 packinone のみ) | ウィンドウアイコン / DPI | ❌ **packinoneWin32 へ** (または廃止。[windowEx 廃止で落とした機能] と同じ扱い) |
-| pemachinetype | (旧 packinone のみ) | PE ヘッダを読んで x86/x64 判定 | ✅ ファイルを読むだけなので移植可能 |
-| TriBinPairString | (旧 packinone のみ) | 文字列ユーティリティ | ✅ 移植可能 |
+| pemachinetype | (旧 packinone のみ) → `src/plugins/pemachinetype` | PE ヘッダを読んで x86/x64 判定 | ✅ 取り込み済み (ストリームを置換して起こし直し) |
+| TriBinPairString | (旧 packinone のみ) → `src/plugins/TriBinPairString` | 文字列ユーティリティ | ✅ 取り込み済み (計算のみ。UTF-8 化して起こし直し) |
 
 ## 本体が既に持っているので実装しなくてよいもの
 
@@ -70,7 +70,9 @@ status: **土台まで実装 (2026-09-27)**。8 個取り込み済み / 残り�
 
 1. ✅ **そのまま取り込むだけ**: csvParser / saveStruct / scriptsEx / shrinkCopy /
    layerExBTOA / layerExImage / layerExRaster / tjsDataPack (8 個) — **完了**
-2. **ストリームの置き換えだけ**: fstat / pemachinetype / TriBinPairString
+2. ✅ **ストリームの置き換えだけ**: pemachinetype / TriBinPairString — **完了**
+   (どちらも旧 PackinOne にしか無かったので、`src/plugins/` に個別プラグインとして
+    起こし直してから取り込んだ。 単体 DLL は作っていない = `TVP_PLUGINS` に入れていない)
 3. **要否から再検討**: addFont (本体に同等機能あり)
 4. **作り直し**: proxyfs (ストリームを提供する側なので設計から)、tlgSliceLoader (要調査)
 5. **packinoneWin32 へ**: process / DpiIconManager / systemEx の Win32 部分
@@ -142,8 +144,8 @@ PROBE link(layerExImage.dll) は素通り OK / 大小文字・パス違いも OK
 
 | | |
 |---|---|
-| ✅ 取り込み済み (8) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack |
-| ⬜ 次 (ストリーム置換が要る) | fstat / pemachinetype / TriBinPairString |
+| ✅ 取り込み済み (10) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack / pemachinetype / TriBinPairString |
+| ⬜ 次 | fstat — ⚠ **見積もり誤り。下記参照** |
 | ⬜ 要否再検討 | addFont (本体に `System.addFont` あり) |
 | ⬜ 作り直し | proxyfs / tlgSliceLoader |
 | ⬜ packinoneWin32 へ | process / DpiIconManager / systemEx の Win32 部分 |
@@ -160,11 +162,37 @@ PROBE link(layerExImage.dll) は素通り OK / 大小文字・パス違いも OK
 `PACKINONE_TJSDATAPACK_DIR` で差せる。 無い場合は警告を出して**その 1 個だけ落とす**
 (`PACKINONE_HAS_TJSDATAPACK` で packinone.cpp 側も連動する)。
 
+## ⚠ fstat は「ストリームの置き換えだけ」では済まない (見積もり誤り)
+
+当初「`TVPCreateIStream` を `TVPCreateStream` に替えるだけ」と見積もったが、実際に
+中身を見たら **ファイルシステム API を直接叩いている部分が本体**だった。
+
+```
+CreateFile ×3 / GetFileAttributes ×5 / SetFileAttributes ×2 / GetFileTime ×2 /
+SetFileTime ×2 / FindFirstFile・FindNextFile ×2 / CreateDirectory ×2 /
+RemoveDirectory / MoveFile / CopyFile / DeleteFile / SearchPath
+```
+
+生えるメソッドも `Storages.dirlist` / `createDirectory` / `moveFile` /
+`copyFile` / `setFileAttributes` / `changeDirectory` … と、ほぼ全部が
+ローカルファイルシステム操作。 IStream を使っているのは
+`fstat` / `exportFile` / `getMD5HashString` の 3 箇所だけ。
+
+**選択肢**:
+
+| | |
+|---|---|
+| A. `std::filesystem` で書き直す | packinone は C++17 なので通る。全機種で動く。手は入る |
+| B. `packinoneWin32` へ送る | 現状維持。 generic では使えないまま |
+
+⬜ **未決**。 generic (SDL / CS) で `Storages.dirlist` 等が要るかどうかで決まる。
+
 ## ⚠ ビルド構成の未決事項
 
 - ✅ 二重登録 → 取り込んだものは `TVP_PLUGINS` から外す (決定・実施済み)
 - ✅ 取り込み方 → 静的プラグイン機構に寄せた (上記)
 - ✅ `Plugins.link` の乗っ取り → 本体に `TVPRegisterBundledPlugin` の口を作った
+- ⬜ fstat を std::filesystem で書き直すか packinoneWin32 へ送るか (上記)
 - ⬜ `packinoneWin32` の切り出し (WINVER 専用機能)
 - ⬜ 案件への配備をどうするか (いまの案件は旧 PackinOne.dll をそのまま使っている)
 
