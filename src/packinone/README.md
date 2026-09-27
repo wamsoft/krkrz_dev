@@ -46,7 +46,7 @@ status: **実装中 (2026-09-27)**。packinone 10 個 + packinoneWin32 1 個 (fs
 | `layerExImage` | `src/plugins/layerExImage` | 無し | ✅ 取り込み済み |
 | `layerExRaster` | `src/plugins/layerExRaster` | 無し | ✅ 取り込み済み |
 | `tjsDataPack` | `krkrtemplate/plugins_utf8/tjsDataPack` | 無し | ✅ 取り込み済み |
-| `fstat` | `src/plugins/fstat` | ローカル FS 操作そのもの | ✅ **packinoneWin32 へ取り込み済み**。本体に無い分だけ補完する形 |
+| `fstat` | `src/plugins/fstat` | ローカル FS 操作そのもの | ✅ **大半は本体へ移した**。Win32 専用の残りだけ packinoneWin32 |
 | `addFont` | `src/plugins/addFont` | `AddFontResourceEx` / テンポラリ展開 | ❌ **不要**。本体の `System.addFont` に寄せた (下記) |
 | `proxyfs` | `krkrtemplate/plugins_utf8/proxyfs` | IStream でストリームを**提供**している | ⚠ 作り直しが要る (本体のストレージメディア API へ) |
 | `tlgSliceLoader` | `krkrtemplate/plugins_utf8/tlgSliceLoader` | 3 ファイル | ⚠ 要調査 |
@@ -62,6 +62,7 @@ status: **実装中 (2026-09-27)**。packinone 10 個 + packinoneWin32 1 個 (fs
 | 機能 | 本体 API | 備考 |
 |---|---|---|
 | ファイル / フォルダ選択ダイアログ | `Storages.selectFile` / `Storages.selectDirectory` | **WINVER / generic の両方にある** (`*/base/StorageImpl.cpp`) |
+| ローカルファイル操作 | `Storages.fstat` / `dirlist` / `dirlistEx` / `dirtree` / `isExistentDirectory` / `createDirectory` / `removeDirectory` / `moveFile` / `deleteFile` / `copyFile` / `exportFile` / `truncateFile` / `getMD5HashString` / `getTemporaryName` / `clearStorageCaches` | **2026-09 に fstat から本体へ移した** (`common/base/StorageIntf.cpp`)。WINVER / generic 共通 |
 | フォント追加 | `System.addFont` / `Font.addFont` | `*/base/SystemImpl.cpp` / `common/visual/LayerIntf.cpp`。**WINVER に `System.addFont` が無かったので足した** |
 | プログラム起動 | `TVPExecuteProgram` (generic にもある) / `System.shellExecute` (WINVER) | `process` の「起動するだけ」の用途はこれで足りる |
 | MD5 | `TVP_md5_init` / `append` / `finish` をプラグインへ export 済み | ⚠ `__WINVER__` ガードが**無い**ので全機種で使える |
@@ -145,7 +146,7 @@ PROBE link(layerExImage.dll) は素通り OK / 大小文字・パス違いも OK
 | | |
 |---|---|
 | ✅ 取り込み済み (10) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack / pemachinetype / TriBinPairString |
-| ✅ packinoneWin32 (1) | fstat (本体に無い分だけ補完) |
+| ✅ packinoneWin32 (1) | fstat (16 個は本体へ移し、Win32 専用の残りだけ) |
 | ⬜ 作り直し | proxyfs / tlgSliceLoader |
 | ⬜ packinoneWin32 の残り | process / DpiIconManager / systemEx の Win32 部分 |
 
@@ -193,7 +194,7 @@ WINVER : System.addFont("roboto-regular.ttf") -> []       ← 下記
 `faces` を埋めていない (`Font.addFont` も同じく空配列が返る)。
 埋めるにはフォントの name テーブルを自前で読む必要がある。
 
-## fstat は packinoneWin32 へ (本体に無い分だけ補完する形)
+## fstat は大半を本体へ移し、Win32 専用の残りだけ packinoneWin32 へ
 
 当初「`TVPCreateIStream` を `TVPCreateStream` に替えるだけ」と見積もったが、実体は
 **ファイルシステム API の直叩き**だった (`CreateFile` ×3 / `GetFileAttributes` ×5 /
@@ -210,41 +211,87 @@ IStream を使っているのは `fstat` / `exportFile` / `getMD5HashString` の
 
 つまり**重要どころは generic の本体が既に持っていて、WINVER の本体だけが持っていない**。
 
-### やったこと
+### やったこと: 下回りが両方にあるものは本体へ移した
 
-`src/plugins/fstat` を **packinoneWin32 に取り込み、本体が持っているものは
-`NCB_METHOD_IF_MISSING` / `RawCallbackIfMissing` で登録する**ようにした。
-
-- 本体にある名前は**上書きしない**ので、generic では本体の実装がそのまま使われる
-- WINVER では本体に無い分をプラグインが埋める
-- 将来 WINVER の本体が `dirlist` 等を持てば、**プラグイン側は自動的に身を引く**
-
-IF_MISSING にしたもの: `dirlist` / `dirtree` / `isExistentDirectory` / `moveFile` /
-`deleteFile` / `getLastModifiedFileTime` / `selectDirectory`。
-残り (`fstat` / `getTime` / `setTime` / `exportFile` / `truncateFile` / `dirlistEx` /
-`createDirectory` / `removeDirectory` / `changeDirectory` / `*FileAttributes` /
-`copyFile` / `getDisplayName` / `getMD5HashString` / `searchPath` / `currentPath` /
-`getTemporaryName` / `TemporaryFiles` クラス) は本体に無いので常に登録する。
-
-### 実測
+本体には **WINVER / generic の両方にある**ローカルファイル操作の下回りが揃っている:
 
 ```
-WINVER : Bundled Plugin:fstat.dll / canLink(fstat.dll)=1
-         26 個のメソッドが全部生える (欠けなし) / TemporaryFiles クラスも生える
-         dirlist("./") が startup.tjs を拾う / isExistentDirectory("./")=1
-         fstat(size=…, mtime あり) / getMD5HashString / getTemporaryName
-         copyFile -> moveFile -> deleteFile が順に成功
-SDL    : canLink(fstat.dll)=0 (packinoneWin32 は作られない)
-         dirlist / dirtree / isExistentDirectory / moveFile / deleteFile は
-         本体のものがそのまま使える (欠けなし)
+TVPCreateStream / TVPMoveStorage / TVPRemoveStorage / TVPCreateFolders /
+TVPRemoveFolder / TVPFileSize / TVPLastModifiedFileTime /
+TVPCheckExistentLocalFile / TVPCheckExistentLocalFolder / TVPGetTemporaryName
 ```
+
+足りなかったのは「ディレクトリかどうかを付けた列挙」だけだったので、
+`TVPGetLocalFolderListAt()` を 1 本足した (generic は
+`iTVPLocalFileSystem::GetListAt`、WINVER は `FindFirstFileW` に落ちる)。
+
+これで fstat のメソッドの大半は**本体 (`common/base/StorageIntf.cpp`) に
+1 つの実装**で置ける。 移したのは 16 個:
+
+```
+clearStorageCaches / fstat / dirlist / dirlistEx / dirtree /
+isExistentDirectory / isExistentStorageNoSearchNoNormalize /
+createDirectory / removeDirectory / moveFile / deleteFile /
+copyFile / exportFile / truncateFile / getMD5HashString / getTemporaryName
+```
+
+generic 本体が持っていた `dirlist` / `dirtree` / `isExistentDirectory` /
+`moveFile` / `deleteFile` は common へ引き上げたので、**generic からは消してある**
+(二重登録を避けるため)。
+
+### プラグインに残るもの (Win32 専用 = 下回りが本体に無い)
+
+```
+getTime / setTime / setLastModifiedFileTime      ← ctime/atime と時刻の書き込み
+setFileAttributes / resetFileAttributes / getFileAttributes  ← Win32 の属性ビット
+searchPath                                        ← SearchPath
+getDisplayName                                    ← シェルの表示名
+changeDirectory / currentPath                     ← プロセスのカレント
+createDirectoryNoNormalize / copyFileNoNormalize  ← 正規化なし版
+TemporaryFiles クラス                             ← DELETE_ON_CLOSE ハンドル
+```
+
+本体へ移した 16 個はプラグイン側も `IF_MISSING` で登録してあるので、
+**本体がある環境では登録されない** (古い本体と組み合わせたときだけ補完する)。
+
+### 実測 (WINVER / generic で結果が一致)
+
+```
+[本体のみ] 生えていないもの: なし
+[本体のみ] Win32 専用のうち生えているもの: なし (想定どおり)
+dirlist("./") / dirlistEx("./") (name + isDirectory) / isExistentDirectory("./")=1
+fstat(startup.tjs) size / mtime>0
+getMD5HashString = 3ec457795713f439efee25c3c2ef75d3   ← 両機種で同値
+createDirectory("probedir/a/b/")=1 → dirtree("probedir",true) = a/,a/b/
+  → removeDirectory=1 → 消えたか OK
+copyFile=1 (サイズ一致) / failIfExist の 2 回目=0
+exportFile → truncateFile(…,100) → サイズ=100
+moveFile=1 → deleteFile=1 → 存在=0
+
+[WINVER] PackinOneWin32.dll を link する前後:
+  前: Win32 専用 11 個は生えていない / currentPath, TemporaryFiles も無い
+  後: 11 個 + currentPath + TemporaryFiles が生える。
+      本体側の dirlist / fstat / getMD5HashString は上書きされず同じ値のまま
+      getFileAttributes(startup.tjs)=32 / getTime は mtime,ctime,atime とも取れる
+[SDL] canLink(fstat.dll)=0 (packinoneWin32 は作られない)
+```
+
+### ついでに直した本体側のバグ 2 件
+
+- **generic の `TVPRemoveFolder` が極性を間違えていた** (`0==RemoveDirectory(...)`)。
+  実際には削除できているのに false が返っていた
+- **`deleteFile` / `moveFile` の後も `isExistentStorage` が true を返すことがあった**。
+  `TVPGetPlacedPath` は「渡された名前」をキーにキャッシュするので、
+  正規化名だけ落としても素の名前で引いた結果が残る。両方落とすようにした
+- `truncateFile` は `iTJSBinaryStream::SetEndOfStorage` では generic の実ファイルが
+  縮まない (論理位置を覚えるだけ) ため、`std::filesystem::resize_file` を使う
 
 ## ⚠ ビルド構成の未決事項
 
 - ✅ 二重登録 → 取り込んだものは `TVP_PLUGINS` から外す (決定・実施済み)
 - ✅ 取り込み方 → 静的プラグイン機構に寄せた (上記)
 - ✅ `Plugins.link` の乗っ取り → 本体に `TVPRegisterBundledPlugin` の口を作った
-- ✅ fstat → packinoneWin32 へ (本体に無い分だけ補完する形)
+- ✅ fstat → 16 個を本体へ移し、Win32 専用の残りだけ packinoneWin32 へ
 - ⬜ `packinoneWin32` の残り (process / DpiIconManager / systemEx の Win32 部分)
 - ⬜ 案件への配備をどうするか (いまの案件は旧 PackinOne.dll をそのまま使っている)
 
