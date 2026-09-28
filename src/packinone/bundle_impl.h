@@ -22,6 +22,9 @@
 #ifndef PACKINONE_PLUGINS
 # error "PACKINONE_PLUGINS(f) を定義してから include すること"
 #endif
+#ifndef PACKINONE_SELF_NAME
+# error "PACKINONE_SELF_NAME (自分の DLL 名) を定義してから include すること"
+#endif
 
 #include <windows.h>
 #include "tp_stub.h"
@@ -68,9 +71,26 @@ static void CollectPackedPlugins()
 # endif
 #endif
 
+//---------------------------------------------------------------------------
+// ⚠ TVPRegisterBundledPlugin が無い (古い) 本体でも読み込めるようにする。
+//   tp_stub の inline は未解決だと TVPThrowPluginUnboundFunctionError を投げるので、
+//   呼ぶ前に exporter へ直接問い合わせて有無を確かめる。
+//   申告できない本体では Plugins.link("<同梱名>.dll") は素通りしない
+//   (スクリプト側で typeof ガードしていれば動く)。
+//---------------------------------------------------------------------------
+static bool HasBundledPluginAPI(iTVPFunctionExporter *exporter)
+{
+	static const char *name = "void ::TVPRegisterBundledPlugin(const ttstr &)";
+	void *ptr = NULL;
+	return exporter && exporter->QueryFunctionsByNarrowString(&name, &ptr, 1) && ptr;
+}
+
+static bool BundledPluginAPI = false;
+
 extern "C" __declspec(dllexport) HRESULT STDCALL V2Link(iTVPFunctionExporter *exporter)
 {
 	TVPInitImportStub(exporter);
+	BundledPluginAPI = HasBundledPluginAPI(exporter);
 
 	CollectPackedPlugins();
 	for(std::vector<const iTVPStaticPlugin *>::iterator i = PackedPlugins.begin();
@@ -80,19 +100,29 @@ extern "C" __declspec(dllexport) HRESULT STDCALL V2Link(iTVPFunctionExporter *ex
 		if(!p) continue;
 		if(p->link) p->link(exporter);
 		// 「このプラグインは同梱済み」と本体へ申告する
-		if(p->name) TVPRegisterBundledPlugin(ttstr(p->name) + TJS_W(".dll"));
+		if(p->name && BundledPluginAPI)
+			TVPRegisterBundledPlugin(ttstr(p->name) + TJS_W(".dll"));
 	}
+
+	// ⚠ 自分の名前も申告しておく。
+	//   詰め合わせを 2 回 link されると各プラグインが再登録を試みて
+	//   「Already registerd class:」で落ちるため (旧 PackinOne は
+	//    Plugins.link を自前で差し替えて素通りさせていた)。
+	if(BundledPluginAPI) TVPRegisterBundledPlugin(ttstr(PACKINONE_SELF_NAME));
+
 	return S_OK;
 }
 //---------------------------------------------------------------------------
 extern "C" __declspec(dllexport) HRESULT STDCALL V2Unlink()
 {
+	if(BundledPluginAPI) TVPUnregisterBundledPlugin(ttstr(PACKINONE_SELF_NAME));
 	for(std::vector<const iTVPStaticPlugin *>::reverse_iterator i = PackedPlugins.rbegin();
 		i != PackedPlugins.rend(); i++)
 	{
 		const iTVPStaticPlugin *p = *i;
 		if(!p) continue;
-		if(p->name) TVPUnregisterBundledPlugin(ttstr(p->name) + TJS_W(".dll"));
+		if(p->name && BundledPluginAPI)
+			TVPUnregisterBundledPlugin(ttstr(p->name) + TJS_W(".dll"));
 		if(p->unlink) p->unlink();
 	}
 	TVPUninitImportStub();

@@ -23,4 +23,6 @@
 	f(process)               \
 	f(dpiicon)
 
+#define PACKINONE_SELF_NAME TJS_W("PackinOneWin32.dll")
+
 #include "bundle_impl.h"

@@ -30,4 +30,6 @@
 	PACKINONE_TJSDATAPACK(f) \
 	PACKINONE_TLGSLICE(f)
 
+#define PACKINONE_SELF_NAME TJS_W("PackinOne.dll")
+
 #include "bundle_impl.h"
