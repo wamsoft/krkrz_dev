@@ -120,10 +120,10 @@ Win32 API に依存しているため、現時点では WINVER ビルドでの�
 
 | プラグイン | 説明 |
 |---|---|
-| **addFont** | プライベートフォント ( .ttf / .otf ) の動的追加を行います。 |
+| **addFont** | プライベートフォント ( .ttf / .otf ) の動的追加を行います ( 本体の [System.addFont](../reference/System.md#addfont) でも同じことができます )。 |
 | **binaryStream** | ファイルをバイナリレベルで読み書きする [BinaryStream](../reference/BinaryStream.md) クラスを追加します。 |
 | **fpslimit** | メインループの実行頻度に制限をかけます ( 現在は本体の -contfreq オプションで代替できます )。 |
-| **fstat** | ファイルサイズや更新日時の取得などを [Storages](../reference/Storages.md) に追加します。 |
+| **fstat** | ファイルサイズや更新日時の取得などを [Storages](../reference/Storages.md) に追加します。基本的なファイル操作 ( `fstat` / `getTime` / `copyFile` / `dirlist` 等 ) は本体にもあり、どのビルドでも使えます。本プラグインを読み込むと `fstat` / `getTime` / `currentPath` / `dirlistEx` は作成・アクセス日時や属性まで返す版に置き換わり、属性の設定などの Win32 固有の操作が加わります。 |
 | **gamepad** | ゲームパッドを直接扱う [Pad](../reference/Pad.md) クラスを追加します。 |
 | **httprequest** | HTTP 通信を行う [HttpRequest](../reference/HttpRequest.md) クラスを追加します。 |
 | **layerExDraw** | GDI+ による図形/テキスト描画を行う [GdiPlus](../reference/GdiPlus.md) クラス群を追加します。 |
@@ -134,10 +134,10 @@ Win32 API に依存しているため、現時点では WINVER ビルドでの�
 | **process** | 外部プロセスの起動と監視を行う [Process](../reference/Process.md) クラスを追加します。 |
 | **shellExecute** | 関連付けアプリケーションによるファイル / URL のオープンを [System](../reference/System.md) に追加します。 |
 | **stdio** | 標準入出力へのアクセスを [System](../reference/System.md) に追加します。 |
-| **systemEx** | OS 情報の取得などのユーティリティを [System](../reference/System.md) に追加します。 |
+| **systemEx** | OS 情報の取得などのユーティリティを [System](../reference/System.md) に追加します。環境変数と URL エンコード ( `readEnvValue` / `urlencode` 等 ) は本体にもあり、本体版が使われます。本プラグインに残るのはレジストリ / OS バージョン / 既知フォルダ / DLL 検索パスなどの Win32 固有の機能です。 |
 | **tftSave** | レンダリング済みフォントデータの保存機能を [System](../reference/System.md) / [Layer](../reference/Layer.md) に追加します。 |
 | **varfile** | TJS の変数空間 ( 辞書中の octet ) をファイルとして参照する var:// アクセスを追加します。 |
 | **win32dialog** | Win32 ネイティブダイアログを構築する [WIN32Dialog](../reference/WIN32Dialog.md) クラスを追加します。 |
 | **win32ole** | OLE オートメーション / ActiveX を扱う [WIN32OLE](../reference/WIN32OLE.md) / [ActiveX](../reference/ActiveX.md) / [JScriptHost](../reference/JScriptHost.md) クラスを追加します。 |
-| **windowEx** | ウィンドウ操作の各種拡張を [Window](../reference/Window.md) / [System](../reference/System.md) / [Console](../reference/Console.md) などに追加します。 |
+| **windowEx** | ウィンドウ操作の各種拡張を [Window](../reference/Window.md) / [System](../reference/System.md) / [Console](../reference/Console.md) などに追加します。最大化 / 矩形 / 拡張イベント / モニタ情報は本体にもあり、どのビルドでも使えます ( 本プラグインを読み込むとプラグイン版で上書きされます )。廃止予定です。 |
 | **windowExProgress** | 実行ブロック中でも表示され続けるプログレスバー付きウィンドウ表示を [Window](../reference/Window.md) に追加します。 |
