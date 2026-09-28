@@ -127,10 +127,8 @@ win32dialog
 windowEx
 httprequest
 shellExecute
-systemEx
 tftSave
 #httpserv
-process
 messenger
 windowExProgress
 win32ole

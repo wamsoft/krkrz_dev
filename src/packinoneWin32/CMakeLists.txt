@@ -15,6 +15,16 @@ set(PACKINONE_SOURCES "")
 # fstat: ローカルファイルシステム操作。本体に無い分だけ補完する (IF_MISSING 登録)
 packinone_absorb(fstat NCBIND SOURCES Main.cpp)
 
+# systemEx: レジストリ / DPI / OS バージョン / 既知フォルダ / メッセージポンプ /
+#           DLL 検索パス。 移植できる分は本体へ移してある (IfMissing 登録)
+packinone_absorb(systemEx SIMPLEBIND SOURCES main.cpp)
+
+# process: メッセージ専用ウィンドウを作って子プロセスと遣り取りする
+packinone_absorb(process NCBIND SOURCES main.cpp)
+
+# dpiicon: DPI に合わせた大きさのウィンドウアイコン (DpiIcon クラス)
+packinone_absorb(dpiicon SIMPLEBIND SOURCES Main.cpp)
+
 krkrz_plugin(packinoneWin32
     INCLUDES
         ${PACKINONE_DIR}

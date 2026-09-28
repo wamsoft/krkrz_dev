@@ -1,6 +1,6 @@
 # packinone 再構築 (調査と実装範囲)
 
-status: **実装中 (2026-09-27)**。packinone 10 個 + packinoneWin32 1 個 (fstat) / 残りは下記
+status: **実装中 (2026-09-28)**。packinone 10 個 + packinoneWin32 4 個 / 残りは下記
 置き場: `src/packinone` / `src/packinoneWin32` (`src/plugins` とは別枠)
 
 ## これは何か
@@ -50,10 +50,10 @@ status: **実装中 (2026-09-27)**。packinone 10 個 + packinoneWin32 1 個 (fs
 | `addFont` | `src/plugins/addFont` | `AddFontResourceEx` / テンポラリ展開 | ❌ **不要**。本体の `System.addFont` に寄せた (下記) |
 | `proxyfs` | `krkrtemplate/plugins_utf8/proxyfs` | IStream でストリームを**提供**している | ⚠ 作り直しが要る (本体のストレージメディア API へ) |
 | `tlgSliceLoader` | `krkrtemplate/plugins_utf8/tlgSliceLoader` | 3 ファイル | ⚠ 要調査 |
-| `systemEx` | `src/plugins/systemEx` | `TVPGetApplicationWindowHandle` (メッセージボックスの親) / ntdll の `RtlGetVersion` / `SetDefaultDllDirectories` | ⚠ **分割**。移植可能な部分だけ packinone へ、残りは packinoneWin32 |
-| `process` | `src/plugins/process` | メッセージ専用ウィンドウを `CreateWindowExW` で作る | ❌ **packinoneWin32 へ** |
+| `systemEx` | `src/plugins/systemEx` | レジストリ / DPI / OS バージョン / 既知フォルダ / DLL 検索パス | ✅ **分割済み**。環境変数と URL エンコードは本体へ、残りは packinoneWin32 |
+| `process` | `src/plugins/process` | メッセージ専用ウィンドウを `CreateWindowExW` で作る | ✅ **packinoneWin32 へ取り込み済み** |
 | FileSelector / selfile | (旧 packinone のみ) | ファイル選択ダイアログ | ❌ **不要**。本体に `Storages.selectFile` / `selectDirectory` がある (WINVER / generic 両方) |
-| DpiIconManager | (旧 packinone のみ) | ウィンドウアイコン / DPI | ❌ **packinoneWin32 へ** (または廃止。[windowEx 廃止で落とした機能] と同じ扱い) |
+| DpiIconManager | (旧 packinone のみ) → `src/plugins/dpiicon` | ウィンドウアイコン / DPI | ✅ **packinoneWin32 へ取り込み済み** (UTF-8 化して起こし直し) |
 | pemachinetype | (旧 packinone のみ) → `src/plugins/pemachinetype` | PE ヘッダを読んで x86/x64 判定 | ✅ 取り込み済み (ストリームを置換して起こし直し) |
 | TriBinPairString | (旧 packinone のみ) → `src/plugins/TriBinPairString` | 文字列ユーティリティ | ✅ 取り込み済み (計算のみ。UTF-8 化して起こし直し) |
 
@@ -76,7 +76,7 @@ status: **実装中 (2026-09-27)**。packinone 10 個 + packinoneWin32 1 個 (fs
     起こし直してから取り込んだ。 単体 DLL は作っていない = `TVP_PLUGINS` に入れていない)
 3. ✅ **要否から再検討**: addFont — **取り込まない** (下記)
 4. **作り直し**: proxyfs (ストリームを提供する側なので設計から)、tlgSliceLoader (要調査)
-5. **packinoneWin32 へ**: ✅ fstat (完了) / ⬜ process / DpiIconManager / systemEx の Win32 部分
+5. ✅ **packinoneWin32 へ**: fstat / systemEx (Win32 部分) / process / dpiicon — **完了**
 6. **作らない**: FileSelector / selfile (本体のダイアログを使う)
 
 ## 実装した仕組み (動作確認済み)
@@ -146,9 +146,8 @@ PROBE link(layerExImage.dll) は素通り OK / 大小文字・パス違いも OK
 | | |
 |---|---|
 | ✅ 取り込み済み (10) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack / pemachinetype / TriBinPairString |
-| ✅ packinoneWin32 (1) | fstat (16 個は本体へ移し、Win32 専用の残りだけ) |
+| ✅ packinoneWin32 (4) | fstat / systemEx (どちらも本体へ移した分を除く) / process / dpiicon |
 | ⬜ 作り直し | proxyfs / tlgSliceLoader |
-| ⬜ packinoneWin32 の残り | process / DpiIconManager / systemEx の Win32 部分 |
 
 ⚠ **取り込んだものは `TVP_PLUGINS` から外す** (同じクラスの二重登録を避けるため)。
 外し忘れると個別 DLL と両方ビルドされる。
@@ -286,13 +285,43 @@ moveFile=1 → deleteFile=1 → 存在=0
 - `truncateFile` は `iTJSBinaryStream::SetEndOfStorage` では generic の実ファイルが
   縮まない (論理位置を覚えるだけ) ため、`std::filesystem::resize_file` を使う
 
+## systemEx も同じ手で分けた
+
+| | |
+|---|---|
+| 本体へ移した | `getAboutString` / `readEnvValue` / `writeEnvValue` / `expandEnvString` / `urlencode` / `urldecode` |
+| packinoneWin32 に残す | `writeRegValue` / `waitForAppLock` / `setDpiAwareness` (+`dac*` 定数) / `getOSVersion` / `getKnownFolderPath` / `processApplicationMessages` / `handleApplicationMessage` / `setDefaultDllDirectories` (+`lls*` 定数) / `addDllDirectory` / `removeDllDirectory` |
+
+環境変数は CRT 経由 (`_wgetenv` / `_wputenv_s`、POSIX は `getenv` / `setenv`)、
+`expandEnvString` の `%NAME%` 展開は自前で書いたので generic でも動く。
+`urlencode` は**旧実装に二重 delete があった**ので直してある。
+
+実測 (WINVER / generic で結果が一致):
+
+```
+[本体のみ] 生えていないもの: なし / Win32 専用のうち生えているもの: なし
+PATH が読める / 未設定は void / writeEnvValue は以前の値を返す / 空文字列で消える
+expandEnvString("[%KRKRZ_PROBE_VAR%]") = [second]
+expandEnvString 未設定はそのまま = [%KRKRZ_NO_SUCH_VAR_XYZ%] / "%%" → "%"
+urlencode("a b&c=d") = a%20b%26c%3Dd / "あいう" = %E3%81%82%E3%81%84%E3%81%86
+utf8=0 の往復も OK / 不正な %XX は例外
+[WINVER] link 後に Win32 専用 10 個 + dac*/lls* 定数 + Process + DpiIcon が生え、
+         本体側の urlencode / readEnvValue / getAboutString は上書きされない
+         getOSVersion major=10 build=26200 / getKnownFolderPath も取れる
+         DpiIcon: getDpi(win)=192 / calcSize(24,192)=48 / setIcon=1
+```
+
+⚠ **`DpiIcon` はウィンドウアイコンの唯一の口**になっている。
+windowEx 廃止で `setWindowIcon` が落ちたままなので、これが無いと
+engine はアイコン設定を黙って飛ばす (`typeof global.DpiIcon` で分岐している)。
+
 ## ⚠ ビルド構成の未決事項
 
 - ✅ 二重登録 → 取り込んだものは `TVP_PLUGINS` から外す (決定・実施済み)
 - ✅ 取り込み方 → 静的プラグイン機構に寄せた (上記)
 - ✅ `Plugins.link` の乗っ取り → 本体に `TVPRegisterBundledPlugin` の口を作った
 - ✅ fstat → 16 個を本体へ移し、Win32 専用の残りだけ packinoneWin32 へ
-- ⬜ `packinoneWin32` の残り (process / DpiIconManager / systemEx の Win32 部分)
+- ✅ `packinoneWin32` の残り (systemEx / process / dpiicon) も取り込み済み
 - ⬜ 案件への配備をどうするか (いまの案件は旧 PackinOne.dll をそのまま使っている)
 
 ## 参考
