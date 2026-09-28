@@ -438,6 +438,11 @@ class Storages {
 	 * サブディレクトリのエントリは末尾に `/` が付加された形になります。
 	 * `TVP_NO_NORMALIZE_PATH` が定義されていないビルドでは、結果はすべて
 	 * 小文字に正規化されます。
+	 *
+	 * `.` / `..` ( 自身と親 ) は含みません。
+	 *
+	 * ローカルの実フォルダのほか、アーカイブ内やプラグインが提供するメディア
+	 * ( `proxy://` 等 ) のフォルダも列挙できます。
 	 * @param path 一覧を取得したいディレクトリのストレージ名を指定します。
 	 * 末尾は `/` で終わる必要があります。
 	 * @return ファイル名 / ディレクトリ名を要素とする配列が返ります。
@@ -482,7 +487,9 @@ class Storages {
 	 * 指定したディレクトリが存在するかどうかを確認します。
 	 * @param path 確認したいディレクトリのストレージ名を指定します。
 	 * 末尾は `/` で終わる必要があります。
-	 * @return 存在すれば真、存在しなければ偽が返ります。
+	 * @return 存在すれば真、存在しなければ偽が返ります。ローカルの実フォルダに
+	 * 対応しないストレージ名 ( アーカイブ内等 ) を渡した場合も偽が返ります
+	 * ( 例外にはなりません )。
 	 * @see Storages.isExistentStorage
 	 */
 	function isExistentDirectory(path);
@@ -683,4 +690,144 @@ class Storages {
 	 * ( エントリ数ではありません )。
 	 */
 	function setCacheMaxSize(size);
+
+	/**
+	 * ファイルのサイズと更新時刻の取得
+	 *
+	 * 指定したストレージのサイズと最終更新時刻を辞書で返します。
+	 *
+	 * - `size` … ファイルサイズ ( バイト数 )
+	 * - `mtime` … 最終更新時刻 ( Date オブジェクト )。時刻が取れない場合は入りません
+	 *
+	 * アーカイブ内のファイルやプラグインが提供するメディア ( `proxy://` 等 ) は
+	 * 実ファイルが無いため `size` だけが入ります。
+	 *
+	 * fstat プラグインを読み込んだ環境では、プラグイン版 ( `atime` / `ctime` も返す ) に
+	 * 置き換わります。更新時刻を数値で比較したい場合は
+	 * [Storages.getLastModifiedFileTime](Storages.md#getlastmodifiedfiletime) を使います。
+	 * @param storage 対象のストレージ名を指定します。
+	 * @return `%[ size, mtime ]` の辞書が返ります。開けない場合は例外になります。
+	 * @see Storages.getLastModifiedFileTime
+	 */
+	function fstat(storage);
+
+	/**
+	 * 更新時刻の取得
+	 *
+	 * ローカルの実ファイルまたはフォルダの最終更新時刻を `%[ mtime ]` の辞書で返します
+	 * ( `mtime` は Date オブジェクト )。アーカイブ内のファイルは対象にできません。
+	 *
+	 * fstat プラグインを読み込んだ環境では、プラグイン版 ( `ctime` / `atime` も返す ) に
+	 * 置き換わります。
+	 * @param target 対象のファイルまたはフォルダのストレージ名を指定します。
+	 * @return `%[ mtime ]` の辞書が返ります。見つからない場合は例外になります。
+	 * @see Storages.fstat
+	 * @see Storages.getLastModifiedFileTime
+	 */
+	function getTime(target);
+
+	/**
+	 * カレントディレクトリ
+	 *
+	 * プロセスのカレントディレクトリをストレージ名 ( 末尾は `/` ) で返します。
+	 * `Storages.getFullPath(Storages.currentPath + name)` のように、相対パスの基準に使えます。
+	 * カレントディレクトリの概念が無い環境では空文字列になります。
+	 *
+	 * 本体版は読み取り専用です。fstat プラグインを読み込んだ環境 ( WINVER ) では
+	 * プラグイン版に置き換わり、代入でカレントディレクトリを変更できます。
+	 * @type String
+	 */
+	property currentPath { getter; }
+
+	/**
+	 * ディレクトリの作成
+	 *
+	 * 指定したディレクトリを作成します。途中の階層が無ければそれも作ります。
+	 * @param path 作成するディレクトリのストレージ名を指定します。
+	 * @return 作成できれば真、できなければ偽が返ります。
+	 * @see Storages.removeDirectory
+	 */
+	function createDirectory(path);
+
+	/**
+	 * ディレクトリの削除
+	 *
+	 * 指定したディレクトリを削除します。中にファイルが残っている場合は削除されません。
+	 * @param path 削除するディレクトリのストレージ名を指定します。
+	 * @return 削除できれば真、できなければ偽が返ります。
+	 * @see Storages.createDirectory
+	 */
+	function removeDirectory(path);
+
+	/**
+	 * ファイルのコピー
+	 *
+	 * ストレージ空間中のファイルを別のストレージ名へコピーします。
+	 * コピー元はアーカイブ内のファイルでもかまいません。
+	 * @param from コピー元のストレージ名を指定します。
+	 * @param to コピー先のストレージ名を指定します。
+	 * @param failIfExist 真を指定すると、コピー先が既にある場合は何もせず偽を返します。
+	 * 偽 ( 既定 ) なら上書きします。
+	 * @return コピーできれば真、コピー先があって止めた場合は偽が返ります。
+	 * @see Storages.exportFile
+	 */
+	function copyFile(from, to, failIfExist = false);
+
+	/**
+	 * ファイルの書き出し
+	 *
+	 * ストレージ空間中のファイル ( アーカイブ内のものを含む ) を、指定したストレージ名へ
+	 * 書き出します。コピー先があれば上書きします。
+	 * @param storage 書き出すファイルのストレージ名を指定します。
+	 * @param dest 書き出し先のストレージ名を指定します。
+	 * @see Storages.copyFile
+	 */
+	function exportFile(storage, dest);
+
+	/**
+	 * ファイルの切り詰め
+	 *
+	 * ローカルの実ファイルを指定したサイズに切り詰めます。
+	 * 成功するとそのファイルの読み込みキャッシュも破棄されます。
+	 * @param storage 対象のストレージ名を指定します。
+	 * @param size 切り詰めた後のサイズ ( バイト数 ) を指定します。
+	 * @return 切り詰めできれば真、できなければ偽が返ります。
+	 */
+	function truncateFile(storage, size);
+
+	/**
+	 * MD5 ハッシュ値の取得
+	 *
+	 * 指定したストレージの内容の MD5 ハッシュ値を返します。
+	 * アーカイブ内のファイルも対象にできます。
+	 * @param storage 対象のストレージ名を指定します。
+	 * @return 32 文字の 16 進文字列 ( 小文字 ) が返ります。開けない場合は例外になります。
+	 */
+	function getMD5HashString(storage);
+
+	/**
+	 * 一時ファイル名の取得
+	 *
+	 * 一時ファイルに使えるローカルのファイル名を 1 つ払い出します。
+	 * @return 一時ファイル名が返ります。
+	 */
+	function getTemporaryName();
+
+	/**
+	 * 正規化・検索なしの存在確認
+	 *
+	 * パスの正規化も自動検索パスからの検索も行わずに、ストレージが存在するかを確認します。
+	 * @param storage 確認するストレージ名を指定します。
+	 * @return 存在すれば真、存在しなければ偽が返ります。
+	 * @see Storages.isExistentStorage
+	 */
+	function isExistentStorageNoSearchNoNormalize(storage);
+
+	/**
+	 * ストレージのキャッシュの破棄
+	 *
+	 * アーカイブ ( XP3 ) のセグメントキャッシュと、自動検索パスのキャッシュを破棄します。
+	 * エンジンの外でファイルを追加・削除した後に呼びます。
+	 */
+	function clearStorageCaches();
 }

@@ -130,6 +130,31 @@ EVENTNAME_RE = re.compile(
 )
 EVENT_NAME_PREFIX_RE = re.compile(r"^on[A-Z]")
 
+# プラットフォーム側のウィンドウ実装は tTJSNC_Window のコンストラクタを持たないが、
+# Window のイベントを投げている (registerExEvent 系 / onDeviceChanged / onPaste)。
+# ファイル名 (src/core からの相対パス) → クラス名 で紐付ける。
+EVENT_SOURCE_FILES = {
+    "win32/environ/WindowFormUnit.cpp": "Window",
+    "sdl3/environ/form.cpp": "Window",
+}
+FIRE_EX_EVENT_RE = re.compile(r'FireExEvent(?:Rect)?\s*\(\s*TJS_W\(\s*"(on[A-Z]\w*)"\s*\)')
+EVNAME_RE = re.compile(
+    r'static\s+ttstr\s+ev(?:ent)?name\s*\(\s*TJS_W\(\s*"(on[A-Z]\w*)"\s*\)\s*\)'
+)
+
+
+def scan_event_source(path: Path, cls: str) -> dict[str, dict]:
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return {}
+    names = sorted({m.group(1) for rx in (FIRE_EX_EVENT_RE, EVNAME_RE)
+                    for m in rx.finditer(text)} - {n.split(".", 1)[1]
+                    for n in EXCLUDED_MEMBERS if n.startswith(cls + ".")})
+    if not names:
+        return {}
+    return {cls: {"file": None, "methods": [], "properties": [], "events": names}}
+
 def _strip_define_blocks(text: str) -> str:
     """Replace multi-line `#define ... \\` blocks with blanks of equal length.
 
@@ -235,12 +260,19 @@ def main() -> int:
         return 2
 
     inventory: dict[str, dict] = {}
+    pending_events: dict[str, set[str]] = {}
     file_count = 0
     for p in root.rglob("*.cpp"):
         # skip external / generated / build output
         parts = set(p.parts)
         if "external" in parts or "build" in parts or "tp_stub" in parts:
             continue
+        rel = p.relative_to(root).as_posix()
+        if rel in EVENT_SOURCE_FILES:
+            # イベントだけを足す。 ここを「クラスを定義しているファイル」には
+            # しないよう、inventory の file はコンストラクタのある側に任せる
+            for cls, info in scan_event_source(p, EVENT_SOURCE_FILES[rel]).items():
+                pending_events.setdefault(cls, set()).update(info["events"])
         found = scan_file(p)
         if not found:
             continue
@@ -257,6 +289,14 @@ def main() -> int:
                 for name in info[k]:
                     if name not in existing[k]:
                         existing[k].append(name)
+
+    for cls, names in pending_events.items():
+        if cls not in inventory:
+            continue
+        ev = inventory[cls]["events"]
+        for name in names:
+            if name not in ev:
+                ev.append(name)
 
     # sort member lists for stable diffs
     for info in inventory.values():

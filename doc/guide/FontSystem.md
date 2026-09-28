@@ -59,6 +59,14 @@ Noto Emoji / elements_basic)。ゲーム側で増やすものではなく、エ�
 フォントの置き場所です。埋め込みフォントはストレージ名
 `resource://./ファイル名` でもアクセスできます。
 
+同梱フォントは実行ファイルサイズの大半を占めます (Noto Sans JP 4.3MB /
+Noto Emoji 1.9MB)。ゲーム側で自前のフォントを供給する構成では、ビルド時に
+`-DKRKRZ_EMBED_BUNDLED_FONTS=OFF` を渡すとこの 2 本を埋め込まなくなり、
+実行ファイルが約 6.2MB 小さくなります (Roboto / elements_basic は Elements の
+既定テーマが参照するので残ります)。任意のファイルを外すには
+`-DKRKRZ_RESOURCE_EXCLUDE="ファイル名;ファイル名"` を使います。
+外した場合、日本語・絵文字の描画に使うフォントはゲーム側で用意してください。
+
 ### ② data 外だし + fonts.json (推奨)
 
 大きいフォント (カラー絵文字・CJK バリエーション等) は data フォルダに置き、
@@ -313,7 +321,13 @@ var r = layer.drawVerticalTextArea(20, 20, 400, 560, text, 0x000000,
   Noto Emoji) が自動登録され、追加フォントは
   `ElementsDialog.registerFont(family, storage[, weight, slant, stretch])` /
   `ElementsDialog.registerFontDir(dir)` で登録します。ストレージパス (XP3 内・
-  `resource://` 含む) をそのまま渡せます。多言語 UI で表示言語ごとに
+  `resource://` 含む) をそのまま渡せます。`registerFontDir` は**登録できた
+  本数**を返すので、`if (ElementsDialog.registerFontDir(dir) == 0) { ... }` で
+  「パッケージしたらフォントが 1 本も無い」事故を検知できます (0 本のときは
+  エンジンも警告ログを出します)。XP3 に固めたフォントを指すときは
+  `"data.xp3>font/"` のように**アーカイブを明示**してください
+  (`addAutoPath` でのマウントはファイル検索用で、ディレクトリ列挙はできません)。
+  OS のパス (`"D:/game/font/"`) をそのまま渡すと 0 本になります。多言語 UI で表示言語ごとに
   フォント (JP/TC/SC 等) を自動で切り替えるには
   [ElementsDialog.fontLanguages](../reference/ElementsDialog.md#fontlanguages)
   (言語連動フォント置換) を使います

@@ -1,6 +1,6 @@
 ---
 name: krkrz-repl
-description: 吉里吉里Z (krkrz) の SDL3 / WINVER ビルドを REPL 経由でエージェントから駆動するためのリファレンス。krkrz を起動して TJS スクリプトを評価・検証・デバッグする、startup.tjs を介さず明示的に処理を開始する、入力イベント (キー/マウス) を注入する、画面をキャプチャして目視確認する、Elements ダイアログを観測・操作する、例外やダイアログ表示をコンソールで観測する、といった場面で使う。**外部エージェントは console(CONIN$) に打てないので -replfile ファイルチャネルが本命**。起動フラグ (-repl / -replfile / -nostartup / -loglevel / -display)、ファイルチャネルのプロトコル、Agent API (入力注入 / captureScreen / dialogs / dialogClick)、ドットコマンド (.cap/.dlg/.click/.mem 等)、REPL 駆動時の挙動変更 (例外で即終了しない / inform と例外ダイアログがコンソールに出る) を網羅。TJS2 言語仕様そのものは skill `tjs2`、本体クラス API は skill `krkrz` を参照。
+description: 吉里吉里Z (krkrz) の SDL3 / WINVER ビルドを REPL 経由でエージェントから駆動するためのリファレンス。krkrz を起動して TJS スクリプトを評価・検証・デバッグする、startup.tjs を介さず明示的に処理を開始する、入力イベント (キー/マウス) を注入する、画面をキャプチャして目視確認する、Elements ダイアログを観測・操作する、例外やダイアログ表示をコンソールで観測する、といった場面で使う。**外部エージェントは console(CONIN$) に打てないので -replfile ファイルチャネルが本命**。起動フラグ (-repl / -replfile / -nostartup / -loglevel / -display / -ignoremouse)、ファイルチャネルのプロトコル、Agent API (入力注入 / captureScreen / dialogs / dialogClick)、ドットコマンド (.cap/.dlg/.click/.mem 等)、REPL 駆動時の挙動変更 (例外で即終了しない / inform と例外ダイアログがコンソールに出る) を網羅。TJS2 言語仕様そのものは skill `tjs2`、本体クラス API は skill `krkrz` を参照。
 ---
 
 # krkrz REPL 駆動リファレンス
@@ -232,6 +232,7 @@ function Send-Cmd($script, $timeoutMs = 5000) {
 | `Agent.click(x,y[,btn[,shift]])` / `Agent.wheel(delta,x,y)` | クリック (move+down+up) / ホイール(120単位) |
 | `Agent.keyDown/keyUp/keyPress(vk[,shift])` | キー (vk は `VK_*` 数値、例 `VK_RETURN`) |
 | `Agent.text(str)` | アクティブダイアログへテキスト入力 (input_box 等) |
+| `Agent.ignoreRealMouse` | 真にすると**実マウス入力を捨てる**(Agent の注入だけ通す)。起動オプション `-ignoremouse=yes` でも設定可。人がポインタを動かしても測定が汚れない。⚠有効中は人の手でマウス操作できない |
 | `Agent.dialogs()` | アクティブダイアログ配列 `%[index,modal,active,screen,focused,x,y,w,h]` |
 | `Agent.closeDialog()` / `Agent.closeAllDialogs()` | 最前面 / 全ダイアログを閉じる |
 | `Agent.dialogClick(i,id)` / `Agent.dialogFocus(i,id)` | id 指定で起動 / フォーカス (座標不要) |

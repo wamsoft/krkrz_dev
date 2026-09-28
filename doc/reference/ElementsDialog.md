@@ -80,6 +80,8 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利�
 - [defaultFontFamily](#defaultfontfamily)
 - [active](#active)
 - [modalActive](#modalactive)
+- [atlasCacheStats](#atlascachestats)
+- [atlasCacheBudget](#atlascachebudget)
 - [watchVars](#watchvars)
 - [language](#language)
 - [fontLanguages](#fontlanguages)
@@ -125,8 +127,10 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利�
 - [listVars](#listvars)
 - [focus](#focus)
 - [activate](#activate)
+- [trimAtlasCache](#trimatlascache)
 - [setPadIconBase](#setpadiconbase)
 - [setPadTheme](#setpadtheme)
+- [setPadIconAlias](#setpadiconalias)
 - [renderStatsReset](#renderstatsreset)
 
 ### イベント
@@ -207,6 +211,53 @@ Elements ランタイムが初期化されたあと ( 最初のダイアログ�
 コールバックで「モーダル表示中は何もせず素通しする」判定に使います。
 
 **関連:** [ElementsDialog.active](ElementsDialog.md#active)
+
+---
+
+### atlasCacheStats
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Dictionary`
+
+**解説**
+
+アトラスのデコードキャッシュの常駐量 ( 読み取り専用 )
+
+アトラス画像は「パス + 倍率」をキーにデコード済みの絵をキャッシュして
+使い回します。**画面を切り替えても手放しません** — 長時間プレイでヒープが
+断片化したあと大きな連続領域が取れずデコードに失敗し、絵の無い画面が
+組まれてしまうのを避けるためです。どれだけ抱えているかを場面の切れ目で
+確認するためのプロパティです ( クラス全体に効く static 相当 )。
+
+辞書で `bytes` ( RGBA 展開後の合計バイト数 ) / `count` ( エントリ数 ) /
+`budget` ( 現在の予算 ) を返します。
+
+```tjs
+var st = global.ElementsDialog.atlasCacheStats;
+Debug.message("アトラス常駐 %.1f MB (%d 件)".sprintf(st.bytes / 1048576.0, st.count));
+```
+
+**関連:** [ElementsDialog.trimAtlasCache](ElementsDialog.md#trimatlascache)
+
+---
+
+### atlasCacheBudget
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Integer`
+
+**解説**
+
+アトラスのデコードキャッシュの予算 ( バイト )
+
+代入すると**恒久的に**変わり、下げた場合はその場で切り詰めます。
+0 にするとキャッシュ無効 ( 毎回デコード ) になります。
+既定は 192MB で、1 画面ぶんのアトラスを載せたままにできる大きさです
+( クラス全体に効く static 相当 )。
+
+**関連:** [ElementsDialog.trimAtlasCache](ElementsDialog.md#trimatlascache)
 
 ---
 
@@ -924,7 +975,9 @@ weight / slant / stretch は font_constants の整数値です ( 詳細は
 
 **戻り値**
 
-真が返ります ( ディレクトリが空でも例外にはなりません )。
+登録できたフォントの本数が返ります。0 = 1 本も登録できていない
+( ディレクトリが無い / フォントが無い )。例外にはならず、
+代わりに警告ログを出します。
 
 **解説**
 
@@ -932,7 +985,11 @@ Elements 用フォントの一括登録
 
 指定ディレクトリ配下の .ttf / .otf を全て列挙して登録します ( ファイル
 名から family / weight / slant / stretch を推定 )。dir は Storages 経由の
-パス指定が使え、XP3 内のディレクトリでも構いません。
+パス指定で、相対パス ( "font/" ) も `System.exePath + "data/font/"` の
+ような正規化済みパスも使えます。XP3 内のディレクトリを指すときは
+`"data.xp3>font/"` のようにアーカイブを明示してください
+( addAutoPath でマウントしただけではディレクトリ列挙はできません )。
+OS のパス ( "D:/foo/font/" ) をそのまま渡すと 0 本になります。
 
 **関連:** [ElementsDialog.registerFont](ElementsDialog.md#registerfont)
 
@@ -1312,6 +1369,43 @@ Dictionary の配列です。
 
 ---
 
+### trimAtlasCache
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `budget` | `&nbsp;` | 切り詰める上限 ( バイト )。0 / 省略で使われていない分を全解放。 |
+
+**戻り値**
+
+解放できたバイト数。
+
+**解説**
+
+アトラスのデコードキャッシュを切り詰める
+
+アトラスのデコードキャッシュを `budget` バイトまで切り詰めます。
+0 ( 既定 ) を渡すと「使われていないものを全部」手放します。
+戻り値は解放できたバイト数です。
+
+⚠ **表示中の画面が使っているアトラスは参照が残っているので捨てられません。**
+場面の切れ目 ( 画面を閉じた後 ) に呼んでください。
+
+```tjs
+dlg.close();
+var freed = global.ElementsDialog.trimAtlasCache();   // 使っていない分を全部
+```
+
+予算そのものは変わりません ( 一時的な切り詰め )。恒久的に下げたい場合は
+[atlasCacheBudget](#atlascachebudget) へ代入します。
+
+**関連:** [ElementsDialog.atlasCacheStats](ElementsDialog.md#atlascachestats)
+
+---
+
 ### setPadIconBase
 
 メソッド
@@ -1352,10 +1446,55 @@ pad_icon の全体テーマを設定する
 
 pad_icon の全体テーマ ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` / `"none"` ) を
 設定します。`"auto"` を指定すると、接続しているパッドの系統
-( [System.padStyle](System.md#padstyle) ) からテーマを自動選択します。
-パッドが無い場合は動作プラットフォームから決まり、画面を開くたびに決め直される
-ため、途中でコントローラを差し替えても次に開く画面から追従します。
+( [System.padStyle](System.md#padstyle) ) からテーマを自動選択します。系統が
+判定できないプラットフォーム ( Windows など ) では、パッドが 1 つでも
+つながっていれば `"xbox"`、1 つも無ければ `"keyboard"` になります
+( パッドが無い状態で pad の絵を出しても、押せるキーが判らないためです )。
+
+`"auto"` の判定はパッドの接続数と系統を見張っていて、**変化したその場で
+決め直します**。コントローラを抜き差ししても画面を開き直す必要はなく、
+表示中の画面の pad_icon も次の描画で新しいテーマの絵に差し替わります。
 画面 JSON の top-level `"pad_theme"` が指定されていればそちらが優先されます。
+
+**関連:** [ElementsDialog.setPadIconAlias](ElementsDialog.md#setpadiconalias)
+
+---
+
+### setPadIconAlias
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `theme` | `&nbsp;` | 対象のテーマ名 ( `"xbox"` / `"ps"` / `"switch"` / `"keyboard"` )。 |
+| `name` | `&nbsp;` | 上書きする論理名。空文字ならそのテーマの上書きを全解除。 |
+| `basename` | `&nbsp;` | 割り当てる素材の basename。空文字 / 省略でその名前の上書きを解除。 |
+
+**戻り値**
+
+テーマ名を解釈できたかどうか。
+
+**解説**
+
+pad_icon の名前解決をテーマ単位で上書きする
+
+pad_icon の論理名 ( `"a"` / `"b"` / `"dpad"` など ) から実際の素材ファイル名
+( Kenney pack の basename ) への対応表を、テーマ単位で上書きします。既定表
+( `"a"` = Enter / `"b"` = Esc / `"dpad"` = 矢印 … ) がタイトルの実際のキー
+割り当てと違うときに使います。
+
+```tjs
+// キャンセルが Esc ではなく BackSpace のタイトル
+global.ElementsDialog.setPadIconAlias("keyboard", "b", "keyboard_backspace");
+```
+
+上書きは既定表より優先されます。basename に空文字を渡すとその名前の上書き
+だけを解除、name に空文字を渡すとそのテーマの上書きを全解除します。いずれも
+表示中の画面へ次の描画から反映されます。
+
+**関連:** [ElementsDialog.setPadTheme](ElementsDialog.md#setpadtheme)
 
 ---
 

@@ -207,6 +207,7 @@ foreach_dict_of(cfg, function(k, v) { ElementsDialog.setSharedVar(k, v); });
 - **2 値トグル** ( `checkbox` / `toggle_button` / `slide_switch` ) は `"value_var"` で変数 store と双方向になります ( `""` / `"0"` / `"false"` = off )。クリックで書き戻り、[setVar](../reference/ElementsDialog.md#setvar) で状態が追従します ( 追従では `onAction` は発火しません )。設定画面の ON/OFF をホストのコールバック無しで扱えます。
 - **`image` ウィジェット**は `"image_var"` で絵そのものを差し替えられます。変数の値がそのまま画像パス ( `"resources/x.png"` / `"mem://thumb_3"` / 空 = 無描画 ) になるので、セーブ一覧のページ送りでサムネイルが変わる、CG ビュワーの絵を送る、といった画面が**再構築なしで**書けます。
 - **アトラスごと**入れ替えたい場合は、画面 JSON で `"atlases": { "cg": { "path": ..., "swappable": true } }` と宣言し、[setAtlasImage](../reference/ElementsDialog.md#setatlasimage) で差し替えます。ウィジェットは作り直さないのでレイアウトもフォーカスも保たれます。**差し替え先は同じ矩形割りであること** ( frames / rect は変わらないので、絵の位置がずれると別の絵が出ます )。差し替えられるアトラス名は [swappableAtlases](../reference/ElementsDialog.md#swappableatlases) で確認できます。
+- **アトラスは画面を閉じても解放されません。** デコード済みの絵は「パス + 倍率」をキーにキャッシュされ、画面を切り替えても抱えたままになります ( 長時間プレイでヒープが断片化したあと大きな連続領域が取れずデコードに失敗し、絵の無い画面が組まれるのを避けるため )。抱え込み量は [atlasCacheStats](../reference/ElementsDialog.md#atlascachestats) で読め、場面の切れ目 ( タイトル → 本編など ) で [trimAtlasCache](../reference/ElementsDialog.md#trimatlascache) を呼べば落とせます。⚠ **表示中の画面が使っているアトラスは参照が残るので落ちません** — 画面を閉じた後に呼んでください。予算そのものを変えるなら [atlasCacheBudget](../reference/ElementsDialog.md#atlascachebudget) です。
 
 ## 非モーダルの複数同時表示とフォーカス
 

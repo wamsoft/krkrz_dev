@@ -4,6 +4,10 @@ Storages クラスは 吉里吉里本体の**ストレージシステム**に関
 
 ## メンバー一覧
 
+### プロパティ
+
+- [currentPath](#currentpath)
+
 ### メソッド
 
 - [addAutoPath](#addautopath)
@@ -50,6 +54,36 @@ Storages クラスは 吉里吉里本体の**ストレージシステム**に関
 - [dumpImageCacheList](#dumpimagecachelist)
 - [rollbackSavedata](#rollbacksavedata)
 - [setCacheMaxSize](#setcachemaxsize)
+- [fstat](#fstat)
+- [getTime](#gettime)
+- [createDirectory](#createdirectory)
+- [removeDirectory](#removedirectory)
+- [copyFile](#copyfile)
+- [exportFile](#exportfile)
+- [truncateFile](#truncatefile)
+- [getMD5HashString](#getmd5hashstring)
+- [getTemporaryName](#gettemporaryname)
+- [isExistentStorageNoSearchNoNormalize](#isexistentstoragenosearchnonormalize)
+- [clearStorageCaches](#clearstoragecaches)
+
+---
+
+### currentPath
+
+プロパティ \ アクセス: `r`
+
+**型**: `String`
+
+**解説**
+
+カレントディレクトリ
+
+プロセスのカレントディレクトリをストレージ名 ( 末尾は `/` ) で返します。
+`Storages.getFullPath(Storages.currentPath + name)` のように、相対パスの基準に使えます。
+カレントディレクトリの概念が無い環境では空文字列になります。
+
+本体版は読み取り専用です。fstat プラグインを読み込んだ環境 ( WINVER ) では
+プラグイン版に置き換わり、代入でカレントディレクトリを変更できます。
 
 ---
 
@@ -646,6 +680,11 @@ pin されていない ( transient な ) キャッシュエントリを file 層
 `TVP_NO_NORMALIZE_PATH` が定義されていないビルドでは、結果はすべて
 小文字に正規化されます。
 
+`.` / `..` ( 自身と親 ) は含みません。
+
+ローカルの実フォルダのほか、アーカイブ内やプラグインが提供するメディア
+( `proxy://` 等 ) のフォルダも列挙できます。
+
 **関連:** [Storages.dirtree](Storages.md#dirtree)
 
 ---
@@ -729,7 +768,9 @@ pin されていない ( transient な ) キャッシュエントリを file 層
 
 **戻り値**
 
-存在すれば真、存在しなければ偽が返ります。
+存在すれば真、存在しなければ偽が返ります。ローカルの実フォルダに
+対応しないストレージ名 ( アーカイブ内等 ) を渡した場合も偽が返ります
+( 例外にはなりません )。
 
 **解説**
 
@@ -1071,6 +1112,265 @@ MASTER ビルドでも出力されます。REPL の `.icache` と同等です。
 
 ---
 
+### fstat
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `storage` | `&nbsp;` | 対象のストレージ名を指定します。 |
+
+**戻り値**
+
+`%[ size, mtime ]` の辞書が返ります。開けない場合は例外になります。
+
+**解説**
+
+ファイルのサイズと更新時刻の取得
+
+指定したストレージのサイズと最終更新時刻を辞書で返します。
+
+- `size` … ファイルサイズ ( バイト数 )
+- `mtime` … 最終更新時刻 ( Date オブジェクト )。時刻が取れない場合は入りません
+
+アーカイブ内のファイルやプラグインが提供するメディア ( `proxy://` 等 ) は
+実ファイルが無いため `size` だけが入ります。
+
+fstat プラグインを読み込んだ環境では、プラグイン版 ( `atime` / `ctime` も返す ) に
+置き換わります。更新時刻を数値で比較したい場合は
+[Storages.getLastModifiedFileTime](Storages.md#getlastmodifiedfiletime) を使います。
+
+**関連:** [Storages.getLastModifiedFileTime](Storages.md#getlastmodifiedfiletime)
+
+---
+
+### getTime
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `target` | `&nbsp;` | 対象のファイルまたはフォルダのストレージ名を指定します。 |
+
+**戻り値**
+
+`%[ mtime ]` の辞書が返ります。見つからない場合は例外になります。
+
+**解説**
+
+更新時刻の取得
+
+ローカルの実ファイルまたはフォルダの最終更新時刻を `%[ mtime ]` の辞書で返します
+( `mtime` は Date オブジェクト )。アーカイブ内のファイルは対象にできません。
+
+fstat プラグインを読み込んだ環境では、プラグイン版 ( `ctime` / `atime` も返す ) に
+置き換わります。
+
+**関連:** [Storages.fstat](Storages.md#fstat) / [Storages.getLastModifiedFileTime](Storages.md#getlastmodifiedfiletime)
+
+---
+
+### createDirectory
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 作成するディレクトリのストレージ名を指定します。 |
+
+**戻り値**
+
+作成できれば真、できなければ偽が返ります。
+
+**解説**
+
+ディレクトリの作成
+
+指定したディレクトリを作成します。途中の階層が無ければそれも作ります。
+
+**関連:** [Storages.removeDirectory](Storages.md#removedirectory)
+
+---
+
+### removeDirectory
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | 削除するディレクトリのストレージ名を指定します。 |
+
+**戻り値**
+
+削除できれば真、できなければ偽が返ります。
+
+**解説**
+
+ディレクトリの削除
+
+指定したディレクトリを削除します。中にファイルが残っている場合は削除されません。
+
+**関連:** [Storages.createDirectory](Storages.md#createdirectory)
+
+---
+
+### copyFile
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `from` | `&nbsp;` | コピー元のストレージ名を指定します。 |
+| `to` | `&nbsp;` | コピー先のストレージ名を指定します。 |
+| `failIfExist` | `false` | 真を指定すると、コピー先が既にある場合は何もせず偽を返します。<br>偽 ( 既定 ) なら上書きします。 |
+
+**戻り値**
+
+コピーできれば真、コピー先があって止めた場合は偽が返ります。
+
+**解説**
+
+ファイルのコピー
+
+ストレージ空間中のファイルを別のストレージ名へコピーします。
+コピー元はアーカイブ内のファイルでもかまいません。
+
+**関連:** [Storages.exportFile](Storages.md#exportfile)
+
+---
+
+### exportFile
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `storage` | `&nbsp;` | 書き出すファイルのストレージ名を指定します。 |
+| `dest` | `&nbsp;` | 書き出し先のストレージ名を指定します。 |
+
+**解説**
+
+ファイルの書き出し
+
+ストレージ空間中のファイル ( アーカイブ内のものを含む ) を、指定したストレージ名へ
+書き出します。コピー先があれば上書きします。
+
+**関連:** [Storages.copyFile](Storages.md#copyfile)
+
+---
+
+### truncateFile
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `storage` | `&nbsp;` | 対象のストレージ名を指定します。 |
+| `size` | `&nbsp;` | 切り詰めた後のサイズ ( バイト数 ) を指定します。 |
+
+**戻り値**
+
+切り詰めできれば真、できなければ偽が返ります。
+
+**解説**
+
+ファイルの切り詰め
+
+ローカルの実ファイルを指定したサイズに切り詰めます。
+成功するとそのファイルの読み込みキャッシュも破棄されます。
+
+---
+
+### getMD5HashString
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `storage` | `&nbsp;` | 対象のストレージ名を指定します。 |
+
+**戻り値**
+
+32 文字の 16 進文字列 ( 小文字 ) が返ります。開けない場合は例外になります。
+
+**解説**
+
+MD5 ハッシュ値の取得
+
+指定したストレージの内容の MD5 ハッシュ値を返します。
+アーカイブ内のファイルも対象にできます。
+
+---
+
+### getTemporaryName
+
+メソッド
+
+**戻り値**
+
+一時ファイル名が返ります。
+
+**解説**
+
+一時ファイル名の取得
+
+一時ファイルに使えるローカルのファイル名を 1 つ払い出します。
+
+---
+
+### isExistentStorageNoSearchNoNormalize
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `storage` | `&nbsp;` | 確認するストレージ名を指定します。 |
+
+**戻り値**
+
+存在すれば真、存在しなければ偽が返ります。
+
+**解説**
+
+正規化・検索なしの存在確認
+
+パスの正規化も自動検索パスからの検索も行わずに、ストレージが存在するかを確認します。
+
+**関連:** [Storages.isExistentStorage](Storages.md#isexistentstorage)
+
+---
+
+### clearStorageCaches
+
+メソッド
+
+**解説**
+
+ストレージのキャッシュの破棄
+
+アーカイブ ( XP3 ) のセグメントキャッシュと、自動検索パスのキャッシュを破棄します。
+エンジンの外でファイルを追加・削除した後に呼びます。
+
+---
+
 ## プラグイン拡張: fstat
 
 擬似コードによるマニュアル
@@ -1134,6 +1434,9 @@ ctime: 作成日時 (Date オブジェクト)
 
 ファイル属性の取得
 
+※本体にも同名のメソッドがありますが、本プラグインを読み込むと
+こちらの版で上書きされます。本体版との違い: 本体版は size と mtime だけを返し、atime / ctime を返しません。
+
 ---
 
 ### exportFile
@@ -1150,6 +1453,10 @@ ctime: 作成日時 (Date オブジェクト)
 **解説**
 
 吉里吉里のストレージ空間中のファイルを抽出する
+
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.exportFile](Storages.md#exportfile) を参照してください。
 
 ---
 
@@ -1172,6 +1479,10 @@ ctime: 作成日時 (Date オブジェクト)
 
 吉里吉里のストレージ空間中の指定ファイルを削除する。
 
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.deleteFile](Storages.md#deletefile) を参照してください。
+
 ---
 
 ### truncateFile
@@ -1193,6 +1504,10 @@ ctime: 作成日時 (Date オブジェクト)
 **解説**
 
 吉里吉里のストレージ空間中の指定ファイルのサイズを変更する(切り捨てる)
+
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.truncateFile](Storages.md#truncatefile) を参照してください。
 
 ---
 
@@ -1217,6 +1532,10 @@ ctime: 作成日時 (Date オブジェクト)
 
 指定ファイルを移動する。
 
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.moveFile](Storages.md#movefile) を参照してください。
+
 ---
 
 ### dirlist
@@ -1236,6 +1555,10 @@ ctime: 作成日時 (Date オブジェクト)
 **解説**
 
 指定ディレクトリのファイル一覧を取得する
+
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.dirlist](Storages.md#dirlist) を参照してください。
 
 ---
 
@@ -1281,6 +1604,10 @@ dirlistと違いnameにおいてフォルダの場合の末尾"/"追加がない
 
 指定ディレクトリ以下のファイル・フォルダ一覧（サブフォルダ含む）を取得する
 
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.dirtree](Storages.md#dirtree) を参照してください。
+
 ---
 
 ### removeDirectory
@@ -1302,6 +1629,10 @@ dirlistと違いnameにおいてフォルダの場合の末尾"/"追加がない
 
 指定ディレクトリを削除する
 
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.removeDirectory](Storages.md#removedirectory) を参照してください。
+
 ---
 
 ### createDirectory
@@ -1321,6 +1652,10 @@ dirlistと違いnameにおいてフォルダの場合の末尾"/"追加がない
 **解説**
 
 ディレクトリを作成する
+
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.createDirectory](Storages.md#createdirectory) を参照してください。
 
 ---
 
@@ -1465,6 +1800,10 @@ params.rootDir フォルダ選択のルートを指定します(このフォル�
 
 ディレクトリの存在チェック
 
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.isExistentDirectory](Storages.md#isexistentdirectory) を参照してください。
+
 ---
 
 ### getTime
@@ -1484,6 +1823,8 @@ mtime: 更新日時 (Date オブジェクト)
 atime: アクセス日時 (Date オブジェクト)
 ctime: 作成日時 (Date オブジェクト)
 ⇒fstatとの違いは非アーカイブファイル限定で，sizeを返さないこと
+※本体にも同名のメソッドがありますが、本プラグインを読み込むと
+こちらの版で上書きされます。本体版との違い: 本体版は mtime だけを返し、ctime / atime を返しません。
 
 **解説**
 
@@ -1530,6 +1871,10 @@ ctime: 作成日時 (Date オブジェクト)
 
 更新日取得（高速版）
 
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.getLastModifiedFileTime](Storages.md#getlastmodifiedfiletime) を参照してください。
+
 ---
 
 ### setLastModifiedFileTime
@@ -1572,6 +1917,10 @@ ctime: 作成日時 (Date オブジェクト)
 **解説**
 
 吉里吉里のストレージ空間中の指定ファイルをコピーする
+
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.copyFile](Storages.md#copyfile) を参照してください。
 
 ---
 
@@ -1619,6 +1968,9 @@ ctime: 作成日時 (Date オブジェクト)
 パスの正規化を行なわず、autoPathからの検索も行なわずに
 
 ファイルの存在確認を行う
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.isExistentStorageNoSearchNoNormalize](Storages.md#isexistentstoragenosearchnonormalize) を参照してください。
 
 ---
 
@@ -1662,6 +2014,10 @@ ctime: 作成日時 (Date オブジェクト)
 
 MD5ハッシュ値の取得
 
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.getMD5HashString](Storages.md#getmd5hashstring) を参照してください。
+
 ---
 
 ### searchPath
@@ -1696,6 +2052,10 @@ MD5ハッシュ値の取得
 **解説**
 
 テンポラリファイル名の取得
+
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [Storages.getTemporaryName](Storages.md#gettemporaryname) を参照してください。
 
 ---
 
