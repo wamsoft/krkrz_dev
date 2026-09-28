@@ -26,6 +26,7 @@
 	f(layerExImage)          \
 	f(pemachinetype)         \
 	f(TriBinPairString)      \
+	f(proxyfs)               \
 	PACKINONE_TJSDATAPACK(f) \
 	PACKINONE_TLGSLICE(f)
 

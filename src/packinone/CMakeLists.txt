@@ -18,6 +18,7 @@ packinone_absorb(layerExImage  NCBIND SOURCES LayerExImage.cpp Main.cpp Licenses
 # 旧 PackinOne にしか無かったものを個別プラグインとして起こし直した分
 packinone_absorb(pemachinetype    SIMPLEBIND SOURCES Main.cpp)
 packinone_absorb(TriBinPairString SIMPLEBIND SOURCES Main.cpp)
+packinone_absorb(proxyfs          SIMPLEBIND SOURCES Main.cpp)
 
 # tjsDataPack だけは現行ツリーの外 (krkrtemplate/plugins_utf8) にある
 set(PACKINONE_TJSDATAPACK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../krkrtemplate/plugins_utf8/tjsDataPack"

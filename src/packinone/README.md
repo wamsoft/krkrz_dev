@@ -1,6 +1,6 @@
 # packinone 再構築 (調査と実装範囲)
 
-status: **実装中 (2026-09-28)**。packinone 11 個 + packinoneWin32 4 個 / 残りは proxyfs のみ
+status: **取り込み完了 (2026-09-28)**。packinone 12 個 + packinoneWin32 4 個。残りは案件への配備
 置き場: `src/packinone` / `src/packinoneWin32` (`src/plugins` とは別枠)
 
 ## これは何か
@@ -48,7 +48,7 @@ status: **実装中 (2026-09-28)**。packinone 11 個 + packinoneWin32 4 個 / �
 | `tjsDataPack` | `krkrtemplate/plugins_utf8/tjsDataPack` | 無し | ✅ 取り込み済み |
 | `fstat` | `src/plugins/fstat` | ローカル FS 操作そのもの | ✅ **大半は本体へ移した**。Win32 専用の残りだけ packinoneWin32 |
 | `addFont` | `src/plugins/addFont` | `AddFontResourceEx` / テンポラリ展開 | ❌ **不要**。本体の `System.addFont` に寄せた (下記) |
-| `proxyfs` | `krkrtemplate/plugins_utf8/proxyfs` | IStream でストリームを**提供**している | ⚠ 作り直しが要る (本体のストレージメディア API へ) |
+| `proxyfs` | (旧実装は IStream) → `src/plugins/proxyfs` | IStream でストリームを**提供**していた | ✅ **iTJSBinaryStream で作り直して取り込み済み** |
 | `tlgSliceLoader` | `krkrtemplate/plugins_utf8/tlgSliceLoader` | 無し | ✅ 取り込み済み (Win32 依存は無かった) |
 | `systemEx` | `src/plugins/systemEx` | レジストリ / DPI / OS バージョン / 既知フォルダ / DLL 検索パス | ✅ **分割済み**。環境変数と URL エンコードは本体へ、残りは packinoneWin32 |
 | `process` | `src/plugins/process` | メッセージ専用ウィンドウを `CreateWindowExW` で作る | ✅ **packinoneWin32 へ取り込み済み** |
@@ -75,8 +75,8 @@ status: **実装中 (2026-09-28)**。packinone 11 個 + packinoneWin32 4 個 / �
    (どちらも旧 PackinOne にしか無かったので、`src/plugins/` に個別プラグインとして
     起こし直してから取り込んだ。 単体 DLL は作っていない = `TVP_PLUGINS` に入れていない)
 3. ✅ **要否から再検討**: addFont — **取り込まない** (下記)
-4. **作り直し**: proxyfs (ストリームを提供する側なので設計から)。
-   tlgSliceLoader は ✅ **調査の結果そのまま入った** (下記)
+4. ✅ **作り直し**: proxyfs を iTJSBinaryStream で書き直した (下記) — **完了**。
+   tlgSliceLoader は調査の結果そのまま入った (下記)
 5. ✅ **packinoneWin32 へ**: fstat / systemEx (Win32 部分) / process / dpiicon — **完了**
 6. **作らない**: FileSelector / selfile (本体のダイアログを使う)
 
@@ -146,9 +146,8 @@ PROBE link(layerExImage.dll) は素通り OK / 大小文字・パス違いも OK
 
 | | |
 |---|---|
-| ✅ 取り込み済み (11) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack / pemachinetype / TriBinPairString / tlgSliceLoader |
+| ✅ 取り込み済み (12) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack / pemachinetype / TriBinPairString / tlgSliceLoader / proxyfs |
 | ✅ packinoneWin32 (4) | fstat / systemEx (どちらも本体へ移した分を除く) / process / dpiicon |
-| ⬜ 作り直し | proxyfs (ストリームを提供する側なので設計から) |
 
 ⚠ **取り込んだものは `TVP_PLUGINS` から外す** (同じクラスの二重登録を避けるため)。
 外し忘れると個別 DLL と両方ビルドされる。
@@ -308,6 +307,50 @@ Layer.fetchImageSize が png / tlg6 / bmp とも [32,24,4] を返す
 ⚠ `Layer.fetchImageSize` の戻りは **`[幅, 高さ, 成分数]` の配列**
 (`width` / `height` を持つ辞書ではない)。
 
+## proxyfs は IStream を捨てて書き直した
+
+旧 proxyfs は `IStream` でストリームを**提供する**側で、全体が Win32 の COM
+前提だった (`OperationWrapperStrem` / `WrapperStream` / `MemStreamHolder` が
+IStream 実装、最後に `TVPCreateBinaryStreamAdapter` で変換)。
+`src/plugins/proxyfs` として **`iTJSBinaryStream` で全部書き直した**。
+IStream の定型 (QueryInterface / Stat / Clone / CopyTo / LockRegion …) が
+まるごと消えるので、1400 行 → 600 行弱になっている。
+
+| 旧 | 新 |
+|---|---|
+| `OperationWrapperStrem<T>` (IStream + ポリシー) | `tProxyStreamBase` (位置管理だけの土台) |
+| `WrapperStream` + `RangeLimitStream` | `tProxyRangeStream` |
+| `OctetStream` | `tProxyOctetStream` |
+| `MemoryStream` / `CreateStreamOnHGlobal` | `tProxyMemStream` + `std::shared_ptr<std::vector>` |
+| `CSGuardDict` + `DispatchProxy` (CRITICAL_SECTION) | `tProxyGuardDict` (`std::recursive_mutex`) |
+
+実測 (SDL):
+
+```
+canLink(proxyfs.dll)=1 / ProxyStorageMap = Object
+octet を置く      : isExistentStorage=1 / size=3 / md5 が "abc" と一致
+文字列 = 別名参照 : md5 一致 / getLocalName が実体を指す
+辞書 = 一部読み   : offset=1,size=2 も offset=-2,size=2 も "bc" と一致
+書き込みで新規    : メモリ上のファイルができて size=3 / md5 一致
+dirlist("proxy://./") : 6 件を列挙
+画像              : fetchImageSize("proxy://./aliased.png") = [8,8,4]
+```
+
+⚠ **`ProxyStorageMap` から読むと octet が返る** (メモリ上のファイルの場合)。
+`MemStreamHolder` は既定メンバの `PropGet` が octet を返すので TJS からは
+プロパティオブジェクトに見える。 **旧実装と同じ挙動**なのでそのままにしてある
+(そのため `holder.count` や `holder[0] = n` といったバイト単位のアクセサは
+旧実装でも実質到達しない)。
+
+### ついでに直した本体側
+
+- `Storages.fstat` が **ローカルに落とせない名前で例外**を投げていた
+  (`TVPGetLocalName` は変換できないと throw する)。
+  `TVPGetLocallyAccessibleName` に替えて、アーカイブ内や `proxy://` でも通るようにした
+- `Storages.dirlist` が同じ理由でメディアを列挙できなかった。
+  ローカルに落とせない名前は `TVPGetStorageListAt` へ回すようにしたので、
+  **アーカイブ内やプラグインのメディアも列挙できる**ようになった
+
 ## systemEx も同じ手で分けた
 
 | | |
@@ -345,8 +388,10 @@ engine はアイコン設定を黙って飛ばす (`typeof global.DpiIcon` で�
 - ✅ `Plugins.link` の乗っ取り → 本体に `TVPRegisterBundledPlugin` の口を作った
 - ✅ fstat → 16 個を本体へ移し、Win32 専用の残りだけ packinoneWin32 へ
 - ✅ `packinoneWin32` の残り (systemEx / process / dpiicon) も取り込み済み
-- ⬜ proxyfs の作り直し (IStream 前提の 1400 行。下記)
-- ⬜ 案件への配備をどうするか (いまの案件は旧 PackinOne.dll をそのまま使っている)
+- ✅ proxyfs の作り直し (IStream 前提の 1400 行 → iTJSBinaryStream で 600 行弱)
+- ⬜ **案件への配備** (いまの案件は旧 PackinOne.dll をそのまま使っている)。
+  ⚠ pc2 の変換ツール (`scnconv/UIPack.tjs`) が proxyfs を使うので、
+  新 PackinOne を配る前にそこを通す確認が要る
 
 ## 参考
 
