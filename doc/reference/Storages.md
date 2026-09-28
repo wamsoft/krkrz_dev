@@ -4,6 +4,10 @@ Storages クラスは 吉里吉里本体の**ストレージシステム**に関
 
 ## メンバー一覧
 
+### プロパティ
+
+- [currentPath](#currentpath)
+
 ### メソッド
 
 - [addAutoPath](#addautopath)
@@ -51,6 +55,7 @@ Storages クラスは 吉里吉里本体の**ストレージシステム**に関
 - [rollbackSavedata](#rollbacksavedata)
 - [setCacheMaxSize](#setcachemaxsize)
 - [fstat](#fstat)
+- [getTime](#gettime)
 - [createDirectory](#createdirectory)
 - [removeDirectory](#removedirectory)
 - [copyFile](#copyfile)
@@ -60,6 +65,25 @@ Storages クラスは 吉里吉里本体の**ストレージシステム**に関
 - [getTemporaryName](#gettemporaryname)
 - [isExistentStorageNoSearchNoNormalize](#isexistentstoragenosearchnonormalize)
 - [clearStorageCaches](#clearstoragecaches)
+
+---
+
+### currentPath
+
+プロパティ \ アクセス: `r`
+
+**型**: `String`
+
+**解説**
+
+カレントディレクトリ
+
+プロセスのカレントディレクトリをストレージ名 ( 末尾は `/` ) で返します。
+`Storages.getFullPath(Storages.currentPath + name)` のように、相対パスの基準に使えます。
+カレントディレクトリの概念が無い環境では空文字列になります。
+
+本体版は読み取り専用です。fstat プラグインを読み込んだ環境 ( WINVER ) では
+プラグイン版に置き換わり、代入でカレントディレクトリを変更できます。
 
 ---
 
@@ -1122,6 +1146,34 @@ fstat プラグインを読み込んだ環境では、プラグイン版 ( `atim
 
 ---
 
+### getTime
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `target` | `&nbsp;` | 対象のファイルまたはフォルダのストレージ名を指定します。 |
+
+**戻り値**
+
+`%[ mtime ]` の辞書が返ります。見つからない場合は例外になります。
+
+**解説**
+
+更新時刻の取得
+
+ローカルの実ファイルまたはフォルダの最終更新時刻を `%[ mtime ]` の辞書で返します
+( `mtime` は Date オブジェクト )。アーカイブ内のファイルは対象にできません。
+
+fstat プラグインを読み込んだ環境では、プラグイン版 ( `ctime` / `atime` も返す ) に
+置き換わります。
+
+**関連:** [Storages.fstat](Storages.md#fstat) / [Storages.getLastModifiedFileTime](Storages.md#getlastmodifiedfiletime)
+
+---
+
 ### createDirectory
 
 メソッド
@@ -1771,6 +1823,8 @@ mtime: 更新日時 (Date オブジェクト)
 atime: アクセス日時 (Date オブジェクト)
 ctime: 作成日時 (Date オブジェクト)
 ⇒fstatとの違いは非アーカイブファイル限定で，sizeを返さないこと
+※本体にも同名のメソッドがありますが、本プラグインを読み込むと
+こちらの版で上書きされます。本体版との違い: 本体版は mtime だけを返し、ctime / atime を返しません。
 
 **解説**
 

@@ -655,6 +655,7 @@
       "getMD5HashString",
       "getPlacedPath",
       "getTemporaryName",
+      "getTime",
       "isCacheLoading",
       "isCachePinned",
       "isExistentDirectory",
@@ -677,7 +678,9 @@
       "truncateFile",
       "unpinCache"
     ],
-    "properties": []
+    "properties": [
+      "currentPath"
+    ]
   },
   "System": {
     "events": [

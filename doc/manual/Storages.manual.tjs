@@ -712,6 +712,34 @@ class Storages {
 	function fstat(storage);
 
 	/**
+	 * 更新時刻の取得
+	 *
+	 * ローカルの実ファイルまたはフォルダの最終更新時刻を `%[ mtime ]` の辞書で返します
+	 * ( `mtime` は Date オブジェクト )。アーカイブ内のファイルは対象にできません。
+	 *
+	 * fstat プラグインを読み込んだ環境では、プラグイン版 ( `ctime` / `atime` も返す ) に
+	 * 置き換わります。
+	 * @param target 対象のファイルまたはフォルダのストレージ名を指定します。
+	 * @return `%[ mtime ]` の辞書が返ります。見つからない場合は例外になります。
+	 * @see Storages.fstat
+	 * @see Storages.getLastModifiedFileTime
+	 */
+	function getTime(target);
+
+	/**
+	 * カレントディレクトリ
+	 *
+	 * プロセスのカレントディレクトリをストレージ名 ( 末尾は `/` ) で返します。
+	 * `Storages.getFullPath(Storages.currentPath + name)` のように、相対パスの基準に使えます。
+	 * カレントディレクトリの概念が無い環境では空文字列になります。
+	 *
+	 * 本体版は読み取り専用です。fstat プラグインを読み込んだ環境 ( WINVER ) では
+	 * プラグイン版に置き換わり、代入でカレントディレクトリを変更できます。
+	 * @type String
+	 */
+	property currentPath { getter; }
+
+	/**
 	 * ディレクトリの作成
 	 *
 	 * 指定したディレクトリを作成します。途中の階層が無ければそれも作ります。
