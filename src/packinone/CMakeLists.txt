@@ -40,6 +40,27 @@ else()
     message(WARNING "packinone: tjsDataPack sources not found at ${PACKINONE_TJSDATAPACK_DIR} - skipped")
 endif()
 
+# tlgSliceLoader も現行ツリーの外。 lz4 は tjsDataPack のものを共用する
+# (同じ DLL 内なので lz4.c は tjsDataPack 側の 1 本で足りる)。
+set(PACKINONE_TLGSLICE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../krkrtemplate/plugins_utf8/tlgSliceLoader"
+    CACHE PATH "Path to tlgSliceLoader sources")
+if(PACKINONE_HAS_TJSDATAPACK AND EXISTS "${PACKINONE_TLGSLICE_DIR}/Main.cpp")
+    packinone_absorb(tlgSliceLoader SIMPLEBIND
+        DIR      ${PACKINONE_TLGSLICE_DIR}
+        INCLUDES ${PACKINONE_TJSDATAPACK_DIR}/lz4
+        SOURCES
+            Main.cpp
+            LoadTLG.cpp
+            LoadQOI.cpp
+            FetchSize.cpp
+            MyException.cpp
+            SliceLayer_bin.c
+            lz4wrap.cpp)
+    set(PACKINONE_HAS_TLGSLICE TRUE)
+else()
+    message(WARNING "packinone: tlgSliceLoader sources not found at ${PACKINONE_TLGSLICE_DIR} - skipped")
+endif()
+
 krkrz_plugin(packinone
     INCLUDES
         ${CMAKE_CURRENT_SOURCE_DIR}
@@ -54,6 +75,9 @@ target_compile_features(packinone PRIVATE cxx_std_17)
 
 if(PACKINONE_HAS_TJSDATAPACK)
     target_compile_definitions(packinone PRIVATE PACKINONE_HAS_TJSDATAPACK)
+endif()
+if(PACKINONE_HAS_TLGSLICE)
+    target_compile_definitions(packinone PRIVATE PACKINONE_HAS_TLGSLICE)
 endif()
 
 # 歴史的な名前 (スクリプトは "PackinOne.dll" を link する)

@@ -1,6 +1,6 @@
 # packinone 再構築 (調査と実装範囲)
 
-status: **実装中 (2026-09-28)**。packinone 10 個 + packinoneWin32 4 個 / 残りは下記
+status: **実装中 (2026-09-28)**。packinone 11 個 + packinoneWin32 4 個 / 残りは proxyfs のみ
 置き場: `src/packinone` / `src/packinoneWin32` (`src/plugins` とは別枠)
 
 ## これは何か
@@ -49,7 +49,7 @@ status: **実装中 (2026-09-28)**。packinone 10 個 + packinoneWin32 4 個 / �
 | `fstat` | `src/plugins/fstat` | ローカル FS 操作そのもの | ✅ **大半は本体へ移した**。Win32 専用の残りだけ packinoneWin32 |
 | `addFont` | `src/plugins/addFont` | `AddFontResourceEx` / テンポラリ展開 | ❌ **不要**。本体の `System.addFont` に寄せた (下記) |
 | `proxyfs` | `krkrtemplate/plugins_utf8/proxyfs` | IStream でストリームを**提供**している | ⚠ 作り直しが要る (本体のストレージメディア API へ) |
-| `tlgSliceLoader` | `krkrtemplate/plugins_utf8/tlgSliceLoader` | 3 ファイル | ⚠ 要調査 |
+| `tlgSliceLoader` | `krkrtemplate/plugins_utf8/tlgSliceLoader` | 無し | ✅ 取り込み済み (Win32 依存は無かった) |
 | `systemEx` | `src/plugins/systemEx` | レジストリ / DPI / OS バージョン / 既知フォルダ / DLL 検索パス | ✅ **分割済み**。環境変数と URL エンコードは本体へ、残りは packinoneWin32 |
 | `process` | `src/plugins/process` | メッセージ専用ウィンドウを `CreateWindowExW` で作る | ✅ **packinoneWin32 へ取り込み済み** |
 | FileSelector / selfile | (旧 packinone のみ) | ファイル選択ダイアログ | ❌ **不要**。本体に `Storages.selectFile` / `selectDirectory` がある (WINVER / generic 両方) |
@@ -75,7 +75,8 @@ status: **実装中 (2026-09-28)**。packinone 10 個 + packinoneWin32 4 個 / �
    (どちらも旧 PackinOne にしか無かったので、`src/plugins/` に個別プラグインとして
     起こし直してから取り込んだ。 単体 DLL は作っていない = `TVP_PLUGINS` に入れていない)
 3. ✅ **要否から再検討**: addFont — **取り込まない** (下記)
-4. **作り直し**: proxyfs (ストリームを提供する側なので設計から)、tlgSliceLoader (要調査)
+4. **作り直し**: proxyfs (ストリームを提供する側なので設計から)。
+   tlgSliceLoader は ✅ **調査の結果そのまま入った** (下記)
 5. ✅ **packinoneWin32 へ**: fstat / systemEx (Win32 部分) / process / dpiicon — **完了**
 6. **作らない**: FileSelector / selfile (本体のダイアログを使う)
 
@@ -145,9 +146,9 @@ PROBE link(layerExImage.dll) は素通り OK / 大小文字・パス違いも OK
 
 | | |
 |---|---|
-| ✅ 取り込み済み (10) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack / pemachinetype / TriBinPairString |
+| ✅ 取り込み済み (11) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack / pemachinetype / TriBinPairString / tlgSliceLoader |
 | ✅ packinoneWin32 (4) | fstat / systemEx (どちらも本体へ移した分を除く) / process / dpiicon |
-| ⬜ 作り直し | proxyfs / tlgSliceLoader |
+| ⬜ 作り直し | proxyfs (ストリームを提供する側なので設計から) |
 
 ⚠ **取り込んだものは `TVP_PLUGINS` から外す** (同じクラスの二重登録を避けるため)。
 外し忘れると個別 DLL と両方ビルドされる。
@@ -285,6 +286,28 @@ moveFile=1 → deleteFile=1 → 存在=0
 - `truncateFile` は `iTJSBinaryStream::SetEndOfStorage` では generic の実ファイルが
   縮まない (論理位置を覚えるだけ) ため、`std::filesystem::resize_file` を使う
 
+## tlgSliceLoader は Win32 依存が無かった (そのまま入った)
+
+「作り直しが要る」と見積もっていたが、実際に見たら **`StreamWrapper.hpp` は
+どこからも include されていない死にコード**だった。 これは古い tp_stub に
+`tTJSBinaryStream` が無かった頃の名残で、`tTJSBinaryStream` を IStream の
+ラッパとして自前定義し `TVPCreateStream` をマクロで乗っ取るもの。
+現行のソースは本体の `iTJSBinaryStream` / `TVPCreateStream` を直接使っている。
+
+`lz4` は tjsDataPack のものを共用する (同じ DLL なので `lz4.c` は 1 本で足りる)。
+`tjsDataPack` が無い構成では `tlgSliceLoader` も落とす。
+
+実測 (SDL):
+
+```
+(info) Bundled Plugin:tlgsliceloader.dll / canLink(tlgSliceLoader.dll)=1
+SliceLayer.SliceLoader.{loadSlicedImage,fetchPartialInfo,loadPartialImage,loadNormalImage}
+Layer.fetchImageSize が png / tlg6 / bmp とも [32,24,4] を返す
+```
+
+⚠ `Layer.fetchImageSize` の戻りは **`[幅, 高さ, 成分数]` の配列**
+(`width` / `height` を持つ辞書ではない)。
+
 ## systemEx も同じ手で分けた
 
 | | |
@@ -322,6 +345,7 @@ engine はアイコン設定を黙って飛ばす (`typeof global.DpiIcon` で�
 - ✅ `Plugins.link` の乗っ取り → 本体に `TVPRegisterBundledPlugin` の口を作った
 - ✅ fstat → 16 個を本体へ移し、Win32 専用の残りだけ packinoneWin32 へ
 - ✅ `packinoneWin32` の残り (systemEx / process / dpiicon) も取り込み済み
+- ⬜ proxyfs の作り直し (IStream 前提の 1400 行。下記)
 - ⬜ 案件への配備をどうするか (いまの案件は旧 PackinOne.dll をそのまま使っている)
 
 ## 参考

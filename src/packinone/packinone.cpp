@@ -10,6 +10,12 @@
 # define PACKINONE_TJSDATAPACK(f)
 #endif
 
+#ifdef PACKINONE_HAS_TLGSLICE
+# define PACKINONE_TLGSLICE(f) f(tlgSliceLoader)
+#else
+# define PACKINONE_TLGSLICE(f)
+#endif
+
 #define PACKINONE_PLUGINS(f) \
 	f(csvParser)             \
 	f(saveStruct)            \
@@ -20,6 +26,7 @@
 	f(layerExImage)          \
 	f(pemachinetype)         \
 	f(TriBinPairString)      \
-	PACKINONE_TJSDATAPACK(f)
+	PACKINONE_TJSDATAPACK(f) \
+	PACKINONE_TLGSLICE(f)
 
 #include "bundle_impl.h"
