@@ -1783,4 +1783,270 @@ class Window {
 	 * @type Integer
 	 */
 	property GLGetProcAddress { getter; }
+
+	/**
+	 * 最大化しているか
+	 *
+	 * ウィンドウが最大化されていれば真です。変更は
+	 * [Window.maximize](Window.md#maximize) / [Window.showRestore](Window.md#showrestore) で行います。
+	 *
+	 * WINVER / SDL3 系ビルドの双方で利用できます。
+	 * @type Boolean
+	 * @see Window.maximize
+	 * @see Window.minimized
+	 */
+	property maximized { getter; }
+
+	/**
+	 * 最小化しているか
+	 *
+	 * ウィンドウが最小化 ( アイコン化 ) されていれば真です。
+	 * @type Boolean
+	 * @see Window.minimize
+	 * @see Window.maximized
+	 */
+	property minimized { getter; }
+
+	/**
+	 * 最大化
+	 *
+	 * ウィンドウを最大化します。
+	 * [Window.onMaximizeQuery](Window.md#onmaximizequery) は通りません
+	 * ( プログラムからの最大化は意図したものとして扱います )。
+	 * @see Window.showRestore
+	 * @see Window.maximized
+	 */
+	function maximize();
+
+	/**
+	 * 最小化
+	 *
+	 * ウィンドウを最小化 ( アイコン化 ) します。
+	 * @see Window.showRestore
+	 * @see Window.minimized
+	 */
+	function minimize();
+
+	/**
+	 * 元のサイズに戻す
+	 *
+	 * 最大化 / 最小化されているウィンドウを元の位置とサイズに戻します。
+	 * @see Window.maximize
+	 * @see Window.minimize
+	 */
+	function showRestore();
+
+	/**
+	 * 元の矩形の取得
+	 *
+	 * 最大化 / 最小化していないときのウィンドウの外形矩形 ( 画面座標 ) を
+	 * `%[ x, y, w, h ]` の辞書で返します。最大化中でも「元に戻したときの位置とサイズ」が
+	 * 取れるので、次回起動時の復元などに使えます。
+	 * @return 矩形の辞書が返ります。取れない場合は void が返ります。
+	 * @see Window.getWindowRect
+	 */
+	function getNormalRect();
+
+	/**
+	 * ウィンドウ矩形の取得
+	 *
+	 * 枠やタイトルバーを含むウィンドウの外形矩形を、画面座標の `%[ x, y, w, h ]` で返します。
+	 * @return 矩形の辞書が返ります。
+	 * @see Window.getClientRect
+	 * @see Window.getNormalRect
+	 */
+	function getWindowRect();
+
+	/**
+	 * クライアント矩形の取得
+	 *
+	 * 描画領域 ( クライアント領域 ) の矩形を、画面座標の `%[ x, y, w, h ]` で返します。
+	 * @return 矩形の辞書が返ります。
+	 * @see Window.setClientRect
+	 * @see Window.getWindowRect
+	 */
+	function getClientRect();
+
+	/**
+	 * クライアント矩形の設定
+	 *
+	 * クライアント領域が指定した画面座標の矩形になるよう、ウィンドウを移動・リサイズします。
+	 * 辞書に無い要素は現在の値のままです ( `%[ w:320 ]` なら幅だけ変わります )。
+	 * @param rect `%[ x, y, w, h ]` の辞書を指定します。
+	 * @return 設定できれば真が返ります。
+	 * @see Window.getClientRect
+	 */
+	function setClientRect(rect);
+
+	/**
+	 * サイズ変更の禁止
+	 *
+	 * 真にすると、ユーザが枠を掴んでウィンドウのサイズを変えられなくなります。
+	 * SDL3 系ビルドでも有効です。
+	 * @type Boolean
+	 * @see Window.disableMove
+	 */
+	property disableResize { getter; setter; }
+
+	/**
+	 * 移動の禁止
+	 *
+	 * 真にすると、ユーザがウィンドウを掴んで動かせなくなります。
+	 * 枠なしで表示するときに使います。
+	 *
+	 * WINVER ビルドでのみ効きます。SDL3 系ビルドは値を保持するだけです
+	 * ( SDL に移動を止める手段が無いため )。
+	 * @type Boolean
+	 * @see Window.disableResize
+	 */
+	property disableMove { getter; setter; }
+
+	/**
+	 * 拡張イベントの有効化
+	 *
+	 * 呼ぶと、ウィンドウ枠の操作に伴う次のイベントが発生するようになります。
+	 * 呼ぶまでは発生しません。
+	 *
+	 * | イベント | 発生するとき | SDL3 系ビルド |
+	 * |---|---|---|
+	 * | [onMove](Window.md#onmove) | 移動した | ○ |
+	 * | [onMoving](Window.md#onmoving) | 移動中 | × |
+	 * | [onResizing](Window.md#onresizing) | サイズ変更中 | × |
+	 * | [onMoveSizeBegin](Window.md#onmovesizebegin) / [onMoveSizeEnd](Window.md#onmovesizeend) | 枠のドラッグ開始 / 終了 | × |
+	 * | [onMinimize](Window.md#onminimize) / [onMaximize](Window.md#onmaximize) | 最小化 / 最大化した | ○ |
+	 * | [onMaximizeQuery](Window.md#onmaximizequery) | 最大化しようとしている | × |
+	 * | [onDPIChanged](Window.md#ondpichanged) | DPI が変わった | ○ |
+	 * | [onDisplayChanged](Window.md#ondisplaychanged) | 画面構成が変わった | ○ |
+	 *
+	 * SDL3 系ビルドで × のものは、SDL がドラッグ中の問い合わせを持たず、
+	 * 結果しか通知しないため発生しません。
+	 */
+	function registerExEvent();
+
+	/**
+	 * デバイス変化の通知を有効化
+	 *
+	 * 呼ぶと、入力デバイスの抜き差しで [Window.onDeviceChanged](Window.md#ondevicechanged)
+	 * が発生するようになります。本体の入力 ( マウス / パッド ) は自分で追従するので、
+	 * プラグイン等が自前でデバイスを列挙している場合に使います。
+	 * @return 有効になれば真が返ります。
+	 */
+	function registerDeviceChange();
+
+	/**
+	 * 最大化の確認
+	 *
+	 * ユーザがウィンドウを最大化しようとしたときに発生します
+	 * ( [Window.registerExEvent](Window.md#registerexevent) の後、WINVER ビルドのみ )。
+	 * 最大化を止めたい場合は、上位クラスの同メソッドに false を渡してください。
+	 * 呼ばなければ既定どおり最大化します
+	 * ( [Window.onCloseQuery](Window.md#onclosequery) と同じ作りです )。
+	 * ```tjs
+	 * function onMaximizeQuery() {
+	 *     goPseudoFullScreen();           // 最大化のかわりに別の処理
+	 *     super.onMaximizeQuery(false);   // 最大化そのものは止める
+	 * }
+	 * ```
+	 * windowEx プラグインの「ハンドラが真を返すと止まる」方式とは異なります。
+	 * @param canmaximize 最大化してよいかどうかを指定します。
+	 * @kind event
+	 */
+	function onMaximizeQuery(canmaximize = true);
+
+	/**
+	 * 移動した
+	 *
+	 * ウィンドウが移動したときに発生します ( 要 [Window.registerExEvent](Window.md#registerexevent) )。
+	 * @param x 新しい位置の X 座標
+	 * @param y 新しい位置の Y 座標
+	 */
+	event onMove(x, y);
+
+	/**
+	 * 移動中
+	 *
+	 * ユーザがウィンドウを移動している間に発生します
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )。
+	 * 渡された矩形を書き換えると、移動先を拘束できます。
+	 * @param rect 移動先の矩形 `%[ x, y, w, h ]`
+	 */
+	event onMoving(rect);
+
+	/**
+	 * サイズ変更中
+	 *
+	 * ユーザがウィンドウのサイズを変えている間に発生します
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )。
+	 * 渡された矩形を書き換えると、サイズを拘束できます。
+	 * @param rect 変更後の矩形 `%[ x, y, w, h ]`
+	 * @param edge 掴んでいる辺
+	 */
+	event onResizing(rect, edge);
+
+	/**
+	 * 枠のドラッグ開始
+	 *
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )
+	 * @see Window.onMoveSizeEnd
+	 */
+	event onMoveSizeBegin();
+
+	/**
+	 * 枠のドラッグ終了
+	 *
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )
+	 * @see Window.onMoveSizeBegin
+	 */
+	event onMoveSizeEnd();
+
+	/**
+	 * 最小化した
+	 *
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent) )
+	 * @see Window.minimize
+	 */
+	event onMinimize();
+
+	/**
+	 * 最大化した
+	 *
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent) )
+	 * @see Window.maximize
+	 */
+	event onMaximize();
+
+	/**
+	 * DPI が変わった
+	 *
+	 * ウィンドウの DPI が変わったときに発生します
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent) )。
+	 * SDL3 系ビルドでは表示倍率を `96 × 倍率` に換算して渡します。
+	 * @param dpiX 横方向の DPI
+	 * @param dpiY 縦方向の DPI
+	 */
+	event onDPIChanged(dpiX, dpiY);
+
+	/**
+	 * 画面構成が変わった
+	 *
+	 * 画面の解像度やモニタの構成が変わったときに発生します
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent) )。
+	 */
+	event onDisplayChanged();
+
+	/**
+	 * 入力デバイスが抜き差しされた
+	 *
+	 * ( 要 [Window.registerDeviceChange](Window.md#registerdevicechange) )
+	 * @param arrival 接続なら真、取り外しなら偽
+	 */
+	event onDeviceChanged(arrival);
+
+	/**
+	 * 貼り付けの指示
+	 *
+	 * 外部 ( ランチャ等 ) から貼り付けを指示されたとき ( `WM_PASTE` ) に発生します。
+	 * WINVER ビルドのみです。
+	 */
+	event onPaste();
 }
