@@ -1074,6 +1074,18 @@ IMEのモードを表します。値を設定することもできます。
 
 未指定時は imDisable になります。
 
+Windows では `imDisable` を**入力コンテキストの切り離し**
+( `ImmAssociateContext(hwnd, NULL)` ) で実現しています。そのため
+`imDisable` のレイヤにフォーカスがある間は、半角/全角キーを押しても
+IME は開きません。`imClose` との違いはここです。フォーカスが
+`imDisable` 以外のレイヤへ移ると自動的に結び直されます。
+
+IME 制御そのものを切りたい場合は起動引数 `-controlime=no` を使います
+(レイヤの `imeMode` は一切適用されなくなります)。
+
+SDL 系のビルドでは、`imDisable` 以外のレイヤにフォーカスがある間だけ
+OS のテキスト入力を有効にする形で同じ意味を実現しています。
+
 **関連:** [Window.imeMode](Window.md#imemode)
 
 ---
