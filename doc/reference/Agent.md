@@ -294,8 +294,14 @@ Agent の注入でその位置が更新されるので、有効にしてもホ�
 各ウィンドウの状態を表す辞書の配列が返ります。主な項目は次のとおりです。
 
 `contextAttached` … 入力コンテキストが結び付いているか。**偽なら IME は完全に
-無効**で、[Window.imeMode](Window.md#imemode) も半角/全角キーも効きません
-( `Window.resetImeContext(false)` 等で切られた状態 )。`conversion` も 0 になります。
+無効**で、[Window.imeMode](Window.md#imemode) も半角/全角キーも効きません。
+`conversion` も 0 になります。
+
+偽になるのは、フォーカスのあるレイヤの
+[imeMode](Layer.md#imemode) が `imDisable` のとき (既定値です) か、
+外部から `Window.resetImeContext(false)` 等で切られたときです。
+前者は**正常な状態**で、`imDisable` 以外のレイヤへフォーカスが移れば
+自動的に結び直されます。テキスト欄に入っているのに偽のままなら後者を疑います。
 
 `hasFocus` … このウィンドウがキーボードフォーカスを持つか。偽の間は IME モードの
 適用そのものが行われません。
