@@ -1868,6 +1868,43 @@ class Window {
 	function getClientRect();
 
 	/**
+	 * マウスカーソル位置の指定 ( 描画領域座標 )
+	 *
+	 * **描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) でマウスカーソルの
+	 * 位置を指定します。
+	 *
+	 * [Layer.setCursorPos](Layer.md#setcursorpos) と同名ですが、**座標系が違います**。
+	 * レイヤ座標の値を持っているなら、そちらを使ってください。こちらは「描画領域座標の
+	 * 値をそのまま入れたい」ときのためのものです。
+	 *
+	 * 代表例は [Window.onTouchScaling](Window.md#ontouchscaling) や
+	 * [Window.onTouchRotate](Window.md#ontouchrotate) の `cx` / `cy` です。これらは
+	 * マウスイベントと違ってレイヤ座標へ変換されずに届くため、レイヤ座標へ直すには
+	 * 描画先の矩形が必要ですが、その矩形はスクリプトからは取得できません。
+	 * このメソッドならそのまま渡せます。
+	 *
+	 * Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で動作します。
+	 * @param x 描画領域座標での x 座標値をピクセル単位で指定します。
+	 * @param y 描画領域座標での y 座標値をピクセル単位で指定します。
+	 * @see Window.getCursorPos
+	 * @see Layer.setCursorPos
+	 */
+	function setCursorPos(x, y);
+
+	/**
+	 * マウスカーソル位置の取得 ( 描画領域座標 )
+	 *
+	 * [Window.setCursorPos](Window.md#setcursorpos) と同じ**描画領域座標**で、現在の
+	 * マウスカーソル位置を `%[ x, y ]` の辞書で返します。
+	 *
+	 * レイヤ座標で読みたい場合は [Layer.cursorX](Layer.md#cursorx) /
+	 * [Layer.cursorY](Layer.md#cursory) を使ってください。
+	 * @see Window.setCursorPos
+	 * @see Layer.cursorX
+	 */
+	function getCursorPos();
+
+	/**
 	 * クライアント矩形の設定
 	 *
 	 * クライアント領域が指定した画面座標の矩形になるよう、ウィンドウを移動・リサイズします。

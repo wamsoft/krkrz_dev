@@ -1960,9 +1960,12 @@ class Layer {
 	function update(left, top, width, height);
 
 	/**
-	 * マウスカーソル位置の指定
+	 * マウスカーソル位置の指定 ( レイヤ座標 )
 	 *
-	 * マウスカーソルの位置を指定します。
+	 * **このレイヤの表示座標**でマウスカーソルの位置を指定します。
+	 *
+	 * ⚠ [Window.setCursorPos](Window.md#setcursorpos) と同名ですが、あちらは
+	 * **描画領域座標**で、座標系が違います。
 	 * @param x マウスカーソルの ( このレイヤの表示座標における ) x 座標値をピクセル単位で指定します。
 	 *
 	 * この値は [Layer.cursorX](Layer.md#cursorx) プロパティでも設定／取得する事ができます。

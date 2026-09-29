@@ -106,6 +106,8 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [getNormalRect](#getnormalrect)
 - [getWindowRect](#getwindowrect)
 - [getClientRect](#getclientrect)
+- [setCursorPos](#setcursorpos)
+- [getCursorPos](#getcursorpos)
 - [setClientRect](#setclientrect)
 - [registerExEvent](#registerexevent)
 - [registerDeviceChange](#registerdevicechange)
@@ -2016,6 +2018,58 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 描画領域 ( クライアント領域 ) の矩形を、画面座標の `%[ x, y, w, h ]` で返します。
 
 **関連:** [Window.setClientRect](Window.md#setclientrect) / [Window.getWindowRect](Window.md#getwindowrect)
+
+---
+
+### setCursorPos
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 描画領域座標での x 座標値をピクセル単位で指定します。 |
+| `y` | `&nbsp;` | 描画領域座標での y 座標値をピクセル単位で指定します。 |
+
+**解説**
+
+マウスカーソル位置の指定 ( 描画領域座標 )
+
+**描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) でマウスカーソルの
+位置を指定します。
+
+[Layer.setCursorPos](Layer.md#setcursorpos) と同名ですが、**座標系が違います**。
+レイヤ座標の値を持っているなら、そちらを使ってください。こちらは「描画領域座標の
+値をそのまま入れたい」ときのためのものです。
+
+代表例は [Window.onTouchScaling](Window.md#ontouchscaling) や
+[Window.onTouchRotate](Window.md#ontouchrotate) の `cx` / `cy` です。これらは
+マウスイベントと違ってレイヤ座標へ変換されずに届くため、レイヤ座標へ直すには
+描画先の矩形が必要ですが、その矩形はスクリプトからは取得できません。
+このメソッドならそのまま渡せます。
+
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で動作します。
+
+**関連:** [Window.getCursorPos](Window.md#getcursorpos) / [Layer.setCursorPos](Layer.md#setcursorpos)
+
+---
+
+### getCursorPos
+
+メソッド
+
+**解説**
+
+マウスカーソル位置の取得 ( 描画領域座標 )
+
+[Window.setCursorPos](Window.md#setcursorpos) と同じ**描画領域座標**で、現在の
+マウスカーソル位置を `%[ x, y ]` の辞書で返します。
+
+レイヤ座標で読みたい場合は [Layer.cursorX](Layer.md#cursorx) /
+[Layer.cursorY](Layer.md#cursory) を使ってください。
+
+**関連:** [Window.setCursorPos](Window.md#setcursorpos) / [Layer.cursorX](Layer.md#cursorx)
 
 ---
 
