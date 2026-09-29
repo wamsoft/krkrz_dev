@@ -153,9 +153,9 @@ data ディレクトリを使うなら **絶対パス**で渡す。相対 `data/
   実際に応答を返せる (応答口が無ければ confirm は既定 Yes、選択はネイティブへ)。
   `System.inputString` も本体実装済みでこのチャネルに乗る (2026-09-25 実測)。
 
-## モーダル応答チャネル (confirm / 文字列入力 / ファイル選択)
+## モーダル応答チャネル (confirm / 文字列入力 / 選択肢 / ファイル選択)
 
-`-replfile=<dir>` 駆動中、本体が `System.confirm` / `System.inputString` /
+`-replfile=<dir>` 駆動中、本体が `System.confirm` / `System.inputString` / `System.choice` /
 `Storages.selectFile` / `Storages.selectDirectory` を実行すると、**cmd/resp とは別の専用ファイル対**で
 応答を求めてくる。メイン実行はブロックするが、応答は別プロセス (エージェント) が
 直接書くのでデッドロックしない。
@@ -164,12 +164,14 @@ data ディレクトリを使うなら **絶対パス**で渡す。相対 `data/
 1. 本体が要求 JSON を `<dir>/modal` に書く。例:
    - `{"type":"confirm","caption":"確認","text":"続行?"}`
    - `{"type":"inputString","caption":"題名","prompt":"入力してください","default":"きてい"}`
+   - `{"type":"choice","caption":"確認","text":"保存しますか?","choices":["yes","no","cancel"],"default":2}`
    - `{"type":"selectFile","name":"","title":"開く","save":false}`
    - `{"type":"selectDirectory","name":"","title":"フォルダ","save":false}`
 2. エージェントは `modal` の出現を検知し、応答を **`<dir>/modalresp`** に書く
    (プレーン文字列):
    - confirm         : `yes` `y` `1` `true` `ok` が真、**それ以外は偽**
    - inputString     : `ok<改行><入力値>` / `cancel` 単独でキャンセル (void が返る)
+   - choice          : 選んだ要素の文字列 (大小文字は区別しない) か index。空 / 該当しない値 = `default`
    - selectFile/Dir  : 返すパス (直接入力でよい) / 空文字列 = キャンセル
 
    ⚠ **種別ごとにキャンセルの書き方が違う**。汎用の 1 文字列では済まないので
@@ -193,6 +195,10 @@ while (-not (Test-Path "$chan/modal")) { Start-Sleep -Milliseconds 30 }
 ⚠ **答えないと `resp` は返らない**。本体は既定 30 秒 (`-replmodaltimeout=<秒>`、0 で無限)
 待ってから TJS 例外を投げる。モーダルを出しうる式を投げるハーネスは、`resp` 待ちループの中で
 `modal` も見て、出たら種別に応じて答えること。
+
+スクリプト側から「いま REPL で駆動されているか」は `System.replActive` (読み取り専用) で分かる。
+⚠ WINVER では REPL が起動スクリプトの後に有効になるので、`startup.tjs` の実行中はまだ偽
+(SDL3 は起動時から真)。起動直後の判定は `System.getArgument("-replfile")` を併用する。
 
 ## ファイルチャネル駆動 (エージェント推奨)
 

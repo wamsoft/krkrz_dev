@@ -85,6 +85,40 @@ lowpri
 
 下のリストの中で「動的に変更可能」という表記がある物は、[System.setArgument](../reference/System.md#setargument) メソッドで変更が可能な物です。それ以外のオプションは動的に変更を行うことは出来ません。
 
+### 引数の区切り ( `--` ) とファイル引数
+
+コマンドライン引数は次のように扱われます。
+
+- `-名前[=値]` はオプションです ( 値を省略すると `yes` )。
+- 先頭にハイフンの無い引数は、プロジェクトのフォルダ ( またはアーカイブ ) の指定になります。
+- 単独の `--` より後ろはオプションとして読まず、スクリプトへ渡す引数になります。
+  順に `-arg0` / `-arg1` / … という名前で [System.getArgument](../reference/System.md#getargument) から取り出せます。
+
+```text
+krkrz64.exe D:/game/ -loglevel=info -- -mode a.txt
+→ プロジェクト: D:/game/、オプション: -loglevel=info、-arg0=-mode、-arg1=a.txt
+```
+
+ファイルを関連付けて開くツールなど、「引数はすべてスクリプトが受け取るファイル名」として
+扱いたい場合は、本体に埋め込まれたセキュリティオプション `acceptfilenameargument`
+( `TVPSystemSecurityOptions` の一項目。ビルド時の値か、実行ファイルの同じ長さの書き換えで決まる ) を使います。
+
+| `acceptfilenameargument` | 動作 |
+|---|---|
+| 0 ( 既定 ) | 上記のとおり |
+| 1 | すべての引数を `-argN` にする。オプションもプロジェクトの指定も読まない |
+| 2 | 単独の `--` があれば、それより前の `-名前[=値]` をオプションとして読み、前にあるハイフンの無い引数と `--` より後ろを ( この順で ) `-argN` にする。`--` が無ければ 1 と同じ |
+
+1 と 2 では、ハイフンの無い引数をプロジェクトの指定には使いません ( プロジェクトは実行ファイルの隣の
+`data.xp3` / `data` フォルダ等から自動で探します )。2 を使うと、ファイル引数を受け取るツールでも
+`-datapath` / `-loglevel` / `-replfile` などのオプションをコマンドラインで渡せます。
+
+```text
+( acceptfilenameargument=2 )
+tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
+→ オプション: -replfile / -datapath、-arg0=-batch、-arg1=a.mmo
+```
+
 ## 起動オプション
 
 吉里吉里の特定の機能のみを呼び出して使うために以下のオプションがあります。

@@ -56,6 +56,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [padAxisLeftTrigger](#padaxislefttrigger)
 - [padAxisRightTrigger](#padaxisrighttrigger)
 - [padEnabled](#padenabled)
+- [replActive](#replactive)
 
 ### メソッド
 
@@ -66,6 +67,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [inform](#inform)
 - [confirm](#confirm)
 - [inputString](#inputstring)
+- [choice](#choice)
 - [getTickCount](#gettickcount)
 - [getKeyState](#getkeystate)
 - [registerHotKey](#registerhotkey)
@@ -1147,6 +1149,26 @@ PlayStation / Xbox 系はどちらの方式でも結果が同じです。
 
 ---
 
+### replActive
+
+プロパティ \ アクセス: `r`
+
+**型**: `Boolean`
+
+**解説**
+
+REPL で駆動されているか
+
+REPL ( `-repl` / `-replfile` / `-replweb` ) が有効なら真です。読み取り専用。
+エージェントに駆動されている間だけ処理を変える ( 確認ダイアログの代わりに
+[System.choice](System.md#choice) のモーダル応答チャネルを使う等 ) 判定に使います。
+REPL を含まないビルド ( MASTER 等 ) では常に偽です。
+
+WINVER ビルドでは REPL が起動スクリプトの後に有効になるため、`startup.tjs` の実行中は
+まだ偽です。起動直後に判定したい場合は `System.getArgument("-replfile")` 等を併用してください。
+
+---
+
 ### terminate
 
 メソッド
@@ -1279,8 +1301,11 @@ Continuous ハンドラの削除
 ユーザに「はい / いいえ」を問うためのモーダルウィンドウを表示します
 ( [System.inform](System.md#inform) の Yes/No 版 )。表示中は他のウィンドウは
 操作できません。
-REPL / ヘッダレス駆動中はブロッキングダイアログを表示せず、
-内容をログへ出力して既定応答 ( 真 ) を返します。
+REPL のファイルチャネル ( `-replfile` ) で駆動中はブロッキングダイアログを
+表示せず、モーダル応答チャネルでエージェントの答えを受け取ります
+( `yes` / `y` / `1` / `true` / `ok` が真 )。
+
+**関連:** [System.choice](System.md#choice)
 
 ---
 
@@ -1311,6 +1336,47 @@ Elements ベースの入力ダイアログを表示します。プラットフ�
 ソフトウェアキーボード等に差し替えられる場合があります ( 未対応環境では void )。
 REPL 駆動中はブロッキングダイアログを出さず、REPL の応答チャネル経由で
 入力を受け取ります ( 応答口が無い場合は default を返します )。
+
+---
+
+### choice
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `caption` | `&nbsp;` | ダイアログのタイトルを指定します。 |
+| `text` | `&nbsp;` | 本文を指定します。 |
+| `choices` | `&nbsp;` | ボタンの文言の配列を指定します ( 1 個以上。空の配列は例外になります )。 |
+| `default` | `0` | 既定のボタンの番号を指定します ( 範囲外は 0 )。 |
+
+**戻り値**
+
+選ばれたボタンの番号 ( choices の添字 ) が返ります。
+
+**解説**
+
+選択肢から 1 つ選ぶ
+
+選択肢のボタンを並べたモーダルダイアログを表示し、選ばれたボタンの番号を返します
+( 「保存 / 保存しない / キャンセル」のような 3 択など、
+[System.confirm](System.md#confirm) の 2 択で表せない問い合わせに使います )。
+```tjs
+var r = System.choice("確認", "変更を保存しますか?", ["保存", "保存しない", "キャンセル"], 2);
+if(r == 0) save(); else if(r == 2) return;
+```
+WINVER ビルドは TaskDialog、SDL3 系ビルドは Elements のダイアログ ( 使えない場合は OS の
+メッセージボックス ) で表示します。既定のボタンにフォーカスが置かれ、Esc や閉じるボタンで
+閉じた場合も既定の番号が返ります。
+
+REPL のファイルチャネル ( `-replfile` ) で駆動中はダイアログを出さず、モーダル応答チャネルに
+`{"type":"choice","caption":…,"text":…,"choices":[…],"default":n}` を出して
+エージェントの答えを待ちます。答えは選んだ要素の文字列 ( 大文字小文字は区別しない ) か番号で、
+空や該当しない値のときは既定の番号になります。
+
+**関連:** [System.confirm](System.md#confirm) / [System.replActive](System.md#replactive)
 
 ---
 
