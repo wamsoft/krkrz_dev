@@ -110,9 +110,9 @@ if (obj.name !== void) { ... }                          // 正しい
 |---|---|
 | `System.appDataPath` / `personalPath` | 2026-08-25 に SDL3 / 汎用ビルドへも追加済 ( Windows では WINVER と同じ解決、他 OS では `exePath` と同じ値 )。それ以前のエンジンの汎用ビルドには無いので `typeof` 確認。保存先は `System.dataPath` を使う |
 | `System.desktopLeft/Top/Width/Height` | WINVER 限定。解像度だけなら `System.screenWidth/Height` |
-| `System.urldecode` / `readRegValue` 等 | Windows 拡張。SDL3 ビルドには無い |
+| `System.readRegValue` / `writeRegValue` 等 | Windows 拡張。SDL3 ビルドには無い ( `urlencode` / `urldecode` / `readEnvValue` / `writeEnvValue` / `expandEnvString` は 2026-09-28 に本体へ入り、全ビルドで使える ) |
 | `System.setMemoryOverlay` / `setPadOverlay` | フラグは全ビルド共通だが、描画するのは OGL 系 / SDL の DrawDevice ( WINVER 既定の D3D11 では出ない ) |
-| `Layer.imeMode` / `setAttentionPoint` | 値は全ビルドで保持されるが、実際に効くのは WINVER |
+| `Layer.imeMode` / `setAttentionPoint` | `imeMode` は SDL3 でも「`imDisable` かそれ以外か」だけは効く ( それ以外のレイヤにフォーカスがある間だけテキスト入力を受ける )。開閉や入力モードの細かい指定と `setAttentionPoint` が効くのは WINVER |
 | `Window.setZoom` | 2026-08-17 に両ビルドで挙動を統一済 ( 「レイヤサイズ × 倍率」をウィンドウの内側サイズにする )。それ以前の WINVER は倍率を覚えるだけだったので、古いエンジンも対象にするなら [Window.setInnerSize](../../reference/Window.md#setinnersize) を併用する |
 | `System.padButtonMapping` | SDL3 / 汎用ビルド限定。WINVER は XInput ベースで刻印が Xbox 系固定のため設定自体が不要 |
 | `Dialog` 系 / `WebServer` | ビルドオプション ( `KRKRZ_USE_ELEMENTS` / `KRKRZ_REPL_WEB` ) 次第 |
