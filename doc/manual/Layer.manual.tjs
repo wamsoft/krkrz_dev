@@ -464,10 +464,14 @@ class Layer {
 	 * タッチパネル上でマルチタッチによって拡大操作した時に発生します。
 	 *
 	 * このイベントが発生するのは、フォーカスのあるレイヤです。
+	 *
+	 * 距離 ( startdistance / currentdistance ) は描画領域上のピクセル距離で、レイヤ座標には換算されません
+	 * ( 拡大率は `currentdistance / startdistance` の比で求めてください )。
+	 * 中心 ( cx / cy ) は 2026-09-29 以前は描画領域座標のまま渡されていました。
 	 * @param startdistance マルチタッチが開始された時のピクセル距離です。
 	 * @param currentdistance イベント発生時のタッチのピクセル距離です。
-	 * @param cx 中心位置の x 座標 ( クライアント座標での ) の値です。
-	 * @param cy 中心位置の y 座標 ( クライアント座標での ) の値です。
+	 * @param cx 中心位置の x 座標です。このレイヤのローカル座標 ( [onTouchDown](#ontouchdown) と同じ ) で渡されます。
+	 * @param cy 中心位置の y 座標です。座標系は cx と同じです。
 	 * @param flag マルチタッチ状態フラグです。
 	 *
 	 * `**0x01**     : `マルチタッチが開始された最初のイベントに設定されています。
@@ -484,8 +488,8 @@ class Layer {
 	 * @param startangle マルチタッチが開始された時のラジアン角度です。
 	 * @param currentangle イベント発生時のタッチのラジアン角度です。
 	 * @param distance イベント発生時のタッチのピクセル距離です。
-	 * @param cx 中心位置の x 座標 ( クライアント座標での ) の値です。
-	 * @param cy 中心位置の y 座標 ( クライアント座標での ) の値です。
+	 * @param cx 中心位置の x 座標です。このレイヤのローカル座標 ( [onTouchDown](#ontouchdown) と同じ ) で渡されます。
+	 * @param cy 中心位置の y 座標です。座標系は cx と同じです。
 	 * @param flag マルチタッチ状態フラグです。
 	 *
 	 * `**0x01**     : `マルチタッチが開始された最初のイベントに設定されています。

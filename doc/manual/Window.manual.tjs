@@ -230,8 +230,9 @@ class Window {
 	 * タッチパネル上でマルチタッチによって拡大操作した時に発生します。
 	 * @param startdistance マルチタッチが開始された時のピクセル距離です。
 	 * @param currentdistance イベント発生時のタッチのピクセル距離です。
-	 * @param cx 中心位置の x 座標 ( クライアント座標での ) の値です。
-	 * @param cy 中心位置の y 座標 ( クライアント座標での ) の値です。
+	 * @param cx 中心位置の x 座標です。**描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) で渡されます
+	 * ( [Window.setCursorPos](#setcursorpos) にそのまま渡せます )。レイヤ座標が必要なら [Layer.onTouchScaling](Layer.md#ontouchscaling) を使ってください。
+	 * @param cy 中心位置の y 座標です。座標系は cx と同じです。
 	 * @param flag マルチタッチ状態フラグです。
 	 *
 	 * `**0x01**     : `マルチタッチが開始された最初のイベントに設定されています。
@@ -246,8 +247,9 @@ class Window {
 	 * @param startangle マルチタッチが開始された時のラジアン角度です。
 	 * @param currentangle イベント発生時のタッチのラジアン角度です。
 	 * @param distance イベント発生時のタッチのピクセル距離です。
-	 * @param cx 中心位置の x 座標 ( クライアント座標での ) の値です。
-	 * @param cy 中心位置の y 座標 ( クライアント座標での ) の値です。
+	 * @param cx 中心位置の x 座標です。**描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) で渡されます
+	 * ( [Window.setCursorPos](#setcursorpos) にそのまま渡せます )。レイヤ座標が必要なら [Layer.onTouchRotate](Layer.md#ontouchrotate) を使ってください。
+	 * @param cy 中心位置の y 座標です。座標系は cx と同じです。
 	 * @param flag マルチタッチ状態フラグです。
 	 *
 	 * `**0x01**     : `マルチタッチが開始された最初のイベントに設定されています。
