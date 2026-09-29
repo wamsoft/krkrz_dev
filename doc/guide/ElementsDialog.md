@@ -223,7 +223,7 @@ foreach_dict_of(cfg, function(k, v) { ElementsDialog.setSharedVar(k, v); });
 
 入力は次の優先順位で配送されます。
 
-1. **最上位ホットキー** ( [System.registerHotKey](../reference/System.md#registerhotkey) ) — イベントポンプの入口。**モーダル表示中でも効く**唯一の層です ( フックは SDL3 系ビルドのみ配線されており、WINVER ビルドでは発火しません )
+1. **最上位ホットキー** ( [System.registerHotKey](../reference/System.md#registerhotkey) ) — イベントポンプの入口。**モーダル表示中でも効く**唯一の層です ( WINVER / SDL3 系ビルドの双方で動作します )
 2. **モーダルダイアログ** — 全入力を独占 ( 下にもゲームにも通しません )
 3. **ホストホットキー** ( [registerHotKey](../reference/ElementsDialog.md#registerhotkey) ) — 登録キーはダイアログへ渡らず [Window.onKeyDown](../reference/Window.md#onkeydown) 等へ直行
 4. **フォーカスを持つ非モーダルパネル** — キー / パッドを受け、未処理分のみ素通し
