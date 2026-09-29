@@ -4,6 +4,27 @@
 Win32 依存の原因をまとめた資料。`wamsoft` ブランチ (worktree
 `../krkrz_dev_wamsoft`) の構成を対象とする。
 
+## 詰め合わせプラグイン PackinOne (入口)
+
+旧プラグインを 1 つの DLL に詰め合わせたもの。案件はこれを置けば個別 DLL を
+並べずに済む。**詳細 (取り込み方・本体側の口・実測・未決事項) は
+[src/packinone/README.md](src/packinone/README.md) が SSOT。**
+
+| DLL | ソース | 対象 | 中身 |
+|---|---|---|---|
+| `PackinOne.dll` | `src/packinone` | 全バリアント | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack / pemachinetype / TriBinPairString / tlgSliceLoader / proxyfs (12) |
+| `PackinOneWin32.dll` | `src/packinoneWin32` | WINVER のみ | fstat / systemEx (本体へ移った分を除く) / process / dpiicon (4) |
+
+使うときの要点:
+
+- 読み込みは `Plugins.link("PackinOne.dll")` (WINVER の Win32 専用機能も要るなら
+  `PackinOneWin32.dll` も)。同梱済みのプラグイン名で `Plugins.link` すると、何もせず
+  成功する (`Plugins.canLink` も真。本体の `TVPRegisterBundledPlugin` で申告している)
+- ⚠ 詰め合わせたプラグインは **`TVP_PLUGINS` から外してある** ので単体 DLL は作られない。
+  単体の `tjsDataPack.dll` 等が要る案件へ配るときは README の「取り込み状況」を参照
+- fstat / systemEx の機能の大半は本体に入った。本体とプラグインの分担は
+  [src/core/doc/LocalFileOps.md](src/core/doc/LocalFileOps.md)
+
 ## ソースの所在とビルド枠組み
 
 - **src/plugins/** … umbrella リポジトリ本体のプラグイン submodule 群。
@@ -180,7 +201,7 @@ win32ole(COM) / k2compat(GUI/WM_TOUCH) / wvdecoder(COM/TSS) / msdfrender(GDI fon
 |---|---|
 | AlphaMovie / extrans / psbfile / motionplayer | 別リポジトリ (未取得) |
 | psd | **除外 (user 判断 2026-09-04)**: `wamsoft_work/libpsd` を近代化して一度取込んだ (2026-07-21) が、今後は使わない方針。§6 参照。PSD 読み込みは `src/plugins/psdfile` (psdparse ベースの `psdfile.dll`) のみ |
-| PackinOne | `plugins_utf8/packinone` はあるが `_makefile` が svn switch のみでソース未取得 (`/branches/plugin_PackInOne`) |
+| PackinOne | **作り直して取り込み済み (2026-09-28)**。`src/packinone` / `src/packinoneWin32`。冒頭の「詰め合わせプラグイン PackinOne」参照 (旧ソース `plugins_utf8/packinone` は旧版メンテ用で使わない) |
 | krmovie | 本体側 (`src/core` win32 movie) |
 | krkrsteam | `src/plugins/steam` にあり (既定コメントアウト・`STEAMWORKS_SDK` 必須) |
 
