@@ -151,24 +151,30 @@ data ディレクトリを使うなら **絶対パス**で渡す。相対 `data/
 - **System.confirm / Storages.selectFile / Storages.selectDirectory → エージェント応答**:
   REPL 中はネイティブモーダルを出さず、下記「モーダル応答チャネル」でエージェントが
   実際に応答を返せる (応答口が無ければ confirm は既定 Yes、選択はネイティブへ)。
-  `inputString` は本体未実装 (将来対応予定)。
+  `System.inputString` も本体実装済みでこのチャネルに乗る (2026-09-25 実測)。
 
-## モーダル応答チャネル (confirm / ファイル選択)
+## モーダル応答チャネル (confirm / 文字列入力 / ファイル選択)
 
-`-replfile=<dir>` 駆動中、本体が `System.confirm` / `Storages.selectFile` /
-`Storages.selectDirectory` を実行すると、**cmd/resp とは別の専用ファイル対**で
+`-replfile=<dir>` 駆動中、本体が `System.confirm` / `System.inputString` /
+`Storages.selectFile` / `Storages.selectDirectory` を実行すると、**cmd/resp とは別の専用ファイル対**で
 応答を求めてくる。メイン実行はブロックするが、応答は別プロセス (エージェント) が
 直接書くのでデッドロックしない。
 
 プロトコル (`<dir>` 配下、cmd を投げた後):
 1. 本体が要求 JSON を `<dir>/modal` に書く。例:
    - `{"type":"confirm","caption":"確認","text":"続行?"}`
+   - `{"type":"inputString","caption":"題名","prompt":"入力してください","default":"きてい"}`
    - `{"type":"selectFile","name":"","title":"開く","save":false}`
    - `{"type":"selectDirectory","name":"","title":"フォルダ","save":false}`
 2. エージェントは `modal` の出現を検知し、応答を **`<dir>/modalresp`** に書く
    (プレーン文字列):
-   - confirm         : `yes` / `no`
+   - confirm         : `yes` `y` `1` `true` `ok` が真、**それ以外は偽**
+   - inputString     : `ok<改行><入力値>` / `cancel` 単独でキャンセル (void が返る)
    - selectFile/Dir  : 返すパス (直接入力でよい) / 空文字列 = キャンセル
+
+   ⚠ **種別ごとにキャンセルの書き方が違う**。汎用の 1 文字列では済まないので
+   `modal` の `"type"` を見て振り分けること (`cancel` を selectFile に返すと
+   「cancel という名前のパスを選んだ」ことになる)。
 3. 本体が `modalresp` を読み、`modal`/`modalresp` を削除して処理続行 → 通常どおり
    `resp` に最終結果が出る。
 
@@ -180,9 +186,13 @@ data ディレクトリを使うなら **絶対パス**で渡す。相対 `data/
 ```powershell
 # cmd 送信後
 while (-not (Test-Path "$chan/modal")) { Start-Sleep -Milliseconds 30 }
-[IO.File]::WriteAllText("$chan/modalresp", "yes")   # or パス / "no" / ""
+[IO.File]::WriteAllText("$chan/modalresp", "yes")   # or "ok`n<値>" / "cancel" / パス / "no" / ""
 # この後 $chan/resp が出るので通常どおり読む
 ```
+
+⚠ **答えないと `resp` は返らない**。本体は既定 30 秒 (`-replmodaltimeout=<秒>`、0 で無限)
+待ってから TJS 例外を投げる。モーダルを出しうる式を投げるハーネスは、`resp` 待ちループの中で
+`modal` も見て、出たら種別に応じて答えること。
 
 ## ファイルチャネル駆動 (エージェント推奨)
 
