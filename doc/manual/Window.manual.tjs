@@ -230,8 +230,9 @@ class Window {
 	 * タッチパネル上でマルチタッチによって拡大操作した時に発生します。
 	 * @param startdistance マルチタッチが開始された時のピクセル距離です。
 	 * @param currentdistance イベント発生時のタッチのピクセル距離です。
-	 * @param cx 中心位置の x 座標 ( クライアント座標での ) の値です。
-	 * @param cy 中心位置の y 座標 ( クライアント座標での ) の値です。
+	 * @param cx 中心位置の x 座標です。**描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) で渡されます
+	 * ( [Window.setCursorPos](#setcursorpos) にそのまま渡せます )。レイヤ座標が必要なら [Layer.onTouchScaling](Layer.md#ontouchscaling) を使ってください。
+	 * @param cy 中心位置の y 座標です。座標系は cx と同じです。
 	 * @param flag マルチタッチ状態フラグです。
 	 *
 	 * `**0x01**     : `マルチタッチが開始された最初のイベントに設定されています。
@@ -246,8 +247,9 @@ class Window {
 	 * @param startangle マルチタッチが開始された時のラジアン角度です。
 	 * @param currentangle イベント発生時のタッチのラジアン角度です。
 	 * @param distance イベント発生時のタッチのピクセル距離です。
-	 * @param cx 中心位置の x 座標 ( クライアント座標での ) の値です。
-	 * @param cy 中心位置の y 座標 ( クライアント座標での ) の値です。
+	 * @param cx 中心位置の x 座標です。**描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) で渡されます
+	 * ( [Window.setCursorPos](#setcursorpos) にそのまま渡せます )。レイヤ座標が必要なら [Layer.onTouchRotate](Layer.md#ontouchrotate) を使ってください。
+	 * @param cy 中心位置の y 座標です。座標系は cx と同じです。
 	 * @param flag マルチタッチ状態フラグです。
 	 *
 	 * `**0x01**     : `マルチタッチが開始された最初のイベントに設定されています。
@@ -1426,11 +1428,28 @@ class Window {
 	 *
 	 * ここで指定したモードは、どのレイヤにもフォーカスが無い状態に設定されるモードです。
 	 *
-	 * 未指定の場合は **imDisable**で、これはどのレイヤにもフォーカスが無い状態では IME は無効状態であるということになります。
+	 * 未指定の場合は **imClose**で、これはどのレイヤにもフォーカスが無い状態では IME は閉じている ( 英数入力 ) ということになります。
 	 *
 	 * 指定可能な値については [Layer.imeMode](Layer.md#imemode) を参照してください。
+	 *
+	 * 書き込みは Windows ネイティブ ( WINVER ) ビルドでのみ有効です。SDL3 ビルドでは
+	 * 読み書きとも未実装 ( 例外 ) です。
+	 *
+	 * 設定は、どのレイヤにもフォーカスが無いときはその場で反映されます。フォーカスを
+	 * 持つレイヤがあるときはそのレイヤの [Layer.imeMode](Layer.md#imemode) が優先され、
+	 * フォーカスが外れた時点でここで指定した既定値に戻ります。
+	 *
+	 * ElementsDialog のテキスト入力欄に編集フォーカスがある間は、ここでの指定によらず
+	 * IME が開かれます ( フォーカスが外れると、ここで指定した既定値に戻ります )。
+	 * この間はレイヤ側の [Layer.imeMode](Layer.md#imemode) の反映も保留され、
+	 * フォーカスが外れた時点でまとめて適用されます。
+	 *
+	 * なお、このプロパティが返すのはあくまで**既定値**です。フォーカスのあるレイヤや
+	 * ElementsDialog によって実際に適用されている IME の状態は返らないので、
+	 * 「IME が開いているか」の確認には使えません
+	 * ( 確認には [Agent.dialogs](Agent.md#dialogs) の `textFocus` を使ってください )。
 	 */
-	property imeMode { getter; }
+	property imeMode;
 
 	/**
 	 * マウスカーソル表示状態
@@ -1766,4 +1785,307 @@ class Window {
 	 * @type Integer
 	 */
 	property GLGetProcAddress { getter; }
+
+	/**
+	 * 最大化しているか
+	 *
+	 * ウィンドウが最大化されていれば真です。変更は
+	 * [Window.maximize](Window.md#maximize) / [Window.showRestore](Window.md#showrestore) で行います。
+	 *
+	 * WINVER / SDL3 系ビルドの双方で利用できます。
+	 * @type Boolean
+	 * @see Window.maximize
+	 * @see Window.minimized
+	 */
+	property maximized { getter; }
+
+	/**
+	 * 最小化しているか
+	 *
+	 * ウィンドウが最小化 ( アイコン化 ) されていれば真です。
+	 * @type Boolean
+	 * @see Window.minimize
+	 * @see Window.maximized
+	 */
+	property minimized { getter; }
+
+	/**
+	 * 最大化
+	 *
+	 * ウィンドウを最大化します。
+	 * [Window.onMaximizeQuery](Window.md#onmaximizequery) は通りません
+	 * ( プログラムからの最大化は意図したものとして扱います )。
+	 * @see Window.showRestore
+	 * @see Window.maximized
+	 */
+	function maximize();
+
+	/**
+	 * 最小化
+	 *
+	 * ウィンドウを最小化 ( アイコン化 ) します。
+	 * @see Window.showRestore
+	 * @see Window.minimized
+	 */
+	function minimize();
+
+	/**
+	 * 元のサイズに戻す
+	 *
+	 * 最大化 / 最小化されているウィンドウを元の位置とサイズに戻します。
+	 * @see Window.maximize
+	 * @see Window.minimize
+	 */
+	function showRestore();
+
+	/**
+	 * 元の矩形の取得
+	 *
+	 * 最大化 / 最小化していないときのウィンドウの外形矩形 ( 画面座標 ) を
+	 * `%[ x, y, w, h ]` の辞書で返します。最大化中でも「元に戻したときの位置とサイズ」が
+	 * 取れるので、次回起動時の復元などに使えます。
+	 * @return 矩形の辞書が返ります。取れない場合は void が返ります。
+	 * @see Window.getWindowRect
+	 */
+	function getNormalRect();
+
+	/**
+	 * ウィンドウ矩形の取得
+	 *
+	 * 枠やタイトルバーを含むウィンドウの外形矩形を、画面座標の `%[ x, y, w, h ]` で返します。
+	 * @return 矩形の辞書が返ります。
+	 * @see Window.getClientRect
+	 * @see Window.getNormalRect
+	 */
+	function getWindowRect();
+
+	/**
+	 * クライアント矩形の取得
+	 *
+	 * 描画領域 ( クライアント領域 ) の矩形を、画面座標の `%[ x, y, w, h ]` で返します。
+	 * @return 矩形の辞書が返ります。
+	 * @see Window.setClientRect
+	 * @see Window.getWindowRect
+	 */
+	function getClientRect();
+
+	/**
+	 * マウスカーソル位置の指定 ( 描画領域座標 )
+	 *
+	 * **描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) でマウスカーソルの
+	 * 位置を指定します。
+	 *
+	 * [Layer.setCursorPos](Layer.md#setcursorpos) と同名ですが、**座標系が違います**。
+	 * レイヤ座標の値を持っているなら、そちらを使ってください。こちらは「描画領域座標の
+	 * 値をそのまま入れたい」ときのためのものです。
+	 *
+	 * 代表例は [Window.onTouchScaling](Window.md#ontouchscaling) や
+	 * [Window.onTouchRotate](Window.md#ontouchrotate) の `cx` / `cy` です。これらは
+	 * マウスイベントと違ってレイヤ座標へ変換されずに届くため、レイヤ座標へ直すには
+	 * 描画先の矩形が必要ですが、その矩形はスクリプトからは取得できません。
+	 * このメソッドならそのまま渡せます。
+	 *
+	 * Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で動作します。
+	 * @param x 描画領域座標での x 座標値をピクセル単位で指定します。
+	 * @param y 描画領域座標での y 座標値をピクセル単位で指定します。
+	 * @see Window.getCursorPos
+	 * @see Layer.setCursorPos
+	 */
+	function setCursorPos(x, y);
+
+	/**
+	 * マウスカーソル位置の取得 ( 描画領域座標 )
+	 *
+	 * [Window.setCursorPos](Window.md#setcursorpos) と同じ**描画領域座標**で、現在の
+	 * マウスカーソル位置を `%[ x, y ]` の辞書で返します。
+	 *
+	 * レイヤ座標で読みたい場合は [Layer.cursorX](Layer.md#cursorx) /
+	 * [Layer.cursorY](Layer.md#cursory) を使ってください。
+	 * @see Window.setCursorPos
+	 * @see Layer.cursorX
+	 */
+	function getCursorPos();
+
+	/**
+	 * クライアント矩形の設定
+	 *
+	 * クライアント領域が指定した画面座標の矩形になるよう、ウィンドウを移動・リサイズします。
+	 * 辞書に無い要素は現在の値のままです ( `%[ w:320 ]` なら幅だけ変わります )。
+	 * @param rect `%[ x, y, w, h ]` の辞書を指定します。
+	 * @return 設定できれば真が返ります。
+	 * @see Window.getClientRect
+	 */
+	function setClientRect(rect);
+
+	/**
+	 * サイズ変更の禁止
+	 *
+	 * 真にすると、ユーザが枠を掴んでウィンドウのサイズを変えられなくなります。
+	 * SDL3 系ビルドでも有効です。
+	 * @type Boolean
+	 * @see Window.disableMove
+	 */
+	property disableResize { getter; setter; }
+
+	/**
+	 * 移動の禁止
+	 *
+	 * 真にすると、ユーザがウィンドウを掴んで動かせなくなります。
+	 * 枠なしで表示するときに使います。
+	 *
+	 * WINVER ビルドでのみ効きます。SDL3 系ビルドは値を保持するだけです
+	 * ( SDL に移動を止める手段が無いため )。
+	 * @type Boolean
+	 * @see Window.disableResize
+	 */
+	property disableMove { getter; setter; }
+
+	/**
+	 * 拡張イベントの有効化
+	 *
+	 * 呼ぶと、ウィンドウ枠の操作に伴う次のイベントが発生するようになります。
+	 * 呼ぶまでは発生しません。
+	 *
+	 * | イベント | 発生するとき | SDL3 系ビルド |
+	 * |---|---|---|
+	 * | [onMove](Window.md#onmove) | 移動した | ○ |
+	 * | [onMoving](Window.md#onmoving) | 移動中 | × |
+	 * | [onResizing](Window.md#onresizing) | サイズ変更中 | × |
+	 * | [onMoveSizeBegin](Window.md#onmovesizebegin) / [onMoveSizeEnd](Window.md#onmovesizeend) | 枠のドラッグ開始 / 終了 | × |
+	 * | [onMinimize](Window.md#onminimize) / [onMaximize](Window.md#onmaximize) | 最小化 / 最大化した | ○ |
+	 * | [onMaximizeQuery](Window.md#onmaximizequery) | 最大化しようとしている | × |
+	 * | [onDPIChanged](Window.md#ondpichanged) | DPI が変わった | ○ |
+	 * | [onDisplayChanged](Window.md#ondisplaychanged) | 画面構成が変わった | ○ |
+	 *
+	 * SDL3 系ビルドで × のものは、SDL がドラッグ中の問い合わせを持たず、
+	 * 結果しか通知しないため発生しません。
+	 */
+	function registerExEvent();
+
+	/**
+	 * デバイス変化の通知を有効化
+	 *
+	 * 呼ぶと、入力デバイスの抜き差しで [Window.onDeviceChanged](Window.md#ondevicechanged)
+	 * が発生するようになります。本体の入力 ( マウス / パッド ) は自分で追従するので、
+	 * プラグイン等が自前でデバイスを列挙している場合に使います。
+	 * @return 有効になれば真が返ります。
+	 */
+	function registerDeviceChange();
+
+	/**
+	 * 最大化の確認
+	 *
+	 * ユーザがウィンドウを最大化しようとしたときに発生します
+	 * ( [Window.registerExEvent](Window.md#registerexevent) の後、WINVER ビルドのみ )。
+	 * 最大化を止めたい場合は、上位クラスの同メソッドに false を渡してください。
+	 * 呼ばなければ既定どおり最大化します
+	 * ( [Window.onCloseQuery](Window.md#onclosequery) と同じ作りです )。
+	 * ```tjs
+	 * function onMaximizeQuery() {
+	 *     goPseudoFullScreen();           // 最大化のかわりに別の処理
+	 *     super.onMaximizeQuery(false);   // 最大化そのものは止める
+	 * }
+	 * ```
+	 * windowEx プラグインの「ハンドラが真を返すと止まる」方式とは異なります。
+	 * @param canmaximize 最大化してよいかどうかを指定します。
+	 * @kind event
+	 */
+	function onMaximizeQuery(canmaximize = true);
+
+	/**
+	 * 移動した
+	 *
+	 * ウィンドウが移動したときに発生します ( 要 [Window.registerExEvent](Window.md#registerexevent) )。
+	 * @param x 新しい位置の X 座標
+	 * @param y 新しい位置の Y 座標
+	 */
+	event onMove(x, y);
+
+	/**
+	 * 移動中
+	 *
+	 * ユーザがウィンドウを移動している間に発生します
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )。
+	 * 渡された矩形を書き換えると、移動先を拘束できます。
+	 * @param rect 移動先の矩形 `%[ x, y, w, h ]`
+	 */
+	event onMoving(rect);
+
+	/**
+	 * サイズ変更中
+	 *
+	 * ユーザがウィンドウのサイズを変えている間に発生します
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )。
+	 * 渡された矩形を書き換えると、サイズを拘束できます。
+	 * @param rect 変更後の矩形 `%[ x, y, w, h ]`
+	 * @param edge 掴んでいる辺
+	 */
+	event onResizing(rect, edge);
+
+	/**
+	 * 枠のドラッグ開始
+	 *
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )
+	 * @see Window.onMoveSizeEnd
+	 */
+	event onMoveSizeBegin();
+
+	/**
+	 * 枠のドラッグ終了
+	 *
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )
+	 * @see Window.onMoveSizeBegin
+	 */
+	event onMoveSizeEnd();
+
+	/**
+	 * 最小化した
+	 *
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent) )
+	 * @see Window.minimize
+	 */
+	event onMinimize();
+
+	/**
+	 * 最大化した
+	 *
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent) )
+	 * @see Window.maximize
+	 */
+	event onMaximize();
+
+	/**
+	 * DPI が変わった
+	 *
+	 * ウィンドウの DPI が変わったときに発生します
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent) )。
+	 * SDL3 系ビルドでは表示倍率を `96 × 倍率` に換算して渡します。
+	 * @param dpiX 横方向の DPI
+	 * @param dpiY 縦方向の DPI
+	 */
+	event onDPIChanged(dpiX, dpiY);
+
+	/**
+	 * 画面構成が変わった
+	 *
+	 * 画面の解像度やモニタの構成が変わったときに発生します
+	 * ( 要 [Window.registerExEvent](Window.md#registerexevent) )。
+	 */
+	event onDisplayChanged();
+
+	/**
+	 * 入力デバイスが抜き差しされた
+	 *
+	 * ( 要 [Window.registerDeviceChange](Window.md#registerdevicechange) )
+	 * @param arrival 接続なら真、取り外しなら偽
+	 */
+	event onDeviceChanged(arrival);
+
+	/**
+	 * 貼り付けの指示
+	 *
+	 * 外部 ( ランチャ等 ) から貼り付けを指示されたとき ( `WM_PASTE` ) に発生します。
+	 * WINVER ビルドのみです。
+	 */
+	event onPaste();
 }

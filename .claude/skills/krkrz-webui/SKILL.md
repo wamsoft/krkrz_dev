@@ -99,6 +99,8 @@ es.onmessage = e => render(JSON.parse(e.data));
 | `WebServer.serveStatic(prefix, storageDir)` | Storages 経由の静的配信。例 `("/ui/","ui/")` |
 | `WebServer.unserveStatic(prefix)` | 静的マウント解除 |
 | `WebServer.broadcast(channel, text)` | `/sub/<channel>` 購読者へ SSE 配信 (改行可) |
+| `WebServer.registerPanel(id, label, path)` | **組み込み UI へタブを 1 枚足す** (下記) |
+| `WebServer.unregisterPanel(id)` | パネルを外す |
 | `WebServer.start([port])` / `startAt(host, port)` | サーバをスクリプトから起動 (`-replweb` 不要)。既に稼働中なら no-op。戻り値=稼働中か |
 | `WebServer.stop()` | サーバ停止 |
 | `WebServer.openBrowser([url [, appMode=true]])` | url をブラウザで開く。appMode 時 Edge/Chrome を `--app` で試し不可なら既定ブラウザへ。url 省略で稼働中 URL。**SDL 版でもアプリモード可** |
@@ -109,6 +111,26 @@ es.onmessage = e => render(JSON.parse(e.data));
 **`GET|POST /watch` + `/sub/watch` = 監視式** / **`POST /pad/exec` + `GET|POST /pad/file` = Pad** / **`GET|POST /state` + `/sub/state` = コントローラ** / **`POST /bye`** (下記)。
 **組み込みルートは `WebServer.register` より先に判定される**ので、これらのパスは
 自前ハンドラで上書きできない (別名を使う)。
+
+### 案件パネル (`registerPanel`) — 組み込み UI にタブを足す
+
+**自前 UI を丸ごと立てる前にこれを検討する。** `serveStatic` だけで別ページを
+作ると Console / Watch / Pad とコントローラを失う。 パネルとして足せば同居できる。
+
+```tjs
+WebServer.serveStatic("/tool/", "web/");
+WebServer.registerPanel("mytool", "案件ツール", "/tool/tool.html");
+```
+
+- 中身は **iframe**。組み込みページへスクリプトを注入する方式ではないので、
+  **組み込み UI の内部 DOM に依存しない** (向こうが変わっても壊れない)
+- 同一オリジンなのでパネルから `/cmd` `/watch` `/pad/exec` や自前
+  `register` エンドポイントを普通に叩ける
+- 同じ id で上書き。登録/解除は `/sub/panels` で**開いているページへ即反映**
+- 中身は**タブを初めて開いたとき**に読む (重いツールでも起動は遅くならない)
+- `path` は **`/` 始まりのサーバ上パス**。不正なら登録されずログに理由が出る
+  (⚠ msys2 の bash から curl で叩くと `/tool/...` が Windows パスへ
+  自動変換されて弾かれる。ファイル body か PowerShell を使う)
 
 ### ブラウザ UI とアプリの寿命をそろえる (両方向)
 

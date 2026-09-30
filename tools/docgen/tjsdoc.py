@@ -32,6 +32,9 @@ class Doc:
     return_type: str = ""
     type_hint: str = ""
     kind_hint: str = ""  # @kind event -> "event"
+    # @experimental [補足] -> 安定保証の対象外。補足が無ければ "1"。
+    # 番号運用は src/core/doc/Versioning.md 参照。
+    experimental: str = ""
     sees: list = field(default_factory=list)  # @see X.Y entries
 
 
@@ -314,6 +317,8 @@ def parse_doc_block(comment_block):
             doc.type_hint = txt
         elif in_tag == "kind":
             doc.kind_hint = txt.strip()
+        elif in_tag == "experimental":
+            doc.experimental = txt.strip() or "1"
         elif in_tag == "see":
             for ref in txt.splitlines():
                 ref = ref.strip()
@@ -565,8 +570,35 @@ def md_table(headers, rows):
     return "\n".join(out)
 
 
+def experimental_note(doc, inline=False):
+    """@experimental の警告を作る。 安定保証の対象外である旨を目立たせる。
+
+    クラス冒頭は admonition、 メンバ見出し直後は 1 行で出す (表の直前に
+    大きな箱を挟むと読みにくいため)。
+    """
+    if not doc.experimental:
+        return ""
+    extra = "" if doc.experimental == "1" else " " + doc.experimental
+    if inline:
+        return "**⚠ 実験中** — 予告なく変更・削除されることがあります。" + extra.strip()
+    lines = [
+        '!!! warning "実験中 ( 安定保証の対象外 )"',
+        "    この API はまだ形が固まっていません。**予告なく変更・削除される",
+        "    ことがあります** ( 非互換変更でもメジャー番号は上がりません )。",
+        "    版の上げ方は [バージョン運用]"
+        "(https://github.com/wamsoft/krkrz_develop/blob/master/doc/Versioning.md)",
+        "    を参照してください。",
+    ]
+    if extra.strip():
+        lines += ["", "    " + extra.strip()]
+    return "\n".join(lines)
+
+
 def render_member(m, cls):
     parts = [f"### {m.name}"]
+    exp = experimental_note(m.doc, inline=True)
+    if exp:
+        parts.append(exp)
     if m.kind == "function":
         short = cls.name.split(".")[-1]
         if m.doc.kind_hint == "event":
@@ -667,6 +699,9 @@ def _render_index(ctors, props, methods, events, consts,
 
 def render_primary(cls):
     parts = [f"# {cls.name}"]
+    exp = experimental_note(cls.doc)
+    if exp:
+        parts.append(exp)
     if cls.doc.summary:
         parts.append(cls.doc.summary)
     if cls.doc.description:
@@ -687,6 +722,9 @@ def render_primary(cls):
 def render_extension(cls):
     label = cls.source or "拡張"
     parts = [f"## プラグイン拡張: {label}"]
+    exp = experimental_note(cls.doc)
+    if exp:
+        parts.append(exp)
     if cls.doc.summary:
         parts.append(cls.doc.summary)
     if cls.doc.description:

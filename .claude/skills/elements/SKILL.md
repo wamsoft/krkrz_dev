@@ -115,7 +115,7 @@ dlg.showDict(%[
 - **絵を変数で差す `image_var`**: `image` の絵そのものを変数で差し替える。値がそのまま画像パス(`"resources/x.png"` / `"mem://thumb_3"` / 空=無描画)。構築時は変数値が静的 `"image"` より優先、未設定なら `"image"` を種まき。**セーブ一覧のページ送りでサムネが変わる / CG ビュワーの絵を送る**が画面再構築なしで書ける。空や読めないパスでも widget は残るので、正しいパスを入れれば戻る。
 - **差し替え可能アトラス**: top-level `"atlases": { "cg": { "path": "atlas/cg_g0.png", "swappable": true } }` と宣言すると、`ElementsDialog.setAtlasImage("cg","atlas/cg_g1.png")`(static、path は画面の `resource_base` 起点、戻り値=差し替えたか)で**画面はそのまま絵の束だけ**入れ替わる。widget は作り直さないのでレイアウト/フォーカス維持。⚠**同じ矩形割りであること**(frames/rect は変わらないので位置がずれると別の絵が出る)。一覧は `ElementsDialog.swappableAtlases()`。swappable はパス単位キャッシュに乗らない(他画面を巻き添えにしないため)。
 - **モーダルへの初期 vars 注入**: `dlg.showModalFile(path, %[name=>value,...])`(showModalJson/Dict も同様、第2引数 Dictionary)。build 直後・pump 前に変数 store へ流し込む(モーダル中は TJS がブロックされ setVar 不可のため)。モーダル中も onAction は同期で届く。
-- **pad_icon/フォント setup (static)**: `ElementsDialog.setPadIconBase(dir)`(Kenney SVG のベース storage パス。未設定だと灰色プレースホルダ)/`ElementsDialog.setPadTheme("xbox"|"ps"|"switch"|"keyboard"|"auto")`(`"auto"`=接続パッドの系統〔`System.padStyle`〕から自動選択、画面を開くたび決め直し)/`ElementsDialog.registerFontDir(dir)`/`ElementsDialog.defaultFontFamily = "Open Sans, Roboto, Noto Sans JP, ..."`(明示設定は自動 theme 並びに上書きされない。Emoji 系は必ず末尾に)。
+- **pad_icon/フォント setup (static)**: `ElementsDialog.setPadIconBase(dir)`(Kenney SVG のベース storage パス。未設定だと灰色プレースホルダ)/`ElementsDialog.setPadTheme("xbox"|"ps"|"switch"|"keyboard"|"auto")`(`"auto"`=接続パッドの系統〔`System.padStyle`〕から自動選択。接続数/系統の変化をその場で検出して決め直すので抜き差しに即追従〔表示中の画面も再描画〕。系統不明のプラットフォームはパッド 1 台以上で `"xbox"`、0 台で `"keyboard"`)/`ElementsDialog.setPadIconAlias(theme, name, basename)`(論理名→Kenney basename の既定表〔a=Enter/b=Esc/dpad=矢印〕をテーマ単位で上書き。例: キャンセルが BackSpace なら `setPadIconAlias("keyboard","b","keyboard_backspace")`。basename 空で個別解除、name 空でテーマ全解除)/`ElementsDialog.registerFontDir(dir)`/`ElementsDialog.defaultFontFamily = "Open Sans, Roboto, Noto Sans JP, ..."`(明示設定は自動 theme 並びに上書きされない。Emoji 系は必ず末尾に)。
 - **要素の有効/無効を変数連動**: button 系(`button`/`atlas_button`/`invert_button`/`ring_button`)の `enabled_var`。値 `"0"` で無効、それ以外(既定)で有効。無効中はクリック/キー決定が効かず、描画は `disabled` frame があればそれ、無ければ半透明。進行で開放されるメニュー項目(未クリアなら「おまけ」を灰色)等に。
 
 ### static 設定一覧 (クラス全体に効く。`ElementsDialog.xxx`)
@@ -132,6 +132,9 @@ dlg.showDict(%[
 | `renderScale` | `0` | ラスタライズ密度。0=auto(present サイズで直接)/`>0`=authored×倍率で描いて拡縮 |
 | `renderStats` / `renderStatsReset()` | — | 描画パイプラインの区間計測(frames/rasters/partials/updateUs/rasterUs/uploadUs/presentUs 等)。累積値なので2回読んで差分を取る。計測画面=`data/elements_bench`(`-benchauto` で無操作スイープ) |
 | `renderCount` | — | 累計ラスタライズ回数。アイドルで増えなければ renderCache が効いている |
+| `atlasCacheStats` | — | アトラスのデコードキャッシュの常駐量 `%[bytes, count, budget]`。**画面を閉じても手放さない**設計なので、場面の切れ目で抱え込み量を見る用 |
+| `trimAtlasCache(budget=0)` | — | アトラスキャッシュを切り詰める(0=使われていない分を全部)。戻り値=解放バイト数。⚠**表示中の画面が使っている分は参照が残るので落ちない**→画面を閉じた後に呼ぶ |
+| `atlasCacheBudget` | 192MB | アトラスキャッシュの予算。代入で恒久変更(下げたらその場で切り詰め)。0 でキャッシュ無効 |
 
 ### interactive 属性 (focusable widget 共通)
 - **`"id"`** — `onAction` / `result.values` / shortcut / setVar の参照キー。
@@ -230,7 +233,7 @@ dlg.startFlow("ui/menu/app.jsonc");   // 即 return(戻り値=起動成否)
   - `modal=false`(startFlow/startFlowScreens、showJson 系は第3引数で指定可): ヒットしない入力は下/ゲームへ**素通し**。
 - **用途 3 態**: モーダル `showJson(json)` / **操作パネル `showJson(json, true, false)`**(キー/パッドがパネルへ届き、未処理分はホストへ素通し。パッド十字=フォーカスナビ/A=決定) / 表示専用 HUD `showJson(json, false)`(キーを一切受けない)。
 - **キーボードフォーカス**: modal または `wants_focus` の最前面が保持。後から開いた focus-grab が自然に前面、閉じると直前へ戻る。テキスト入力ウィジェット focus 中は grabFocus=false でもキー/テキストが届く(focus_consumes_text フォールバック)。
-- **最上位ホットキー `System.registerHotKey(key, mods, callback)`** / `System.unregisterHotKey(key, mods)`: イベントポンプ入口で照合するので **モーダル表示中・テキスト入力中でも効く**唯一の層(下の ElementsDialog.registerHotKey より上流)。callback が `false` を返せば消費せず通常 dispatch へ素通し。リピートは消費のみ・up は key のみ照合。モーダルの有無は **`ElementsDialog.modalActive`**(読取専用・常駐オーバレイは含まない)で判定。SDL3 ビルドのみ(WINVER 未配線)。
+- **最上位ホットキー `System.registerHotKey(key, mods, callback)`** / `System.unregisterHotKey(key, mods)`: イベントポンプ入口で照合するので **モーダル表示中・テキスト入力中でも効く**唯一の層(下の ElementsDialog.registerHotKey より上流)。callback が `false` を返せば消費せず通常 dispatch へ素通し。リピートは消費のみ・up は key のみ照合。モーダルの有無は **`ElementsDialog.modalActive`**(読取専用・常駐オーバレイは含まない)で判定。WINVER / SDL3 の両ビルドで動く(WINVER は 2026-09-26 に配線)。
 - **ホストホットキー `ElementsDialog.registerHotKey(key, shift=0, duringTextInput=false)`** / `unregisterHotKey` / `clearHotKeys`: 登録キー(VK_PAD*・VK_RBUTTON 等マウスも同じ空間)はパネルへ渡らず `Window.onKeyDown/onMouseDown` へ直行(バイパス方式・専用イベント無し)。テキスト入力中は既定抑止(`duringTextInput=true` で有効)。モーダル中は無効。ESC/PgUp/PgDn 等「シェルが必ず受けたいキー」の確保に使う(実例=demolib DemoShell)。
 - `input`(top-level)で矢印/パッドナビ(`arrow_focus_nav` / `dpad_mode` / `shortcuts`〔key/pad→id〕/ `pad_bindings`)を設定。既定 bind: A=Enter / B=Esc / X=Shift+Tab / Y=Tab / D-Pad=矢印。`"bindings": [{key|pad|mouse|wheel, action}]` で named-action を差替(`"none"`=消費して無効化、`"passthrough"`=消費せずホストへ素通し=常駐オーバレイが「この入力は下のゲームのもの」と宣言する用)。pad 名はフェイス以外に `"lb"`(`"l1"`)/`"rb"`(`"r1"`)/**`"lt"`(`"l2"`/`"lt_click"`)/`"rt"`(`"r2"`/`"rt_click"`)**/`"l3"`/`"r3"`/`"back"`/`"start"`/`"dpad_*"` が使える(トリガ 2 つは krkrz 側の VK_PAD7/VK_PAD8 変換が入って初めて届くようになった)。フェイスボタンは刻印(`"a"`/`"b"`/`"x"`/`"y"`)と位置(`"face_south"`/`"face_east"`/`"face_west"`/`"face_north"`)の 2 系統で、1 押下で両方届く。表示側 `pad_icon` の name も同 2 系統を持つので割り当てと表示は同じ基準で組にする(任天堂系は X/Y の位置が Xbox と逆)。
 - **一覧は `list` で組む(行テンプレート)**: `"rows": N` + `"row": {…木…}` + `"row_size"`/`"pitch"`。文字列値の **`#index` が行番号へ展開**され(`"id": "row#index"` / `"visible_var": "rhov#index"`)、`text_list_var` 等を持つ要素には `"index"` と `"index_offset_var"` が**自動で挿さる**(= «窓» になる)。行の中の widget が先にクリックを受け、誰も受けなければ**行クリック**として `onAction(id, データindex)`。`count_var` を渡すと**データが無い行は描画も当たりも消える**。hover/選択は行ごとフラグ(`row_hover_var`/`row_select_var` → `visible_var` で受ける)か、ホスト側で拾う `hover_var`/`select_var`(`onVar`)。
@@ -250,6 +253,7 @@ dlg.startFlow("ui/menu/app.jsonc");   // 即 return(戻り値=起動成否)
 - **フォーカス奪取 / 共通ホットキー**: ✅解決済(2026-08-11)。操作パネルは `showJson(json, true, false)`+ホスト必須キーを `ElementsDialog.registerHotKey` で確保(§6)。旧回避策の grabFocus=false は表示専用 HUD 用。[[project_elements_global_shortcut]]
 - **サブクラスは `super.ElementsDialog()` 必須**。`showFile` は autopath 未対応な場面あり(相対解決に注意)。
 - **サブクラス内から static を触るときは `global.ElementsDialog.xxx`**。素の `ElementsDialog` は親クラス参照になり `ElementsDialog.focusRing = false` 等が「メンバが見つかりません」で落ちる。
+- **入力/ナビ/部分再描画の切り分けには `-navlog`**(指定するだけで有効)。フォーカス移動・cursor-warp・パッド方向キーの到着を ms 付きで、100ms 超フレームの段別内訳(`slow frame`)、ラスタ 1 回ごとの「部分にできたか/できなかった理由」(`raster partial=` / `no-partial:`)が出る。計測画面=`data/elements_audit`(`-audittest` で自動巡回、`-ignoremouse=yes` を併用すると実マウスに邪魔されない)。
 - **描画が重いと感じたら**まず `ElementsDialog.renderStats` の差分を見る(`renderCount` がアイドルで増えていないかも)。`data/elements_bench` に更新パターン別の計測画面がある。overlay 描画の支配項はテキストのラスタライズで、同内容のテキストは自動でビットマップキャッシュされる(毎フレーム内容が変わる HUD カウンタは意図的に載らない)。
 - **case-name 規約**: 共有/公開リポ(krkrz_dev/elements)に**案件固有名を書かない**。elements リポのコメント等はホストを「SDL を使うホストアプリ」等の汎用表現で。[[feedback_elements_repo_project_agnostic]] [[feedback_no_case_names_in_shared_repo]]
 

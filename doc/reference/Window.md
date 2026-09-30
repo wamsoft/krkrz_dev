@@ -65,6 +65,10 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [mouseCursor](#mousecursor)
 - [showScrollBars](#showscrollbars)
 - [GLGetProcAddress](#glgetprocaddress)
+- [maximized](#maximized)
+- [minimized](#minimized)
+- [disableResize](#disableresize)
+- [disableMove](#disablemove)
 
 ### メソッド
 
@@ -96,6 +100,17 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [beginMove](#beginmove)
 - [requestUpdate](#requestupdate)
 - [setLayerPos](#setlayerpos)
+- [maximize](#maximize)
+- [minimize](#minimize)
+- [showRestore](#showrestore)
+- [getNormalRect](#getnormalrect)
+- [getWindowRect](#getwindowrect)
+- [getClientRect](#getclientrect)
+- [setCursorPos](#setcursorpos)
+- [getCursorPos](#getcursorpos)
+- [setClientRect](#setclientrect)
+- [registerExEvent](#registerexevent)
+- [registerDeviceChange](#registerdevicechange)
 
 ### イベント
 
@@ -128,6 +143,18 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [onPointerDown](#onpointerdown)
 - [onPointerMove](#onpointermove)
 - [onPointerUp](#onpointerup)
+- [onMaximizeQuery](#onmaximizequery)
+- [onMove](#onmove)
+- [onMoving](#onmoving)
+- [onResizing](#onresizing)
+- [onMoveSizeBegin](#onmovesizebegin)
+- [onMoveSizeEnd](#onmovesizeend)
+- [onMinimize](#onminimize)
+- [onMaximize](#onmaximize)
+- [onDPIChanged](#ondpichanged)
+- [onDisplayChanged](#ondisplaychanged)
+- [onDeviceChanged](#ondevicechanged)
+- [onPaste](#onpaste)
 
 ---
 
@@ -696,7 +723,7 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方�
 
 ### imeMode
 
-プロパティ \ アクセス: `r`
+プロパティ \ アクセス: `r/w`
 
 **解説**
 
@@ -706,9 +733,26 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方�
 
 ここで指定したモードは、どのレイヤにもフォーカスが無い状態に設定されるモードです。
 
-未指定の場合は **imDisable**で、これはどのレイヤにもフォーカスが無い状態では IME は無効状態であるということになります。
+未指定の場合は **imClose**で、これはどのレイヤにもフォーカスが無い状態では IME は閉じている ( 英数入力 ) ということになります。
 
 指定可能な値については [Layer.imeMode](Layer.md#imemode) を参照してください。
+
+書き込みは Windows ネイティブ ( WINVER ) ビルドでのみ有効です。SDL3 ビルドでは
+読み書きとも未実装 ( 例外 ) です。
+
+設定は、どのレイヤにもフォーカスが無いときはその場で反映されます。フォーカスを
+持つレイヤがあるときはそのレイヤの [Layer.imeMode](Layer.md#imemode) が優先され、
+フォーカスが外れた時点でここで指定した既定値に戻ります。
+
+ElementsDialog のテキスト入力欄に編集フォーカスがある間は、ここでの指定によらず
+IME が開かれます ( フォーカスが外れると、ここで指定した既定値に戻ります )。
+この間はレイヤ側の [Layer.imeMode](Layer.md#imemode) の反映も保留され、
+フォーカスが外れた時点でまとめて適用されます。
+
+なお、このプロパティが返すのはあくまで**既定値**です。フォーカスのあるレイヤや
+ElementsDialog によって実際に適用されている IME の状態は返らないので、
+「IME が開いているか」の確認には使えません
+( 確認には [Agent.dialogs](Agent.md#dialogs) の `textFocus` を使ってください )。
 
 ---
 
@@ -1117,6 +1161,78 @@ GLES 系プラグイン ( EffekseerDevice 等 ) の oglbase として利用し�
 アクセス時に GL コンテキストが未初期化なら遅延生成してカレントにします
 ( OGLDrawDevice / Canvas を使う場合でもウィンドウから取得できます )。GL を
 取得できない環境では 0 ( null ) を返します。
+
+---
+
+### maximized
+
+プロパティ \ アクセス: `r`
+
+**型**: `Boolean`
+
+**解説**
+
+最大化しているか
+
+ウィンドウが最大化されていれば真です。変更は
+[Window.maximize](Window.md#maximize) / [Window.showRestore](Window.md#showrestore) で行います。
+
+WINVER / SDL3 系ビルドの双方で利用できます。
+
+**関連:** [Window.maximize](Window.md#maximize) / [Window.minimized](Window.md#minimized)
+
+---
+
+### minimized
+
+プロパティ \ アクセス: `r`
+
+**型**: `Boolean`
+
+**解説**
+
+最小化しているか
+
+ウィンドウが最小化 ( アイコン化 ) されていれば真です。
+
+**関連:** [Window.minimize](Window.md#minimize) / [Window.maximized](Window.md#maximized)
+
+---
+
+### disableResize
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Boolean`
+
+**解説**
+
+サイズ変更の禁止
+
+真にすると、ユーザが枠を掴んでウィンドウのサイズを変えられなくなります。
+SDL3 系ビルドでも有効です。
+
+**関連:** [Window.disableMove](Window.md#disablemove)
+
+---
+
+### disableMove
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Boolean`
+
+**解説**
+
+移動の禁止
+
+真にすると、ユーザがウィンドウを掴んで動かせなくなります。
+枠なしで表示するときに使います。
+
+WINVER ビルドでのみ効きます。SDL3 系ビルドは値を保持するだけです
+( SDL に移動を止める手段が無いため )。
+
+**関連:** [Window.disableResize](Window.md#disableresize)
 
 ---
 
@@ -1805,6 +1921,228 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 
 ---
 
+### maximize
+
+メソッド
+
+**解説**
+
+最大化
+
+ウィンドウを最大化します。
+[Window.onMaximizeQuery](Window.md#onmaximizequery) は通りません
+( プログラムからの最大化は意図したものとして扱います )。
+
+**関連:** [Window.showRestore](Window.md#showrestore) / [Window.maximized](Window.md#maximized)
+
+---
+
+### minimize
+
+メソッド
+
+**解説**
+
+最小化
+
+ウィンドウを最小化 ( アイコン化 ) します。
+
+**関連:** [Window.showRestore](Window.md#showrestore) / [Window.minimized](Window.md#minimized)
+
+---
+
+### showRestore
+
+メソッド
+
+**解説**
+
+元のサイズに戻す
+
+最大化 / 最小化されているウィンドウを元の位置とサイズに戻します。
+
+**関連:** [Window.maximize](Window.md#maximize) / [Window.minimize](Window.md#minimize)
+
+---
+
+### getNormalRect
+
+メソッド
+
+**戻り値**
+
+矩形の辞書が返ります。取れない場合は void が返ります。
+
+**解説**
+
+元の矩形の取得
+
+最大化 / 最小化していないときのウィンドウの外形矩形 ( 画面座標 ) を
+`%[ x, y, w, h ]` の辞書で返します。最大化中でも「元に戻したときの位置とサイズ」が
+取れるので、次回起動時の復元などに使えます。
+
+**関連:** [Window.getWindowRect](Window.md#getwindowrect)
+
+---
+
+### getWindowRect
+
+メソッド
+
+**戻り値**
+
+矩形の辞書が返ります。
+
+**解説**
+
+ウィンドウ矩形の取得
+
+枠やタイトルバーを含むウィンドウの外形矩形を、画面座標の `%[ x, y, w, h ]` で返します。
+
+**関連:** [Window.getClientRect](Window.md#getclientrect) / [Window.getNormalRect](Window.md#getnormalrect)
+
+---
+
+### getClientRect
+
+メソッド
+
+**戻り値**
+
+矩形の辞書が返ります。
+
+**解説**
+
+クライアント矩形の取得
+
+描画領域 ( クライアント領域 ) の矩形を、画面座標の `%[ x, y, w, h ]` で返します。
+
+**関連:** [Window.setClientRect](Window.md#setclientrect) / [Window.getWindowRect](Window.md#getwindowrect)
+
+---
+
+### setCursorPos
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 描画領域座標での x 座標値をピクセル単位で指定します。 |
+| `y` | `&nbsp;` | 描画領域座標での y 座標値をピクセル単位で指定します。 |
+
+**解説**
+
+マウスカーソル位置の指定 ( 描画領域座標 )
+
+**描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) でマウスカーソルの
+位置を指定します。
+
+[Layer.setCursorPos](Layer.md#setcursorpos) と同名ですが、**座標系が違います**。
+レイヤ座標の値を持っているなら、そちらを使ってください。こちらは「描画領域座標の
+値をそのまま入れたい」ときのためのものです。
+
+代表例は [Window.onTouchScaling](Window.md#ontouchscaling) や
+[Window.onTouchRotate](Window.md#ontouchrotate) の `cx` / `cy` です。これらは
+マウスイベントと違ってレイヤ座標へ変換されずに届くため、レイヤ座標へ直すには
+描画先の矩形が必要ですが、その矩形はスクリプトからは取得できません。
+このメソッドならそのまま渡せます。
+
+Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で動作します。
+
+**関連:** [Window.getCursorPos](Window.md#getcursorpos) / [Layer.setCursorPos](Layer.md#setcursorpos)
+
+---
+
+### getCursorPos
+
+メソッド
+
+**解説**
+
+マウスカーソル位置の取得 ( 描画領域座標 )
+
+[Window.setCursorPos](Window.md#setcursorpos) と同じ**描画領域座標**で、現在の
+マウスカーソル位置を `%[ x, y ]` の辞書で返します。
+
+レイヤ座標で読みたい場合は [Layer.cursorX](Layer.md#cursorx) /
+[Layer.cursorY](Layer.md#cursory) を使ってください。
+
+**関連:** [Window.setCursorPos](Window.md#setcursorpos) / [Layer.cursorX](Layer.md#cursorx)
+
+---
+
+### setClientRect
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `rect` | `&nbsp;` | `%[ x, y, w, h ]` の辞書を指定します。 |
+
+**戻り値**
+
+設定できれば真が返ります。
+
+**解説**
+
+クライアント矩形の設定
+
+クライアント領域が指定した画面座標の矩形になるよう、ウィンドウを移動・リサイズします。
+辞書に無い要素は現在の値のままです ( `%[ w:320 ]` なら幅だけ変わります )。
+
+**関連:** [Window.getClientRect](Window.md#getclientrect)
+
+---
+
+### registerExEvent
+
+メソッド
+
+**解説**
+
+拡張イベントの有効化
+
+呼ぶと、ウィンドウ枠の操作に伴う次のイベントが発生するようになります。
+呼ぶまでは発生しません。
+
+| イベント | 発生するとき | SDL3 系ビルド |
+|---|---|---|
+| [onMove](Window.md#onmove) | 移動した | ○ |
+| [onMoving](Window.md#onmoving) | 移動中 | × |
+| [onResizing](Window.md#onresizing) | サイズ変更中 | × |
+| [onMoveSizeBegin](Window.md#onmovesizebegin) / [onMoveSizeEnd](Window.md#onmovesizeend) | 枠のドラッグ開始 / 終了 | × |
+| [onMinimize](Window.md#onminimize) / [onMaximize](Window.md#onmaximize) | 最小化 / 最大化した | ○ |
+| [onMaximizeQuery](Window.md#onmaximizequery) | 最大化しようとしている | × |
+| [onDPIChanged](Window.md#ondpichanged) | DPI が変わった | ○ |
+| [onDisplayChanged](Window.md#ondisplaychanged) | 画面構成が変わった | ○ |
+
+SDL3 系ビルドで × のものは、SDL がドラッグ中の問い合わせを持たず、
+結果しか通知しないため発生しません。
+
+---
+
+### registerDeviceChange
+
+メソッド
+
+**戻り値**
+
+有効になれば真が返ります。
+
+**解説**
+
+デバイス変化の通知を有効化
+
+呼ぶと、入力デバイスの抜き差しで [Window.onDeviceChanged](Window.md#ondevicechanged)
+が発生するようになります。本体の入力 ( マウス / パッド ) は自分で追従するので、
+プラグイン等が自前でデバイスを列挙している場合に使います。
+
+---
+
 ### onMouseEnter
 
 イベント
@@ -2036,8 +2374,8 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 | --- | --- | --- |
 | `startdistance` | `&nbsp;` | マルチタッチが開始された時のピクセル距離です。 |
 | `currentdistance` | `&nbsp;` | イベント発生時のタッチのピクセル距離です。 |
-| `cx` | `&nbsp;` | 中心位置の x 座標 ( クライアント座標での ) の値です。 |
-| `cy` | `&nbsp;` | 中心位置の y 座標 ( クライアント座標での ) の値です。 |
+| `cx` | `&nbsp;` | 中心位置の x 座標です。**描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) で渡されます<br>( [Window.setCursorPos](#setcursorpos) にそのまま渡せます )。レイヤ座標が必要なら [Layer.onTouchScaling](Layer.md#ontouchscaling) を使ってください。 |
+| `cy` | `&nbsp;` | 中心位置の y 座標です。座標系は cx と同じです。 |
 | `flag` | `&nbsp;` | マルチタッチ状態フラグです。<br>`**0x01**     : `マルチタッチが開始された最初のイベントに設定されています。 |
 
 **解説**
@@ -2059,8 +2397,8 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 | `startangle` | `&nbsp;` | マルチタッチが開始された時のラジアン角度です。 |
 | `currentangle` | `&nbsp;` | イベント発生時のタッチのラジアン角度です。 |
 | `distance` | `&nbsp;` | イベント発生時のタッチのピクセル距離です。 |
-| `cx` | `&nbsp;` | 中心位置の x 座標 ( クライアント座標での ) の値です。 |
-| `cy` | `&nbsp;` | 中心位置の y 座標 ( クライアント座標での ) の値です。 |
+| `cx` | `&nbsp;` | 中心位置の x 座標です。**描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) で渡されます<br>( [Window.setCursorPos](#setcursorpos) にそのまま渡せます )。レイヤ座標が必要なら [Layer.onTouchRotate](Layer.md#ontouchrotate) を使ってください。 |
+| `cy` | `&nbsp;` | 中心位置の y 座標です。座標系は cx と同じです。 |
 | `flag` | `&nbsp;` | マルチタッチ状態フラグです。<br>`**0x01**     : `マルチタッチが開始された最初のイベントに設定されています。 |
 
 **解説**
@@ -2468,6 +2806,216 @@ Layer 側へは互換のため従来どおり UTF-16 符号単位へ分解した
 **解説**
 
 何らかのポインティングデバイスが離された
+
+---
+
+### onMaximizeQuery
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `canmaximize` | `true` | 最大化してよいかどうかを指定します。 |
+
+**解説**
+
+最大化の確認
+
+ユーザがウィンドウを最大化しようとしたときに発生します
+( [Window.registerExEvent](Window.md#registerexevent) の後、WINVER ビルドのみ )。
+最大化を止めたい場合は、上位クラスの同メソッドに false を渡してください。
+呼ばなければ既定どおり最大化します
+( [Window.onCloseQuery](Window.md#onclosequery) と同じ作りです )。
+```tjs
+function onMaximizeQuery() {
+goPseudoFullScreen();           // 最大化のかわりに別の処理
+super.onMaximizeQuery(false);   // 最大化そのものは止める
+}
+```
+windowEx プラグインの「ハンドラが真を返すと止まる」方式とは異なります。
+
+---
+
+### onMove
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 新しい位置の X 座標 |
+| `y` | `&nbsp;` | 新しい位置の Y 座標 |
+
+**解説**
+
+移動した
+
+ウィンドウが移動したときに発生します ( 要 [Window.registerExEvent](Window.md#registerexevent) )。
+
+---
+
+### onMoving
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `rect` | `&nbsp;` | 移動先の矩形 `%[ x, y, w, h ]` |
+
+**解説**
+
+移動中
+
+ユーザがウィンドウを移動している間に発生します
+( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )。
+渡された矩形を書き換えると、移動先を拘束できます。
+
+---
+
+### onResizing
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `rect` | `&nbsp;` | 変更後の矩形 `%[ x, y, w, h ]` |
+| `edge` | `&nbsp;` | 掴んでいる辺 |
+
+**解説**
+
+サイズ変更中
+
+ユーザがウィンドウのサイズを変えている間に発生します
+( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )。
+渡された矩形を書き換えると、サイズを拘束できます。
+
+---
+
+### onMoveSizeBegin
+
+イベント
+
+**解説**
+
+枠のドラッグ開始
+
+( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )
+
+**関連:** [Window.onMoveSizeEnd](Window.md#onmovesizeend)
+
+---
+
+### onMoveSizeEnd
+
+イベント
+
+**解説**
+
+枠のドラッグ終了
+
+( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )
+
+**関連:** [Window.onMoveSizeBegin](Window.md#onmovesizebegin)
+
+---
+
+### onMinimize
+
+イベント
+
+**解説**
+
+最小化した
+
+( 要 [Window.registerExEvent](Window.md#registerexevent) )
+
+**関連:** [Window.minimize](Window.md#minimize)
+
+---
+
+### onMaximize
+
+イベント
+
+**解説**
+
+最大化した
+
+( 要 [Window.registerExEvent](Window.md#registerexevent) )
+
+**関連:** [Window.maximize](Window.md#maximize)
+
+---
+
+### onDPIChanged
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `dpiX` | `&nbsp;` | 横方向の DPI |
+| `dpiY` | `&nbsp;` | 縦方向の DPI |
+
+**解説**
+
+DPI が変わった
+
+ウィンドウの DPI が変わったときに発生します
+( 要 [Window.registerExEvent](Window.md#registerexevent) )。
+SDL3 系ビルドでは表示倍率を `96 × 倍率` に換算して渡します。
+
+---
+
+### onDisplayChanged
+
+イベント
+
+**解説**
+
+画面構成が変わった
+
+画面の解像度やモニタの構成が変わったときに発生します
+( 要 [Window.registerExEvent](Window.md#registerexevent) )。
+
+---
+
+### onDeviceChanged
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `arrival` | `&nbsp;` | 接続なら真、取り外しなら偽 |
+
+**解説**
+
+入力デバイスが抜き差しされた
+
+( 要 [Window.registerDeviceChange](Window.md#registerdevicechange) )
+
+---
+
+### onPaste
+
+イベント
+
+**解説**
+
+貼り付けの指示
+
+外部 ( ランチャ等 ) から貼り付けを指示されたとき ( `WM_PASTE` ) に発生します。
+WINVER ビルドのみです。
 
 ---
 
@@ -3112,6 +3660,13 @@ exe や dll の場合は署名はファイルに内臓されます。xp3 など�
 
 Window拡張
 
+※本体の Window にも、最大化 / 最小化 / 復帰 (maximize / minimize / showRestore /
+maximized / minimized)、矩形 (getWindowRect / getClientRect / setClientRect /
+getNormalRect)、disableResize / disableMove、registerExEvent / registerDeviceChange
+と拡張イベントが入っています (SDL3 系ビルドでも利用可)。
+本プラグインを読み込むと、これらはプラグイン版で上書きされます。
+新しく書くスクリプトは本体版を前提にしてください。
+
 ### メンバー一覧
 
 #### プロパティ
@@ -3511,6 +4066,9 @@ true を返すと最大化を許可しない
 **解説**
 
 ■拡張イベント：最大化を許可するかどうか確認
+
+※本体版は止め方が異なります。本体版は super.onMaximizeQuery(false) を呼ぶと止まり、
+戻り値は見ません ([Window.onMaximizeQuery](Window.md#onmaximizequery) を参照)。
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: krkrz-repl
-description: 吉里吉里Z (krkrz) の SDL3 / WINVER ビルドを REPL 経由でエージェントから駆動するためのリファレンス。krkrz を起動して TJS スクリプトを評価・検証・デバッグする、startup.tjs を介さず明示的に処理を開始する、入力イベント (キー/マウス) を注入する、画面をキャプチャして目視確認する、Elements ダイアログを観測・操作する、例外やダイアログ表示をコンソールで観測する、といった場面で使う。**外部エージェントは console(CONIN$) に打てないので -replfile ファイルチャネルが本命**。起動フラグ (-repl / -replfile / -nostartup / -loglevel / -display)、ファイルチャネルのプロトコル、Agent API (入力注入 / captureScreen / dialogs / dialogClick)、ドットコマンド (.cap/.dlg/.click/.mem 等)、REPL 駆動時の挙動変更 (例外で即終了しない / inform と例外ダイアログがコンソールに出る) を網羅。TJS2 言語仕様そのものは skill `tjs2`、本体クラス API は skill `krkrz` を参照。
+description: 吉里吉里Z (krkrz) の SDL3 / WINVER ビルドを REPL 経由でエージェントから駆動するためのリファレンス。krkrz を起動して TJS スクリプトを評価・検証・デバッグする、startup.tjs を介さず明示的に処理を開始する、入力イベント (キー/マウス) を注入する、画面をキャプチャして目視確認する、Elements ダイアログを観測・操作する、例外やダイアログ表示をコンソールで観測する、といった場面で使う。**外部エージェントは console(CONIN$) に打てないので -replfile ファイルチャネルが本命**。起動フラグ (-repl / -replfile / -nostartup / -loglevel / -display / -ignoremouse)、ファイルチャネルのプロトコル、Agent API (入力注入 / captureScreen / dialogs / dialogClick)、ドットコマンド (.cap/.dlg/.click/.mem 等)、REPL 駆動時の挙動変更 (例外で即終了しない / inform と例外ダイアログがコンソールに出る) を網羅。TJS2 言語仕様そのものは skill `tjs2`、本体クラス API は skill `krkrz` を参照。
 ---
 
 # krkrz REPL 駆動リファレンス
@@ -61,6 +61,15 @@ SDL3 専用として残るのは起動時 UserConfig UI (`-userconf`、ゲーム
 | `-nostartup` | startup.tjs の自動実行を抑止。window 無し起動でも即終了しない。明示的にスクリプトを呼んで初めて処理が始まる。`-nostartup=no/off/false/0` で無効。 |
 | `-loglevel=info` | ログレベル。コンソールに出る量を制御。`MASTER` ビルドだと既定 WARNING。 |
 | `-display=<番号\|名前>` | 起動するディスプレイ (モニタ) の指定。**マルチディスプレイ環境でメインディスプレイを占有せずに検証したいときに使う**。番号は 1 origin (Windows の `\\.\DISPLAYn` の n)、名前はモニタ名の部分一致、`primary` も可。`-display=list` で一覧をログ出力。WINVER / SDL3 両対応。 |
+
+> ⚠ **`-replweb` の既定ポート 8899 は PC 全体で 1 つ**。 別のセッション
+> (あるいは user 本人) の krkrz が先に握っていると、 後から起動した自分の
+> アプリはポートを取れないのに **自分のログには `listening on http://127.0.0.1:8899/` が出る**ので気付けず、 `curl` は
+> **相手のアプリを駆動する**。 検証で起動するときは **`-replweb=<固有ポート>` を明示**すること
+> (ブラウザを開かせたくなければ `-replwebopen=no` も)。 `-replfile` の
+> チャネルは自分のディレクトリなので必ず自分のアプリに届く — **HTTP とファイルチャネルで
+> 結果が食い違ったらこれを疑う**。 確定は `Get-CimInstance Win32_Process -Filter "Name='krkrz64.exe'"` で
+> ExecutablePath / CommandLine を見る。
 
 ### WebServer クラス (`-replweb` の拡張登録口)
 
@@ -142,24 +151,32 @@ data ディレクトリを使うなら **絶対パス**で渡す。相対 `data/
 - **System.confirm / Storages.selectFile / Storages.selectDirectory → エージェント応答**:
   REPL 中はネイティブモーダルを出さず、下記「モーダル応答チャネル」でエージェントが
   実際に応答を返せる (応答口が無ければ confirm は既定 Yes、選択はネイティブへ)。
-  `inputString` は本体未実装 (将来対応予定)。
+  `System.inputString` も本体実装済みでこのチャネルに乗る (2026-09-25 実測)。
 
-## モーダル応答チャネル (confirm / ファイル選択)
+## モーダル応答チャネル (confirm / 文字列入力 / 選択肢 / ファイル選択)
 
-`-replfile=<dir>` 駆動中、本体が `System.confirm` / `Storages.selectFile` /
-`Storages.selectDirectory` を実行すると、**cmd/resp とは別の専用ファイル対**で
+`-replfile=<dir>` 駆動中、本体が `System.confirm` / `System.inputString` / `System.choice` /
+`Storages.selectFile` / `Storages.selectDirectory` を実行すると、**cmd/resp とは別の専用ファイル対**で
 応答を求めてくる。メイン実行はブロックするが、応答は別プロセス (エージェント) が
 直接書くのでデッドロックしない。
 
 プロトコル (`<dir>` 配下、cmd を投げた後):
 1. 本体が要求 JSON を `<dir>/modal` に書く。例:
    - `{"type":"confirm","caption":"確認","text":"続行?"}`
+   - `{"type":"inputString","caption":"題名","prompt":"入力してください","default":"きてい"}`
+   - `{"type":"choice","caption":"確認","text":"保存しますか?","choices":["yes","no","cancel"],"default":2}`
    - `{"type":"selectFile","name":"","title":"開く","save":false}`
    - `{"type":"selectDirectory","name":"","title":"フォルダ","save":false}`
 2. エージェントは `modal` の出現を検知し、応答を **`<dir>/modalresp`** に書く
    (プレーン文字列):
-   - confirm         : `yes` / `no`
+   - confirm         : `yes` `y` `1` `true` `ok` が真、**それ以外は偽**
+   - inputString     : `ok<改行><入力値>` / `cancel` 単独でキャンセル (void が返る)
+   - choice          : 選んだ要素の文字列 (大小文字は区別しない) か index。空 / 該当しない値 = `default`
    - selectFile/Dir  : 返すパス (直接入力でよい) / 空文字列 = キャンセル
+
+   ⚠ **種別ごとにキャンセルの書き方が違う**。汎用の 1 文字列では済まないので
+   `modal` の `"type"` を見て振り分けること (`cancel` を selectFile に返すと
+   「cancel という名前のパスを選んだ」ことになる)。
 3. 本体が `modalresp` を読み、`modal`/`modalresp` を削除して処理続行 → 通常どおり
    `resp` に最終結果が出る。
 
@@ -171,9 +188,17 @@ data ディレクトリを使うなら **絶対パス**で渡す。相対 `data/
 ```powershell
 # cmd 送信後
 while (-not (Test-Path "$chan/modal")) { Start-Sleep -Milliseconds 30 }
-[IO.File]::WriteAllText("$chan/modalresp", "yes")   # or パス / "no" / ""
+[IO.File]::WriteAllText("$chan/modalresp", "yes")   # or "ok`n<値>" / "cancel" / パス / "no" / ""
 # この後 $chan/resp が出るので通常どおり読む
 ```
+
+⚠ **答えないと `resp` は返らない**。本体は既定 30 秒 (`-replmodaltimeout=<秒>`、0 で無限)
+待ってから TJS 例外を投げる。モーダルを出しうる式を投げるハーネスは、`resp` 待ちループの中で
+`modal` も見て、出たら種別に応じて答えること。
+
+スクリプト側から「いま REPL で駆動されているか」は `System.replActive` (読み取り専用) で分かる。
+⚠ WINVER では REPL が起動スクリプトの後に有効になるので、`startup.tjs` の実行中はまだ偽
+(SDL3 は起動時から真)。起動直後の判定は `System.getArgument("-replfile")` を併用する。
 
 ## ファイルチャネル駆動 (エージェント推奨)
 
@@ -223,6 +248,7 @@ function Send-Cmd($script, $timeoutMs = 5000) {
 | `Agent.click(x,y[,btn[,shift]])` / `Agent.wheel(delta,x,y)` | クリック (move+down+up) / ホイール(120単位) |
 | `Agent.keyDown/keyUp/keyPress(vk[,shift])` | キー (vk は `VK_*` 数値、例 `VK_RETURN`) |
 | `Agent.text(str)` | アクティブダイアログへテキスト入力 (input_box 等) |
+| `Agent.ignoreRealMouse` | 真にすると**実マウス入力を捨てる**(Agent の注入だけ通す)。起動オプション `-ignoremouse=yes` でも設定可。人がポインタを動かしても測定が汚れない。⚠有効中は人の手でマウス操作できない |
 | `Agent.dialogs()` | アクティブダイアログ配列 `%[index,modal,active,screen,focused,x,y,w,h]` |
 | `Agent.closeDialog()` / `Agent.closeAllDialogs()` | 最前面 / 全ダイアログを閉じる |
 | `Agent.dialogClick(i,id)` / `Agent.dialogFocus(i,id)` | id 指定で起動 / フォーカス (座標不要) |
@@ -300,6 +326,7 @@ Scripts.execStorage("mytest.tjs");      // data/ 配下 (autopath)
 | `.depth [N]` / `.compact [on/off]` | 結果の pretty-print 設定 |
 | `.mem` | メモリ要約 1 行 (File/Bitmap/Sound/Global/Process/SysAlloc) |
 | `.memdump` | 全メモリ統計をログへ (`TVPHeapDump`) |
+| `.memsites [N] [関数名の一部]` | 生存確保を呼び出し元別に上位 N 件 (診断ビルド + `-memstatsite` 起動時のみ) |
 | `.sysalloc` | システムアロケータ情報 |
 | `.filecache` / `.imagecache` | ファイル/画像キャッシュ一覧をログへ |
 | `.memoverlay [on/off]` / `.padoverlay [on/off]` | 画面オーバレイ表示トグル |

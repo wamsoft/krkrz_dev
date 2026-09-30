@@ -44,6 +44,7 @@
  *
  * テーマ・表示言語・[ElementsDialog.registerImage](ElementsDialog.md#registerimage)
  * の実行時画像ストアはプロセス全体で共有され、パネルにも反映されます。
+ * @experimental Elements ベースの UI 機構はまだ形が固まっていません。イベント / 変数まわりの API は ElementsDialog と揃えて変わることがあります。
  */
 class ElementsPanel {
 	/**

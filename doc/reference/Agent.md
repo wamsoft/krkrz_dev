@@ -1,5 +1,13 @@
 # Agent
 
+!!! warning "実験中 ( 安定保証の対象外 )"
+    この API はまだ形が固まっていません。**予告なく変更・削除される
+    ことがあります** ( 非互換変更でもメジャー番号は上がりません )。
+    版の上げ方は [バージョン運用](https://github.com/wamsoft/krkrz_develop/blob/master/doc/Versioning.md)
+    を参照してください。
+
+    開発・検証用の API です。REPL / デバッグ窓の整備にあわせて変わります。
+
 Agent クラスはエージェント駆動 (テスト/自動化) のための API を提供するクラスです。このクラスからオブジェクトを作成することはできません。System と同様に `Agent.click(...)` のように直接呼び出して使用します。
 
 このクラスは、入力イベント ( マウス / キー / ホイール ) の注入、実画面のキャプチャ、Elements ダイアログの観測・操作を行うための機能を提供します。外部エージェントから吉里吉里を駆動して動作を検証する用途を想定しています。
@@ -9,6 +17,10 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 座標はすべて論理座標で指定します。`shift` 引数はシフト状態のビットフラグで、既定値は 0 です。`button` 引数は 0 = 左ボタン / 1 = 右ボタン / 2 = 中ボタンです。`vk` 引数は仮想キーコードの数値です。ダイアログ系のメソッド ( `dialogs` / `dialogTree` / `closeDialog` / `closeAllDialogs` / `dialogClick` / `dialogFocus` / `text` ) は Elements を有効にしたビルドでのみ動作します。
 
 ## メンバー一覧
+
+### プロパティ
+
+- [ignoreRealMouse](#ignorerealmouse)
 
 ### メソッド
 
@@ -22,6 +34,7 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 - [keyPress](#keypress)
 - [text](#text)
 - [dialogs](#dialogs)
+- [imeStatus](#imestatus)
 - [dialogTree](#dialogtree)
 - [closeDialog](#closedialog)
 - [closeAllDialogs](#closealldialogs)
@@ -29,6 +42,30 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 - [dialogFocus](#dialogfocus)
 - [captureScreen](#capturescreen)
 - [lastCapture](#lastcapture)
+
+---
+
+### ignoreRealMouse
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `Integer`
+
+**解説**
+
+実マウス入力を捨てる ( 動作テスト用 )
+
+真にすると**実マウスの入力をすべて捨て**、Agent から注入された入力だけを
+通します。自動テストで「入力は全部 Agent が出す」前提を作るためのもので、
+人がうっかりポインタを動かしても測定が汚れません。
+
+起動オプション `-ignoremouse=yes` を付けると最初から有効です。
+
+hover 判定やカーソル参照は**仮想カーソル位置**を見るようになっており、
+Agent の注入でその位置が更新されるので、有効にしてもホバーやフォーカスは
+従来どおり動きます。
+
+⚠ 有効にすると**人の手ではマウス操作できなくなります**。検証用です。
 
 ---
 
@@ -226,7 +263,17 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 **戻り値**
 
 ダイアログ記述子の配列が返ります。各要素は
-`%[index, modal, active, screen, focused, x, y, w, h]` 形式の辞書です。
+`%[index, modal, active, screen, focused, textFocus, x, y, w, h]` 形式の辞書です。
+
+`textFocus` は「テキスト入力ウィジェット ( input_box 等 ) が編集フォーカスを
+持っているか」で、ソフトキーボードや IME を開くかどうかの判断に使われている値
+そのものです。日本語入力が始まらない等の切り分けに使えます。
+
+`screen` はフロー ( navigator ) の現画面名で、単発のダイアログでは空です。
+`focused` はフォーカス中のウィジェット id ですが、**id を追跡する仕掛けを持つ
+画面でのみ埋まります**。空だからフォーカスが無い、という意味ではありません
+( フォーカスの有無を見たいときは `textFocus` か
+[Agent.dialogTree](Agent.md#dialogtree) を使ってください )。
 
 **解説**
 
@@ -235,6 +282,59 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 現在アクティブな Elements ダイアログの記述子の配列を返します。
 
 **関連:** [Agent.dialogTree](Agent.md#dialogtree)
+
+---
+
+### imeStatus
+
+メソッド
+
+**戻り値**
+
+各ウィンドウの状態を表す辞書の配列が返ります。主な項目は次のとおりです。
+
+`contextAttached` … 入力コンテキストが結び付いているか。**偽なら IME は完全に
+無効**で、[Window.imeMode](Window.md#imemode) も半角/全角キーも効きません。
+`conversion` も 0 になります。
+
+偽になるのは、フォーカスのあるレイヤの
+[imeMode](Layer.md#imemode) が `imDisable` のとき (既定値です) か、
+外部から `Window.resetImeContext(false)` 等で切られたときです。
+前者は**正常な状態**で、`imDisable` 以外のレイヤへフォーカスが移れば
+自動的に結び直されます。テキスト欄に入っているのに偽のままなら後者を疑います。
+
+`hasFocus` … このウィンドウがキーボードフォーカスを持つか。偽の間は IME モードの
+適用そのものが行われません。
+
+`keyTrapperIsSelf` … 偽の場合、`trapKey` が真の別ウィンドウのモードが適用されます。
+
+`imeMode` … 実際に適用しているモード。`defaultImeMode` は
+[Window.imeMode](Window.md#imemode) が返す既定値です。
+
+`overrideActive` … ElementsDialog のテキスト欄が IME を握っているか。
+`contextForced` はそのために入力コンテキストを結び直したか。
+
+`areaX` / `areaY` / `areaW` / `areaH` / `areaCursor` … IME の変換 / 変換候補
+ウィンドウを寄せるために最後にホストへ渡した矩形 ( ウィンドウクライアント
+座標 px ) と、その左端からのキャレット相対 x です。`areaValid` が偽なら
+テキスト欄に編集フォーカスがありません。
+
+ほかに `visible` / `trapKeys` / `attentionPoint` / `controlImeState` /
+`disabledBySelf` / `imeAvailable` / `open` / `savedImeMode` / `conversion` /
+`sentence` / `index` / `isMain` があります。SDL3 ビルドでは
+`textInputActive` と上記の area 系のみが入ります。
+
+**解説**
+
+IME 状態の取得
+
+ウィンドウごとの IME 関連の状態を返します。「入力欄にキャレットは出ているのに
+日本語が打てない」といった不具合の切り分け用です。
+
+Windows ネイティブ ( WINVER ) ビルドでのみ中身が入ります。他のビルドでは
+常に空の配列が返ります。
+
+**関連:** [Agent.dialogs](Agent.md#dialogs)
 
 ---
 

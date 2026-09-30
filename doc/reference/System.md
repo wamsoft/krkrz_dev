@@ -56,6 +56,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [padAxisLeftTrigger](#padaxislefttrigger)
 - [padAxisRightTrigger](#padaxisrighttrigger)
 - [padEnabled](#padenabled)
+- [replActive](#replactive)
 
 ### メソッド
 
@@ -66,6 +67,7 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [inform](#inform)
 - [confirm](#confirm)
 - [inputString](#inputstring)
+- [choice](#choice)
 - [getTickCount](#gettickcount)
 - [getKeyState](#getkeystate)
 - [registerHotKey](#registerhotkey)
@@ -106,6 +108,16 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [stopRumblePad](#stoprumblepad)
 - [getLicenseList](#getlicenselist)
 - [getLicenseText](#getlicensetext)
+- [readEnvValue](#readenvvalue)
+- [writeEnvValue](#writeenvvalue)
+- [expandEnvString](#expandenvstring)
+- [urlencode](#urlencode)
+- [urldecode](#urldecode)
+- [getAboutString](#getaboutstring)
+- [breathe](#breathe)
+- [getMonitorInfo](#getmonitorinfo)
+- [getDisplayMonitors](#getdisplaymonitors)
+- [getSystemMetrics](#getsystemmetrics)
 
 ---
 
@@ -1137,6 +1149,26 @@ PlayStation / Xbox 系はどちらの方式でも結果が同じです。
 
 ---
 
+### replActive
+
+プロパティ \ アクセス: `r`
+
+**型**: `Boolean`
+
+**解説**
+
+REPL で駆動されているか
+
+REPL ( `-repl` / `-replfile` / `-replweb` ) が有効なら真です。読み取り専用。
+エージェントに駆動されている間だけ処理を変える ( 確認ダイアログの代わりに
+[System.choice](System.md#choice) のモーダル応答チャネルを使う等 ) 判定に使います。
+REPL を含まないビルド ( MASTER 等 ) では常に偽です。
+
+WINVER ビルドでは REPL が起動スクリプトの後に有効になるため、`startup.tjs` の実行中は
+まだ偽です。起動直後に判定したい場合は `System.getArgument("-replfile")` 等を併用してください。
+
+---
+
 ### terminate
 
 メソッド
@@ -1269,8 +1301,11 @@ Continuous ハンドラの削除
 ユーザに「はい / いいえ」を問うためのモーダルウィンドウを表示します
 ( [System.inform](System.md#inform) の Yes/No 版 )。表示中は他のウィンドウは
 操作できません。
-REPL / ヘッダレス駆動中はブロッキングダイアログを表示せず、
-内容をログへ出力して既定応答 ( 真 ) を返します。
+REPL のファイルチャネル ( `-replfile` ) で駆動中はブロッキングダイアログを
+表示せず、モーダル応答チャネルでエージェントの答えを受け取ります
+( `yes` / `y` / `1` / `true` / `ok` が真 )。
+
+**関連:** [System.choice](System.md#choice)
 
 ---
 
@@ -1301,6 +1336,47 @@ Elements ベースの入力ダイアログを表示します。プラットフ�
 ソフトウェアキーボード等に差し替えられる場合があります ( 未対応環境では void )。
 REPL 駆動中はブロッキングダイアログを出さず、REPL の応答チャネル経由で
 入力を受け取ります ( 応答口が無い場合は default を返します )。
+
+---
+
+### choice
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `caption` | `&nbsp;` | ダイアログのタイトルを指定します。 |
+| `text` | `&nbsp;` | 本文を指定します。 |
+| `choices` | `&nbsp;` | ボタンの文言の配列を指定します ( 1 個以上。空の配列は例外になります )。 |
+| `default` | `0` | 既定のボタンの番号を指定します ( 範囲外は 0 )。 |
+
+**戻り値**
+
+選ばれたボタンの番号 ( choices の添字 ) が返ります。
+
+**解説**
+
+選択肢から 1 つ選ぶ
+
+選択肢のボタンを並べたモーダルダイアログを表示し、選ばれたボタンの番号を返します
+( 「保存 / 保存しない / キャンセル」のような 3 択など、
+[System.confirm](System.md#confirm) の 2 択で表せない問い合わせに使います )。
+```tjs
+var r = System.choice("確認", "変更を保存しますか?", ["保存", "保存しない", "キャンセル"], 2);
+if(r == 0) save(); else if(r == 2) return;
+```
+WINVER ビルドは TaskDialog、SDL3 系ビルドは Elements のダイアログ ( 使えない場合は OS の
+メッセージボックス ) で表示します。既定のボタンにフォーカスが置かれ、Esc や閉じるボタンで
+閉じた場合も既定の番号が返ります。
+
+REPL のファイルチャネル ( `-replfile` ) で駆動中はダイアログを出さず、モーダル応答チャネルに
+`{"type":"choice","caption":…,"text":…,"choices":[…],"default":n}` を出して
+エージェントの答えを待ちます。答えは選んだ要素の文字列 ( 大文字小文字は区別しない ) か番号で、
+空や該当しない値のときは既定の番号になります。
+
+**関連:** [System.confirm](System.md#confirm) / [System.replActive](System.md#replactive)
 
 ---
 
@@ -1382,10 +1458,7 @@ up は key のみで照合して対応する down を消費したキーは必ず
 ( 修飾キーを先に離しても片割れが入力レイヤへ漏れません )。コールバックが
 例外を投げてもポンプは壊れず、ログへ残して続行します。
 
-**プラットフォームによる差異**
-
-フックは SDL3 系ビルドのイベントポンプ入口のみに配線されています。WINVER
-( Windows ネイティブ ) ビルドでは登録しても発火しません。
+WINVER ( Windows ネイティブ ) ビルドと SDL3 系ビルドの双方で動作します。
 
 ダイアログにフォーカスを渡したまま特定のキーだけホスト側で受けたい場合は、
 用途の違う [ElementsDialog.registerHotKey](ElementsDialog.md#registerhotkey) ( ダイアログへ
@@ -1573,7 +1646,7 @@ void が返ります。
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `key` | `&nbsp;` | チェックを行うためのキー文字列を指定します。同じキー文字列をほかの<br>実行中の吉里吉里がこのメソッドに指定していた場合、false が戻ります。<br>キー文字列には基本的には TJS の変数の命名規則と同じ文字のみが使えると<br>考えてください。<br>キー文字列は十分にユニークな物である必要があります。 |
+| `key` | `&nbsp;` | チェックを行うためのキー文字列を指定します。同じキー文字列をほかの<br>実行中の吉里吉里がこのメソッドに指定していた場合、false が戻ります。<br>キー文字列には基本的には TJS の変数の命名規則と同じ文字のみが使えると<br>考えてください。<br>キー文字列は十分にユニークな物である必要があります。<br>WINVER ビルドは名前付き Mutex、SDL3 系ビルドは一時領域のロックファイルを<br>OS の排他ロックで掴む形で実現しています。どちらもプロセスが終了すれば<br>( 異常終了でも ) 解放されます。 |
 
 **戻り値**
 
@@ -2314,6 +2387,269 @@ GL テクスチャメモリのピーク値のリセット
 
 ---
 
+### readEnvValue
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 環境変数名を指定します。 |
+
+**戻り値**
+
+環境変数の値が返ります。設定されていない場合は void が返ります。
+
+**解説**
+
+環境変数の取得
+
+WINVER / SDL3 系ビルドの双方で利用できます。
+
+**関連:** [System.writeEnvValue](System.md#writeenvvalue) / [System.expandEnvString](System.md#expandenvstring)
+
+---
+
+### writeEnvValue
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | 環境変数名を指定します。 |
+| `value` | `&nbsp;` | 設定する値を指定します。空文字列を指定するとその環境変数を消します。 |
+
+**戻り値**
+
+設定前の値が返ります。設定されていなかった場合は void が返ります。
+
+**解説**
+
+環境変数の設定
+
+設定はこのプロセス ( と、ここから起動する子プロセス ) にだけ効きます。
+
+**関連:** [System.readEnvValue](System.md#readenvvalue)
+
+---
+
+### expandEnvString
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `text` | `&nbsp;` | 展開する文字列を指定します。 |
+
+**戻り値**
+
+展開後の文字列が返ります。
+
+**解説**
+
+環境変数の展開
+
+文字列中の `%NAME%` を環境変数の値に置き換えます。
+対応する環境変数が無い `%NAME%` はそのまま残り、`%%` は `%` 1 個になります
+( Win32 の ExpandEnvironmentStrings と同じ規則 )。
+
+**関連:** [System.readEnvValue](System.md#readenvvalue)
+
+---
+
+### urlencode
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `str` | `&nbsp;` | 変換する文字列を指定します。 |
+| `utf8` | `true` | 真 ( 既定 ) なら UTF-8 のバイト列として、偽ならシステムの<br>マルチバイト文字列として変換します。 |
+
+**戻り値**
+
+変換後の文字列が返ります。
+
+**解説**
+
+URL エンコード
+
+RFC 3986 の非予約文字 ( 英数字と `-` `_` `.` `~` ) 以外を `%XX` に変換します。
+空白も `%20` になります ( `+` にはなりません )。
+```tjs
+System.urlencode("a b&c=d");   // "a%20b%26c%3Dd"
+System.urlencode("あ");         // "%E3%81%82"
+```
+
+**関連:** [System.urldecode](System.md#urldecode)
+
+---
+
+### urldecode
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `str` | `&nbsp;` | 変換する文字列を指定します。不正な `%XX` を含む場合は例外になります。 |
+| `utf8` | `true` | 真 ( 既定 ) なら UTF-8 として、偽ならシステムのマルチバイト文字列として<br>解釈します。 |
+
+**戻り値**
+
+変換後の文字列が返ります。
+
+**解説**
+
+URL デコード
+
+`%XX` を元のバイトに戻して文字列にします。`+` は空白に戻しません。
+
+**関連:** [System.urlencode](System.md#urlencode)
+
+---
+
+### getAboutString
+
+メソッド
+
+**戻り値**
+
+バージョン情報の文字列が返ります。
+
+**解説**
+
+バージョン情報文字列の取得
+
+起動オプション `-about` で表示されるのと同じ、エンジンと同梱ライブラリの
+バージョン情報のテキストを返します。
+
+---
+
+### breathe
+
+メソッド
+
+**解説**
+
+メッセージの処理
+
+長い処理の途中で呼ぶと、OS のメッセージだけを処理してウィンドウが無反応に
+見えないようにします。処理している間は TJS のイベントは配送されません。
+
+---
+
+### getMonitorInfo
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `nearest` | `&nbsp;` | 対象に重なるモニタが無いとき、最も近いモニタを返すなら真を指定します。 |
+| `x` | `&nbsp;` |  |
+| `y` | `&nbsp;` |  |
+| `w` | `&nbsp;` |  |
+| `h` | `&nbsp;` |  |
+
+**戻り値**
+
+モニタ情報の辞書が返ります。
+
+**解説**
+
+モニタ情報の取得
+
+モニタの情報を次の形の辞書で返します。矩形は画面座標です。
+```tjs
+%[ name:"\\.\DISPLAY1", primary:1,
+monitor:%[ x:0, y:0, w:3840, h:2160 ],   // モニタ全体
+work:   %[ x:0, y:0, w:3840, h:2064 ] ]  // タスクバー等を除いた作業領域
+```
+引数の数で対象が変わります。
+
+| 引数 | 対象 |
+|---|---|
+| なし | プライマリモニタ |
+| `(nearest, window)` | そのウィンドウのあるモニタ |
+| `(nearest, x, y)` | その点のあるモニタ |
+| `(nearest, x, y, w, h)` | その矩形と重なるモニタ |
+
+`nearest` が真なら最も近いモニタを、偽なら重なるモニタが無いとき void を返します。
+
+WINVER / SDL3 系ビルドの双方で利用できます。モニタの概念が無い環境
+( 常にフルスクリーンの機種等 ) では void が返ります。
+
+**関連:** [System.getDisplayMonitors](System.md#getdisplaymonitors)
+
+---
+
+### getDisplayMonitors
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` | 矩形の左端を指定します ( 省略可 )。 |
+| `y` | `&nbsp;` | 矩形の上端を指定します ( 省略可 )。 |
+| `w` | `&nbsp;` | 矩形の幅を指定します ( 省略可 )。 |
+| `h` | `&nbsp;` | 矩形の高さを指定します ( 省略可 )。 |
+
+**戻り値**
+
+モニタ情報の配列が返ります。モニタの概念が無い環境では空の配列になります。
+
+**解説**
+
+モニタ一覧の取得
+
+全モニタの情報 ( 形は [System.getMonitorInfo](System.md#getmonitorinfo) と同じ ) を
+配列で返します。矩形を指定すると、その矩形と重なるモニタだけを返し、
+重なった部分を各要素の `intersect` ( `%[ x, y, w, h ]` ) に入れます。
+
+SDL3 系ビルドのモニタの並びはその時点のものです。抜き差しで変わるので、
+添字を保存して使わないでください。
+
+**関連:** [System.getMonitorInfo](System.md#getmonitorinfo)
+
+---
+
+### getSystemMetrics
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | メトリクスの名前を指定します。 |
+
+**戻り値**
+
+値が返ります。知らない名前の場合は void が返ります。
+
+**解説**
+
+システムメトリクスの取得
+
+Win32 の GetSystemMetrics の値を名前で取得します。名前は `SM_` を除いた部分
+( `"CXSIZEFRAME"` / `"CYCAPTION"` / `"CMONITORS"` 等。大文字小文字は問いません ) です。
+
+WINVER ビルド専用です。SDL3 系ビルドにはこのメソッドはありません。
+
+---
+
 ## プラグイン拡張: process
 
 ### メンバー一覧
@@ -2597,6 +2933,9 @@ System クラスへの標準入出力拡張
 
 環境変数を取得
 
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [System.readEnvValue](System.md#readenvvalue) を参照してください。
 レジストリの読み込みは、組み込みの System.readRegValue を使用のこと
 
 ---
@@ -2620,6 +2959,10 @@ System クラスへの標準入出力拡張
 
 環境変数を設定
 
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [System.writeEnvValue](System.md#writeenvvalue) を参照してください。
+
 ---
 
 ### expandEnvString
@@ -2639,6 +2982,10 @@ System クラスへの標準入出力拡張
 **解説**
 
 文字列内の「%～%」を環境変数で展開
+
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [System.expandEnvString](System.md#expandenvstring) を参照してください。
 
 ---
 
@@ -2661,6 +3008,10 @@ URLEncodeされた文字列
 
 URLEncode処理を行う
 
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [System.urlencode](System.md#urlencode) を参照してください。
+
 ---
 
 ### urldecode
@@ -2682,6 +3033,10 @@ URLDecodeされた文字列
 
 URLDecode処理を行う
 
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [System.urldecode](System.md#urldecode) を参照してください。
+
 ---
 
 ### getAboutString
@@ -2695,6 +3050,10 @@ URLDecode処理を行う
 **解説**
 
 Ctrl+F12で表示される環境情報テキストを取得する
+
+※本体に同名のメソッドがある環境では本体版が使われます
+(本プラグインは本体に無い旧環境でのみ補完登録します)。
+仕様は本体の [System.getAboutString](System.md#getaboutstring) を参照してください。
 
 ---
 
@@ -2972,6 +3331,10 @@ setDefaultDllDirectoriesでllsUserDirsフラグを立てておくこと
 ## プラグイン拡張: windowEx
 
 System拡張
+
+※本体の System にも getMonitorInfo / getDisplayMonitors / breathe /
+readEnvValue / expandEnvString (WINVER / SDL3 系) と getSystemMetrics (WINVER) が
+入っています。本プラグインを読み込むと、これらはプラグイン版で上書きされます。
 
 ### メンバー一覧
 

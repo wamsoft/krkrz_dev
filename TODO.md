@@ -8,6 +8,8 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | バージョン番号の扱い | [src/core/doc/Versioning.md](src/core/doc/Versioning.md) |
 | 画面転送コスト (計測・読み方) | [src/core/doc/ScreenTransfer.md](src/core/doc/ScreenTransfer.md) |
 | Elements (レイアウト/ダイアログ) の要修正 | [TODO-elements.md](TODO-elements.md) |
+| Elements の入力リピート / キャッシュ / 描画の精査 | [src/core/doc/ElementsAudit.md](src/core/doc/ElementsAudit.md) |
+| 仮想カーソル位置 (提案) | [src/core/doc/VirtualCursor.md](src/core/doc/VirtualCursor.md) |
 | デモ整備 | [data/ROADMAP.md](data/ROADMAP.md) |
 | Window のサイズ/位置/ズーム/ビューポート仕様 | [src/core/doc/WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | Layer / Bitmap / ImageFunction の統合 | [src/core/doc/ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
@@ -21,19 +23,35 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 完了したものは末尾の「完了 (記録として残す)」へ移す。
 
-## 現況 (2026-09-06 時点)
+## 現況 (2026-09-11 時点)
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 12 | Elements/UI 1 (低) / エンジン基盤 8 / ビルド・運用 3 |
+| 予定・未着手 | 16 | Elements/UI 4 / エンジン基盤 9 / ビルド・運用 3 (内訳: 中 8 / 低 7 / 検討中 1) |
 | 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
-| 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 |
-| 低優先・保留 | 9 | 単発の小さいもの。着手順は問わない |
+| 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
+| 低優先・保留 | 10 | 単発の小さいもの。着手順は問わない |
 | デモ整備 | 10 + 1 | 未着手デモは多くが資材待ち |
 
-**優先度「高」の項目は現在ゼロ**。最後まで残っていた
-「画面データ側で UI を完結させる (不足 4 点)」は 2026-09-05 に elements 側で
-実装が揃い、2026-09-06 に engine 側 (submodule ref + TJS API 公開) も済んだ。
+### 次のリリースで移行メモに書くこと
+
+[Versioning.md](src/core/doc/Versioning.md) の「移行メモ」= サマリとタグメッセージの冒頭に置く一覧。 リリース枝へ反映するときに拾う。
+
+- (現在なし)
+
+2.4.0 (2026-09-30) までの分は krkrz.git のサマリ `3af0ed63` と タグ `v2.4.0` の「■ 移行メモ」へ載せた
+(IME 候補窓の追従 / KAGEX の IME 無効化への対処 / Elements のテキスト欄で IME を開く / ogg の float 出力 /
+24・32bit WAV / opus 先頭欠け / doGrayScale の重み / RegExp.index / imDisable の仕様どおり化 /
+タッチの中心座標 / %e・%g / ムービー音声の音量カーブ / 仮想カーソル / fstat・systemEx の登録方式 /
+registerHotKey の WINVER 配線)。
+
+**優先度「高」の項目は現在ゼロ**。2026-09-11 の Elements 仕様精査
+([ElementsAudit.md](src/core/doc/ElementsAudit.md)) の 7 項目と、その作業中に
+判明した [仮想カーソル位置の導入](src/core/doc/VirtualCursor.md) は
+いずれも 2026-09-12 に対応済み。
+それ以前から残っていた「画面データ側で UI を完結させる (不足 4 点)」は
+2026-09-05 に elements 側で実装が揃い、2026-09-06 に engine 側
+(submodule ref + TJS API 公開) も済んでいる。
 
 > 「**overlay の出力先をホストのレイヤへ**」は 2026-09-01 に対応
 > (`ElementsPanel`)。overlay が常に最前面でレイヤツリーの外にいるという制約を
@@ -67,11 +85,25 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 低 | Elements の観測・操作 API を TJS へ公開 (残り) | **変数系は 2026-08-29 に公開済み** (`ElementsDialog.getVar` / `listVars` / `onVar` / `watchVars` = elements_modal の `get_var` / `list_vars` / `set_var_watcher` に対応。src/core `fcae740b`)。 残りは **navigator の `push` / `pop` / `replace` / `stack`** と `languages`。 要素を名指しで動かす instance 版は公開済み (`ElementsDialog.focus(id)` = 2026-09-02 / `activate(id)` = 2026-09-04。検証用の `Agent.dialogFocus` / `dialogClick` は従来どおり)。 用途は検証ツールから「この画面へ飛ぶ」を実装すること。 当たり判定やフォーカスナビの確認は実入力を流す API でないと意味が無い点に注意 |
 | ✅ | Elements: `input_box` にプログラム的フォーカスが効かない | **2026-09-02 に解決** (elements `de989d18`: `descend_focus_first` — composite 包みの内側へフォーカス連鎖を用意)。`initial_focus` / `focus_by_id` / `ElementsDialog.focus(id)` で編集フォーカス (キャレット + text 受理) になる。詳細 = [TODO-elements.md](TODO-elements.md) §3 |
 | ✅ | Elements: `input_box` の最大長と値の差し替え口が無い | **2026-09-02 に解決** (elements `de989d18`): `"max_chars"` (別名 `"maxlength"`、codepoint 単位、0/省略=無制限) を追加。既定値 (`"text"`/`"value"`) 入りは build 時全選択なので initial_focus からそのまま打つと置き換わる (差し替え口の代替)。詳細 = [TODO-elements.md](TODO-elements.md) §5-8 |
+| ✅ | Elements の IME: 変換候補窓のキャレット追従 | **対応済み**。elements に `overlay_session::focus_text_caret()` を新設し、engine が毎フレーム surface 座標→クライアント px へ直して WINVER は `ImmSetCompositionWindow`/`ImmSetCandidateWindow`、SDL3 は `SDL_SetTextInputArea` へ渡す。**SDL3 は上流の Windows バックエンドが同等の Imm 呼び出しを実装済みで fork は不要**だった (SDL2 の頃と違う)。残るは未確定文字列のインライン表示のみ (下記)。SSOT = [ElementsDialog.md](src/core/doc/ElementsDialog.md) 「変換ウィンドウの位置」 |
+| 低 | Elements の IME: 未確定文字列のインライン表示 | 変換中の文字列はアプリ側で描かず IME の窓に任せている。入力欄の中に直接出したい場合は `WM_IME_COMPOSITION` (GCS_COMPSTR) / SDL の `SDL_EVENT_TEXT_EDITING` を拾って elements のテキスト要素へ「未確定領域」として流す仕組みが要る。位置は追従済みなので実用上は困らない |
+| ✅ | SDL3 ビルドの IME が開かない — **現状問題なしと判断 (2026-09-12)** | 起票時は「SDL3 は `SDL_StartTextInput` でテキストイベントを有効にするだけで IME の開閉までは面倒を見ないので、Windows/SDL3 では Elements のテキスト欄に focus しても英数のまま」としていたが、**実運用で問題として顕在化していない**ため一旦クローズ。変換窓の位置追従は 2026-09-10 に対応済み (`focus_text_caret` → `SDL_SetTextInputArea`)。再発したら「focus 中だけ HWND から imm32 を直に叩く」か「SDL 側に口を足す」で再開する |
+| ✅ | Elements: cursor-warp の echo 判定が 2 層に重複 | **2026-09-12 対応**。判定を engine 側 1 箇所に寄せ、結果を `on_mouse_move(..., bool synthetic)` で session へ渡す形にした (elements_modal の `warp_issued` / `warp_target` / ±2px 照合を削除)。レイヤ座標と view 論理座標という倍率の違う 2 つの座標系へ同じ ±2 を当てていた構造が消えた。なお「踏むと直る」ことを実測できた類ではなく、食い違いの窓 (`present_scale=1/2` なら実誤差 1〜2px の範囲) を構造ごと消す修正。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §1 |
+| ✅ | Elements: warp の往復誤差で warp モードが勝手に切れる — **誤報だった (2026-09-12 取り下げ)** | 実マウスに触れていないつもりの走行で `warp guard: MISMATCH (d=3〜7)` が頻発したため新規バグとして起票したが、**実際には実マウスが動いていた**。`-navlog` に warp の通し番号と `SetCursorPos` 直後の `GetCursorPos` 読み戻しを足して切り分けたところ、マウス非接触なら倍率 1/1・1/2 とも `warp landed d=0,0` が 11/11、`warp guard` は 13/13 すべて match で、往復は厳密に一致していた。誤判断の原因は、サンプルの `mousemoves` カウンタを汚染判定に使ったこと — **パネル表示中はオーバーレイがマウス移動を消費してシーンまで届かない**ので 0 のままになる。cursor-warp まわりの測定は `warp guard: MISMATCH` の有無で汚染を判定すること。診断ログは有用なので残置。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §1-b |
+| ✅ | Elements: 一覧の更新コストが行数に比例する | **2026-09-12 対応**。真因は `list_rows_element::limits()` の毎フレーム全行走査だった (`view::draw` が無条件に `set_limits()` を呼ぶ cycfi 本体の作りのため、部分再描画でも木全体の limits が走る)。list の limits の戻り値は spec から計算していて子に依存しないので、この走査は純粋に副作用目的 — しかも `text_var` も一覧の «窓» も購読で更新されていて依存実装は見つからなかった。部分再描画中はダーティ矩形に掛かる行だけ一巡する形にして、**行数への比例が消えた** (us/raster: canvas 64 行 1059→304、vtile 64 行 904→93 = 約 10 倍)。実画面も 64 行が全行正しく描けることを確認済み。`list::draw` の可視判定も併せて修正済み。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §2 |
+| ✅ | Elements: アトラスキャッシュに解放の口が無い | **2026-09-12 対応**。elements_modal に `atlas_cache_stats` / `trim_atlas_cache` / `set_atlas_cache_budget` を足し、TJS へ `ElementsDialog.atlasCacheStats` (辞書) / `trimAtlasCache(budget=0)` / `atlasCacheBudget` として公開。実測: 72MB ぶんのアトラスを使う画面で、**閉じても 75,497,472 バイトが 1 バイトも減らず**、`trimAtlasCache(0)` で 0 になることを確認。⚠ 表示中の画面が使っているアトラスは参照が残るので捨てられない (場面の切れ目に呼ぶ)。残件 = 案件側で «どの場面の切れ目で呼ぶか» を決めること、予算 192MB の妥当性を実案件で見ること。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §3 |
+| ✅ | Elements: `text_metrics` キャッシュの全 clear | **2026-09-12 対応**。上限 (4096 件) 到達時に `cache.clear()` していたのを、直近の使用が古い順に 1/4 だけ捨てる形へ変更 (`last_use` + `nth_element`)。⚠ **デスクトップでは効果を計測できなかった** — 安定ラベル 120 + 変動 40 で上限を跨がせても、フレーム間のばらつき (平均の 1.5〜2.4 倍) が跨いだフレームの追加コスト (≒1ms) と同じ桁で埋もれる。崖が痛いのは「安定ラベルが大量 + churn がゆっくり」な通常のゲーム画面で、それは 4096 件到達まで数分かかり短い自動テストに載らない。全 clear は構造として working set を丸ごと捨てるので崖が原理的に残る一方、変更は 30 行で定常コストは不変、`measure_text` が高価な低速機では差が大きく出るはず、という理由で残す判断。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §4 |
+| 中 | Elements: `text_metrics` LRU 化の効果を実機で計測する | §4 の LRU 化はデスクトップの合成シナリオでは差が出せなかった (フレーム間のばらつきに埋もれる)。**効果の確認は実案件の画面と、コンソール機 (CS) で行う。** 安定ラベルが大量にあり churn がゆっくりな画面 (メニュー / ステータス / 一覧など) を長時間出しっぱなしにして、上限を跨ぐ瞬間のフレーム落ちが消えるかを見る。`measure_text` のコストが高いコンソール機のほうが差は大きく出るはず。上限到達は「起動からの累計で 4096 種類」なので短いテストでは踏まない — 上限を実行時に下げられる口を先に足すと短時間で再現できる。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §4 |
+| ✅ | Elements: 押しっぱなしガードの棚卸し | **2026-09-12 実測**。当初「#4 (離しの全インスタンス配送) が入った今 #3 (suspend 時の `st.current` クリア) は冗長では」と見立てたが**逆だった**。十字を押しっぱなしで前面パネルを開閉する 2 ケース (覆われている間に離す / ずっと押したまま) で 4 通りを測ったところ、前者はどちらか一方で防げるが、**後者は #3 だけが防ぐ** (#4 は離しが発生しないので原理的に無力)。→ **#3 が主、#4 は狭いレース向けの二重化**として両方残し、誤解を招いていた #4 のコメントを実態に合わせて修正。★ハーネスの教訓: 最初は 4 通りすべて 0 で、グリッドが端で clamp してフォーカスが止まるため暴走が観測できていなかった (`focus_wrap: true` で陽性対照が取れた)。**壊しても壊れない検査は検査になっていない**。★ビルドの罠: `src/core/build/` と umbrella `build/` の 2 ツリーがあり、`cd src/core` からビルドすると起動側の exe が古いまま — 一度誤結論を出した。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §5 |
+| ✅ | Elements: リピート周期が一本化されていない | **2026-09-12 対応**。`-paddelay` / `-padinterval` が明示指定されたときだけ Elements の軸リピート既定へ流す (`overlay_session::set_axis_repeat_default` を `start()` 前に呼ぶ。engine 側は `BuildSession` が起動オプションを読む)。優先順は **画面 JSON > 起動オプション > `input_defaults.jsonc` > 組込既定**。未指定なら従来どおりで既定の操作感は不変。実測で、画面指定なしは 234→608ms と追従し、画面指定ありは 225→217ms で不変 = 優先順を実証。キーボードの矢印は OS のリピートのまま (テキスト入力と同じリズムが期待値) とし、「キーボードとパッドで送り速度が違う」ことは仕様として受け入れる。CommandLine.md / optiondesc*.json (4 言語) / elements_modal README にも反映。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §6 |
+| 【検討中】 | Elements: リピート «処理» そのものの統合 | §6 で揃えたのは設定値だけで、リピートを作る場所は 3 系統 (キーボード=OS / 十字・スティック=elements のタイマ / VK_PAD*=engine) のまま。**案 A (エンジンが全部作る) はそのままでは成立しない** — engine のリピート生成器はボタン状態からしか作らずスティックが対象外で、寄せると「十字=engine クロック / スティック=elements クロック」と今より不統一になる。**案 B (elements が全部持ってエンジンへ流す / エンジンの現行処理は消す) は成立しない** — パッドのキーリピートはダイアログが 1 枚も開いていない状態でもゲーム側 TJS へ届く必要があり、elements が権威だと UI 非表示中にリピートを作る主体が居なくなる。また elements は krkrz 非依存の汎用ライブラリなので、エンジンのコア入力がそれに依存するのは依存の向きとして逆。**案 C (推奨) = スロットル**: ブリッジが `on_key_down` に repeat フラグを渡し (elements 側には `key_action::repeat` が元からある)、view がナビキーの repeat に `axis_repeat` と同じ delay/rate を当てて早すぎる分を**捨てる**。生成せず落とすだけなので暴走経路が増えず held 状態も不要。制約は「OS より遅くはできるが速くはできない」。規模はブリッジ 1 引数 + view 30 行程度。したがって**完全統合するなら «エンジンが権威» しかない**。ただし (1) エンジンが持てるのはリピートのクロックまでで、スティックの value モード (倒し量連動 / デッドゾーン) は生の軸値が要るので elements に残る = 「送りはエンジンが刻む / 軸値は従来どおり流す」の二本立て、(2) elements 側の機構は消さず «ホストが駆動するモード» として切れるようにする (他ホストから使う汎用ライブラリなので)、の 2 条件付き。**エンジン側に足りないのは «軸値からリピートを合成する処理»** — 現行の `tTVPKeyRepeatEmulator` はボタン状態からしか作らない。デッドゾーンと倒し量連動レートの規則を elements から移設するのが実質の作業量。着手するなら §5 のガード整理の後が安全。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §6 |
+| ✅ | Elements: フェイスボタン 2 系統配送を仕様として明記 | **2026-09-12 対応**。elements_modal README の `pad` 一覧 / `doc/ElementsDialog.md` / umbrella `doc/topics/core/gamepad.md` に明記。gamepad.md には「1 回の押下で両系統のキーイベントが届く」ことは元々書かれていたので、**その帰結 (同じ物理ボタンに両系統を割り当てると 1 押しで 2 回発火する)** を追記した。併せて画面 JSON の pad バインドを build 時に走査し、刻印基準 (`a`/`b`/`x`/`y`) と位置基準 (`face_*`) の併用に注意ログを出すようにした。⚠ どの刻印がどの位置かはコントローラ依存 (任天堂系は A が右・B が下) なので「`a` と `face_south` が同じ」とは限らず、静的には «両方使っている» ことまでしか言えない — 断定せず注意に留めている。詳細 = [ElementsAudit.md](src/core/doc/ElementsAudit.md) §7 |
 
 ### エンジン基盤
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
+| ✅ | 仮想カーソル位置の導入 (実カーソルを直接動かすのをやめる) | **2026-09-12 実装 (第一段)**。`common/visual/VirtualCursor.h` を追加し、ウィンドウ実装が 1 つずつ持つ。`OnMouseMove` (実マウス) が上書き / `SetCursorPos` は実カーソルと同時に揃える / 新設の `SetVirtualCursorPos` は仮想だけ / `GetCursorPos` は仮想を返す。読み出しは `Layer.cursorX/Y` → LayerManager → LayerTreeOwner → DrawDevice → `Window->GetCursorPos` の一本道だったので、ウィンドウ実装を直すだけで全読み手が追従した。**Elements の cursor-warp は実カーソルを触らなくなり、echo 判定 (engine の `warp_expect_*` と session の `synthetic` 引数) は両側から撤去**。`Agent` のマウス注入は元から form 経由なので自動的に仮想位置のみになった。効果: シナリオ 1 でキー 12〜14 回の注入に対しフォーカス移動が **5/6 → 13/15** (移行前は warp の合成 move が nav 種別を mouse へ倒して大半が流れていた)、`warp guard` ログは 0 件。派生で **`-ignoremouse` / `Agent.ignoreRealMouse`** (実マウス入力を捨てて Agent 注入だけ通す) も追加 — 「人がマウスに触らないこと」という測定の運用制約を外せる (§1-b の誤起票の再発防止)。**第二段も 2026-09-12 に完了**: クリック時に実座標で仮想位置を揃える / `::GetCursorPos` 直呼び 5 箇所を精査し**迂回していた 3 つ (マウスキー機能の位置読み ×2・移動 ×1) を仮想へ寄せた** (残る 2 つは「隠してから実マウスが動いたか」の判定で実カーソルが正しい) / `mcsTempHidden` は機構そのままで古い前提のコメントを訂正 / ヒントは OS ツールチップが実ポインタ追従・IME はキャレット追従・カーソル形状はナビ中は非表示、と個別に確認。詳細 = [VirtualCursor.md](src/core/doc/VirtualCursor.md) |
 | 中 | Layer / Bitmap / ImageFunction の統合 | ImageFunction の API 二重化と、プラグインが Bitmap を扱えない問題 (Layer 参照 26 ファイル) の再整理。**方針決定済 = P1 (tp_stub 共通アクセス口) → P2 (Bitmap へメソッド追加・ImageFunction は shim 化) → P3 (プラグイン対応) → P4 で共通基底 `ImageBuffer` の要否を判断**。B案はプロトタイプ実測済み (パッチ同梱)。着手は後日。SSOT = [ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
 | 中 | Emote/Motion リソースマネージャの共有 (再読込の削減) | `data/system/AffineSourceMotion.tjs` の `SimpleEmotePlayer` はプレイヤー生成のたびに `MotionResourceManager` を new しており、リソースキャッシュ (`Motion.ResourceManager`、既定 20MB、`motionCacheSize` で可変) が効かず、立ち絵 psb (数十 MB) を表示/アクションのたびにフル再読込している。**アクション毎のカクつきと、メモリ枯渇 (特に 32-bit) を招く**。ウィンドウ単位で 1 つの ResourceManager を共有すれば解消するが、単純な共有化 (window に持たせて addRef/共有) を試すと **emoteplayer プラグイン内部 (`V2Unlink`) が AV で即死**した — 複数 `EmotePlayer` が同一 ResourceManager を参照する構成をプラグインが想定していない疑い。**要調査**: (1) `Motion.ResourceManager` / `EmotePlayer` の参照所有モデル (unload が他プレイヤーの参照中リソースを解放していないか)、(2) 共有可能にするためのプラグイン側 IF、(3) 併せて `SwitchEmotePlayer` の base 別プレイヤーも同一 psb を二重ロードしていないか。回避として `motionCacheSize` 拡大 + 32-bit の pool 縮小 + LAA で当座の枯渇は解消済み (別項)。実機再現は E-mote 立ち絵のアクションが連続する場面 |
@@ -80,13 +112,14 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 低 | 縦組みの組版拡張 (ルビ / 縦中横 / 圏点 / 割注 / 字取り・段組・傍線) | `Layer.drawVerticalTextArea` の対応範囲は本文の組版のみ。ルビ等は行の中へ**入れ子の組版ボックス**を埋める話で、`LineItem` の拡張と入力マークアップ (本文文字列 1 本では表現できない) の設計がセットになる。段組は「入りきらない列を次へ渡す継続位置」、傍線は縦組み固有の位置決めが要る。必要になった時点で層から決める。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「縦組み (drawVerticalTextArea) の未対応」 |
 | 低 | プラグイン向けログレベル個別 IF | `TVPLogMsg` を tp_stub に収録するだけ。important = WARNING は維持 |
 | 低 | フォントエンジンの未対応 (計画) 4 件 | ①収録範囲を使った**言語別フォールバックの自動選択** (Elements は宣言式の `font_languages` で対応済みだが `Layer.drawText` / `Font.face` 側は未対応) ②圧縮 cmap/bitset による包含判定の最適化 ③`TVPGetAllFontList` へメタデータ名を合流 (設定 UI のフォント一覧反映) ④システムフォント全列挙 (`allowSystem`) の検索統合。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「未対応 (計画)」 |
+| 低 | 実行中にウィンドウのアイコンを差し替える口 (`Window.setIcon` 相当) | windowEx の廃止で `setWindowIcon` / `resetWindowIcon` が無くなった。WINVER には `DpiIcon` クラス (DPI に合わせた大きさで設定) があるが WINVER 専用なので、**SDL3 版と CS 機には実行中にアイコンを替える手段が無い**。入れるなら本体の Window にメソッドを足す (WINVER は `WM_SETICON`、SDL3 は `SDL_SetWindowIcon`)。引数は画像ストレージかレイヤ。常にフルスクリーンの機種では何もしない。windowEx から外した残りの機能 (Win32 固有の見た目 / IME / 小物) は移さない方針。経緯 = [WindowState.md](src/core/doc/WindowState.md) 8 章 |
 
 ### ビルド・運用
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
 | 中 | krkrlive2d のドライバソースを版固定取得へ | ドライバ側 CMake がローカルパス (`LIVE2DLIB_FOLDER` / `CUBISM_SDK` 等) を直接参照する作りで、そのフォルダの版がずれると **umbrella の configure ごと失敗する** (実例: ドライバが `find_package(minizip)` を要求する版になり、本体 vcpkg マニフェストに minizip が無くて configure 不能)。 版を固定して fetch する形へ直すまで、`CMakeLists.txt` の `CUBISM_SDK` ブロックをコメントアウトしてビルド対象から外してある (2edc380)。 直したら除外を戻す |
-| 中 | リリースのバージョン運用を確定する | 番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する |
+| 中 | リリースのバージョン運用を確定する | **実験中 API の扱いは 2026-09-06 に決定** (安定保証の対象外を `@experimental` で明示し、そこの非互換変更はマイナー。[Versioning.md](src/core/doc/Versioning.md) 「実験中 API」節)。番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する |
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
 
 ## 将来課題
@@ -124,6 +157,8 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 - tjsDataPack のライセンス収集 IF 対応 (保留)
 - リップシンクの母音判定精度向上とデモ
 - Elements 遷移エフェクト Phase C (GPU present 拡張・optional)
+- `-replweb` 稼働中に本体がモーダル (`System.inform` 等) を出すと HTTP API が全部止まる。 動的ハンドラはメインスレッド実行なので、 モーダルを閉じるまで`/cmd` も `/pad/exec` も返らず、 静的配信だけ生きているので「一部だけ応答する」紛らわしい状態になる (REPL も drain されないので中から復帰できない)。 **利用側は「実行できない条件をハンドラで先に弾いて 4xx を返す」で回避できる**ので優先度は低い。 本体側の案は (a) `/state` に「モーダル待ち」を出して UI が「死んだのか待っているだけか」を切り分けられるようにする (安い) (b) `-replweb` 稼働中はモーダルを出さずログと SSE へ流すオプション。 → 上の «web REPL の modal 転送» と同じ系統
+- 起動オプションの残骸。 `-timerprec` は `generic/base/SysInitImpl.cpp` で値を読んで `prectick` に入れるだけで、 以降どこからも参照されない (WINVER 側にも実装なし)。 ガイドには載せていないので、 **実装を戻すか、 オプションごと消すか**を決めるだけの作業 (2026-09-20 のコマンドラインオプション棚卸しで判明)。 ✅ 同時に見つかった `-ogg_pcm_format` (ブロックコメントの中で死んでいた) は実装して有効化済み (src/core `4fda1460`)。
 
 ## デモ整備
 
@@ -145,6 +180,8 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
+| ✅ | `RegExp.index` がマッチ開始位置よりずれる | **原因**: `tjsRegExp.cpp` の `tTJSNC_RegExp::Exec` で `Index` にだけ `/sizeof(tjs_char)` が抜けていた (Oniguruma の `region->beg/end` はバイトオフセット。同じ関数内の `LastIndex` / `LastMatch` / `LastParen` / `LeftContext` は全て割っていた)。UTF-16 なので `Start + 2×相対オフセット` になる。**検索開始位置より後ろでマッチした全ケース**が対象で、`/g` の 2 個目以降だけでなく非 `/g` でも `/b/.exec("aab")` が 4 (正 2) だった。修正 = 該当行に `/sizeof(tjs_char)` を足すだけ (src/core `ea363abc`)。実測: `\[([^\]]*)\]` を `"[a]-[bb]--[c]"` に回して 0 / 4 / 10。**★ TJS の挙動変更なのでリリース時の移行メモに載せること** (`index` を `lastIndex - matches[0].length` で逆算する回避をしているスクリプトがあれば影響する) |
+| ✅ | `POST /pad/exec` が最初の文しか実行しない | **原因**: `ReplMainQueue::Drain()` の «式か文か» 判定が式優先で、`CompileScript(..., isexpression=true)` は `式; 残り...` でも**先頭の式だけ読んで成功を返す**ため式パスに入り、2 文目以降が黙って捨てられていた。修正 = `Submit` に `ExecMode` を追加し、`/pad/exec` は **`Script` (文として通るなら文)** を渡す (src/core `ea363abc`)。`ExecMode::Expression` が既定なので console / `-replfile` / `/cmd` は挙動不変。`1+2` のような «文にならない単発の式» は式パスへ落ちるので pad でも値が返る。あわせて判定プローブ中は TJS コンソールを外し、外れた側の「文法エラーです」が偽ログとして出ないようにした |
 | 中 | ✅ バリアブルフォント (可変軸) の TJS 露出 (P0〜P5) | **全実装済** (P0〜P4 = src/core b48ba3bc 2026-08-23、P5 = src/core 83482f08 2026-08-24)。`Font.weight` / `Font.variations` / `Font.defaultUseVarStyle` / `Font.getVarAxes` / `getFontInfo` の axes・namedInstances / `fonts.json` の `axes`・`instance` 宣言 / `#tag=val` サフィックス表記 (Font.face トークン・Elements JSON "font"・gw ブリッジキーで一様)。glyphware 経路 (`rasterizer=2` の drawText + drawShapedText 系 + Elements) のみ。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「バリアブルフォント (可変軸) の全体展開」 |
 | ✅ | Window ジオメトリ仕様の統一 **P1** | DestRect 算出を `TVPCalcViewportDestRect` 共通計算へ + viewport の配置 API を全バリアント公開 + WINVER 入力座標の DestRect オフセット対応。等価変換で**挙動不変を実測確認済**。SSOT = [WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | ✅ | 同 **P2** | WINVER `setZoom` が `SetInnerSize(layer×zoom)` を行うようになり (旧 WIN / SDL と同じ意味論)、既定 align も両バリアント中央に統一。倍率・入力座標・フルスクリーン往復・KAG3 相当の呼び方を実測確認済 |

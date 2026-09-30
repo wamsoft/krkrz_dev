@@ -185,7 +185,7 @@ description: 吉里吉里Z (kirikiri Z) 本体クラス API のリファレン�
 |---|---|---|
 | `scriptsEx.dll` | `Scripts.foreach(obj, func, args*)` / `Scripts.getObjectKeys(obj)` / `Scripts.getObjectCount(obj)` / `Scripts.getObjectContext(obj)` / `Scripts.equalStruct(a, b)` / `Scripts.clone(obj)` / `Scripts.propSet` / `Scripts.propGet` | Dictionary の列挙 API は本体に無いので事実上必須 |
 | `saveStruct.dll` | `Array.save2(file, utf8=false, newline=0)` / `Array.saveStruct2(file, utf8, newline, opt)` / `Dictionary.saveStruct2(file, utf8, newline, opt)` / `.toStructString(newline, opt)` | 組み込み `Array.save` は UTF-16 LE + BOM 固定なので、UTF-8 テキスト保存が必要ならこちらを使う |
-| `fstat.dll` | `Storages.dirlist(dir)` / `Storages.dirlistEx(dir)` / `Storages.createDirectory(dir)` / `Storages.isExistentDirectory(dir)` | ディレクトリ走査 / 作成。**引数のディレクトリパスは末尾 `/` 必須** (無いと "'/' must be specified..." throw) |
+| `fstat.dll` | `Storages.dirlistEx(dir)` (size / attrib / 時刻付きの列挙) / ファイル属性の取得・設定 / 時刻の書き込み / `fstat`・`getTime` の `atime`・`ctime` | **`dirlist` / `dirtree` / `createDirectory` / `isExistentDirectory` / `fstat` (size + mtime) / `getTime` (mtime) / `currentPath` (読取) は本体にもある** (リンク不要、全ビルド可)。プラグインを読むと `fstat` / `getTime` / `currentPath` / `dirlistEx` はプラグイン版 (情報の多い版) に置き換わる。ディレクトリ引数は末尾 `/` 必須。SSOT = src/core/doc/LocalFileOps.md |
 | `PackinOne.dll` | 上記 fstat / saveStruct / scriptsEx の一部機能を統合提供 | wamsoft 独自の統合版。ただし link 時に fstat 経由でパス検証が走り、standalone 環境では init throw する場合がある。単機能を欲しいだけなら個別プラグインの方が安全 |
 
 **Scripts.foreach の落とし穴** ( scriptsEx.dll ):

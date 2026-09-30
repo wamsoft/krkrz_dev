@@ -1,5 +1,13 @@
 # ElementsPanel
 
+!!! warning "実験中 ( 安定保証の対象外 )"
+    この API はまだ形が固まっていません。**予告なく変更・削除される
+    ことがあります** ( 非互換変更でもメジャー番号は上がりません )。
+    版の上げ方は [バージョン運用](https://github.com/wamsoft/krkrz_develop/blob/master/doc/Versioning.md)
+    を参照してください。
+
+    Elements ベースの UI 機構はまだ形が固まっていません。イベント / 変数まわりの API は ElementsDialog と揃えて変わることがあります。
+
 Elements の画面をホストのレイヤへ描くパネル
 
 [ElementsDialog](ElementsDialog.md) と同じ画面 JSON を、overlay ( 常に最前面 )
