@@ -27,7 +27,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 16 | Elements/UI 4 / エンジン基盤 9 / ビルド・運用 3 (内訳: 中 8 / 低 7 / 検討中 1) |
+| 予定・未着手 | 17 | Elements/UI 4 / エンジン基盤 10 / ビルド・運用 3 (内訳: 中 9 / 低 7 / 検討中 1) |
 | 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 10 | 単発の小さいもの。着手順は問わない |
@@ -37,7 +37,11 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 [Versioning.md](src/core/doc/Versioning.md) の「移行メモ」= サマリとタグメッセージの冒頭に置く一覧。 リリース枝へ反映するときに拾う。
 
-- (現在なし)
+- **日本語・絵文字フォントを既定で埋め込まなくなった** (`KRKRZ_EMBED_BUNDLED_FONTS` の既定が OFF。埋め込むのは Roboto と elements_basic だけ、exe -6.5MB)。`resource://./notosansjp-regular.otf` 等を直接指していたスクリプトは引けなくなる。日本語は `fonts.json` で宣言するか OS のフォントを使う。従来どおりにするにはビルド時 `-DKRKRZ_EMBED_BUNDLED_FONTS=ON`
+- **SDL 版ほかで OS のフォントを名前で使えるようになった** (Windows = DirectWrite / Linux = fontconfig、名前だけ登録して初回使用時に読む)。既定フォントの候補にも入るので、フォントを同梱しない構成では OS の日本語フォントで描かれる。無効化は `-systemfont=no`
+- 既定フォントは `fonts.json` の宣言名も候補にし、起動時に決まらなければ後から登録された候補で選び直す (SDL 版ほか)
+- **どのフォントにも無い文字は U+FFFD (無ければ `?`) で描く** (以前は .notdef = 空白や豆腐、Elements では描かれなかった)。見えない文字 (制御文字・ゼロ幅・異体字セレクタ等) は何も描かない。GDI ラスタライザは対象外
+- Elements のテーマフォントの末尾にエンジンの既定フォントがつながる (同梱フォントに無い文字は fonts.json / OS の日本語フォントで描かれる)
 
 2.4.0 (2026-09-30) までの分は krkrz.git のサマリ `3af0ed63` と タグ `v2.4.0` の「■ 移行メモ」へ載せた
 (IME 候補窓の追従 / KAGEX の IME 無効化への対処 / Elements のテキスト欄で IME を開く / ogg の float 出力 /
@@ -111,6 +115,7 @@ registerHotKey の WINVER 配線)。
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
 | 低 | 縦組みの組版拡張 (ルビ / 縦中横 / 圏点 / 割注 / 字取り・段組・傍線) | `Layer.drawVerticalTextArea` の対応範囲は本文の組版のみ。ルビ等は行の中へ**入れ子の組版ボックス**を埋める話で、`LineItem` の拡張と入力マークアップ (本文文字列 1 本では表現できない) の設計がセットになる。段組は「入りきらない列を次へ渡す継続位置」、傍線は縦組み固有の位置決めが要る。必要になった時点で層から決める。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「縦組み (drawVerticalTextArea) の未対応」 |
 | 低 | プラグイン向けログレベル個別 IF | `TVPLogMsg` を tp_stub に収録するだけ。important = WARNING は維持 |
+| 中 | OS フォントの文字単位フォールバック + macOS / Android の OS フォント列挙 | 2026-09-30 に「OS のフォントを名前で引ける」まで対応 (SDL 版ほか: Windows = DirectWrite / Linux = fontconfig、`generic/environ/SystemFontList.cpp`)。残り: **(B-1) 連鎖のどのフォントにも無い文字を OS に問い合わせて補う** (DirectWrite `IDWriteFontFallback::MapCharacters` / fontconfig `FcFontSort` + charset。現状は U+FFFD で描く) / **(B-2) macOS の CoreText (`CTFontManagerCopyAvailableFontURLs`) と Android の `ASystemFontIterator` (API 29+) で同じ名前登録**。B-1 は結果が実行環境で変わるので、既定で入れるか (`-systemfont` で切るか) を決めてから。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「OS のフォント」 |
 | 低 | フォントエンジンの未対応 (計画) 4 件 | ①収録範囲を使った**言語別フォールバックの自動選択** (Elements は宣言式の `font_languages` で対応済みだが `Layer.drawText` / `Font.face` 側は未対応) ②圧縮 cmap/bitset による包含判定の最適化 ③`TVPGetAllFontList` へメタデータ名を合流 (設定 UI のフォント一覧反映) ④システムフォント全列挙 (`allowSystem`) の検索統合。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「未対応 (計画)」 |
 | 低 | 実行中にウィンドウのアイコンを差し替える口 (`Window.setIcon` 相当) | windowEx の廃止で `setWindowIcon` / `resetWindowIcon` が無くなった。WINVER には `DpiIcon` クラス (DPI に合わせた大きさで設定) があるが WINVER 専用なので、**SDL3 版と CS 機には実行中にアイコンを替える手段が無い**。入れるなら本体の Window にメソッドを足す (WINVER は `WM_SETICON`、SDL3 は `SDL_SetWindowIcon`)。引数は画像ストレージかレイヤ。常にフルスクリーンの機種では何もしない。windowEx から外した残りの機能 (Win32 固有の見た目 / IME / 小物) は移さない方針。経緯 = [WindowState.md](src/core/doc/WindowState.md) 8 章 |
 

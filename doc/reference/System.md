@@ -237,7 +237,7 @@ OS 名
 
 エンジン組み込みリソースのあるパス
 
-`config.cf` / `messages.json` / 同梱フォント (`notosansjp-regular.otf` 等) といった
+`config.cf` / `messages.json` / 同梱フォント (`roboto-regular.ttf` 等) といった
 エンジン組み込みリソースが置かれている場所を、末尾に `/` の付いた統一ストレージ名で
 返します。
 
@@ -254,8 +254,8 @@ OS 名
 ときは必ずこのプロパティを前置してください。
 
 ```tjs
-// 同梱の日本語フォントを参照する
-var path = System.resourcePath + "notosansjp-regular.otf";
+// 同梱の英字フォントを参照する
+var path = System.resourcePath + "roboto-regular.ttf";
 ```
 
 **関連:** [System.exePath](System.md#exepath)
