@@ -326,6 +326,7 @@ Scripts.execStorage("mytest.tjs");      // data/ 配下 (autopath)
 | `.depth [N]` / `.compact [on/off]` | 結果の pretty-print 設定 |
 | `.mem` | メモリ要約 1 行 (File/Bitmap/Sound/Global/Process/SysAlloc) |
 | `.memdump` | 全メモリ統計をログへ (`TVPHeapDump`) |
+| `.memsites [N] [関数名の一部]` | 生存確保を呼び出し元別に上位 N 件 (診断ビルド + `-memstatsite` 起動時のみ) |
 | `.sysalloc` | システムアロケータ情報 |
 | `.filecache` / `.imagecache` | ファイル/画像キャッシュ一覧をログへ |
 | `.memoverlay [on/off]` / `.padoverlay [on/off]` | 画面オーバレイ表示トグル |
