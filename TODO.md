@@ -37,35 +37,13 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 [Versioning.md](src/core/doc/Versioning.md) の「移行メモ」= サマリとタグメッセージの冒頭に置く一覧。 リリース枝へ反映するときに拾う。
 
-- **IME の変換 / 変換候補ウィンドウが入力欄の位置に出るようになった (WINVER / SDL3)** —
-  これまでは OS 既定位置 (ウィンドウ左上隅) に出ていた。Elements のテキスト欄の
-  キャレット位置を毎フレーム追従させる。SDL3 は上流実装をそのまま使うので fork は不要。
-- **KAGEX と組み合わせたときに IME が無効化される件に対応 (WINVER)** — KAGEX は
-  `data/sysscn/Override.tjs` の初期化で windowEx の `Window.resetImeContext(false)` を
-  呼び、ウィンドウの IME 入力コンテキストを切っている。この状態では `Window.imeMode` も
-  ユーザの 半角/全角 キーも効かず (英数だけ通る)、Elements のテキスト入力を使うと
-  必ず日本語が打てなくなっていた。Elements のテキスト欄が編集フォーカスを持つ間だけ
-  コンテキストを結び直し、外れたら元へ戻すようにしたので、ゲーム側の設定はそのままで
-  日本語入力ができる。切り分け用に `Agent.imeStatus()` を追加 (`contextAttached` 等)。
-- **Elements のテキスト欄で IME が開くようになった (WINVER)** — テキスト入力ウィジェットが編集フォーカスを持つ間だけ IME を開き、 外れると `Window.imeMode` の既定値へ戻す。 これまでは半角/全角キーを叩かないと日本語が打てなかった。 併せて **`Window.imeMode` の setter を実装** (レイヤツリーオーナ化のときに コメントアウトされたまま残っていたもの)。 SDL3 ビルドは従来どおり。
-- **`-ogg_pcm_format=f32` が使えるようになった** — ogg ( Vorbis ) のデコード出力を
-  IEEE 32bit float にする指定。オプション解釈もデコード経路も封印されていたのを
-  実装した ( opus 側の `-opus_pcm_format` と対になる )。ゲイン指定と組み合わせた
-  ときの挙動は 16bit 経路と一致する (src/core `4fda1460`)。
-- **24bit / 32bit 整数の WAV が再生できるようになった** — 従来は読み込みには成功する
-  ものの、再生開始時に「不正なフォーマットです(BitsPerSample)」で落ちていた
-  ( 実際に通していたのは 8bit / 16bit / 32bit float だけ )。ビット深度を落とさず
-  そのまま再生する。WAVE_FORMAT_EXTENSIBLE で有効ビット数がコンテナ幅より小さい
-  場合 ( 32bit コンテナに 24bit を左詰め等 ) にも対応。動画音声が要求する 32bit
-  整数が float として扱われていた件も同時に解消 (src/core `0e6d28da`)。
-- **opus の再生で先頭が欠けていたのを修正** — 総サンプル数を数える処理が ogg の
-  読み込みバッファをリセットしており、先頭のオーディオページが丸ごと捨てられて
-  いた ( 実測で 1.0 秒欠落 )。open 直後の 1 回目の再生だけで起き、stop 後の再生
-  では再現しないため分かりにくかった。あわせて float 出力時に
-  `WaveSoundBuffer.bits` が 65568 という内部値を返していたのを 32 に直し、
-  `-opus_pcm_format=f32` が実際に使えるようになった (src/core `a2601728`)。
-- **`Layer.doGrayScale` / `ImageFunction.doGrayScale` に重み指定を追加** — `doGrayScale(0.299, 0.587, 0.114)` のように R/G/B の重みを渡せる。 引数を省略した従来呼び出しは BT.709 相当のままで挙動不変。
-- **`RegExp.index` の修正 (src/core `ea363abc`)** — これまで検索開始位置より後ろでマッチすると `index` が `Start + 2×相対オフセット` にずれていた。正しい文字位置を返すようになったので、`index` のずれを前提に補正しているスクリプトがあれば影響する (詳細は末尾の完了欄)。
+- (現在なし)
+
+2.4.0 (2026-09-30) までの分は krkrz.git のサマリ `3af0ed63` と タグ `v2.4.0` の「■ 移行メモ」へ載せた
+(IME 候補窓の追従 / KAGEX の IME 無効化への対処 / Elements のテキスト欄で IME を開く / ogg の float 出力 /
+24・32bit WAV / opus 先頭欠け / doGrayScale の重み / RegExp.index / imDisable の仕様どおり化 /
+タッチの中心座標 / %e・%g / ムービー音声の音量カーブ / 仮想カーソル / fstat・systemEx の登録方式 /
+registerHotKey の WINVER 配線)。
 
 **優先度「高」の項目は現在ゼロ**。2026-09-11 の Elements 仕様精査
 ([ElementsAudit.md](src/core/doc/ElementsAudit.md)) の 7 項目と、その作業中に
