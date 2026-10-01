@@ -1,6 +1,6 @@
 # packinone 再構築 (調査と実装範囲)
 
-status: **取り込み完了 (2026-09-28)**。packinone 12 個 + packinoneWin32 4 個。残りは案件への配備
+status: **取り込み完了 (2026-09-28)**。packinone 12 個 + packinoneWin32 5 個 (2026-10-01 に windowEx を追加)。残りは案件への配備
 置き場: `src/packinone` / `src/packinoneWin32` (`src/plugins` とは別枠)
 
 ## これは何か
@@ -147,7 +147,7 @@ PROBE link(layerExImage.dll) は素通り OK / 大小文字・パス違いも OK
 | | |
 |---|---|
 | ✅ 取り込み済み (12) | csvParser / saveStruct / scriptsEx / shrinkCopy / layerExBTOA / layerExRaster / layerExImage / tjsDataPack / pemachinetype / TriBinPairString / tlgSliceLoader / proxyfs |
-| ✅ packinoneWin32 (4) | fstat / systemEx (どちらも本体へ移した分を除く) / process / dpiicon |
+| ✅ packinoneWin32 (5) | fstat / systemEx (どちらも本体へ移した分を除く) / process / dpiicon / windowEx (2026-10-01) |
 
 ⚠ **取り込んだものは `TVP_PLUGINS` から外す** (同じクラスの二重登録を避けるため)。
 外し忘れると個別 DLL と両方ビルドされる。
@@ -397,3 +397,21 @@ engine はアイコン設定を黙って飛ばす (`typeof global.DpiIcon` で�
 
 - `doc/GenericPluginLoading.md` — generic のプラグイン解決と Win32 専用 API スタブの話
 - 旧ソース: `krkrtemplate/plugins/packinone` (Shift_JIS、**触らない**)
+
+## windowEx の同梱 (2026-10-01)
+
+pc2 の WINVER 既定を従来型メニュー (menu.dll のメニューバー) に戻したので、
+単体 DLL を廃止していた windowEx を packinoneWin32 に取り込んだ (`WINDOWEX_BUNDLE=1`)。
+単体でビルドしたときの中身は変わらない。
+
+- 吉里吉里2 判定をしない (吉里吉里Z でも誤認して取り付け先のダミーが作られず、登録が止まっていた)
+- Debug.console / Pad / Scripts の拡張を外す
+- 本体と重なるメンバ (Window 14 / System 10) は IF_MISSING。 ncbind に getter/setter 版の
+  `RawCallbackIfMissing` を足した
+- 本体も発火するイベント (onMaximize / onMinimize / onMoveSizeBegin・End / onDPIChanged /
+  onDisplayChanged / onDeviceChanged / onMaximizeQuery) は発火させない。 WM_HOTKEY は残す
+- インスタンスは必要なときに作る (`SetAdaptorWithNativeInstance`)。 単体版は windowEx の
+  `registerExEvent` が最初に呼ばれる前提だった
+- ⚠ **MenuItem 拡張を効かせるには menu.dll を先に link する**。 無ければ空のダミーに取り付ける
+
+詳細は pc2_makeworld の `tools/doc/開発資料/05_windowEx廃止の棚卸し.md` §5.6。

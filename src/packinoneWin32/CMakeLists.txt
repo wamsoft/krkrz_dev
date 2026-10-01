@@ -25,6 +25,12 @@ packinone_absorb(process NCBIND SOURCES main.cpp)
 # dpiicon: DPI に合わせた大きさのウィンドウアイコン (DpiIcon クラス)
 packinone_absorb(dpiicon SIMPLEBIND SOURCES Main.cpp)
 
+# windowEx: Win32 のウィンドウ拡張 (メニューバー / NC マウス / メッセージフック / システムメニュー等)
+#   と MenuItem 拡張 (bmpItem / rightJustify / popupEx)。 従来型メニュー (menu.dll) 用。
+#   WINDOWEX_BUNDLE=1 で Debug.console / Pad / Scripts の拡張を外し、本体が持つメンバは
+#   IF_MISSING で登録する (本体を上書きしない)。 MenuItem が無ければ空のダミーに取り付ける
+packinone_absorb(windowEx NCBIND SOURCES main.cpp DEFINITIONS WINDOWEX_BUNDLE=1)
+
 krkrz_plugin(packinoneWin32
     INCLUDES
         ${PACKINONE_DIR}

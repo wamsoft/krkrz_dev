@@ -16,12 +16,17 @@
 //                 環境変数と URL エンコードは本体へ移した
 //     process  … メッセージ専用ウィンドウを作って子プロセスと遣り取りする
 //     dpiicon  … DPI に合わせた大きさのウィンドウアイコン (DpiIcon クラス)
+//     windowEx … Win32 のウィンドウ拡張と MenuItem 拡張 (従来型メニュー用)。
+//                 Debug.console / Pad / Scripts の拡張は外してある (WINDOWEX_BUNDLE)。
+//                 ⚠ MenuItem 拡張を効かせるには menu.dll を**先に** link すること
+//                 (無ければ空のダミーに取り付けるので、後から menu.dll を読むと拡張は付かない)
 //---------------------------------------------------------------------------
 #define PACKINONE_PLUGINS(f) \
 	f(fstat)                 \
 	f(systemEx)              \
 	f(process)               \
-	f(dpiicon)
+	f(dpiicon)               \
+	f(windowEx)
 
 #define PACKINONE_SELF_NAME TJS_W("PackinOneWin32.dll")
 
