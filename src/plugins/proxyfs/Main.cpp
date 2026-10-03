@@ -682,10 +682,22 @@ public:
 		Instance->Release();
 		Instance = NULL;
 	}
+	// スクリプトエンジンが先に破棄された後の解放 (システム終了時)。V2Unlink は ONV2UNLINK を呼ばずに
+	// ONV2DETACH を呼ぶ (simplebinder の v2link.cpp。V2LINK_USE_V2DETACH を CMake で立てている)。
+	// メディアの登録だけは外す: 外さないと DLL が解放された後で本体の TVPStorageMediaManager の破棄が
+	// Release を呼んで落ちる (2026-10-03、SDL 版で発生。WIN 版は DLL を固定しているので表に出なかった)。
+	// 実体はグローバルの辞書 (ProxyStorageMap) を抱えていて、エンジンの無い今は外せないので手放すだけにする
+	static void Detach()
+	{
+		if(!Instance) return;
+		TVPUnregisterStorageMedia(Instance);
+		Instance = NULL;
+	}
 };
 ProxyStorage *ProxyStorage::Instance = NULL;
 
 //---------------------------------------------------------------------------
 bool ONV2LINK()   { return ProxyStorage::Install(); }
 bool ONV2UNLINK() { ProxyStorage::Uninstall(); return true; }
+void ONV2DETACH() { ProxyStorage::Detach(); }
 //---------------------------------------------------------------------------

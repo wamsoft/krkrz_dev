@@ -8,3 +8,5 @@ krkrz_plugin(proxyfs
 )
 
 target_compile_features(proxyfs PRIVATE cxx_std_17)
+# システム終了時 (スクリプトエンジン破棄後) の解放でストレージメディアの登録を外す ONV2DETACH を使う
+target_compile_definitions(proxyfs PRIVATE V2LINK_USE_V2DETACH)
