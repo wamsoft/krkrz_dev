@@ -1,6 +1,30 @@
 # アクセシビリティ (スクリーンリーダー) 対応 設計 — 吉里吉里Z 接続
 
-状態: **設計案 (未実装)**。Elements 側の設計は `external/elements/docs/accessibility.md` にある (この文書では「本体設計」と呼ぶ)。この文書では、krkrz 側の接続と REPL / Agent の拡張だけを扱う。パスは `src/core/` 起点。
+状態: **Phase A 実装済み (2026-10-04)**。下の「使い方」が実際の口。以降の節は設計時の記録で、細部は実装と違うところがある (違いは「使い方」の下に列挙)。Elements 側の設計は `external/elements/docs/accessibility.md` にある (この文書では「本体設計」と呼ぶ)。この文書では、krkrz 側の接続と REPL / Agent の拡張だけを扱う。パスは `src/core/` 起点。
+
+## 使い方 (Phase A、実装済み)
+
+| 口 | 内容 |
+|---|---|
+| ビルド | `KRKRZ_USE_A11Y` (デスクトップ = Windows / macOS / Linux の通常ビルドは既定 ON)。Elements の `elements_a11y_accesskit` をリンクし、`KRKRZ_HAS_A11Y` を立てる。OFF でもツリーの取得 / 操作 / 読み上げログは使える (OS へ出ないだけ) |
+| ウィンドウ | 最初の `PaintOverlay` (メインウィンドウのデバイス) でメインウィンドウに付く。SDL3 版は `accesskit_host::attach_sdl`、WINVER は HWND に `attach` (どちらも `SetWindowSubclass` / 表示後の後付け)。スクリーンリーダーが繋がるまでは何もしない |
+| ダイアログ | `ElementsDialogManager` の各インスタンスが slot になる。重なり順・モーダル・位置 (`present_scale` / `present_off_x/y`) は `PaintOverlay` の末尾で同期する。画面 JSON の `"a11y"` (本体設計 §4) がそのまま効く |
+| `ElementsDialog.announce(text[, assertive])` | 読み上げさせる (最前面ダイアログの live region)。assertive=true は割り込みの指定 (読み上げ側がどう扱うかはスクリーンリーダー次第) |
+| `ElementsDialog.a11yActive` | OS のスクリーンリーダー等が接続中か (読み取り専用) |
+| `ElementsDialog.a11yMode` | `"auto"` (既定) / `"off"` (OS へ出さない) |
+| `ElementsDialog.a11yLabel` | 読み上げツリーの根 (ウィンドウ) の名前。空なら最前面画面の名前 |
+| `Agent.a11yTree()` | 表示中ダイアログの読み上げツリー (JSON 文字列)。`{"dialogs":[{"index","screen","modal","tree"}]}` |
+| `Agent.a11yLog([since])` | 読み上げログ `%[lines, next]`。REPL が動いているときだけ溜まる。announce もここに残る |
+| `Agent.a11yAction(node, action[, arg])` | スクリーンリーダーと同じ経路で操作する (click / focus / increment / decrement / set_value) |
+| REPL | `.a11y` / `.a11ylog [N]` / `.a11ydo <node> <action> [arg]` / `.say <text>` (file / web / socket / console 共通) |
+
+設計時からの変更:
+
+- TJS の口は新しい `Accessibility` クラスではなく、既存の `ElementsDialog` の静的メンバにした (`language` などと同じ形)。
+- WINVER も `TTVPWindowForm::Proc` を触らず、HWND を後からサブクラス化する (Elements 側の `accesskit_host::attach`)。
+- Phase B (Layer のフォーカス連鎖 / ゲーム本体の source / `ElementsPanel`) と Phase C は未着手。
+
+確認: SDL3 版 / WINVER 版とも、`data/elements_gallery` を開いて UI Automation の外部クライアントでツリー (名前・ロール・値・状態)、REPL の `.a11ydo` / `.say` / `.a11ylog` を確認した。
 
 ## 1. 現状 (調査結果)
 
