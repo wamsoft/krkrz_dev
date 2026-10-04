@@ -88,7 +88,7 @@ Layer に生やして使うメンバ (どれも任意):
 - TJS の口は新しい `Accessibility` クラスではなく、既存の `ElementsDialog` の静的メンバにした (`language` などと同じ形)。
 - WINVER も `TTVPWindowForm::Proc` を触らず、HWND を後からサブクラス化する (Elements 側の `accesskit_host::attach`)。
 - 座標: 描画面 (renderer の surface) の座標を、描画面とウィンドウの実寸の比で OS の単位へ換算する。macOS はポイント × `backingScaleFactor` (SDL のウィンドウが高解像度でなくても Retina なら 2。Elements の `accesskit_host::native_scale`)、Linux はウィンドウ座標。
-- Phase B のゲーム本体の source は 2 段にした。スクリプトがノードの表を渡す `setGameA11y` と、Layer のフォーカス連鎖を自動で読む `a11yLayers` (ElementsPanel を含む)。KAG 拡張 (メッセージの自動読み上げ / リンク) と Phase C は未着手。
+- Phase B のゲーム本体の source は 2 段にした。スクリプトがノードの表を渡す `setGameA11y` と、Layer のフォーカス連鎖を自動で読む `a11yLayers` (ElementsPanel を含む)。Phase C は未着手。KAG3 の拡張 (下の「KAG 連携」) は行わない (KAG3 自体を今後拡張しない方針のため。KAG 系の作品は、作品側のスクリプトから `setGameA11y` / `announce` を呼んで対応する)。
 
 確認 (Layer の自動): Windows (SDL3 / WINVER) / macOS / Linux で、フォーカス連鎖の Layer、`a11yName` / `a11yRole` の上書き、`a11yHidden` と非表示の除外、ElementsPanel の中身、`setGameA11y` との併用 (並び順・focus の優先)、AT / `Agent.a11yAction` からの click (Enter) と `onA11yAction` を確認した。
 
@@ -160,7 +160,9 @@ class Accessibility  // static
 - ElementsDialog の JSON / Dictionary に書いた `"a11y"` キー (本体設計 §4.1) は、何もしなくてもそのまま効く。
 - `active` が false のときは、`announce` は読み上げログへの記録だけ行い、すぐ戻る。
 
-### KAG 連携 (opt-in スクリプト)
+### KAG 連携 (opt-in スクリプト) — 行わない
+
+> 設計時の案。KAG3 は今後拡張しない方針になったので、`script/KAG3` には入れない。KAG 系の作品は、作品側のスクリプトで本文を `ElementsDialog.announce` に渡し、選択肢などを `setGameA11y` で載せる (実際にそうしている作品がある)。
 
 KAG 本体の .tjs は変更しない。拡張 `system/A11yKAG.tjs` を用意し、`kag.a11y.messages = true` で有効にする。
 
@@ -187,5 +189,5 @@ KAG 本体の .tjs は変更しない。拡張 `system/A11yKAG.tjs` を用意し
 | Phase | 内容 |
 |---|---|
 | A (済) | SDL3 / WINVER のメインウィンドウへの接続、ElementsDialog の source 化、TJS の口 (`ElementsDialog` の静的メンバ)、REPL の追加 |
-| B (済、KAG 拡張を除く) | ゲーム本体の source (`setGameA11y` と、Layer フォーカス連鎖 / `hint` / `focusedLayer` / `ElementsPanel` を読む `a11yLayers`)。KAG 拡張スクリプトは未着手 |
+| B (済) | ゲーム本体の source (`setGameA11y` と、Layer フォーカス連鎖 / `hint` / `focusedLayer` / `ElementsPanel` を読む `a11yLayers`)。KAG 拡張スクリプトは行わない |
 | C | `showModalJson` の専用ウィンドウ、複数 Window (macOS / Linux 実機での確認は A / B と一緒に済んだ) |
