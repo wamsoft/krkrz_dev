@@ -13,6 +13,7 @@
 | `ElementsDialog.setGameA11y(nodes[, focus])` | ゲーム本体 (Layer に描いた選択肢 / メニュー / 設定画面) を読み上げツリーに載せる。下の「ゲーム本体のノード」を参照 |
 | `ElementsDialog.clearGameA11y()` | ゲーム本体のノードを全て外す |
 | `ElementsDialog.onGameA11yAction(id, action, arg)` | ゲーム本体のノードへの AT の操作を受けるイベント (スクリプトで関数を代入する) |
+| `ElementsDialog.a11yLayers` | メインウィンドウの Layer を読み上げツリーに自動で載せる (既定 false)。下の「Layer の自動」を参照 |
 | `ElementsDialog.a11yActive` | OS のスクリーンリーダー等が接続中か (読み取り専用) |
 | `ElementsDialog.a11yMode` | `"auto"` (既定) / `"off"` (OS へ出さない) |
 | `ElementsDialog.a11yLabel` | 読み上げツリーの根 (ウィンドウ) の名前。空なら最前面画面の名前 |
@@ -53,11 +54,40 @@ ElementsDialog.setGameA11y([
 - 重なり順: ゲーム本体の slot はダイアログより下。ただし、キーを受けているダイアログが無く、ゲーム側にフォーカスがあるときは最前面に上げる (スクリーンリーダーのフォーカスはいちばん上の slot のものが採られるため)。モーダルなダイアログの表示中は隠れる。
 - メインウィンドウのみ。
 
+### Layer の自動 (`a11yLayers`)
+
+`ElementsDialog.a11yLayers = true` にすると、メインウィンドウの primary layer 以下を辿って、ゲーム本体の slot にノードを足す。既定は false (何もしなければ動作は変わらない)。既定を true に変える場合は、この機能を使わずに `setGameA11y` で組んでいる利用側へ事前に知らせる。
+
+載るもの:
+
+- フォーカス連鎖に入っている Layer (`focusable` かつ `joinFocusChain`)。名前は `hint`、ロールは button (`CheckBoxLayer` は check_box、`EditLayer` は text_input)
+- `a11yName` か `a11yRole` を持つ Layer (フォーカスできなくてもよい。見出しや説明文に)
+- ElementsPanel を描いている Layer。パネルの中の部品がその下に並び、操作もパネルへ届く
+
+載らないもの: `visible` が false の Layer とその子。`a11yHidden` が真の Layer とその子 (自前で `setGameA11y` に載せるレイヤに立てる)。
+
+Layer に生やして使うメンバ (どれも任意):
+
+| メンバ | 内容 |
+|---|---|
+| `a11yName` / `a11yRole` / `a11yValue` / `a11yDescription` | 名前 / ロール (`setGameA11y` と同じ名前) / 値 / 補足説明 |
+| `a11yStates` | 配列か `"checked,selected"`。`disabled` は `enabled` からも付く |
+| `a11yHidden` | 真なら部分木ごと外す |
+| `onA11yAction(action, arg)` | AT の操作を受ける。false を返すと既定の処理も行う |
+
+- 既定の処理: focus は `layer.focus()`、click はフォーカスしてから Enter キーを送る (キー操作できる部品はこれで押せる)。値の変更 (increment / set_value など) は `onA11yAction` でしか受けない。
+- フォーカス: `window.focusedLayer`。ただし `setGameA11y` に focus を渡しているときはそちらが優先する。
+- 並び順: `setGameA11y` のノードが先、自動の Layer が後 (Layer の重なり順)。id は `layer:<Layer.name>` (同名は `#2`, `#3` …)。
+- 読む頻度: 150ms に 1 回まで (フォーカス中の Layer が変わったら即時)。読むのは AT が繋がっている間か、REPL の読み上げログを取っている間だけで、描画の外 (continuous イベント) で読む。`a11y*` を property の getter にしているなら軽く保つこと。`Agent.a11yTree` / `Agent.a11yAction` はその場で読み直す。
+- WINVER で AT が繋がっている間は、この読み直しのために continuous イベントが回り続ける (アイドル時も起きる)。
+
 設計時からの変更:
 
 - TJS の口は新しい `Accessibility` クラスではなく、既存の `ElementsDialog` の静的メンバにした (`language` などと同じ形)。
 - WINVER も `TTVPWindowForm::Proc` を触らず、HWND を後からサブクラス化する (Elements 側の `accesskit_host::attach`)。
-- Phase B のうちゲーム本体の source は、Layer のフォーカス連鎖を自動で読むのではなく、スクリプトがノードの表を渡す形 (`setGameA11y`) で先に入れた。Layer のフォーカス連鎖の自動化 / `ElementsPanel` / KAG 拡張と Phase C は未着手。
+- Phase B のゲーム本体の source は 2 段にした。スクリプトがノードの表を渡す `setGameA11y` と、Layer のフォーカス連鎖を自動で読む `a11yLayers` (ElementsPanel を含む)。KAG 拡張 (メッセージの自動読み上げ / リンク) と Phase C は未着手。
+
+確認 (Layer の自動): Windows (SDL3 / WINVER) / macOS / Linux で、フォーカス連鎖の Layer、`a11yName` / `a11yRole` の上書き、`a11yHidden` と非表示の除外、ElementsPanel の中身、`setGameA11y` との併用 (並び順・focus の優先)、AT / `Agent.a11yAction` からの click (Enter) と `onA11yAction` を確認した。
 
 確認: SDL3 版 / WINVER 版とも、`data/elements_gallery` を開いて UI Automation の外部クライアントでツリー (名前・ロール・値・状態)、REPL の `.a11ydo` / `.say` / `.a11ylog` を確認した。ゲーム本体のノードも同じく、ツリーと座標 (letterbox 込み)、UIA の Invoke / SelectionItem.Select / RangeValue.SetValue → `onGameA11yAction`、モーダル表示中に隠れること、ダイアログが無いときの announce、WINVER の描画が止まった画面での操作を確認した。
 
