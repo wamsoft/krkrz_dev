@@ -42,6 +42,9 @@ Agent クラスはエージェント駆動 (テスト/自動化) のための AP
 - [dialogFocus](#dialogfocus)
 - [captureScreen](#capturescreen)
 - [lastCapture](#lastcapture)
+- [a11yTree](#a11ytree)
+- [a11yLog](#a11ylog)
+- [a11yAction](#a11yaction)
 
 ---
 
@@ -485,5 +488,92 @@ Windows ネイティブ ( WINVER ) ビルドでのみ中身が入ります。他
 直近の [Agent.captureScreen](Agent.md#capturescreen) の結果を返します。
 
 **関連:** [Agent.captureScreen](Agent.md#capturescreen)
+
+---
+
+### a11yTree
+
+メソッド
+
+**戻り値**
+
+読み上げツリーの JSON 文字列が返ります。
+
+**解説**
+
+読み上げツリーの取得
+
+スクリーンリーダーに見えている読み上げツリーを JSON 文字列で返します。
+スクリーンリーダーが繋がっていなくても取れます。
+
+`{"dialogs":[{"index","screen","modal","tree"}],"game":{"hidden","tree"}}` の形で、
+`dialogs` は表示中のダイアログ、`game` はゲーム本体
+( [ElementsDialog.setGameA11y](ElementsDialog.md#setgamea11y) /
+[ElementsDialog.a11yLayers](ElementsDialog.md#a11ylayers) ) のノードです
+( 無ければ `null`。`hidden` はモーダルなダイアログの下で隠れているか )。
+ノードの `id` は画面 JSON の `"id"` か setGameA11y の id で、無いものは
+`"#<16 進>"` になります。REPL の `.a11y` と同じです。
+
+**関連:** [Agent.a11yAction](Agent.md#a11yaction)
+
+---
+
+### a11yLog
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `since` | `0` | この位置以降の行を返します ( 省略で先頭から )。 |
+
+**戻り値**
+
+`%[lines, next]` 形式の辞書が返ります。`next` を次回の since に渡すと差分だけ取れます。
+
+**解説**
+
+読み上げログの取得
+
+「スクリーンリーダーがおおよそ何と読むか」を 1 行ずつ記録したログを返します。
+行は `[focus]` / `[value]` / `[state]` / `[caret]` / `[selected]` / `[polite]` などで
+始まり、[ElementsDialog.announce](ElementsDialog.md#announce) もここに残ります。
+ログは REPL が動いているときだけ溜まります。REPL の `.a11ylog` と同じです。
+
+```tjs
+var r = Agent.a11yLog(since);
+for (var i = 0; i < r.lines.count; i++) Debug.message(r.lines[i]);
+since = r.next;   // 次回は差分だけ
+```
+
+---
+
+### a11yAction
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `node` | `&nbsp;` | 操作するノードの `id`。 |
+| `action` | `&nbsp;` | `"click"` / `"focus"` / `"increment"` / `"decrement"` / `"set_value"`。 |
+| `arg` | `&nbsp;` | `"set_value"` のときの値。 |
+
+**戻り値**
+
+操作できたら真が返ります。
+
+**解説**
+
+スクリーンリーダーと同じ経路で操作する
+
+[Agent.a11yTree](Agent.md#a11ytree) のノードを、スクリーンリーダーからの操作と
+同じ経路で操作します ( キー入力の合成ではありません )。読み上げ対応の検証に使います。
+最前面のダイアログから探し、モーダルなダイアログが無ければゲーム本体のノードも
+探します。REPL の `.a11ydo` と同じです。
+
+**関連:** [Agent.a11yTree](Agent.md#a11ytree)
 
 ---

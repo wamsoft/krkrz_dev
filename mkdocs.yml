@@ -264,6 +264,7 @@ nav:
     - 動画再生機能: specification/movie.md
     - 画像処理機能: specification/graphics.md
     - 音声再生機能: specification/sound.md
+    - アクセシビリティ (スクリーンリーダー): specification/accessibility.md
   - 周辺情報:
     - topics/index.md
     - ユーザー向け情報:

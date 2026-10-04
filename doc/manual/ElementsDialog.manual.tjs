@@ -54,6 +54,13 @@
  * 折り返しは全文で確定済みなので送ってもリフローしません
  * ( 字幕やセリフ窓向け。従来からある `text_box` は互換のためそのまま )。
  *
+ * 表示中の画面は OS のスクリーンリーダー ( ナレーター / VoiceOver / Orca ) から
+ * 読めます。画面 JSON の `"a11y"` キーで名前や役割を補えます。ゲーム本体の
+ * Layer に描いた UI も [setGameA11y](#setgamea11y) / [a11yLayers](#a11ylayers)
+ * で載せられ、[announce](#announce) で任意の文を読ませられます。仕様の全体は
+ * [アクセシビリティ (スクリーンリーダー) 対応](../specification/accessibility.md)
+ * を参照してください。
+ *
  * `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では ElementsDialog クラスは利用できません。
  * WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利用できます
  * (非モーダル / overlay モーダル / 独立ウィンドウモーダル / フロー /
@@ -848,6 +855,8 @@ class ElementsDialog {
 	 *
 	 * @type String
 	 */
+	property language;
+
 	/**
 	 * 変数変化通知の対象
 	 *
@@ -864,8 +873,6 @@ class ElementsDialog {
 	 * 即座に反映されます。
 	 */
 	property watchVars;
-
-	property language;
 
 	/**
 	 * 言語連動フォント置換表
@@ -1064,4 +1071,187 @@ class ElementsDialog {
 	 * 計測区間の開始時に呼びます。
 	 */
 	function renderStatsReset();
+
+	/**
+	 * スクリーンリーダーに読ませる
+	 *
+	 * text をスクリーンリーダーに読み上げさせます ( クラス全体に効く static 相当 )。
+	 * 最前面のダイアログの live region に入り、ダイアログが 1 つも無ければゲーム本体の
+	 * live region に入ります。同じ文を続けて渡しても毎回読みます。
+	 *
+	 * スクリーンリーダーが繋がっていなくても受け付けます ( 繋がった時点で最新の状態が
+	 * 渡ります )。REPL の動作中は読み上げログ ( [Agent.a11yLog](Agent.md#a11ylog) ) にも
+	 * 残ります。
+	 *
+	 * ```tjs
+	 * global.ElementsDialog.announce("セーブしました");
+	 * global.ElementsDialog.announce("体力が残りわずかです", true);   // 割り込み
+	 * ```
+	 *
+	 * 仕様の全体は [アクセシビリティ (スクリーンリーダー) 対応](../specification/accessibility.md)
+	 * を参照してください。
+	 * @param text 読ませる文字列。
+	 * @param assertive 真なら割り込みを指定します ( 既定 false )。実際にどう扱うかは
+	 * スクリーンリーダー次第です。
+	 * @see ElementsDialog.a11yActive
+	 */
+	function announce(text, assertive = false);
+
+	/**
+	 * スクリーンリーダーが接続中かどうか ( 読み取り専用 )
+	 *
+	 * OS のスクリーンリーダー等が読み上げツリーを問い合わせ済みなら真です
+	 * ( クラス全体で共通 )。最初の問い合わせで真になります。Windows では
+	 * ウィンドウが前面になったときに問い合わせが来るため、起動直後はまだ偽です。
+	 *
+	 * 「繋がっていたら本文を読ませる」判定に使う場合は、値をキャッシュせず
+	 * 読む直前にこのプロパティを見るか、
+	 * [onA11yActiveChanged](#ona11yactivechanged) で受けてください。
+	 * `KRKRZ_USE_A11Y=OFF` のビルドと [a11yMode](#a11ymode) が `"off"` のときは
+	 * 常に偽です。
+	 * @type bool
+	 * @see ElementsDialog.onA11yActiveChanged
+	 */
+	property a11yActive { getter; }
+
+	/**
+	 * スクリーンリーダーの接続状態が変わった
+	 *
+	 * [a11yActive](#a11yactive) が変わったときに呼ばれます。`ElementsDialog` クラスへ
+	 * 関数を代入して受けます ( 描画の外で呼ばれ、WINVER の静止画面でも即時 )。
+	 *
+	 * ```tjs
+	 * global.ElementsDialog.onA11yActiveChanged = function(active) {
+	 *     Debug.message("スクリーンリーダー: " + (active ? "接続" : "切断"));
+	 * };
+	 * ```
+	 * @param active 接続中なら真。
+	 * @kind event
+	 */
+	function onA11yActiveChanged(active);
+
+	/**
+	 * 読み上げツリーを OS へ出すかどうか
+	 *
+	 * `"auto"` ( 既定 ) はスクリーンリーダーが繋がったときだけ働きます。`"off"` は
+	 * OS へ出しません ( クラス全体に効く static 相当 )。`"off"` でも
+	 * [Agent.a11yTree](Agent.md#a11ytree) などの検証用の口は使えます。
+	 * それ以外の文字列を代入すると無視してログに警告を出します。
+	 * @type String
+	 */
+	property a11yMode;
+
+	/**
+	 * 読み上げツリーの根 ( ウィンドウ ) の名前
+	 *
+	 * ゲーム名や場面名を入れます ( クラス全体に効く static 相当 )。空文字 ( 既定 ) なら
+	 * 最前面の画面の名前 ( 画面 JSON の `"a11y"` の `title` ) を使います。
+	 * @type String
+	 */
+	property a11yLabel;
+
+	/**
+	 * ゲーム本体の UI を読み上げツリーに載せる
+	 *
+	 * Layer に描いた選択肢・メニュー・設定画面などは Elements の外にあるので、
+	 * スクリプトからノードの表を渡して読み上げツリーに載せます ( クラス全体に効く
+	 * static 相当 )。呼ぶたびに表全体を差し替えます ( 差分は本体が取ります )。
+	 *
+	 * ```tjs
+	 * global.ElementsDialog.setGameA11y([
+	 *     %[ id:"choices", role:"list", name:"選択肢" ],
+	 *     %[ id:"c1", role:"list_item", name:"北へ行く", parent:"choices", rect:[100,400,600,48] ],
+	 *     %[ id:"c2", role:"list_item", name:"南へ行く", parent:"choices", rect:[100,460,600,48] ],
+	 *     %[ id:"vol", role:"slider", name:"音量", value:"50%", num_value:50, num_min:0, num_max:100 ],
+	 * ], "c1");
+	 * ```
+	 *
+	 * ノードの辞書のキー:
+	 *
+	 * - `id` ... 必須。一意な文字列。空か重複しているノードはログを出して飛ばします
+	 * - `role` ... `button` / `toggle_button` / `check_box` / `radio_button` / `tab` /
+	 *   `menu_item` / `list` / `list_item` / `slider` / `spin_button` / `text_input` /
+	 *   `label` / `heading` / `image` / `status` / `group` ( 省略と未知の値は group )
+	 * - `name` / `value` / `description` ... 名前 / 値 / 補足説明
+	 * - `states` ... 配列か `"focusable,checked"` の形。`focusable` / `disabled` /
+	 *   `checked` / `selected` / `expanded` / `read_only`
+	 * - `rect` ... primary layer の座標 `[x, y, w, h]`。省略すると子を囲む矩形。
+	 *   ウィンドウの拡縮とレターボックスは本体が換算します
+	 * - `parent` ... 親の `id`。省略で最上位
+	 * - `num_value` / `num_min` / `num_max` / `num_step` ... slider / spin_button の数値
+	 *
+	 * ゲーム本体のノードはダイアログより下に並び、モーダルなダイアログの表示中は
+	 * 隠れます。スクリーンリーダーからの操作は
+	 * [onGameA11yAction](#ongamea11yaction) に届きます。本体はフォーカスや値を
+	 * 自分では動かさないので、スクリプトがゲームの状態を変えてから
+	 * `setGameA11y` を呼び直してください。メインウィンドウのみが対象です。
+	 * @param nodes ノードの辞書の配列。
+	 * @param focus フォーカスを置くノードの `id` ( 省略で無し )。
+	 * @see ElementsDialog.clearGameA11y
+	 * @see ElementsDialog.a11yLayers
+	 */
+	function setGameA11y(nodes, focus);
+
+	/**
+	 * ゲーム本体のノードを全て外す
+	 *
+	 * [setGameA11y](#setgamea11y) で載せたノードを全て外します。ゲーム本体の
+	 * 枠と、[announce](#announce) が使う live region は残ります。
+	 */
+	function clearGameA11y();
+
+	/**
+	 * ゲーム本体のノードへの操作
+	 *
+	 * スクリーンリーダーが [setGameA11y](#setgamea11y) のノードを操作したときに
+	 * 呼ばれます。`ElementsDialog` クラスへ関数を代入して受けます。どのスレッドから
+	 * 来た操作でも、描画の外のメインスレッドで呼ばれます。
+	 *
+	 * action はノードのロールから決まります。押せるもの ( button / check_box /
+	 * list_item など ) は `"click"`、slider / spin_button は `"increment"` /
+	 * `"decrement"` / `"set_value"`、text_input は `"set_value"` です。どのロールも
+	 * `"focus"` を受け、`disabled` のノードは `"focus"` だけを受けます。
+	 *
+	 * ```tjs
+	 * global.ElementsDialog.onGameA11yAction = function(id, action, arg) {
+	 *     if (action == "focus") { selectChoice(id); updateA11y(); }
+	 *     else if (action == "click") { decideChoice(id); }
+	 * };
+	 * ```
+	 * @param id 操作されたノードの `id`。
+	 * @param action `"click"` / `"focus"` / `"increment"` / `"decrement"` / `"set_value"`。
+	 * @param arg `"set_value"` のときの値 ( 文字列 )。
+	 * @kind event
+	 */
+	function onGameA11yAction(id, action, arg);
+
+	/**
+	 * Layer を読み上げツリーに自動で載せる
+	 *
+	 * 真にすると、メインウィンドウの primary layer 以下を辿ってゲーム本体の
+	 * ノードに足します ( 既定 false。クラス全体に効く static 相当 )。
+	 *
+	 * 載るのは次の Layer です。
+	 *
+	 * - フォーカス連鎖に入っている Layer ( `focusable` かつ `joinFocusChain` )。
+	 *   名前は `hint`、ロールは button ( `CheckBoxLayer` は check_box、
+	 *   `EditLayer` は text_input )
+	 * - `a11yName` か `a11yRole` を持つ Layer ( フォーカスできなくてもよい )
+	 * - [ElementsPanel](ElementsPanel.md) を描いている Layer ( パネルの部品が
+	 *   その下に並び、操作もパネルへ届く )
+	 *
+	 * `visible` が偽の Layer と、`a11yHidden` が真の Layer は、子も含めて載りません。
+	 * Layer に生やせるメンバ ( `a11yName` / `a11yRole` / `a11yValue` /
+	 * `a11yDescription` / `a11yStates` / `a11yHidden` / `onA11yAction` ) は
+	 * [Layer](Layer.md) のクラス説明を参照してください。
+	 *
+	 * [setGameA11y](#setgamea11y) と併用できます。並び順は setGameA11y のノードが先で、
+	 * フォーカスも setGameA11y に渡したものが優先です。読み直しは 150ms に 1 回まで
+	 * ( フォーカス中の Layer が変わったら即時 ) で、スクリーンリーダーが繋がっている間か
+	 * REPL の読み上げログを取っている間だけ行います。WINVER ではその間、アイドル時も
+	 * continuous イベントが回り続けます。
+	 * @type bool
+	 * @see ElementsDialog.setGameA11y
+	 */
+	property a11yLayers;
 }

@@ -11,13 +11,14 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | Elements の入力リピート / キャッシュ / 描画の精査 | [src/core/doc/ElementsAudit.md](src/core/doc/ElementsAudit.md) |
 | 仮想カーソル位置 (提案) | [src/core/doc/VirtualCursor.md](src/core/doc/VirtualCursor.md) |
 | デモ整備 | [data/ROADMAP.md](data/ROADMAP.md) |
+| 読み上げ (スクリーンリーダー対応) | [doc/specification/accessibility.md](doc/specification/accessibility.md) (Elements 側は `src/core/external/elements/docs/accessibility.md`) |
 | Window のサイズ/位置/ズーム/ビューポート仕様 | [src/core/doc/WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | Layer / Bitmap / ImageFunction の統合 | [src/core/doc/ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
 | フォントエンジン (可変軸・glyphware 統合) | [src/core/doc/FontEngine.md](src/core/doc/FontEngine.md) |
 | WINVER モダン化 | [src/core/doc/ModernizationRoadmap.md](src/core/doc/ModernizationRoadmap.md) |
 | 動画 (Media Foundation 移行) | [src/core/doc/MovieMFMigration.md](src/core/doc/MovieMFMigration.md) |
 | ✅ 吉里吉里2 デバッグ窓 (監視式/コントローラ/編集パッド) の REPL・Web 復活 | [src/core/doc/DebugToolsRevival.md](src/core/doc/DebugToolsRevival.md) (**2026-09-06 に P1〜P5 完了**。`.watch` / `.event` + Web API + Console/Watch/Pad タブ UI + コントローラ + 永続化。以後は運用しながらの手入れ) |
-| リファレンスとコードの差分 | [doc/_missing.md](doc/_missing.md) (生成物。現在 0 件) |
+| リファレンスとコードの差分 | [doc/_missing.md](doc/_missing.md) (生成物。現在 3 件 = `ElementsDialog` の `beginKeyCapture` / `endKeyCapture` / `onKeyCapture` が未記載) |
 | ✅ Claude Code スキルの配布形 (install.sh) | [tools/skills/TODO-skills.md](tools/skills/TODO-skills.md) (切れリンク 0 件に解消済み) |
 
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
@@ -91,6 +92,9 @@ registerHotKey の WINVER 配線)。
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
+| 低 | 読み上げ: Phase C (`showModalJson` の専用ウィンドウ / 複数 Window) | Phase A / B (ダイアログ・`setGameA11y`・`a11yLayers`・`announce`・REPL の `.a11y` 系) と入力欄の文字単位の読み上げは 2026-10-04 に実装済み。残りは、`showModalJson` が開く専用ウィンドウにスクリーンリーダーの口を付けることと、メインウィンドウ以外の `Window` への対応。SSOT = [accessibility.md](doc/specification/accessibility.md) §7 |
+| 低 | 読み上げ: IME の変換中文字列 | 入力欄の変換中 (確定前) の文字列は値にも読み上げにも入っていない (確定文字だけ読む)。上の「未確定文字列のインライン表示」と同じく、変換中の文字列を elements へ流す仕組みが前提。SSOT = Elements 側 `docs/accessibility.md` §6.5 |
+| 低 | 読み上げ: 使い方のガイド・デモ・スキル | 仕様書と API リファレンスは整備済み。Layer で組んだ選択肢を `setGameA11y` で読ませる手順のガイド、`data/` のデモ、スキル (elements / krkrz / krkrz-repl) への追記が無い |
 | ✅ | Elements: 画面データ側で UI を完結させる | **2026-09-05 に 4 点すべて対応** (画面をまたぐ変数 = `"shared_vars"` / 動的画像の実行時差替 = `"image_var"` + 差し替え可能アトラス / 画面契約 = `contract.py` / 標準ロールの語彙 = `adv_vocabulary.md`)。 engine 側は 2026-09-06 に submodule ref を上げ、ホスト向け API を TJS へ公開 (`ElementsDialog.setSharedVar` / `getSharedVars` / `clearSharedVars` / `setAtlasImage` / `swappableAtlases`)。 詳細 = [TODO-elements.md](TODO-elements.md) §7 |
 | 低 | Elements の観測・操作 API を TJS へ公開 (残り) | **変数系は 2026-08-29 に公開済み** (`ElementsDialog.getVar` / `listVars` / `onVar` / `watchVars` = elements_modal の `get_var` / `list_vars` / `set_var_watcher` に対応。src/core `fcae740b`)。 残りは **navigator の `push` / `pop` / `replace` / `stack`** と `languages`。 要素を名指しで動かす instance 版は公開済み (`ElementsDialog.focus(id)` = 2026-09-02 / `activate(id)` = 2026-09-04。検証用の `Agent.dialogFocus` / `dialogClick` は従来どおり)。 用途は検証ツールから「この画面へ飛ぶ」を実装すること。 当たり判定やフォーカスナビの確認は実入力を流す API でないと意味が無い点に注意 |
 | ✅ | Elements: `input_box` にプログラム的フォーカスが効かない | **2026-09-02 に解決** (elements `de989d18`: `descend_focus_first` — composite 包みの内側へフォーカス連鎖を用意)。`initial_focus` / `focus_by_id` / `ElementsDialog.focus(id)` で編集フォーカス (キャレット + text 受理) になる。詳細 = [TODO-elements.md](TODO-elements.md) §3 |

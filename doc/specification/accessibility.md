@@ -1,6 +1,8 @@
 # アクセシビリティ (スクリーンリーダー) 対応 設計 — 吉里吉里Z 接続
 
-状態: **Phase A / B 実装済み (2026-10-04)**。Windows (SDL3 / WINVER)・macOS・Linux の実機で確認した。下の「使い方」が実際の口。以降の節は設計時の記録で、細部は実装と違うところがある (違いは「使い方」の下に列挙)。Elements 側の設計は `external/elements/docs/accessibility.md` にある (この文書では「本体設計」と呼ぶ)。この文書では、krkrz 側の接続と REPL / Agent の拡張だけを扱う。パスは `src/core/` 起点。
+状態: **Phase A / B 実装済み (2026-10-04)**。入力欄の文字・単語・行単位の読み上げ (Elements 側 Phase 5) も入っている。Windows (SDL3 / WINVER)・macOS・Linux の実機で確認した。下の「使い方」が実際の口。以降の節は設計時の記録で、細部は実装と違うところがある (違いは「使い方」の下に列挙)。Elements 側の設計は `external/elements/docs/accessibility.md` にある (この文書では「本体設計」と呼ぶ)。この文書では、krkrz 側の接続と REPL / Agent の拡張だけを扱う。パスは `src/core/` 起点。
+
+API リファレンス: [ElementsDialog](../reference/ElementsDialog.md) (`announce` / `setGameA11y` / `a11yLayers` ほか)、[Agent](../reference/Agent.md) (`a11yTree` / `a11yLog` / `a11yAction`)、[Layer](../reference/Layer.md) (Layer に生やすメンバ)。
 
 ## 使い方 (実装済み)
 
@@ -23,6 +25,14 @@
 | `Agent.a11yLog([since])` | 読み上げログ `%[lines, next]`。REPL が動いているときだけ溜まる。announce もここに残る |
 | `Agent.a11yAction(node, action[, arg])` | スクリーンリーダーと同じ経路で操作する (click / focus / increment / decrement / set_value)。最前面のダイアログから探し、モーダルなダイアログが無ければゲーム本体のノードも探す |
 | REPL | `.a11y` / `.a11ylog [N]` / `.a11ydo <node> <action> [arg]` / `.say <text>` (file / web / socket / console 共通) |
+
+### 入力欄
+
+ダイアログの入力欄 (`input_box` / `text_box`) は、スクリーンリーダーが文字・単語・行の単位で読め、キャレットの移動も追える (UIA の TextPattern / AT-SPI の Text・EditableText / macOS の AXSelectedTextRange・AXStringForRange)。スクリーンリーダーからキャレットや選択範囲を動かすこともできる。スクリプト側ですることは無い。
+
+- 読み上げログには、値が変わらずにキャレットだけ動いたとき `[caret] x` (行末は `(line end)`、末尾は `(end)`)、選択したとき `[selected] 文字列` が出る。
+- IME の変換中の文字列 (確定前) は読まない。読むのは確定した文字だけ (Elements 側の残課題)。
+- ゲーム本体の `EditLayer` (`a11yLayers`) と `setGameA11y` の `text_input` は値を読むだけで、文字単位の読み上げは無い。
 
 ### ゲーム本体のノード (`setGameA11y`)
 
@@ -191,3 +201,5 @@ KAG 本体の .tjs は変更しない。拡張 `system/A11yKAG.tjs` を用意し
 | A (済) | SDL3 / WINVER のメインウィンドウへの接続、ElementsDialog の source 化、TJS の口 (`ElementsDialog` の静的メンバ)、REPL の追加 |
 | B (済) | ゲーム本体の source (`setGameA11y` と、Layer フォーカス連鎖 / `hint` / `focusedLayer` / `ElementsPanel` を読む `a11yLayers`)。KAG 拡張スクリプトは行わない |
 | C | `showModalJson` の専用ウィンドウ、複数 Window (macOS / Linux 実機での確認は A / B と一緒に済んだ) |
+
+入力欄の文字・単語・行単位の読み上げは Elements 側 (本体設計 §6.5) で済んでいる。残りは Phase C と、IME の変換中文字列の読み上げ (Elements 側)。索引は umbrella の `TODO.md`。
