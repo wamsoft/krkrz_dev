@@ -9,22 +9,57 @@
 | ビルド | `KRKRZ_USE_A11Y` (デスクトップ = Windows / macOS / Linux の通常ビルドは既定 ON)。Elements の `elements_a11y_accesskit` をリンクし、`KRKRZ_HAS_A11Y` を立てる。OFF でもツリーの取得 / 操作 / 読み上げログは使える (OS へ出ないだけ) |
 | ウィンドウ | 最初の `PaintOverlay` (メインウィンドウのデバイス) でメインウィンドウに付く。SDL3 版は `accesskit_host::attach_sdl`、WINVER は HWND に `attach` (どちらも `SetWindowSubclass` / 表示後の後付け)。スクリーンリーダーが繋がるまでは何もしない |
 | ダイアログ | `ElementsDialogManager` の各インスタンスが slot になる。重なり順・モーダル・位置 (`present_scale` / `present_off_x/y`) は `PaintOverlay` の末尾で同期する。画面 JSON の `"a11y"` (本体設計 §4) がそのまま効く |
-| `ElementsDialog.announce(text[, assertive])` | 読み上げさせる (最前面ダイアログの live region)。assertive=true は割り込みの指定 (読み上げ側がどう扱うかはスクリーンリーダー次第) |
+| `ElementsDialog.announce(text[, assertive])` | 読み上げさせる (最前面ダイアログの live region。ダイアログが無ければゲーム本体の slot の live region)。assertive=true は割り込みの指定 (読み上げ側がどう扱うかはスクリーンリーダー次第)。同じ文を続けて渡しても読む |
+| `ElementsDialog.setGameA11y(nodes[, focus])` | ゲーム本体 (Layer に描いた選択肢 / メニュー / 設定画面) を読み上げツリーに載せる。下の「ゲーム本体のノード」を参照 |
+| `ElementsDialog.clearGameA11y()` | ゲーム本体のノードを全て外す |
+| `ElementsDialog.onGameA11yAction(id, action, arg)` | ゲーム本体のノードへの AT の操作を受けるイベント (スクリプトで関数を代入する) |
 | `ElementsDialog.a11yActive` | OS のスクリーンリーダー等が接続中か (読み取り専用) |
 | `ElementsDialog.a11yMode` | `"auto"` (既定) / `"off"` (OS へ出さない) |
 | `ElementsDialog.a11yLabel` | 読み上げツリーの根 (ウィンドウ) の名前。空なら最前面画面の名前 |
-| `Agent.a11yTree()` | 表示中ダイアログの読み上げツリー (JSON 文字列)。`{"dialogs":[{"index","screen","modal","tree"}]}` |
+| `Agent.a11yTree()` | 読み上げツリー (JSON 文字列)。`{"dialogs":[{"index","screen","modal","tree"}],"game":{"hidden","tree"}}`。`game` はゲーム本体の slot (無ければ `null`、`hidden` はモーダルなダイアログの下で隠れているか) |
 | `Agent.a11yLog([since])` | 読み上げログ `%[lines, next]`。REPL が動いているときだけ溜まる。announce もここに残る |
-| `Agent.a11yAction(node, action[, arg])` | スクリーンリーダーと同じ経路で操作する (click / focus / increment / decrement / set_value) |
+| `Agent.a11yAction(node, action[, arg])` | スクリーンリーダーと同じ経路で操作する (click / focus / increment / decrement / set_value)。最前面のダイアログから探し、モーダルなダイアログが無ければゲーム本体のノードも探す |
 | REPL | `.a11y` / `.a11ylog [N]` / `.a11ydo <node> <action> [arg]` / `.say <text>` (file / web / socket / console 共通) |
+
+### ゲーム本体のノード (`setGameA11y`)
+
+Layer に描いた UI は Elements の外なので、スクリプトがノードの表を渡す。呼ぶたびに丸ごと差し替え、差分は本体が取る。
+
+```
+ElementsDialog.onGameA11yAction = function(id, action, arg) {
+    // action: "click" / "focus" / "increment" / "decrement" / "set_value" (arg が値)
+    // focus を受けたら、 ゲーム側のフォーカスを動かして setGameA11y を呼び直す
+};
+ElementsDialog.setGameA11y([
+    %[ id:"choices", role:"list", name:"選択肢" ],
+    %[ id:"c1", role:"list_item", name:"北へ行く", parent:"choices", rect:[100,400,600,48] ],
+    %[ id:"c2", role:"list_item", name:"南へ行く", parent:"choices", rect:[100,460,600,48] ],
+    %[ id:"vol", role:"slider", name:"音量", value:"50%", num_value:50, num_min:0, num_max:100 ],
+], "c1");
+```
+
+| キー | 内容 |
+|---|---|
+| `id` | 必須。一意な文字列。`Agent.a11yAction` / `.a11ydo` もこの id で指す |
+| `role` | `button` / `toggle_button` / `check_box` / `radio_button` / `tab` / `menu_item` / `list` / `list_item` / `slider` / `spin_button` / `text_input` / `label` / `heading` / `image` / `status` / `group` (省略で group) |
+| `name` / `value` / `description` | 読み上げる名前 / 値 / 補足説明 |
+| `states` | 配列か `"focusable,checked"`。`focusable` / `disabled` / `checked` / `selected` / `expanded` / `read_only`。`focused` は第 2 引数で決める |
+| `rect` | primary layer の座標 `[x, y, w, h]`。省略可 (省略したノードは子を囲む矩形になる)。ウィンドウの拡縮とレターボックスは本体が換算する |
+| `parent` | 親の `id`。省略すると最上位 |
+| `num_value` / `num_min` / `num_max` / `num_step` | slider / spin_button の数値 |
+
+- 操作はロールから決まる。押せるもの (button / check_box / list_item …) は click、slider / spin_button は increment / decrement / set_value、text_input は set_value。どれも focus を受け、`disabled` なら focus だけ。
+- AT の操作は描画の外で `onGameA11yAction` に届く (どのスレッドから来ても、メインスレッドで呼ぶ)。本体はフォーカスや値を自分では動かさない。スクリプトがゲームの状態を変えて `setGameA11y` を呼び直す。
+- 重なり順: ゲーム本体の slot はダイアログより下。ただし、キーを受けているダイアログが無く、ゲーム側にフォーカスがあるときは最前面に上げる (スクリーンリーダーのフォーカスはいちばん上の slot のものが採られるため)。モーダルなダイアログの表示中は隠れる。
+- メインウィンドウのみ。
 
 設計時からの変更:
 
 - TJS の口は新しい `Accessibility` クラスではなく、既存の `ElementsDialog` の静的メンバにした (`language` などと同じ形)。
 - WINVER も `TTVPWindowForm::Proc` を触らず、HWND を後からサブクラス化する (Elements 側の `accesskit_host::attach`)。
-- Phase B (Layer のフォーカス連鎖 / ゲーム本体の source / `ElementsPanel`) と Phase C は未着手。
+- Phase B のうちゲーム本体の source は、Layer のフォーカス連鎖を自動で読むのではなく、スクリプトがノードの表を渡す形 (`setGameA11y`) で先に入れた。Layer のフォーカス連鎖の自動化 / `ElementsPanel` / KAG 拡張と Phase C は未着手。
 
-確認: SDL3 版 / WINVER 版とも、`data/elements_gallery` を開いて UI Automation の外部クライアントでツリー (名前・ロール・値・状態)、REPL の `.a11ydo` / `.say` / `.a11ylog` を確認した。
+確認: SDL3 版 / WINVER 版とも、`data/elements_gallery` を開いて UI Automation の外部クライアントでツリー (名前・ロール・値・状態)、REPL の `.a11ydo` / `.say` / `.a11ylog` を確認した。ゲーム本体のノードも同じく、ツリーと座標 (letterbox 込み)、UIA の Invoke / SelectionItem.Select / RangeValue.SetValue → `onGameA11yAction`、モーダル表示中に隠れること、ダイアログが無いときの announce、WINVER の描画が止まった画面での操作を確認した。
 
 ## 1. 現状 (調査結果)
 
