@@ -1,20 +1,22 @@
 # アクセシビリティ (スクリーンリーダー) 対応 設計 — 吉里吉里Z 接続
 
-状態: **Phase A 実装済み (2026-10-04)**。下の「使い方」が実際の口。以降の節は設計時の記録で、細部は実装と違うところがある (違いは「使い方」の下に列挙)。Elements 側の設計は `external/elements/docs/accessibility.md` にある (この文書では「本体設計」と呼ぶ)。この文書では、krkrz 側の接続と REPL / Agent の拡張だけを扱う。パスは `src/core/` 起点。
+状態: **Phase A / B 実装済み (2026-10-04)**。Windows (SDL3 / WINVER)・macOS・Linux の実機で確認した。下の「使い方」が実際の口。以降の節は設計時の記録で、細部は実装と違うところがある (違いは「使い方」の下に列挙)。Elements 側の設計は `external/elements/docs/accessibility.md` にある (この文書では「本体設計」と呼ぶ)。この文書では、krkrz 側の接続と REPL / Agent の拡張だけを扱う。パスは `src/core/` 起点。
 
-## 使い方 (Phase A、実装済み)
+## 使い方 (実装済み)
 
 | 口 | 内容 |
 |---|---|
 | ビルド | `KRKRZ_USE_A11Y` (デスクトップ = Windows / macOS / Linux の通常ビルドは既定 ON)。Elements の `elements_a11y_accesskit` をリンクし、`KRKRZ_HAS_A11Y` を立てる。OFF でもツリーの取得 / 操作 / 読み上げログは使える (OS へ出ないだけ) |
 | ウィンドウ | 最初の `PaintOverlay` (メインウィンドウのデバイス) でメインウィンドウに付く。SDL3 版は `accesskit_host::attach_sdl`、WINVER は HWND に `attach` (どちらも `SetWindowSubclass` / 表示後の後付け)。スクリーンリーダーが繋がるまでは何もしない |
+| ゲーム本体の slot | OS への口を開いた時点で置く (常設)。ダイアログより下で、モーダルなダイアログの表示中は隠れる。空の live region (status) を最初から置いておき、`announce` で中身を変える (文字の入った live region が後から現れると、スクリーンリーダーは読まないことがある) |
 | ダイアログ | `ElementsDialogManager` の各インスタンスが slot になる。重なり順・モーダル・位置 (`present_scale` / `present_off_x/y`) は `PaintOverlay` の末尾で同期する。画面 JSON の `"a11y"` (本体設計 §4) がそのまま効く |
-| `ElementsDialog.announce(text[, assertive])` | 読み上げさせる (最前面ダイアログの live region。ダイアログが無ければゲーム本体の slot の live region)。assertive=true は割り込みの指定 (読み上げ側がどう扱うかはスクリーンリーダー次第)。同じ文を続けて渡しても読む |
+| `ElementsDialog.announce(text[, assertive])` | 読み上げさせる (最前面ダイアログの live region。ダイアログが無ければゲーム本体の slot の live region)。assertive=true は割り込みの指定 (読み上げ側がどう扱うかはスクリーンリーダー次第)。同じ文を続けて渡しても読む。スクリーンリーダーが繋がっていなくても受け付ける (繋がったら最新の状態が渡る) |
 | `ElementsDialog.setGameA11y(nodes[, focus])` | ゲーム本体 (Layer に描いた選択肢 / メニュー / 設定画面) を読み上げツリーに載せる。下の「ゲーム本体のノード」を参照 |
-| `ElementsDialog.clearGameA11y()` | ゲーム本体のノードを全て外す |
+| `ElementsDialog.clearGameA11y()` | ゲーム本体のノードを全て外す (slot と live region は残る) |
 | `ElementsDialog.onGameA11yAction(id, action, arg)` | ゲーム本体のノードへの AT の操作を受けるイベント (スクリプトで関数を代入する) |
 | `ElementsDialog.a11yLayers` | メインウィンドウの Layer を読み上げツリーに自動で載せる (既定 false)。下の「Layer の自動」を参照 |
-| `ElementsDialog.a11yActive` | OS のスクリーンリーダー等が接続中か (読み取り専用) |
+| `ElementsDialog.a11yActive` | OS のスクリーンリーダー等が接続中か (読み取り専用)。スクリーンリーダーが初めてツリーを問い合わせた時点で真になる (Windows はウィンドウが前面 / フォーカスになったとき。起動直後はまだ偽) |
+| `ElementsDialog.onA11yActiveChanged(active)` | `a11yActive` が変わったときに呼ばれる (スクリプトで関数を代入する。描画の外、WINVER の静止画面でも即時)。「繋がっていたら本文を読ませる」判定はキャッシュせず、これか読む直前の `a11yActive` で行う |
 | `ElementsDialog.a11yMode` | `"auto"` (既定) / `"off"` (OS へ出さない) |
 | `ElementsDialog.a11yLabel` | 読み上げツリーの根 (ウィンドウ) の名前。空なら最前面画面の名前 |
 | `Agent.a11yTree()` | 読み上げツリー (JSON 文字列)。`{"dialogs":[{"index","screen","modal","tree"}],"game":{"hidden","tree"}}`。`game` はゲーム本体の slot (無ければ `null`、`hidden` はモーダルなダイアログの下で隠れているか) |
@@ -85,6 +87,7 @@ Layer に生やして使うメンバ (どれも任意):
 
 - TJS の口は新しい `Accessibility` クラスではなく、既存の `ElementsDialog` の静的メンバにした (`language` などと同じ形)。
 - WINVER も `TTVPWindowForm::Proc` を触らず、HWND を後からサブクラス化する (Elements 側の `accesskit_host::attach`)。
+- 座標: 描画面 (renderer の surface) の座標を、描画面とウィンドウの実寸の比で OS の単位へ換算する。macOS はポイント × `backingScaleFactor` (SDL のウィンドウが高解像度でなくても Retina なら 2。Elements の `accesskit_host::native_scale`)、Linux はウィンドウ座標。
 - Phase B のゲーム本体の source は 2 段にした。スクリプトがノードの表を渡す `setGameA11y` と、Layer のフォーカス連鎖を自動で読む `a11yLayers` (ElementsPanel を含む)。KAG 拡張 (メッセージの自動読み上げ / リンク) と Phase C は未着手。
 
 確認 (Layer の自動): Windows (SDL3 / WINVER) / macOS / Linux で、フォーカス連鎖の Layer、`a11yName` / `a11yRole` の上書き、`a11yHidden` と非表示の除外、ElementsPanel の中身、`setGameA11y` との併用 (並び順・focus の優先)、AT / `Agent.a11yAction` からの click (Enter) と `onA11yAction` を確認した。
@@ -183,6 +186,6 @@ KAG 本体の .tjs は変更しない。拡張 `system/A11yKAG.tjs` を用意し
 
 | Phase | 内容 |
 |---|---|
-| A | SDL3 / WINVER のメインウィンドウへの接続、ElementsDialog の source 化、TJS の `Accessibility`、REPL の追加。全 `data/elements_*` のサンプルを NVDA で確認 |
-| B | ゲーム本体の source (Layer フォーカス連鎖、`hint` を名前に、`focused` を focus に、`ElementsPanel`)、KAG 拡張スクリプト |
-| C | `showModalJson` の専用ウィンドウ、複数 Window、macOS / Linux 実機での確認 |
+| A (済) | SDL3 / WINVER のメインウィンドウへの接続、ElementsDialog の source 化、TJS の口 (`ElementsDialog` の静的メンバ)、REPL の追加 |
+| B (済、KAG 拡張を除く) | ゲーム本体の source (`setGameA11y` と、Layer フォーカス連鎖 / `hint` / `focusedLayer` / `ElementsPanel` を読む `a11yLayers`)。KAG 拡張スクリプトは未着手 |
+| C | `showModalJson` の専用ウィンドウ、複数 Window (macOS / Linux 実機での確認は A / B と一緒に済んだ) |
