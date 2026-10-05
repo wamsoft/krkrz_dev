@@ -2,6 +2,8 @@
 
 状態: **Phase A / B 実装済み (2026-10-04)**。入力欄の文字・単語・行単位の読み上げ (Elements 側 Phase 5) も入っている。Windows (SDL3 / WINVER)・macOS・Linux の実機で確認した。下の「使い方」が実際の口。以降の節は設計時の記録で、細部は実装と違うところがある (違いは「使い方」の下に列挙)。Elements 側の設計は `external/elements/docs/accessibility.md` にある (この文書では「本体設計」と呼ぶ)。この文書では、krkrz 側の接続と REPL / Agent の拡張だけを扱う。パスは `src/core/` 起点。
 
+使い方のガイド: [読み上げ (スクリーンリーダー)](../guide/Accessibility.md)。動く例はコアデモ `data/a11y`。
+
 API リファレンス: [ElementsDialog](../reference/ElementsDialog.md) (`announce` / `setGameA11y` / `a11yLayers` ほか)、[Agent](../reference/Agent.md) (`a11yTree` / `a11yLog` / `a11yAction`)、[Layer](../reference/Layer.md) (Layer に生やすメンバ)。
 
 ## 使い方 (実装済み)
@@ -31,7 +33,7 @@ API リファレンス: [ElementsDialog](../reference/ElementsDialog.md) (`annou
 ダイアログの入力欄 (`input_box` / `text_box`) は、スクリーンリーダーが文字・単語・行の単位で読め、キャレットの移動も追える (UIA の TextPattern / AT-SPI の Text・EditableText / macOS の AXSelectedTextRange・AXStringForRange)。スクリーンリーダーからキャレットや選択範囲を動かすこともできる。スクリプト側ですることは無い。
 
 - 読み上げログには、値が変わらずにキャレットだけ動いたとき `[caret] x` (行末は `(line end)`、末尾は `(end)`)、選択したとき `[selected] 文字列` が出る。
-- IME の変換中の文字列 (確定前) は読まない。読むのは確定した文字だけ (Elements 側の残課題)。
+- IME の変換中の文字列 (確定前) は扱わない。変換中の文字や候補は OS の IME 自体がスクリーンリーダーへ伝えるので、アプリ側でも出すと二重に読まれる。入力欄が持つのは確定した文字だけ (本体設計 §6.5)。
 - ゲーム本体の `EditLayer` (`a11yLayers`) と `setGameA11y` の `text_input` は値を読むだけで、文字単位の読み上げは無い。
 
 ### ゲーム本体のノード (`setGameA11y`)
@@ -202,4 +204,4 @@ KAG 本体の .tjs は変更しない。拡張 `system/A11yKAG.tjs` を用意し
 | B (済) | ゲーム本体の source (`setGameA11y` と、Layer フォーカス連鎖 / `hint` / `focusedLayer` / `ElementsPanel` を読む `a11yLayers`)。KAG 拡張スクリプトは行わない |
 | C | `showModalJson` の専用ウィンドウ、複数 Window (macOS / Linux 実機での確認は A / B と一緒に済んだ) |
 
-入力欄の文字・単語・行単位の読み上げは Elements 側 (本体設計 §6.5) で済んでいる。残りは Phase C と、IME の変換中文字列の読み上げ (Elements 側)。索引は umbrella の `TODO.md`。
+入力欄の文字・単語・行単位の読み上げは Elements 側 (本体設計 §6.5) で済んでいる。IME の変換中文字列は扱わない方針 (上の「入力欄」)。残りは Phase C。索引は umbrella の `TODO.md`。

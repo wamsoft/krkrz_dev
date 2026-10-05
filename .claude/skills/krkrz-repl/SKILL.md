@@ -254,6 +254,9 @@ function Send-Cmd($script, $timeoutMs = 5000) {
 | `Agent.dialogClick(i,id)` / `Agent.dialogFocus(i,id)` | id 指定で起動 / フォーカス (座標不要) |
 | `Agent.captureScreen(path[,x,y,w,h])` | overlay 込み実画面を**次フレーム**で PNG 保存 (戻り値=path) |
 | `Agent.lastCapture()` | 直近キャプチャ結果 `%[path,width,height,ok]` |
+| `Agent.a11yTree()` | 読み上げツリー (スクリーンリーダーに見えるもの) を JSON 文字列で。`{"dialogs":[…],"game":…}`。スクリーンリーダー無しでも取れる |
+| `Agent.a11yLog([since])` | 読み上げログ `%[lines, next]` (「おおよそ何と読むか」の行: `[focus]` / `[value]` / `[state]` / `[caret]` / `[polite]` …)。REPL 稼働中だけ溜まる |
+| `Agent.a11yAction(node, action[, arg])` | スクリーンリーダーと同じ経路で操作 (キー合成ではない)。action = click / focus / increment / decrement / set_value |
 
 検証フロー例 (ファイルチャネル)。`$CAP_DIR` はセッションの scratchpad など
 書き込み可能な作業ディレクトリの絶対パス:
@@ -334,6 +337,10 @@ Scripts.execStorage("mytest.tjs");      // data/ 配下 (autopath)
 | `.cap [path]` | 画面キャプチャ (`Agent.captureScreen`、省略時 agent_cap.png) |
 | `.dlg` / `.dlgclose` | ダイアログ一覧 / 全クローズ (`Agent.dialogs`/`closeAllDialogs`) |
 | `.click X Y` | (X,Y) にクリック注入 (`Agent.click`) |
+| `.a11y` | 読み上げツリーを表示 (`Agent.a11yTree`) |
+| `.a11ylog [N]` | 読み上げログの N 行目以降 (`Agent.a11yLog`) |
+| `.a11ydo <node> <action> [arg]` | 読み上げツリーのノードを AT の経路で操作 (`Agent.a11yAction`)。node は `.a11y` の id (画面 JSON の `"id"` / setGameA11y の id / `layer:<Layer.name>` / `#<hex>`) |
+| `.say <text>` | `ElementsDialog.announce` |
 | `.watch` | 監視式の一覧を `id: 式 = 値` で表示 (表示前に全件評価) |
 | `.watch add EXPR` | 監視式を追加して即評価 (式は空白を含んでよい) |
 | `.watch rm ID` / `.watch rm all` | 監視式の削除 / 全消し |

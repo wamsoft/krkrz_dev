@@ -90,6 +90,7 @@ nav:
       - サウンドシステム: guide/SoundSystem.md
       - ストレージシステム: guide/StorageSystem.md
       - ダイアログ: guide/ElementsDialog.md
+      - 読み上げ (スクリーンリーダー): guide/Accessibility.md
       - フォントシステム: guide/FontSystem.md
       - トランジション: guide/Transition.md
       - プラグイン: guide/Plugins.md

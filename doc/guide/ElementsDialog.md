@@ -322,6 +322,10 @@ ElementsDialog.registerFont("MyFont-Medium", "fonts/MyFont-VF.ttf#wght=500");   
 
 日本語 / 繁体字 / 簡体字のように文字体系ごとの別フォントを持つ UI では、[ElementsDialog.fontLanguages](../reference/ElementsDialog.md#fontlanguages) に言語→ファミリの置換表を設定しておくと、[ElementsDialog.language](../reference/ElementsDialog.md#language) の切替に連動してフォント解決時にファミリが差し替わります ( 共有コードポイントの漢字を表示言語に合った地域字形で描画できます )。表は画面 JSON の top-level `"font_languages"` でも宣言でき、特定 widget だけ言語を固定したい場合は widget の `"locale"` を指定します。
 
+## 読み上げ ( スクリーンリーダー )
+
+表示中の画面は、OS のスクリーンリーダーからそのまま読めます。名前が自動で決まらない部品 ( 絵だけのボタンなど ) は、画面 JSON の `"a11y"` キーで補います。詳しくは [読み上げ ( スクリーンリーダー )](Accessibility.md) を参照してください。
+
 ## ビルド構成
 
 ダイアログ機能は `KRKRZ_USE_ELEMENTS=ON` ( デフォルト ) でビルドされたエンジンで利用できます。SDL3 ビルドと WINVER ( Windows ネイティブ / D3D11 ) ビルドの両方に対応します。`KRKRZ_USE_ELEMENTS=OFF` でビルドした場合は [ElementsDialog](../reference/ElementsDialog.md) / [ElementsPanel](../reference/ElementsPanel.md) クラスは登録されず、ダイアログ関連のコードはリンクから除外されて実行ファイルサイズが削減されます。
