@@ -563,6 +563,73 @@ class ElementsDialog {
 	function onClose(action);
 
 	/**
+	 * キー捕捉を始める
+	 *
+	 * 「次に押されたキーをそのまま受け取る」ためのメソッドです。キー割り当ての設定画面で
+	 * 「割り当てるキーを押してください」と出すときのように、キーをウィジェットの操作
+	 * ( フォーカス移動・決定・Esc で閉じる等 ) に使わせず、TJS で判定したい場面で使います。
+	 *
+	 * 捕捉中のダイアログがキーボードフォーカスを持っている間は、キーの押下がすべて
+	 * [onKeyCapture](#onkeycapture) へ届き、ウィジェットには渡りません。
+	 *
+	 * - モーダルの上でも、[registerHotKey](#registerhotkey) で登録したキーよりも優先します。
+	 *   ただし [System.registerHotKey](System.md#registerhotkey) の最上位ホットキーは
+	 *   先に効きます。
+	 * - Shift / Ctrl / Alt の単独押し、ゲームパッドのボタン ( `VK_PAD*` )、
+	 *   オートリピート ( `ssRepeat` 付き ) も届きます。リピートを無視するかは受け手が決めます。
+	 * - 左以外のマウスボタン ( 右 / 中 / X ) の押下も `VK_RBUTTON` などで届きます
+	 *   ( 右クリックで取り消す、など )。左クリックは通常どおりウィジェットへ届きます。
+	 * - キーを離したときのイベントと文字入力は、捕捉中は捨てます。
+	 * - 捕捉したキーを押したまま捕捉を終えても ( ダイアログを閉じても )、背面の画面へ
+	 *   リピートが漏れることはありません。
+	 *
+	 * [endKeyCapture](#endkeycapture) を呼ぶか、ダイアログを閉じると捕捉は終わります。
+	 *
+	 * 説明文だけのダイアログを設定画面の上にモーダルで重ね、そのダイアログで
+	 * 捕捉するのが典型的な使い方です。[onKeyCapture](#onkeycapture) の中から
+	 * [close](#close) を呼んでもかまいません。
+	 *
+	 * ```tjs
+	 * var dlg = new ElementsDialog();
+	 * dlg.onKeyCapture = function(key, shift) {
+	 *     if (shift & ssRepeat) return;          // リピートは無視
+	 *     if (key == VK_RBUTTON) { close(); return; }   // 右クリックで取り消し
+	 *     assignKey(key);
+	 *     close();
+	 * } incontextof dlg;
+	 * dlg.showJson(promptJson);
+	 * dlg.beginKeyCapture();
+	 * ```
+	 * @returns 捕捉を始められたら真。ダイアログが表示されていない ( アクティブでない ) ときは偽。
+	 * @see ElementsDialog.endKeyCapture
+	 * @see ElementsDialog.onKeyCapture
+	 */
+	function beginKeyCapture();
+
+	/**
+	 * キー捕捉を終える
+	 *
+	 * [beginKeyCapture](#beginkeycapture) で始めた捕捉を終えます。ダイアログを閉じた場合は
+	 * 自動で終わるので、呼ぶ必要はありません。
+	 * @returns 終えられたら真。ダイアログが表示されていない ( アクティブでない ) ときは偽。
+	 * @see ElementsDialog.beginKeyCapture
+	 */
+	function endKeyCapture();
+
+	/**
+	 * 捕捉したキー
+	 *
+	 * [beginKeyCapture](#beginkeycapture) で捕捉中に押されたキーを受け取るイベントです。
+	 * TJS 側で override してください。既定は何もしません。
+	 * @param key VK コード。左以外のマウスボタンは `VK_RBUTTON` / `VK_MBUTTON` /
+	 *   `VK_XBUTTON1` / `VK_XBUTTON2`、ゲームパッドのボタンは `VK_PAD*`。
+	 * @param shift `ss*` の組み合わせ。オートリピートは `ssRepeat` 付き。
+	 * @kind event
+	 * @see ElementsDialog.beginKeyCapture
+	 */
+	function onKeyCapture(key, shift);
+
+	/**
 	 * 実行時画像を登録する
 	 *
 	 * 統一ストレージパス path のファイルを name で実行時画像ストアへ登録します。jsonc の

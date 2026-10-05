@@ -19,16 +19,6 @@
 ## サマリー
 
 - クラス未作成: 0
-- 未記載メンバー合計: 3
+- 未記載メンバー合計: 0
 - コードに無いメンバー合計: 0
-
-## ElementsDialog
-
-- manual: `doc/manual/ElementsDialog.manual.tjs`
-- code: `src/core/common/visual/elements/DialogIntf.cpp`
-
-### 未記載メンバー
-- [ ] `beginKeyCapture` (method)
-- [ ] `endKeyCapture` (method)
-- [ ] `onKeyCapture` (event)
 
