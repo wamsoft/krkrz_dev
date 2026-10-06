@@ -3,6 +3,8 @@ name: krkrz-webui
 description: 吉里吉里Z (krkrz) の -replweb HTTP+SSE サーバ (WebServer クラス) にブラウザ UI を載せて、本体アプリの操作/編集/観測パネルをブラウザ側に組み込む方法論。ゲーム本体は 3D 表示やゲーム内 UI に専念させ、編集ツール・インスペクター・ダッシュボード・REPL コンソールをブラウザ (別ウィンドウ/別PC) から使う構成を作るときに読む。プラグインや TJS がサーバへエンドポイントを追加公開する手順 (WebServer.register / serveStatic / broadcast)、ハンドラ呼び出し規約 (req %[method,path,query,body,bytes] → 文字列/octet/整数/辞書)、状態同期パターン (fetch POST + SSE /sub push + throttle + 差分/tick 配信)、既存 REPL コンソール (/events + /cmd) の UI 埋め込み、ブラウザのアプリモード起動 (Chromium --app / -webui)、json.dll 連携、TJS2 由来のハマりどころ (ローカル関数クロージャ不在→クラス化 / ブロックコメントのネスト誤爆 / startup 例外の致命性 / ハンドラは必ずメインスレッド実行) を網羅。エンジン側 WebServer クラスそのものの仕様は krkrz core doc/REPL.md、REPL/Agent 駆動は skill krkrz-repl、Elements ネイティブ UI は skill elements、TJS2 言語は skill tjs2、本体 API は skill krkrz を参照。
 ---
 
+> **パスの基点**: 本文の相対パスは **engine ルート基準** (krkrz_dev では `src/core/` を前置。下記参照)。作業ディレクトリが krkrz_dev 以外 (krkrz_android / krkrz_ios などの外枠や案件フォルダ) のときは **`${KRKRZ_BASE}/krkrz_dev/` を前置して**読む (`echo $KRKRZ_BASE` で実パスを確認。マシンごとに値が違うので絶対パスは書き込まない)。
+
 # krkrz replweb ベース ブラウザ UI 組み込み方法論
 
 krkrz エンジンの `-replweb` HTTP+SSE サーバ (`KRKRZ_REPL_WEB` ビルド) に乗せて、

@@ -3,6 +3,8 @@ name: elements
 description: 吉里吉里Z 上の Elements ベース汎用ダイアログ/画面 UI (cycfi/elements + elements_modal) の作り方リファレンス。TJS で JSON / Dictionary 定義のダイアログを作る・出す・イベントを受ける・複数画面フロー(navigator)や常駐メニューを組む・入力/フォーカス/モーダルを制御する・Agent で動作検証する、といった場面で使う。基本的なダイアログ画面の作り方(最小例・レイアウト JSON スキーマ・ウィジェット一覧)から、モーダル/非モーダル/独立ウィンドウ/常駐フロー、複数インスタンス/z-order、DrawDevice 登録タイミング等のハマりどころまで網羅。Win32 ネイティブの WIN32Dialog(win32dialog プラグイン)とは別物。TJS2 言語仕様は skill `tjs2`、本体クラス API は `krkrz`、REPL/Agent 駆動は `krkrz-repl` を参照。
 ---
 
+> **パスの基点**: 本文の相対パスは **engine ルート基準** (krkrz_dev では `src/core/` を前置。下記参照)。作業ディレクトリが krkrz_dev 以外 (krkrz_android / krkrz_ios などの外枠や案件フォルダ) のときは **`${KRKRZ_BASE}/krkrz_dev/` を前置して**読む (`echo $KRKRZ_BASE` で実パスを確認。マシンごとに値が違うので絶対パスは書き込まない)。
+
 # Elements ベース ダイアログ / 画面 UI (krkrz)
 
 吉里吉里Z に埋め込んだ [Elements](https://github.com/wamsoft/elements) (ThorVG/cycfi ベースの C++ GUI) で、**JSON / TJS Dictionary 定義のダイアログや画面**を出す仕組み。`ElementsDialog` クラス経由で使う。全デスクトップ変種 (SDL3 / WINVER / OGL) で動作する。

@@ -3,6 +3,8 @@ name: krkrz-repl
 description: 吉里吉里Z (krkrz) の SDL3 / WINVER ビルドを REPL 経由でエージェントから駆動するためのリファレンス。krkrz を起動して TJS スクリプトを評価・検証・デバッグする、startup.tjs を介さず明示的に処理を開始する、入力イベント (キー/マウス) を注入する、画面をキャプチャして目視確認する、Elements ダイアログを観測・操作する、例外やダイアログ表示をコンソールで観測する、コアデモ全シーンを自動巡回してキャプチャで表示確認する (-demotest / -demotestcap)、といった場面で使う。**外部エージェントは console(CONIN$) に打てないので -replfile ファイルチャネルが本命**。起動フラグ (-repl / -replfile / -nostartup / -loglevel / -display / -ignoremouse)、ファイルチャネルのプロトコル、Agent API (入力注入 / captureScreen / dialogs / dialogClick)、ドットコマンド (.cap/.dlg/.click/.mem 等)、REPL 駆動時の挙動変更 (例外で即終了しない / inform と例外ダイアログがコンソールに出る) を網羅。TJS2 言語仕様そのものは skill `tjs2`、本体クラス API は skill `krkrz` を参照。
 ---
 
+> **パスの基点**: 本文の相対パスは **engine ルート基準** (krkrz_dev では `src/core/` を前置。下記参照)。作業ディレクトリが krkrz_dev 以外 (krkrz_android / krkrz_ios などの外枠や案件フォルダ) のときは **`${KRKRZ_BASE}/krkrz_dev/` を前置して**読む (`echo $KRKRZ_BASE` で実パスを確認。マシンごとに値が違うので絶対パスは書き込まない)。
+
 # krkrz REPL 駆動リファレンス
 
 krkrz SDL3 ビルドには対話型 TJS シェル (REPL) が組み込まれている

@@ -3,6 +3,8 @@ name: tjs2
 description: TJS2 (吉里吉里Z 内蔵スクリプト言語) の言語仕様と組み込みクラスのリファレンス。.tjs ファイル / *.ks (KAG) 内の埋め込みスクリプト / TJS2 コード断片 を扱う、書く、レビューする、デバッグするときに使う。JavaScript / TypeScript に似ているが文法と意味論が違うので、JS の感覚で書くと壊れる場合が多い。組み込みクラス (Array / Dictionary / Date / Math / RegExp / Exception) の API もここに集約。**呼び出されたら必ず「JS との主な違い」セクションを最初に確認し、その上で必要な詳細リファレンスを Read で取りに行くこと。** 吉里吉里Z 本体のクラス API (Window / Layer / System / Storages / Bitmap 等) や engine 内部はこのスキルの対象外。
 ---
 
+> **パスの基点**: 本文の相対パスは **krkrz_dev リポジトリルート基準**。作業ディレクトリが krkrz_dev 以外 (krkrz_android / krkrz_ios などの外枠や案件フォルダ) のときは **`${KRKRZ_BASE}/krkrz_dev/` を前置して**読む (`echo $KRKRZ_BASE` で実パスを確認。マシンごとに値が違うので絶対パスは書き込まない)。
+
 # TJS2 言語リファレンス
 
 TJS2 (TJS Just Script 2) は吉里吉里 / 吉里吉里Z (kirikiri Z) 内蔵の

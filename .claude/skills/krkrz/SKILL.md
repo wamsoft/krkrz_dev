@@ -3,6 +3,8 @@ name: krkrz
 description: 吉里吉里Z (kirikiri Z) 本体クラス API のリファレンス。TJS2 で吉里吉里Z 上のスクリプトを書く、レビューする、デバッグするときに使う。Layer / Window / Bitmap / System / Storages / Font / Plugins / Timer / Debug / AsyncTrigger / Scripts / BinaryStream / Matrix32 / Matrix44 / Rect / ImageFunction のコア API、サウンド系 (WaveSoundBuffer / SoundBuffer / VideoOverlay)、DrawDevice (BasicDrawDevice / SDLDrawDevice / OGLDrawDevice / NullDrawDevice)、OpenGL 描画系 (Canvas / Texture / ShaderProgram / Offscreen / VertexBinder / VertexBuffer)、および主要プラグイン提供クラス (HttpRequest / GdiPlus.* / WIN32Dialog / CSVParser / LineParser / Process / Pad / MenuItem / Unzip / Zip / PSD / SimpleHTTPServer) を網羅。**呼び出されたら必ず「共通パターン」と「クロスカッティング概念」を確認し、必要な詳細クラスは doc/reference/*.md を Read しに行くこと。** TJS2 言語そのものや組み込みクラス (Array / Dictionary / Math 等) は別 skill (`tjs2`) を参照。エンジン内部構造 (C++ 実装、レンダリングパイプライン詳細) は対象外。
 ---
 
+> **パスの基点**: 本文の相対パスは **krkrz_dev リポジトリルート基準**。作業ディレクトリが krkrz_dev 以外 (krkrz_android / krkrz_ios などの外枠や案件フォルダ) のときは **`${KRKRZ_BASE}/krkrz_dev/` を前置して**読む (`echo $KRKRZ_BASE` で実パスを確認。マシンごとに値が違うので絶対パスは書き込まない)。
+
 # 吉里吉里Z 本体クラス API リファレンス
 
 吉里吉里Z (kirikiri Z) が TJS2 から見えるクラス API のスキル。スクリプト
