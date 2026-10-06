@@ -52,6 +52,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 - **★重要: プラグインフォルダの規則を明文化・統一した (SDL 版)**。`plugin64/` を使うのは **Windows の 64bit 版だけ**で、Linux などは 64bit 版でも `plugin/` (CMake のインストール先と同じ。**Linux の動作は従来どおり**)。gcc / clang (MinGW 等) でビルドした Windows 64bit の SDL 版だけは `plugin/` → `plugin64/` に変わる。起動ログに `pluginPath:` を出すようにし、Linux 等で `plugin64/` が置かれていると「探索しない」警告を出す。ガイド = `doc/guide/Plugins.md` 「プラグインフォルダの名前」(src/core `051c7691`)
 - **★重要: TLG6 画像のうち幅が 8 の倍数でないものが、Windows x64 版 (および今回から Linux / macOS の x64 版) で崩れて読まれ、メモリを壊すことがあった**のを修正。SSE2 版のデコードが行末の端数ブロックまで 8 画素として処理していた。32bit 版と `-cpusimd=no` では起きない (src/core `f327fe65`)
 - `TJS_64BIT_OS` が gcc / clang の 64bit ビルドでも定義されるようになった (以前は MSVC x64 だけ)。tp_stub も更新したので、**このマクロで分岐しているプラグインは Linux / macOS の 64bit ビルドで挙動が変わる** (同梱プラグインに該当なし)。`System.osBits` / `exeBits` も 64 を返す
+- **★重要: Linux 版の既定のデータ保存場所 (`-datapath` 未指定時) を、実行ファイルの隣の `savedata` からユーザごとのフォルダ `~/.local/share/<orgname>/<appname>/` (SDL_GetPrefPath、`getLocalName` が使えるローカルパス) に変更**。配布物は `<exe名>.cf` に `orgname` / `appname` を書く運用 (Steam Cloud の同期パスもここ)。旧位置を使い続けるには `datapath="$(exepath)/savedata"`。旧既定のセーブが exe の隣に残っていれば起動時に警告。あわせて、以前の Linux 版は既定の保存場所の末尾に `/` が無く `System.dataPath + "x"` が exe の隣に `savedatax` として書かれていたのを修正。Linux 版では `$(appdatapath)` 等もこのフォルダ (以前は `user://`)。Windows / Android は変更なし。ガイド = `doc/guide/CommandLine.md` -datapath (src/core `2459eed5`)
 - SDL 版: `./krkrz` のような相対パスでの起動で起動直後に落ちていたのを修正。REPL Web / DAP サーバを止めるときに Linux で固まっていたのを修正。`System.openGLESVersion` が実際の版 (例: 320) を返すようになり、GLES3 用のテクスチャ転送経路が使われるようになった
 
 2.4.0 (2026-09-30) までの分は krkrz.git のサマリ `3af0ed63` と タグ `v2.4.0` の「■ 移行メモ」へ載せた
@@ -148,6 +149,7 @@ registerHotKey の WINVER 配線)。
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
 | ✅ | 2026-10-06 の Linux 修正を基準環境で確認する | 相対パス起動の abort / サーバ停止時のハング / GLES 版 / exeBits の修正 (src/core `5016acf1`〜`a86ec6de`) は、ホストの Ubuntu 26.04 (glibc 新・gcc 15・CMake 4.2) で直ビルドして確認しただけ。2026-10-06 に基準環境 (steamdev `deckbuild/` sniper SDK、src/core `051c7691`) で configure〜install が通り、[LinuxBuild.md](src/core/doc/LinuxBuild.md) の合格基準 (GLIBC ≤ 2.31 / GLIBCXX 依存なし) を満たすこと、ホスト (Wayland) で `-demotest -demotestcap` 全 24 シーン ok を確認済み。同日 Steam Deck 実機 (SteamOS 3.8.16、ネイティブ実行) でも `-demotest -demotestcap` 全 24 シーン ok。なお Steam から起動すると同梱 SDL3 (3.4.0) ではなく Steam ランタイム側の SDL3 (3.2.18) が読まれていた (動作は問題なし) (`dc5a3ed`) |
 | ✅ | Steam 起動時に同梱 SDL3 が使われない | Deck で Steam から起動すると `LD_LIBRARY_PATH=.` を付けても Steam ランタイム側の SDL3 (3.2.18) が先に読まれ、ビルドした SDL3 (3.4.0) が使われない。今のところ動作に問題はないが、SDL3 側の修正に依存する不具合が出たら効いてくる。→ exe に `$ORIGIN` を DT_RPATH で埋め込み、soname リンクも install するよう修正。Deck の Steam 起動で同梱 3.4.0 が読まれ `-demotest` 全 24 シーン ok を確認 (src/core `0f54ee4b`) |
+| 中 | 配布パッケージ外枠の整備 (Linux 以外も) | Linux は [krkrz_linux](https://github.com/wamsoft/krkrz_linux) でフォルダ + tar.gz まで (2026-10-06)。残り: AppImage 出力 (`.desktop` / アイコンは生成済み)、xp3 アーカイブの作成、Flatpak (AppStream メタデータ) は需要次第。macOS (.app) / Windows (フォルダ・MSIX) / Xbox (GDK) も `*-config.json` の `cmake` / `assetPack` 書式を共通にした外枠で揃える方向で調査 |
 
 ## 将来課題
 
