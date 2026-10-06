@@ -12,6 +12,9 @@ krkrz のビルド・資材構築・起動の定義です。
   ( engine 側 SSOT )
 - steamdev 側の詳細は `docs/WORKFLOW.md` / `docs/DECKPROJECT.md` /
   `deckbuild/README.md`
+- 作品を配布用のフォルダ / tar.gz にまとめるのは
+  [Linux 版の配布パッケージ ( krkrz_linux )](linux_package.md)。その出力も
+  同じ手順で Deck に送って確かめられる
 
 ---
 
@@ -25,6 +28,21 @@ krkrz のビルド・資材構築・起動の定義です。
 
 未整備なら steamdev の README「初期セットアップ」に従います
 ( イメージ作成は数 GB ダウンロードで初回のみ )。
+
+**Linux ホストから使う場合** ( WSL を使わない ) の違い:
+
+- steamdev は `uv tool install --editable <steamdev> --with zeroconf` で入れる
+  ( Debian / Ubuntu 系で python3-venv が無くても uv なら入る )。イメージは
+  `bash <steamdev>/deckbuild/deckbuild.sh image`
+- devkit 鍵は `~/.config/steamos-devkit/devkit_rsa`。Windows の公式クライアントで
+  ペアリング済みでも、このホストは別にペアリングが要る。**Deck 側で
+  「設定 → 開発者 → Pair new host」を開いてから** `steamdev -d <ip> register`
+  ( 開いていないと HTTP 403 )
+- Deck の `~/devkit-utils` は公式クライアント由来。Linux ホストには同梱の utils が
+  無いので、一度でも Windows から転送済みなら `sync-utils` は不要
+- Deck は `avahi-browse -rpt _steamos-devkit._tcp` でも見つかる
+- コンテナは root で動くので、Linux ホストでは `bin/x64-linux/` が root 所有になる
+  ( 戻し方は LinuxBuild.md )
 
 Deck の IP は毎回打たずに固定できます。
 
@@ -55,10 +73,14 @@ WSL の Ubuntu などで直接ビルドが通っても確認したことには�
 wsl -e bash -lc "cd /mnt/d/.../bin/x64-linux/Release && \
   objdump -T krkrz | grep -o 'GLIBC_[0-9.]*' | sort -uV | tail -1 && \
   objdump -T krkrz | grep -c GLIBCXX"
+# Linux ホストなら wsl -e を外してそのまま
+readelf -d bin/x64-linux/Release/krkrz | grep RPATH     # (RPATH) [$ORIGIN]
 ```
 
 - 要求 glibc の最大が **2.31 以下**
 - **GLIBCXX 依存が 0** ( libstdc++ は静的リンク )
+- 実行ファイルに **`$ORIGIN` の RPATH** ( 同梱 SDL3 を確実に読むため。プラグインは
+  `$ORIGIN:$ORIGIN/..` )
 
 ### 1-3. 転送と起動
 
@@ -78,6 +100,28 @@ steamdev screenshot -o deck.png
 プロセスが居ても前面とは限りません ( gamescope は最後に起動したものを前面化 )。
 **必ずスクリーンショットまで見ます**。`run-game` 直後は Steam 側の処理に
 数秒〜十数秒のラグがあるので、待ってから確認します。
+
+### 1-4b. コアデモ全シーンの表示確認 ( 推奨 )
+
+起動引数を差し替えて `-demotest -demotestcap` を Deck 上で回すと、デモの全シーンを
+巡回して PNG に撮り、終わると自分で終了します。`steamdev deploy` で起動コマンドを
+一時的に差し替えます ( 引数は登録時に焼き込まれるので、終わったら
+`steamdev project -p . deploy linux` で元に戻す )。
+
+```bash
+steamdev project -p . stage linux
+steamdev deploy --gameid krkrz_linux --dir .deckstage/linux --clean --start \
+    --command "./krkrz data -demotest -demotestcap=/home/deck/krkrz_demotest -loglevel=info"
+# 終了待ち: steamdev exec -- "pgrep -x krkrz" が空になるまで
+steamdev exec -- "ls /home/deck/krkrz_demotest | wc -l"     # シーン数
+steamdev exec -- "grep -a '@demotest:' ~/.local/share/Steam/logs/console-linux.txt | tail -2"
+steamdev ssh-command      # 表示された ssh のオプションで rsync -e "ssh ..." すればキャプチャを回収できる
+steamdev project -p . deploy linux                            # 起動コマンドを戻す
+```
+
+Steam から起動したアプリの標準出力は Deck の
+`~/.local/share/Steam/logs/console-linux.txt` に入ります ( バイナリが混ざるので
+`grep -a` )。読み込まれた .so は `/proc/$(pgrep -x krkrz)/maps` で確かめられます。
 
 ### 1-5. REPL で中身を確認する ( 任意 )
 
@@ -131,6 +175,9 @@ Proton の初回起動は prefix 生成で数十秒かかるのが正常です�
 | 起動引数を変えたのに反映されない | 引数はショートカット登録時に Steam 側へ焼き込まれる。デバイス上の `<gameid>-argv.json` を書き換えても無駄で、**再デプロイが必要** |
 | curl `-d 'expr=a+b'` の `+` が空白になる | form-urlencoded の仕様。`+` は **`%2B`** と書く |
 | ビルドが `_mm256_*` 未定義で失敗 | sniper SDK 既定の gcc-10 が古い。deckbuild は gcc-14 を既定にしている |
+| `deckbuild.sh image` が apt の 404 で失敗 | Debian 11 の LTS 終了で `bullseye-security` が deb.debian.org から消えた。steamdev `adc1343` 以降の Dockerfile は archive.debian.org に向け直している |
+| ホストで Wayland 起動すると SDL の初期化で segfault | 画面 ( コンポジタ ) がスリープ中だった。ビルドの問題ではないので、画面を復帰させてから実行する |
+| セーブデータが見当たらない | 2026-10 から Linux 版の既定の保存場所は `~/.local/share/<orgname>/<appname>/` ( Deck なら `/home/deck/.local/share/…` )。`deckproject.toml` の構成は `.cf` が無いので `wamsoft/krkrz` |
 
 ### `-replweb` を使うときの注意 ( 2026-09-06〜 )
 
@@ -153,9 +200,17 @@ Proton の初回起動は prefix 生成で数十秒かかるのが正常です�
 - トンネル経由で `/state` `/watch` `/pad/exec` `/` ( ブラウザ UI ) すべて応答
 - 後片付けまで完了
 
+2026-10-06 に Linux ホスト ( WSL なし ) から再確認 ( SteamOS 3.8.16 )。
+
+- sniper ビルド: GLIBC ≤ 2.30 ( プラグインも ≤ 2.31 ) / GLIBCXX 依存なし
+- `-demotest -demotestcap` で全 24 シーン ok
+- 同梱 SDL3 ( 3.4.0 ) が RPATH で読まれることを `/proc/<pid>/maps` で確認
+  ( RPATH 対応前は SteamOS の `/usr/lib/libSDL3.so.0` ( 3.2.18 ) が読まれていた )
+
 ## 関連
 
 - [REPL ( 対話型 TJS シェル )](repl.md) — `-replweb` の HTTP API とブラウザ UI
 - [LinuxBuild.md](https://github.com/wamsoft/krkrz_develop/blob/master/doc/LinuxBuild.md)
   — sniper ビルド環境の中身と合格基準 ( engine 側 SSOT )
+- [Linux 版の配布パッケージ ( krkrz_linux )](linux_package.md) — 作品を配布用にまとめる
 - umbrella ルートの `deckproject.toml` — ビルド / 資材 / 起動の定義

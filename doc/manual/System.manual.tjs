@@ -601,6 +601,12 @@ class System {
 	 *
 	 * ユーザスクリプトがデータを保存する場合は、ここに保存することを推奨します。
 	 *
+	 * -datapath を指定しない場合の既定は、Windows では実行ファイルの隣の
+	 * `savedata`、**Linux 版では `~/.local/share/<orgname>/<appname>/`** です
+	 * ( 2026-10 から。以前は Linux も実行ファイルの隣 )。組織名・アプリケーション名は
+	 * -orgname / -appname ( 配布物では `<exe名>.cf` に書く ) で決まります。
+	 * Linux 版の値もローカルパスなので `Storages.getLocalName()` が使えます。
+	 *
 	 * **全ビルドに存在する**ため、保存先の取得はこのプロパティを使うのが安全です
 	 * ( [System.appDataPath](System.md#appdatapath) /
 	 * [System.personalPath](System.md#personalpath) は Windows ネイティブ
