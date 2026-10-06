@@ -177,6 +177,8 @@ Proton の初回起動は prefix 生成で数十秒かかるのが正常です�
 | ビルドが `_mm256_*` 未定義で失敗 | sniper SDK 既定の gcc-10 が古い。deckbuild は gcc-14 を既定にしている |
 | `deckbuild.sh image` が apt の 404 で失敗 | Debian 11 の LTS 終了で `bullseye-security` が deb.debian.org から消えた。steamdev `adc1343` 以降の Dockerfile は archive.debian.org に向け直している |
 | ホストで Wayland 起動すると SDL の初期化で segfault | 画面 ( コンポジタ ) がスリープ中だった。ビルドの問題ではないので、画面を復帰させてから実行する |
+| 外したはずの環境変数が効き続ける | Deck 側の devkit-utils は env が空だと `~/devkit-game/<gameid>-env.json` を消さない。steamdev `e39d1d9` 以降の `deploy` は env が空なら消す ( 古い steamdev で登録した title は再デプロイで消える ) |
+| `invalid gameid` で deploy が失敗 | gameid は英数字・`_`・`.` だけ ( ハイフン不可 ) |
 | セーブデータが見当たらない | 2026-10 から Linux 版の既定の保存場所は `~/.local/share/<orgname>/<appname>/` ( Deck なら `/home/deck/.local/share/…` )。`deckproject.toml` の構成は `.cf` が無いので `wamsoft/krkrz` |
 
 ### `-replweb` を使うときの注意 ( 2026-09-06〜 )
@@ -206,6 +208,8 @@ Proton の初回起動は prefix 生成で数十秒かかるのが正常です�
 - `-demotest -demotestcap` で全 24 シーン ok
 - 同梱 SDL3 ( 3.4.0 ) が RPATH で読まれることを `/proc/<pid>/maps` で確認
   ( RPATH 対応前は SteamOS の `/usr/lib/libSDL3.so.0` ( 3.2.18 ) が読まれていた )
+- krkrz_linux のサンプル案件のパッケージ ( `krkrz-sample` ) も同様に全 24 シーン ok。
+  保存場所は `.cf` の `orgname` / `appname` どおり `/home/deck/.local/share/wamsoft/krkrz-sample/`
 
 ## 関連
 

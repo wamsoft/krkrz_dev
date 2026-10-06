@@ -108,6 +108,10 @@ steamdev -d <deck> deploy --gameid mygame_linux \
     --dir build/linux/package/mygame --command "./mygame" --start
 ```
 
+gameid は英数字・`_`・`.` だけです ( ハイフン不可 )。2026-10-06 に krkrz_linux の
+サンプル案件 ( コアデモ ) で確認済みです: Deck のネイティブ実行で `-demotest` 全 24
+シーン ok、同梱 SDL3 が読まれ、保存場所は `/home/deck/.local/share/wamsoft/krkrz-sample/`。
+
 手順全体とハマりどころは [Steam Deck 実機確認](steamdeck.md) を参照してください。
 
 ## 今後
