@@ -186,6 +186,8 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
   - **$(savedgamespath)**  
     System.savedGamesPath(ゲームのセーブデータ用フォルダ)に置き換えられます。(1.1.0以降)
   
+  上の説明は Windows 版のものです。**Windows 以外の SDL3 版**では `$(appdatapath)` / `$(personalpath)` / `$(vistapath)` / `$(savedgamespath)` はいずれも**アプリごとのユーザ領域** ( `user://`。Linux 版は下記のローカルパス ) に置き換わり、[System.appDataPath](../reference/System.md#appdatapath) / [System.personalPath](../reference/System.md#personalpath) が返す OS 標準フォルダ ( macOS の `~/Library/Application Support/` など ) とは一致しません。
+  
   デフォルトでは「$(exepath)\savedata」となっています (**Linux 版を除く**。下記)。この設定は、インストーラなどを特に用いずにプログラムを zip 等で圧縮・アーカイブして配布し、ユーザにそれを展開して頂いてすぐにプログラム実行、という配布形態に適した設定です。
   
   しかし、このデフォルトの設定では、Program Files 以下にプログラムを配置した場合、Program Files 以下に書き込む権限がない、Windows XP 等の「制限ユーザ」等でプログラムを起動した場合に、ファイルを書き込むことができずにエラーになる可能性があります。
@@ -677,7 +679,7 @@ CPU の認識トラブルが起こった場合に 'no' に設定するとその�
 - **-**replweb** (ブラウザ REPL ビューワーの有効化 / `KRKRZ_REPL_WEB` ビルド向け)**  
   軽量な HTTP + SSE サーバを立て、ブラウザから 上=ログ / 下=入力 で REPL を操作できるようにします。端末 ( conhost ) の制約を受けず、テキスト選択・コピー・貼り付け・スクロール・検索がブラウザネイティブに効きます。
   
-  設定可能な値は `[ホスト:]ポート` です。例: `-replweb=8899` ( `http://127.0.0.1:8899/` )。既定バインドは **127.0.0.1 ( ローカル専用 )**。`-replweb=0.0.0.0:8899` のように指定すると全インタフェースにバインドし、**別マシンのブラウザから接続**できます ( devkit / LAN 用途。ネットワークに露出するため信頼できる環境でのみ使用 )。`no` / `0` / `off` / `false` で無効。
+  設定可能な値は `[ホスト:]ポート` です。例: `-replweb=8899` ( `http://127.0.0.1:8899/` )。既定バインドは **127.0.0.1 ( ローカル専用 )**。`-replweb=0.0.0.0:8899` のように指定すると全インタフェースにバインドし、**別マシンのブラウザから接続**できます ( devkit / LAN 用途。ネットワークに露出するため信頼できる環境でのみ使用 )。macOS / iOS / Linux では全インタフェース指定 ( `0.0.0.0` / `*` / `::` ) のとき IPv6 と IPv4 の両方で待ち受けます ( IPv6 しか通らない iOS 実機の USB 接続 ( `<端末名>.coredevice.local` ) から開発 Mac で開くため。IPv6 が使えなければ IPv4 のみ )。`no` / `0` / `off` / `false` で無効。
   
   実装は WIN32 ( Winsock ) / POSIX ソケット両対応で、`-repl` / `-replfile` / `-replsocket` と独立・同時起動できます。詳細は [コンソール](Console.md#replweb) を参照してください。
 - **-**replwebidle** (ブラウザが閉じたらアプリも終了するまでの秒数)**  
