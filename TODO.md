@@ -38,26 +38,12 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 [Versioning.md](src/core/doc/Versioning.md) の「移行メモ」= サマリとタグメッセージの冒頭に置く一覧。 リリース枝へ反映するときに拾う。
 
-- **日本語・絵文字フォントを既定で埋め込まなくなった** (`KRKRZ_EMBED_BUNDLED_FONTS` の既定が OFF。埋め込むのは Roboto と elements_basic だけ、exe -6.5MB)。`resource://./notosansjp-regular.otf` 等を直接指していたスクリプトは引けなくなる。日本語は `fonts.json` で宣言するか OS のフォントを使う。従来どおりにするにはビルド時 `-DKRKRZ_EMBED_BUNDLED_FONTS=ON`
-- **SDL 版ほかで OS のフォントを名前で使えるようになった** (Windows = DirectWrite / Linux = fontconfig、名前だけ登録して初回使用時に読む)。既定フォントの候補にも入るので、フォントを同梱しない構成では OS の日本語フォントで描かれる。無効化は `-systemfont=no`
-- 既定フォントは `fonts.json` の宣言名も候補にし、起動時に決まらなければ後から登録された候補で選び直す (SDL 版ほか)
-- **どのフォントにも無い文字は U+FFFD (無ければ `?`) で描く** (以前は .notdef = 空白や豆腐、Elements では描かれなかった)。見えない文字 (制御文字・ゼロ幅・異体字セレクタ等) は何も描かない。GDI ラスタライザは対象外
-- **動画 (VideoOverlay のレイヤ再生) の終わり方が変わった**: 最終フレームを 1 フレーム分表示してから `stop` / ループの巻き戻しになる (以前は最終フレームの表示とほぼ同時で、ループでは最終フレームが見えなかった)。終了後・停止後のレイヤは最終フレームのまま (以前は先頭フレームに戻ることがあった)。ループの継ぎ目のために先頭と同じ絵を最後に足していた素材は、その 1 枚を外す (外さないと先頭の絵が 2 フレーム分続く)
-- 動画: 先頭フレームでも `onFrameUpdate` が来る (以前はフレーム 1 から)。webm のループで `perLoop` が 1 周 2 回出ていたのが 1 回に。mp4 のフレーム番号 (`frame` / `onFrameUpdate`) が 2 小さくなる (先頭フレーム = 0 に揃えた) / `position` も先頭フレーム = 0
-- 動画: webm の再生中に CPU 1 コアを使い切っていたのを解消。音声ありの webm でループの 2 周目が止まる・一時停止から再開するとコマが飛ぶ、を修正
-- WINVER: 動画を閉じた直後などに TJS のタイマー / REPL が数十秒〜2 分止まる (何か入力すると動き出す) ことがあったのを修正。アイドル時の待ちを `WaitMessage` → `MsgWaitForMultipleObjectsEx(MWMO_INPUTAVAILABLE)` に (イベント配送中の範囲指定 `PeekMessage` でタイマーの wake が「調べ済み」になり、キューに残ったまま眠っていた)
-- **SDL 版の動画で `loop` が効くようになった** (以前は無視されて 1 周で stop)。`frame` / `fps` / `numberOfFrame` / `onFrameUpdate` のフレーム番号も実際の値になった (以前は 0)。停止後・終了後の `play()` は先頭から
-- 一時フォルダ (アーカイブ内プラグイン DLL の取り出し先・`Storages.getTemporaryName`) が書けない / 環境変数が無く Windows ディレクトリになった場合は、警告ログを出してセーブデータのフォルダを使う
-- Elements のテーマフォントの末尾にエンジンの既定フォントがつながる (同梱フォントに無い文字は fonts.json / OS の日本語フォントで描かれる)
-- **★重要: プラグインフォルダの規則を明文化・統一した (SDL 版)**。`plugin64/` を使うのは **Windows の 64bit 版だけ**で、Linux などは 64bit 版でも `plugin/` (CMake のインストール先と同じ。**Linux の動作は従来どおり**)。gcc / clang (MinGW 等) でビルドした Windows 64bit の SDL 版だけは `plugin/` → `plugin64/` に変わる。起動ログに `pluginPath:` を出すようにし、Linux 等で `plugin64/` が置かれていると「探索しない」警告を出す。ガイド = `doc/guide/Plugins.md` 「プラグインフォルダの名前」(src/core `051c7691`)
-- **★重要: TLG6 画像のうち幅が 8 の倍数でないものが、Windows x64 版 (および今回から Linux / macOS の x64 版) で崩れて読まれ、メモリを壊すことがあった**のを修正。SSE2 版のデコードが行末の端数ブロックまで 8 画素として処理していた。32bit 版と `-cpusimd=no` では起きない (src/core `f327fe65`)
-- `TJS_64BIT_OS` が gcc / clang の 64bit ビルドでも定義されるようになった (以前は MSVC x64 だけ)。tp_stub も更新したので、**このマクロで分岐しているプラグインは Linux / macOS の 64bit ビルドで挙動が変わる** (同梱プラグインに該当なし)。`System.osBits` / `exeBits` も 64 を返す
-- **★重要: Linux 版の既定のデータ保存場所 (`-datapath` 未指定時) を、実行ファイルの隣の `savedata` からユーザごとのフォルダ `~/.local/share/<orgname>/<appname>/` (SDL_GetPrefPath、`getLocalName` が使えるローカルパス) に変更**。配布物は `<exe名>.cf` に `orgname` / `appname` を書く運用 (Steam Cloud の同期パスもここ)。旧位置を使い続けるには `datapath="$(exepath)/savedata"`。旧既定のセーブが exe の隣に残っていれば起動時に警告。あわせて、以前の Linux 版は既定の保存場所の末尾に `/` が無く `System.dataPath + "x"` が exe の隣に `savedatax` として書かれていたのを修正。Linux 版では `$(appdatapath)` 等もこのフォルダ (以前は `user://`)。Windows / Android は変更なし。ガイド = `doc/guide/CommandLine.md` -datapath (src/core `2459eed5`)
-- SDL 版: `./krkrz` のような相対パスでの起動で起動直後に落ちていたのを修正。REPL Web / DAP サーバを止めるときに Linux で固まっていたのを修正。`System.openGLESVersion` が実際の版 (例: 320) を返すようになり、GLES3 用のテクスチャ転送経路が使われるようになった
-- **★重要: `System.personalPath` / `appDataPath` が Windows 以外でも OS 標準フォルダを返すようになった** (以前は常に `exePath`)。macOS = `~/Documents/` / `~/Library/Application Support/`、iOS = サンドボックス内の同名フォルダ、Linux = XDG の Documents (無ければ `$HOME`) / `$XDG_DATA_HOME` (既定 `~/.local/share/`)、Android = アプリ専用外部ストレージ / 内部ストレージ。Windows と Web は変更なし。「exePath と等しければ別置き場なし」で分岐しているスクリプトは分岐先が変わる。`-datapath` の `$(appdatapath)` 等の置き換え先は変わらない。リファレンス = `doc/manual/System.manual.tjs` (src/core `91d999c5`)
-- SDL 版: `Window.enableTouch` の `onTouch*` がどのウィンドウにも届いていなかったのを修正 (イベントの宛先ウィンドウを `SDL_GetWindowFromEvent` で判定)。あわせて demolib で、ウィンドウを拡大表示している環境 (iOS / Android の論理面、デスクトップの拡大表示) のクリック位置がずれていたのを修正 (src/core `91d999c5`)
-- iOS: タッチ操作をエンジン側で変換するようにした。2 本指タップ = ESC (戻る)、2 本指の上下スワイプ = ホイール。1 本指は約 100ms 保留してから左ボタン押下。`Window.enableTouchMouse` = 偽で止まる (src/core `91d999c5`)
-- REPL Web (`-replweb`): macOS / iOS / Linux で全インタフェース指定時に IPv6 / IPv4 の両方で待ち受け (iOS 実機の USB 接続用)。ブラウザ側が切断した直後のログ送信で SIGPIPE によりアプリごと落ちる、サーバを止めずに `exit()` されると SIGABRT になる、を修正 (src/core `4d7b39d1` / `17621206` / `56e386c3`)
+(なし)
+
+2.5.0 (2026-10-06) までの分は krkrz.git のサマリ `b6485e20` と タグ `v2.5.0` の「■ 移行メモ」へ載せた
+(日本語フォントの既定埋め込み廃止 / OS フォント / U+FFFD 代替表示 / 動画の終わり方とフレーム番号 /
+プラグインフォルダの規則 / TJS_64BIT_OS / Linux の既定データ保存場所 / personalPath・appDataPath の各 OS 対応 /
+一時フォルダの逃がし先 / キャプチャ画像の不透明化)。
 
 2.4.0 (2026-09-30) までの分は krkrz.git のサマリ `3af0ed63` と タグ `v2.4.0` の「■ 移行メモ」へ載せた
 (IME 候補窓の追従 / KAGEX の IME 無効化への対処 / Elements のテキスト欄で IME を開く / ogg の float 出力 /
