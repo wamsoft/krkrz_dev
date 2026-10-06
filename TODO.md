@@ -28,7 +28,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 21 | Elements/UI 5 / エンジン基盤 12 / ビルド・運用 4 (内訳: 中 11 / 低 9 / 検討中 1) |
+| 予定・未着手 | 22 | Elements/UI 5 / エンジン基盤 13 / ビルド・運用 4 (内訳: 中 12 / 低 9 / 検討中 1) |
 | 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 12 | 単発の小さいもの。着手順は問わない |
@@ -49,6 +49,10 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 - **SDL 版の動画で `loop` が効くようになった** (以前は無視されて 1 周で stop)。`frame` / `fps` / `numberOfFrame` / `onFrameUpdate` のフレーム番号も実際の値になった (以前は 0)。停止後・終了後の `play()` は先頭から
 - 一時フォルダ (アーカイブ内プラグイン DLL の取り出し先・`Storages.getTemporaryName`) が書けない / 環境変数が無く Windows ディレクトリになった場合は、警告ログを出してセーブデータのフォルダを使う
 - Elements のテーマフォントの末尾にエンジンの既定フォントがつながる (同梱フォントに無い文字は fonts.json / OS の日本語フォントで描かれる)
+- **★重要: プラグインフォルダの規則を明文化・統一した (SDL 版)**。`plugin64/` を使うのは **Windows の 64bit 版だけ**で、Linux などは 64bit 版でも `plugin/` (CMake のインストール先と同じ。**Linux の動作は従来どおり**)。gcc / clang (MinGW 等) でビルドした Windows 64bit の SDL 版だけは `plugin/` → `plugin64/` に変わる。起動ログに `pluginPath:` を出すようにし、Linux 等で `plugin64/` が置かれていると「探索しない」警告を出す。ガイド = `doc/guide/Plugins.md` 「プラグインフォルダの名前」(src/core `051c7691`)
+- **★重要: TLG6 画像のうち幅が 8 の倍数でないものが、Windows x64 版 (および今回から Linux / macOS の x64 版) で崩れて読まれ、メモリを壊すことがあった**のを修正。SSE2 版のデコードが行末の端数ブロックまで 8 画素として処理していた。32bit 版と `-cpusimd=no` では起きない (src/core `f327fe65`)
+- `TJS_64BIT_OS` が gcc / clang の 64bit ビルドでも定義されるようになった (以前は MSVC x64 だけ)。tp_stub も更新したので、**このマクロで分岐しているプラグインは Linux / macOS の 64bit ビルドで挙動が変わる** (同梱プラグインに該当なし)。`System.osBits` / `exeBits` も 64 を返す
+- SDL 版: `./krkrz` のような相対パスでの起動で起動直後に落ちていたのを修正。REPL Web / DAP サーバを止めるときに Linux で固まっていたのを修正。`System.openGLESVersion` が実際の版 (例: 320) を返すようになり、GLES3 用のテクスチャ転送経路が使われるようになった
 
 2.4.0 (2026-09-30) までの分は krkrz.git のサマリ `3af0ed63` と タグ `v2.4.0` の「■ 移行メモ」へ載せた
 (IME 候補窓の追従 / KAGEX の IME 無効化への対処 / Elements のテキスト欄で IME を開く / ogg の float 出力 /
@@ -131,7 +135,9 @@ registerHotKey の WINVER 配線)。
 | 低 | フォントエンジンの未対応 (計画) 4 件 | ①収録範囲を使った**言語別フォールバックの自動選択** (Elements は宣言式の `font_languages` で対応済みだが `Layer.drawText` / `Font.face` 側は未対応) ②圧縮 cmap/bitset による包含判定の最適化 ③`TVPGetAllFontList` へメタデータ名を合流 (設定 UI のフォント一覧反映) ④システムフォント全列挙 (`allowSystem`) の検索統合。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「未対応 (計画)」 |
 | 低 | 実行中にウィンドウのアイコンを差し替える口 (`Window.setIcon` 相当) | windowEx の廃止で `setWindowIcon` / `resetWindowIcon` が無くなった。WINVER には `DpiIcon` クラス (DPI に合わせた大きさで設定) があるが WINVER 専用なので、**SDL3 版と CS 機には実行中にアイコンを替える手段が無い**。入れるなら本体の Window にメソッドを足す (WINVER は `WM_SETICON`、SDL3 は `SDL_SetWindowIcon`)。引数は画像ストレージかレイヤ。常にフルスクリーンの機種では何もしない。windowEx から外した残りの機能 (Win32 固有の見た目 / IME / 小物) は移さない方針。経緯 = [WindowState.md](src/core/doc/WindowState.md) 8 章 |
 | 中 | SDL 版で GLES3 経路が有効になった影響を各機種で確認する | 2026-10-06 まで SDL3 経路は `TVPOpenGLESVersion` が常に 200 で、`GLTexture` の GLES3 経路 (`GL_UNPACK_ROW_LENGTH` の部分転送 / 3.2 以上の `glCopyImageSubData` / ミップマップ生成) が一度も通っていなかった。`InitGLES` で実際の版を入れるよう直した (src/core `33a92114`) ので、**Windows SDL 版 (ネイティブ ES / ANGLE)・Android・wasm (WebGL2 = 3.0)・Steam Deck で初めてこの経路を通る**。確認済みは Linux (Mesa, GLES 3.2) のみ: `-demotest -demotestcap` の全 24 シーンと GL Canvas 全 5 ページで表示崩れ・GL エラーなし。WINVER は EGLContext が先に 200/300 を入れた後で実際の版に上書きされる (ANGLE D3D11 なら 3.0/3.1 なので `glCopyImageSubData` には入らない) |
-| 低 | `TJS_64BIT_OS` が gcc / clang では定義されない | `tjsTypes.h` は MSVC の `_M_X64` でしか定義しないため、Linux / macOS の 64bit ビルドで (1) TLG6 デコードの SSE2 版 (`blend_function_sse2.cpp`、`TVPTLG6DecodeLine*_sse2_c`) が登録されず C 版のまま、(2) SDL3 のプラグインフォルダが `plugin64/` ではなく `plugin/` になる。表示値の `System.exeBits` / `osBits` だけは個別に直した (src/core `8b5c857d`)。マクロ自体を gcc で立てると (2) の配置規約が変わるので、Linux/Deck の配布 (`deckproject.toml` の stage) と合わせて決める |
+| ✅ | `TJS_64BIT_OS` が gcc / clang では定義されない | **2026-10-06 対応** (src/core `051c7691` / tp_stub `8e39fd2`)。`__LP64__` / `_WIN64` で定義。SDL3 のプラグインフォルダは CMake のインストール先と同じ規則 (`plugin64/` は Windows 64bit だけ) に固定したので Linux は `plugin/` のまま。起動ログに `pluginPath:`、Linux 等で `plugin64/` があれば警告。**有効になった TLG6 の SSE2 デコードに、幅が 8 の倍数でない画像で崩れる + 行末からはみ出して書くバグがあった** (端数ブロック用の Generic まで SSE2 版に差し替えていた。MSVC x64 では以前からこの状態) → Generic は C 版に戻して修正 (src/core `f327fe65`)。ノイズ・グラデーション・実画像を TLG6 / TLG6(24bit) で保存→読み戻しし、SIMD 有効/無効とも全画素一致を確認 |
+| 中 | Windows x64 で TLG6 の修正を確認する | 上の TLG6 SSE2 のバグは **MSVC x64 (WINVER / SDL の 64bit 版) で以前から有効だった経路**。確認したのは Linux x64 (gcc) だけなので、Windows x64 でも幅が 8 の倍数でない TLG6 が正しく読めることを確かめる。手順は保存→読み戻しで全画素比較 (`-cpusimd=no` の結果と一致すれば OK)。既存タイトルで「TLG の端が崩れる / たまに落ちる」報告が無かったかも併せて見る |
+| 低 | MSVC arm64 で `TJS_64BIT_OS` が定義されない | MSVC 分岐は `_M_X64` だけを見ているため、`arm64-windows(-win)` の 64bit 版でも未定義。win32/ の 64bit 分岐 (`Application.cpp` / `SysInitImpl.cpp` / `DetectCPU.cpp` 等) とプラグインフォルダ名に影響しうる。x86 専用の分岐 (`DetectCPU.cpp` 等) が混ざっているので、`_M_ARM64` を足すなら各使用箇所を見てから。Windows arm64 実機での確認が前提 |
 
 ### ビルド・運用
 
