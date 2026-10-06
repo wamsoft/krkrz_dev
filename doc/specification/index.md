@@ -17,3 +17,5 @@
 [画像処理機能](graphics.md)
 
 [音声再生機能](sound.md)
+
+[アクセシビリティ (スクリーンリーダー) 対応](accessibility.md)

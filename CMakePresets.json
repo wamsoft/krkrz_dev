@@ -139,7 +139,8 @@
                 "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/osx.cmake",
                 "VCPKG_CRT_LINKAGE":"dynamic",
                 "VCPKG_LIBRARY_LINKAGE":"static",
-                "KRKRZ_USE_OPENGL":"OFF"
+                "KRKRZ_USE_OPENGL":"ON",
+                "VCPKG_OVERLAY_TRIPLETS":"${sourceDir}/src/core/cmake/vcpkg-triplets"
             }
         },
         {

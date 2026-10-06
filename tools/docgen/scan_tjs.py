@@ -136,10 +136,18 @@ EVENT_NAME_PREFIX_RE = re.compile(r"^on[A-Z]")
 EVENT_SOURCE_FILES = {
     "win32/environ/WindowFormUnit.cpp": "Window",
     "sdl3/environ/form.cpp": "Window",
+    # ElementsDialog のクラスへ代入された関数を呼ぶ static なイベント
+    # (onA11yActiveChanged / onGameA11yAction)。
+    "common/visual/elements/ElementsDialogManager.cpp": "ElementsDialog",
 }
 FIRE_EX_EVENT_RE = re.compile(r'FireExEvent(?:Rect)?\s*\(\s*TJS_W\(\s*"(on[A-Z]\w*)"\s*\)')
 EVNAME_RE = re.compile(
     r'static\s+ttstr\s+ev(?:ent)?name\s*\(\s*TJS_W\(\s*"(on[A-Z]\w*)"\s*\)\s*\)'
+)
+# クラスオブジェクトから名前でイベント関数を引いて呼ぶ形
+# (PropGet(0, TJS_W("onX"), ...) / PendingAction{nullptr, TJS_W("onX"), ...})。
+CLASS_EVENT_RE = re.compile(
+    r'(?:PropGet\(\s*0\s*,|PendingAction\s+\w+\s*\{\s*nullptr\s*,)\s*TJS_W\(\s*"(on[A-Z]\w*)"\s*\)'
 )
 
 
@@ -148,7 +156,7 @@ def scan_event_source(path: Path, cls: str) -> dict[str, dict]:
         text = path.read_text(encoding="utf-8", errors="ignore")
     except OSError:
         return {}
-    names = sorted({m.group(1) for rx in (FIRE_EX_EVENT_RE, EVNAME_RE)
+    names = sorted({m.group(1) for rx in (FIRE_EX_EVENT_RE, EVNAME_RE, CLASS_EVENT_RE)
                     for m in rx.finditer(text)} - {n.split(".", 1)[1]
                     for n in EXCLUDED_MEMBERS if n.startswith(cls + ".")})
     if not names:

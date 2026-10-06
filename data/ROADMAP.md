@@ -228,6 +228,15 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
       ※ demolib に onKeyPress フックを追加
       ※ doc の ElementsDialog.md が ElementsDialog.virtualKeyboard と誤記
         (正しくは Dialog.virtualKeyboard) → 修正
+- [x] a11y — 読み上げ (スクリーンリーダー対応) (2026-10-05)。Layer に描いた
+      選択肢を ElementsDialog.setGameA11y で載せて onGameA11yAction で受ける、
+      フォーカス連鎖の Layer を a11yLayers で自動で載せる (hint の名前 /
+      a11yName + a11yRole の見出し / checked を読むチェックボックス /
+      onA11yAction で値を受けるスライダー / a11yHidden の除外)、announce、
+      画面 JSON の "a11y" キー。読み上げログ (REPL 起動時) を画面に出す。資材不要。
+      ※ 作成中に elements 側 1 件を修正: 画面 JSON の "a11y": {hidden} が
+        bool しか受けず、TJS の辞書から渡すと (true が 1 になる) 効かなかった
+      ※ Web 版は読み上げの口が無い (AccessKit はデスクトップのみ)
 - [ ] storage — Storages / autoPath / アーカイブ / BinaryStream / セーブデータ
       (Web では IDBFS 永続化の確認を兼ねる)
 - [x] webui — ブラウザ UI (WebServer) (2026-08-16)。内蔵 HTTP + SSE サーバで

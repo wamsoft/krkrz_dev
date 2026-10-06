@@ -282,13 +282,26 @@ var path = System.resourcePath + "roboto-regular.ttf";
 
 マイドキュメントのパス
 
-ユーザのマイドキュメントのパスを表します。Windows の場合、レジストリの
-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders の
-Personal で表されるフォルダが返されます。通常これは「マイドキュメント」フォルダを指します。
+ユーザの文書フォルダ ( OS 標準の「ドキュメント」フォルダそのもの ) のパスを
+統一ストレージ名 ( 末尾 `/` 付き ) で表します。アプリ固有のサブフォルダではないので、
+書き込む場合はスクリプト側でサブフォルダを作ってください。
 
-このフォルダがない場合は [System.exePath](System.md#exepath) と同じフォルダを返します。
+| OS | 返すフォルダ |
+|---|---|
+| Windows | 「ドキュメント」 ( OneDrive などへのリダイレクト先も解決。無ければ RoamingAppData ) |
+| macOS | `~/Documents/` |
+| iOS / iPadOS | アプリのサンドボックス内の `Documents/` |
+| Linux | XDG のドキュメントフォルダ ( 未設定なら `$HOME` ) |
+| Android | アプリ専用の外部ストレージ ( 無ければ内部ストレージ ) |
+| Web ( wasm ) | 専用フォルダ無し → [System.exePath](System.md#exepath) |
 
-**関連:** [System.appDataPath](System.md#appdatapath) / [System.exePath](System.md#exepath)
+フォルダを決められない場合は [System.exePath](System.md#exepath) と同じフォルダを返します
+( スクリプト側は exePath と等しければ「別置き場なし」として扱えます )。
+
+!!! note "2026-10 以前の SDL3 / 汎用ビルド"
+    Windows 以外では常に exePath を返していました。
+
+**関連:** [System.appDataPath](System.md#appdatapath) / [System.dataPath](System.md#datapath) / [System.exePath](System.md#exepath)
 
 ---
 
@@ -298,26 +311,29 @@ Personal で表されるフォルダが返されます。通常これは「マ�
 
 **解説**
 
-ユーザのホームディレクトリのパス
+ユーザのアプリケーションデータフォルダのパス
 
-ユーザのホームディレクトリのパスを表します。Windows の場合、レジストリの
-HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders の
-AppData で表されるフォルダが返されます。このフォルダがない場合は [System.exePath](System.md#exepath) と同じ
-フォルダを返します。
+アプリケーションデータを置く OS 標準フォルダ ( アプリ固有のサブフォルダではなく、
+その基点 ) のパスを統一ストレージ名 ( 末尾 `/` 付き ) で表します。このフォルダは
+通常、隠しフォルダになっています。書き込む場合はスクリプト側で組織名・アプリ名などの
+サブフォルダを作ってください。
 
-これは、通常、以下の通りになります。
+| OS | 返すフォルダ |
+|---|---|
+| Windows | RoamingAppData ( 通常 `C:\Users\<ユーザ名>\AppData\Roaming` ) |
+| macOS | `~/Library/Application Support/` |
+| iOS / iPadOS | アプリのサンドボックス内の `Library/Application Support/` ( 無ければ作成 ) |
+| Linux | `$XDG_DATA_HOME` ( 未設定なら `~/.local/share/` ) |
+| Android | アプリの内部ストレージ |
+| Web ( wasm ) | 専用フォルダ無し → [System.exePath](System.md#exepath) |
 
-XP の場合
-`C:\Documents and Settings\<ユーザ名>\Application Data\` ( C: の部分は環境によって異なります )
-Vista, 7, 8 の場合
-`C:\Users\<ユーザ名>\AppData\Roaming` ( C: の部分は環境によって異なります )
-何らかの理由で レジストリキー ( 上記参照 ) を読み出せなかった場合
-吉里吉里の実行可能ファイルのあるフォルダ ([System.exePath](System.md#exepath))になります
+フォルダを決められない場合は [System.exePath](System.md#exepath) と同じフォルダを返します。
 
-!!! warning "Windows ネイティブ ( WINVER ) ビルド限定"
-    このプロパティは SDL3 / 汎用ビルドには存在しません。全ビルドで動く
-    スクリプトでは `typeof System.appDataPath` で存在を確認するか、
-    保存先には [System.dataPath](System.md#datapath) を使用してください。
+!!! note "2026-10 以前の SDL3 / 汎用ビルド"
+    Windows 以外では常に exePath を返していました。また 2026-08-25 より前の
+    SDL3 / 汎用ビルドにはこのプロパティ自体が無いため、古いエンジンも対象にする
+    スクリプトでは `typeof System.appDataPath` で存在を確認してください。
+    セーブデータなどの保存先には [System.dataPath](System.md#datapath) を使うのが安全です。
 
 **関連:** [System.dataPath](System.md#datapath) / [System.exePath](System.md#exepath) / [System.personalPath](System.md#personalpath)
 
@@ -337,10 +353,16 @@ Vista, 7, 8 の場合
 
 ユーザスクリプトがデータを保存する場合は、ここに保存することを推奨します。
 
-**全ビルドに存在する**ため、保存先の取得はこのプロパティを使うのが安全です
-( [System.appDataPath](System.md#appdatapath) /
-[System.personalPath](System.md#personalpath) は Windows ネイティブ
-ビルド限定 )。
+-datapath を指定しない場合の既定は、Windows では実行ファイルの隣の
+`savedata`、**Linux 版では `~/.local/share/<orgname>/<appname>/`** です
+( 2026-10 から。以前は Linux も実行ファイルの隣 )。組織名・アプリケーション名は
+-orgname / -appname ( 配布物では `<exe名>.cf` に書く ) で決まります。
+Linux 版の値もローカルパスなので `Storages.getLocalName()` が使えます。
+
+**全ビルドに存在し、アプリ固有の保存場所を指す**ため、保存先の取得は
+このプロパティを使うのが安全です ( [System.appDataPath](System.md#appdatapath) /
+[System.personalPath](System.md#personalpath) は OS 標準フォルダそのもので、
+古い SDL3 / 汎用ビルドでは exePath を返すか、プロパティ自体がありません )。
 
 **関連:** [System.appDataPath](System.md#appdatapath)
 
