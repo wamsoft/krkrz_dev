@@ -1,7 +1,9 @@
 ---
 name: krkrz-repl
-description: 吉里吉里Z (krkrz) の SDL3 / WINVER ビルドを REPL 経由でエージェントから駆動するためのリファレンス。krkrz を起動して TJS スクリプトを評価・検証・デバッグする、startup.tjs を介さず明示的に処理を開始する、入力イベント (キー/マウス) を注入する、画面をキャプチャして目視確認する、Elements ダイアログを観測・操作する、例外やダイアログ表示をコンソールで観測する、といった場面で使う。**外部エージェントは console(CONIN$) に打てないので -replfile ファイルチャネルが本命**。起動フラグ (-repl / -replfile / -nostartup / -loglevel / -display / -ignoremouse)、ファイルチャネルのプロトコル、Agent API (入力注入 / captureScreen / dialogs / dialogClick)、ドットコマンド (.cap/.dlg/.click/.mem 等)、REPL 駆動時の挙動変更 (例外で即終了しない / inform と例外ダイアログがコンソールに出る) を網羅。TJS2 言語仕様そのものは skill `tjs2`、本体クラス API は skill `krkrz` を参照。
+description: 吉里吉里Z (krkrz) の SDL3 / WINVER ビルドを REPL 経由でエージェントから駆動するためのリファレンス。krkrz を起動して TJS スクリプトを評価・検証・デバッグする、startup.tjs を介さず明示的に処理を開始する、入力イベント (キー/マウス) を注入する、画面をキャプチャして目視確認する、Elements ダイアログを観測・操作する、例外やダイアログ表示をコンソールで観測する、コアデモ全シーンを自動巡回してキャプチャで表示確認する (-demotest / -demotestcap)、といった場面で使う。**外部エージェントは console(CONIN$) に打てないので -replfile ファイルチャネルが本命**。起動フラグ (-repl / -replfile / -nostartup / -loglevel / -display / -ignoremouse)、ファイルチャネルのプロトコル、Agent API (入力注入 / captureScreen / dialogs / dialogClick)、ドットコマンド (.cap/.dlg/.click/.mem 等)、REPL 駆動時の挙動変更 (例外で即終了しない / inform と例外ダイアログがコンソールに出る) を網羅。TJS2 言語仕様そのものは skill `tjs2`、本体クラス API は skill `krkrz` を参照。
 ---
+
+> **パスの基点**: 本文の相対パスは **engine ルート基準** (krkrz_dev では `src/core/` を前置。下記参照)。作業ディレクトリが krkrz_dev 以外 (krkrz_android / krkrz_ios などの外枠や案件フォルダ) のときは **`${KRKRZ_BASE}/krkrz_dev/` を前置して**読む (`echo $KRKRZ_BASE` で実パスを確認。マシンごとに値が違うので絶対パスは書き込まない)。
 
 # krkrz REPL 駆動リファレンス
 
@@ -254,6 +256,9 @@ function Send-Cmd($script, $timeoutMs = 5000) {
 | `Agent.dialogClick(i,id)` / `Agent.dialogFocus(i,id)` | id 指定で起動 / フォーカス (座標不要) |
 | `Agent.captureScreen(path[,x,y,w,h])` | overlay 込み実画面を**次フレーム**で PNG 保存 (戻り値=path) |
 | `Agent.lastCapture()` | 直近キャプチャ結果 `%[path,width,height,ok]` |
+| `Agent.a11yTree()` | 読み上げツリー (スクリーンリーダーに見えるもの) を JSON 文字列で。`{"dialogs":[…],"game":…}`。スクリーンリーダー無しでも取れる |
+| `Agent.a11yLog([since])` | 読み上げログ `%[lines, next]` (「おおよそ何と読むか」の行: `[focus]` / `[value]` / `[state]` / `[caret]` / `[polite]` …)。REPL 稼働中だけ溜まる |
+| `Agent.a11yAction(node, action[, arg])` | スクリーンリーダーと同じ経路で操作 (キー合成ではない)。action = click / focus / increment / decrement / set_value |
 
 検証フロー例 (ファイルチャネル)。`$CAP_DIR` はセッションの scratchpad など
 書き込み可能な作業ディレクトリの絶対パス:
@@ -334,6 +339,10 @@ Scripts.execStorage("mytest.tjs");      // data/ 配下 (autopath)
 | `.cap [path]` | 画面キャプチャ (`Agent.captureScreen`、省略時 agent_cap.png) |
 | `.dlg` / `.dlgclose` | ダイアログ一覧 / 全クローズ (`Agent.dialogs`/`closeAllDialogs`) |
 | `.click X Y` | (X,Y) にクリック注入 (`Agent.click`) |
+| `.a11y` | 読み上げツリーを表示 (`Agent.a11yTree`) |
+| `.a11ylog [N]` | 読み上げログの N 行目以降 (`Agent.a11yLog`) |
+| `.a11ydo <node> <action> [arg]` | 読み上げツリーのノードを AT の経路で操作 (`Agent.a11yAction`)。node は `.a11y` の id (画面 JSON の `"id"` / setGameA11y の id / `layer:<Layer.name>` / `#<hex>`) |
+| `.say <text>` | `ElementsDialog.announce` |
 | `.watch` | 監視式の一覧を `id: 式 = 値` で表示 (表示前に全件評価) |
 | `.watch add EXPR` | 監視式を追加して即評価 (式は空白を含んでよい) |
 | `.watch rm ID` / `.watch rm all` | 監視式の削除 / 全消し |
@@ -378,6 +387,42 @@ TJS の評価は dot で始まらない行をそのまま入力する (式・文
 4. 例外が出てもプロセスは生きているので、コンソールの例外/trace を読んで
    スクリプトを直し、再度評価。
 5. `.mem` 等で状態を観測。`exit` で終了。
+
+## コアデモ全シーンの表示確認 (`-demotest` / `-demotestcap`)
+
+エンジン変更後の「全部ちゃんと映るか」の回帰確認は、REPL で 1 シーンずつ
+送るより **ギャラリーの自動巡回 + 自動キャプチャ**が速い (demolib 機能。
+SSOT は `data/demolib/readme.txt` の「ヘッドレス自動テスト」)。
+
+```bash
+krkrz <ABS>/src/core/data -demotest -demotestcap=<ABS_CAP_DIR>
+# 例 (Linux、エージェントのシェルから): WAYLAND_DISPLAY=wayland-0 を前置
+```
+
+- 全シーンを 40 フレームずつ巡回し、各シーンを `<dir>/sceneNN.png` に保存して
+  `@demotest:ok` で自動終了 (01 = メニュー)。ログの
+  `@demotest:cap <path> <シーン名>` が番号 → シーン名の対応、
+  `@demotest:<シーン名> ...` が各シーンの自己検証結果
+- `<dir>` は絶対パス、無ければ作られる。`-demotestcap` 単独でも巡回する
+- 保存は `System.captureScreen` なので REPL 有効ビルドのみ (MASTER では
+  `@demotest:cap unavailable` が出て撮影なし)。実ウィンドウが要る
+- 完走しない (ハング / abort) こと自体が不具合のシグナル。最後に出た
+  `@demotest:scene N/M` の次のシーン (またはその離脱処理) を疑う
+- 目視は PNG を 1 枚ずつ Read するより、PIL 等で縮小して数枚ずつ
+  並べた一覧画像を作って Read すると速い
+- 乱数・アニメのあるシーン (画像処理 / パーティクル / FPS 表示等) は毎回
+  画素が変わるので、前回キャプチャとの差分比較ではノイズとして扱う
+
+**撮れるのは各シーンの最初のページだけ**。複数ページあるシーン (GL Canvas 等)
+の残りは `-replfile` で起動して送る:
+
+```
+demoShell.switchTo(13)              # シーン番号 (0 = メニュー、sceneNN の NN-1)
+Agent.keyPress(VK_RIGHT)            # シーン内のページ送り
+System.captureScreen("<ABS>/p2.png")  # 次フレームで保存されるので少し待つ
+```
+
+`demoShell` は `runDemoHub` が global に置いている DemoShell インスタンス。
 
 ## 関連 (パスは engine ルート相対 / umbrella では `src/core/` 前置)
 

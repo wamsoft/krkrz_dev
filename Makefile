@@ -42,6 +42,10 @@ DATAPATH?=src/core/data
 DATAPATH_ABS=$(shell $(FIXPATH) "$(DATAPATH)")
 
 BUILD_PATH=$(shell cmake --preset $(PRESET) -N | grep BUILD_DIR | sed 's/.*BUILD_DIR="\(.*\)"/\1/')
+# CMake 4.x の `--preset -N` は変数を表示しないので、 取れなければプリセット既定の build/<preset>
+ifeq ($(strip $(BUILD_PATH)),)
+BUILD_PATH=build/$(PRESET)
+endif
 
 .PHONY: build prebuild install clean docs docs-scan docs-diff
 

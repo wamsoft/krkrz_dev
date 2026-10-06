@@ -11,6 +11,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | Elements の入力リピート / キャッシュ / 描画の精査 | [src/core/doc/ElementsAudit.md](src/core/doc/ElementsAudit.md) |
 | 仮想カーソル位置 (提案) | [src/core/doc/VirtualCursor.md](src/core/doc/VirtualCursor.md) |
 | デモ整備 | [data/ROADMAP.md](data/ROADMAP.md) |
+| 読み上げ (スクリーンリーダー対応) | [doc/specification/accessibility.md](doc/specification/accessibility.md) (Elements 側は `src/core/external/elements/docs/accessibility.md`) |
 | Window のサイズ/位置/ズーム/ビューポート仕様 | [src/core/doc/WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | Layer / Bitmap / ImageFunction の統合 | [src/core/doc/ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
 | フォントエンジン (可変軸・glyphware 統合) | [src/core/doc/FontEngine.md](src/core/doc/FontEngine.md) |
@@ -23,21 +24,26 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 完了したものは末尾の「完了 (記録として残す)」へ移す。
 
-## 現況 (2026-09-11 時点)
+## 現況 (2026-10-06 時点)
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 16 | Elements/UI 4 / エンジン基盤 9 / ビルド・運用 3 (内訳: 中 8 / 低 7 / 検討中 1) |
+| 予定・未着手 | 22 | Elements/UI 5 / エンジン基盤 13 / ビルド・運用 4 (内訳: 中 12 / 低 9 / 検討中 1) |
 | 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
-| 低優先・保留 | 10 | 単発の小さいもの。着手順は問わない |
+| 低優先・保留 | 12 | 単発の小さいもの。着手順は問わない |
 | デモ整備 | 10 + 1 | 未着手デモは多くが資材待ち |
 
 ### 次のリリースで移行メモに書くこと
 
 [Versioning.md](src/core/doc/Versioning.md) の「移行メモ」= サマリとタグメッセージの冒頭に置く一覧。 リリース枝へ反映するときに拾う。
 
-- (現在なし)
+(なし)
+
+2.5.0 (2026-10-06) までの分は krkrz.git のサマリ `b6485e20` と タグ `v2.5.0` の「■ 移行メモ」へ載せた
+(日本語フォントの既定埋め込み廃止 / OS フォント / U+FFFD 代替表示 / 動画の終わり方とフレーム番号 /
+プラグインフォルダの規則 / TJS_64BIT_OS / Linux の既定データ保存場所 / personalPath・appDataPath の各 OS 対応 /
+一時フォルダの逃がし先 / キャプチャ画像の不透明化)。
 
 2.4.0 (2026-09-30) までの分は krkrz.git のサマリ `3af0ed63` と タグ `v2.4.0` の「■ 移行メモ」へ載せた
 (IME 候補窓の追従 / KAGEX の IME 無効化への対処 / Elements のテキスト欄で IME を開く / ogg の float 出力 /
@@ -81,6 +87,9 @@ registerHotKey の WINVER 配線)。
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
+| 低 | 読み上げ: Phase C (`showModalJson` の専用ウィンドウ / 複数 Window) | Phase A / B (ダイアログ・`setGameA11y`・`a11yLayers`・`announce`・REPL の `.a11y` 系) と入力欄の文字単位の読み上げは 2026-10-04 に実装済み。残りは、`showModalJson` が開く専用ウィンドウにスクリーンリーダーの口を付けることと、メインウィンドウ以外の `Window` への対応。SSOT = [accessibility.md](doc/specification/accessibility.md) §7 |
+| ✅ | 読み上げ: IME の変換中文字列 — **扱わない方針に決定 (2026-10-05)** | 変換中の文字や候補は OS の IME 自体がスクリーンリーダーへ伝えるので、アプリ側で重ねて出すと二重に読まれる。入力欄は確定した文字だけを持つ。SSOT = Elements 側 `docs/accessibility.md` §6.5 |
+| ✅ | 読み上げ: 使い方のガイド・デモ・スキル | **2026-10-05 対応**。ガイド [doc/guide/Accessibility.md](doc/guide/Accessibility.md)、コアデモ `src/core/data/a11y` (選択肢を `setGameA11y` / ボタン類を `a11yLayers` / パネルの `"a11y"` キー。SDL3・WINVER で REPL から確認)、スキル elements / krkrz / krkrz-repl に追記。作成中に elements の `"a11y": {hidden}` が TJS 辞書 (true が 1) で効かなかったのを修正 |
 | ✅ | Elements: 画面データ側で UI を完結させる | **2026-09-05 に 4 点すべて対応** (画面をまたぐ変数 = `"shared_vars"` / 動的画像の実行時差替 = `"image_var"` + 差し替え可能アトラス / 画面契約 = `contract.py` / 標準ロールの語彙 = `adv_vocabulary.md`)。 engine 側は 2026-09-06 に submodule ref を上げ、ホスト向け API を TJS へ公開 (`ElementsDialog.setSharedVar` / `getSharedVars` / `clearSharedVars` / `setAtlasImage` / `swappableAtlases`)。 詳細 = [TODO-elements.md](TODO-elements.md) §7 |
 | 低 | Elements の観測・操作 API を TJS へ公開 (残り) | **変数系は 2026-08-29 に公開済み** (`ElementsDialog.getVar` / `listVars` / `onVar` / `watchVars` = elements_modal の `get_var` / `list_vars` / `set_var_watcher` に対応。src/core `fcae740b`)。 残りは **navigator の `push` / `pop` / `replace` / `stack`** と `languages`。 要素を名指しで動かす instance 版は公開済み (`ElementsDialog.focus(id)` = 2026-09-02 / `activate(id)` = 2026-09-04。検証用の `Agent.dialogFocus` / `dialogClick` は従来どおり)。 用途は検証ツールから「この画面へ飛ぶ」を実装すること。 当たり判定やフォーカスナビの確認は実入力を流す API でないと意味が無い点に注意 |
 | ✅ | Elements: `input_box` にプログラム的フォーカスが効かない | **2026-09-02 に解決** (elements `de989d18`: `descend_focus_first` — composite 包みの内側へフォーカス連鎖を用意)。`initial_focus` / `focus_by_id` / `ElementsDialog.focus(id)` で編集フォーカス (キャレット + text 受理) になる。詳細 = [TODO-elements.md](TODO-elements.md) §3 |
@@ -104,6 +113,8 @@ registerHotKey の WINVER 配線)。
 | 優先 | 課題 | 内容 |
 |---|---|---|
 | ✅ | 仮想カーソル位置の導入 (実カーソルを直接動かすのをやめる) | **2026-09-12 実装 (第一段)**。`common/visual/VirtualCursor.h` を追加し、ウィンドウ実装が 1 つずつ持つ。`OnMouseMove` (実マウス) が上書き / `SetCursorPos` は実カーソルと同時に揃える / 新設の `SetVirtualCursorPos` は仮想だけ / `GetCursorPos` は仮想を返す。読み出しは `Layer.cursorX/Y` → LayerManager → LayerTreeOwner → DrawDevice → `Window->GetCursorPos` の一本道だったので、ウィンドウ実装を直すだけで全読み手が追従した。**Elements の cursor-warp は実カーソルを触らなくなり、echo 判定 (engine の `warp_expect_*` と session の `synthetic` 引数) は両側から撤去**。`Agent` のマウス注入は元から form 経由なので自動的に仮想位置のみになった。効果: シナリオ 1 でキー 12〜14 回の注入に対しフォーカス移動が **5/6 → 13/15** (移行前は warp の合成 move が nav 種別を mouse へ倒して大半が流れていた)、`warp guard` ログは 0 件。派生で **`-ignoremouse` / `Agent.ignoreRealMouse`** (実マウス入力を捨てて Agent 注入だけ通す) も追加 — 「人がマウスに触らないこと」という測定の運用制約を外せる (§1-b の誤起票の再発防止)。**第二段も 2026-09-12 に完了**: クリック時に実座標で仮想位置を揃える / `::GetCursorPos` 直呼び 5 箇所を精査し**迂回していた 3 つ (マウスキー機能の位置読み ×2・移動 ×1) を仮想へ寄せた** (残る 2 つは「隠してから実マウスが動いたか」の判定で実カーソルが正しい) / `mcsTempHidden` は機構そのままで古い前提のコメントを訂正 / ヒントは OS ツールチップが実ポインタ追従・IME はキャレット追従・カーソル形状はナビ中は非表示、と個別に確認。詳細 = [VirtualCursor.md](src/core/doc/VirtualCursor.md) |
+| ✅ | 動画のレイヤ再生 (vomLayer) の 4 件 | **2026-10-01 報告・同日修正** (movie-player `435ba0c` / src/core `f0f2a5b4`)。①webm 再生中に CPU 1 コアが張り付く = movie-player のコアスレッドが `yield` だけで回るビジーループ → 何も進まない回は次フレームの表示時刻まで待つ (Windows は高分解能待機タイマ + メッセージ到着イベント)。8fps 素材で 102% → 0〜2% ②layer モードの mp4 / mpg のループが 2 周目で止まる = 終端 (`stEnded`) からの `Rewind()` が再生へ戻していなかった ③ループで最終コマの表示時間がほぼ 0 = webm・mp4・mpg とも最終フレームの表示開始で終了していた → 1 フレーム分表示してから終了 ④コマ 0 の `onFrameUpdate` が来ない = `Play()` 直後の `ClearWndProcMessages()` が食べていた / 単発終了後にコマ 0 へ戻る = 停止・終了で古いフレームを再通知していた。ついでに webm ループの `perLoop` が 1 周 2 回出ていたのも修正。同日、残っていた mp4 のコマ番号 +2 (MF のタイムスタンプがエンコーダ遅延分から始まる → 先頭フレームを起点に) と、音声あり webm のループで 2 周目が止まる件 (音声の時計が sink の通算の再生済みサンプル数を足していた → 起点バッファからの差に。一時停止 → 再開でコマが飛ぶ件も同じ原因) も修正。SSOT = [MovieMFMigration.md](src/core/doc/MovieMFMigration.md) 「レイヤ再生 (vomLayer) の 4 件」 |
+| ✅ | SDL 版 `VideoOverlay` のループ / コマ番号 / 先頭コマ通知 | **2026-10-01 対応** (src/core `3d1cd510` / movie-player `71c2b52`)。`generic/visual/VideoOvlImpl.cpp` は `SetLoop` が空 (1 周で stop)、`onFrameUpdate` のコマ番号が常に 0、新しく開いた webm の先頭コマが通知されなかった (修正前から)。ループ = `CheckUpdate` で終端を検出したら `Seek(0)` + `Play()` + `perLoop` / `iTVPMoviePlayer::FrameRate()` を足してコマ番号・fps・総コマ数を実装 / generic ラッパの `Play()` が未配送なら先頭を出し直す / pl_mpeg も巻き戻しと最終コマを WINVER と同じに。movie-player はシークで同じ絵を通知し直さない (ループ時に偽の stop が出ていた)。→ [MovieMFMigration.md](src/core/doc/MovieMFMigration.md) |
 | 中 | Layer / Bitmap / ImageFunction の統合 | ImageFunction の API 二重化と、プラグインが Bitmap を扱えない問題 (Layer 参照 26 ファイル) の再整理。**方針決定済 = P1 (tp_stub 共通アクセス口) → P2 (Bitmap へメソッド追加・ImageFunction は shim 化) → P3 (プラグイン対応) → P4 で共通基底 `ImageBuffer` の要否を判断**。B案はプロトタイプ実測済み (パッチ同梱)。着手は後日。SSOT = [ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
 | 中 | DrawDevice overlay 描画口の汎用開放 | `PostRenderCallback` の tp_stub 公開 + WINVER 対応 (小) / dialog renderer の painter リスト化 (大) |
 | 中 | Emote/Motion リソースマネージャの共有 (再読込の削減) | `data/system/AffineSourceMotion.tjs` の `SimpleEmotePlayer` はプレイヤー生成のたびに `MotionResourceManager` を new しており、リソースキャッシュ (`Motion.ResourceManager`、既定 20MB、`motionCacheSize` で可変) が効かず、立ち絵 psb (数十 MB) を表示/アクションのたびにフル再読込している。**アクション毎のカクつきと、メモリ枯渇 (特に 32-bit) を招く**。ウィンドウ単位で 1 つの ResourceManager を共有すれば解消するが、単純な共有化 (window に持たせて addRef/共有) を試すと **emoteplayer プラグイン内部 (`V2Unlink`) が AV で即死**した — 複数 `EmotePlayer` が同一 ResourceManager を参照する構成をプラグインが想定していない疑い。**要調査**: (1) `Motion.ResourceManager` / `EmotePlayer` の参照所有モデル (unload が他プレイヤーの参照中リソースを解放していないか)、(2) 共有可能にするためのプラグイン側 IF、(3) 併せて `SwitchEmotePlayer` の base 別プレイヤーも同一 psb を二重ロードしていないか。回避として `motionCacheSize` 拡大 + 32-bit の pool 縮小 + LAA で当座の枯渇は解消済み (別項)。実機再現は E-mote 立ち絵のアクションが連続する場面 |
@@ -111,8 +122,13 @@ registerHotKey の WINVER 配線)。
 | 低 | プラグイン横断のリソース消費収集 IF | 命名規約 `getResourceUsage()` の策定から。ライセンス収集 IF と同じ枠組み |
 | 低 | 縦組みの組版拡張 (ルビ / 縦中横 / 圏点 / 割注 / 字取り・段組・傍線) | `Layer.drawVerticalTextArea` の対応範囲は本文の組版のみ。ルビ等は行の中へ**入れ子の組版ボックス**を埋める話で、`LineItem` の拡張と入力マークアップ (本文文字列 1 本では表現できない) の設計がセットになる。段組は「入りきらない列を次へ渡す継続位置」、傍線は縦組み固有の位置決めが要る。必要になった時点で層から決める。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「縦組み (drawVerticalTextArea) の未対応」 |
 | 低 | プラグイン向けログレベル個別 IF | `TVPLogMsg` を tp_stub に収録するだけ。important = WARNING は維持 |
+| 中 | OS フォントの文字単位フォールバック + macOS / Android の OS フォント列挙 | 2026-09-30 に「OS のフォントを名前で引ける」まで対応 (SDL 版ほか: Windows = DirectWrite / Linux = fontconfig、`generic/environ/SystemFontList.cpp`)。残り: **(B-1) 連鎖のどのフォントにも無い文字を OS に問い合わせて補う** (DirectWrite `IDWriteFontFallback::MapCharacters` / fontconfig `FcFontSort` + charset。現状は U+FFFD で描く) / **(B-2) macOS の CoreText (`CTFontManagerCopyAvailableFontURLs`) と Android の `ASystemFontIterator` (API 29+) で同じ名前登録**。B-1 は結果が実行環境で変わるので、既定で入れるか (`-systemfont` で切るか) を決めてから。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「OS のフォント」 |
 | 低 | フォントエンジンの未対応 (計画) 4 件 | ①収録範囲を使った**言語別フォールバックの自動選択** (Elements は宣言式の `font_languages` で対応済みだが `Layer.drawText` / `Font.face` 側は未対応) ②圧縮 cmap/bitset による包含判定の最適化 ③`TVPGetAllFontList` へメタデータ名を合流 (設定 UI のフォント一覧反映) ④システムフォント全列挙 (`allowSystem`) の検索統合。SSOT = [FontEngine.md](src/core/doc/FontEngine.md) 「未対応 (計画)」 |
 | 低 | 実行中にウィンドウのアイコンを差し替える口 (`Window.setIcon` 相当) | windowEx の廃止で `setWindowIcon` / `resetWindowIcon` が無くなった。WINVER には `DpiIcon` クラス (DPI に合わせた大きさで設定) があるが WINVER 専用なので、**SDL3 版と CS 機には実行中にアイコンを替える手段が無い**。入れるなら本体の Window にメソッドを足す (WINVER は `WM_SETICON`、SDL3 は `SDL_SetWindowIcon`)。引数は画像ストレージかレイヤ。常にフルスクリーンの機種では何もしない。windowEx から外した残りの機能 (Win32 固有の見た目 / IME / 小物) は移さない方針。経緯 = [WindowState.md](src/core/doc/WindowState.md) 8 章 |
+| 中 | SDL 版で GLES3 経路が有効になった影響を各機種で確認する | 2026-10-06 まで SDL3 経路は `TVPOpenGLESVersion` が常に 200 で、`GLTexture` の GLES3 経路 (`GL_UNPACK_ROW_LENGTH` の部分転送 / 3.2 以上の `glCopyImageSubData` / ミップマップ生成) が一度も通っていなかった。`InitGLES` で実際の版を入れるよう直した (src/core `33a92114`) ので、**Windows SDL 版 (ネイティブ ES / ANGLE)・Android・wasm (WebGL2 = 3.0)・Steam Deck で初めてこの経路を通る**。確認済みは Linux (Mesa, GLES 3.2) のみ: `-demotest -demotestcap` の全 24 シーンと GL Canvas 全 5 ページで表示崩れ・GL エラーなし。WINVER は EGLContext が先に 200/300 を入れた後で実際の版に上書きされる (ANGLE D3D11 なら 3.0/3.1 なので `glCopyImageSubData` には入らない) |
+| ✅ | `TJS_64BIT_OS` が gcc / clang では定義されない | **2026-10-06 対応** (src/core `051c7691` / tp_stub `8e39fd2`)。`__LP64__` / `_WIN64` で定義。SDL3 のプラグインフォルダは CMake のインストール先と同じ規則 (`plugin64/` は Windows 64bit だけ) に固定したので Linux は `plugin/` のまま。起動ログに `pluginPath:`、Linux 等で `plugin64/` があれば警告。**有効になった TLG6 の SSE2 デコードに、幅が 8 の倍数でない画像で崩れる + 行末からはみ出して書くバグがあった** (端数ブロック用の Generic まで SSE2 版に差し替えていた。MSVC x64 では以前からこの状態) → Generic は C 版に戻して修正 (src/core `f327fe65`)。ノイズ・グラデーション・実画像を TLG6 / TLG6(24bit) で保存→読み戻しし、SIMD 有効/無効とも全画素一致を確認 |
+| 中 | Windows x64 で TLG6 の修正を確認する | 上の TLG6 SSE2 のバグは **MSVC x64 (WINVER / SDL の 64bit 版) で以前から有効だった経路**。確認したのは Linux x64 (gcc) だけなので、Windows x64 でも幅が 8 の倍数でない TLG6 が正しく読めることを確かめる。手順は保存→読み戻しで全画素比較 (`-cpusimd=no` の結果と一致すれば OK)。既存タイトルで「TLG の端が崩れる / たまに落ちる」報告が無かったかも併せて見る |
+| 低 | MSVC arm64 で `TJS_64BIT_OS` が定義されない | MSVC 分岐は `_M_X64` だけを見ているため、`arm64-windows(-win)` の 64bit 版でも未定義。win32/ の 64bit 分岐 (`Application.cpp` / `SysInitImpl.cpp` / `DetectCPU.cpp` 等) とプラグインフォルダ名に影響しうる。x86 専用の分岐 (`DetectCPU.cpp` 等) が混ざっているので、`_M_ARM64` を足すなら各使用箇所を見てから。Windows arm64 実機での確認が前提 |
 
 ### ビルド・運用
 
@@ -121,6 +137,10 @@ registerHotKey の WINVER 配線)。
 | 中 | krkrlive2d のドライバソースを版固定取得へ | ドライバ側 CMake がローカルパス (`LIVE2DLIB_FOLDER` / `CUBISM_SDK` 等) を直接参照する作りで、そのフォルダの版がずれると **umbrella の configure ごと失敗する** (実例: ドライバが `find_package(minizip)` を要求する版になり、本体 vcpkg マニフェストに minizip が無くて configure 不能)。 版を固定して fetch する形へ直すまで、`CMakeLists.txt` の `CUBISM_SDK` ブロックをコメントアウトしてビルド対象から外してある (2edc380)。 直したら除外を戻す |
 | 中 | リリースのバージョン運用を確定する | **実験中 API の扱いは 2026-09-06 に決定** (安定保証の対象外を `@experimental` で明示し、そこの非互換変更はマイナー。[Versioning.md](src/core/doc/Versioning.md) 「実験中 API」節)。番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する |
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
+| ✅ | 2026-10-06 の Linux 修正を基準環境で確認する | 相対パス起動の abort / サーバ停止時のハング / GLES 版 / exeBits の修正 (src/core `5016acf1`〜`a86ec6de`) は、ホストの Ubuntu 26.04 (glibc 新・gcc 15・CMake 4.2) で直ビルドして確認しただけ。2026-10-06 に基準環境 (steamdev `deckbuild/` sniper SDK、src/core `051c7691`) で configure〜install が通り、[LinuxBuild.md](src/core/doc/LinuxBuild.md) の合格基準 (GLIBC ≤ 2.31 / GLIBCXX 依存なし) を満たすこと、ホスト (Wayland) で `-demotest -demotestcap` 全 24 シーン ok を確認済み。同日 Steam Deck 実機 (SteamOS 3.8.16、ネイティブ実行) でも `-demotest -demotestcap` 全 24 シーン ok。なお Steam から起動すると同梱 SDL3 (3.4.0) ではなく Steam ランタイム側の SDL3 (3.2.18) が読まれていた (動作は問題なし) (`dc5a3ed`) |
+| ✅ | Steam 起動時に同梱 SDL3 が使われない | Deck で Steam から起動すると `LD_LIBRARY_PATH=.` を付けても Steam ランタイム側の SDL3 (3.2.18) が先に読まれ、ビルドした SDL3 (3.4.0) が使われない。今のところ動作に問題はないが、SDL3 側の修正に依存する不具合が出たら効いてくる。→ exe に `$ORIGIN` を DT_RPATH で埋め込み、soname リンクも install するよう修正。Deck の Steam 起動で同梱 3.4.0 が読まれ `-demotest` 全 24 シーン ok を確認 (src/core `0f54ee4b`) |
+| 中 | 配布パッケージ外枠の整備 (Linux 以外も) | Linux は [krkrz_linux](https://github.com/wamsoft/krkrz_linux) でフォルダ + tar.gz まで (2026-10-06)。残り: AppImage 出力 (`.desktop` / アイコンは生成済み)、Flatpak (AppStream メタデータ) は需要次第。macOS (.app) / Windows (フォルダ・MSIX) / Xbox (GDK) も `*-config.json` の `cmake` / `assetPack` 書式を共通にした外枠で揃える方向で調査 |
+| 中 | 共通の xp3 作成 CLI | 外枠 (krkrz_android / krkrz_linux / krkrz_ios) は xp3 を作らず、案件側で事前に作ったものを `assetPack` の `flatten` で取り込む方針。暗号化などを含む案件独自ツールとは別に、**暗号化なしの通常の xp3 を作る共通 CLI** を本体側に持つ (Linux / macOS / CI でも動くこと。リリーサーは吉里吉里2 の Windows GUI しか無い)。置き場所は krkrz_dev の `src/tools/` かスクリプト、xp3 の書式は本体の読み込み実装 (`XP3Archive`) に合わせる |
 
 ## 将来課題
 
@@ -159,6 +179,7 @@ registerHotKey の WINVER 配線)。
 - Elements 遷移エフェクト Phase C (GPU present 拡張・optional)
 - `-replweb` 稼働中に本体がモーダル (`System.inform` 等) を出すと HTTP API が全部止まる。 動的ハンドラはメインスレッド実行なので、 モーダルを閉じるまで`/cmd` も `/pad/exec` も返らず、 静的配信だけ生きているので「一部だけ応答する」紛らわしい状態になる (REPL も drain されないので中から復帰できない)。 **利用側は「実行できない条件をハンドラで先に弾いて 4xx を返す」で回避できる**ので優先度は低い。 本体側の案は (a) `/state` に「モーダル待ち」を出して UI が「死んだのか待っているだけか」を切り分けられるようにする (安い) (b) `-replweb` 稼働中はモーダルを出さずログと SSE へ流すオプション。 → 上の «web REPL の modal 転送» と同じ系統
 - 起動オプションの残骸。 `-timerprec` は `generic/base/SysInitImpl.cpp` で値を読んで `prectick` に入れるだけで、 以降どこからも参照されない (WINVER 側にも実装なし)。 ガイドには載せていないので、 **実装を戻すか、 オプションごと消すか**を決めるだけの作業 (2026-09-20 のコマンドラインオプション棚卸しで判明)。 ✅ 同時に見つかった `-ogg_pcm_format` (ブロックコメントの中で死んでいた) は実装して有効化済み (src/core `4fda1460`)。
+- `-demotestcap` (ギャラリー全シーンの自動キャプチャ) は各シーンの最初のページしか撮らない。複数ページあるシーン (GL Canvas 5 ページ等) の残りは REPL から送って撮っている (手順 = `src/core/data/demolib/readme.txt`)。シーン側に「ページ数とページ送り」の口 (`onDemoTest` と同様のフック) を足せば巡回時に全ページ撮れる
 
 ## デモ整備
 
@@ -202,6 +223,17 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 
 ## 最近クローズしたもの
 
+- ✅ Linux (SDL3) で見つかった起動・終了・表示値の不具合 (2026-10-06、
+  src/core `5016acf1`〜`a86ec6de` / umbrella `9c2b556`)
+  ホストの Linux で直ビルドしてギャラリーを回した際に判明。
+  ①`./krkrz` のような相対パス起動で起動直後に abort (`ResolveExePath` が argv[0] を
+  相対のまま返し、データパスの正規化で未捕捉例外) ②REPL Web / DAP サーバの停止で
+  固まる (POSIX は `close()` だけでは別スレッドの `accept()` が起きない → `shutdown()`
+  を先に。`-demotest` が webui シーンの離脱でハングしていた) ③SDL3 で
+  `openGLESVersion` が 200 固定 (= GLES3 経路が無効。各機種の確認は上の «予定・未着手»)
+  ④gcc 64bit で `exeBits` / `osBits` が 32 ⑤CMake 4.x で `make build` がビルド
+  ディレクトリを取れない。あわせて全シーンの表示確認用に `-demotestcap=<dir>` を追加
+  (demolib。使い方 = `src/core/data/demolib/readme.txt` / skill `krkrz-repl`)
 - ✅ Elements の言語連動フォント置換 `font_languages` (elements `56d1318d`〜 /
   src/core `c6444966`)
   多言語 UI で表示言語に応じて JP/TC/SC 等のフォントを自動で差し替える

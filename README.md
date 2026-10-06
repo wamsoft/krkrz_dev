@@ -4,15 +4,15 @@
 ドキュメント等開発関係のもの全てが入ったリポジトリ。
 各種ファイルはサブモジュールで参照されています。
 
-## 他プラットフォーム向けの外枠リポジトリ (ブラウザ / Android)
+## 他プラットフォーム向けの外枠リポジトリ (ブラウザ / Android / iOS)
 
 Win32 や各種デスクトップ向けのビルドは本リポジトリ (umbrella) で完結するが、
-**ブラウザ (wasm) と Android** はそれぞれ別の「外枠」リポジトリでビルドする。
-どちらも本リポジトリをエンジンソースとして参照し (環境変数 `KRKRZ_BASE` に
+**ブラウザ (wasm) / Android / iOS / Linux 配布パッケージ** はそれぞれ別の「外枠」リポジトリでビルドする。
+いずれも本リポジトリをエンジンソースとして参照し (環境変数 `KRKRZ_BASE` に
 本リポジトリの親フォルダを指定)、エンジン本体・プラグインには手を入れず、
 各プラットフォーム固有のビルド定義・パッケージングだけを持つ。本リポジトリと
 同じ場所に clone しておく (`KRKRZ_BASE/krkrz_dev` と `KRKRZ_BASE/krkrz_web` /
-`KRKRZ_BASE/krkrz_android` が並ぶ構成)。
+`KRKRZ_BASE/krkrz_android` / `KRKRZ_BASE/krkrz_ios` / `KRKRZ_BASE/krkrz_linux` が並ぶ構成)。
 
 - **krkrz_web** — ブラウザ (Emscripten / wasm32, SDL3 ベース) 版。
   https://github.com/wamsoft/krkrz_web
@@ -27,6 +27,22 @@ Win32 や各種デスクトップ向けのビルドは本リポジトリ (umbrel
   https://github.com/wamsoft/krkrz_android
   案件構成は `app-config.json` (`assetPack.sources` で資材をマージ、`padPacks`
   で Play Asset Delivery の分割配信) で定義し、`PROJECT_DIR` を指定してビルドする。
+
+- **krkrz_ios** — iOS / iPadOS 版 (CMake の Xcode ジェネレータ + vcpkg, SDL3 ベース)。
+  https://github.com/wamsoft/krkrz_ios
+  案件構成は `ios-config.json` で定義する (`cmake` / `assetPack` は krkrz_android の
+  `app-config.json` と同じ書式・同じ動作なので、案件フォルダで資材を共有できる)。
+  `PROJECT_DIR` を指定してビルドし、資材はアプリバンドル直下に同梱する。
+  iOS は dlopen 不可のため全プラグインを static で組み込む。描画は `graphics` で
+  `metal` (SDL_Renderer) / `gles` (OpenGL ES, ogl / sdlogl DrawDevice) を選ぶ。
+  `KRKRZ_BASE` 未指定時は krkrz_ios の親フォルダ (= 隣に clone した krkrz_dev) を参照する。
+
+- **krkrz_linux** — Linux 版の配布パッケージ (steamdev deckbuild の sniper SDK コンテナでビルド)。
+  https://github.com/wamsoft/krkrz_linux
+  案件構成は `linux-config.json` で定義する (`cmake` / `assetPack` は krkrz_android と
+  同じ書式)。出力は「そのまま動くフォルダ」と tar.gz で、Steam のデポや itch.io / GOG に
+  そのまま使える。`orgName` / `appName` を `<exe名>.cf` に書き込み、セーブデータの場所
+  (`~/.local/share/<orgname>/<appname>/`) を案件ごとに決める。
 
 各リポジトリ固有の詳細はそれぞれの README を参照。
 

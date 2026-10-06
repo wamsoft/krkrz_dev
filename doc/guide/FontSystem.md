@@ -54,18 +54,20 @@
 ### ① exe 埋め込み (resource/)
 
 エンジンの `resource/` フォルダに置いた `.ttf/.otf` はビルド時に実行ファイルへ
-埋め込まれ、起動時から使用できます (既定同梱: Noto Sans JP / Roboto /
-Noto Emoji / elements_basic)。ゲーム側で増やすものではなく、エンジン既定
+埋め込まれ、起動時から使用できます。ゲーム側で増やすものではなく、エンジン既定
 フォントの置き場所です。埋め込みフォントはストレージ名
 `resource://./ファイル名` でもアクセスできます。
 
-同梱フォントは実行ファイルサイズの大半を占めます (Noto Sans JP 4.3MB /
-Noto Emoji 1.9MB)。ゲーム側で自前のフォントを供給する構成では、ビルド時に
-`-DKRKRZ_EMBED_BUNDLED_FONTS=OFF` を渡すとこの 2 本を埋め込まなくなり、
-実行ファイルが約 6.2MB 小さくなります (Roboto / elements_basic は Elements の
-既定テーマが参照するので残ります)。任意のファイルを外すには
+**既定で埋め込むのは Roboto (英字) と elements_basic (Elements のアイコン) だけ**
+です。日本語 (Noto Sans JP 4.3MB) と絵文字 (Noto Emoji 1.9MB) は
+実行ファイルサイズの大半を占めるため、既定では埋め込みません。日本語はゲーム側で
+`fonts.json` に宣言するか (②)、OS のフォント (④) を使います。以前と同じく
+埋め込みたい場合はビルド時に `-DKRKRZ_EMBED_BUNDLED_FONTS=ON` を渡します
+(実行ファイルが約 6.2MB 大きくなります)。任意のファイルを外すには
 `-DKRKRZ_RESOURCE_EXCLUDE="ファイル名;ファイル名"` を使います。
-外した場合、日本語・絵文字の描画に使うフォントはゲーム側で用意してください。
+
+エンジン同梱のデモ (`src/core/data`) は、この 2 本を `data/fonts/` に置いて
+`fonts.json` で宣言しています。ゲームで同じフォントを使う場合の見本になります。
 
 ### ② data 外だし + fonts.json (推奨)
 
@@ -136,13 +138,20 @@ Font.addFont("mygame_font.ttf");                       // 即時ロード
 Font.registerFontFile("fonts/big_cjk.ttf", "MyCJK");   // 遅延 (初回使用時に読む)
 ```
 
-### ④ システムフォント (Windows ネイティブ版)
+### ④ システムフォント (OS にインストール済みのフォント)
 
-WINVER では OS にインストール済みのフォントを**フォント名だけで**使えます
-(GDI 名前解決)。glyphware 系の経路 (rasterizer=2 / drawShapedText /
-Elements) でも `"メイリオ"` `"MS PGothic"` 等の名前がそのまま解決され、
-TTC のフェイス番号も正しく選択されます。`addFont` プラグインで登録した
-埋め込みフォントも同様に名前で使えます。
+OS にインストール済みのフォントを**フォント名だけで**使えます。
+
+- **WINVER** は GDI の名前解決です。glyphware 系の経路 (rasterizer=2 /
+  drawShapedText / Elements) でも `"メイリオ"` `"MS PGothic"` 等の名前が
+  そのまま解決され、TTC のフェイス番号も正しく選択されます。`addFont`
+  プラグインで登録した埋め込みフォントも同様に名前で使えます。
+- **SDL 版ほか** は起動時に OS のフォント一覧から**名前とファイルの対応だけ**を
+  登録し、実ファイルは初めて使ったときに読みます (fonts.json と同じ遅延ロード)。
+  一覧の取得元は Windows が DirectWrite、Linux が fontconfig です
+  (macOS / Android は未対応)。同じ名前が fonts.json や実行時登録にあれば
+  そちらが優先されます。配布物の見た目を実行環境に左右させたくない場合は
+  起動オプション `-systemfont=no` で無効にできます。
 
 ## フォント名の規約と解決順序
 
@@ -151,8 +160,28 @@ TTC のフェイス番号も正しく選択されます。`addFont` プラグイ
 
 1. **fonts.json / registerFontFile の宣言名** (family / aliases) → ストレージ
 2. **ストレージパス** (`fonts/foo.ttf`、`resource://./…` など実在するもの)
-3. **(WINVER) インストール済み GDI フォント名** (addFont 登録分を含む)
+3. **OS のフォント名** (WINVER は GDI、addFont 登録分を含む。SDL 版ほかは
+   起動時に登録した OS フォント一覧)
 4. 解決できない名前は既定フェイスへフォールバック
+
+### 既定フォント
+
+フォント名を指定しないときの既定フォントは、起動オプション `-deffont` が
+あればそれ、無ければ実行環境の言語に合わせた候補から**実際に使えるもの**を
+選びます (SDL 版ほか)。日本語環境の候補は `fonts.json` の Noto Sans JP、
+続いて Yu Gothic UI / メイリオ / MS ゴシック / ヒラギノ / IPA / Noto Sans CJK JP
+などの OS のフォントです。起動時にどれも使えなかった場合は、後から
+`fonts.json` や `Font.registerFontFile` で候補の名前が登録された時点で選び
+直します。WINVER は従来どおり GDI の既定フォントです。
+
+### どのフォントにも無い文字
+
+フォールバック連鎖のどのフォントにも無い文字は、連鎖の中で持っているフォントの
+**U+FFFD (�)** で描きます。U+FFFD も無ければ `?` です (同梱の Roboto は
+U+FFFD を持っています)。改行やゼロ幅文字・異体字セレクタなどの見えない文字は
+何も描きません。`Layer.drawText` (FreeType / glyphware ラスタライザ)・
+`drawShapedText` 系・縦組み・Elements で共通です (GDI ラスタライザは GDI の
+代替表示のまま)。
 
 classic (FreeType) の face 名は「family subfamily」連結 (例 "Noto Sans JP
 Regular") である点に注意してください。fonts.json 生成器が連結名を alias に
@@ -317,8 +346,11 @@ var r = layer.drawVerticalTextArea(20, 20, 400, 560, text, 0x000000,
 ## UI 系 (Elements) と layerExVector のフォント
 
 - **Elements ダイアログ** ([ダイアログ](ElementsDialog.md)) のテキストは glyphware で
-  描画されます。テーマフォントには埋め込みフォント (Roboto / Noto Sans JP /
-  Noto Emoji) が自動登録され、追加フォントは
+  描画されます。テーマフォントには埋め込みフォント (既定は Roboto) が自動登録
+  され、その後ろに**エンジンの既定フォント** (上記「既定フォント」: fonts.json の
+  宣言フォントや OS の日本語フォント、WINVER は GDI の既定) が最後の手段として
+  つながります。フォントを同梱しない構成でも日本語が出るのはこのためです。
+  追加フォントは
   `ElementsDialog.registerFont(family, storage[, weight, slant, stretch])` /
   `ElementsDialog.registerFontDir(dir)` で登録します。ストレージパス (XP3 内・
   `resource://` 含む) をそのまま渡せます。`registerFontDir` は**登録できた
@@ -343,9 +375,8 @@ var r = layer.drawVerticalTextArea(20, 20, 400, 560, text, 0x000000,
   **同じフォント・同じ見た目**になります ( 可変フォントの軸を使う場合だけは、
   共有 face の状態を汚さないよう専用の face が開かれます )。
 - **layerExVector プラグイン** (`GdiPlus.loadFont(storage, name)`) も同じ
-  エンジンを共有します。`resource://./notosansjp-regular.otf` のように
-  本体埋め込みフォントを指定でき、フォントを同梱しなくてもアウトライン
-  文字を描画できます。
+  エンジンを共有します。`resource://./roboto-regular.ttf` のように
+  本体埋め込みフォントや fonts.json の宣言名を指定できます。
 - どの経路も同一フォントは FontStream の共有バッファ 1 部を使うため、
   複数箇所で同じフォントを使ってもメモリは増えません。
 
@@ -358,6 +389,10 @@ tp_stub にフォントサービス API (`TVPCreateFontStream` / `TVPFontAcquire
 
 ## トラブルシューティング
 
+- **文字が � (U+FFFD) で出る** — その文字を持つフォントがどこにもありません。
+  日本語なら fonts.json で日本語フォントを宣言するか、OS のフォントを使って
+  ください (`-systemfont=no` を付けていないか、SDL 版の macOS / Android では
+  OS のフォントが使えない点にも注意)。
 - **フォント名を指定したのに既定フォントで描かれる** — 名前が未登録です。
   `Font.getFontInfo(名前)` が void を返すか確認し、fonts.json の宣言名 /
   aliases、または `Font.addFont` の戻り値のフェイス名を使ってください。

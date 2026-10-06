@@ -29,6 +29,52 @@ var demolibPath = void;
     }
 }
 if (demolibPath === void) { System.inform("demolib が見つかりません"); System.exit(1); }
+
+// --- コアデモのフォント (src/core/data/fonts.json) を名前だけ登録 ------
+// fonts.json はプロジェクト (= この data/) 直下のものしか自動では読まれない。
+// 本体の既定ビルドは日本語フォントを埋め込まないので、コアデモ用の宣言を
+// ここで遅延登録する (実ファイルは初回使用時に読まれる)。既定フォントも
+// 登録後に選び直されるので、OS フォントの無い環境 (Web) でも日本語が出る。
+// 生成器の出力 (1 行 1 キー) を前提にした簡易な読み取り。
+function fontsJsonQuoted(s, from)
+{
+    var a = s.indexOf('"', from);
+    if (a < 0) return void;
+    var b = s.indexOf('"', a + 1);
+    return b < 0 ? void : s.substring(a + 1, b - a - 1);
+}
+function fontsJsonValue(s, key)
+{
+    var k = '"' + key + '"';
+    var p = s.indexOf(k);
+    return p < 0 ? void : fontsJsonQuoted(s, p + k.length);
+}
+function registerDeclaredFonts(base)
+{
+    var json = base + "fonts.json";
+    if (!Storages.isExistentStorage(json)) return;
+    // 相対名のままだと遅延ロード時の基準がずれるので、実在位置から絶対化する
+    base = Storages.extractStoragePath(Storages.getPlacedPath(json));
+    var lines = [];
+    lines.load(json);
+    var file = void, inAliases = false;
+    for (var i = 0; i < lines.count; i++) {
+        var l = lines[i];
+        if (inAliases) {
+            if (l.indexOf("]") >= 0) { inAliases = false; continue; }
+            var a = fontsJsonQuoted(l, 0);
+            if (a !== void && file !== void) Font.registerFontFile(base + file, a);
+            continue;
+        }
+        var v;
+        if ((v = fontsJsonValue(l, "file")) !== void) { file = v; continue; }
+        if (file === void) continue;
+        if ((v = fontsJsonValue(l, "family")) !== void) { Font.registerFontFile(base + file, v); continue; }
+        if (l.indexOf('"aliases"') >= 0 && l.indexOf("[") >= 0 && l.indexOf("]") < 0) inAliases = true;
+    }
+}
+registerDeclaredFonts(demolibPath + "../");
+
 Scripts.execStorage(demolibPath + "demo_common.tjs");
 
 // --- 横断デモ (data/) の資材検索パスを登録 -----------------------------
@@ -70,6 +116,7 @@ tryScene(coreBase + "system_debug/scene.tjs",  function() { return new SystemDeb
 tryScene(coreBase + "webui/scene.tjs",         function() { return new WebUIScene(); });
 tryScene(coreBase + "softkey_ime/scene.tjs",   function() { return new SoftkeyImeScene(); });
 tryScene(coreBase + "pad_advanced/scene.tjs",  function() { return new PadAdvancedScene(); });
+tryScene(coreBase + "a11y/scene.tjs",          function() { return new A11yScene(); });
 
 // 横断デモ (data/ 直下、複数プラグイン)
 tryScene("vector_demo/scene.tjs",     function() { return new VectorScene(); });

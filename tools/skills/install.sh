@@ -87,6 +87,7 @@ BUNDLE=(
   "tjs2|doc/topics/tjs2|topics|doc/topics/tjs2/|references/topics/"
   "elements|src/core/doc/ElementsDialog.md|.|doc/ElementsDialog.md|references/ElementsDialog.md"
   "elements|src/core/doc/Gamepad.md|.|doc/Gamepad.md|references/Gamepad.md"
+  "elements|doc/guide/Accessibility.md|.|umbrella の \`doc/guide/Accessibility.md\`|\`references/Accessibility.md\`"
   "krkrz-webui|src/core/doc/REPL.md|.|doc/REPL.md|references/REPL.md"
 )
 

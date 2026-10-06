@@ -90,6 +90,7 @@ nav:
       - サウンドシステム: guide/SoundSystem.md
       - ストレージシステム: guide/StorageSystem.md
       - ダイアログ: guide/ElementsDialog.md
+      - 読み上げ (スクリーンリーダー): guide/Accessibility.md
       - フォントシステム: guide/FontSystem.md
       - トランジション: guide/Transition.md
       - プラグイン: guide/Plugins.md
@@ -264,6 +265,7 @@ nav:
     - 動画再生機能: specification/movie.md
     - 画像処理機能: specification/graphics.md
     - 音声再生機能: specification/sound.md
+    - アクセシビリティ (スクリーンリーダー): specification/accessibility.md
   - 周辺情報:
     - topics/index.md
     - ユーザー向け情報:
@@ -291,6 +293,7 @@ nav:
       - ゲームパッド状態の観察 (PadOverlay): topics/core/pad_overlay.md
       - REPL (対話型 TJS シェル): topics/core/repl.md
       - Steam Deck 実機確認 (リリース前チェック): topics/core/steamdeck.md
+      - Linux 版の配布パッケージ (krkrz_linux): topics/core/linux_package.md
       - ゲーム画面の表示画角制御 (ビューポート): topics/core/viewport.md
       - ログ出力: topics/core/logging.md
     - ライセンス: topics/LICENSE.md

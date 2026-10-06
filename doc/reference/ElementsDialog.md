@@ -64,6 +64,13 @@ text_box / text_area / vtile / htile / vspacer / hspacer 等 ) や属性、
 折り返しは全文で確定済みなので送ってもリフローしません
 ( 字幕やセリフ窓向け。従来からある `text_box` は互換のためそのまま )。
 
+表示中の画面は OS のスクリーンリーダー ( ナレーター / VoiceOver / Orca ) から
+読めます。画面 JSON の `"a11y"` キーで名前や役割を補えます。ゲーム本体の
+Layer に描いた UI も [setGameA11y](#setgamea11y) / [a11yLayers](#a11ylayers)
+で載せられ、[announce](#announce) で任意の文を読ませられます。仕様の全体は
+[アクセシビリティ (スクリーンリーダー) 対応](../specification/accessibility.md)
+を参照してください。
+
 `KRKRZ_USE_ELEMENTS=OFF` でビルドした exe では ElementsDialog クラスは利用できません。
 WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利用できます
 (非モーダル / overlay モーダル / 独立ウィンドウモーダル / フロー /
@@ -82,8 +89,8 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利�
 - [modalActive](#modalactive)
 - [atlasCacheStats](#atlascachestats)
 - [atlasCacheBudget](#atlascachebudget)
-- [watchVars](#watchvars)
 - [language](#language)
+- [watchVars](#watchvars)
 - [fontLanguages](#fontlanguages)
 - [virtualKeyboard](#virtualkeyboard)
 - [hasPhysicalKeyboard](#hasphysicalkeyboard)
@@ -94,6 +101,10 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利�
 - [partialRedraw](#partialredraw)
 - [renderCount](#rendercount)
 - [renderStats](#renderstats)
+- [a11yActive](#a11yactive)
+- [a11yMode](#a11ymode)
+- [a11yLabel](#a11ylabel)
+- [a11yLayers](#a11ylayers)
 
 ### メソッド
 
@@ -114,6 +125,8 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利�
 - [registerHotKey](#registerhotkey)
 - [unregisterHotKey](#unregisterhotkey)
 - [clearHotKeys](#clearhotkeys)
+- [beginKeyCapture](#beginkeycapture)
+- [endKeyCapture](#endkeycapture)
 - [registerImage](#registerimage)
 - [unregisterImage](#unregisterimage)
 - [clearImages](#clearimages)
@@ -132,6 +145,9 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利�
 - [setPadTheme](#setpadtheme)
 - [setPadIconAlias](#setpadiconalias)
 - [renderStatsReset](#renderstatsreset)
+- [announce](#announce)
+- [setGameA11y](#setgamea11y)
+- [clearGameA11y](#cleargamea11y)
 
 ### イベント
 
@@ -141,6 +157,9 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利�
 - [onDrag](#ondrag)
 - [onVar](#onvar)
 - [onClose](#onclose)
+- [onKeyCapture](#onkeycapture)
+- [onA11yActiveChanged](#ona11yactivechanged)
+- [onGameA11yAction](#ongamea11yaction)
 
 ---
 
@@ -261,7 +280,7 @@ Debug.message("アトラス常駐 %.1f MB (%d 件)".sprintf(st.bytes / 1048576.0
 
 ---
 
-### watchVars
+### language
 
 プロパティ \ アクセス: `r/w`
 
@@ -287,6 +306,13 @@ global.ElementsDialog.language = "en";     // 表示中の画面もその場で�
 読み出すと設定済みの言語を返します。未設定なら空文字 ( = 各画面 JSON の
 `lang` 指定に従う ) です。`strings` を持たない画面では何も起きません。
 
+---
+
+### watchVars
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
 
 変数変化通知の対象
 
@@ -301,12 +327,6 @@ global.ElementsDialog.language = "en";     // 表示中の画面もその場で�
 `"vars_on_hover"` の変数やドラッグ位置は毎フレーム書き換わるため、
 特定の変数だけ必要なら名前を並べたほうが軽くなります。表示中に設定しても
 即座に反映されます。
-
----
-
-### language
-
-プロパティ \ アクセス: `r/w`
 
 ---
 
@@ -551,6 +571,99 @@ true ( 既定 ) の間、変化した範囲が矩形で特定できる場合は*
 ( [ElementsDialog.renderStatsReset](ElementsDialog.md#renderstatsreset) で 0 クリア )。
 計測用のベンチ画面がコアデモ `elements_bench` にあります
 ( シナリオ切替 + renderCache A/B + 500ms ごとの内訳表示 )。
+
+---
+
+### a11yActive
+
+プロパティ \ アクセス: `r`
+
+**型**: `bool`
+
+**解説**
+
+スクリーンリーダーが接続中かどうか ( 読み取り専用 )
+
+OS のスクリーンリーダー等が読み上げツリーを問い合わせ済みなら真です
+( クラス全体で共通 )。最初の問い合わせで真になります。Windows では
+ウィンドウが前面になったときに問い合わせが来るため、起動直後はまだ偽です。
+
+「繋がっていたら本文を読ませる」判定に使う場合は、値をキャッシュせず
+読む直前にこのプロパティを見るか、
+[onA11yActiveChanged](#ona11yactivechanged) で受けてください。
+`KRKRZ_USE_A11Y=OFF` のビルドと [a11yMode](#a11ymode) が `"off"` のときは
+常に偽です。
+
+**関連:** [ElementsDialog.onA11yActiveChanged](ElementsDialog.md#ona11yactivechanged)
+
+---
+
+### a11yMode
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+読み上げツリーを OS へ出すかどうか
+
+`"auto"` ( 既定 ) はスクリーンリーダーが繋がったときだけ働きます。`"off"` は
+OS へ出しません ( クラス全体に効く static 相当 )。`"off"` でも
+[Agent.a11yTree](Agent.md#a11ytree) などの検証用の口は使えます。
+それ以外の文字列を代入すると無視してログに警告を出します。
+
+---
+
+### a11yLabel
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `String`
+
+**解説**
+
+読み上げツリーの根 ( ウィンドウ ) の名前
+
+ゲーム名や場面名を入れます ( クラス全体に効く static 相当 )。空文字 ( 既定 ) なら
+最前面の画面の名前 ( 画面 JSON の `"a11y"` の `title` ) を使います。
+
+---
+
+### a11yLayers
+
+プロパティ \ アクセス: `r/w`
+
+**型**: `bool`
+
+**解説**
+
+Layer を読み上げツリーに自動で載せる
+
+真にすると、メインウィンドウの primary layer 以下を辿ってゲーム本体の
+ノードに足します ( 既定 false。クラス全体に効く static 相当 )。
+
+載るのは次の Layer です。
+
+- フォーカス連鎖に入っている Layer ( `focusable` かつ `joinFocusChain` )。
+名前は `hint`、ロールは button ( `CheckBoxLayer` は check_box、
+`EditLayer` は text_input )
+- `a11yName` か `a11yRole` を持つ Layer ( フォーカスできなくてもよい )
+- [ElementsPanel](ElementsPanel.md) を描いている Layer ( パネルの部品が
+その下に並び、操作もパネルへ届く )
+
+`visible` が偽の Layer と、`a11yHidden` が真の Layer は、子も含めて載りません。
+Layer に生やせるメンバ ( `a11yName` / `a11yRole` / `a11yValue` /
+`a11yDescription` / `a11yStates` / `a11yHidden` / `onA11yAction` ) は
+[Layer](Layer.md) のクラス説明を参照してください。
+
+[setGameA11y](#setgamea11y) と併用できます。並び順は setGameA11y のノードが先で、
+フォーカスも setGameA11y に渡したものが優先です。読み直しは 150ms に 1 回まで
+( フォーカス中の Layer が変わったら即時 ) で、スクリーンリーダーが繋がっている間か
+REPL の読み上げログを取っている間だけ行います。WINVER ではその間、アイドル時も
+continuous イベントが回り続けます。
+
+**関連:** [ElementsDialog.setGameA11y](ElementsDialog.md#setgamea11y)
 
 ---
 
@@ -1074,6 +1187,77 @@ ESC でのシーン復帰や PageUp/Down での画面切替を、slider 等を�
 
 ---
 
+### beginKeyCapture
+
+メソッド
+
+**戻り値**
+
+捕捉を始められたら真。ダイアログが表示されていない ( アクティブでない ) ときは偽。
+
+**解説**
+
+キー捕捉を始める
+
+「次に押されたキーをそのまま受け取る」ためのメソッドです。キー割り当ての設定画面で
+「割り当てるキーを押してください」と出すときのように、キーをウィジェットの操作
+( フォーカス移動・決定・Esc で閉じる等 ) に使わせず、TJS で判定したい場面で使います。
+
+捕捉中のダイアログがキーボードフォーカスを持っている間は、キーの押下がすべて
+[onKeyCapture](#onkeycapture) へ届き、ウィジェットには渡りません。
+
+- モーダルの上でも、[registerHotKey](#registerhotkey) で登録したキーよりも優先します。
+ただし [System.registerHotKey](System.md#registerhotkey) の最上位ホットキーは
+先に効きます。
+- Shift / Ctrl / Alt の単独押し、ゲームパッドのボタン ( `VK_PAD*` )、
+オートリピート ( `ssRepeat` 付き ) も届きます。リピートを無視するかは受け手が決めます。
+- 左以外のマウスボタン ( 右 / 中 / X ) の押下も `VK_RBUTTON` などで届きます
+( 右クリックで取り消す、など )。左クリックは通常どおりウィジェットへ届きます。
+- キーを離したときのイベントと文字入力は、捕捉中は捨てます。
+- 捕捉したキーを押したまま捕捉を終えても ( ダイアログを閉じても )、背面の画面へ
+リピートが漏れることはありません。
+
+[endKeyCapture](#endkeycapture) を呼ぶか、ダイアログを閉じると捕捉は終わります。
+
+説明文だけのダイアログを設定画面の上にモーダルで重ね、そのダイアログで
+捕捉するのが典型的な使い方です。[onKeyCapture](#onkeycapture) の中から
+[close](#close) を呼んでもかまいません。
+
+```tjs
+var dlg = new ElementsDialog();
+dlg.onKeyCapture = function(key, shift) {
+if (shift & ssRepeat) return;          // リピートは無視
+if (key == VK_RBUTTON) { close(); return; }   // 右クリックで取り消し
+assignKey(key);
+close();
+} incontextof dlg;
+dlg.showJson(promptJson);
+dlg.beginKeyCapture();
+```
+
+**関連:** [ElementsDialog.endKeyCapture](ElementsDialog.md#endkeycapture) / [ElementsDialog.onKeyCapture](ElementsDialog.md#onkeycapture)
+
+---
+
+### endKeyCapture
+
+メソッド
+
+**戻り値**
+
+終えられたら真。ダイアログが表示されていない ( アクティブでない ) ときは偽。
+
+**解説**
+
+キー捕捉を終える
+
+[beginKeyCapture](#beginkeycapture) で始めた捕捉を終えます。ダイアログを閉じた場合は
+自動で終わるので、呼ぶ必要はありません。
+
+**関連:** [ElementsDialog.beginKeyCapture](ElementsDialog.md#beginkeycapture)
+
+---
+
 ### registerImage
 
 メソッド
@@ -1511,6 +1695,106 @@ global.ElementsDialog.setPadIconAlias("keyboard", "b", "keyboard_backspace");
 
 ---
 
+### announce
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `text` | `&nbsp;` | 読ませる文字列。 |
+| `assertive` | `false` | 真なら割り込みを指定します ( 既定 false )。実際にどう扱うかは<br>スクリーンリーダー次第です。 |
+
+**解説**
+
+スクリーンリーダーに読ませる
+
+text をスクリーンリーダーに読み上げさせます ( クラス全体に効く static 相当 )。
+最前面のダイアログの live region に入り、ダイアログが 1 つも無ければゲーム本体の
+live region に入ります。同じ文を続けて渡しても毎回読みます。
+
+スクリーンリーダーが繋がっていなくても受け付けます ( 繋がった時点で最新の状態が
+渡ります )。REPL の動作中は読み上げログ ( [Agent.a11yLog](Agent.md#a11ylog) ) にも
+残ります。
+
+```tjs
+global.ElementsDialog.announce("セーブしました");
+global.ElementsDialog.announce("体力が残りわずかです", true);   // 割り込み
+```
+
+仕様の全体は [アクセシビリティ (スクリーンリーダー) 対応](../specification/accessibility.md)
+を参照してください。
+
+**関連:** [ElementsDialog.a11yActive](ElementsDialog.md#a11yactive)
+
+---
+
+### setGameA11y
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `nodes` | `&nbsp;` | ノードの辞書の配列。 |
+| `focus` | `&nbsp;` | フォーカスを置くノードの `id` ( 省略で無し )。 |
+
+**解説**
+
+ゲーム本体の UI を読み上げツリーに載せる
+
+Layer に描いた選択肢・メニュー・設定画面などは Elements の外にあるので、
+スクリプトからノードの表を渡して読み上げツリーに載せます ( クラス全体に効く
+static 相当 )。呼ぶたびに表全体を差し替えます ( 差分は本体が取ります )。
+
+```tjs
+global.ElementsDialog.setGameA11y([
+%[ id:"choices", role:"list", name:"選択肢" ],
+%[ id:"c1", role:"list_item", name:"北へ行く", parent:"choices", rect:[100,400,600,48] ],
+%[ id:"c2", role:"list_item", name:"南へ行く", parent:"choices", rect:[100,460,600,48] ],
+%[ id:"vol", role:"slider", name:"音量", value:"50%", num_value:50, num_min:0, num_max:100 ],
+], "c1");
+```
+
+ノードの辞書のキー:
+
+- `id` ... 必須。一意な文字列。空か重複しているノードはログを出して飛ばします
+- `role` ... `button` / `toggle_button` / `check_box` / `radio_button` / `tab` /
+`menu_item` / `list` / `list_item` / `slider` / `spin_button` / `text_input` /
+`label` / `heading` / `image` / `status` / `group` ( 省略と未知の値は group )
+- `name` / `value` / `description` ... 名前 / 値 / 補足説明
+- `states` ... 配列か `"focusable,checked"` の形。`focusable` / `disabled` /
+`checked` / `selected` / `expanded` / `read_only`
+- `rect` ... primary layer の座標 `[x, y, w, h]`。省略すると子を囲む矩形。
+ウィンドウの拡縮とレターボックスは本体が換算します
+- `parent` ... 親の `id`。省略で最上位
+- `num_value` / `num_min` / `num_max` / `num_step` ... slider / spin_button の数値
+
+ゲーム本体のノードはダイアログより下に並び、モーダルなダイアログの表示中は
+隠れます。スクリーンリーダーからの操作は
+[onGameA11yAction](#ongamea11yaction) に届きます。本体はフォーカスや値を
+自分では動かさないので、スクリプトがゲームの状態を変えてから
+`setGameA11y` を呼び直してください。メインウィンドウのみが対象です。
+
+**関連:** [ElementsDialog.clearGameA11y](ElementsDialog.md#cleargamea11y) / [ElementsDialog.a11yLayers](ElementsDialog.md#a11ylayers)
+
+---
+
+### clearGameA11y
+
+メソッド
+
+**解説**
+
+ゲーム本体のノードを全て外す
+
+[setGameA11y](#setgamea11y) で載せたノードを全て外します。ゲーム本体の
+枠と、[announce](#announce) が使う live region は残ります。
+
+---
+
 ### onScreen
 
 イベント
@@ -1672,5 +1956,86 @@ slider の `"value_var"` / `"drag_at_var"` / 一覧の `"index_offset_var"`
 
 このインスタンスのダイアログが閉じ切った ( teardown 完了 ) タイミングで発火する
 非ブロッキング経路のイベントです。TJS 側で override してください。
+
+---
+
+### onKeyCapture
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `key` | `&nbsp;` | VK コード。左以外のマウスボタンは `VK_RBUTTON` / `VK_MBUTTON` /<br>`VK_XBUTTON1` / `VK_XBUTTON2`、ゲームパッドのボタンは `VK_PAD*`。 |
+| `shift` | `&nbsp;` | `ss*` の組み合わせ。オートリピートは `ssRepeat` 付き。 |
+
+**解説**
+
+捕捉したキー
+
+[beginKeyCapture](#beginkeycapture) で捕捉中に押されたキーを受け取るイベントです。
+TJS 側で override してください。既定は何もしません。
+
+**関連:** [ElementsDialog.beginKeyCapture](ElementsDialog.md#beginkeycapture)
+
+---
+
+### onA11yActiveChanged
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `active` | `&nbsp;` | 接続中なら真。 |
+
+**解説**
+
+スクリーンリーダーの接続状態が変わった
+
+[a11yActive](#a11yactive) が変わったときに呼ばれます。`ElementsDialog` クラスへ
+関数を代入して受けます ( 描画の外で呼ばれ、WINVER の静止画面でも即時 )。
+
+```tjs
+global.ElementsDialog.onA11yActiveChanged = function(active) {
+Debug.message("スクリーンリーダー: " + (active ? "接続" : "切断"));
+};
+```
+
+---
+
+### onGameA11yAction
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `id` | `&nbsp;` | 操作されたノードの `id`。 |
+| `action` | `&nbsp;` | `"click"` / `"focus"` / `"increment"` / `"decrement"` / `"set_value"`。 |
+| `arg` | `&nbsp;` | `"set_value"` のときの値 ( 文字列 )。 |
+
+**解説**
+
+ゲーム本体のノードへの操作
+
+スクリーンリーダーが [setGameA11y](#setgamea11y) のノードを操作したときに
+呼ばれます。`ElementsDialog` クラスへ関数を代入して受けます。どのスレッドから
+来た操作でも、描画の外のメインスレッドで呼ばれます。
+
+action はノードのロールから決まります。押せるもの ( button / check_box /
+list_item など ) は `"click"`、slider / spin_button は `"increment"` /
+`"decrement"` / `"set_value"`、text_input は `"set_value"` です。どのロールも
+`"focus"` を受け、`disabled` のノードは `"focus"` だけを受けます。
+
+```tjs
+global.ElementsDialog.onGameA11yAction = function(id, action, arg) {
+if (action == "focus") { selectChoice(id); updateA11y(); }
+else if (action == "click") { decideChoice(id); }
+};
+```
 
 ---

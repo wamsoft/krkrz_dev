@@ -1332,6 +1332,12 @@ MD5 ハッシュ値の取得
 
 一時ファイルに使えるローカルのファイル名を 1 つ払い出します。
 
+置き場所は OS の一時フォルダです (Windows は環境変数 TMP → TEMP → USERPROFILE の順)。
+そこに書き込めない場合や、環境変数が全く無い状態で起動されて Windows ディレクトリに
+なってしまった場合は、ログに警告を出してセーブデータのフォルダ
+([System.dataPath](System.md#datapath)) を使います。アーカイブ内のプラグイン DLL を
+取り出すときも同じ場所が使われます。
+
 ---
 
 ### isExistentStorageNoSearchNoNormalize

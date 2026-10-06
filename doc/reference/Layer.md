@@ -8,6 +8,27 @@ Layer クラスは、**レイヤ**を管理するためのクラスです。
 
 三者の関係と使い分けは [Layer と Bitmap と ImageFunction](../guide/LayerAndBitmap.md) を参照してください。
 
+### 読み上げ ( スクリーンリーダー ) 用のメンバ
+
+[ElementsDialog.a11yLayers](ElementsDialog.md#a11ylayers) を真にすると、フォーカス連鎖に
+入っている Layer がスクリーンリーダーの読み上げツリーに載ります ( 名前は [hint](#hint) )。
+次のメンバを Layer に生やすと、読み上げ方を変えられます。どれも任意で、本体が値を読むだけの
+規約です ( Layer クラス自体は持っていません )。
+
+| メンバ | 内容 |
+|---|---|
+| `a11yName` / `a11yRole` | 名前 / ロール ( [ElementsDialog.setGameA11y](ElementsDialog.md#setgamea11y) と同じ名前 )。どちらかがあれば、フォーカスできない Layer ( 見出しや説明文 ) も載る |
+| `a11yValue` / `a11yDescription` | 値 / 補足説明 |
+| `a11yStates` | 配列か `"checked,selected"` の形。`disabled` は [enabled](#enabled) からも付く |
+| `a11yHidden` | 真なら子も含めて外す ( `setGameA11y` で自前で載せる Layer に立てる ) |
+| `onA11yAction(action, arg)` | スクリーンリーダーからの操作を受ける。false を返すと既定の処理も行う |
+
+既定の処理は、`"focus"` が [focus](#focus)、`"click"` がフォーカスしてから Enter キーを
+送る、です。値の変更 ( `"increment"` / `"set_value"` など ) は `onA11yAction` でしか
+受けません。これらを property の getter にする場合は軽く保ってください
+( 読み直しは最大 150ms に 1 回 )。仕様の全体は
+[アクセシビリティ (スクリーンリーダー) 対応](../specification/accessibility.md) を参照してください。
+
 ## メンバー一覧
 
 ### コンストラクタ

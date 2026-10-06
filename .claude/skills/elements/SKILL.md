@@ -3,6 +3,8 @@ name: elements
 description: 吉里吉里Z 上の Elements ベース汎用ダイアログ/画面 UI (cycfi/elements + elements_modal) の作り方リファレンス。TJS で JSON / Dictionary 定義のダイアログを作る・出す・イベントを受ける・複数画面フロー(navigator)や常駐メニューを組む・入力/フォーカス/モーダルを制御する・Agent で動作検証する、といった場面で使う。基本的なダイアログ画面の作り方(最小例・レイアウト JSON スキーマ・ウィジェット一覧)から、モーダル/非モーダル/独立ウィンドウ/常駐フロー、複数インスタンス/z-order、DrawDevice 登録タイミング等のハマりどころまで網羅。Win32 ネイティブの WIN32Dialog(win32dialog プラグイン)とは別物。TJS2 言語仕様は skill `tjs2`、本体クラス API は `krkrz`、REPL/Agent 駆動は `krkrz-repl` を参照。
 ---
 
+> **パスの基点**: 本文の相対パスは **engine ルート基準** (krkrz_dev では `src/core/` を前置。下記参照)。作業ディレクトリが krkrz_dev 以外 (krkrz_android / krkrz_ios などの外枠や案件フォルダ) のときは **`${KRKRZ_BASE}/krkrz_dev/` を前置して**読む (`echo $KRKRZ_BASE` で実パスを確認。マシンごとに値が違うので絶対パスは書き込まない)。
+
 # Elements ベース ダイアログ / 画面 UI (krkrz)
 
 吉里吉里Z に埋め込んだ [Elements](https://github.com/wamsoft/elements) (ThorVG/cycfi ベースの C++ GUI) で、**JSON / TJS Dictionary 定義のダイアログや画面**を出す仕組み。`ElementsDialog` クラス経由で使う。全デスクトップ変種 (SDL3 / WINVER / OGL) で動作する。
@@ -246,6 +248,16 @@ dlg.startFlow("ui/menu/app.jsonc");   // 即 return(戻り値=起動成否)
 
 ---
 
+## 6.5 読み上げ (スクリーンリーダー)
+表示中の画面は OS のスクリーンリーダー (ナレーター / VoiceOver / Orca) から**何もしなくても読まれる** (名前は text / labeled_row.label / group.title 等から、役割は type から自動。入力欄は文字・単語・行単位)。使い方の全体は umbrella の `doc/guide/Accessibility.md`。
+- **画面 JSON の `"a11y"` キー** (全ウィジェット共通): 文字列=名前の短縮形、辞書=`label`/`label_id` (名前) / `description`/`description_id` / `role` (`"heading"` 等で上書き) / `value_var` / `live` (`"polite"`/`"assertive"`、text_var の変化を読む) / `hidden` (子ごと外す)。トップレベル `"a11y": {"title"|"title_id"}` = 画面名。**絵だけのボタン (`sprite_button` / `atlas_*`) は文字を持たないので必ず名前を付ける**。TJS 辞書から渡すと true が 1 になるが、bool キーは数値も受ける。
+- **static** (クラス全体): `announce(text[, assertive])` (任意の文を読ませる。AT 未接続でも受け付ける) / `a11yActive` (読み取り専用。Windows は窓が前面になるまで偽) / `onA11yActiveChanged(active)` (クラスへ関数を代入) / `a11yMode` (`"auto"`/`"off"`) / `a11yLabel` (根の名前)。
+- **ゲーム本体 (Layer に描いた UI)**: `setGameA11y(nodes[, focus])` (ノード表を丸ごと渡す。`%[id, role, name, value, states, rect=primary 座標, parent, num_*]`) + `onGameA11yAction(id, action, arg)` (本体はフォーカスを動かさない → 状態を変えて setGameA11y を呼び直す) / `clearGameA11y()` / `a11yLayers = true` (フォーカス連鎖の Layer を自動で載せる。名前=hint、Layer に `a11yName`/`a11yRole`/`a11yValue`/`a11yStates`/`a11yHidden`/`onA11yAction` を生やして補う)。ゲームのノードはダイアログより下・モーダル中は隠れる。
+- ⚠ どれも static なので**場面を抜けるときに戻す** (`clearGameA11y()` / `a11yLayers = false` / `onGameA11yAction = void`)。対象はメインウィンドウだけ (`showModalJson` の専用窓・2 枚目以降の Window は未対応)。
+- 実例: `data/a11y` (選択肢を setGameA11y、ボタン類を a11yLayers、パネルの `"a11y"` キー)。検証は §8 の `.a11y` / `.a11ylog` / `.a11ydo`。
+
+---
+
 ## 7. ハマりどころ (memory 由来・重要)
 - **DrawDevice 登録タイミング**: 起動直後(初回フレーム前)は overlay renderer 未登録で **`showJson` が false を返す**ことがある。初回表示は `Window.onContinuousHandler` 等へ遅延し、**成功するまでリトライ**する(`data/demolib` 参照)。[[reference_elements_dialog_drawdevice_timing]]
 - **GL DrawDevice 上で出ない**: 提示中デバイスへ host 解決が追従していないと GL 画面上でパネルが出ない/操作不可。エンジン修正済だが、デモ側の「パネル再試行が自壊(shellClosePanel が pending を消す)」に注意。[[reference_elements_on_gl_drawdevice]]
@@ -266,6 +278,7 @@ GUI は `krkrz-repl` skill のファイルチャネル + Agent API で駆動・�
 - `Agent.text(str)` — アクティブダイアログへテキスト入力(input_box)。
 - `Agent.captureScreen(path)` — overlay 込み実画面 PNG(次フレーム)。→ Read で目視。
 - ドットコマンド: `.dlg` / `.dlgclose` / `.click X Y` / `.cap`。
+- 読み上げ: `.a11y` (読み上げツリー JSON = `Agent.a11yTree()`) / `.a11ylog [N]` (おおよそ何と読むか) / `.a11ydo <node> <action> [arg]` (AT と同じ経路で操作 = `Agent.a11yAction`) / `.say <text>`。スクリーンリーダー無しで確かめられる。
 - 検証時の注意: REPL eval は式評価。永続変数は `global.x = ...`。多重 primary layer は不可(2枚目以降は `new Layer(win, primary)`)。詳細は skill `krkrz-repl`。
 
 ---
