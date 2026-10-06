@@ -22,8 +22,6 @@ sources = [
     { type = "mirror", from = "bin/x64-linux/Release", to = "" },
     { type = "mirror", from = "src/core/data", to = "data", exclude = ["**/*.bak", "**/*.psd"] },
 ]
-# install は libSDL3.so.0.4.0 実体のみで soname (libSDL3.so.0) が無いので補完する
-script = "python -c \"import glob,os,shutil; d=os.environ['STEAMDEV_STAGE_DIR']; src=glob.glob(os.path.join(d,'libSDL3.so.0.*'))[0]; shutil.copy(src, os.path.join(d,'libSDL3.so.0'))\""
 
 [targets.linux.deploy]
 # -replweb: 127.0.0.1:8899 に REPL サーバ (steamdev tunnel -L 18899:8899 で駆動)。
@@ -34,8 +32,7 @@ script = "python -c \"import glob,os,shutil; d=os.environ['STEAMDEV_STAGE_DIR'];
 # アプリが落ちてしまい、検証が途切れる。実機確認では見て閉じてまた見る、を
 # 繰り返すので切っておく。
 command = "./krkrz data -replweb -replwebidle=no -loglevel=info"
-# exe に RPATH が無いので同梱 SDL3 をカレントから拾わせる
-env = { LD_LIBRARY_PATH = "." }
+# 同梱 SDL3 は exe の RPATH ($ORIGIN, DT_RPATH) で読まれる。LD_LIBRARY_PATH は不要
 # Steam 配布と同一環境で検証する場合は sniper コンテナ実行:
 # settings = { compat_tool = "SteamLinuxRuntime_sniper" }
 

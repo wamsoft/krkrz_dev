@@ -127,7 +127,7 @@ Proton の初回起動は prefix 生成で数十秒かかるのが正常です�
 |---|---|
 | **`steamdev delete` してもアプリが動き続ける** | delete は資材とショートカットを消すだけで**プロセスは止めない**。先に kill する |
 | `pkill -f krkrz_linux` が効かない / 自爆する | パターンが自分のリモートシェルにもマッチする。ブラケット ( `krkrz_[l]inux` ) でも外すことがあるので、**`pgrep -a` で PID を見て `kill -9 <PID>`** が確実 |
-| Linux バイナリが即死 | 同梱 `.so` の soname 欠落 / RPATH 無し。`deckproject.toml` の stage script が `libSDL3.so.0` を補完し、`LD_LIBRARY_PATH=.` で起動している |
+| Linux バイナリが即死 / 同梱 SDL3 が使われない | 同梱 `.so` の解決は exe の `$ORIGIN` (DT_RPATH) と install される soname リンク `libSDL3.so.0` に任せている。`readelf -d krkrz` に `(RPATH) [$ORIGIN]` が無い古いビルドだと、Steam の `LD_LIBRARY_PATH` に入る `/usr/lib` の SteamOS 版 SDL3 が読まれる (読まれた .so は `/proc/<pid>/maps` で確認) |
 | 起動引数を変えたのに反映されない | 引数はショートカット登録時に Steam 側へ焼き込まれる。デバイス上の `<gameid>-argv.json` を書き換えても無駄で、**再デプロイが必要** |
 | curl `-d 'expr=a+b'` の `+` が空白になる | form-urlencoded の仕様。`+` は **`%2B`** と書く |
 | ビルドが `_mm256_*` 未定義で失敗 | sniper SDK 既定の gcc-10 が古い。deckbuild は gcc-14 を既定にしている |
