@@ -1,6 +1,6 @@
 ---
 name: krkrz-repl
-description: 吉里吉里Z (krkrz) の SDL3 / WINVER ビルドを REPL 経由でエージェントから駆動するためのリファレンス。krkrz を起動して TJS スクリプトを評価・検証・デバッグする、startup.tjs を介さず明示的に処理を開始する、入力イベント (キー/マウス) を注入する、画面をキャプチャして目視確認する、Elements ダイアログを観測・操作する、例外やダイアログ表示をコンソールで観測する、といった場面で使う。**外部エージェントは console(CONIN$) に打てないので -replfile ファイルチャネルが本命**。起動フラグ (-repl / -replfile / -nostartup / -loglevel / -display / -ignoremouse)、ファイルチャネルのプロトコル、Agent API (入力注入 / captureScreen / dialogs / dialogClick)、ドットコマンド (.cap/.dlg/.click/.mem 等)、REPL 駆動時の挙動変更 (例外で即終了しない / inform と例外ダイアログがコンソールに出る) を網羅。TJS2 言語仕様そのものは skill `tjs2`、本体クラス API は skill `krkrz` を参照。
+description: 吉里吉里Z (krkrz) の SDL3 / WINVER ビルドを REPL 経由でエージェントから駆動するためのリファレンス。krkrz を起動して TJS スクリプトを評価・検証・デバッグする、startup.tjs を介さず明示的に処理を開始する、入力イベント (キー/マウス) を注入する、画面をキャプチャして目視確認する、Elements ダイアログを観測・操作する、例外やダイアログ表示をコンソールで観測する、コアデモ全シーンを自動巡回してキャプチャで表示確認する (-demotest / -demotestcap)、といった場面で使う。**外部エージェントは console(CONIN$) に打てないので -replfile ファイルチャネルが本命**。起動フラグ (-repl / -replfile / -nostartup / -loglevel / -display / -ignoremouse)、ファイルチャネルのプロトコル、Agent API (入力注入 / captureScreen / dialogs / dialogClick)、ドットコマンド (.cap/.dlg/.click/.mem 等)、REPL 駆動時の挙動変更 (例外で即終了しない / inform と例外ダイアログがコンソールに出る) を網羅。TJS2 言語仕様そのものは skill `tjs2`、本体クラス API は skill `krkrz` を参照。
 ---
 
 # krkrz REPL 駆動リファレンス
@@ -385,6 +385,42 @@ TJS の評価は dot で始まらない行をそのまま入力する (式・文
 4. 例外が出てもプロセスは生きているので、コンソールの例外/trace を読んで
    スクリプトを直し、再度評価。
 5. `.mem` 等で状態を観測。`exit` で終了。
+
+## コアデモ全シーンの表示確認 (`-demotest` / `-demotestcap`)
+
+エンジン変更後の「全部ちゃんと映るか」の回帰確認は、REPL で 1 シーンずつ
+送るより **ギャラリーの自動巡回 + 自動キャプチャ**が速い (demolib 機能。
+SSOT は `data/demolib/readme.txt` の「ヘッドレス自動テスト」)。
+
+```bash
+krkrz <ABS>/src/core/data -demotest -demotestcap=<ABS_CAP_DIR>
+# 例 (Linux、エージェントのシェルから): WAYLAND_DISPLAY=wayland-0 を前置
+```
+
+- 全シーンを 40 フレームずつ巡回し、各シーンを `<dir>/sceneNN.png` に保存して
+  `@demotest:ok` で自動終了 (01 = メニュー)。ログの
+  `@demotest:cap <path> <シーン名>` が番号 → シーン名の対応、
+  `@demotest:<シーン名> ...` が各シーンの自己検証結果
+- `<dir>` は絶対パス、無ければ作られる。`-demotestcap` 単独でも巡回する
+- 保存は `System.captureScreen` なので REPL 有効ビルドのみ (MASTER では
+  `@demotest:cap unavailable` が出て撮影なし)。実ウィンドウが要る
+- 完走しない (ハング / abort) こと自体が不具合のシグナル。最後に出た
+  `@demotest:scene N/M` の次のシーン (またはその離脱処理) を疑う
+- 目視は PNG を 1 枚ずつ Read するより、PIL 等で縮小して数枚ずつ
+  並べた一覧画像を作って Read すると速い
+- 乱数・アニメのあるシーン (画像処理 / パーティクル / FPS 表示等) は毎回
+  画素が変わるので、前回キャプチャとの差分比較ではノイズとして扱う
+
+**撮れるのは各シーンの最初のページだけ**。複数ページあるシーン (GL Canvas 等)
+の残りは `-replfile` で起動して送る:
+
+```
+demoShell.switchTo(13)              # シーン番号 (0 = メニュー、sceneNN の NN-1)
+Agent.keyPress(VK_RIGHT)            # シーン内のページ送り
+System.captureScreen("<ABS>/p2.png")  # 次フレームで保存されるので少し待つ
+```
+
+`demoShell` は `runDemoHub` が global に置いている DemoShell インスタンス。
 
 ## 関連 (パスは engine ルート相対 / umbrella では `src/core/` 前置)
 
