@@ -1,9 +1,5 @@
 # CSVParser
 
-擬似コードによるマニュアル
-
-Copyright 2005-2009 GoWatanabe
-
 ## メンバー一覧
 
 ### コンストラクタ
@@ -149,7 +145,5 @@ Copyright 2005-2009 GoWatanabe
 **解説**
 
 parse/parseStorage で呼び出されるイベント
-
-----------------------------------
 
 ---
