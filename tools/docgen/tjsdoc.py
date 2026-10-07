@@ -800,14 +800,22 @@ def read_source_text(path: Path) -> str:
 
     src/plugins には SJIS のまま保守されているプラグインがあり、 UTF-8 決め打ちで
     読むと解説文が文字化けしたまま md へ出てしまうため。
+    改行は LF に揃える (CRLF のままだと、空行でコメントのまとまりを区切る判定が
+    効かず、前のセクション見出しコメントが次のメンバの解説に混ざる)。
+    CR CR LF のように CR が重なった行末も 1 つの改行として扱う (別々に数えると
+    全行の間に空行が入り、解説コメントと宣言が切り離される)。
     """
     raw = path.read_bytes()
+    text = None
     for enc in ("utf-8", "cp932"):
         try:
-            return raw.decode(enc)
+            text = raw.decode(enc)
+            break
         except UnicodeDecodeError:
             continue
-    return raw.decode("utf-8", errors="replace")
+    if text is None:
+        text = raw.decode("utf-8", errors="replace")
+    return re.sub(r"\r+\n", "\n", text).replace("\r", "\n")
 
 
 def main(argv=None):

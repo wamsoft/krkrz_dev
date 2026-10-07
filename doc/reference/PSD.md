@@ -94,6 +94,17 @@ psd://PSDファイル名/id/レイヤID.bmp
 - [getLayerTextBounds](#getlayertextbounds)
 - [setLayerTextBounds](#setlayertextbounds)
 - [clearStorageCache](#clearstoragecache)
+- [getComposite](#getcomposite)
+- [renderLayer](#renderlayer)
+- [getVectorMask](#getvectormask)
+- [getPaths](#getpaths)
+- [getLayerShape](#getlayershape)
+- [getShapeMask](#getshapemask)
+- [flattenPath](#flattenpath)
+- [rasterizePath](#rasterizepath)
+- [strokePath](#strokepath)
+- [setThreads](#setthreads)
+- [getThreads](#getthreads)
 
 ---
 
@@ -103,7 +114,7 @@ psd://PSDファイル名/id/レイヤID.bmp
 
 **解説**
 
-画像の基本プロパティ
+画像横幅
 
 ---
 
@@ -560,8 +571,6 @@ top:, left:, bottom:, right:, // enclosing 矩形
 
 レイヤマスクの詳細を取得する
 
-======================================================================== 参照系メタデータ getLayerInfo() には載せていない詳細情報を個別に取り出す口。 該当データを持たない場合はいずれも void を返す(例外にはしない)。 ========================================================================
-
 ---
 
 ### getLayerBlendingRanges
@@ -880,8 +889,6 @@ data:        // ペイロードの octet(28バイトのヘッダを除いたも�
 **解説**
 
 現在の内容を PSD ファイルとして書き出す
-
-======================================================================== 編集系 API (psdparse v0.7+ の編集機能。psdfile.dll から利用可能) いずれも in-memory の内容を操作するだけで、実際のバイト列は save() 時に 再構築される。画素/レイヤ追加系は 8bit RGB 文書のみ対応。編集後は psd:// ストレージのレイヤ検索キャッシュが破棄される。 注意: 合成画像(getBlend の元)は編集しても古いままになる (Photoshop で開いて再合成するまで反映されない)。テキストの字形も 再描画されないので、本文/書式/配置の変更が絵に出るのは Photoshop で 開き直したとき。 ========================================================================
 
 ---
 
@@ -1676,5 +1683,252 @@ getLayerInfo().text.transform と同じ値。テキストレイヤ以外は例�
 static method
 
 ストレージとして保持されてるキャッシュをクリアする
+
+---
+
+### getComposite
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `layer` | `&nbsp;` | 格納先レイヤ (文書サイズになる) |
+| `effects` | `true` | レイヤー効果を描くか (省略時 true) |
+| `background` | `void` | 不透明な背景色 0xRRGGBB (省略 / void なら透明) |
+
+**戻り値**
+
+再現できなかったものの数
+%[ skipped_adjustments, unsupported_clip_base, unsupported_effects ]
+
+**解説**
+
+レイヤから文書を合成する。
+
+---
+
+### renderLayer
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `layer` | `&nbsp;` | 格納先レイヤ |
+| `no` | `&nbsp;` | レイヤ番号 |
+| `effects` | `true` | レイヤー効果を描くか (省略時 true) |
+
+**戻り値**
+
+描いたら true。グループ / 区切り / 調整レイヤ / 空のレイヤは false
+
+**解説**
+
+レイヤ 1 枚を効果込みで透明な面へ描く (下のレイヤとは重ねない)。
+
+マスク・塗りつぶしやシェイプの中身・不透明度・効果を反映する。
+格納先レイヤの left/top は文書上の位置で、矩形は効果のはみ出し
+(影・光彩・境界線) を含む。
+
+---
+
+### getVectorMask
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `no` | `&nbsp;` | レイヤ番号 |
+
+**戻り値**
+
+%[ key, inverted, not_linked, disabled, path ]。無ければ void
+path = %[ subpaths:[ %[ closed, operation, index,
+knots:[ %[ anchor:[x,y], preceding:[x,y], leaving:[x,y], linked ], ... ] ], ... ],
+initial_fill, clipboard ]
+operation はサブパスの合成方法 (-1 直前とひとまとまり / 0 中マド /
+1 結合 / 2 前面の型抜き / 3 交差)。preceding は前の区間の制御点、
+leaving は次の区間の制御点。
+
+**解説**
+
+ベクタマスク (シェイプレイヤは 'vsms')。座標は文書ピクセル。
+
+---
+
+### getPaths
+
+メソッド
+
+**戻り値**
+
+[ %[ id, kind:"saved"|"work", name:<octet>, unicode_name, path ], ... ]
+path は getVectorMask と同じ形
+
+**解説**
+
+保存パス (リソース 2000〜2997) と作業パス (1025)。
+
+---
+
+### getLayerShape
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `no` | `&nbsp;` | レイヤ番号 |
+
+**戻り値**
+
+%[ fill_enabled, stroke_enabled,
+fill:%[ kind:"solid"|"gradient"|"pattern", descriptor ],
+stroke:%[ width (px), alignment:"inside"|"center"|"outside",
+cap:"butt"|"round"|"square", join:"miter"|"round"|"bevel",
+miter_limit, dashes:[px...], dash_offset (px), opacity (0..1),
+blend_mode, content_kind, content ],
+origins:[ %[ type:"rectangle"|"rounded_rectangle"|"line"|"ellipse",
+type_id, index, box:[l,t,r,b], radii:[左上,右上,右下,左下],
+line:[x0,y0,x1,y1], line_weight, invalidated ], ... ],
+path ]
+どれも無ければ void。pt 指定の線幅は文書の解像度で px に換算済み
+
+**解説**
+
+シェイプレイヤの情報 ('vscg' 塗り / 'vstk' 線 / 'vogk' ライブシェイプ)。
+
+---
+
+### getShapeMask
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `layer` | `&nbsp;` | 格納先レイヤ (left/top は文書上の位置。文書の外にはみ出しうる) |
+| `no` | `&nbsp;` | レイヤ番号 |
+| `part` | `"both"` | "fill" (パスの内側) / "stroke" (シェイプの線) / "both" (省略時) |
+
+**戻り値**
+
+%[ left, top, width, height ]。ベクタマスクが無い (stroke なら線が無い) と void
+
+**解説**
+
+シェイプ / ベクタマスクのパスをラスタライズする (アンチエイリアス付き)。
+
+格納先レイヤには被覆率を B=G=R=値, A=255 で入れる (getLayerDataMask と同じ形)。
+マスクの濃度・ぼかしは掛けない。
+
+---
+
+### flattenPath
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `path` | `&nbsp;` | getVectorMask の path と同じ形の辞書、またはサブパスの配列。<br>knot は [x, y] だけでもよい (直線の頂点)。closed の省略は true、<br>operation の省略は -1 |
+| `tolerance` | `0.1` | 曲線からのずれの上限 (px、省略時 0.1) |
+
+**戻り値**
+
+[ %[ closed, operation, points:[ [x,y], ... ] ], ... ]
+
+**解説**
+
+static method
+
+パスを折れ線にする。
+
+---
+
+### rasterizePath
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `layer` | `&nbsp;` | 格納先レイヤ (width x height になる) |
+| `path` | `&nbsp;` | flattenPath と同じ |
+| `width` | `&nbsp;` | 幅 |
+| `height` | `&nbsp;` | 高さ |
+| `left` | `0` | 格納先の左上に当たるパス座標 (省略時 0) |
+| `top` | `0` | 同上 (省略時 0) |
+
+**解説**
+
+static method
+
+パスの塗りをラスタライズする (被覆率を B=G=R=値, A=255 で)。
+
+---
+
+### strokePath
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `layer` | `&nbsp;` | 格納先レイヤ (width x height になる) |
+| `path` | `&nbsp;` | flattenPath と同じ |
+| `width` | `&nbsp;` | 幅 |
+| `height` | `&nbsp;` | 高さ |
+| `style` | `void` | %[ left, top, line_width (省略時 1), alignment:"center"\|"inside"\|"outside",<br>cap:"butt"\|"round"\|"square", join:"miter"\|"round"\|"bevel",<br>miter_limit (線幅に対する比、省略時 4), dashes:[線,間隔,...] (px),<br>dash_offset (px) ]<br>inside / outside は閉じたサブパスの片側にだけ線幅ぶん描く |
+
+**解説**
+
+static method
+
+パスの線をラスタライズする (被覆率を B=G=R=値, A=255 で)。
+
+---
+
+### setThreads
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `count` | `&nbsp;` | 使うスレッド数 (呼び出し元を含む)。0 = 自動 (論理コア数、最大 16)、<br>1 = 分けない。プラグインの登録解除のときに作業スレッドは止める |
+
+**解説**
+
+static method
+
+描画系 (getComposite / renderLayer / ラスタライズ) の並列処理のスレッド数。
+大きな画像は行ごとに複数のスレッドへ分けて処理する (結果はスレッド数によらない)。
+主な描画モードの合成は、AVX2 の CPU なら 8 画素ずつの SIMD 版で処理する。
+
+---
+
+### getThreads
+
+メソッド
+
+**戻り値**
+
+描画系が実際に使うスレッド数
+
+**解説**
+
+static method
 
 ---

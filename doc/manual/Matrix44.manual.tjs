@@ -57,7 +57,6 @@ class Matrix44 {
 	 * @description 1次元配列からコピー
 	 * @param array 16要素の配列を指定します。
 	 */
-
 	function set(array:Array);
 
 	/**

@@ -2958,7 +2958,6 @@ System クラスへの標準入出力拡張
 ※本体に同名のメソッドがある環境では本体版が使われます
 (本プラグインは本体に無い旧環境でのみ補完登録します)。
 仕様は本体の [System.readEnvValue](System.md#readenvvalue) を参照してください。
-レジストリの読み込みは、組み込みの System.readRegValue を使用のこと
 
 ---
 
@@ -3162,7 +3161,6 @@ void or %[ major, minor, build, platform, spmajor, spminor, servevicepack, suite
 OSのバージョン情報詳細を取得
 
 RtlGetVersion API および RTL_OSVERSIONINFOW 構造体を参照のこと
-(October 2018 update or later)
 
 ---
 
@@ -3258,8 +3256,6 @@ setDefaultDllDirectoriesでllsUserDirsフラグを立てておくこと
 **解説**
 
 ::AddDllDirectoryラッパー
-
-0x00000400
 
 ---
 
