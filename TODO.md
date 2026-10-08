@@ -223,6 +223,14 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 
 ## 最近クローズしたもの
 
+- ✅ Elements: スムーズスクロール一覧 `virtual_scroller` とスライダの目盛制約 `snap`、
+  WINVER のホイール位置の修正 (2026-10-08、elements `54436cfe`〜`510e5089` / src/core `bb2ff20d`〜`16cff597`、
+  ドキュメントは elements `6a9f61f6` / src/core `130e95c0`)
+  `virtual_scroller` は窓の行数 + 1 行ぶんのセルを 1px 単位で送り、行の境目で先頭行を知らせる
+  (ホイール / キーはアニメーション、ドラッグは慣性。`atlas_scrollbar` の `row_steps` / `active_var` と組む)。
+  スライダは `"snap": true` で 1 目盛単位に制約。WINVER の `WM_MOUSEWHEEL` はスクリーン座標のまま
+  `OnMouseWheel` へ渡していたため、ウィンドウが画面の左上に無いとカーソルの下の要素にホイールが届かなかった
+  (`ScreenToClient` で修正)。ガイド = [doc/guide/ElementsDialog.md](doc/guide/ElementsDialog.md)
 - ✅ 24bit / 8bit BMP の保存で行末の詰め物が不定値になる (2026-10-08、src/core `c60a5de4`)
   `TVPSaveAsBMP` が行バッファを初期化せずに使っていたため、4 バイト境界までの詰め物に不定値が入り、
   同じ画像でも保存のたびに出力が変わっていた (画素値は正しい)。TLG6 の確認中に、24bit の比較結果が
