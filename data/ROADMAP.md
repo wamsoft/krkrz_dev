@@ -117,6 +117,10 @@ readme.txt 推奨、資材自己完結、canLink ガード) に加えて:
 
 ## 独立タスク: Elements の非 SDL プラットフォーム対応 (WINVER 含む)
 
+**✅ 2026-07-31 に完了** (src/core `bc0ab76a` まで)。結果的に BasicDrawDevice (D3D11) 用の
+renderer も作り、描画は host 借用方式で全 DrawDevice に配線した。独立ウィンドウ型 `run_modal` も
+WINVER 版 (`WinElementsModalRunner`) がある。以下は当時の計画の記録。
+
 デモ本体とは独立の基盤タスク。WINVER はフェードアウト予定だが当面使い続ける
 ため、Elements (Dialog クラス) を WINVER でも利用可能にする。作業は
 「WINVER 対応」ではなく **SDL 依存の剥がし**として行う — LIB ビルド等の
@@ -133,12 +137,12 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
 4. モーダル nested pump (SDLElementsModalRunner) の Win32 版
 5. 独立ウィンドウ型 `run_modal` は SDL 専用のまま (オーバーレイ経路のみ対応)
 
-- [ ] elements_modal: 中立イベント型導入 + SDL gating 解除 (wamsoft/elements fork 作業)
-- [ ] ElementsDialogManager: テキスト入力/ウィンドウ取得を seam 化
-- [ ] WINVER: WndProc → manager イベント転送 + IME 接続 + nested pump
-- [ ] WINVER: OGLDrawDevice への OGLDialogRenderer 配線 (Elements 使用時は
+- [x] elements_modal: 中立イベント型導入 + SDL gating 解除 (wamsoft/elements fork 作業)
+- [x] ElementsDialogManager: テキスト入力/ウィンドウ取得を seam 化
+- [x] WINVER: WndProc → manager イベント転送 + IME 接続 + nested pump
+- [x] WINVER: OGLDrawDevice への OGLDialogRenderer 配線 (Elements 使用時は
       OGL デバイス前提と割り切る。BasicDrawDevice (D3D) 用 renderer は作らない)
-- [ ] 実機確認: WINVER ビルドで elements_gallery デモが動くこと (完成後の検証を兼ねる)
+- [x] 実機確認: WINVER ビルドで elements_gallery デモが動くこと (完成後の検証を兼ねる)
 
 ## デモバックログ (候補カタログ)
 
