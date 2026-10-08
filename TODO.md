@@ -24,12 +24,12 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 完了したものは末尾の「完了 (記録として残す)」へ移す。
 
-## 現況 (2026-10-06 時点)
+## 現況 (2026-10-08 時点)
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 22 | Elements/UI 5 / エンジン基盤 13 / ビルド・運用 4 (内訳: 中 12 / 低 9 / 検討中 1) |
-| 将来課題 | 9 | 着手時期未定。優先は WaveSoundBuffer 3D 定位 (中〜高) |
+| 予定・未着手 | 21 | Elements/UI 5 / エンジン基盤 12 / ビルド・運用 4 (内訳: 中 11 / 低 9 / 検討中 1) |
+| 将来課題 | 7 | 着手時期未定 (中 3 / 低 4)。WaveSoundBuffer 3D 定位と Elements の WINVER 対応は実装済みだったので 2026-10-08 に ✅ |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 12 | 単発の小さいもの。着手順は問わない |
 | デモ整備 | 10 + 1 | 未着手デモは多くが資材待ち |
@@ -127,7 +127,7 @@ registerHotKey の WINVER 配線)。
 | 低 | 実行中にウィンドウのアイコンを差し替える口 (`Window.setIcon` 相当) | windowEx の廃止で `setWindowIcon` / `resetWindowIcon` が無くなった。WINVER には `DpiIcon` クラス (DPI に合わせた大きさで設定) があるが WINVER 専用なので、**SDL3 版と CS 機には実行中にアイコンを替える手段が無い**。入れるなら本体の Window にメソッドを足す (WINVER は `WM_SETICON`、SDL3 は `SDL_SetWindowIcon`)。引数は画像ストレージかレイヤ。常にフルスクリーンの機種では何もしない。windowEx から外した残りの機能 (Win32 固有の見た目 / IME / 小物) は移さない方針。経緯 = [WindowState.md](src/core/doc/WindowState.md) 8 章 |
 | 中 | SDL 版で GLES3 経路が有効になった影響を各機種で確認する | 2026-10-06 まで SDL3 経路は `TVPOpenGLESVersion` が常に 200 で、`GLTexture` の GLES3 経路 (`GL_UNPACK_ROW_LENGTH` の部分転送 / 3.2 以上の `glCopyImageSubData` / ミップマップ生成) が一度も通っていなかった。`InitGLES` で実際の版を入れるよう直した (src/core `33a92114`) ので、**Windows SDL 版 (ネイティブ ES / ANGLE)・Android・wasm (WebGL2 = 3.0)・Steam Deck で初めてこの経路を通る**。確認済みは Linux (Mesa, GLES 3.2) のみ: `-demotest -demotestcap` の全 24 シーンと GL Canvas 全 5 ページで表示崩れ・GL エラーなし。WINVER は EGLContext が先に 200/300 を入れた後で実際の版に上書きされる (ANGLE D3D11 なら 3.0/3.1 なので `glCopyImageSubData` には入らない) |
 | ✅ | `TJS_64BIT_OS` が gcc / clang では定義されない | **2026-10-06 対応** (src/core `051c7691` / tp_stub `8e39fd2`)。`__LP64__` / `_WIN64` で定義。SDL3 のプラグインフォルダは CMake のインストール先と同じ規則 (`plugin64/` は Windows 64bit だけ) に固定したので Linux は `plugin/` のまま。起動ログに `pluginPath:`、Linux 等で `plugin64/` があれば警告。**有効になった TLG6 の SSE2 デコードに、幅が 8 の倍数でない画像で崩れる + 行末からはみ出して書くバグがあった** (端数ブロック用の Generic まで SSE2 版に差し替えていた。MSVC x64 では以前からこの状態) → Generic は C 版に戻して修正 (src/core `f327fe65`)。ノイズ・グラデーション・実画像を TLG6 / TLG6(24bit) で保存→読み戻しし、SIMD 有効/無効とも全画素一致を確認 |
-| 中 | Windows x64 で TLG6 の修正を確認する | 上の TLG6 SSE2 のバグは **MSVC x64 (WINVER / SDL の 64bit 版) で以前から有効だった経路**。確認したのは Linux x64 (gcc) だけなので、Windows x64 でも幅が 8 の倍数でない TLG6 が正しく読めることを確かめる。手順は保存→読み戻しで全画素比較 (`-cpusimd=no` の結果と一致すれば OK)。既存タイトルで「TLG の端が崩れる / たまに落ちる」報告が無かったかも併せて見る |
+| ✅ | Windows x64 で TLG6 の修正を確認する | **2026-10-08 に WINVER x64 (MSVC) で確認**。幅が 8 の倍数でない 19 サイズ (1x1〜1023x5) と対照の 8 の倍数 3 サイズ × ノイズ (α付き) / グラデーションを TLG6・TLG6(24bit) で保存→読み戻しし、88 項目すべて全画素一致。SIMD 有効 / `-cpusimd=no` / 再実行で結果も同一。修正 (`f327fe65`) を一時的に外したビルドでは、8 の倍数でない幅が全件崩れ (72 件)、終了時に異常終了 (はみ出し書き込みによるヒープ破壊) も再現したので、確認方法が不具合を捉えることも確かめた。既存タイトルでの報告の有無は未確認 |
 | 低 | MSVC arm64 で `TJS_64BIT_OS` が定義されない | MSVC 分岐は `_M_X64` だけを見ているため、`arm64-windows(-win)` の 64bit 版でも未定義。win32/ の 64bit 分岐 (`Application.cpp` / `SysInitImpl.cpp` / `DetectCPU.cpp` 等) とプラグインフォルダ名に影響しうる。x86 専用の分岐 (`DetectCPU.cpp` 等) が混ざっているので、`_M_ARM64` を足すなら各使用箇所を見てから。Windows arm64 実機での確認が前提 |
 
 ### ビルド・運用
@@ -136,7 +136,7 @@ registerHotKey の WINVER 配線)。
 |---|---|---|
 | 中 | krkrlive2d のドライバソースを版固定取得へ | ドライバ側 CMake がローカルパス (`LIVE2DLIB_FOLDER` / `CUBISM_SDK` 等) を直接参照する作りで、そのフォルダの版がずれると **umbrella の configure ごと失敗する** (実例: ドライバが `find_package(minizip)` を要求する版になり、本体 vcpkg マニフェストに minizip が無くて configure 不能)。 版を固定して fetch する形へ直すまで、`CMakeLists.txt` の `CUBISM_SDK` ブロックをコメントアウトしてビルド対象から外してある (2edc380)。 直したら除外を戻す |
 | 中 | リリースのバージョン運用を確定する | **実験中 API の扱いは 2026-09-06 に決定** (安定保証の対象外を `@experimental` で明示し、そこの非互換変更はマイナー。[Versioning.md](src/core/doc/Versioning.md) 「実験中 API」節)。番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する |
-| 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可 |
+| 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可。ほかに `src/core/generic/base/copy_if_differ.pl` が残っているが、どこからも呼ばれていない (2026-10-08 確認。消してよい) |
 | ✅ | 2026-10-06 の Linux 修正を基準環境で確認する | 相対パス起動の abort / サーバ停止時のハング / GLES 版 / exeBits の修正 (src/core `5016acf1`〜`a86ec6de`) は、ホストの Ubuntu 26.04 (glibc 新・gcc 15・CMake 4.2) で直ビルドして確認しただけ。2026-10-06 に基準環境 (steamdev `deckbuild/` sniper SDK、src/core `051c7691`) で configure〜install が通り、[LinuxBuild.md](src/core/doc/LinuxBuild.md) の合格基準 (GLIBC ≤ 2.31 / GLIBCXX 依存なし) を満たすこと、ホスト (Wayland) で `-demotest -demotestcap` 全 24 シーン ok を確認済み。同日 Steam Deck 実機 (SteamOS 3.8.16、ネイティブ実行) でも `-demotest -demotestcap` 全 24 シーン ok。なお Steam から起動すると同梱 SDL3 (3.4.0) ではなく Steam ランタイム側の SDL3 (3.2.18) が読まれていた (動作は問題なし) (`dc5a3ed`) |
 | ✅ | Steam 起動時に同梱 SDL3 が使われない | Deck で Steam から起動すると `LD_LIBRARY_PATH=.` を付けても Steam ランタイム側の SDL3 (3.2.18) が先に読まれ、ビルドした SDL3 (3.4.0) が使われない。今のところ動作に問題はないが、SDL3 側の修正に依存する不具合が出たら効いてくる。→ exe に `$ORIGIN` を DT_RPATH で埋め込み、soname リンクも install するよう修正。Deck の Steam 起動で同梱 3.4.0 が読まれ `-demotest` 全 24 シーン ok を確認 (src/core `0f54ee4b`) |
 | 中 | 配布パッケージ外枠の整備 (Linux 以外も) | Linux は [krkrz_linux](https://github.com/wamsoft/krkrz_linux) でフォルダ + tar.gz まで (2026-10-06)。残り: AppImage 出力 (`.desktop` / アイコンは生成済み)、Flatpak (AppStream メタデータ) は需要次第。macOS (.app) / Windows (フォルダ・MSIX) / Xbox (GDK) も `*-config.json` の `cmake` / `assetPack` 書式を共通にした外枠で揃える方向で調査 |
@@ -146,8 +146,8 @@ registerHotKey の WINVER 配線)。
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
-| 中〜高 | WaveSoundBuffer 3D 定位 API (F-1) | miniaudio の spatializer で全バリアント横断の 3D 定位 API を新設 |
-| 中 | Elements を WINVER のネイティブ経路へ | 中立イベント型の導入 / manager のテキスト入力・ウィンドウ取得の seam 化 / WndProc → manager 転送 + IME / OGLDrawDevice への renderer 配線 / elements_gallery の実機確認。[data/ROADMAP.md](data/ROADMAP.md) 参照 |
+| ✅ | WaveSoundBuffer 3D 定位 API (F-1) | **2026-08-01 に実装済み** (src/core `ff8c66f1`)。miniaudio の spatializer で全バリアント共通。`WaveSoundBuffer.use3D` / `posX`・`posY`・`posZ` / `minDistance` / `maxDistance` / `rolloffFactor` ほか、リスナは `SoundListener` クラス。TODO の更新漏れを 2026-10-08 の棚卸しで確認 |
+| ✅ | Elements を WINVER のネイティブ経路へ | **2026-07-31 に完了** (src/core `bc0ab76a` まで)。入力の中立型化 (SDL 依存の剥がし) / テキスト入力・ウィンドウ取得の seam 化 / WndProc → manager 転送 / nested pump の overlay モーダル / 独立ウィンドウ モーダル (`WinElementsModalRunner`) / 描画は host 借用方式で Basic (D3D11) / OGL / SDL / SDLOGL の全 DrawDevice に配線。IME の候補窓追従もその後対応済み。WINVER 実機で SDL 版と同じ表示・操作を確認済み。TODO の更新漏れを 2026-10-08 の棚卸しで確認 |
 | 中 | フォントラスタライザを glyphware へ一本化 | 現状の既定は WINVER=GDI / 非 WINVER=旧 FreeType で、glyphware (`rasterizer=2`) はどちらでも既定ではない。可変軸・シェイピング・BiDi・カラー絵文字・フォールバックが既定で効くようにするには一本化が本筋だが、**全案件の文字描画の見た目が変わりうる**ためパリティ検証が前提。→ [FontEngine.md](src/core/doc/FontEngine.md) |
 | 中 | SDL 版に `-about` のダイアログが無い | バージョン情報ダイアログは WINVER だけの実装 (`TVPCheckAbout()` → `TVPShowVersionForm()` = Win32 `DialogBox`)。SDL3 は `-about` を処理しておらず、`System.showVersion()` も WINVER のみ。**表示する文字列は全バリアント共通で用意済み** (`TVPGetAboutString()` = バージョン行 + LICENSE + 収録一覧 + 環境情報。SSOT = [LicenseSystem.md](src/core/doc/LicenseSystem.md)) なので、残るのは表示手段だけ。素直には `-userconf` と同じくゲームウィンドウ生成前の独立 SDL_Window + Elements overlay だが、**gamescope (Steam Deck) はセカンダリウィンドウを出せない**ので、その環境での代替 (標準出力へ落とす等) も併せて決める必要がある。現状の代替手段 = `-license` (標準出力) と `System.licenseText` |
 | 中 | SDL ビルドの SEH 捕捉 | ゼロ除算・アクセス違反でログを残さず即死する。WINVER は translator + minidump あり |
@@ -223,6 +223,28 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 
 ## 最近クローズしたもの
 
+- ✅ Elements: スムーズスクロール一覧 `virtual_scroller` とスライダの目盛制約 `snap`、
+  WINVER のホイール位置の修正 (2026-10-08、elements `54436cfe`〜`510e5089` / src/core `bb2ff20d`〜`16cff597`、
+  ドキュメントは elements `6a9f61f6` / src/core `130e95c0`)
+  `virtual_scroller` は窓の行数 + 1 行ぶんのセルを 1px 単位で送り、行の境目で先頭行を知らせる
+  (ホイール / キーはアニメーション、ドラッグは慣性。`atlas_scrollbar` の `row_steps` / `active_var` と組む)。
+  スライダは `"snap": true` で 1 目盛単位に制約。WINVER の `WM_MOUSEWHEEL` はスクリーン座標のまま
+  `OnMouseWheel` へ渡していたため、ウィンドウが画面の左上に無いとカーソルの下の要素にホイールが届かなかった
+  (`ScreenToClient` で修正)。ガイド = [doc/guide/ElementsDialog.md](doc/guide/ElementsDialog.md)
+- ✅ 24bit / 8bit BMP の保存で行末の詰め物が不定値になる (2026-10-08、src/core `c60a5de4`)
+  `TVPSaveAsBMP` が行バッファを初期化せずに使っていたため、4 バイト境界までの詰め物に不定値が入り、
+  同じ画像でも保存のたびに出力が変わっていた (画素値は正しい)。TLG6 の確認中に、24bit の比較結果が
+  実行ごとに揺れることから判明。確保直後に 0 で埋めるよう修正
+- ✅ リファレンス生成 (tjsdoc) の改行コード処理と psdfile / krkrgles のリファレンス (2026-10-07、
+  umbrella `a67ca2b` / `f77871b`、krkrgles `60b94ca`)
+  `tools/docgen/tjsdoc.py` がソースをバイト列で読むようになって (`0499c76`) から改行が CRLF のまま
+  処理され、空行でコメントのまとまりを区切る判定が効かずに、セクション見出しの `//` コメントが
+  次のメンバの解説へ混ざっていた。改行を LF に揃えて修正 (CR CR LF の行末も 1 つの改行として扱う)。
+  各リファレンスから混入していた見出し・区切り線を除去し、Matrix44 `set(array)` の manual の
+  空行を詰めた。あわせて psdfile の描画系 API (getComposite / renderLayer / パス・シェイプ系 /
+  setThreads 等 11 件) をリファレンスへ反映し、krkrgles の `endEffect` のコマンド一覧・
+  `setClipRect` のクリッピング方式と使用例を `//` コメントから解説へ移した
+  (`//` で書いた説明はリファレンスに出ない。載せたい説明は javadoc の中へ書く)
 - ✅ Linux (SDL3) で見つかった起動・終了・表示値の不具合 (2026-10-06、
   src/core `5016acf1`〜`a86ec6de` / umbrella `9c2b556`)
   ホストの Linux で直ビルドしてギャラリーを回した際に判明。

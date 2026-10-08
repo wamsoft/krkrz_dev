@@ -155,6 +155,37 @@ dlg.setVar("n", "3");                             // 総件数
 
 スクロールバーは `"type": "atlas_scrollbar"` に**同じ `index_offset_var`** を挿すだけです。つまみの長さは「見えている行数 ÷ 総件数」に比例し、つまみのドラッグ・溝クリックでのページ送り・ホイールまで内蔵しています ( 本文が `scroller` に載っている画面なら `scroller` の `pos_var` で足ります )。
 
+## スムーズスクロール一覧 ( virtual_scroller )
+
+`list` や «窓» は 1 行単位で送ります。スマートフォンの一覧のように **1px 単位で滑らかに送りたい**場合は `"type": "virtual_scroller"` を使います。ホイールやキーの送りはアニメーションし、`"drag_scroll": true` にすると中身のドラッグに指が付いてきて、離した速度で慣性移動します。
+
+窓に収まる行数 + 1 行ぶんのセルだけを子 `canvas` に並べておくと、位置に合わせてセル全体をずらし、行の境目をまたいだところで **先頭行** を知らせてきます。件数が何千行あってもセルの数は変わりません。
+
+```tjs
+var cells = [];
+for (var i = 0; i < 5; i++)   // 表示 4 行 + 予備 1 行
+    cells.add(%[ "type" => "label", "at" => [0, i * 100, 676, 96],
+                 "index" => i, "index_offset_var" => "top", "text_list_var" => "items" ]);
+var layout = %[
+  "content" => %[ "type" => "canvas", "children" => [
+    %[ "type" => "virtual_scroller", "id" => "list", "at" => [148, 192, 676, 400],
+       "row_height" => 100, "rows_visible" => 4,
+       "row_count_var" => "rows", "top_row_var" => "top", "pos_var" => "pos",
+       "child" => %[ "type" => "canvas", "children" => cells ] ]
+  ] ]
+];
+dlg.showDict(layout);
+dlg.setVar("items", itemsText);   // 一覧データ ( 改行区切り )
+dlg.setVar("rows", "%d".sprintf(itemCount));
+```
+
+- セルが «窓» ( `index` + `index_offset_var` ) で一覧を引いていれば、`top_row_var` と同じ変数を挿すだけで中身が先頭行に付いてきます。TJS 側はデータと行数を渡すだけです
+- 絵やサムネイルなどをホスト側で差し替える場合は、先頭行の変化が [onAction](../reference/ElementsDialog.md#onaction) に **`payload` = 先頭行** で届きます。差し替えたあとで `"row_ready_var"` に指定した変数へ同じ行番号を書くと、差し替えが届くまで一覧が中身と位置をずらさずに待ちます
+- スクロールバーは `atlas_scrollbar` を **value モード** ( `"value_var"` に一覧の `pos_var` と同じ変数 ) にし、`"row_steps": true` ( 送りを行単位に ) と `"active_var"` ( 掴んでいる間 `"1"` ) を付け、その変数を一覧の `"bar_active_var"` へ渡します。つまみは一覧に 1px 単位で付いていき、離すと一覧が行へ揃います
+- PageUp / PageDown / Home / End と、窓の端の行での ↑ ↓ ( キー / パッド ) にも対応しています。キーはセルの中のボタン等にフォーカスがあるときに届きます
+
+キーの一覧と細かい調整 ( アニメーション時間・慣性の係数・止まったときに行へ揃えるか等 ) は elements_modal の README「スムーズスクロール一覧」を参照してください。
+
 ## 変数の読み書きと変化通知 ( setVar / getVar / onVar )
 
 画面 JSON の変数は 1 本の store にぶら下がっていて、[setVar](../reference/ElementsDialog.md#setvar) で書けるだけでなく [getVar](../reference/ElementsDialog.md#getvar) で読み出せます。読めるのは自分が書いた値だけではありません — `"vars_on_hover"` / `"vars_on_focus"`、slider の `"value_var"`、`"drag_at_var"`、一覧の `"index_offset_var"` のように**画面側が書いた値も同じ store**なので、そのまま読めます。
@@ -205,6 +236,7 @@ foreach_dict_of(cfg, function(k, v) { ElementsDialog.setSharedVar(k, v); });
 ## 値と絵を変数で差し替える ( value_var / image_var / 差し替え可能アトラス )
 
 - **2 値トグル** ( `checkbox` / `toggle_button` / `slide_switch` ) は `"value_var"` で変数 store と双方向になります ( `""` / `"0"` / `"false"` = off )。クリックで書き戻り、[setVar](../reference/ElementsDialog.md#setvar) で状態が追従します ( 追従では `onAction` は発火しません )。設定画面の ON/OFF をホストのコールバック無しで扱えます。
+- **スライダー** ( `slider` / `slider_with_range` / `atlas_slider` ) は `"snap": true` で値を **1 目盛単位**に制約できます。つまみはドラッグ中も目盛から目盛へ飛び、キー・ホイール・パッド・読み上げの増減も 1 目盛ずつになります。1 目盛は `"step"` ( 0..1 ) か、`"display"` の `step / (max - min)` で決まります ( 例: `"display": { "min": 0, "max": 100, "step": 10 }` なら 10 段階 )。
 - **`image` ウィジェット**は `"image_var"` で絵そのものを差し替えられます。変数の値がそのまま画像パス ( `"resources/x.png"` / `"mem://thumb_3"` / 空 = 無描画 ) になるので、セーブ一覧のページ送りでサムネイルが変わる、CG ビュワーの絵を送る、といった画面が**再構築なしで**書けます。
 - **アトラスごと**入れ替えたい場合は、画面 JSON で `"atlases": { "cg": { "path": ..., "swappable": true } }` と宣言し、[setAtlasImage](../reference/ElementsDialog.md#setatlasimage) で差し替えます。ウィジェットは作り直さないのでレイアウトもフォーカスも保たれます。**差し替え先は同じ矩形割りであること** ( frames / rect は変わらないので、絵の位置がずれると別の絵が出ます )。差し替えられるアトラス名は [swappableAtlases](../reference/ElementsDialog.md#swappableatlases) で確認できます。
 - **アトラスは画面を閉じても解放されません。** デコード済みの絵は「パス + 倍率」をキーにキャッシュされ、画面を切り替えても抱えたままになります ( 長時間プレイでヒープが断片化したあと大きな連続領域が取れずデコードに失敗し、絵の無い画面が組まれるのを避けるため )。抱え込み量は [atlasCacheStats](../reference/ElementsDialog.md#atlascachestats) で読め、場面の切れ目 ( タイトル → 本編など ) で [trimAtlasCache](../reference/ElementsDialog.md#trimatlascache) を呼べば落とせます。⚠ **表示中の画面が使っているアトラスは参照が残るので落ちません** — 画面を閉じた後に呼んでください。予算そのものを変えるなら [atlasCacheBudget](../reference/ElementsDialog.md#atlascachebudget) です。
