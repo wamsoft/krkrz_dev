@@ -30,5 +30,5 @@
 | アーカイブ | XP3 | .xp3 | 吉里吉里独自形式。<br>[Releaser](../guide/Releaser.md)にて作成する。 |
 | アーカイブ | PEXP3 | .exe | 吉里吉里独自形式。<br>吉里吉里実行ファイル（krkr.eXe）とXP3形式を組み合わせたもの。<br>非推奨形式。<br>[Releaser](../guide/Releaser.md)にて作成する。 |
 | アーカイブ | その他 | .* | プラグインにより拡張可能。 |
-| フォント | レンダリング済みフォント | .tft | 吉里吉里独自形式。<br>[レンダリング済みフォントデータ作成ツール](../guide/FontMaker.md)にて生成する |
+| フォント | レンダリング済みフォント | .tft | 吉里吉里独自形式。<br>tftSave プラグインで生成する ( [レンダリング済みフォントデータの作成](../guide/FontMaker.md) ) |
 | フォント | TrueType/OpenType フォント | .ttf<br>.otf | 非公式サポート。<br>システムにフォントをインストールすることなく使える。<br>要 [addFont.dll](https://github.com/wamsoft/addFont)。Windows のみ対応。 |
