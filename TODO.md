@@ -28,7 +28,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 22 | Elements/UI 5 / エンジン基盤 13 / ビルド・運用 4 (内訳: 中 12 / 低 9 / 検討中 1) |
+| 予定・未着手 | 21 | Elements/UI 5 / エンジン基盤 12 / ビルド・運用 4 (内訳: 中 11 / 低 9 / 検討中 1) |
 | 将来課題 | 7 | 着手時期未定 (中 3 / 低 4)。WaveSoundBuffer 3D 定位と Elements の WINVER 対応は実装済みだったので 2026-10-08 に ✅ |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 12 | 単発の小さいもの。着手順は問わない |
@@ -127,7 +127,7 @@ registerHotKey の WINVER 配線)。
 | 低 | 実行中にウィンドウのアイコンを差し替える口 (`Window.setIcon` 相当) | windowEx の廃止で `setWindowIcon` / `resetWindowIcon` が無くなった。WINVER には `DpiIcon` クラス (DPI に合わせた大きさで設定) があるが WINVER 専用なので、**SDL3 版と CS 機には実行中にアイコンを替える手段が無い**。入れるなら本体の Window にメソッドを足す (WINVER は `WM_SETICON`、SDL3 は `SDL_SetWindowIcon`)。引数は画像ストレージかレイヤ。常にフルスクリーンの機種では何もしない。windowEx から外した残りの機能 (Win32 固有の見た目 / IME / 小物) は移さない方針。経緯 = [WindowState.md](src/core/doc/WindowState.md) 8 章 |
 | 中 | SDL 版で GLES3 経路が有効になった影響を各機種で確認する | 2026-10-06 まで SDL3 経路は `TVPOpenGLESVersion` が常に 200 で、`GLTexture` の GLES3 経路 (`GL_UNPACK_ROW_LENGTH` の部分転送 / 3.2 以上の `glCopyImageSubData` / ミップマップ生成) が一度も通っていなかった。`InitGLES` で実際の版を入れるよう直した (src/core `33a92114`) ので、**Windows SDL 版 (ネイティブ ES / ANGLE)・Android・wasm (WebGL2 = 3.0)・Steam Deck で初めてこの経路を通る**。確認済みは Linux (Mesa, GLES 3.2) のみ: `-demotest -demotestcap` の全 24 シーンと GL Canvas 全 5 ページで表示崩れ・GL エラーなし。WINVER は EGLContext が先に 200/300 を入れた後で実際の版に上書きされる (ANGLE D3D11 なら 3.0/3.1 なので `glCopyImageSubData` には入らない) |
 | ✅ | `TJS_64BIT_OS` が gcc / clang では定義されない | **2026-10-06 対応** (src/core `051c7691` / tp_stub `8e39fd2`)。`__LP64__` / `_WIN64` で定義。SDL3 のプラグインフォルダは CMake のインストール先と同じ規則 (`plugin64/` は Windows 64bit だけ) に固定したので Linux は `plugin/` のまま。起動ログに `pluginPath:`、Linux 等で `plugin64/` があれば警告。**有効になった TLG6 の SSE2 デコードに、幅が 8 の倍数でない画像で崩れる + 行末からはみ出して書くバグがあった** (端数ブロック用の Generic まで SSE2 版に差し替えていた。MSVC x64 では以前からこの状態) → Generic は C 版に戻して修正 (src/core `f327fe65`)。ノイズ・グラデーション・実画像を TLG6 / TLG6(24bit) で保存→読み戻しし、SIMD 有効/無効とも全画素一致を確認 |
-| 中 | Windows x64 で TLG6 の修正を確認する | 上の TLG6 SSE2 のバグは **MSVC x64 (WINVER / SDL の 64bit 版) で以前から有効だった経路**。確認したのは Linux x64 (gcc) だけなので、Windows x64 でも幅が 8 の倍数でない TLG6 が正しく読めることを確かめる。手順は保存→読み戻しで全画素比較 (`-cpusimd=no` の結果と一致すれば OK)。既存タイトルで「TLG の端が崩れる / たまに落ちる」報告が無かったかも併せて見る |
+| ✅ | Windows x64 で TLG6 の修正を確認する | **2026-10-08 に WINVER x64 (MSVC) で確認**。幅が 8 の倍数でない 19 サイズ (1x1〜1023x5) と対照の 8 の倍数 3 サイズ × ノイズ (α付き) / グラデーションを TLG6・TLG6(24bit) で保存→読み戻しし、88 項目すべて全画素一致。SIMD 有効 / `-cpusimd=no` / 再実行で結果も同一。修正 (`f327fe65`) を一時的に外したビルドでは、8 の倍数でない幅が全件崩れ (72 件)、終了時に異常終了 (はみ出し書き込みによるヒープ破壊) も再現したので、確認方法が不具合を捉えることも確かめた。既存タイトルでの報告の有無は未確認 |
 | 低 | MSVC arm64 で `TJS_64BIT_OS` が定義されない | MSVC 分岐は `_M_X64` だけを見ているため、`arm64-windows(-win)` の 64bit 版でも未定義。win32/ の 64bit 分岐 (`Application.cpp` / `SysInitImpl.cpp` / `DetectCPU.cpp` 等) とプラグインフォルダ名に影響しうる。x86 専用の分岐 (`DetectCPU.cpp` 等) が混ざっているので、`_M_ARM64` を足すなら各使用箇所を見てから。Windows arm64 実機での確認が前提 |
 
 ### ビルド・運用
