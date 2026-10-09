@@ -94,13 +94,16 @@ nav:
       - フォントシステム: guide/FontSystem.md
       - トランジション: guide/Transition.md
       - プラグイン: guide/Plugins.md
-    - 付属ツール:
-      - ファイル破損チェックツール: guide/FileChkTool.md
-      - レンダリング済みフォントデータ作成ツール: guide/FontMaker.md
-      - ループチューナ: guide/LoopTuner.md
-      - Releaser: guide/Releaser.md
+    - 標準ツール:
+      - 標準ツールについて: guide/Tools.md
+      - xp3 アーカイブツール: guide/Xp3Tool.md
       - キー・署名ツール: guide/SignTool.md
+      - ファイル破損チェックツール: guide/FileChkTool.md
       - 画像フォーマットコンバータ: guide/TPC.md
+      - 音声フォーマットコンバータ: guide/AudioConverter.md
+      - ループチューナ: guide/LoopTuner.md
+      - リリーサ: guide/Releaser.md
+      - レンダリング済みフォントデータの作成: guide/FontMaker.md
     - 定数一覧:
       - 仮想キーコード: guide/KeyCodes.md
       - マウスカーソル: guide/MouseCursors.md
@@ -159,6 +162,7 @@ nav:
       - reference/NullDrawDevice.md
     - 吉里吉里Z 3D機能クラス:
       - reference/OGLDrawDevice.md
+      - reference/GPUDrawDevice.md
       - reference/Canvas.md
       - reference/Texture.md
       - reference/Offscreen.md

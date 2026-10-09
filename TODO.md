@@ -11,9 +11,11 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | Elements の入力リピート / キャッシュ / 描画の精査 | [src/core/doc/ElementsAudit.md](src/core/doc/ElementsAudit.md) |
 | 仮想カーソル位置 (提案) | [src/core/doc/VirtualCursor.md](src/core/doc/VirtualCursor.md) |
 | デモ整備 | [data/ROADMAP.md](data/ROADMAP.md) |
+| 標準ツールの改定 (リリーサ / 署名 / 破損チェック / ループチューナ / 画像・音声コンバータ) | [TODO-tools.md](TODO-tools.md) |
 | 読み上げ (スクリーンリーダー対応) | [doc/specification/accessibility.md](doc/specification/accessibility.md) (Elements 側は `src/core/external/elements/docs/accessibility.md`) |
 | Window のサイズ/位置/ズーム/ビューポート仕様 | [src/core/doc/WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | Layer / Bitmap / ImageFunction の統合 | [src/core/doc/ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
+| Canvas の SDL_GPU 版・GPU モードの確立・描画系プラグイン (Live2D / Effekseer / モーション系) の GPU 版 | [src/core/doc/CanvasGPU.md](src/core/doc/CanvasGPU.md) (基本部分は 2026-10-09 統合済み・PS5 実機確認済み。«今後の方向» は記録のみで未着手) |
 | フォントエンジン (可変軸・glyphware 統合) | [src/core/doc/FontEngine.md](src/core/doc/FontEngine.md) |
 | WINVER モダン化 | [src/core/doc/ModernizationRoadmap.md](src/core/doc/ModernizationRoadmap.md) |
 | 動画 (Media Foundation 移行) | [src/core/doc/MovieMFMigration.md](src/core/doc/MovieMFMigration.md) |
@@ -140,7 +142,7 @@ registerHotKey の WINVER 配線)。
 | ✅ | 2026-10-06 の Linux 修正を基準環境で確認する | 相対パス起動の abort / サーバ停止時のハング / GLES 版 / exeBits の修正 (src/core `5016acf1`〜`a86ec6de`) は、ホストの Ubuntu 26.04 (glibc 新・gcc 15・CMake 4.2) で直ビルドして確認しただけ。2026-10-06 に基準環境 (steamdev `deckbuild/` sniper SDK、src/core `051c7691`) で configure〜install が通り、[LinuxBuild.md](src/core/doc/LinuxBuild.md) の合格基準 (GLIBC ≤ 2.31 / GLIBCXX 依存なし) を満たすこと、ホスト (Wayland) で `-demotest -demotestcap` 全 24 シーン ok を確認済み。同日 Steam Deck 実機 (SteamOS 3.8.16、ネイティブ実行) でも `-demotest -demotestcap` 全 24 シーン ok。なお Steam から起動すると同梱 SDL3 (3.4.0) ではなく Steam ランタイム側の SDL3 (3.2.18) が読まれていた (動作は問題なし) (`dc5a3ed`) |
 | ✅ | Steam 起動時に同梱 SDL3 が使われない | Deck で Steam から起動すると `LD_LIBRARY_PATH=.` を付けても Steam ランタイム側の SDL3 (3.2.18) が先に読まれ、ビルドした SDL3 (3.4.0) が使われない。今のところ動作に問題はないが、SDL3 側の修正に依存する不具合が出たら効いてくる。→ exe に `$ORIGIN` を DT_RPATH で埋め込み、soname リンクも install するよう修正。Deck の Steam 起動で同梱 3.4.0 が読まれ `-demotest` 全 24 シーン ok を確認 (src/core `0f54ee4b`) |
 | 中 | 配布パッケージ外枠の整備 (Linux 以外も) | Linux は [krkrz_linux](https://github.com/wamsoft/krkrz_linux) でフォルダ + tar.gz まで (2026-10-06)。残り: AppImage 出力 (`.desktop` / アイコンは生成済み)、Flatpak (AppStream メタデータ) は需要次第。macOS (.app) / Windows (フォルダ・MSIX) / Xbox (GDK) も `*-config.json` の `cmake` / `assetPack` 書式を共通にした外枠で揃える方向で調査 |
-| 中 | 共通の xp3 作成 CLI | 外枠 (krkrz_android / krkrz_linux / krkrz_ios) は xp3 を作らず、案件側で事前に作ったものを `assetPack` の `flatten` で取り込む方針。暗号化などを含む案件独自ツールとは別に、**暗号化なしの通常の xp3 を作る共通 CLI** を本体側に持つ (Linux / macOS / CI でも動くこと。リリーサーは吉里吉里2 の Windows GUI しか無い)。置き場所は krkrz_dev の `src/tools/` かスクリプト、xp3 の書式は本体の読み込み実装 (`XP3Archive`) に合わせる |
+| 中 | 共通の xp3 作成 CLI | 外枠 (krkrz_android / krkrz_linux / krkrz_ios) は xp3 を作らず、案件側で事前に作ったものを `assetPack` の `flatten` で取り込む方針。暗号化などを含む案件独自ツールとは別に、**暗号化なしの通常の xp3 を作る共通 CLI** を本体側に持つ (Linux / macOS / CI でも動くこと。リリーサーは吉里吉里2 の Windows GUI しか無い)。置き場所は krkrz_dev の `src/tools/` かスクリプト、xp3 の書式は本体の読み込み実装 (`XP3Archive`) に合わせる **→ 標準ツールの改定 ([TODO-tools.md](TODO-tools.md)) のリリーサの最初の段階として扱う** |
 
 ## 将来課題
 

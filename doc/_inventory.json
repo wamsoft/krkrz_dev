@@ -343,6 +343,28 @@
       "weight"
     ]
   },
+  "GPUDrawDevice": {
+    "events": [
+      "onDone",
+      "onDraw",
+      "onInit"
+    ],
+    "file": "src/core/sdl3/visual/SDLGpuDrawDevice.cpp",
+    "methods": [
+      "createCanvas",
+      "recreate",
+      "resumeOnDraw"
+    ],
+    "properties": [
+      "canvas",
+      "dialogRendererHost",
+      "interface",
+      "sdlVideoPresenterHost",
+      "texture",
+      "viewportBackgroundHost",
+      "window"
+    ]
+  },
   "ImageFunction": {
     "events": [],
     "file": "src/core/common/visual/ImageFunction.cpp",
