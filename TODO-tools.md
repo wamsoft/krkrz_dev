@@ -145,7 +145,7 @@ A 案の利点 (本体の挙動そのものでの試聴など) が必要な場�
 | 一部 ✅ (Windows) | 4. 画像コンバータ | **`krkrimg` 2026-10-09** (krkrz_tools `8e8fdc9`): 入力 BMP / PNG / JPEG / TLG5 / TLG6 / PSD / CLIP、旧 krkrtpc と同じ規則 (不透明 / 透過で別形式、メイン/マスク分離の読み書き、完全透明部分の色の除去・合成、ltAddAlpha、mode / offs / vpag / reso タグ)。PSD・CLIP は psdparse / clipparse でレイヤから合成 (ブレンド・効果・調整レイヤ込み)、`layers` でレイヤ単位の書き出し (位置・文書サイズのタグ + `layers.json`)。TLG は本体コードを単体ライブラリ `libs/tlg` へ移植。確認済み: **エンコード結果が本体と 114 件すべてバイト一致**、本体が出した TLG を読める、本体で変換結果を読めて画素とタグが一致、完全透明部分の合成が旧版の計算と一致。**残り: CLIP は中身のある実データで未確認 (空のサンプルのみ)、画面は API のみ確認 (ブラウザでの表示は未確認)、非 ASCII のタグ値の扱いは本体と未照合** |
 | 一部 ✅ (Windows) | 5. 音声コンバータ | **`krkraudio` 2026-10-09** (krkrz_tools `f2375cf`): WAV / Ogg Vorbis / Ogg Opus の相互変換 (品質・ビットレート・ビット数)、`.sli` の引き継ぎ (Opus の 48kHz へは位置を換算)、音量 (`--gain` = Opus はヘッダゲイン / ほかは焼き込み、`--normalize=LUFS`、Vorbis の ReplayGain タグ)、EBU R128 ラウドネス測定、口パク用の音量 (RMS / ピーク、JSON / CSV、**形式は暫定**)。確認済み: 本体で変換結果と `.sli` を開ける、長さがサンプル単位で保たれる、**先頭位置もずれない** (0.5 秒の位置のクリックが Vorbis 22050 / Opus 24000 サンプル目に戻る)。**残り: 母音の推定 (本体 `getVowel` と同じ処理)、Live2D 向けパラメータ出力、口パク出力形式の確定** |
 | | 6. 追加候補 | 吉里吉里設定 / xp3 閲覧 ほか |
-| | 7. ドキュメント | `doc/guide/` の旧ツールのページを置き換え、`doc/topics/tools/releaser.md` (「吉里吉里2 のものを使う」) を更新 |
+| ✅ | 7. ドキュメント | **2026-10-09**: «標準ツール» 欄を新設 (`guide/Tools.md` = 概要・入手・画面/CLI の共通事項)。旧ツールのページを新ツールの説明に置き換え (FileChkTool / SignTool / TPC / LoopTuner。概念の説明は残す)、新規 `Xp3Tool.md` / `AudioConverter.md`、`Releaser.md` は «xp3 は krkrxp3、リリーサは準備中、それまでの手順と xp3 結合» に、`topics/tools/releaser.md` も更新。使われなくなった旧画面の画像を削除。mkdocs --strict 通過。**残り: リリーサができたら Releaser.md を書き直す、画面のスクリーンショット (未掲載)** |
 
 各フェーズの終わりに、そのツールのガイドを書き、旧ツールとの互換確認の結果をここへ残す。
 

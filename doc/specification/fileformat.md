@@ -27,8 +27,8 @@
 | 動画 | Windows Media Video (WMV) | .wmv<br>.asf | Media Foundation でデコード。再生機に Windows Media コンポーネントが必要。 |
 | 動画 | AVI | .avi | 非公式サポート。内部コーデックが Media Foundation で扱える場合のみ再生可 (公式サポートは行わない)。 |
 | アニメーション | ASD ファイル | .asd | 吉里吉里独自のアニメーション定義形式。<br>AnimationLayer.tjs のコメントを参照のこと。 |
-| アーカイブ | XP3 | .xp3 | 吉里吉里独自形式。<br>[Releaser](../guide/Releaser.md)にて作成する。 |
-| アーカイブ | PEXP3 | .exe | 吉里吉里独自形式。<br>吉里吉里実行ファイル（krkr.eXe）とXP3形式を組み合わせたもの。<br>非推奨形式。<br>[Releaser](../guide/Releaser.md)にて作成する。 |
+| アーカイブ | XP3 | .xp3 | 吉里吉里独自形式。<br>[xp3 アーカイブツール](../guide/Xp3Tool.md)にて作成する。 |
+| アーカイブ | PEXP3 | .exe | 吉里吉里独自形式。<br>吉里吉里実行ファイル（krkr.eXe）とXP3形式を組み合わせたもの。<br>非推奨形式。<br>実行可能ファイルの後ろに xp3 を結合する ([Releaser](../guide/Releaser.md) 参照)。 |
 | アーカイブ | その他 | .* | プラグインにより拡張可能。 |
 | フォント | レンダリング済みフォント | .tft | 吉里吉里独自形式。<br>tftSave プラグインで生成する ( [レンダリング済みフォントデータの作成](../guide/FontMaker.md) ) |
 | フォント | TrueType/OpenType フォント | .ttf<br>.otf | 非公式サポート。<br>システムにフォントをインストールすることなく使える。<br>要 [addFont.dll](https://github.com/wamsoft/addFont)。Windows のみ対応。 |
