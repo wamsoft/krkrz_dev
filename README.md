@@ -129,6 +129,17 @@ make
 make install
 ```
 
+### 標準ツール (krkrz_tools)
+
+`src/tools/krkrz_tools` ([krkrz_tools](https://github.com/wamsoft/krkrz_tools)、submodule) の
+ツール (破損チェック・署名・xp3・音声 / 画像コンバータ・ループチューナ) も一緒にビルドし、
+`make install` で `<インストール先>/tools/` に置きます。
+
+- ツールは exe 1 本で配れるよう静的リンク (`x64-windows-static` など) で作るため、本体とは別の
+  ビルドとして作ります (`build/<preset>/krkrz_tools`、常に Release。`cmake/KrkrzTools.cmake`)
+- 初回は、ツール用の vcpkg ライブラリ (静的版) のビルドに時間がかかります
+- 既定は Windows のみ。`CMAKEOPT='-DKRKRZ_BUILD_TOOLS=OFF'` でビルドしません
+
 ### OpenGL 用 ANGLE DLL の配置
 
 エンジンの OpenGL (GLES) 機能を Windows で使うには ANGLE の
