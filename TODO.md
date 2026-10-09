@@ -26,12 +26,12 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 完了したものは末尾の「完了 (記録として残す)」へ移す。
 
-## 現況 (2026-10-08 時点)
+## 現況 (2026-10-09 時点)
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 21 | Elements/UI 5 / エンジン基盤 12 / ビルド・運用 4 (内訳: 中 11 / 低 9 / 検討中 1) |
-| 将来課題 | 7 | 着手時期未定 (中 3 / 低 4)。WaveSoundBuffer 3D 定位と Elements の WINVER 対応は実装済みだったので 2026-10-08 に ✅ |
+| 予定・未着手 | 21 | Elements/UI 5 / エンジン基盤 12 / ビルド・運用 4 (内訳: 中 11 / 低 9 / 検討中 1)。2026-10-09: 「共通の xp3 作成 CLI」を標準ツール `krkrxp3` で ✅ |
+| 将来課題 | 8 | 着手時期未定 (中 4 / 低 4)。2026-10-09 に「GPU モードの確立と描画系プラグインの SDL_GPU 版」を追加 |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 12 | 単発の小さいもの。着手順は問わない |
 | デモ整備 | 10 + 1 | 未着手デモは多くが資材待ち |
@@ -142,7 +142,7 @@ registerHotKey の WINVER 配線)。
 | ✅ | 2026-10-06 の Linux 修正を基準環境で確認する | 相対パス起動の abort / サーバ停止時のハング / GLES 版 / exeBits の修正 (src/core `5016acf1`〜`a86ec6de`) は、ホストの Ubuntu 26.04 (glibc 新・gcc 15・CMake 4.2) で直ビルドして確認しただけ。2026-10-06 に基準環境 (steamdev `deckbuild/` sniper SDK、src/core `051c7691`) で configure〜install が通り、[LinuxBuild.md](src/core/doc/LinuxBuild.md) の合格基準 (GLIBC ≤ 2.31 / GLIBCXX 依存なし) を満たすこと、ホスト (Wayland) で `-demotest -demotestcap` 全 24 シーン ok を確認済み。同日 Steam Deck 実機 (SteamOS 3.8.16、ネイティブ実行) でも `-demotest -demotestcap` 全 24 シーン ok。なお Steam から起動すると同梱 SDL3 (3.4.0) ではなく Steam ランタイム側の SDL3 (3.2.18) が読まれていた (動作は問題なし) (`dc5a3ed`) |
 | ✅ | Steam 起動時に同梱 SDL3 が使われない | Deck で Steam から起動すると `LD_LIBRARY_PATH=.` を付けても Steam ランタイム側の SDL3 (3.2.18) が先に読まれ、ビルドした SDL3 (3.4.0) が使われない。今のところ動作に問題はないが、SDL3 側の修正に依存する不具合が出たら効いてくる。→ exe に `$ORIGIN` を DT_RPATH で埋め込み、soname リンクも install するよう修正。Deck の Steam 起動で同梱 3.4.0 が読まれ `-demotest` 全 24 シーン ok を確認 (src/core `0f54ee4b`) |
 | 中 | 配布パッケージ外枠の整備 (Linux 以外も) | Linux は [krkrz_linux](https://github.com/wamsoft/krkrz_linux) でフォルダ + tar.gz まで (2026-10-06)。残り: AppImage 出力 (`.desktop` / アイコンは生成済み)、Flatpak (AppStream メタデータ) は需要次第。macOS (.app) / Windows (フォルダ・MSIX) / Xbox (GDK) も `*-config.json` の `cmake` / `assetPack` 書式を共通にした外枠で揃える方向で調査 |
-| 中 | 共通の xp3 作成 CLI | 外枠 (krkrz_android / krkrz_linux / krkrz_ios) は xp3 を作らず、案件側で事前に作ったものを `assetPack` の `flatten` で取り込む方針。暗号化などを含む案件独自ツールとは別に、**暗号化なしの通常の xp3 を作る共通 CLI** を本体側に持つ (Linux / macOS / CI でも動くこと。リリーサーは吉里吉里2 の Windows GUI しか無い)。置き場所は krkrz_dev の `src/tools/` かスクリプト、xp3 の書式は本体の読み込み実装 (`XP3Archive`) に合わせる **→ 標準ツールの改定 ([TODO-tools.md](TODO-tools.md)) のリリーサの最初の段階として扱う** |
+| ✅ | 共通の xp3 作成 CLI | **2026-10-09 に標準ツールの `krkrxp3` で対応** (krkrz_tools `3b020ff`、umbrella では `src/tools/krkrz_tools` から `make install` で `tools/` に入る)。暗号化なしの通常の xp3 を作る CLI (pack / list / extract / verify) + 画面。書式は旧 krkrrel と同じで、本体 (`XP3Archive`) で全ファイルを読めることを確認。Windows / Linux (sniper SDK) / macOS (Intel) でビルド・動作確認済み。外枠 (krkrz_android / krkrz_linux / krkrz_ios) や CI からも使える。残り (暗号化の口・Ogg のコードブック共有) は [TODO-tools.md](TODO-tools.md) で管理 |
 
 ## 将来課題
 
@@ -151,6 +151,7 @@ registerHotKey の WINVER 配線)。
 | ✅ | WaveSoundBuffer 3D 定位 API (F-1) | **2026-08-01 に実装済み** (src/core `ff8c66f1`)。miniaudio の spatializer で全バリアント共通。`WaveSoundBuffer.use3D` / `posX`・`posY`・`posZ` / `minDistance` / `maxDistance` / `rolloffFactor` ほか、リスナは `SoundListener` クラス。TODO の更新漏れを 2026-10-08 の棚卸しで確認 |
 | ✅ | Elements を WINVER のネイティブ経路へ | **2026-07-31 に完了** (src/core `bc0ab76a` まで)。入力の中立型化 (SDL 依存の剥がし) / テキスト入力・ウィンドウ取得の seam 化 / WndProc → manager 転送 / nested pump の overlay モーダル / 独立ウィンドウ モーダル (`WinElementsModalRunner`) / 描画は host 借用方式で Basic (D3D11) / OGL / SDL / SDLOGL の全 DrawDevice に配線。IME の候補窓追従もその後対応済み。WINVER 実機で SDL 版と同じ表示・操作を確認済み。TODO の更新漏れを 2026-10-08 の棚卸しで確認 |
 | 中 | フォントラスタライザを glyphware へ一本化 | 現状の既定は WINVER=GDI / 非 WINVER=旧 FreeType で、glyphware (`rasterizer=2`) はどちらでも既定ではない。可変軸・シェイピング・BiDi・カラー絵文字・フォールバックが既定で効くようにするには一本化が本筋だが、**全案件の文字描画の見た目が変わりうる**ためパリティ検証が前提。→ [FontEngine.md](src/core/doc/FontEngine.md) |
+| 中 | GPU モードの確立と描画系プラグインの SDL_GPU 版 | Canvas の SDL_GPU 版は 2026-10-09 に master 統合済み・PS5 実機確認済み。残りは、本体の内蔵機能 (マスク・ステンシルクリップ / beginEffect / drawText / GLCompositor / TextureLayerTreeOwner / 動画テクスチャ) を GPU モードでそろえて PS5 まで動作を確立すること、そのあと GLES 系の描画プラグイン (Live2D / Effekseer / M2 Motion・E-mote) に SDL_GPU 版を足すこと。別途開発中の SDL_GPU ベースのエンジンとコードを参照しあいながら少しずつ進める (すぐには着手しない)。SSOT = [CanvasGPU.md](src/core/doc/CanvasGPU.md) «今後の方向» |
 | 中 | SDL 版に `-about` のダイアログが無い | バージョン情報ダイアログは WINVER だけの実装 (`TVPCheckAbout()` → `TVPShowVersionForm()` = Win32 `DialogBox`)。SDL3 は `-about` を処理しておらず、`System.showVersion()` も WINVER のみ。**表示する文字列は全バリアント共通で用意済み** (`TVPGetAboutString()` = バージョン行 + LICENSE + 収録一覧 + 環境情報。SSOT = [LicenseSystem.md](src/core/doc/LicenseSystem.md)) なので、残るのは表示手段だけ。素直には `-userconf` と同じくゲームウィンドウ生成前の独立 SDL_Window + Elements overlay だが、**gamescope (Steam Deck) はセカンダリウィンドウを出せない**ので、その環境での代替 (標準出力へ落とす等) も併せて決める必要がある。現状の代替手段 = `-license` (標準出力) と `System.licenseText` |
 | 中 | SDL ビルドの SEH 捕捉 | ゼロ除算・アクセス違反でログを残さず即死する。WINVER は translator + minidump あり |
 | 低 | WINVER モダン化の残 | F-3 (入力)、HW mixer の直描画 |
