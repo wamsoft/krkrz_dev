@@ -258,7 +258,7 @@
 			},
 			{
 				"caption": "パッドキーリピートディレイ",
-				"description": "パッド(ジョイスティック)のキーリピートまでの時間をミリ秒単位で指定します。",
+				"description": "パッド(ジョイスティック)のキーリピートまでの時間をミリ秒単位で指定します。\n\n明示指定すると、Elements ダイアログのフォーカス送り(パッド長押し)の待ち時間の既定にもこの値が使われます。画面側の指定があればそちらが優先されます。",
 				"name": "paddelay",
 				"type": "select",
 				"user": true,
@@ -312,7 +312,7 @@
 			},
 			{
 				"caption": "パッドキーリピート間隔",
-				"description": "パッド(ジョイスティック)のキーリピートの間隔をミリ秒単位で指定します。値が小さいほどリピートが高速になります。",
+				"description": "パッド(ジョイスティック)のキーリピートの間隔をミリ秒単位で指定します。値が小さいほどリピートが高速になります。\n\n明示指定すると、Elements ダイアログのフォーカス送り(パッド長押し)の間隔の既定にもこの値が使われます。画面側の指定があればそちらが優先されます。",
 				"name": "padinterval",
 				"type": "select",
 				"user": true,
@@ -1020,7 +1020,7 @@
 			},
 			{
 				"caption": "起動時の DrawDevice",
-				"description": "起動時に使用する既定の DrawDevice を選択します。\n\nSDL3 ビルド: 'sdl' (SDL_Renderer 経由) / 'sdlogl' (OpenGL ES 直接) / 'ogl' (OpenGL ES + Canvas 等のフル機能)。指定しない場合、OpenGL 有効ビルドでは 'sdlogl'、無効ビルドでは 'sdl' になります。\n\nWINVER ビルド: 'basic' (Direct3D 11、既定) / 'ogl' (OpenGL ES) / 'null' (描画しない。検証用)。\n\n'ogl' / 'sdlogl' を使う場合は OpenGL ES が利用できる環境が必要です (WINVER と、SDL3 でネイティブに GLES コンテキストを作れない環境では ANGLE の libEGL.dll / libGLESv2.dll が必要)。実行中に Window.drawDevice へ代入して切り替えることもできますが、SDL3 ビルドで 'sdl' を指定して起動した場合は実行中に OpenGL 系へ切り替えることはできません。",
+				"description": "起動時に使用する既定の DrawDevice を選択します。\n\nSDL3 ビルド: 'sdl' (SDL_Renderer 経由) / 'sdlogl' (OpenGL ES 直接) / 'ogl' (OpenGL ES + Canvas 等のフル機能)。指定しない場合、OpenGL 有効ビルドでは 'sdlogl'、無効ビルドでは 'sdl' になります。Canvas を SDL_GPU で動かすビルド (KRKRZ_CANVAS_GPU) では 'gpu' (SDL_GPU + Canvas 等) も選べ、指定しない場合は 'gpu' になります。\n\nWINVER ビルド: 'basic' (Direct3D 11、既定) / 'ogl' (OpenGL ES) / 'null' (描画しない。検証用)。\n\n'ogl' / 'sdlogl' を使う場合は OpenGL ES が利用できる環境が必要です (WINVER と、SDL3 でネイティブに GLES コンテキストを作れない環境では ANGLE の libEGL.dll / libGLESv2.dll が必要)。実行中に Window.drawDevice へ代入して切り替えることもできますが、SDL3 ビルドで 'sdl' を指定して起動した場合は実行中に OpenGL 系へ切り替えることはできません。",
 				"name": "drawdevice",
 				"type": "string",
 				"length": 16,
@@ -1031,6 +1031,15 @@
 				"caption": "SDL_Renderer バックエンド",
 				"description": "SDLDrawDevice が利用する SDL_Renderer のバックエンド名を明示します (例: direct3d11 / vulkan / opengl / software)。指定しない場合は SDL3 の自動選択に任されます。\n\nSDL3 ビルドで SDLDrawDevice (-drawdevice=sdl) を使う場合のみ意味を持ちます。",
 				"name": "renderer",
+				"type": "string",
+				"length": 32,
+				"user": false,
+				"value": ""
+			},
+			{
+				"caption": "SDL_GPU ドライバ",
+				"description": "Canvas を SDL_GPU で動かすビルド (KRKRZ_CANVAS_GPU) で、GPUDrawDevice が使う SDL_GPU のドライバ名を明示します (例: vulkan)。指定しない場合は SDL3 の自動選択に任されます。\n\nCanvas のシェーダーは SPIR-V で用意するため、Windows では SPIR-V を受け付ける vulkan が選ばれます。",
+				"name": "gpudriver",
 				"type": "string",
 				"length": 32,
 				"user": false,
@@ -1062,6 +1071,24 @@
 				"length": 64,
 				"user": false,
 				"value": ""
+			},
+			{
+				"caption": "ウィンドウ最大化ボタン",
+				"description": "タイトルバーの最大化ボタンを表示するかどうかの設定です。\n\n「無効」にすると最大化ボタンが消え、タイトルバーのダブルクリックや Win+↑ による最大化もできなくなります。ウィンドウ枠のドラッグによるリサイズと Alt+Enter のフルスクリーン切替は従来どおり使えます。\n\nSDL3 ビルドの Windows のみ有効です (他のプラットフォームでは何もしません)。",
+				"name": "maximizebox",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "有効",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "無効"
+					}
+				]
 			},
 			{
 				"caption": "動画のハードウェアデコード",
