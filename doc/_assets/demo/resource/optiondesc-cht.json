@@ -258,7 +258,7 @@
 			},
 			{
 				"caption": "手把按鍵連擊延遲",
-				"description": "設定遊戲手把判斷按鍵連擊需要多少毫秒。",
+				"description": "設定遊戲手把判斷按鍵連擊需要多少毫秒。\n\n若明確指定，此值亦會作為 Elements 對話框中焦點移動(長按手把)的預設等待時間。畫面本身的設定優先。",
 				"name": "paddelay",
 				"type": "select",
 				"user": true,
@@ -312,7 +312,7 @@
 			},
 			{
 				"caption": "手把按鍵連擊間隔",
-				"description": "設定遊戲手把按鍵連擊間隔多少毫秒。數值越小速度越快。",
+				"description": "設定遊戲手把按鍵連擊間隔多少毫秒。數值越小速度越快。\n\n若明確指定，此值亦會作為 Elements 對話框中焦點移動(長按手把)的預設間隔。畫面本身的設定優先。",
 				"name": "padinterval",
 				"type": "select",
 				"user": true,
@@ -1020,7 +1020,7 @@
 			},
 			{
 				"caption": "啟動時的 DrawDevice",
-				"description": "選擇啟動時使用的預設 DrawDevice。\n\nSDL3 版本：'sdl'（經由 SDL_Renderer）/ 'sdlogl'（直接 OpenGL ES）/ 'ogl'（OpenGL ES + Canvas 等完整功能）。未指定時，啟用 OpenGL 的版本預設為 'sdlogl'，否則為 'sdl'。\n\nWINVER 版本：'basic'（Direct3D 11，預設）/ 'ogl'（OpenGL ES）/ 'null'（不繪製，用於驗證）。\n\n使用 'ogl' / 'sdlogl' 時需要 OpenGL ES 可用的環境（WINVER 版本，以及 SDL3 上無法原生建立 GLES 上下文的環境，需要 ANGLE 的 libEGL.dll / libGLESv2.dll）。執行中也可以透過給 Window.drawDevice 賦值來切換，但 SDL3 版本以 'sdl' 啟動時，執行中無法切換到 OpenGL 系裝置。",
+				"description": "選擇啟動時使用的預設 DrawDevice。\n\nSDL3 版本：'sdl'（經由 SDL_Renderer）/ 'sdlogl'（直接 OpenGL ES）/ 'ogl'（OpenGL ES + Canvas 等完整功能）。未指定時，啟用 OpenGL 的版本預設為 'sdlogl'，否則為 'sdl'。在以 SDL_GPU 執行 Canvas 的版本 (KRKRZ_CANVAS_GPU) 中，還可以選擇 'gpu'（SDL_GPU + Canvas 等），未指定時預設為 'gpu'。\n\nWINVER 版本：'basic'（Direct3D 11，預設）/ 'ogl'（OpenGL ES）/ 'null'（不繪製，用於驗證）。\n\n使用 'ogl' / 'sdlogl' 時需要 OpenGL ES 可用的環境（WINVER 版本，以及 SDL3 上無法原生建立 GLES 上下文的環境，需要 ANGLE 的 libEGL.dll / libGLESv2.dll）。執行中也可以透過給 Window.drawDevice 賦值來切換，但 SDL3 版本以 'sdl' 啟動時，執行中無法切換到 OpenGL 系裝置。",
 				"name": "drawdevice",
 				"type": "string",
 				"length": 16,
@@ -1031,6 +1031,15 @@
 				"caption": "SDL_Renderer 後端",
 				"description": "明確指定 SDLDrawDevice 使用的 SDL_Renderer 後端名稱（例：direct3d11 / vulkan / opengl / software）。未指定時由 SDL3 自動選擇。\n\n僅在 SDL3 版本使用 SDLDrawDevice (-drawdevice=sdl) 時有意義。",
 				"name": "renderer",
+				"type": "string",
+				"length": 32,
+				"user": false,
+				"value": ""
+			},
+			{
+				"caption": "SDL_GPU 驅動程式",
+				"description": "在以 SDL_GPU 執行 Canvas 的版本 (KRKRZ_CANVAS_GPU) 中，明確指定 GPUDrawDevice 使用的 SDL_GPU 驅動程式名稱（例：vulkan）。未指定時由 SDL3 自動選擇。\n\nCanvas 的著色器以 SPIR-V 形式準備，因此在 Windows 上會選擇接受 SPIR-V 的 vulkan。",
+				"name": "gpudriver",
 				"type": "string",
 				"length": 32,
 				"user": false,
@@ -1062,6 +1071,24 @@
 				"length": 64,
 				"user": false,
 				"value": ""
+			},
+			{
+				"caption": "視窗最大化按鈕",
+				"description": "設定標題列是否顯示最大化按鈕。\n\n設為「停用」後最大化按鈕會消失，雙擊標題列或按 Win+↑ 也無法最大化。拖曳視窗邊框調整大小以及 Alt+Enter 切換全螢幕仍然可以使用。\n\n僅在 SDL3 版本的 Windows 上有效（其他平台不執行任何動作）。",
+				"name": "maximizebox",
+				"type": "select",
+				"user": false,
+				"values": [
+					{
+						"value": "yes",
+						"desc": "啟用",
+						"default": true
+					},
+					{
+						"value": "no",
+						"desc": "停用"
+					}
+				]
 			},
 			{
 				"caption": "影片硬體解碼",
