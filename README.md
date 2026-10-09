@@ -138,7 +138,7 @@ make install
 - ツールは exe 1 本で配れるよう静的リンク (`x64-windows-static` など) で作るため、本体とは別の
   ビルドとして作ります (`build/<preset>/krkrz_tools`、常に Release。`cmake/KrkrzTools.cmake`)
 - 初回は、ツール用の vcpkg ライブラリ (静的版) のビルドに時間がかかります
-- 既定は Windows のみ。`CMAKEOPT='-DKRKRZ_BUILD_TOOLS=OFF'` でビルドしません
+- 既定はデスクトップ (Windows / Linux / macOS) で有効。`CMAKEOPT='-DKRKRZ_BUILD_TOOLS=OFF'` でビルドしません
 
 ### OpenGL 用 ANGLE DLL の配置
 

@@ -9,16 +9,17 @@
 #   make / cmake --build   … 本体と一緒にツールもビルドする
 #   make install           … <prefix>/tools/ にツールの exe とライセンスを置く
 #
-# KRKRZ_BUILD_TOOLS=OFF でビルドしない。既定は Windows のみ ON
-# (krkrz_tools の Linux / macOS ビルドは未確認のため)。
+# KRKRZ_BUILD_TOOLS=OFF でビルドしない。既定はデスクトップ (Windows / Linux / macOS) で ON、
+# モバイルと wasm は OFF (ツールはデスクトップ用)。Linux / macOS の triplet は本体と同じ
+# (x64-linux / x64-osx などは vcpkg の既定で静的ライブラリなので、そのまま exe 1 本になる)。
 # 初回は krkrz_tools 用の vcpkg ライブラリ (静的版) のビルドで時間がかかる。
 #---------------------------------------------------------------------------
 set(_KRKRZ_TOOLS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/krkrz_tools")
 
-if(WIN32)
-    set(_krkrz_tools_default ON)
-else()
+if(ANDROID OR IOS OR EMSCRIPTEN)
     set(_krkrz_tools_default OFF)
+else()
+    set(_krkrz_tools_default ON)
 endif()
 option(KRKRZ_BUILD_TOOLS "標準ツール (src/tools/krkrz_tools) をビルドし、install で tools/ に置く" ${_krkrz_tools_default})
 
