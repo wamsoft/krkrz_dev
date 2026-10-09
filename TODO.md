@@ -15,6 +15,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 読み上げ (スクリーンリーダー対応) | [doc/specification/accessibility.md](doc/specification/accessibility.md) (Elements 側は `src/core/external/elements/docs/accessibility.md`) |
 | Window のサイズ/位置/ズーム/ビューポート仕様 | [src/core/doc/WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | Layer / Bitmap / ImageFunction の統合 | [src/core/doc/ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
+| Canvas の SDL_GPU 版・GPU モードの確立・描画系プラグイン (Live2D / Effekseer / モーション系) の GPU 版 | [src/core/doc/CanvasGPU.md](src/core/doc/CanvasGPU.md) (基本部分は 2026-10-09 統合済み・PS5 実機確認済み。«今後の方向» は記録のみで未着手) |
 | フォントエンジン (可変軸・glyphware 統合) | [src/core/doc/FontEngine.md](src/core/doc/FontEngine.md) |
 | WINVER モダン化 | [src/core/doc/ModernizationRoadmap.md](src/core/doc/ModernizationRoadmap.md) |
 | 動画 (Media Foundation 移行) | [src/core/doc/MovieMFMigration.md](src/core/doc/MovieMFMigration.md) |

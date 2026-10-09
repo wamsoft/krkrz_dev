@@ -554,8 +554,9 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
     - **'sdl'**: SDL_Renderer 経由の [SDLDrawDevice](../reference/SDLDrawDevice.md) ( backend 自動選択 )
     - **'sdlogl'**: OpenGL ES 直接版 ( PBO 経由・Canvas 非対応の純粋版 ) ( `TVP_USE_OPENGL=ON` 時のみ )
     - **'ogl'**: OpenGL ES + Canvas / Texture / Shader / Offscreen を含むフル機能版 [OGLDrawDevice](../reference/OGLDrawDevice.md) ( `TVP_USE_OPENGL=ON` 時のみ )
+    - **'gpu'**: SDL_GPU + Canvas / Texture / Shader / Offscreen の GPUDrawDevice ( Canvas を SDL_GPU で動かす `KRKRZ_CANVAS_GPU=ON` ビルドのみ。このビルドでは `Window.OGLDrawDevice` の名前でも使えます )
   
-  指定しなかった場合、`TVP_USE_OPENGL=ON` ビルドでは `sdlogl`、それ以外では `sdl` が選択されます。
+  指定しなかった場合、`TVP_USE_OPENGL=ON` ビルドでは `sdlogl`、`KRKRZ_CANVAS_GPU=ON` ビルドでは `gpu`、それ以外では `sdl` が選択されます。
   
   Windows ネイティブ ( WINVER ) ビルド:
   
@@ -585,6 +586,18 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
   コンテキストの要求バージョンは ES 3.2 で、作れない場合は 3.1 → 3.0 → 2.0 と自動的に下げて再試行します ( ANGLE の D3D11 バックエンドは ES 3.0/3.1 までのため、EGL 経由ではこの再試行で成立します )。実際に得られたバージョンは起動ログの `Loaded GLES x.y` で確認できます。
   
   WINVER ビルドの OpenGL は常に EGL ( ANGLE ) 経由のため、このオプションは SDL3 ビルドでのみ意味を持ちます。
+- **-**gpudriver** (SDL_GPU ドライバの明示指定 / `KRKRZ_CANVAS_GPU` ビルド限定)**  
+  GPUDrawDevice が使う SDL_GPU のドライバ名を明示します ( 例: `vulkan` )。指定しなかった場合は SDL3 の自動選択に任されます。
+  
+  Canvas ( GPU 版 ) のシェーダーは SPIR-V で用意するため、Windows では SPIR-V を受け付ける `vulkan` が選ばれます ( `direct3d12` は未対応 )。
+- **-**gpushaderpack** (Canvas ( GPU 版 ) のシェーダーパック / `KRKRZ_CANVAS_GPU` ビルド限定)**  
+  スクリプトが使うシェーダーを事前に変換したパック ( `.kzgs` ) をストレージ名で指定します。`;` で区切って複数指定できます。
+  
+  指定しなかった場合は、データの `canvas_shaders.kzgs` を読み、無ければ実行ファイルと同じフォルダの `canvas_shaders.kzgs` を読みます。
+- **-**gpushadercollect** (変換が必要なシェーダーの書き出し / `KRKRZ_CANVAS_GPU` ビルド限定・開発用)**  
+  パックに無いシェーダーが使われたとき、そのソースを指定したフォルダへ書き出します。書き出したものを変換ツール ( `gpushaderc.py pack` ) でパックにします。
+  
+  Canvas ( GPU 版 ) は実行時にシェーダーをコンパイルしないため、パックに無いシェーダーを使うと例外になります。手順は本体ソースの `doc/CanvasGPU.md` を参照してください。
 - **-**mediaengine** (動画のハードウェアデコード / Windows 限定)**  
   [VideoOverlay](../reference/VideoOverlay.md) のオーバーレイ再生 ( `vomOverlay` ) で、
   mp4/H.264/HEVC/wmv/asf などの MF-native 形式を Media Foundation ( IMFMediaEngine ) で
