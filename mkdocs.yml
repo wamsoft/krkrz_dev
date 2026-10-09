@@ -102,7 +102,7 @@ nav:
       - 画像フォーマットコンバータ: guide/TPC.md
       - 音声フォーマットコンバータ: guide/AudioConverter.md
       - ループチューナ: guide/LoopTuner.md
-      - Releaser (準備中): guide/Releaser.md
+      - リリーサ: guide/Releaser.md
       - レンダリング済みフォントデータの作成: guide/FontMaker.md
     - 定数一覧:
       - 仮想キーコード: guide/KeyCodes.md

@@ -4,7 +4,7 @@
 
 吉里吉里Z には、ゲームの素材作りや配布の準備に使う標準ツールが付属しています。
 吉里吉里2 の付属ツール (Releaser・画像フォーマットコンバータ・ループチューナなど) の後継で、
-Windows / Linux / macOS で動きます。
+Windows / Linux / macOS で動きます (リリーサだけは Windows 専用です)。
 
 | ツール | 実行ファイル | 用途 |
 |---|---|---|
@@ -14,10 +14,10 @@ Windows / Linux / macOS で動きます。
 | [画像フォーマットコンバータ](TPC.md) | `krkrimg` | BMP / PNG / JPEG / TLG / PSD / CLIP を TLG5・TLG6 などへ変換、PSD・CLIP のレイヤ書き出し |
 | [音声フォーマットコンバータ](AudioConverter.md) | `krkraudio` | WAV / Ogg Vorbis / Ogg Opus の相互変換、音量の調整と測定 |
 | [ループチューナ](LoopTuner.md) | `krkrloop` | 波形を見ながら、ループ情報 (.sli) のリンクとラベルを編集・試聴する |
+| [リリーサ](Releaser.md) | `krkrrelease` | 配布用の実行可能ファイルを作る (起動オプション・アイコン・バージョン情報の埋め込み、xp3 の結合、署名)。**Windows 専用** |
 
 レンダリング済みフォント (.tft) は、ツールではなく tftSave プラグインで作ります
 ([レンダリング済みフォントデータの作成](FontMaker.md))。
-exe への xp3 の結合やアイコンの差し替えを行う «リリーサ» は準備中です ([Releaser](Releaser.md))。
 
 ## 入手方法
 
