@@ -37,6 +37,14 @@ getScene() の Group を Scene に add。毎フレーム update(dt) を呼ぶ。
 - [setOffset](#setoffset)
 - [setColliderScale](#setcolliderscale)
 - [getColliderScale](#getcolliderscale)
+- [resetSpringBones](#resetspringbones)
+- [getMaterialCount](#getmaterialcount)
+- [getMaterialName](#getmaterialname)
+- [materialListJson](#materiallistjson)
+- [setMaterialVisible](#setmaterialvisible)
+- [getMaterialVisible](#getmaterialvisible)
+- [setMaterialColor](#setmaterialcolor)
+- [setTint](#settint)
 - [getMetaName](#getmetaname)
 - [getMetaVersion](#getmetaversion)
 - [getMetaLicenseUrl](#getmetalicenseurl)
@@ -449,6 +457,124 @@ VRoid 系はコライダーが体にタイトで胴体側面が手薄なため�
 **解説**
 
 -> float
+
+---
+
+### resetSpringBones
+
+メソッド
+
+**解説**
+
+揺れものを現在の姿勢で静止させる (慣性を 0 にする)。
+
+ロード直後・服装替え・大きな姿勢変更・セーブ復元の後に呼ぶと髪が暴れない。
+
+---
+
+### getMaterialCount
+
+メソッド
+
+**解説**
+
+--- マテリアル (glTF の material 単位) --- name は完全一致を優先し、無ければ部分一致した全 material に適用する。戻り値は適用数。 VRoid の服の部品 (上着/リボン等) の出し入れや色替え、全体の暗さに使う。 実効色 = 元の色 × setMaterialColor の色 × setTint の色 (MToon の lit/shade/emissive/rim/ matcap と輪郭線の色に掛かる)。
+
+---
+
+### getMaterialName
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `index` | `&nbsp;` |  |
+
+**解説**
+
+-> string (glTF material.name)
+
+---
+
+### materialListJson
+
+メソッド
+
+**解説**
+
+-> [{name,visible,meshes},…] の JSON 文字列
+
+---
+
+### setMaterialVisible
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` |  |
+| `visible` | `&nbsp;` |  |
+
+**解説**
+
+-> 適用数
+
+---
+
+### getMaterialVisible
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` |  |
+
+**解説**
+
+-> bool
+
+---
+
+### setMaterialColor
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` |  |
+| `r` | `&nbsp;` |  |
+| `g` | `&nbsp;` |  |
+| `b` | `&nbsp;` |  |
+
+**解説**
+
+乗算色 (1,1,1 = 元の色) -> 適用数
+
+---
+
+### setTint
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `r` | `&nbsp;` |  |
+| `g` | `&nbsp;` |  |
+| `b` | `&nbsp;` |  |
+
+**解説**
+
+全 material への乗算色 (1,1,1 = 元の色)
 
 ---
 

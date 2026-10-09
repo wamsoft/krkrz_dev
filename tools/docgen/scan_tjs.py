@@ -52,7 +52,7 @@ DEFAULT_OUT = REPO / "doc" / "_inventory.json"
 CLASSES = {
     "Layer", "Bitmap", "BitmapLayerTreeOwner", "Font", "ImageFunction",
     "Window", "NullDrawDevice", "BasicDrawDevice",
-    "SDLDrawDevice", "OGLDrawDevice",
+    "SDLDrawDevice", "OGLDrawDevice", "GPUDrawDevice",
     "Scripts", "Storages", "System", "Timer", "Debug", "Clipboard",
     "AsyncTrigger", "Plugins", "Rect", "Console", "VideoOverlay",
     "WaveSoundBuffer", "SoundBuffer", "SoundListener",
@@ -90,6 +90,7 @@ NEW_INSTANCE_RE = re.compile(r"new\s+tTJSNC_(\w+)\s*\(")
 # internals). Applied to ctor-span names before the CLASSES filter.
 CLASS_ALIASES = {
     "Dialog": "ElementsDialog",
+    "SDLGpuDrawDevice": "GPUDrawDevice",
 }
 DECL_RES = {
     "method":  re.compile(r"TJS_BEGIN_NATIVE_METHOD_DECL\(\s*(?:/\*[^*]*\*/\s*)?(\w+)\s*\)"),
@@ -105,6 +106,7 @@ DECL_RES = {
 HELPER_MACRO_RES = {
     "property": [
         re.compile(r"\bTVP_DEF_PAD_AXIS_PROP\s*\(\s*(\w+)\s*,"),
+        re.compile(r"\bGPU_DD_RO_PROP\s*\(\s*(\w+)\s*,"),
     ],
 }
 
@@ -129,6 +131,8 @@ EVENTNAME_RE = re.compile(
     r'static\s+ttstr\s+eventname\s*\(\s*TJS_W\(\s*"(\w+)"\s*\)\s*\)'
 )
 EVENT_NAME_PREFIX_RE = re.compile(r"^on[A-Z]")
+# GPUDrawDevice はイベントを自前の FireEvent( TJS_W("onXxx") ) で投げる
+FIREEVENT_RE = re.compile(r'\bFireEvent\s*\(\s*TJS_W\(\s*"(on[A-Z]\w*)"\s*\)\s*\)')
 
 # プラットフォーム側のウィンドウ実装は tTJSNC_Window のコンストラクタを持たないが、
 # Window のイベントを投げている (registerExEvent 系 / onDeviceChanged / onPaste)。
@@ -252,6 +256,8 @@ def scan_file(path: Path) -> dict[str, dict]:
             key = "events" if EVENT_NAME_PREFIX_RE.match(name) else "properties"
             add(primary, key, name)
         for m in EVENTNAME_RE.finditer(text):
+            add(primary, "events", m.group(1))
+        for m in FIREEVENT_RE.finditer(text):
             add(primary, "events", m.group(1))
 
     return classes

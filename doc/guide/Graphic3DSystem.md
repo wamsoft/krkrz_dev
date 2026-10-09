@@ -8,7 +8,7 @@
 
 ## SDL_GPU 版 ( 開発中 )
 
-OpenGL の無い環境向けに、同じクラス群を SDL3 の GPU API ( SDL_GPU ) で動かすビルド ( CMake オプション `KRKRZ_CANVAS_GPU=ON`、SDL3 ビルドのみ・OpenGL 版とは排他 ) があります。クラス名と API は OpenGL ES 版と同じで、描画デバイスは GPUDrawDevice ( このビルドでは `OGLDrawDevice` の名前でも使えるので、スクリプトはそのまま動きます ) です。違いは次のとおりです。
+OpenGL の無い環境向けに、同じクラス群を SDL3 の GPU API ( SDL_GPU ) で動かすビルド ( CMake オプション `KRKRZ_CANVAS_GPU=ON`、SDL3 ビルドのみ・OpenGL 版とは排他 ) があります。クラス名と API は OpenGL ES 版と同じで、描画デバイスは [GPUDrawDevice](../reference/GPUDrawDevice.md) ( このビルドでは `OGLDrawDevice` の名前でも使えるので、スクリプトはそのまま動きます ) です。違いは次のとおりです。
 
 - シェーダーは実行時にコンパイルせず、事前に変換したパック ( `canvas_shaders.kzgs` ) から引きます。パックに無いシェーダーを使うと例外になります ( 起動オプション [-gpushadercollect](CommandLine.md) で書き出して変換します )
 - ポストエフェクト ( beginEffect / endEffect )・マスクやステンシルによるクリッピング・drawText・GLCompositor・TextureLayerTreeOwner・動画テクスチャは未対応です

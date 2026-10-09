@@ -554,7 +554,7 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
     - **'sdl'**: SDL_Renderer 経由の [SDLDrawDevice](../reference/SDLDrawDevice.md) ( backend 自動選択 )
     - **'sdlogl'**: OpenGL ES 直接版 ( PBO 経由・Canvas 非対応の純粋版 ) ( `TVP_USE_OPENGL=ON` 時のみ )
     - **'ogl'**: OpenGL ES + Canvas / Texture / Shader / Offscreen を含むフル機能版 [OGLDrawDevice](../reference/OGLDrawDevice.md) ( `TVP_USE_OPENGL=ON` 時のみ )
-    - **'gpu'**: SDL_GPU + Canvas / Texture / Shader / Offscreen の GPUDrawDevice ( Canvas を SDL_GPU で動かす `KRKRZ_CANVAS_GPU=ON` ビルドのみ。このビルドでは `Window.OGLDrawDevice` の名前でも使えます )
+    - **'gpu'**: SDL_GPU + Canvas / Texture / Shader / Offscreen の [GPUDrawDevice](../reference/GPUDrawDevice.md) ( Canvas を SDL_GPU で動かす `KRKRZ_CANVAS_GPU=ON` ビルドのみ。このビルドでは `Window.OGLDrawDevice` の名前でも使えます )
   
   指定しなかった場合、`TVP_USE_OPENGL=ON` ビルドでは `sdlogl`、`KRKRZ_CANVAS_GPU=ON` ビルドでは `gpu`、それ以外では `sdl` が選択されます。
   

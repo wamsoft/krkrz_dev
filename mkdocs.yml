@@ -162,6 +162,7 @@ nav:
       - reference/NullDrawDevice.md
     - 吉里吉里Z 3D機能クラス:
       - reference/OGLDrawDevice.md
+      - reference/GPUDrawDevice.md
       - reference/Canvas.md
       - reference/Texture.md
       - reference/Offscreen.md

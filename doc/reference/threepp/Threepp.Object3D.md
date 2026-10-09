@@ -48,6 +48,7 @@
 - [updateMatrix](#updatematrix)
 - [updateMatrixWorld](#updatematrixworld)
 - [treeJson](#treejson)
+- [setQuaternion](#setquaternion)
 - [getWorldPosition](#getworldposition)
 - [getWorldQuaternion](#getworldquaternion)
 - [getWorldScale](#getworldscale)
@@ -504,6 +505,25 @@ JSON 文字列
 サブツリーを JSON 文字列で一括ダンプ (外部インスペクタのシーンツリー表示用)。
 
 1 ノード = {id,name,type,visible,pos:[x,y,z],children:[…]}
+
+---
+
+### setQuaternion
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` |  |
+| `y` | `&nbsp;` |  |
+| `z` | `&nbsp;` |  |
+| `w` | `&nbsp;` |  |
+
+**解説**
+
+quaternion プロパティは値のコピーを返すので、書き戻しはこれを使う (Object3D のみ)
 
 ---
 

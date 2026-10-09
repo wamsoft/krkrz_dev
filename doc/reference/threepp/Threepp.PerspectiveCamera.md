@@ -29,6 +29,7 @@
 - [setViewOffset](#setviewoffset)
 - [clearViewOffset](#clearviewoffset)
 - [updateProjectionMatrix](#updateprojectionmatrix)
+- [applyScreenAffine](#applyscreenaffine)
 
 ---
 
@@ -205,5 +206,29 @@
 **解説**
 
 投影行列を更新
+
+---
+
+### applyScreenAffine
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `a` | `&nbsp;` |  |
+| `b` | `&nbsp;` |  |
+| `c` | `&nbsp;` |  |
+| `d` | `&nbsp;` |  |
+| `tx` | `&nbsp;` |  |
+| `ty` | `&nbsp;` |  |
+
+**解説**
+
+投影行列に画面上の 2D アフィンを後掛けする (updateProjectionMatrix の後に呼ぶ。Camera 共通)。
+
+NDC で x' = a*x + b*y + tx, y' = c*x + d*y + ty。カメラの全画角を画面の任意の平行四辺形へ
+写せるので、2D 側の拡大・回転・位置を「描いた後の拡大」ではなく描画そのものに反映できる。
 
 ---
