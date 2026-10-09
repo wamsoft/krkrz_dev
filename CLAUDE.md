@@ -23,10 +23,10 @@ make clean
 make run               # Windows only: builds, copies plugin DLLs next to exe, runs krkrz(64).exe $(DATAPATH)
 
 # Override preset / config / cmake args
-PRESET=x64-windows-sdl BUILD_TYPE=Debug CMAKEOPT='-DKRKRZ_USE_SJIS=ON' make prebuild build
+PRESET=x64-windows-win BUILD_TYPE=Debug CMAKEOPT='-DKRKRZ_USE_SJIS=ON' make prebuild build
 ```
 
-- Default `CMAKEOPT` in the root Makefile is `-DKRKRZ_USE_SJIS=YES`. Override it (don't append to it) when you need different flags — the Makefile assigns, it doesn't append.
+- `CMAKEOPT` in the root Makefile is empty by default (`CMAKEOPT?=`; the old default `-DKRKRZ_USE_SJIS=YES` was dropped). Pass `CMAKEOPT='-DKRKRZ_USE_SJIS=ON'` for an SJIS build. The option name is `KRKRZ_USE_SJIS` — the older `USESJIS` no longer exists. Cached values stick across `make prebuild`: to return an option to its default, pass `-U<NAME>` once.
 - `make run` uses `DATAPATH` (default `src/core/data`) as the game data argument and on Windows copies `plugin/` or `plugin64/` DLLs (ANGLE `libEGL.dll` / `libGLESv2.dll`) into the build output so OpenGL works at runtime.
 - For SJIS win32 legacy builds, launch from the Visual Studio **x86** Developer Command Prompt — vcpkg misbehaves otherwise (see `README.md`).
 - Available presets and preset naming are documented in `src/core/CLAUDE.md`; the umbrella Makefile only auto-picks a default.

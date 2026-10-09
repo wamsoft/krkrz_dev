@@ -114,7 +114,7 @@ win32版（SJIS対応）で作成する
 
 ```
 export PRESET=x86-windows
-export CMAKEOPT="-DUSESJIS=ON"
+export CMAKEOPT="-DKRKRZ_USE_SJIS=ON"
 make prebuild
 make
 make install
@@ -187,7 +187,7 @@ TVP_PLUGINS_STATIC が定義されている場合は、それに含まれる
 CMake のリストとして定義するので ;　区切りで必要なものを列挙します
 
 ```
-CMAKEOPT='-DUSESJIS=ON -DTVP_PLUGINS_STATIC="json;csvParser"' make prebuild
+CMAKEOPT='-DKRKRZ_USE_SJIS=ON -DTVP_PLUGINS_STATIC="json;csvParser"' make prebuild
 make
 make install
 ```
