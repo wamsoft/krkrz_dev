@@ -91,6 +91,8 @@ SDL(GENERIC) 系統では、webm を movie-player、MPEG-1 を pl_mpeg でデコ
 
 映像の提示 (presenter) には SDL_Renderer 版と OpenGL 版があり、OpenGL 版では BT.601 の YUV→RGB 変換をシェーダで行います。Emscripten(web) ではブラウザの `<video>` を用います。
 
+**制限**: レイヤ再生 (vomLayer) 以外のモードでは再生矩形 (`setPos` / `setSize` / `setBounds`) が現在効かず、動画は画面全体に縦横比を保って表示されます (実装予定)。
+
 動画の音声は miniaudio 経由で再生されます (MovieAudioSink)。再生済みサンプル数を AV 同期のマスタクロックとして用い、映像側をこれに追従させます。
 
 ## 特殊再生機能 { #trickplay }
