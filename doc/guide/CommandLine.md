@@ -589,7 +589,7 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
 - **-**gpudriver** (SDL_GPU ドライバの明示指定 / `KRKRZ_CANVAS_GPU` ビルド限定)**  
   GPUDrawDevice が使う SDL_GPU のドライバ名を明示します ( 例: `vulkan` )。指定しなかった場合は SDL3 の自動選択に任されます。
   
-  Canvas ( GPU 版 ) のシェーダーは SPIR-V で用意するため、Windows では SPIR-V を受け付ける `vulkan` が選ばれます ( `direct3d12` は未対応 )。
+  Windows では既定で `vulkan` ( シェーダーは SPIR-V ) が選ばれます。`direct3d12` を指定すると D3D12 ( シェーダーは DXIL ) で動きます。この場合、スクリプトのシェーダーも DXIL で用意したパックが必要です ( 変換ツールの `--target dxil` で作ります )。
 - **-**gpushaderpack** (Canvas ( GPU 版 ) のシェーダーパック / `KRKRZ_CANVAS_GPU` ビルド限定)**  
   スクリプトが使うシェーダーを事前に変換したパック ( `.kzgs` ) をストレージ名で指定します。`;` で区切って複数指定できます。
   

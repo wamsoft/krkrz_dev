@@ -1,7 +1,7 @@
 /**
  * GPUDrawDevice クラスは、このインスタンスを [Window.drawDevice](Window.md#drawdevice) に登録して使用するための DrawDevice で、SDL3 の GPU API ( SDL_GPU ) を用いて [Canvas](Canvas.md) 系クラスを動かします。**開発中の機能** で、Canvas を SDL_GPU で動かすビルド ( CMake オプション `KRKRZ_CANVAS_GPU=ON`、SDL3 ビルドのみ・OpenGL 版とは排他 ) にだけ含まれます。
  *
- * このビルドでは起動時の既定 DrawDevice がこのクラスになります ( `-drawdevice=gpu`。`-drawdevice=sdl` で [SDLDrawDevice](SDLDrawDevice.md) に戻せます。 [コマンドラインオプション](../guide/CommandLine.md) )。SDL_GPU のドライバは自動選択で、`-gpudriver` で明示できます ( Windows では SPIR-V を受け付ける `vulkan` が選ばれます )。
+ * このビルドでは起動時の既定 DrawDevice がこのクラスになります ( `-drawdevice=gpu`。`-drawdevice=sdl` で [SDLDrawDevice](SDLDrawDevice.md) に戻せます。 [コマンドラインオプション](../guide/CommandLine.md) )。SDL_GPU のドライバは自動選択で、`-gpudriver` で明示できます ( Windows の既定は `vulkan`。`-gpudriver=direct3d12` で D3D12 でも動きます。その場合スクリプトのシェーダーは DXIL のパックが必要です )。
  *
  * OpenGL 版の無いビルドでは、このクラスは `Window.OGLDrawDevice` の名前でも登録されます。[OGLDrawDevice](OGLDrawDevice.md) を使う既存のスクリプト ( 派生クラスの `super.OGLDrawDevice()` を含む ) は、そのままこのクラスで動きます。
  *
