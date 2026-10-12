@@ -40,7 +40,11 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 
 [Versioning.md](src/core/doc/Versioning.md) の「移行メモ」= サマリとタグメッセージの冒頭に置く一覧。 リリース枝へ反映するときに拾う。
 
-(なし)
+- **エンジン設定 (`-userconf`) の画面がブラウザに**: WINVER の Win32 ダイアログと SDL の Elements 版を廃止し、ブラウザで開く設定画面に統一 (`doc/guide/Configure.md`)。.cfu の書式・保存場所は同じ。保存するのは変えた項目と前から .cfu にあった項目だけになった (.cf の値を .cfu へ写さない)
+- **VideoOverlay の再生矩形が効くように**: `vomOverlay` / `vomMixer` の `setPos` / `setSize` / `setBounds` / `left` / `top` / `width` / `height` が、SDL 版と WINVER の既定経路 (描画デバイスが動画を描く経路) でも効く。矩形を指定しているスクリプトでは、これまで画面全体に出ていた動画がその矩形に出る (未指定なら従来どおり画面全体)。SDL 版の getter は WINVER と同じ初期値 0,0,320,240 を返す
+- **macOS のデータ保存場所**: `System.dataPath` が `user://` ではなくローカルパス (`~/Library/Application Support/<orgname>/<appname>/`、場所は以前と同じ) で返る。`-datapath` が効くようになった
+- **相対パスの `-datapath`** (Linux / macOS): 起動時のカレントディレクトリ基準の絶対パスとして扱う (以前は起動時に異常終了)
+- **WINVER: `System.eventDisabled` の間は描画しない**: 非アクティブで止めている間 (動画再生中を除く) は画面の描画・Present をしない (Elements の表示中も)
 
 2.5.0 (2026-10-06) までの分は krkrz.git のサマリ `b6485e20` と タグ `v2.5.0` の「■ 移行メモ」へ載せた
 (日本語フォントの既定埋め込み廃止 / OS フォント / U+FFFD 代替表示 / 動画の終わり方とフレーム番号 /

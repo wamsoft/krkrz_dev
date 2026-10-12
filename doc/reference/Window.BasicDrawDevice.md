@@ -19,6 +19,7 @@ Window.BasicDrawDevice クラスは、このインスタンスを [Window.drawDe
 ### メソッド
 
 - [recreate](#recreate)
+- [captureWithOverlay](#capturewithoverlay)
 
 ---
 
@@ -118,5 +119,31 @@ WINVER (D3D11) ビルドのみ。通常はエンジン内部/プラグインが�
 内部デバイスの再生成を行います。
 
 通常使用することはありません。
+
+---
+
+### captureWithOverlay
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `bitmap` | `&nbsp;` | 写し先の [Bitmap](Bitmap.md) オブジェクト。大きさは必要に応じて変わります。 |
+
+**戻り値**
+
+成功したら true
+
+**解説**
+
+Elements の画面込みで画面を取り込む
+
+レイヤの合成結果に [ElementsDialog](ElementsDialog.md) などのオーバーレイを重ねた、今の画面を描いて読み戻し、
+ゲーム画面の範囲を bitmap へ写します。写した画像の大きさはウィンドウ上の表示サイズです。
+
+レイヤだけを写す方法 ( Layer の画像のコピーや KAG の画面取り込み ) では Elements の画面が写らないため、
+セーブのサムネイルなどで Elements の画面も含めたい場合に使います。
 
 ---

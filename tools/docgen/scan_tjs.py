@@ -131,8 +131,8 @@ EVENTNAME_RE = re.compile(
     r'static\s+ttstr\s+eventname\s*\(\s*TJS_W\(\s*"(\w+)"\s*\)\s*\)'
 )
 EVENT_NAME_PREFIX_RE = re.compile(r"^on[A-Z]")
-# GPUDrawDevice はイベントを自前の FireEvent( TJS_W("onXxx") ) で投げる
-FIREEVENT_RE = re.compile(r'\bFireEvent\s*\(\s*TJS_W\(\s*"(on[A-Z]\w*)"\s*\)\s*\)')
+# GPUDrawDevice はイベントを自前の FireEvent( TJS_W("onXxx") [, immediate] ) で投げる
+FIREEVENT_RE = re.compile(r'\bFireEvent\s*\(\s*TJS_W\(\s*"(on[A-Z]\w*)"\s*\)\s*[,)]')
 
 # プラットフォーム側のウィンドウ実装は tTJSNC_Window のコンストラクタを持たないが、
 # Window のイベントを投げている (registerExEvent 系 / onDeviceChanged / onPaste)。

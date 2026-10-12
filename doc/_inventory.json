@@ -48,6 +48,7 @@
     "events": [],
     "file": "src/core/win32/visual/BasicDrawDevice.cpp",
     "methods": [
+      "captureWithOverlay",
       "recreate"
     ],
     "properties": [
