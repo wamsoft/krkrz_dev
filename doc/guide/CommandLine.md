@@ -188,9 +188,9 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
   - **$(savedgamespath)**  
     System.savedGamesPath(ゲームのセーブデータ用フォルダ)に置き換えられます。(1.1.0以降)
   
-  上の説明は Windows 版のものです。**Windows 以外の SDL3 版**では `$(appdatapath)` / `$(personalpath)` / `$(vistapath)` / `$(savedgamespath)` はいずれも**アプリごとのユーザ領域** ( `user://`。Linux 版は下記のローカルパス ) に置き換わり、[System.appDataPath](../reference/System.md#appdatapath) / [System.personalPath](../reference/System.md#personalpath) が返す OS 標準フォルダ ( macOS の `~/Library/Application Support/` など ) とは一致しません。
+  上の説明は Windows 版のものです。**Windows 以外の SDL3 版**では `$(appdatapath)` / `$(personalpath)` / `$(vistapath)` / `$(savedgamespath)` はいずれも**アプリごとのユーザ領域** ( `user://`。Linux 版・macOS 版は下記のローカルパス ) に置き換わり、[System.appDataPath](../reference/System.md#appdatapath) / [System.personalPath](../reference/System.md#personalpath) が返す OS 標準フォルダ ( macOS の `~/Library/Application Support/` など ) とは一致しません。
   
-  デフォルトでは「$(exepath)\savedata」となっています (**Linux 版を除く**。下記)。この設定は、インストーラなどを特に用いずにプログラムを zip 等で圧縮・アーカイブして配布し、ユーザにそれを展開して頂いてすぐにプログラム実行、という配布形態に適した設定です。
+  デフォルトでは「$(exepath)\savedata」となっています (**Linux 版・macOS 版を除く**。下記)。この設定は、インストーラなどを特に用いずにプログラムを zip 等で圧縮・アーカイブして配布し、ユーザにそれを展開して頂いてすぐにプログラム実行、という配布形態に適した設定です。
   
   しかし、このデフォルトの設定では、Program Files 以下にプログラムを配置した場合、Program Files 以下に書き込む権限がない、Windows XP 等の「制限ユーザ」等でプログラムを起動した場合に、ファイルを書き込むことができずにエラーになる可能性があります。
   
@@ -206,6 +206,10 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
       - Linux 版では `$(appdatapath)` / `$(personalpath)` / `$(vistapath)` / `$(savedgamespath)` も、このユーザごとのフォルダ (ローカルパス) に置き換わります。`\` 区切りで書いた値は `/` に直され、末尾の区切りも補われます。
       - 実際の保存場所は起動ログの `datapath (Linux default, ...)` / データ保存場所の行で確認できます。実行ファイルの隣に旧既定のセーブ (`savedata*`) が残っていると、移行を促す警告を出します。
       - 以前の Linux 版は既定の保存場所の末尾に `/` が付いておらず、`System.dataPath + "ファイル名"` が実行ファイルの隣に `savedataファイル名` として書かれていました。残っている場合は新しい場所へ移してください。
+
+  macOS 版 (SDL3) の既定も **ユーザごとのフォルダ `~/Library/Application Support/<組織名>/<アプリケーション名>/`** です (以前と同じ場所)。2026-10-12 からはこれをローカルのパスとして扱い、-datapath も効くようになりました ( 以前は -datapath が無視されていました )。
+
+  相対パスで指定した場合は、起動したときのカレントフォルダを基準にします ( Windows 版も同じ )。
 
   このオプションで指定されたデータ保存場所は、吉里吉里起動時に、もし存在していなければ作成が試みられます。作成が失敗してもそこで終了とはならずに処理が続行しますので、エラー処理はユーザのスクリプト内で(データが保存できないなどの例外を捕捉することにより)行ってください。
   
