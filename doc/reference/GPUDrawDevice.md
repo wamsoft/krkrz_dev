@@ -9,7 +9,7 @@ OpenGL 版の無いビルドでは、このクラスは `Window.OGLDrawDevice` �
 このデバイスがアクティブな間、[Canvas](Canvas.md) / [Texture](Texture.md) / [ShaderProgram](ShaderProgram.md) / [Offscreen](Offscreen.md) / [Matrix32](Matrix32.md) / [VertexBuffer](VertexBuffer.md) / [VertexBinder](VertexBinder.md) が SDL_GPU の上で機能します。OpenGL ES 版との主な違いは次のとおりです。
 
 - シェーダーは実行時にコンパイルせず、事前に変換したパック ( `canvas_shaders.kzgs` ) から引きます。パックに無いシェーダーを使うと例外になります ( `-gpushadercollect` で書き出して変換します。`-gpushaderpack` でパックを指定できます )
-- ポストエフェクト ( beginEffect / endEffect )・マスクやステンシルによるクリッピング・drawText・GLCompositor・TextureLayerTreeOwner・動画テクスチャは未対応です
+- drawText は未対応です ( マスク・ステンシルによるクリッピング ( beginMaskClip / beginStencilClip )・ポストエフェクト ( beginEffect / endEffect )・TextureLayerTreeOwner・[GLCompositor](GLCompositor.md) は使えます。オーバーレイ動画は [SDLDrawDevice](SDLDrawDevice.md) と同じ経路で Canvas の上に出ます )
 - [Texture.nativeHandle](Texture.md#nativehandle) は GL のテクスチャ番号ではなく、SDL_GPU のテクスチャになります
 - [matrix](OGLDrawDevice.md#matrix) / [glVideoPresenterHost](OGLDrawDevice.md#glvideopresenterhost) プロパティはありません
 

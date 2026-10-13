@@ -1038,7 +1038,7 @@
 			},
 			{
 				"caption": "SDL_GPU 驅動程式",
-				"description": "在以 SDL_GPU 執行 Canvas 的版本 (KRKRZ_CANVAS_GPU) 中，明確指定 GPUDrawDevice 使用的 SDL_GPU 驅動程式名稱（例：vulkan）。未指定時由 SDL3 自動選擇。\n\nCanvas 的著色器以 SPIR-V 形式準備，因此在 Windows 上會選擇接受 SPIR-V 的 vulkan。",
+				"description": "在以 SDL_GPU 執行 Canvas 的版本 (KRKRZ_CANVAS_GPU) 中，明確指定 GPUDrawDevice 使用的 SDL_GPU 驅動程式名稱（例：vulkan）。未指定時由 SDL3 自動選擇。\n\n在 Windows 上預設選擇 vulkan（著色器為 SPIR-V）。指定 direct3d12 時以 D3D12（著色器為 DXIL）執行，此時腳本的著色器也需要以 DXIL 形式準備的著色器包。",
 				"name": "gpudriver",
 				"type": "string",
 				"length": 32,

@@ -15,6 +15,10 @@ capture() のコールバックは「incontextof このコンポジタ」で実�
 (内部 Canvas) の フル API (drawTexture / beginEffect / endEffect / クリップ等) や
 this.drawLayer / this.copyLayer をそのまま利用できます (GLESAdaptor 互換)。
 
+Canvas を SDL_GPU で動かすビルド ([GPUDrawDevice](GPUDrawDevice.md) のあるビルド) では、同じ名前・同じ API の
+GPU 版になります。描画は共有の GPU デバイスの上で行い、GL のコンテキストは無いので
+makeCurrent は何もせず、GLGetProcAddress は 0 を返します (GLES 系プラグインの描画先には使えません)。
+
 ## メンバー一覧
 
 ### コンストラクタ

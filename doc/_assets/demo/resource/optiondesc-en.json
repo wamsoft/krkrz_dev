@@ -1038,7 +1038,7 @@
 			},
 			{
 				"caption": "SDL_GPU driver",
-				"description": "In builds that run Canvas on SDL_GPU (KRKRZ_CANVAS_GPU), specifies the SDL_GPU driver used by GPUDrawDevice (e.g. vulkan). When not specified, SDL3 chooses automatically.\n\nCanvas shaders are prepared as SPIR-V, so on Windows vulkan, which accepts SPIR-V, is chosen.",
+				"description": "In builds that run Canvas on SDL_GPU (KRKRZ_CANVAS_GPU), specifies the SDL_GPU driver used by GPUDrawDevice (e.g. vulkan). When not specified, SDL3 chooses automatically.\n\nOn Windows, vulkan (SPIR-V shaders) is chosen by default. Specifying direct3d12 runs on D3D12 (DXIL shaders); in that case the script shaders must also be supplied as a DXIL pack.",
 				"name": "gpudriver",
 				"type": "string",
 				"length": 32,

@@ -1038,7 +1038,7 @@
 			},
 			{
 				"caption": "SDL_GPU ドライバ",
-				"description": "Canvas を SDL_GPU で動かすビルド (KRKRZ_CANVAS_GPU) で、GPUDrawDevice が使う SDL_GPU のドライバ名を明示します (例: vulkan)。指定しない場合は SDL3 の自動選択に任されます。\n\nCanvas のシェーダーは SPIR-V で用意するため、Windows では SPIR-V を受け付ける vulkan が選ばれます。",
+				"description": "Canvas を SDL_GPU で動かすビルド (KRKRZ_CANVAS_GPU) で、GPUDrawDevice が使う SDL_GPU のドライバ名を明示します (例: vulkan)。指定しない場合は SDL3 の自動選択に任されます。\n\nWindows では既定で vulkan (シェーダーは SPIR-V) が選ばれます。direct3d12 を指定すると D3D12 (シェーダーは DXIL) で動きます。この場合、スクリプトのシェーダーも DXIL で用意したパックが必要です。",
 				"name": "gpudriver",
 				"type": "string",
 				"length": 32,
