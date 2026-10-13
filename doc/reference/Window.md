@@ -514,6 +514,9 @@ window.aspectLock = "";            // 固定を解除
 !!! warning "SDL3 / 汎用ビルド専用"
     Windows ネイティブ ( WINVER ) ビルドでは**何も行いません**。設定しても無視され、読み出すと常に空文字列が返ります。
 
+!!! note "macOS での制限"
+    macOS では、一度固定した比率を `""` で解除しても、ユーザによるリサイズの拘束はウインドウを作り直すまで残ります ( 読み出し値は空になります )。OS 側の不具合でウインドウ操作時に落ちるのを避けるためです。比率の切り替え ( `"4:3"` → `"16:9"` など ) も同じ理由で、前の拘束が残ることがあります。
+
 **関連:** [Window.viewportFit](Window.md#viewportfit) / [Window.setZoom](Window.md#setzoom) / [Window.setInnerSize](Window.md#setinnersize)
 
 ---

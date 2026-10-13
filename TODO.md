@@ -31,7 +31,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 区分 | 件数 | 中身 |
 |---|---|---|
 | 予定・未着手 | 22 | Elements/UI 6 / エンジン基盤 12 / ビルド・運用 4 (内訳: 中 12 / 低 9 / 検討中 1)。2026-10-12: 「VideoOverlay の再生矩形」を ✅。2026-10-09: 「共通の xp3 作成 CLI」を標準ツール `krkrxp3` で ✅。2026-10-11〜12: 「SDL 版 VideoOverlay の再生矩形」「パネルのパッド操作」を追加 |
-| 将来課題 | 8 | 着手時期未定 (中 4 / 低 4)。2026-10-09 に「GPU モードの確立と描画系プラグインの SDL_GPU 版」を追加 |
+| 将来課題 | 7 | 着手時期未定 (中 4 / 低 3)。2026-10-09 に「GPU モードの確立と描画系プラグインの SDL_GPU 版」を追加 |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 12 | 単発の小さいもの。着手順は問わない |
 | デモ整備 | 10 + 1 | 未着手デモは多くが資材待ち |
@@ -41,6 +41,9 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 [Versioning.md](src/core/doc/Versioning.md) の「移行メモ」= サマリとタグメッセージの冒頭に置く一覧。 リリース枝へ反映するときに拾う。
 
 (なし)
+
+2.6.3 (2026-10-13) までの分は krkrz.git のサマリ `247a7592` と タグ `v2.6.3` の「■ 移行メモ」へ載せた
+(非 Windows の物理メモリ量 / macOS の Retina と縦横比 / aspectLock の幅基準 / user:// の 0 バイト)。
 
 2.6.2 (2026-10-13) は移行メモなし (サマリ `62b7f602`)。
 
@@ -167,7 +170,7 @@ registerHotKey の WINVER 配線)。
 | 中 | SDL ビルドの SEH 捕捉 | ゼロ除算・アクセス違反でログを残さず即死する。WINVER は translator + minidump あり |
 | 低 | WINVER モダン化の残 | F-3 (入力)、HW mixer の直描画 |
 | 低 | WINVER に繁体字のメッセージ文字列が無い | `messages.csv` の `cht` 列は SDL3/LIB へ `resource/messages-cht.json` として届くが、WINVER の PE 文字列テーブル (`win32/vcproj/string_table_*.rc`) は jp / en / chs の 3 種のみ。zh-Hant UI では PE リソースの言語解決でフォールバックする。`gen_messages.py` に `string_table_cht.rc` の出力を足し、`tvpwin32.rc` の Chinese (Traditional) ブロックへ `#include` すれば埋まる (設定ダイアログの文字列は既に繁体字あり)。→ `src/core/common/msg/text/README.md` |
-| 低 | macOS (Retina) の point / pixel の使い分け | `SDL3WindowForm::GetSurfaceSize` が `SDL_GetWindowSize` (macOS では **point**) を使っているため、Retina では描画解像度が半分になる可能性がある。`SDL_GetWindowSizeInPixels` との使い分けを整理する必要あり。**未検証 (macOS 実機確認が前提)**。サイズ API の単位定義とあわせて判断する → [WindowGeometry.md](src/core/doc/WindowGeometry.md) §8 |
+| ✅ | macOS (Retina) の point / pixel の使い分け | **2026-10-13 に対応**: GL コンテキストの `GetSurfaceSize` を `SDL_GetWindowSizeInPixels` (実ピクセル) に、iOS / macOS のウィンドウに `SDL_WINDOW_HIGH_PIXEL_DENSITY` を付けた (サイズ API の単位は論理ポイントのまま、`displayDensity` が 192)。macOS は 4K (2 倍) で描画・マウス・Elements・フルスクリーンを確認。あわせて macOS で枠ドラッグ / フルスクリーン解除時に落ちる件 (縦横比 (0,0)) を修正 (解除が効かない既知の制限あり) → [WindowGeometry.md](src/core/doc/WindowGeometry.md) §8 |
 | 低 | generic フラグの 3 種区別 | `kirikiriz_generic` が導入当時「CS (コンシューマ) 版」の意味だったため、案件スクリプトは generic = プラグイン静的リンク前提で分岐している。PC の SDL ビルドは CS でも WINVER でもない第 3 の形態なのに区別する手段が無い。案件側スクリプトにも影響するため改定は慎重に |
 
 ## 未修正の既知バグ (回避策で運用中)
