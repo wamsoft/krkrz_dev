@@ -310,7 +310,7 @@ iTVPDialogRenderer / OGLDialogRenderer は既に中立):
 |---|---|---|
 | 1 ✅ | 基盤: core samples.tjs マージ + demolib + sysinfo デモ + ランチャ改良 (スクロール/カテゴリ/process 起動/-demotest) — 2026-07-20 完了 | src/core (submodule) + data/ |
 | 2 ✅ | elements_gallery (Elements 主要パーツ一覧、7 ページ) — 2026-07-20 完了 | src/core/data |
-| 3a ✅ | gl_canvas (OpenGL/Canvas 基礎 + エフェクト/クリップ、5 ページ) — 2026-07-20 完了 | src/core/data |
+| 3a ✅ | gl_canvas (OpenGL/Canvas 基礎 + エフェクト/クリップ、5 ページ) — 2026-07-20 完了。2026-10-13 に 7 ページへ (ステンシルクリップ / GLCompositor でレイヤーにエフェクト、エフェクト 11 種) | src/core/data |
 | 3b ✅ | gl_particles (ステートレス GPU パーティクル、50000 粒子) — 2026-07-20 完了 | src/core/data |
 | 4 ✅ | vector_demo (layerExVector + layerExImage 横断) — 2026-07-20 完了 | data/ |
 | 5 | collect_samples 集約機構 + doc/ デモ一覧ページ | tools/ + doc/ |
