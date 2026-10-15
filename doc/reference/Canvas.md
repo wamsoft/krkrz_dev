@@ -546,6 +546,7 @@ defaultShaderで描画されます。
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `commands` | `null` | 加工コマンド ( Dictionary ) の配列。省略すると素通し合成。 |
+| `opacity` | `255` | 合成時の不透明度 (0〜255)。 |
 
 **解説**
 
@@ -561,6 +562,10 @@ LUT 系 ( gamma / adjustGamma / light / lut )、
 overcolor )、近傍系 ( boxBlur / gaussianBlur )。
 各コマンドのパラメータと融合規則は
 [3D グラフィックシステム](../guide/Graphic3DSystem.md) を参照。
+
+opacity (0〜255) を指定すると、合成時に捕捉内容の α へ掛ける (gles プラグインの
+GLESAdaptor.endEffect と同じ)。現状 OpenGL 描画の Canvas で有効で、GPU 描画の
+Canvas では無視される。
 
 **関連:** [Canvas.beginEffect](Canvas.md#begineffect)
 
