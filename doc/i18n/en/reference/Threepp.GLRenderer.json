@@ -1,0 +1,309 @@
+{
+  "class": "Threepp.GLRenderer",
+  "entries": {
+    "krkrthreepp:Threepp.GLRenderer": {
+      "hash": "74f22ef6ff9c",
+      "ja": {
+        "summary": "OpenGL レンダラー",
+        "description": "シーンをレンダリングするためのレンダラーです。"
+      },
+      "tr": {
+        "summary": "OpenGL renderer",
+        "description": "The renderer used to render scenes."
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.GLRenderer": {
+      "hash": "907743c27aaa",
+      "ja": {
+        "summary": "コンストラクタ",
+        "description": "ホストが用意した GL コンテキスト上に描画するレンダラー(デバイス)。\n第1引数にホストの GL コンテキスト提供オブジェクト(gles プラグインの\nGLESAdaptor 等、GLGetProcAddress プロパティを持つもの)を渡すと、そこから\n関数ポインタ(getProcAddress)を取得して glad を初期化する。\nこれは effekseer / motion プラグインの Device と同じ結線方式。",
+        "params": {
+          "adaptor": "GL コンテキスト提供オブジェクト (GLGetProcAddress を持つ)",
+          "width": "レンダリング幅",
+          "height": "レンダリング高さ"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "description": "A renderer (device) that draws into a GL context prepared by the host.\nPass the host's GL context provider (an object with a GLGetProcAddress property, such as GLESAdaptor from the gles plugin) as the first argument; the renderer obtains the function pointers (getProcAddress) from it and initializes glad.\nThis is the same wiring as the Device of the effekseer / motion plugins.",
+        "params": {
+          "adaptor": "GL context provider (has GLGetProcAddress).",
+          "width": "Rendering width.",
+          "height": "Rendering height."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.GLRenderer@2": {
+      "hash": "f8c9f5a907c8",
+      "ja": {
+        "summary": "コンストラクタ (従来形式)",
+        "description": "GL コンテキストの current 化と glad の初期化を呼び出し側で\n済ませてある場合はこちら。ヘッドレス生成。"
+      },
+      "tr": {
+        "summary": "Constructor (legacy form)",
+        "description": "Use this form when the caller has already made the GL context current and initialized glad. Creates the renderer headless."
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.autoClear": {
+      "hash": "7b62bc340613",
+      "ja": {
+        "summary": "自動クリアするか"
+      },
+      "tr": {
+        "summary": "Whether to clear automatically"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.autoClearColor": {
+      "hash": "47923c76be7b",
+      "ja": {
+        "summary": "カラーバッファを自動クリアするか"
+      },
+      "tr": {
+        "summary": "Whether to clear the color buffer automatically"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.autoClearDepth": {
+      "hash": "a52930c12ab0",
+      "ja": {
+        "summary": "深度バッファを自動クリアするか"
+      },
+      "tr": {
+        "summary": "Whether to clear the depth buffer automatically"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.autoClearStencil": {
+      "hash": "389565c268b0",
+      "ja": {
+        "summary": "ステンシルバッファを自動クリアするか"
+      },
+      "tr": {
+        "summary": "Whether to clear the stencil buffer automatically"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.sortObjects": {
+      "hash": "c8d1c7325e62",
+      "ja": {
+        "summary": "オブジェクトをソートするか"
+      },
+      "tr": {
+        "summary": "Whether to sort objects"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.useLegacyLights": {
+      "hash": "ea1563c25f92",
+      "ja": {
+        "summary": "旧来ライティング(true)か物理的に正確(false, 既定)か"
+      },
+      "tr": {
+        "summary": "Legacy lighting (true) or physically correct lighting (false, default)"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.toneMappingExposure": {
+      "hash": "a45d6eb54d0b",
+      "ja": {
+        "summary": "トーンマッピングの露出"
+      },
+      "tr": {
+        "summary": "Tone mapping exposure"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.onBeginScene": {
+      "hash": "519abe98aa11",
+      "ja": {
+        "summary": "フレーム描画開始 (ホスト GL コンテキストが current な状態で呼ぶ)",
+        "description": "内部ステートキャッシュを無効化し、描画サイズを設定する。\nadaptor.capture() のコールバック内で render() の前に呼ぶ。",
+        "params": {
+          "width": "サーフェス幅",
+          "height": "サーフェス高さ"
+        }
+      },
+      "tr": {
+        "summary": "Begins drawing a frame (call while the host GL context is current)",
+        "description": "Invalidates the internal state cache and sets the drawing size.\nCall it inside the adaptor.capture() callback, before render().",
+        "params": {
+          "width": "Surface width.",
+          "height": "Surface height."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.onEndScene": {
+      "hash": "80beec6b585d",
+      "ja": {
+        "summary": "フレーム描画終了",
+        "description": "render() 後に呼ぶ。現状は特別な処理を行わないが、ホストとの\nGL ステート整合のために呼び出し位置を確保しておく。"
+      },
+      "tr": {
+        "summary": "Ends drawing a frame",
+        "description": "Call it after render(). It currently does nothing special, but the call site is reserved for keeping the GL state consistent with the host."
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.render": {
+      "hash": "e7a2170749e8",
+      "ja": {
+        "summary": "シーンをレンダリング",
+        "params": {
+          "scene": "シーン",
+          "camera": "カメラ"
+        }
+      },
+      "tr": {
+        "summary": "Renders a scene",
+        "params": {
+          "scene": "Scene.",
+          "camera": "Camera."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.setClearColor": {
+      "hash": "8336f05a945a",
+      "ja": {
+        "summary": "クリアカラーを設定",
+        "params": {
+          "color": "色 (0xRRGGBB)",
+          "alpha": "アルファ値"
+        }
+      },
+      "tr": {
+        "summary": "Sets the clear color",
+        "params": {
+          "color": "Color (0xRRGGBB).",
+          "alpha": "Alpha value."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.setPixelRatio": {
+      "hash": "ae91179caba9",
+      "ja": {
+        "summary": "ピクセル比を設定"
+      },
+      "tr": {
+        "summary": "Sets the pixel ratio"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.setSize": {
+      "hash": "2fde7dd8579f",
+      "ja": {
+        "summary": "サイズを設定"
+      },
+      "tr": {
+        "summary": "Sets the size"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.setSampleCount": {
+      "hash": "ebb675938d7d",
+      "ja": {
+        "summary": "MSAA (マルチサンプルアンチエイリアス) のサンプル数を設定",
+        "params": {
+          "count": "0/1=無効, 2/4/8 など。既定 4。onBeginScene が内部マルチサンプル FBO へ\n描き onEndScene で解決(resolve)してホスト FBO へ転送する。輪郭のジャギーが軽減される。\n縁の premultiplied alpha が気になる場合はホスト側(GLESAdaptor.unpremultiply)で補正する。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the number of MSAA (multisample anti-aliasing) samples",
+        "params": {
+          "count": "0/1 = disabled; 2/4/8 etc. Default 4. onBeginScene draws into an internal multisample FBO, and onEndScene resolves it and transfers the result to the host FBO. This reduces jagged edges.\nIf the premultiplied alpha at the edges is a concern, correct it on the host side (GLESAdaptor.unpremultiply)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.setScissorTest": {
+      "hash": "3206abf2d204",
+      "ja": {
+        "summary": "シザーテストの有効/無効"
+      },
+      "tr": {
+        "summary": "Enables or disables the scissor test"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.setShadowMapEnabled": {
+      "hash": "2de7d3bea499",
+      "ja": {
+        "summary": "影(ShadowMap)の有効/無効",
+        "description": "true でシャドウマップ描画を有効化する。別途、影を落とすライトの\ncastShadow=true・影を受けるメッシュの receiveShadow=true・影を落とすメッシュの\ncastShadow=true が必要。GLES/捕捉FBO 経路でも動作する(影用 FBO へ深度を焼き、\n本描画時に元の描画先へ復帰する)。\n使用例:\nrenderer.setShadowMapEnabled(true);\nvar dir = new Threepp.DirectionalLight(0xffffff, 2.0);\ndir.setPosition(3, 5, 2); dir.castShadow = true;\ndir.setShadowOrthoBounds(-6, 6, 6, -6); dir.setShadowNearFar(0.5, 30);\nscene.add(dir);\nfloor.receiveShadow = true; box.castShadow = true;"
+      },
+      "tr": {
+        "summary": "Enables or disables shadows (ShadowMap)",
+        "description": "true enables shadow map rendering. In addition, the shadow-casting light needs castShadow=true, the receiving meshes need receiveShadow=true, and the shadow-casting meshes need castShadow=true. This also works on the GLES/captured FBO path (depth is rendered into a shadow FBO, and the original render target is restored for the main pass).\nExample:\nrenderer.setShadowMapEnabled(true);\nvar dir = new Threepp.DirectionalLight(0xffffff, 2.0);\ndir.setPosition(3, 5, 2); dir.castShadow = true;\ndir.setShadowOrthoBounds(-6, 6, 6, -6); dir.setShadowNearFar(0.5, 30);\nscene.add(dir);\nfloor.receiveShadow = true; box.castShadow = true;"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.setShadowMapType": {
+      "hash": "1f65097b9452",
+      "ja": {
+        "summary": "0=Basic,1=PCF(既定),2=PCFSoft,3=VSM 相当"
+      },
+      "tr": {
+        "summary": "0=Basic, 1=PCF (default), 2=PCFSoft, 3=equivalent to VSM"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.setShadowMapAutoUpdate": {
+      "hash": "15c5ce94a50e",
+      "ja": {
+        "summary": "毎フレーム影を更新(既定 true)"
+      },
+      "tr": {
+        "summary": "Updates shadows every frame (default true)"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.setShadowMapNeedsUpdate": {
+      "hash": "fd3402f586f3",
+      "ja": {
+        "summary": "autoUpdate=false 時に1回だけ更新"
+      },
+      "tr": {
+        "summary": "Updates shadows once when autoUpdate=false"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.clear": {
+      "hash": "efd84181d2f8",
+      "ja": {
+        "summary": "バッファをクリア"
+      },
+      "tr": {
+        "summary": "Clears the buffers"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.clearColor": {
+      "hash": "79365cb53140",
+      "ja": {
+        "summary": "カラーバッファをクリア"
+      },
+      "tr": {
+        "summary": "Clears the color buffer"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.clearDepth": {
+      "hash": "f5c89f169807",
+      "ja": {
+        "summary": "深度バッファをクリア"
+      },
+      "tr": {
+        "summary": "Clears the depth buffer"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.clearStencil": {
+      "hash": "1be4bc32302f",
+      "ja": {
+        "summary": "ステンシルバッファをクリア"
+      },
+      "tr": {
+        "summary": "Clears the stencil buffer"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.dispose": {
+      "hash": "4b8ce80d5ddf",
+      "ja": {
+        "summary": "リソースを解放"
+      },
+      "tr": {
+        "summary": "Releases resources"
+      }
+    },
+    "krkrthreepp:Threepp.GLRenderer.resetState": {
+      "hash": "1d3bcf0e3c1a",
+      "ja": {
+        "summary": "状態をリセット"
+      },
+      "tr": {
+        "summary": "Resets the state"
+      }
+    }
+  }
+}

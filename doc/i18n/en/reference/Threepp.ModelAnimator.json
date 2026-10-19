@@ -1,0 +1,83 @@
+{
+  "class": "Threepp.ModelAnimator",
+  "entries": {
+    "krkrthreepp:Threepp.ModelAnimator": {
+      "hash": "1186afc0c386",
+      "ja": {
+        "summary": "モデルアニメーション再生機 (three.js の AnimationMixer 相当)",
+        "description": "対象 root (通常 model.getScene()) を内部で生かし続けるので、\nModelAnimator を保持している間はモデルも解放されない。"
+      },
+      "tr": {
+        "summary": "Model animation player (equivalent to three.js's AnimationMixer)",
+        "description": "It keeps the target root (usually model.getScene()) alive internally, so the model is not released while you hold the ModelAnimator."
+      }
+    },
+    "krkrthreepp:Threepp.ModelAnimator.ModelAnimator": {
+      "hash": "d7aee4b2ea2c",
+      "ja": {
+        "params": {
+          "root": "アニメ対象の Object3D (通常 model.getScene())"
+        }
+      },
+      "tr": {
+        "params": {
+          "root": "Object3D to animate (usually model.getScene())."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.ModelAnimator.clipAction": {
+      "hash": "19aae095a860",
+      "ja": {
+        "summary": "(GLTFModel, クリップindex) -> AnimationAction (未再生)"
+      },
+      "tr": {
+        "summary": "(GLTFModel, clip index) -> AnimationAction (not yet playing)"
+      }
+    },
+    "krkrthreepp:Threepp.ModelAnimator.play": {
+      "hash": "366e1c465bc1",
+      "ja": {
+        "summary": "(GLTFModel, index) -> AnimationAction (ループ設定+reset+play 一括。定番)"
+      },
+      "tr": {
+        "summary": "(GLTFModel, index) -> AnimationAction (sets looping, resets and plays in one call; the usual way)"
+      }
+    },
+    "krkrthreepp:Threepp.ModelAnimator.update": {
+      "hash": "b46a170bf8cc",
+      "ja": {
+        "summary": "(経過秒) 毎フレーム呼んでアニメを進める"
+      },
+      "tr": {
+        "summary": "(elapsed seconds) Call every frame to advance the animation"
+      }
+    },
+    "krkrthreepp:Threepp.ModelAnimator.stopAll": {
+      "hash": "48d672d4d0af",
+      "ja": {
+        "summary": "全アクション停止"
+      },
+      "tr": {
+        "summary": "Stops all actions"
+      }
+    },
+    "krkrthreepp:Threepp.ModelAnimator.setTimeScale": {
+      "hash": "8e639a66fc81",
+      "ja": {
+        "summary": "全体の再生速度 (1.0=等速)"
+      },
+      "tr": {
+        "summary": "Overall playback speed (1.0 = normal speed)"
+      }
+    },
+    "krkrthreepp:Threepp.ModelAnimator.getTimeScale": {
+      "hash": "7171a8222bf5",
+      "ja": {
+        "summary": "-> float"
+      },
+      "tr": {
+        "summary": "-> float"
+      }
+    }
+  }
+}

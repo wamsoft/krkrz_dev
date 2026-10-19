@@ -16,7 +16,7 @@ expat による処理がおこなわれて自動的にメソッド呼び返し�
 - [currentByteIndex](#currentbyteindex)
 - [currentLineNumber](#currentlinenumber)
 - [currentColumnNumber](#currentcolumnnumber)
-- [currentButeCount](#currentbutecount)
+- [currentByteCount](#currentbytecount)
 
 ### メソッド
 
@@ -27,7 +27,7 @@ expat による処理がおこなわれて自動的にメソッド呼び返し�
 
 ### errorCode
 
-プロパティ \ アクセス: `r/w`
+プロパティ \ アクセス: `r`
 
 **解説**
 
@@ -37,7 +37,7 @@ expat による処理がおこなわれて自動的にメソッド呼び返し�
 
 ### errorString
 
-プロパティ \ アクセス: `r/w`
+プロパティ \ アクセス: `r`
 
 **解説**
 
@@ -47,7 +47,7 @@ expat による処理がおこなわれて自動的にメソッド呼び返し�
 
 ### currentByteIndex
 
-プロパティ \ アクセス: `r/w`
+プロパティ \ アクセス: `r`
 
 **解説**
 
@@ -57,7 +57,7 @@ expat による処理がおこなわれて自動的にメソッド呼び返し�
 
 ### currentLineNumber
 
-プロパティ \ アクセス: `r/w`
+プロパティ \ アクセス: `r`
 
 **解説**
 
@@ -67,17 +67,17 @@ expat による処理がおこなわれて自動的にメソッド呼び返し�
 
 ### currentColumnNumber
 
-プロパティ \ アクセス: `r/w`
+プロパティ \ アクセス: `r`
 
 **解説**
 
-現在の行番号
+現在の列番号
 
 ---
 
-### currentButeCount
+### currentByteCount
 
-プロパティ \ アクセス: `r/w`
+プロパティ \ アクセス: `r`
 
 **解説**
 

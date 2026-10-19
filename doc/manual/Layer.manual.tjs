@@ -1996,7 +1996,7 @@ class Layer {
 	 * この値は [Layer.cursorX](Layer.md#cursorx) プロパティでも設定／取得する事ができます。
 	 * @param y マウスカーソルの ( このレイヤの表示座標における ) y 座標値をピクセル単位で指定します。
 	 *
-	 * この値は [Layer.cursorX](Layer.md#cursorx) プロパティでも設定／取得する事ができます。
+	 * この値は [Layer.cursorY](Layer.md#cursory) プロパティでも設定／取得する事ができます。
 	 */
 	function setCursorPos(x, y);
 
@@ -2050,7 +2050,7 @@ class Layer {
 	 * @param left 注視する ( このレイヤの表示座標における ) x 座標値をピクセル単位で指定します。
 	 *
 	 * この値は [Layer.attentionLeft](Layer.md#attentionleft) プロパティでも設定／取得する事ができます。
-	 * @param top 注視する ( このレイヤの表示座標における ) x 座標値をピクセル単位で指定します。
+	 * @param top 注視する ( このレイヤの表示座標における ) y 座標値をピクセル単位で指定します。
 	 *
 	 * この値は [Layer.attentionTop](Layer.md#attentiontop) プロパティでも設定／取得する事ができます。
 	 * @see Layer.useAttention

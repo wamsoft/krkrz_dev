@@ -1,0 +1,193 @@
+{
+  "class": "Threepp.Shape",
+  "entries": {
+    "krkrthreepp:Threepp.Shape": {
+      "hash": "22a0242eac25",
+      "ja": {
+        "summary": "Shape（穴付き2D形状）",
+        "description": "Pathを継承し、穴を追加できる2D形状クラス\nExtrudeGeometryやShapeGeometryで使用"
+      },
+      "tr": {
+        "summary": "Shape (2D shape with holes)",
+        "description": "A 2D shape class that inherits from Path and can have holes.\nUsed with ExtrudeGeometry and ShapeGeometry."
+      }
+    },
+    "krkrthreepp:Threepp.Shape.Shape": {
+      "hash": "4d774c850e07",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "points": "初期点の配列（省略可）"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "points": "Array of initial points (optional)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Shape.autoClose": {
+      "hash": "8d920eac4607",
+      "ja": {
+        "summary": "パスを自動的に閉じるか"
+      },
+      "tr": {
+        "summary": "Whether to close the path automatically"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.currentPoint": {
+      "hash": "ddceef6434fb",
+      "ja": {
+        "summary": "現在のペン位置（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Current pen position (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.getLength": {
+      "hash": "2ec3135cb4d8",
+      "ja": {
+        "summary": "パスの全長を取得"
+      },
+      "tr": {
+        "summary": "Gets the total length of the path"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.getPoint": {
+      "hash": "1be3886a14b6",
+      "ja": {
+        "summary": "パラメータ t (0-1) の点を取得"
+      },
+      "tr": {
+        "summary": "Gets the point at parameter t (0-1)"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.getPointAt": {
+      "hash": "5dd8fd257e98",
+      "ja": {
+        "summary": "等間隔パラメータ u の点を取得"
+      },
+      "tr": {
+        "summary": "Gets the point at arc-length parameter u"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.moveTo": {
+      "hash": "c52530716006",
+      "ja": {
+        "summary": "ペンを移動"
+      },
+      "tr": {
+        "summary": "Moves the pen"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.lineTo": {
+      "hash": "cbad6f3f02f7",
+      "ja": {
+        "summary": "直線を描画"
+      },
+      "tr": {
+        "summary": "Draws a straight line"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.quadraticCurveTo": {
+      "hash": "1d60dc6a05fb",
+      "ja": {
+        "summary": "二次ベジェ曲線を描画"
+      },
+      "tr": {
+        "summary": "Draws a quadratic Bezier curve"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.bezierCurveTo": {
+      "hash": "e154ddd2fcf9",
+      "ja": {
+        "summary": "三次ベジェ曲線を描画"
+      },
+      "tr": {
+        "summary": "Draws a cubic Bezier curve"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.arc": {
+      "hash": "1350dba9088d",
+      "ja": {
+        "summary": "相対位置から円弧を描画"
+      },
+      "tr": {
+        "summary": "Draws an arc relative to the current position"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.absarc": {
+      "hash": "83d300b64491",
+      "ja": {
+        "summary": "絶対位置で円弧を描画"
+      },
+      "tr": {
+        "summary": "Draws an arc at an absolute position"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.absellipse": {
+      "hash": "88f792f656c7",
+      "ja": {
+        "summary": "楕円を描画"
+      },
+      "tr": {
+        "summary": "Draws an ellipse"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.splineThru": {
+      "hash": "34d2218ee4bf",
+      "ja": {
+        "summary": "点の配列を通過するスプライン"
+      },
+      "tr": {
+        "summary": "Draws a spline through an array of points"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.closePath": {
+      "hash": "072eb19e179a",
+      "ja": {
+        "summary": "パスを閉じる"
+      },
+      "tr": {
+        "summary": "Closes the path"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.addHole": {
+      "hash": "81d2b7aa514a",
+      "ja": {
+        "summary": "穴を追加（Pathオブジェクト）"
+      },
+      "tr": {
+        "summary": "Adds a hole (a Path object)"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.getHole": {
+      "hash": "c6171b319070",
+      "ja": {
+        "summary": "穴を取得"
+      },
+      "tr": {
+        "summary": "Gets a hole"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.getHoleCount": {
+      "hash": "fe4e247f2cf4",
+      "ja": {
+        "summary": "穴の数を取得"
+      },
+      "tr": {
+        "summary": "Gets the number of holes"
+      }
+    },
+    "krkrthreepp:Threepp.Shape.uuid": {
+      "hash": "e4c229fa9b28",
+      "ja": {
+        "summary": "形状のUUIDを取得"
+      },
+      "tr": {
+        "summary": "Gets the UUID of the shape"
+      }
+    }
+  }
+}

@@ -1,0 +1,1680 @@
+{
+  "class": "Storages",
+  "entries": {
+    "Storages": {
+      "hash": "511b7f429b7c",
+      "ja": {
+        "summary": "Storages クラスは 吉里吉里本体の**ストレージシステム**に関するメソッドやプロパティを持ったクラスです。このクラスからオブジェクトを作成することはできません。"
+      },
+      "tr": {
+        "summary": "The Storages class has methods and properties related to the Kirikiri engine's **storage system**. You cannot create objects of this class."
+      }
+    },
+    "Storages.addAutoPath": {
+      "hash": "545f95fb4bb2",
+      "ja": {
+        "summary": "自動検索パスへの追加",
+        "description": "**自動検索パス**に、指定したパスを追加します。吉里吉里は、利用可能なストレージを\n検索するとき、この自動検索パスに登録されたパスを探します。\n\n自動検索パスは、後に指定したものがより優先されて検索されます。\n\nまた、プロジェクトフォルダはもっとも優先されて検索されます。",
+        "params": {
+          "path": "自動検索パスに追加するパスを指定します。\n\nパスの最後は、アーカイブ内のルートフォルダを指定するときは '>'、通常のフォルダを\n指定するときは '/' で終わる必要があります\n( 例 : `\"Archive/arc.xp3>\"` や `\"System/\"` ) 。\n\n2.19 beta 14 よりアーカイブの区切り文字が '#' から '>' に変わりました。"
+        }
+      },
+      "tr": {
+        "summary": "Adds to the automatic search path",
+        "description": "Adds the specified path to the **automatic search path**. When Kirikiri looks for an available storage,\nit searches the paths registered in this automatic search path.\n\nPaths added later are searched with higher priority.\n\nThe project folder is always searched first.",
+        "params": {
+          "path": "Path to add to the automatic search path.\n\nThe path must end with '>' when it specifies the root folder inside an archive, and with '/' when it\nspecifies a regular folder\n(e.g. `\"Archive/arc.xp3>\"` or `\"System/\"`).\n\nSince 2.19 beta 14, the archive delimiter has changed from '#' to '>'."
+        }
+      }
+    },
+    "Storages.removeAutoPath": {
+      "hash": "6ffb40537f45",
+      "ja": {
+        "summary": "自動検索パスの削除",
+        "description": "自動検索パスから、指定したパスを削除します。",
+        "params": {
+          "path": "自動検索から削除するパスを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Removes from the automatic search path",
+        "description": "Removes the specified path from the automatic search path.",
+        "params": {
+          "path": "Path to remove from the automatic search path."
+        }
+      }
+    },
+    "Storages.getFullPath": {
+      "hash": "b27a600b32b2",
+      "ja": {
+        "summary": "完全な統一ストレージ名の取得",
+        "description": "path で指定されたストレージ名を完全な**統一ストレージ名**に変換します。\n\n冗長なパスアクセス ( たとえば `system/flags/../data/` など ) はすべて圧縮されます。\n\nカレントメディア、カレントフォルダが指定されていなければ、補完します。",
+        "returns": "完全な統一ストレージ名",
+        "params": {
+          "path": "完全な統一ストレージ名にしたいストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the full unified storage name",
+        "description": "Converts the storage name given in path into a full **unified storage name**.\n\nRedundant path components (for example `system/flags/../data/`) are all collapsed.\n\nIf no current media or current folder is specified, they are filled in.",
+        "returns": "The full unified storage name",
+        "params": {
+          "path": "Storage name to convert into a full unified storage name."
+        }
+      }
+    },
+    "Storages.getPlacedPath": {
+      "hash": "d105ced4070e",
+      "ja": {
+        "summary": "ストレージの検索",
+        "description": "storage で指定されたストレージを**自動検索パス**から検索します。",
+        "returns": "発見された場所が統一ストレージ名で返ります。見つからなかった場合は空文字列が返ります。",
+        "params": {
+          "storage": "検索したいストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Searches for a storage",
+        "description": "Searches the **automatic search path** for the storage given in storage.",
+        "returns": "The location where it was found, as a unified storage name. An empty string if it was not found.",
+        "params": {
+          "storage": "Storage name to search for."
+        }
+      }
+    },
+    "Storages.isExistentStorage": {
+      "hash": "31cb666c258c",
+      "ja": {
+        "summary": "ストレージの存在確認",
+        "description": "storage で指定したストレージが存在するかどうかを確認します。getPlacedPath を用いるよりは高速\nです。",
+        "returns": "存在を確認できれば真、なければ偽が返ります。",
+        "params": {
+          "storage": "存在を確認したいストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Checks whether a storage exists",
+        "description": "Checks whether the storage given in storage exists. This is faster than using getPlacedPath.",
+        "returns": "true if it exists, false otherwise.",
+        "params": {
+          "storage": "Storage name to check."
+        }
+      }
+    },
+    "Storages.extractStorageExt": {
+      "hash": "b9ef2a2d96e6",
+      "ja": {
+        "summary": "ストレージ名の拡張子の抽出",
+        "description": "指定されたストレージ名から拡張子の部分を抽出して返します。",
+        "returns": "拡張子部分が返ります。拡張子部分は `.` (ドット)も含みます。拡張子が\nなかった場合は空文字列が返ります。",
+        "params": {
+          "storage": "拡張子部分を抽出したいストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Extracts the extension of a storage name",
+        "description": "Extracts and returns the extension part of the specified storage name.",
+        "returns": "The extension part, including the `.` (dot). If there is no\nextension, an empty string is returned.",
+        "params": {
+          "storage": "Storage name to extract the extension from."
+        }
+      }
+    },
+    "Storages.extractStorageName": {
+      "hash": "3ded2aafe9bc",
+      "ja": {
+        "summary": "ストレージ名の抽出",
+        "description": "指定されたストレージ名から、ストレージ名の部分 ( パスを除く ) を抽出して返します。\n\nたとえば `\"System/hoge.txt\"` を渡した場合、`\"hoge.txt\"` が返ります。",
+        "returns": "ストレージ名が返ります。ストレージ名がなかった場合は空文字列が返ります。",
+        "params": {
+          "storage": "ストレージ名を抽出したいストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Extracts the storage name",
+        "description": "Extracts and returns the name part (without the path) of the specified storage name.\n\nFor example, passing `\"System/hoge.txt\"` returns `\"hoge.txt\"`.",
+        "returns": "The storage name. If there is none, an empty string is returned.",
+        "params": {
+          "storage": "Storage name to extract the name from."
+        }
+      }
+    },
+    "Storages.extractStoragePath": {
+      "hash": "5cf429a62188",
+      "ja": {
+        "summary": "ストレージ名のパスの抽出",
+        "description": "指定されたストレージ名から、パスの部分を抽出して返します。\n\nたとえば `\"file://home/dee/hoge.txt\"` を渡した場合、`\"file://home/dee/\"` が\n返ります。",
+        "returns": "パスが返ります。パスがなかった場合は空文字列が返ります。",
+        "params": {
+          "storage": "パスを抽出したいストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Extracts the path of a storage name",
+        "description": "Extracts and returns the path part of the specified storage name.\n\nFor example, passing `\"file://home/dee/hoge.txt\"` returns `\"file://home/dee/\"`.",
+        "returns": "The path. If there is none, an empty string is returned.",
+        "params": {
+          "storage": "Storage name to extract the path from."
+        }
+      }
+    },
+    "Storages.chopStorageExt": {
+      "hash": "62d7dad9fba0",
+      "ja": {
+        "summary": "ストレージ名の拡張子の切り落とし",
+        "description": "指定されたストレージ名から拡張子の部分を切り落として返します。\n\nたとえば `\"file://home/dee/hoge.txt\"` を渡した場合、`\"file://home/dee/hoge\"` が返\nります。",
+        "returns": "拡張子部分が切り落とされたストレージ名が返ります。",
+        "params": {
+          "storage": "拡張子部分を切り落としたいストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Removes the extension from a storage name",
+        "description": "Returns the specified storage name with its extension removed.\n\nFor example, passing `\"file://home/dee/hoge.txt\"` returns `\"file://home/dee/hoge\"`.",
+        "returns": "The storage name with the extension removed.",
+        "params": {
+          "storage": "Storage name to remove the extension from."
+        }
+      }
+    },
+    "Storages.searchCD": {
+      "hash": "045508587162",
+      "ja": {
+        "summary": "CD の検索",
+        "description": "指定されたボリュームラベルを持つ CD ドライブを探して、そのドライブ文字 ( 'H' など ) を返し\nます。\n\nもちろん、ドライブには該当する CD-ROM が挿入されていなければなりません。",
+        "returns": "見つかった CD-ROM ドライブのドライブ文字が返ります。",
+        "params": {
+          "volume": "検索するCDのボリュームラベルを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Searches for a CD",
+        "description": "Looks for a CD drive with the specified volume label and returns its drive letter (such as 'H').\n\nOf course, the matching CD-ROM must be inserted in the drive.",
+        "returns": "The drive letter of the CD-ROM drive found.",
+        "params": {
+          "volume": "Volume label of the CD to search for."
+        }
+      }
+    },
+    "Storages.getLocalName": {
+      "hash": "bae3019f14cb",
+      "ja": {
+        "summary": "ローカルファイル名の取得",
+        "description": "指定された統一ストレージ名を、OS ネイティブの形式 ( ローカルファイル名 ) に変換して返します。",
+        "returns": "ローカルファイル名が返ります。ローカルファイル名に変換できなかった場合は空文字が返るか、\n例外が発生します。",
+        "params": {
+          "path": "**ローカルファイル名** に変換したい統一ストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the local file name",
+        "description": "Converts the specified unified storage name into the OS-native form (local file name) and returns it.",
+        "returns": "The local file name. If it cannot be converted to a local file name, either an empty string is returned or\nan exception is raised.",
+        "params": {
+          "path": "Unified storage name to convert into a **local file name**."
+        }
+      }
+    },
+    "Storages.selectFile": {
+      "hash": "ba1227a2ba42",
+      "ja": {
+        "summary": "ファイル選択ダイアログボックスを表示",
+        "description": "ファイル選択ダイアログボックスを開きます。\n\nvar params = %[\n\nfilter : [ \"テキストファイル(*.txt)|*.txt\", \"バイナリファイル(*.bin)|*.bin\" ],\n\nfilterIndex : 1,\n\nname : \"\",\n\ninitialDir : System.exePath,\n\ntitle : \"ファイルを開く\",\n\nsave : false,\n\n];\n\nif(Storages.selectFile(params))\n\nSystem.inform(\"選択したファイルは : \" + params.name);",
+        "returns": "ユーザがファイルを選択して OK ボタンを押せば真、キャンセルボタンを押せば偽が戻ります。",
+        "params": {
+          "params": "データの受け渡しに用いる辞書配列を指定します。\n\nこのメソッドに渡すとき、以下のメンバを指定することができます。また、\nいくつかのメンバはこのメソッドが終わると値が変更されます。\n\n**filter**\n\nフィルタ文字列を配列で渡します。\n\nフィルタ文字列は、フィルタの説明と フィルタを | (半角縦棒) で区切って指定\nするもので、フィルタにはワイルドカードを指定します。一つのフィルタに複数の\n拡張子が対応する場合は ; (半角セミコロン) で区切ります。\n\n複数のフィルタを指定するには配列で指定します。\n\n省略するとフィルタは用いません。\n\n例 :\n\n`[\"画像ファイル(*.bmp;*.png;*.jpg;*.jpeg;*.eri;*.tlg)|*.bmp;*.png;*.jpg;*.jpeg;*.eri;*.tlg\", `\n\n` \"スクリプトファイル(*.tjs;*.ks)|*.tjs;*.ks\"]`\n\n**filterIndex**\n\n選択されているフィルタの番号 ( filter で指定したもの ) を指定します。\n\n1 を指定すると、filter で指定された最初のフィルタが初期状態において\n選択されています。2 を指定すると2番目のフィルタが選択さている状態に\nなります ( 0 から始まるインデックス番号ではないことに注意してください;\n先頭は 1 です )。\n\n省略すると先頭のフィルタが選択されます。\n\nまた、ユーザが OK ボタンを押した場合、最後にダイアログボックス上で\n選ばれていたフィルタのインデックスがこのメンバに設定されます。\n\n**name**\n\nファイル名を指定します。省略したり、空文字列を指定すると初期状態ではなにもファイルを選択\nされていない状態にすることができます。\n\nまた、ユーザが OK ボタンを押した場合、選択されたファイルがこのメンバに\n設定されます。\n\n**initialDir**\n\n初期状態で表示するフォルダを指定します。\n\n省略するとカレントディレクトリが使用されます。\n\n**title**\n\nダイアログボックスのタイトルを表示します。\n\n省略されるとデフォルトの「開く」や「名前を付けて保存」になります\n( save メンバの設定によります )。\n\n**save**\n\nダイアログボックスの種類を指定します。\n\nfalse(デフォルト) の場合、「開く」のダイアログボックスが使われます。\n\ntrue の場合、「名前を付けて保存」のダイアログボックスが使われます。\n\n**defaultExt**\n\nデフォルトの拡張子を指定します。ユーザが拡張子を指定しなかった場合に\n自動的にこの拡張子を付加します。ここで指定する拡張子には . (ピリオド)を\n指定しないでください。\n\n省略すると、拡張子が付加されることはありません。\n\n**プラットフォームによる差異**\n\nWindows ネイティブ版では OS 標準のファイルダイアログ ( GetOpenFileName ) を、\nSDL 版では SDL のファイルダイアログを使用します ( いずれもデスクトップ向け )。\n\nSDL 版では filter のワイルドカード ( 例 `*.png;*.jpg` ) は SDL 形式へ変換されて\n適用されますが、title / defaultExt / filterIndex ( 初期選択・戻り値 ) は環境に\nよって無視される場合があります。選択結果の name は Windows 版と同様に正規化された\nストレージ名で書き戻されます。"
+        }
+      },
+      "tr": {
+        "summary": "Shows a file selection dialog box",
+        "description": "Opens a file selection dialog box.\n\nvar params = %[\n\nfilter : [ \"テキストファイル(*.txt)|*.txt\", \"バイナリファイル(*.bin)|*.bin\" ],\n\nfilterIndex : 1,\n\nname : \"\",\n\ninitialDir : System.exePath,\n\ntitle : \"ファイルを開く\",\n\nsave : false,\n\n];\n\nif(Storages.selectFile(params))\n\nSystem.inform(\"選択したファイルは : \" + params.name);",
+        "returns": "true if the user selects a file and presses OK, false if the user presses Cancel.",
+        "params": {
+          "params": "Dictionary used to pass data in and out.\n\nYou can specify the following members when calling this method. Some members\nare changed when the method returns.\n\n**filter**\n\nAn array of filter strings.\n\nA filter string consists of a filter description and a filter separated by | (vertical bar);\nthe filter is a wildcard pattern. If one filter covers several extensions,\nseparate them with ; (semicolon).\n\nTo specify several filters, use an array.\n\nIf omitted, no filter is used.\n\nExample:\n\n`[\"画像ファイル(*.bmp;*.png;*.jpg;*.jpeg;*.eri;*.tlg)|*.bmp;*.png;*.jpg;*.jpeg;*.eri;*.tlg\", `\n\n` \"スクリプトファイル(*.tjs;*.ks)|*.tjs;*.ks\"]`\n\n**filterIndex**\n\nNumber of the selected filter (one of those given in filter).\n\nIf you specify 1, the first filter in filter is selected\ninitially. If you specify 2, the second filter is selected\n(note that this is not a 0-based index;\nthe first one is 1).\n\nIf omitted, the first filter is selected.\n\nWhen the user presses OK, this member is set to the index of the filter that was\nlast selected in the dialog box.\n\n**name**\n\nFile name. If omitted or an empty string, no file is selected\ninitially.\n\nWhen the user presses OK, this member is set to the selected file.\n\n**initialDir**\n\nFolder shown initially.\n\nIf omitted, the current directory is used.\n\n**title**\n\nTitle of the dialog box.\n\nIf omitted, the default \"Open\" or \"Save As\" title is used\n(depending on the save member).\n\n**save**\n\nType of dialog box.\n\nIf false (default), an \"Open\" dialog box is used.\n\nIf true, a \"Save As\" dialog box is used.\n\n**defaultExt**\n\nDefault extension. It is appended automatically when the user does not specify an\nextension. Do not include the . (period) in the extension\nspecified here.\n\nIf omitted, no extension is appended.\n\n**Platform differences**\n\nThe native Windows build uses the OS standard file dialog (GetOpenFileName),\nand the SDL build uses SDL's file dialog (both for desktop).\n\nIn the SDL build, the filter wildcards (e.g. `*.png;*.jpg`) are converted to SDL format\nand applied, but title / defaultExt / filterIndex (initial selection and return value) may be ignored\ndepending on the environment. The resulting name is written back as a normalized\nstorage name, as in the Windows build."
+        }
+      }
+    },
+    "Storages.selectDirectory": {
+      "hash": "294289dfef3d",
+      "ja": {
+        "summary": "フォルダ選択ダイアログボックスを表示",
+        "description": "フォルダ ( ディレクトリ ) 選択ダイアログボックスをモーダルで開きます。\n\nvar params = %[\n\nname : \"\",\n\ntitle : \"フォルダを選択\",\n\nrootDir : System.exePath,\n\n];\n\nif(Storages.selectDirectory(params))\n\nSystem.inform(\"選択したフォルダは : \" + params.name);",
+        "returns": "ユーザがフォルダを選択して OK ボタンを押せば真、キャンセルすれば偽が戻ります。",
+        "params": {
+          "params": "データの受け渡しに用いる辞書配列を指定します。指定できるメンバは\n次の通りです。\n\n**name**\n\n初期選択フォルダを指定します。ユーザが OK を押すと、選択されたフォルダの\n正規化ストレージ名がこのメンバに書き戻されます。\n\n**title**\n\nダイアログボックスのタイトルを指定します ( WINVER ビルドのみ反映 )。\n\n**rootDir**\n\n初期表示フォルダ ( name 未指定時のフォールバック ) を指定します。\n\n**window**\n\n親にするウィンドウを指定します ( 省略可 )。\n\n**プラットフォームによる差異**\n\nWindows ネイティブ版では OS 標準のフォルダ選択ダイアログ ( IFileOpenDialog )\nを、SDL 版では SDL のフォルダ選択ダイアログ ( SDL_ShowOpenFolderDialog ) を\n使用します。SDL 版では title は無視される場合があります。"
+        }
+      },
+      "tr": {
+        "summary": "Shows a folder selection dialog box",
+        "description": "Opens a folder (directory) selection dialog box modally.\n\nvar params = %[\n\nname : \"\",\n\ntitle : \"フォルダを選択\",\n\nrootDir : System.exePath,\n\n];\n\nif(Storages.selectDirectory(params))\n\nSystem.inform(\"選択したフォルダは : \" + params.name);",
+        "returns": "true if the user selects a folder and presses OK, false if the user cancels.",
+        "params": {
+          "params": "Dictionary used to pass data in and out. The following members\ncan be specified.\n\n**name**\n\nFolder selected initially. When the user presses OK, the normalized storage name of the\nselected folder is written back to this member.\n\n**title**\n\nTitle of the dialog box (applies only to the WINVER build).\n\n**rootDir**\n\nFolder shown initially (fallback when name is not specified).\n\n**window**\n\nWindow to use as the parent (optional).\n\n**Platform differences**\n\nThe native Windows build uses the OS standard folder selection dialog (IFileOpenDialog),\nand the SDL build uses SDL's folder selection dialog (SDL_ShowOpenFolderDialog).\nIn the SDL build, title may be ignored."
+        }
+      }
+    },
+    "Storages.addCacheTargetExtension": {
+      "hash": "bf0646b8ec82",
+      "ja": {
+        "summary": "オンメモリキャッシュ対象拡張子の追加",
+        "description": "ファイルロード時にオンメモリキャッシュ ( file 層 ) へ載せる拡張子を追加します。\nここで登録された拡張子のファイルは、ストレージから読み込まれた際に\n内容がメモリ上に保持され、再アクセス時のディスク I/O を省略します。",
+        "params": {
+          "ext": "対象とする拡張子を指定します。先頭に `.` (ピリオド) が\n無ければ自動的に補われます。",
+          "minSize": "この拡張子に適用する最小ファイルサイズ ( バイト ) を\n指定します。0 ( 既定 ) を指定するとサイズ閾値なし、それより小さい\nファイルは cache 対象外となります。"
+        }
+      },
+      "tr": {
+        "summary": "Adds an extension to the in-memory cache targets",
+        "description": "Adds an extension whose files are placed in the in-memory cache (file layer) when loaded.\nFor files with a registered extension, the contents are kept in memory when read from storage,\nso disk I/O is skipped on later access.",
+        "params": {
+          "ext": "Target extension. If it does not start with `.` (period),\none is added automatically.",
+          "minSize": "Minimum file size (in bytes) for this extension.\n0 (default) means no size threshold; files smaller than the threshold\nare not cached."
+        }
+      }
+    },
+    "Storages.addDecodeTargetExtension": {
+      "hash": "64a6f443a69a",
+      "ja": {
+        "summary": "decode キャッシュ対象拡張子の追加",
+        "description": "画像デコード結果 ( decode 層キャッシュ ) に載せる拡張子を追加します。\nここで登録された拡張子のファイルは [Storages.requestCache](Storages.md#requestcache)\nからバックグラウンドでデコードまで実行されてキャッシュに載ります。",
+        "params": {
+          "ext": "対象とする拡張子を指定します。先頭に `.` (ピリオド) が\n無ければ自動的に補われます。",
+          "minSize": "この拡張子に適用する最小ファイルサイズ ( バイト ) を\n指定します。0 ( 既定 ) を指定するとサイズ閾値なし。"
+        }
+      },
+      "tr": {
+        "summary": "Adds an extension to the decode cache targets",
+        "description": "Adds an extension whose files are placed in the image decode result cache (decode layer).\nFiles with a registered extension are decoded in the background by [Storages.requestCache](Storages.md#requestcache)\nand placed in the cache.",
+        "params": {
+          "ext": "Target extension. If it does not start with `.` (period),\none is added automatically.",
+          "minSize": "Minimum file size (in bytes) for this extension.\n0 (default) means no size threshold."
+        }
+      }
+    },
+    "Storages.removeDecodeTargetExtension": {
+      "hash": "ad49c063eb85",
+      "ja": {
+        "summary": "decode キャッシュ対象拡張子の削除",
+        "description": "[Storages.addDecodeTargetExtension](Storages.md#adddecodetargetextension) で\n追加した拡張子を decode キャッシュ対象から除外します。",
+        "params": {
+          "ext": "削除する拡張子を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Removes an extension from the decode cache targets",
+        "description": "Removes an extension added with [Storages.addDecodeTargetExtension](Storages.md#adddecodetargetextension)\nfrom the decode cache targets.",
+        "params": {
+          "ext": "Extension to remove."
+        }
+      }
+    },
+    "Storages.clearArchiveCache": {
+      "hash": "874002af4db2",
+      "ja": {
+        "summary": "アーカイブキャッシュの破棄",
+        "description": "XP3 等のアーカイブを開いた際にエンジン内部で保持しているアーカイブ\nメタ情報・展開バッファのキャッシュを全て破棄します。\n\n多数のアーカイブを順次切り替えるなどしてメモリ使用量を抑えたい場合に\n利用します。"
+      },
+      "tr": {
+        "summary": "Discards the archive cache",
+        "description": "Discards all cached archive metadata and extraction buffers that the engine keeps internally\nafter opening archives such as XP3.\n\nUse it to reduce memory usage, for example when switching through many archives\none after another."
+      }
+    },
+    "Storages.clearCache": {
+      "hash": "516dd6cfcae0",
+      "ja": {
+        "summary": "キャッシュの破棄",
+        "description": "`Storages.requestCache` で読み込まれたファイルキャッシュを破棄します。\nfile 層 / decode 層の両層が対象です。",
+        "params": {
+          "path": "破棄するファイルのパスを指定します。省略または空文字列を\n指定すると transient なキャッシュ ( pin されていないもの ) のみを\n全破棄します。"
+        }
+      },
+      "tr": {
+        "summary": "Discards the cache",
+        "description": "Discards file caches loaded with `Storages.requestCache`.\nBoth the file layer and the decode layer are affected.",
+        "params": {
+          "path": "Path of the file to discard. If omitted or an empty string,\nall transient caches (those not pinned) are\ndiscarded."
+        }
+      }
+    },
+    "Storages.clearAllCaches": {
+      "hash": "a877486452a0",
+      "ja": {
+        "summary": "全キャッシュの破棄",
+        "description": "file 層 / decode 層のキャッシュをすべて破棄します。\npin されているエントリも含めて消されるため、最大強度の `doCompact(clAll)`\nに相当します。"
+      },
+      "tr": {
+        "summary": "Discards all caches",
+        "description": "Discards all caches in the file layer and the decode layer.\nPinned entries are removed as well, so this is equivalent to the strongest `doCompact(clAll)`."
+      }
+    },
+    "Storages.clearTransientCaches": {
+      "hash": "e7d6c7bed4ae",
+      "ja": {
+        "summary": "一時的キャッシュの破棄",
+        "description": "pin されていない ( transient な ) キャッシュエントリを file 層 / decode 層\nの両方から破棄します。タイトル画面に戻ったときなどの軽量なキャッシュ\nクリア用途を想定しています。"
+      },
+      "tr": {
+        "summary": "Discards transient caches",
+        "description": "Discards unpinned (transient) cache entries from both the file layer and the decode layer.\nIntended for lightweight cache clearing, such as when returning to the title screen."
+      }
+    },
+    "Storages.clearFastCache": {
+      "hash": "5b00b9b9b738",
+      "ja": {
+        "summary": "高速キャッシュの破棄",
+        "description": "`Storages.requestFastCache` で読み込まれたファイルキャッシュを破棄します。",
+        "params": {
+          "path": "破棄するファイルのパスを指定します。省略または空文字列を\n指定するとすべてのキャッシュを破棄します。"
+        }
+      },
+      "tr": {
+        "summary": "Discards the fast cache",
+        "description": "Discards file caches loaded with `Storages.requestFastCache`.",
+        "params": {
+          "path": "Path of the file to discard. If omitted or an empty string,\nall caches are discarded."
+        }
+      }
+    },
+    "Storages.clearOldCache": {
+      "hash": "c93e2b6d0ce0",
+      "ja": {
+        "summary": "古いキャッシュの破棄",
+        "description": "一定時間以上アクセスされていないキャッシュエントリを破棄します。",
+        "params": {
+          "keepTime": "保持する秒数を指定します。0 を指定すると全てのキャッシュが\n対象になります。",
+          "force": "0 以外を指定すると参照中であっても強制的に破棄します。\n既定値は 0 (参照中のものは破棄しない) 。"
+        }
+      },
+      "tr": {
+        "summary": "Discards old caches",
+        "description": "Discards cache entries that have not been accessed for a certain time.",
+        "params": {
+          "keepTime": "Number of seconds to keep entries. 0 targets all\ncaches.",
+          "force": "If nonzero, entries are discarded even while in use.\nThe default is 0 (entries in use are not discarded)."
+        }
+      }
+    },
+    "Storages.commitSavedata": {
+      "hash": "7267745de983",
+      "ja": {
+        "summary": "セーブデータのコミット",
+        "description": "セーブデータ領域へ書き込まれた内容を確定 ( コミット ) します。\n一部プラットフォームでは、savedata 領域への書き込みがこの呼び出しまで\nバッファされている場合があります。"
+      },
+      "tr": {
+        "summary": "Commits save data",
+        "description": "Commits what has been written to the save data area.\nOn some platforms, writes to the savedata area may be buffered until this call."
+      }
+    },
+    "Storages.deleteFile": {
+      "hash": "6621d5b3fadd",
+      "ja": {
+        "summary": "ファイルの削除",
+        "description": "指定したストレージファイルを削除します。あわせて自動検索パスのキャッシュ\nからも該当エントリが除去されます。",
+        "returns": "削除に成功すれば真、失敗すれば偽が返ります。",
+        "params": {
+          "path": "削除するファイルのストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Deletes a file",
+        "description": "Deletes the specified storage file. The corresponding entry is also removed from the\nautomatic search path cache.",
+        "returns": "true if the file was deleted, false otherwise.",
+        "params": {
+          "path": "Storage name of the file to delete."
+        }
+      }
+    },
+    "Storages.dirlist": {
+      "hash": "885d941d478b",
+      "ja": {
+        "summary": "ディレクトリ内一覧の取得",
+        "description": "指定ディレクトリ直下のファイル名およびサブディレクトリ名を配列で返します。\n\nサブディレクトリのエントリは末尾に `/` が付加された形になります。\n`TVP_NO_NORMALIZE_PATH` が定義されていないビルドでは、結果はすべて\n小文字に正規化されます。\n\n`.` / `..` ( 自身と親 ) は含みません。\n\nローカルの実フォルダのほか、アーカイブ内やプラグインが提供するメディア\n( `proxy://` 等 ) のフォルダも列挙できます。",
+        "returns": "ファイル名 / ディレクトリ名を要素とする配列が返ります。",
+        "params": {
+          "path": "一覧を取得したいディレクトリのストレージ名を指定します。\n末尾は `/` で終わる必要があります。"
+        }
+      },
+      "tr": {
+        "summary": "Lists a directory",
+        "description": "Returns an array of the file names and subdirectory names directly under the specified directory.\n\nSubdirectory entries end with `/`.\nIn builds where `TVP_NO_NORMALIZE_PATH` is not defined, all results are normalized\nto lowercase.\n\n`.` / `..` (the directory itself and its parent) are not included.\n\nBesides real local folders, you can also list folders inside archives and on media provided by plugins\n(such as `proxy://`).",
+        "returns": "An array of file and directory names.",
+        "params": {
+          "path": "Storage name of the directory to list.\nIt must end with `/`."
+        }
+      }
+    },
+    "Storages.dirtree": {
+      "hash": "db8cc7dfe484",
+      "ja": {
+        "summary": "ディレクトリツリーの取得",
+        "description": "指定ディレクトリ配下を再帰的に走査し、ファイル / ディレクトリ名を\n配列で返します。",
+        "returns": "パスを要素とする配列が返ります。",
+        "params": {
+          "path": "走査したいディレクトリのストレージ名を指定します。",
+          "dironly": "真を指定するとディレクトリのみを返します。既定値は偽。"
+        }
+      },
+      "tr": {
+        "summary": "Gets a directory tree",
+        "description": "Recursively walks the specified directory and returns an array of file and directory\nnames.",
+        "returns": "An array of paths.",
+        "params": {
+          "path": "Storage name of the directory to walk.",
+          "dironly": "If true, only directories are returned. Default is false."
+        }
+      }
+    },
+    "Storages.getFileProperty": {
+      "hash": "5a7cf3ff76ef",
+      "ja": {
+        "summary": "ファイルプロパティの取得",
+        "description": "指定されたストレージ名から、プロパティを取得して返します。",
+        "returns": "プロパティが辞書形式で返ります。プロパティがなかった場合はnullが返ります。",
+        "params": {
+          "storage": "プロパティを取得したいファイル名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets file properties",
+        "description": "Gets and returns the properties of the specified storage.",
+        "returns": "The properties as a dictionary. null if there are no properties.",
+        "params": {
+          "storage": "File name whose properties to get."
+        }
+      }
+    },
+    "Storages.isCacheLoading": {
+      "hash": "5fa0e145d83c",
+      "ja": {
+        "summary": "通常キャッシュ読み込み中の判定",
+        "description": "`Storages.requestCache` でリクエストしたファイルが、まだバックグラウンド\nスレッドで読み込み中であれば真を返します。",
+        "returns": "読み込み中であれば真、そうでなければ偽が返ります。"
+      },
+      "tr": {
+        "summary": "Checks whether the regular cache is loading",
+        "description": "Returns true if files requested with `Storages.requestCache` are still being loaded on the\nbackground thread.",
+        "returns": "true if loading, false otherwise."
+      }
+    },
+    "Storages.isExistentDirectory": {
+      "hash": "d32973dee731",
+      "ja": {
+        "summary": "ディレクトリの存在確認",
+        "description": "指定したディレクトリが存在するかどうかを確認します。",
+        "returns": "存在すれば真、存在しなければ偽が返ります。ローカルの実フォルダに\n対応しないストレージ名 ( アーカイブ内等 ) を渡した場合も偽が返ります\n( 例外にはなりません )。",
+        "params": {
+          "path": "確認したいディレクトリのストレージ名を指定します。\n末尾は `/` で終わる必要があります。"
+        }
+      },
+      "tr": {
+        "summary": "Checks whether a directory exists",
+        "description": "Checks whether the specified directory exists.",
+        "returns": "true if it exists, false otherwise. false is also returned for a storage name that does not\ncorrespond to a real local folder (such as one inside an archive);\nno exception is raised.",
+        "params": {
+          "path": "Storage name of the directory to check.\nIt must end with `/`."
+        }
+      }
+    },
+    "Storages.isFastCacheLoading": {
+      "hash": "7cb48770c6be",
+      "ja": {
+        "summary": "高速キャッシュ読み込み中の判定",
+        "description": "`Storages.requestFastCache` でリクエストしたファイルが、まだバックグラウンド\nスレッドで読み込み中であれば真を返します。",
+        "returns": "読み込み中であれば真、そうでなければ偽が返ります。"
+      },
+      "tr": {
+        "summary": "Checks whether the fast cache is loading",
+        "description": "Returns true if files requested with `Storages.requestFastCache` are still being loaded on the\nbackground thread.",
+        "returns": "true if loading, false otherwise."
+      }
+    },
+    "Storages.getLastModifiedFileTime": {
+      "hash": "89ff6dc321b0",
+      "ja": {
+        "summary": "ファイルの最終更新時刻の取得",
+        "description": "指定したストレージファイルの最終更新時刻を取得します。",
+        "returns": "最終更新時刻を Windows の FILETIME 形式の 64bit 整数値\n( 1601-01-01 00:00:00 UTC を起点とする 100 ナノ秒刻みの経過時間 ) で返します。\n取得に失敗した場合は 0 が返ります。\n全プラットフォーム共通で同一の単位・エポックを返すため、大小比較・差分検出の\nほか、値そのものを絶対時刻として解釈することもできます\n( fstat プラグインの Storages.getLastModifiedFileTime と同一仕様 )。",
+        "params": {
+          "path": "最終更新時刻を取得したいファイルのストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets a file's last modified time",
+        "description": "Gets the last modified time of the specified storage file.",
+        "returns": "The last modified time as a 64-bit integer in Windows FILETIME format\n(elapsed time in 100-nanosecond units since 1601-01-01 00:00:00 UTC).\nReturns 0 on failure.\nBecause the same unit and epoch are used on all platforms, you can compare values and detect changes,\nand also interpret the value itself as an absolute time\n(same specification as Storages.getLastModifiedFileTime in the fstat plugin).",
+        "params": {
+          "path": "Storage name of the file whose last modified time to get."
+        }
+      }
+    },
+    "Storages.moveFile": {
+      "hash": "0d2216eb0309",
+      "ja": {
+        "summary": "ファイルの移動 ( リネーム )",
+        "description": "指定したストレージファイルを別の場所へ移動 ( リネーム ) します。\n移動成功時は自動検索パスのキャッシュも更新されます。",
+        "returns": "移動に成功すれば真、失敗すれば偽が返ります。",
+        "params": {
+          "from": "移動元のストレージ名を指定します。",
+          "to": "移動先のストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Moves (renames) a file",
+        "description": "Moves (renames) the specified storage file to another location.\nOn success, the automatic search path cache is updated as well.",
+        "returns": "true if the file was moved, false otherwise.",
+        "params": {
+          "from": "Source storage name.",
+          "to": "Destination storage name."
+        }
+      }
+    },
+    "Storages.requestCache": {
+      "hash": "70d4712a9264",
+      "ja": {
+        "summary": "ファイルキャッシュへの読み込みリクエスト",
+        "description": "指定したファイルを通常のファイルキャッシュへバックグラウンドで\n読み込みます。\n`Storages.addCacheTargetExtension` で登録された拡張子は file 層の cache に、\n`Storages.addDecodeTargetExtension` で登録された画像拡張子は decode 層の cache\n( デコード結果 ) に載ります。両方該当する拡張子は両層に並行で発火します。",
+        "params": {
+          "path": "読み込み対象のファイルのストレージ名を指定します。",
+          "minSize": "この呼び出しに限った最小ファイルサイズ閾値 ( バイト ) を\n指定します。0 ( 既定 ) を指定すると拡張子側の登録設定に従います。"
+        }
+      },
+      "tr": {
+        "summary": "Requests loading into the file cache",
+        "description": "Loads the specified file into the regular file cache in the background.\nExtensions registered with `Storages.addCacheTargetExtension` go into the file-layer cache, and\nimage extensions registered with `Storages.addDecodeTargetExtension` go into the decode-layer cache\n(decoded results). For extensions registered in both, both layers are triggered in parallel.",
+        "params": {
+          "path": "Storage name of the file to load.",
+          "minSize": "Minimum file size threshold (in bytes) for this call only.\n0 (default) follows the setting registered for the extension."
+        }
+      }
+    },
+    "Storages.requestFastCache": {
+      "hash": "eae897327da5",
+      "ja": {
+        "summary": "高速ファイルキャッシュへの読み込みリクエスト",
+        "description": "指定したファイルを高速キャッシュへバックグラウンドで読み込みます。\n内部キューが通常キャッシュと別系統になっており、\n`Storages.requestCache` よりも高優先で処理されます。",
+        "params": {
+          "path": "読み込み対象のファイルのストレージ名を指定します。",
+          "minSize": "この呼び出しに限った最小ファイルサイズ閾値 ( バイト ) を\n指定します。0 ( 既定 ) を指定すると拡張子側の登録設定に従います。"
+        }
+      },
+      "tr": {
+        "summary": "Requests loading into the fast file cache",
+        "description": "Loads the specified file into the fast cache in the background.\nIts internal queue is separate from the regular cache and is processed\nwith higher priority than `Storages.requestCache`.",
+        "params": {
+          "path": "Storage name of the file to load.",
+          "minSize": "Minimum file size threshold (in bytes) for this call only.\n0 (default) follows the setting registered for the extension."
+        }
+      }
+    },
+    "Storages.isImagePrefetchLoading": {
+      "hash": "0c6501744152",
+      "ja": {
+        "summary": "画像 decode prefetch の進行状況の判定",
+        "description": "[Storages.requestCache](Storages.md#requestcache) などから発火された\n画像 decode prefetch ( decode 層 ) のジョブが、まだバックグラウンドで\n処理中の場合に真を返します。\n`Storages.isCacheLoading` が file 層を見るのに対し、こちらは decode 層\nの polling 用です。",
+        "returns": "進行中であれば真、そうでなければ偽が返ります。"
+      },
+      "tr": {
+        "summary": "Checks the progress of image decode prefetch",
+        "description": "Returns true while image decode prefetch jobs (decode layer) triggered by\n[Storages.requestCache](Storages.md#requestcache) and the like are still being\nprocessed in the background.\nWhereas `Storages.isCacheLoading` looks at the file layer, this one is for polling the\ndecode layer.",
+        "returns": "true if in progress, false otherwise."
+      }
+    },
+    "Storages.pinCache": {
+      "hash": "e931c87fe133",
+      "ja": {
+        "summary": "キャッシュエントリの pin 化",
+        "description": "指定パスの cache エントリを file 層 / decode 層の両方で **pin** 状態に\nし、`clearCache(空文字列)` や `clearTransientCaches` の対象外にします。\n同時に、まだ cache に載っていなければ非同期 load を自動で発火します。\nautopath 経由のファイルでも、実体パスへ正規化した上で pin されます。",
+        "params": {
+          "path": "pin したいファイルのストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Pins a cache entry",
+        "description": "Puts the cache entry for the specified path into the **pinned** state in both the file layer and the decode layer,\nexcluding it from `clearCache(empty string)` and `clearTransientCaches`.\nIf it is not in the cache yet, an asynchronous load is triggered automatically.\nFiles found through the autopath are pinned after being normalized to their actual path.",
+        "params": {
+          "path": "Storage name of the file to pin."
+        }
+      }
+    },
+    "Storages.unpinCache": {
+      "hash": "a51f8219e0c8",
+      "ja": {
+        "summary": "キャッシュエントリの pin 解除",
+        "description": "[Storages.pinCache](Storages.md#pincache) で pin したエントリを解除します。\n解除後は transient なクリア対象に戻ります ( ただちに破棄はされません )。",
+        "params": {
+          "path": "pin を解除したいファイルのストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Unpins a cache entry",
+        "description": "Unpins an entry pinned with [Storages.pinCache](Storages.md#pincache).\nAfterwards it is again subject to transient clearing (it is not discarded immediately).",
+        "params": {
+          "path": "Storage name of the file to unpin."
+        }
+      }
+    },
+    "Storages.isCachePinned": {
+      "hash": "cf882a1344db",
+      "ja": {
+        "summary": "cache エントリが pin されているかの判定",
+        "description": "指定パスが file 層または decode 層で pin 状態かを返します。",
+        "returns": "pin 状態であれば真、そうでなければ偽が返ります。",
+        "params": {
+          "path": "判定したいファイルのストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Checks whether a cache entry is pinned",
+        "description": "Returns whether the specified path is pinned in the file layer or the decode layer.",
+        "returns": "true if pinned, false otherwise.",
+        "params": {
+          "path": "Storage name of the file to check."
+        }
+      }
+    },
+    "Storages.getFileCacheList": {
+      "hash": "178b74391de1",
+      "ja": {
+        "summary": "file 層キャッシュ一覧の取得",
+        "description": "file 層キャッシュ ( `requestCache` 系で確保されたバイナリ ) のエントリ\n一覧を、辞書の配列で返します。\n\n各エントリは以下のキーを持ちます。\n\n- `path`        : 正規化されたストレージパス ( String )\n- `size`        : バイト数 ( Integer )\n- `lastaccess`  : 最終アクセス時刻 ( プラットフォーム依存の整数 )\n- `usecount`    : 現在の参照カウント ( Integer )\n- `pinned`      : pin 状態 ( 0 or 1 )",
+        "returns": "cache エントリの辞書配列。"
+      },
+      "tr": {
+        "summary": "Gets the file-layer cache list",
+        "description": "Returns the entries of the file-layer cache (binaries held by the `requestCache` family)\nas an array of dictionaries.\n\nEach entry has the following keys.\n\n- `path`        : normalized storage path (String)\n- `size`        : number of bytes (Integer)\n- `lastaccess`  : last access time (platform-dependent integer)\n- `usecount`    : current reference count (Integer)\n- `pinned`      : pinned state (0 or 1)",
+        "returns": "An array of cache entry dictionaries."
+      }
+    },
+    "Storages.getImageCacheList": {
+      "hash": "09c4d4aa4ce9",
+      "ja": {
+        "summary": "decode 層キャッシュ一覧の取得",
+        "description": "decode 層キャッシュ ( デコード済み Bitmap ) のエントリ一覧を、辞書の\n配列で返します。\n\n各エントリは以下のキーを持ちます。\n\n- `path`    : 正規化されたストレージパス ( String )\n- `keyidx`  : 同一パス内のバリエーション番号 ( Integer )\n- `mode`    : 読み込みモード ( Integer; 内部定数 )\n- `dw, dh`  : 表示サイズ ( Integer )\n- `width, height` : 元 Bitmap サイズ ( Integer )\n- `bytes`   : 占有バイト数 ( Integer )\n- `pinned`  : pin 状態 ( 0 or 1 )",
+        "returns": "cache エントリの辞書配列。"
+      },
+      "tr": {
+        "summary": "Gets the decode-layer cache list",
+        "description": "Returns the entries of the decode-layer cache (decoded Bitmaps) as an array of\ndictionaries.\n\nEach entry has the following keys.\n\n- `path`    : normalized storage path (String)\n- `keyidx`  : variation number within the same path (Integer)\n- `mode`    : load mode (Integer; internal constant)\n- `dw, dh`  : display size (Integer)\n- `width, height` : original Bitmap size (Integer)\n- `bytes`   : bytes occupied (Integer)\n- `pinned`  : pinned state (0 or 1)",
+        "returns": "An array of cache entry dictionaries."
+      }
+    },
+    "Storages.dumpFileCacheList": {
+      "hash": "52af647a4b22",
+      "ja": {
+        "summary": "file 層キャッシュ一覧のログ出力",
+        "description": "file 層キャッシュエントリ一覧を WARNING レベルでログに出力します。\nMASTER ビルドでも出力されます。REPL の `.fcache` と同等です。"
+      },
+      "tr": {
+        "summary": "Logs the file-layer cache list",
+        "description": "Writes the list of file-layer cache entries to the log at WARNING level.\nIt is output even in MASTER builds. Equivalent to `.fcache` in the REPL."
+      }
+    },
+    "Storages.dumpImageCacheList": {
+      "hash": "536c21bf43da",
+      "ja": {
+        "summary": "decode 層キャッシュ一覧のログ出力",
+        "description": "decode 層キャッシュエントリ一覧を WARNING レベルでログに出力します。\nMASTER ビルドでも出力されます。REPL の `.icache` と同等です。"
+      },
+      "tr": {
+        "summary": "Logs the decode-layer cache list",
+        "description": "Writes the list of decode-layer cache entries to the log at WARNING level.\nIt is output even in MASTER builds. Equivalent to `.icache` in the REPL."
+      }
+    },
+    "Storages.rollbackSavedata": {
+      "hash": "b644aba0d4cc",
+      "ja": {
+        "summary": "セーブデータのロールバック",
+        "description": "セーブデータ領域への書き込みを破棄し、最後にコミットされた状態へ戻します。"
+      },
+      "tr": {
+        "summary": "Rolls back save data",
+        "description": "Discards writes to the save data area and returns to the last committed state."
+      }
+    },
+    "Storages.setCacheMaxSize": {
+      "hash": "cdaa8dc43608",
+      "ja": {
+        "summary": "ファイルキャッシュの最大サイズの設定",
+        "description": "`Storages.requestCache` 系で保持するファイルキャッシュ全体の最大サイズを\n設定します。キャッシュ済みファイルの合計サイズがこの値を超えると、古い\nエントリから順に破棄されます。既定値は 200MB ( 200 * 1024 * 1024 ) です。",
+        "params": {
+          "size": "キャッシュの最大サイズを「バイト単位」で指定します\n( エントリ数ではありません )。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the maximum file cache size",
+        "description": "Sets the maximum total size of the file cache held by the `Storages.requestCache` family.\nWhen the total size of cached files exceeds this value, entries are discarded starting\nwith the oldest. The default is 200MB (200 * 1024 * 1024).",
+        "params": {
+          "size": "Maximum cache size in bytes\n(not a number of entries)."
+        }
+      }
+    },
+    "Storages.fstat": {
+      "hash": "defc059dc662",
+      "ja": {
+        "summary": "ファイルのサイズと更新時刻の取得",
+        "description": "指定したストレージのサイズと最終更新時刻を辞書で返します。\n\n- `size` … ファイルサイズ ( バイト数 )\n- `mtime` … 最終更新時刻 ( Date オブジェクト )。時刻が取れない場合は入りません\n\nアーカイブ内のファイルやプラグインが提供するメディア ( `proxy://` 等 ) は\n実ファイルが無いため `size` だけが入ります。\n\nfstat プラグインを読み込んだ環境では、プラグイン版 ( `atime` / `ctime` も返す ) に\n置き換わります。更新時刻を数値で比較したい場合は\n[Storages.getLastModifiedFileTime](Storages.md#getlastmodifiedfiletime) を使います。",
+        "returns": "`%[ size, mtime ]` の辞書が返ります。開けない場合は例外になります。",
+        "params": {
+          "storage": "対象のストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets a file's size and modified time",
+        "description": "Returns the size and last modified time of the specified storage as a dictionary.\n\n- `size` … file size (number of bytes)\n- `mtime` … last modified time (Date object). Omitted if the time cannot be obtained\n\nFiles inside archives and on media provided by plugins (such as `proxy://`)\nhave no real file, so only `size` is included.\n\nWhen the fstat plugin is loaded, it is replaced by the plugin version (which also returns `atime` / `ctime`).\nTo compare modified times numerically, use\n[Storages.getLastModifiedFileTime](Storages.md#getlastmodifiedfiletime).",
+        "returns": "A dictionary `%[ size, mtime ]`. An exception is raised if the storage cannot be opened.",
+        "params": {
+          "storage": "Target storage name."
+        }
+      }
+    },
+    "Storages.getTime": {
+      "hash": "f6309fe009b1",
+      "ja": {
+        "summary": "更新時刻の取得",
+        "description": "ローカルの実ファイルまたはフォルダの最終更新時刻を `%[ mtime ]` の辞書で返します\n( `mtime` は Date オブジェクト )。アーカイブ内のファイルは対象にできません。\n\nfstat プラグインを読み込んだ環境では、プラグイン版 ( `ctime` / `atime` も返す ) に\n置き換わります。",
+        "returns": "`%[ mtime ]` の辞書が返ります。見つからない場合は例外になります。",
+        "params": {
+          "target": "対象のファイルまたはフォルダのストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the modified time",
+        "description": "Returns the last modified time of a real local file or folder as a dictionary `%[ mtime ]`\n(`mtime` is a Date object). Files inside archives are not supported.\n\nWhen the fstat plugin is loaded, it is replaced by the plugin version (which also returns `ctime` / `atime`).",
+        "returns": "A dictionary `%[ mtime ]`. An exception is raised if the target is not found.",
+        "params": {
+          "target": "Storage name of the target file or folder."
+        }
+      }
+    },
+    "Storages.currentPath": {
+      "hash": "269fdcf7d139",
+      "ja": {
+        "summary": "カレントディレクトリ",
+        "description": "プロセスのカレントディレクトリをストレージ名 ( 末尾は `/` ) で返します。\n`Storages.getFullPath(Storages.currentPath + name)` のように、相対パスの基準に使えます。\nカレントディレクトリの概念が無い環境では空文字列になります。\n\n本体版は読み取り専用です。fstat プラグインを読み込んだ環境 ( WINVER ) では\nプラグイン版に置き換わり、代入でカレントディレクトリを変更できます。"
+      },
+      "tr": {
+        "summary": "Current directory",
+        "description": "Returns the process's current directory as a storage name (ending with `/`).\nYou can use it as the base for relative paths, as in `Storages.getFullPath(Storages.currentPath + name)`.\nIn environments without the concept of a current directory, it is an empty string.\n\nThe engine version is read-only. When the fstat plugin is loaded (WINVER), it is replaced\nby the plugin version, and you can change the current directory by assigning to it."
+      }
+    },
+    "Storages.createDirectory": {
+      "hash": "57922882c531",
+      "ja": {
+        "summary": "ディレクトリの作成",
+        "description": "指定したディレクトリを作成します。途中の階層が無ければそれも作ります。",
+        "returns": "作成できれば真、できなければ偽が返ります。",
+        "params": {
+          "path": "作成するディレクトリのストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Creates a directory",
+        "description": "Creates the specified directory, including any missing intermediate directories.",
+        "returns": "true if it was created, false otherwise.",
+        "params": {
+          "path": "Storage name of the directory to create."
+        }
+      }
+    },
+    "Storages.removeDirectory": {
+      "hash": "fc96f1fb7d19",
+      "ja": {
+        "summary": "ディレクトリの削除",
+        "description": "指定したディレクトリを削除します。中にファイルが残っている場合は削除されません。",
+        "returns": "削除できれば真、できなければ偽が返ります。",
+        "params": {
+          "path": "削除するディレクトリのストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Removes a directory",
+        "description": "Removes the specified directory. It is not removed if files remain in it.",
+        "returns": "true if it was removed, false otherwise.",
+        "params": {
+          "path": "Storage name of the directory to remove."
+        }
+      }
+    },
+    "Storages.copyFile": {
+      "hash": "3f500cee3356",
+      "ja": {
+        "summary": "ファイルのコピー",
+        "description": "ストレージ空間中のファイルを別のストレージ名へコピーします。\nコピー元はアーカイブ内のファイルでもかまいません。",
+        "returns": "コピーできれば真、コピー先があって止めた場合は偽が返ります。",
+        "params": {
+          "from": "コピー元のストレージ名を指定します。",
+          "to": "コピー先のストレージ名を指定します。",
+          "failIfExist": "真を指定すると、コピー先が既にある場合は何もせず偽を返します。\n偽 ( 既定 ) なら上書きします。"
+        }
+      },
+      "tr": {
+        "summary": "Copies a file",
+        "description": "Copies a file in the storage space to another storage name.\nThe source may be a file inside an archive.",
+        "returns": "true if copied; false if it stopped because the destination already exists.",
+        "params": {
+          "from": "Source storage name.",
+          "to": "Destination storage name.",
+          "failIfExist": "If true and the destination already exists, does nothing and returns false.\nIf false (default), the destination is overwritten."
+        }
+      }
+    },
+    "Storages.exportFile": {
+      "hash": "f2bc6fdd44a9",
+      "ja": {
+        "summary": "ファイルの書き出し",
+        "description": "ストレージ空間中のファイル ( アーカイブ内のものを含む ) を、指定したストレージ名へ\n書き出します。コピー先があれば上書きします。",
+        "params": {
+          "storage": "書き出すファイルのストレージ名を指定します。",
+          "dest": "書き出し先のストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Exports a file",
+        "description": "Writes a file in the storage space (including one inside an archive) to the specified storage name.\nAn existing destination is overwritten.",
+        "params": {
+          "storage": "Storage name of the file to export.",
+          "dest": "Destination storage name."
+        }
+      }
+    },
+    "Storages.truncateFile": {
+      "hash": "64d6c2f61c1d",
+      "ja": {
+        "summary": "ファイルの切り詰め",
+        "description": "ローカルの実ファイルを指定したサイズに切り詰めます。\n成功するとそのファイルの読み込みキャッシュも破棄されます。",
+        "returns": "切り詰めできれば真、できなければ偽が返ります。",
+        "params": {
+          "storage": "対象のストレージ名を指定します。",
+          "size": "切り詰めた後のサイズ ( バイト数 ) を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Truncates a file",
+        "description": "Truncates a real local file to the specified size.\nOn success, the read cache for that file is also discarded.",
+        "returns": "true if truncated, false otherwise.",
+        "params": {
+          "storage": "Target storage name.",
+          "size": "Size after truncation (in bytes)."
+        }
+      }
+    },
+    "Storages.getMD5HashString": {
+      "hash": "26130b49877b",
+      "ja": {
+        "summary": "MD5 ハッシュ値の取得",
+        "description": "指定したストレージの内容の MD5 ハッシュ値を返します。\nアーカイブ内のファイルも対象にできます。",
+        "returns": "32 文字の 16 進文字列 ( 小文字 ) が返ります。開けない場合は例外になります。",
+        "params": {
+          "storage": "対象のストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the MD5 hash",
+        "description": "Returns the MD5 hash of the contents of the specified storage.\nFiles inside archives are also supported.",
+        "returns": "A 32-character lowercase hexadecimal string. An exception is raised if the storage cannot be opened.",
+        "params": {
+          "storage": "Target storage name."
+        }
+      }
+    },
+    "Storages.getTemporaryName": {
+      "hash": "55584a1999cd",
+      "ja": {
+        "summary": "一時ファイル名の取得",
+        "description": "一時ファイルに使えるローカルのファイル名を 1 つ払い出します。\n\n置き場所は OS の一時フォルダです (Windows は環境変数 TMP → TEMP → USERPROFILE の順)。\nそこに書き込めない場合や、環境変数が全く無い状態で起動されて Windows ディレクトリに\nなってしまった場合は、ログに警告を出してセーブデータのフォルダ\n([System.dataPath](System.md#datapath)) を使います。アーカイブ内のプラグイン DLL を\n取り出すときも同じ場所が使われます。",
+        "returns": "一時ファイル名が返ります。"
+      },
+      "tr": {
+        "summary": "Gets a temporary file name",
+        "description": "Issues one local file name that can be used for a temporary file.\n\nThe location is the OS temporary folder (on Windows, the TMP, TEMP, then USERPROFILE environment variables, in that order).\nIf that folder cannot be written to, or if the engine was started with no environment variables at all and it resolved\nto the Windows directory, a warning is logged and the save data folder\n([System.dataPath](System.md#datapath)) is used instead. The same location is used when extracting plugin DLLs\nfrom archives.",
+        "returns": "A temporary file name."
+      }
+    },
+    "Storages.isExistentStorageNoSearchNoNormalize": {
+      "hash": "98ff97ff70a8",
+      "ja": {
+        "summary": "正規化・検索なしの存在確認",
+        "description": "パスの正規化も自動検索パスからの検索も行わずに、ストレージが存在するかを確認します。",
+        "returns": "存在すれば真、存在しなければ偽が返ります。",
+        "params": {
+          "storage": "確認するストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Checks existence without normalization or search",
+        "description": "Checks whether a storage exists without normalizing the path or searching the automatic search path.",
+        "returns": "true if it exists, false otherwise.",
+        "params": {
+          "storage": "Storage name to check."
+        }
+      }
+    },
+    "Storages.clearStorageCaches": {
+      "hash": "82ae8a435a0e",
+      "ja": {
+        "summary": "ストレージのキャッシュの破棄",
+        "description": "アーカイブ ( XP3 ) のセグメントキャッシュと、自動検索パスのキャッシュを破棄します。\nエンジンの外でファイルを追加・削除した後に呼びます。"
+      },
+      "tr": {
+        "summary": "Discards storage caches",
+        "description": "Discards the archive (XP3) segment cache and the automatic search path cache.\nCall it after adding or deleting files outside the engine."
+      }
+    },
+    "fstat:Storages": {
+      "hash": "fc9c5a5ef2e6",
+      "ja": {
+        "summary": "擬似コードによるマニュアル",
+        "description": "Copyright 2007 GoWatanabe"
+      },
+      "tr": {
+        "summary": "Manual written as pseudo-code",
+        "description": "Copyright 2007 GoWatanabe"
+      }
+    },
+    "fstat:Storages.fstat": {
+      "hash": "bea1c18e7ee5",
+      "ja": {
+        "summary": "ファイル属性の取得",
+        "description": "※本体にも同名のメソッドがありますが、本プラグインを読み込むと\nこちらの版で上書きされます。本体版との違い: 本体版は size と mtime だけを返し、atime / ctime を返しません。",
+        "returns": "属性情報の入った辞書\nsize: ファイルサイズ\nmtime: 更新日時 (Date オブジェクト)\natime: アクセス日時 (Date オブジェクト)\nctime: 作成日時 (Date オブジェクト)",
+        "params": {
+          "file": "対象ファイル"
+        }
+      },
+      "tr": {
+        "summary": "Gets file attributes",
+        "description": "Note: the engine also has a method of the same name, but loading this plugin\nreplaces it with this version. Difference from the engine version: the engine version returns only size and mtime, not atime / ctime.",
+        "returns": "Dictionary containing attribute information\nsize: file size\nmtime: modified time (Date object)\natime: access time (Date object)\nctime: creation time (Date object)",
+        "params": {
+          "file": "Target file"
+        }
+      }
+    },
+    "fstat:Storages.exportFile": {
+      "hash": "9e1891b83509",
+      "ja": {
+        "summary": "吉里吉里のストレージ空間中のファイルを抽出する",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.exportFile](Storages.md#exportfile) を参照してください。",
+        "params": {
+          "src": "保存元ファイル",
+          "dest": "保存先ファイル"
+        }
+      },
+      "tr": {
+        "summary": "Extracts a file from the Kirikiri storage space",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.exportFile](Storages.md#exportfile) for the specification.",
+        "params": {
+          "src": "Source file",
+          "dest": "Destination file"
+        }
+      }
+    },
+    "fstat:Storages.deleteFile": {
+      "hash": "294ded72d5bc",
+      "ja": {
+        "summary": "吉里吉里のストレージ空間中の指定ファイルを削除する。",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.deleteFile](Storages.md#deletefile) を参照してください。",
+        "returns": "実際に削除されたら true\n実ファイルがある場合のみ削除されます",
+        "params": {
+          "file": "削除対象ファイル"
+        }
+      },
+      "tr": {
+        "summary": "Deletes the specified file in the Kirikiri storage space.",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.deleteFile](Storages.md#deletefile) for the specification.",
+        "returns": "true if the file was actually deleted\nOnly real files are deleted",
+        "params": {
+          "file": "File to delete"
+        }
+      }
+    },
+    "fstat:Storages.truncateFile": {
+      "hash": "073d717b00a1",
+      "ja": {
+        "summary": "吉里吉里のストレージ空間中の指定ファイルのサイズを変更する(切り捨てる)",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.truncateFile](Storages.md#truncatefile) を参照してください。",
+        "returns": "サイズ変更できたら true\n実ファイルがある場合のみ処理されます",
+        "params": {
+          "file": "ファイル",
+          "size": "指定サイズ"
+        }
+      },
+      "tr": {
+        "summary": "Changes (truncates) the size of the specified file in the Kirikiri storage space",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.truncateFile](Storages.md#truncatefile) for the specification.",
+        "returns": "true if the size was changed\nOnly real files are processed",
+        "params": {
+          "file": "File",
+          "size": "New size"
+        }
+      }
+    },
+    "fstat:Storages.moveFile": {
+      "hash": "d4ad210d4b02",
+      "ja": {
+        "summary": "指定ファイルを移動する。",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.moveFile](Storages.md#movefile) を参照してください。",
+        "returns": "実際に移動されたら true\n移動対象ファイルが実在し、移動先パスにファイルが無い場合のみ移動されます\n※パスはNormalize/Placedチェックされないのでフルパスで記入のこと",
+        "params": {
+          "fromFile": "移動対象ファイル",
+          "toFile": "移動先パス"
+        }
+      },
+      "tr": {
+        "summary": "Moves the specified file.",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.moveFile](Storages.md#movefile) for the specification.",
+        "returns": "true if the file was actually moved\nThe file is moved only if it exists and there is no file at the destination path\nNote: paths are not normalized or checked with getPlacedPath, so write full paths",
+        "params": {
+          "fromFile": "File to move",
+          "toFile": "Destination path"
+        }
+      }
+    },
+    "fstat:Storages.dirlist": {
+      "hash": "39e11d5ab241",
+      "ja": {
+        "summary": "指定ディレクトリのファイル一覧を取得する",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.dirlist](Storages.md#dirlist) を参照してください。",
+        "returns": "ファイル名一覧が格納された配列",
+        "params": {
+          "dir": "ディレクトリ名"
+        }
+      },
+      "tr": {
+        "summary": "Gets the list of files in the specified directory",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.dirlist](Storages.md#dirlist) for the specification.",
+        "returns": "Array containing the file names",
+        "params": {
+          "dir": "Directory name"
+        }
+      }
+    },
+    "fstat:Storages.dirlistEx": {
+      "hash": "4d9579134b6b",
+      "ja": {
+        "summary": "指定ディレクトリのファイル一覧と詳細情報を取得する",
+        "returns": "ファイル情報一覧が格納された配列\n[ %[ name:ファイル名, size, attrib, mtime, atime, ctime ], ... ]\ndirlistと違いnameにおいてフォルダの場合の末尾\"/\"追加がないので注意(attribで判定のこと)",
+        "params": {
+          "dir": "ディレクトリ名"
+        }
+      },
+      "tr": {
+        "summary": "Gets the list of files in the specified directory with details",
+        "returns": "Array containing file information\n[ %[ name:file name, size, attrib, mtime, atime, ctime ], ... ]\nNote that unlike dirlist, name does not get a trailing \"/\" for folders (use attrib to tell them apart)",
+        "params": {
+          "dir": "Directory name"
+        }
+      }
+    },
+    "fstat:Storages.dirtree": {
+      "hash": "5e66e21d5182",
+      "ja": {
+        "summary": "指定ディレクトリ以下のファイル・フォルダ一覧（サブフォルダ含む）を取得する",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.dirtree](Storages.md#dirtree) を参照してください。",
+        "returns": "一覧が格納された配列（木構造ではなくサブフォルダ含む全列挙）\n一覧には ./ ../ 系の自身や親の参照は含まれません",
+        "params": {
+          "dir": "ディレクトリ名",
+          "dironly": "フォルダ名のみでファイルは除外する"
+        }
+      },
+      "tr": {
+        "summary": "Gets the list of files and folders under the specified directory (including subfolders)",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.dirtree](Storages.md#dirtree) for the specification.",
+        "returns": "Array containing the list (a flat enumeration including subfolders, not a tree)\nThe list does not include self or parent references such as ./ and ../",
+        "params": {
+          "dir": "Directory name",
+          "dironly": "List folder names only, excluding files"
+        }
+      }
+    },
+    "fstat:Storages.removeDirectory": {
+      "hash": "7c9503e4bc03",
+      "ja": {
+        "summary": "指定ディレクトリを削除する",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.removeDirectory](Storages.md#removedirectory) を参照してください。",
+        "returns": "実際に削除されたら true\n中にファイルが無い場合のみ削除されます",
+        "params": {
+          "dir": "ディレクトリ名"
+        }
+      },
+      "tr": {
+        "summary": "Removes the specified directory",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.removeDirectory](Storages.md#removedirectory) for the specification.",
+        "returns": "true if the directory was actually removed\nIt is removed only if it contains no files",
+        "params": {
+          "dir": "Directory name"
+        }
+      }
+    },
+    "fstat:Storages.createDirectory": {
+      "hash": "205d35b524c1",
+      "ja": {
+        "summary": "ディレクトリを作成する",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.createDirectory](Storages.md#createdirectory) を参照してください。",
+        "returns": "実際に作成できたら true",
+        "params": {
+          "dir": "ディレクトリ名"
+        }
+      },
+      "tr": {
+        "summary": "Creates a directory",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.createDirectory](Storages.md#createdirectory) for the specification.",
+        "returns": "true if the directory was actually created",
+        "params": {
+          "dir": "Directory name"
+        }
+      }
+    },
+    "fstat:Storages.createDirectoryNoNormalize": {
+      "hash": "ed4f7037e142",
+      "ja": {
+        "summary": "パスの正規化を行なわずディレクトリを作成する",
+        "description": "(ディレクトリ名が小文字に変換されない)",
+        "returns": "実際に作成できたら true",
+        "params": {
+          "dir": "ディレクトリ名"
+        }
+      },
+      "tr": {
+        "summary": "Creates a directory without normalizing the path",
+        "description": "(The directory name is not converted to lowercase.)",
+        "returns": "true if the directory was actually created",
+        "params": {
+          "dir": "Directory name"
+        }
+      }
+    },
+    "fstat:Storages.changeDirectory": {
+      "hash": "1e13e24c2c82",
+      "ja": {
+        "summary": "カレントディレクトリを変更する",
+        "returns": "実際に変更できたら true",
+        "params": {
+          "dir": "ディレクトリ名"
+        }
+      },
+      "tr": {
+        "summary": "Changes the current directory",
+        "returns": "true if the directory was actually changed",
+        "params": {
+          "dir": "Directory name"
+        }
+      }
+    },
+    "fstat:Storages.setFileAttributes": {
+      "hash": "ff04e946a189",
+      "ja": {
+        "summary": "ファイルの属性を設定する",
+        "params": {
+          "filename": "ファイル/ディレクトリ名",
+          "attr": "設定する属性(FILE_ATTRIBUTE_READONLY,FILE_ATTRIBUTE_HIDDEN,...)"
+        }
+      },
+      "tr": {
+        "summary": "Sets file attributes",
+        "params": {
+          "filename": "File or directory name",
+          "attr": "Attributes to set (FILE_ATTRIBUTE_READONLY, FILE_ATTRIBUTE_HIDDEN, ...)"
+        }
+      }
+    },
+    "fstat:Storages.resetFileAttributes": {
+      "hash": "c325067167bc",
+      "ja": {
+        "summary": "ファイルの属性を解除する",
+        "params": {
+          "filename": "ファイル/ディレクトリ名",
+          "attr": "解除する属性(FILE_ATTRIBUTE_READONLY,FILE_ATTRIBUTE_HIDDEN,...)"
+        }
+      },
+      "tr": {
+        "summary": "Clears file attributes",
+        "params": {
+          "filename": "File or directory name",
+          "attr": "Attributes to clear (FILE_ATTRIBUTE_READONLY, FILE_ATTRIBUTE_HIDDEN, ...)"
+        }
+      }
+    },
+    "fstat:Storages.getFileAttributes": {
+      "hash": "4e54eed8b299",
+      "ja": {
+        "summary": "ファイルの属性を取得する",
+        "returns": "取得した属性(FILE_ATTRIBUTE_READONLY,FILE_ATTRIBUTE_HIDDEN,...)",
+        "params": {
+          "filename": "ファイル/ディレクトリ名"
+        }
+      },
+      "tr": {
+        "summary": "Gets file attributes",
+        "returns": "The attributes (FILE_ATTRIBUTE_READONLY, FILE_ATTRIBUTE_HIDDEN, ...)",
+        "params": {
+          "filename": "File or directory name"
+        }
+      }
+    },
+    "fstat:Storages.selectDirectory": {
+      "hash": "286f5a8a535f",
+      "ja": {
+        "summary": "フォルダ選択ダイアログを開く",
+        "description": "※本体に Storages.selectDirectory が実装されている環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。",
+        "returns": "フォルダを選択してOKボタンを押せば真、キャンセルボタンを押せば偽\nparams.name フォルダ名を指定します。OKボタンを押した場合、選択されたフォルダがこのメンバに設定されます\nparams.title ダイアログボックスのタイトルを表示します\nparams.window ダイアログを開くWindowオブジェクトを指定します(void なら mainWindow が、未指定ならデスクトップがオーナーウィンドウとなります。デスクトップがオーナーの場合は、モードレス)\nparams.rootDir フォルダ選択のルートを指定します(このフォルダ以下のみ表示されます)",
+        "params": {
+          "params": "selectFile と同様のパラメータを設定する"
+        }
+      },
+      "tr": {
+        "summary": "Opens a folder selection dialog",
+        "description": "Note: in environments where the engine implements Storages.selectDirectory, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).",
+        "returns": "true if a folder is selected and OK is pressed, false if Cancel is pressed\nparams.name Folder name. When OK is pressed, the selected folder is set in this member\nparams.title Title of the dialog box\nparams.window Window object that opens the dialog (if void, mainWindow is the owner window; if not specified, the desktop is the owner. When the desktop is the owner, the dialog is modeless)\nparams.rootDir Root of the folder selection (only folders under it are shown)",
+        "params": {
+          "params": "Parameters, set in the same way as for selectFile"
+        }
+      }
+    },
+    "fstat:Storages.isExistentDirectory": {
+      "hash": "f8140c82a970",
+      "ja": {
+        "summary": "ディレクトリの存在チェック",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.isExistentDirectory](Storages.md#isexistentdirectory) を参照してください。",
+        "returns": "ディレクトリが存在すれば true/存在しなければ -1/ディレクトリでなければ false",
+        "params": {
+          "dir": "ディレクトリ名"
+        }
+      },
+      "tr": {
+        "summary": "Checks whether a directory exists",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.isExistentDirectory](Storages.md#isexistentdirectory) for the specification.",
+        "returns": "true if the directory exists, -1 if it does not exist, false if it is not a directory",
+        "params": {
+          "dir": "Directory name"
+        }
+      }
+    },
+    "fstat:Storages.getTime": {
+      "hash": "fa9a78d5740f",
+      "ja": {
+        "summary": "タイムスタンプ取得",
+        "returns": "タイムスタンプ情報の入った辞書\nmtime: 更新日時 (Date オブジェクト)\natime: アクセス日時 (Date オブジェクト)\nctime: 作成日時 (Date オブジェクト)\n⇒fstatとの違いは非アーカイブファイル限定で，sizeを返さないこと\n※本体にも同名のメソッドがありますが、本プラグインを読み込むと\nこちらの版で上書きされます。本体版との違い: 本体版は mtime だけを返し、ctime / atime を返しません。",
+        "params": {
+          "target": "対象ファイルまたはディレクトリ"
+        }
+      },
+      "tr": {
+        "summary": "Gets timestamps",
+        "returns": "Dictionary containing timestamp information\nmtime: modified time (Date object)\natime: access time (Date object)\nctime: creation time (Date object)\nUnlike fstat, it works only on non-archive files and does not return size\nNote: the engine also has a method of the same name, but loading this plugin\nreplaces it with this version. Difference from the engine version: the engine version returns only mtime, not ctime / atime.",
+        "params": {
+          "target": "Target file or directory"
+        }
+      }
+    },
+    "fstat:Storages.setTime": {
+      "hash": "7376efd07b33",
+      "ja": {
+        "summary": "タイムスタンプ設定",
+        "returns": "成功したかどうか",
+        "params": {
+          "target": "対象ファイルまたはディレクトリ",
+          "times": "タイムスタンプ情報の入った辞書\nmtime: 更新日時 (Date オブジェクト)\natime: アクセス日時 (Date オブジェクト)\nctime: 作成日時 (Date オブジェクト)"
+        }
+      },
+      "tr": {
+        "summary": "Sets timestamps",
+        "returns": "Whether it succeeded",
+        "params": {
+          "target": "Target file or directory",
+          "times": "Dictionary containing timestamp information\nmtime: modified time (Date object)\natime: access time (Date object)\nctime: creation time (Date object)"
+        }
+      }
+    },
+    "fstat:Storages.getLastModifiedFileTime": {
+      "hash": "e0aa7202ff10",
+      "ja": {
+        "summary": "更新日取得（高速版）",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.getLastModifiedFileTime](Storages.md#getlastmodifiedfiletime) を参照してください。",
+        "returns": "時間（WINDOWSのFILETIME 64bit値）",
+        "params": {
+          "target": "対象ファイルまたはディレクトリ"
+        }
+      },
+      "tr": {
+        "summary": "Gets the modified time (fast version)",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.getLastModifiedFileTime](Storages.md#getlastmodifiedfiletime) for the specification.",
+        "returns": "Time (64-bit Windows FILETIME value)",
+        "params": {
+          "target": "Target file or directory"
+        }
+      }
+    },
+    "fstat:Storages.setLastModifiedFileTime": {
+      "hash": "fff12cf720e4",
+      "ja": {
+        "summary": "更新日設定（高速版）",
+        "returns": "成功したかどうか",
+        "params": {
+          "target": "対象ファイルまたはディレクトリ",
+          "time": "時間（WINDOWSのFILETIME 64bit値）"
+        }
+      },
+      "tr": {
+        "summary": "Sets the modified time (fast version)",
+        "returns": "Whether it succeeded",
+        "params": {
+          "target": "Target file or directory",
+          "time": "Time (64-bit Windows FILETIME value)"
+        }
+      }
+    },
+    "fstat:Storages.copyFile": {
+      "hash": "43e698d37a01",
+      "ja": {
+        "summary": "吉里吉里のストレージ空間中の指定ファイルをコピーする",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.copyFile](Storages.md#copyfile) を参照してください。",
+        "returns": "実際にコピーできたら true",
+        "params": {
+          "from": "コピー元ファイル",
+          "to": "コピー先ファイル",
+          "failIfExist": "ファイルが存在するときに失敗するなら ture、上書きするなら false"
+        }
+      },
+      "tr": {
+        "summary": "Copies the specified file in the Kirikiri storage space",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.copyFile](Storages.md#copyfile) for the specification.",
+        "returns": "true if the file was actually copied",
+        "params": {
+          "from": "Source file",
+          "to": "Destination file",
+          "failIfExist": "true to fail if the file exists, false to overwrite"
+        }
+      }
+    },
+    "fstat:Storages.copyFileNoNormalize": {
+      "hash": "64b73434b520",
+      "ja": {
+        "summary": "パスの正規化を行なわず吉里吉里のストレージ空間中の指定ファイルをコピーする",
+        "description": "(コピー先ファイルのファイル名が小文字に変換されない)",
+        "returns": "実際にコピーできたら true\n※toには「file://./c/～」のようにフルパスで記述しないと例外が発生します",
+        "params": {
+          "from": "コピー元ファイル",
+          "to": "コピー先ファイル",
+          "failIfExist": "ファイルが存在するときに失敗するなら ture、上書きするなら false"
+        }
+      },
+      "tr": {
+        "summary": "Copies the specified file in the Kirikiri storage space without normalizing the path",
+        "description": "(The destination file name is not converted to lowercase.)",
+        "returns": "true if the file was actually copied\nNote: to must be written as a full path such as \"file://./c/...\", or an exception is raised",
+        "params": {
+          "from": "Source file",
+          "to": "Destination file",
+          "failIfExist": "true to fail if the file exists, false to overwrite"
+        }
+      }
+    },
+    "fstat:Storages.isExistentStorageNoSearchNoNormalize": {
+      "hash": "6c6ea5600d70",
+      "ja": {
+        "summary": "パスの正規化を行なわず、autoPathからの検索も行なわずにファイルの存在確認を行う",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.isExistentStorageNoSearchNoNormalize](Storages.md#isexistentstoragenosearchnonormalize) を参照してください。",
+        "returns": "ファイルが存在したらtrue",
+        "params": {
+          "filename": "ファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Checks whether a file exists without normalizing the path or searching autoPath",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.isExistentStorageNoSearchNoNormalize](Storages.md#isexistentstoragenosearchnonormalize) for the specification.",
+        "returns": "true if the file exists",
+        "params": {
+          "filename": "File name"
+        }
+      }
+    },
+    "fstat:Storages.getDisplayName": {
+      "hash": "408ab6177d27",
+      "ja": {
+        "summary": "表示名の取得",
+        "description": "実際にエクスプローラで表示されるファイル名を返す (SHGetFileInfoによる)",
+        "returns": "表示名",
+        "params": {
+          "filename": "ファイル名（親ディレクトリ以上のパスは落とされるので注意)。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the display name",
+        "description": "Returns the file name as actually shown in Explorer (via SHGetFileInfo).",
+        "returns": "Display name",
+        "params": {
+          "filename": "File name (note that the parent directory and the rest of the path are dropped)."
+        }
+      }
+    },
+    "fstat:Storages.getMD5HashString": {
+      "hash": "d31eb06d544b",
+      "ja": {
+        "summary": "MD5ハッシュ値の取得",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.getMD5HashString](Storages.md#getmd5hashstring) を参照してください。",
+        "returns": "ハッシュ値（32文字の16進数ハッシュ文字列（小文字））",
+        "params": {
+          "filename": "対象ファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Gets the MD5 hash",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.getMD5HashString](Storages.md#getmd5hashstring) for the specification.",
+        "returns": "Hash value (32-character lowercase hexadecimal string)",
+        "params": {
+          "filename": "Target file name"
+        }
+      }
+    },
+    "fstat:Storages.searchPath": {
+      "hash": "8d54fc8c8ce7",
+      "ja": {
+        "summary": "パスの検索",
+        "returns": "見つからなかった場合はvoid，見つかった場合はファイルのフルパス(file://./～)",
+        "params": {
+          "filename": "検索対象ファイル名",
+          "searchpath": "検索対象パス（ローカル表記(c:\\～等)で\";\"区切り，省略時はシステムのデフォルト検索パス）"
+        }
+      },
+      "tr": {
+        "summary": "Searches a path",
+        "returns": "void if not found; if found, the full path of the file (file://./...)",
+        "params": {
+          "filename": "File name to search for",
+          "searchpath": "Paths to search (local notation such as c:\\..., separated by \";\"; if omitted, the system's default search path)"
+        }
+      }
+    },
+    "fstat:Storages.getTemporaryName": {
+      "hash": "e6326e30ccf3",
+      "ja": {
+        "summary": "テンポラリファイル名の取得",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [Storages.getTemporaryName](Storages.md#gettemporaryname) を参照してください。",
+        "returns": "テンポラリファイル名（TVPGetTemporaryName()の文字列）"
+      },
+      "tr": {
+        "summary": "Gets a temporary file name",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [Storages.getTemporaryName](Storages.md#gettemporaryname) for the specification.",
+        "returns": "Temporary file name (the string from TVPGetTemporaryName())"
+      }
+    },
+    "memfile:Storages": {
+      "hash": "797f1cad47f1",
+      "ja": {
+        "summary": "擬似コードによるマニュアル",
+        "description": "mem://./ファイル名 でオンメモリ確保されたファイルとしてアクセス可能になります。"
+      },
+      "tr": {
+        "summary": "Manual written as pseudo-code",
+        "description": "Files allocated in memory become accessible as mem://./filename."
+      }
+    },
+    "memfile:Storages.isExistMemoryFile": {
+      "hash": "26223eb5667d",
+      "ja": {
+        "summary": "メモリファイルの存在確認",
+        "returns": "存在したら true",
+        "params": {
+          "filename": "対象ファイル名 (mem:///はつけない)"
+        }
+      },
+      "tr": {
+        "summary": "Checks whether a memory file exists",
+        "returns": "true if it exists",
+        "params": {
+          "filename": "Target file name (without mem:///)"
+        }
+      }
+    },
+    "memfile:Storages.isExistMemoryDirectory": {
+      "hash": "8baf03f3b87b",
+      "ja": {
+        "summary": "メモリディレクトリの存在確認",
+        "returns": "存在したら true",
+        "params": {
+          "dirname": "対象ディレクトリ名 (mem:///はつけない)"
+        }
+      },
+      "tr": {
+        "summary": "Checks whether a memory directory exists",
+        "returns": "true if it exists",
+        "params": {
+          "dirname": "Target directory name (without mem:///)"
+        }
+      }
+    },
+    "memfile:Storages.deleteMemoryFile": {
+      "hash": "d5b0c641b593",
+      "ja": {
+        "summary": "メモリファイルを削除する",
+        "returns": "ファイルが削除されたら true",
+        "params": {
+          "filename": "対象ファイル名 (mem:///はつけない)"
+        }
+      },
+      "tr": {
+        "summary": "Deletes a memory file",
+        "returns": "true if the file was deleted",
+        "params": {
+          "filename": "Target file name (without mem:///)"
+        }
+      }
+    },
+    "memfile:Storages.deleteMemoryDirectory": {
+      "hash": "0aac09bc0f25",
+      "ja": {
+        "summary": "メモリディレクトリを削除する",
+        "returns": "ディレクトリが削除されたら true",
+        "params": {
+          "dirname": "対象ディレクトリ名 (mem:///はつけない)"
+        }
+      },
+      "tr": {
+        "summary": "Deletes a memory directory",
+        "returns": "true if the directory was deleted",
+        "params": {
+          "dirname": "Target directory name (without mem:///)"
+        }
+      }
+    },
+    "memfile:Storages.getMemoryFileInfo": {
+      "hash": "6a80e0d18c17",
+      "ja": {
+        "summary": "メモリファイル情報を取得する",
+        "returns": "ファイル情報 %[name:名前, size:サイズ, isDirectory:ディレクトリならtrue]",
+        "params": {
+          "filename": "対象ファイル名 (mem:///はつけない)"
+        }
+      },
+      "tr": {
+        "summary": "Gets memory file information",
+        "returns": "File information %[name:name, size:size, isDirectory:true if a directory]",
+        "params": {
+          "filename": "Target file name (without mem:///)"
+        }
+      }
+    },
+    "memfile:Storages.getMemoryFileData": {
+      "hash": "ef97cb500743",
+      "ja": {
+        "summary": "メモリファイル情報を取得する",
+        "returns": "ファイルが存在したら内容を octet で返す。なければ void",
+        "params": {
+          "filename": "対象ファイル名 (mem:///はつけない)"
+        }
+      },
+      "tr": {
+        "summary": "Gets memory file information",
+        "returns": "The file contents as an octet if the file exists; otherwise void",
+        "params": {
+          "filename": "Target file name (without mem:///)"
+        }
+      }
+    },
+    "memfile:Storages.getMemoryDirectory": {
+      "hash": "5a2b5f896b13",
+      "ja": {
+        "summary": "メモリディレクトリ情報を取得する",
+        "returns": "ファイル情報の配列 %[name:名前, size:サイズ, isDirectory:ディレクトリならtrue]",
+        "params": {
+          "dirname": "対象ディレクトリ名 (mem:///はつけない)"
+        }
+      },
+      "tr": {
+        "summary": "Gets memory directory information",
+        "returns": "Array of file information %[name:name, size:size, isDirectory:true if a directory]",
+        "params": {
+          "dirname": "Target directory name (without mem:///)"
+        }
+      }
+    },
+    "minizip:Storages": {
+      "hash": "bd214be64f56",
+      "ja": {
+        "summary": "Storages クラス機能拡張"
+      },
+      "tr": {
+        "summary": "Storages class extensions"
+      }
+    },
+    "minizip:Storages.mountZip": {
+      "hash": "843df9e49997",
+      "ja": {
+        "summary": "zipファイルをファイルシステムとして mount します",
+        "description": "zip://ドメイン名/ファイル名 でアクセス可能になります。読み込み専用になります。",
+        "returns": "マウントに成功したら true",
+        "params": {
+          "name": "ドメイン名",
+          "zipfile": "マウントするZIPファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Mounts a zip file as a file system",
+        "description": "It becomes accessible as zip://domain/filename. It is read-only.",
+        "returns": "true if mounted successfully",
+        "params": {
+          "name": "Domain name",
+          "zipfile": "Name of the ZIP file to mount"
+        }
+      }
+    },
+    "minizip:Storages.unmountZip": {
+      "hash": "6dbad352ec53",
+      "ja": {
+        "summary": "zipファイルを unmount します",
+        "returns": "アンマウントに成功したら true",
+        "params": {
+          "name": "ドメイン名"
+        }
+      },
+      "tr": {
+        "summary": "Unmounts a zip file",
+        "returns": "true if unmounted successfully",
+        "params": {
+          "name": "Domain name"
+        }
+      }
+    }
+  }
+}

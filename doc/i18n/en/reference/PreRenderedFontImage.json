@@ -1,0 +1,77 @@
+{
+  "class": "PreRenderedFontImage",
+  "entries": {
+    "tftSave:PreRenderedFontImage": {
+      "hash": "22945e7de93b",
+      "ja": {
+        "description": "フォントイメージ（※このクラスは実際には存在しません！）\n\ncallbackで返すレイヤオブジェクトに付加する追加情報を定義します。\n普通のレイヤオブジェクトに対して，値を代入して渡してください。\nレイヤの画像は(0,0)-(blackbox_x-1,blackbox_y-1)の領域のα情報のみ参照され，65段階（0〜64）にリサンプルされます。\n\ncallbackの返り値として同じインスタンスを何度も使いまわしても問題ありません。"
+      },
+      "tr": {
+        "description": "Font image (note: this class does not actually exist!)\n\nDefines the extra information attached to the layer object returned from the callback.\nAssign these values to an ordinary layer object and return it.\nOnly the alpha of the region (0,0)-(blackbox_x-1,blackbox_y-1) of the layer image is used, resampled to 65 levels (0 to 64).\n\nThe callback may return the same instance over and over."
+      }
+    },
+    "tftSave:PreRenderedFontImage.blackbox_x": {
+      "hash": "6ee6ddc8b3f1",
+      "ja": {
+        "summary": "GLYPHMETRICS.gmBlackBoxX"
+      },
+      "tr": {
+        "summary": "GLYPHMETRICS.gmBlackBoxX"
+      }
+    },
+    "tftSave:PreRenderedFontImage.blackbox_y": {
+      "hash": "c1cd1d362dd1",
+      "ja": {
+        "summary": "GLYPHMETRICS.gmBlackBoxY"
+      },
+      "tr": {
+        "summary": "GLYPHMETRICS.gmBlackBoxY"
+      }
+    },
+    "tftSave:PreRenderedFontImage.origin_x": {
+      "hash": "d5212f726b66",
+      "ja": {
+        "summary": "GLYPHMETRICS.gmptGlyphOrigin.x"
+      },
+      "tr": {
+        "summary": "GLYPHMETRICS.gmptGlyphOrigin.x"
+      }
+    },
+    "tftSave:PreRenderedFontImage.origin_y": {
+      "hash": "83f911774751",
+      "ja": {
+        "summary": "GLYPHMETRICS.gmptGlyphOrigin.y"
+      },
+      "tr": {
+        "summary": "GLYPHMETRICS.gmptGlyphOrigin.y"
+      }
+    },
+    "tftSave:PreRenderedFontImage.inc_x": {
+      "hash": "66a2e6c82515",
+      "ja": {
+        "summary": "GLYPHMETRICS.gmCellIncX"
+      },
+      "tr": {
+        "summary": "GLYPHMETRICS.gmCellIncX"
+      }
+    },
+    "tftSave:PreRenderedFontImage.inc_y": {
+      "hash": "c47f759f8ce7",
+      "ja": {
+        "summary": "GLYPHMETRICS.gmCellIncY"
+      },
+      "tr": {
+        "summary": "GLYPHMETRICS.gmCellIncY"
+      }
+    },
+    "tftSave:PreRenderedFontImage.inc": {
+      "hash": "a643fd9374c5",
+      "ja": {
+        "summary": "GetTextExtentPoint32 の返すサイズの SIZE.cx"
+      },
+      "tr": {
+        "summary": "SIZE.cx of the size returned by GetTextExtentPoint32"
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "class": "Math",
+  "entries": {
+    "layerExSave:Math": {
+      "hash": "d9ca528dc522",
+      "ja": {
+        "summary": "特殊演算"
+      },
+      "tr": {
+        "summary": "Special arithmetic"
+      }
+    },
+    "layerExSave:Math.octetVectorSum": {
+      "hash": "44c63f7aa7d5",
+      "ja": {
+        "summary": "octetをベクトルとみなして演算",
+        "description": "内積はr[0], ユークリッド距離は Math.sqrt(r[1])，コサイン類似度は r[0]/(sqrt(r[2])*sqrt(r[3]))",
+        "returns": "[ Σ(ai*bi), Σ(ai-bi)^2, Σai^2, Σbi^2, Σai, Σbi, Σ(ai!=bi) ] or bi===voidの場合 [ 0, Σai^2, Σai^2, 0, Σai, 0, Σ(ai!=0) ]",
+        "params": {
+          "a": "octet",
+          "b": "octet (省略可)"
+        }
+      },
+      "tr": {
+        "summary": "Treats octets as vectors and computes sums",
+        "description": "The dot product is r[0], the Euclidean distance is Math.sqrt(r[1]), and the cosine similarity is r[0]/(sqrt(r[2])*sqrt(r[3])).",
+        "returns": "[ Σ(ai*bi), Σ(ai-bi)^2, Σai^2, Σbi^2, Σai, Σbi, Σ(ai!=bi) ], or when bi===void, [ 0, Σai^2, Σai^2, 0, Σai, 0, Σ(ai!=0) ]",
+        "params": {
+          "a": "octet",
+          "b": "octet (optional)"
+        }
+      }
+    }
+  }
+}

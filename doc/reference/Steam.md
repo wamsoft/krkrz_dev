@@ -14,14 +14,14 @@ Steam クラス(static)
 - [personaName](#personaname)
 - [appID](#appid)
 - [cloudEnabled](#cloudenabled)
-- [coundFileCount](#coundfilecount)
+- [cloudFileCount](#cloudfilecount)
 
 ### メソッド
 
 - [requestInitialize](#requestinitialize)
 - [getAchievement](#getachievement)
 - [setAchievement](#setachievement)
-- [clearAchievment](#clearachievment)
+- [clearAchievement](#clearachievement)
 - [getLanguage](#getlanguage)
 - [RestartAppIfNecessary](#restartappifnecessary)
 - [getCloudQuota](#getcloudquota)
@@ -34,7 +34,7 @@ Steam クラス(static)
 - [isBroadcasting](#isbroadcasting)
 - [hookBroadcasting](#hookbroadcasting)
 - [isIsSubscribedApp](#isissubscribedapp)
-- [ssDlcInstalled](#ssdlcinstalled)
+- [isDlcInstalled](#isdlcinstalled)
 - [getDLCCount](#getdlccount)
 - [getDLCData](#getdlcdata)
 
@@ -120,9 +120,9 @@ Steamクラウドの有効/無効設定
 
 ---
 
-### coundFileCount
+### cloudFileCount
 
-プロパティ \ アクセス: `r/w`
+プロパティ \ アクセス: `r`
 
 **解説**
 
@@ -168,7 +168,7 @@ Steamクラウドのファイル数
 
 ---
 
-### clearAchievment
+### clearAchievement
 
 メソッド
 
@@ -377,7 +377,7 @@ only use this member if you need to check ownership of another game related to y
 
 ---
 
-### ssDlcInstalled
+### isDlcInstalled
 
 メソッド
 

@@ -52,14 +52,12 @@ DLL に隣接する `<basename>.options.json` ( 例: `myplugin.options.json` ) �
     "options": [
       {
         "caption":     "データ保存場所",
-        "description": "吉里吉里が様々なデータを保存する場所を指定します。
-
-...",
+        "description": "吉里吉里が様々なデータを保存する場所を指定します。\n\n...",
         "name":        "datapath",
         "type":        "string",
         "length":      255,
         "user":        false,
-        "value":       "$(exepath)\savedata"
+        "value":       "$(exepath)\\savedata"
       },
       {
         "caption":     "処理ウェイト",
@@ -89,8 +87,7 @@ DLL に隣接する `<basename>.options.json` ( 例: `myplugin.options.json` ) �
 | キー | 必須 | 内容 |
 |---|---|---|
 | `caption`     | ○ | 設定ツールに表示する項目名 |
-| `description` | ○ | 説明文。`
-` で改行できる |
+| `description` | ○ | 説明文。`\n` で改行できる |
 | `name`        | ○ | コマンドラインオプション名 ( 先頭の `-` は書かない。`datapath` なら `-datapath=` ) |
 | `type`        | ○ | `"select"` ( 選択肢から選ぶ ) または `"string"` ( 自由入力 ) |
 | `user`        | ○ | エンドユーザ向け設定ツール ( `-userconf` ) に出すかどうか。`false` なら Releaser の制作者向け設定にのみ出る |

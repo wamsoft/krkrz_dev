@@ -1,0 +1,60 @@
+{
+  "class": "Threepp.Line",
+  "entries": {
+    "krkrthreepp:Threepp.Line": {
+      "hash": "a07e32db0734",
+      "ja": {
+        "summary": "線オブジェクト",
+        "description": "連続した線を描画します。"
+      },
+      "tr": {
+        "summary": "Line object",
+        "description": "Draws a continuous line."
+      }
+    },
+    "krkrthreepp:Threepp.Line.Line": {
+      "hash": "c951046d89ef",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "geometry": "ジオメトリ (BufferGeometry)",
+          "material": "マテリアル (LineBasicMaterial)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "geometry": "Geometry (BufferGeometry).",
+          "material": "Material (LineBasicMaterial)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Line.type": {
+      "hash": "0d63682df31a",
+      "ja": {
+        "summary": "\"Line\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"Line\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Line.computeLineDistances": {
+      "hash": "c1709da8a64c",
+      "ja": {
+        "summary": "線の距離を計算"
+      },
+      "tr": {
+        "summary": "Computes line distances"
+      }
+    },
+    "krkrthreepp:Threepp.Line.setGeometry": {
+      "hash": "6e28adb064c0",
+      "ja": {
+        "summary": "ジオメトリを設定"
+      },
+      "tr": {
+        "summary": "Sets the geometry"
+      }
+    }
+  }
+}

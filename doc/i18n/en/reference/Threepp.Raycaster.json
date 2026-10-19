@@ -1,0 +1,127 @@
+{
+  "class": "Threepp.Raycaster",
+  "entries": {
+    "krkrthreepp:Threepp.Raycaster": {
+      "hash": "a77f9ae421e7",
+      "ja": {
+        "summary": "レイキャスター",
+        "description": "レイを使ってオブジェクトとの交差判定を行います。"
+      },
+      "tr": {
+        "summary": "Raycaster",
+        "description": "Uses a ray to test for intersections with objects."
+      }
+    },
+    "krkrthreepp:Threepp.Raycaster.Raycaster": {
+      "hash": "4f956f8da930",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "origin": "原点",
+          "direction": "方向",
+          "near": "ニアクリップ",
+          "far": "ファークリップ"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "origin": "Origin.",
+          "direction": "Direction.",
+          "near": "Near distance.",
+          "far": "Far distance."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Raycaster.nearPlane": {
+      "hash": "728e147b49c0",
+      "ja": {
+        "summary": "ニアクリップ"
+      },
+      "tr": {
+        "summary": "Near distance"
+      }
+    },
+    "krkrthreepp:Threepp.Raycaster.farPlane": {
+      "hash": "845041d98f93",
+      "ja": {
+        "summary": "ファークリップ"
+      },
+      "tr": {
+        "summary": "Far distance"
+      }
+    },
+    "krkrthreepp:Threepp.Raycaster.set": {
+      "hash": "4af17640c59e",
+      "ja": {
+        "summary": "原点と方向を設定 (direction は正規化前提)"
+      },
+      "tr": {
+        "summary": "Sets the origin and direction (direction must be normalized)"
+      }
+    },
+    "krkrthreepp:Threepp.Raycaster.setFromCameraNDC": {
+      "hash": "09b57ad2b69c",
+      "ja": {
+        "summary": "カメラと正規化デバイス座標からレイを設定する (three.js の setFromCamera 相当)",
+        "params": {
+          "ndcX": "正規化デバイス座標 X [-1,1] (画面左端 -1, 右端 +1)",
+          "ndcY": "正規化デバイス座標 Y [-1,1] (画面下端 -1, 上端 +1)",
+          "camera": "PerspectiveCamera または OrthographicCamera"
+        }
+      },
+      "tr": {
+        "summary": "Sets the ray from a camera and normalized device coordinates (equivalent to three.js's setFromCamera)",
+        "params": {
+          "ndcX": "Normalized device coordinate X [-1,1] (left edge of the screen -1, right edge +1).",
+          "ndcY": "Normalized device coordinate Y [-1,1] (bottom edge of the screen -1, top edge +1).",
+          "camera": "PerspectiveCamera or OrthographicCamera."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Raycaster.setFromCameraPixel": {
+      "hash": "ad5190ff0fac",
+      "ja": {
+        "summary": "ピクセル座標(左上原点)+ビューポートサイズからレイを設定する利便版",
+        "description": "マウス座標をそのまま渡せる。内部で NDC に変換する。",
+        "params": {
+          "px": "ピクセル X (左上原点。吉里吉里レイヤ座標)",
+          "py": "ピクセル Y (左上原点。下方向が +)",
+          "viewW": "ビューポート幅 (描画レイヤの幅)",
+          "viewH": "ビューポート高さ (描画レイヤの高さ)",
+          "camera": "カメラ"
+        }
+      },
+      "tr": {
+        "summary": "Convenience version that sets the ray from pixel coordinates (top-left origin) and the viewport size",
+        "description": "You can pass mouse coordinates directly; they are converted to NDC internally.",
+        "params": {
+          "px": "Pixel X (top-left origin; Kirikiri layer coordinates).",
+          "py": "Pixel Y (top-left origin; positive downward).",
+          "viewW": "Viewport width (width of the drawing layer).",
+          "viewH": "Viewport height (height of the drawing layer).",
+          "camera": "Camera."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Raycaster.intersectObjects": {
+      "hash": "59078d86e8a5",
+      "ja": {
+        "summary": "オブジェクト群との交差判定を行い、ヒットを距離の近い順の配列で返す",
+        "returns": "ヒット配列。各要素は辞書:\nobject   … 引数配列で渡した「ヒットしたルートオブジェクト」(同一インスタンス)。\nrecursive で子孫にヒットしても、対応する引数配列内の祖先を返す。\ndistance … レイ原点からの距離\nx, y, z  … ワールド座標のヒット点\n配列は距離の昇順 (result[0] が最も手前)。ヒット無しは count=0。",
+        "params": {
+          "objects": "判定対象の Object3D 配列 (例: [vrm.getScene(), boxMesh])",
+          "recursive": "子孫まで再帰的に判定するか (省略時 true)"
+        }
+      },
+      "tr": {
+        "summary": "Tests for intersections with a set of objects and returns the hits as an array sorted by distance, nearest first",
+        "returns": "Array of hits. Each element is a dictionary:\nobject   … the hit root object passed in the argument array (the same instance).\nEven when recursive finds a hit on a descendant, the corresponding ancestor in the argument array is returned.\ndistance … distance from the ray origin\nx, y, z  … hit point in world coordinates\nThe array is sorted by ascending distance (result[0] is the nearest). With no hits, count=0.",
+        "params": {
+          "objects": "Array of Object3D to test (e.g. [vrm.getScene(), boxMesh]).",
+          "recursive": "Whether to test descendants recursively (default true)."
+        }
+      }
+    }
+  }
+}

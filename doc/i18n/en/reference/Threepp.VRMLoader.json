@@ -1,0 +1,50 @@
+{
+  "class": "Threepp.VRMLoader",
+  "entries": {
+    "krkrthreepp:Threepp.VRMLoader": {
+      "hash": "bb631a61c5a6",
+      "ja": {
+        "summary": "VRM ローダ",
+        "description": ".vrm を読み込み VRM を返す。VRM 0.x / 1.0 両対応。"
+      },
+      "tr": {
+        "summary": "VRM loader",
+        "description": "Loads a .vrm file and returns a VRM. Supports both VRM 0.x and 1.0."
+      }
+    },
+    "krkrthreepp:Threepp.VRMLoader.load": {
+      "hash": "9f83d2fa8414",
+      "ja": {
+        "summary": "OS パスから読み込む (デバッグ/スタンドアロン用)。",
+        "returns": "VRM  (失敗時 void)",
+        "params": {
+          "osPath": "ファイルシステム上の絶対/相対パス"
+        }
+      },
+      "tr": {
+        "summary": "Loads from an OS path (for debugging / standalone use).",
+        "returns": "VRM (void on failure)",
+        "params": {
+          "osPath": "Absolute or relative path on the file system."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.VRMLoader.loadStorage": {
+      "hash": "f0316d69f8d0",
+      "ja": {
+        "summary": "吉里吉里ストレージ名から読み込む (本番用。アーカイブ対応)。",
+        "returns": "VRM  (失敗時 void)",
+        "params": {
+          "storageName": "ストレージ名 (例 Storages.getPlacedPath(\"model.vrm\"))"
+        }
+      },
+      "tr": {
+        "summary": "Loads from a Kirikiri storage name (for production; archives supported).",
+        "returns": "VRM (void on failure)",
+        "params": {
+          "storageName": "Storage name (e.g. Storages.getPlacedPath(\"model.vrm\"))."
+        }
+      }
+    }
+  }
+}

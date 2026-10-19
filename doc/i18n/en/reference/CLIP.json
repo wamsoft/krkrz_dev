@@ -1,0 +1,368 @@
+{
+  "class": "CLIP",
+  "entries": {
+    "clipfile:CLIP": {
+      "hash": "4b7c4c7cc904",
+      "ja": {
+        "summary": "擬似コードによるマニュアル",
+        "description": "CLIP STUDIO PAINT (.clip) 読み込み / 編集プラグイン clipfile.dll\n\nCLIPファイルストレージ機能\n以下のパス名で CLIP ファイルのレイヤ画像を直接ファイルとしてロードできます\n\nclip://CLIPファイル名/root/フォルダ名/.../レイヤ名.bmp\nclip://CLIPファイル名/id/LayerId.bmp\n\n・CLIPファイル名はベース名のみで小文字で正規化されます\n・フォルダ名、レイヤ名は全て小文字で正規化されて含まれる\"/\" は \"_\" に置換されます\n・名前が重複する場合は後にあるものが優先になります\n・画像を持たないレイヤ(フォルダ・調整レイヤ・空レイヤ)は列挙されません\n\npsdfile プラグインの psd:// と同じ規則です。"
+      },
+      "tr": {
+        "summary": "Manual written as pseudo-code",
+        "description": "clipfile.dll: a plugin for reading and editing CLIP STUDIO PAINT (.clip) files\n\nCLIP file storage\nLayer images in a CLIP file can be loaded directly as files using the following paths:\n\nclip://CLIPfilename/root/foldername/.../layername.bmp\nclip://CLIPfilename/id/LayerId.bmp\n\n- The CLIP file name is the base name only, normalized to lowercase\n- Folder and layer names are all normalized to lowercase, and any \"/\" they contain is replaced with \"_\"\n- If names collide, the later one takes precedence\n- Layers without an image (folders, adjustment layers, empty layers) are not listed\n\nThe rules are the same as psd:// in the psdfile plugin."
+      }
+    },
+    "clipfile:CLIP.load": {
+      "hash": "5c8b2f1b8bef",
+      "ja": {
+        "summary": "CLIP ファイルのロード。",
+        "description": "ローカルに実体があるファイルは mmap で開き、画素は 256x256 ブロック単位で\n必要になったときだけ読みます(大きなファイルでも load 自体は軽い)。\nアーカイブ内などローカルパスに落ちない場合はストリームから全体をメモリへ\n読み込んでから解析します。",
+        "returns": "ロードに成功したら true(失敗理由は error プロパティ)",
+        "params": {
+          "filename": "ファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Loads a CLIP file",
+        "description": "Files that exist locally are opened with mmap, and pixels are read in 256x256 blocks only\nwhen needed (so load itself is cheap even for large files).\nIf the file does not resolve to a local path (for example inside an archive), the whole stream\nis read into memory and then parsed.",
+        "returns": "true if loading succeeded (the reason for failure is in the error property).",
+        "params": {
+          "filename": "File name."
+        }
+      }
+    },
+    "clipfile:CLIP.loadOctet": {
+      "hash": "9376267d2a33",
+      "ja": {
+        "summary": "octet に入った CLIP データをロードする。",
+        "description": "バイト列はこのオブジェクトが保持します。ファイル名を持たないため\nclip:// ストレージへは登録されません。",
+        "returns": "ロードに成功したら true",
+        "params": {
+          "data": "ファイル全体を格納した octet"
+        }
+      },
+      "tr": {
+        "summary": "Loads CLIP data held in an octet",
+        "description": "This object keeps the byte sequence. Since there is no file name,\nit is not registered in the clip:// storage.",
+        "returns": "true if loading succeeded.",
+        "params": {
+          "data": "An octet containing the entire file."
+        }
+      }
+    },
+    "clipfile:CLIP.clearData": {
+      "hash": "0e103b9389a3",
+      "ja": {
+        "summary": "保持しているデータを明示的に破棄する。",
+        "description": "吉里吉里のオブジェクト寿命は GC 依存なので、大きなファイルを掴んだままに\nしたくないときに呼びます。"
+      },
+      "tr": {
+        "summary": "Explicitly discards the data held",
+        "description": "Object lifetime in Kirikiri depends on GC, so call this when you do not want to keep\na large file held."
+      }
+    },
+    "clipfile:CLIP.width": {
+      "hash": "5323dff5ffd8",
+      "ja": {
+        "summary": "キャンバスの横幅(実ピクセル)。",
+        "description": "CLIP の Canvas.CanvasWidth は CanvasUnit 依存で mm 単位のファイルが実在する\nため、100% ミップの属性から求めた実ピクセル値を返します。未ロードは -1"
+      },
+      "tr": {
+        "summary": "Canvas width (in actual pixels)",
+        "description": "CLIP's Canvas.CanvasWidth depends on CanvasUnit, and files in mm units do exist,\nso this returns the actual pixel value derived from the attributes of the 100% mipmap. -1 if not loaded."
+      }
+    },
+    "clipfile:CLIP.height": {
+      "hash": "310b3c13336b",
+      "ja": {
+        "summary": "キャンバスの縦幅(実ピクセル)。未ロードは -1"
+      },
+      "tr": {
+        "summary": "Canvas height (in actual pixels). -1 if not loaded"
+      }
+    },
+    "clipfile:CLIP.resolution": {
+      "hash": "a830fd85a9b1",
+      "ja": {
+        "summary": "解像度(dpi)。未ロードは 0"
+      },
+      "tr": {
+        "summary": "Resolution (dpi). 0 if not loaded"
+      }
+    },
+    "clipfile:CLIP.layer_count": {
+      "hash": "626c52c3e040",
+      "ja": {
+        "summary": "レイヤ数。未ロードは -1"
+      },
+      "tr": {
+        "summary": "Number of layers. -1 if not loaded"
+      }
+    },
+    "clipfile:CLIP.root_layer": {
+      "hash": "3aafe7d8c7c7",
+      "ja": {
+        "summary": "ルートフォルダの LayerId。未ロードは -1"
+      },
+      "tr": {
+        "summary": "LayerId of the root folder. -1 if not loaded"
+      }
+    },
+    "clipfile:CLIP.is_loaded": {
+      "hash": "c4877c95ed50",
+      "ja": {
+        "summary": "ロード済みかどうか"
+      },
+      "tr": {
+        "summary": "Whether a file is loaded"
+      }
+    },
+    "clipfile:CLIP.error": {
+      "hash": "4f6bea503bb5",
+      "ja": {
+        "summary": "直近の失敗理由。無ければ空文字列"
+      },
+      "tr": {
+        "summary": "Reason for the most recent failure. An empty string if none"
+      }
+    },
+    "clipfile:CLIP.getLayerName": {
+      "hash": "f0adb6044b2a",
+      "ja": {
+        "summary": "レイヤ名の取得",
+        "returns": "レイヤ名",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets a layer name",
+        "returns": "The layer name.",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "clipfile:CLIP.getLayerInfo": {
+      "hash": "b8ad04d57f3f",
+      "ja": {
+        "summary": "レイヤ情報の取得",
+        "description": "レイヤ番号 no は 0 から layer_count-1 までで、並び順は psdfile と同じ\n「中身が先、フォルダが後、下から上」の平坦順です。",
+        "returns": "レイヤ情報がはいった辞書\n辞書の内容\nleft         左座標(キャンバス座標)\ntop          上座標\nright        右座標\nbottom       底座標\nwidth        横幅\nheight       縦幅\nname         レイヤ名\nlayer_id     LayerId (CLIP の Layer.MainId)。CLIPWriter の各メソッドや\nclip://~/id/ で使うのはこの値\nvisible      表示状態\nopacity      不透明度 0..255 (PSD / 吉里吉里 と揃えた値)\nopacity_raw  不透明度の生値 0..**256** (CLIP は 256 段)\nclipping     下のレイヤでクリッピングするか (0/1)\ncomposite    合成モードの生値 (CLIP の LayerComposite。CLIPWriter の\ncomposite_* 定数と同じ値)\ntype         合成モード(吉里吉里の対応モード)。対応が無いモードは\nltPsNormal に落ちるので、正確に見たいときは composite を使う\nblend_mode_key 合成モードを PSD の 4 文字コードで表したもの。psdfile の\ngetLayerInfo().blend_mode_key と見比べるとき用\nis_group     フォルダレイヤか\nis_filter    調整レイヤか(自分の画素を持たない)\nis_text      テキストレイヤか\nhas_mask     レイヤマスクを持つか\nfolder       フォルダ属性の生値 (bit0=フォルダ / bit4=折り畳み)\ncollapsed    フォルダが折り畳まれているか\nlayer_type_raw LayerType の生値 (bit12(4096)=調整レイヤ / bit1(2)=マスク有)\nparent_index 親フォルダのレイヤ番号(最上位は -1)\nchildren     直接の子のレイヤ番号配列(下から上)。フォルダ以外は空配列",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets layer information",
+        "description": "The layer index no ranges from 0 to layer_count-1, in the same flattened order as psdfile:\n\"contents first, folder after, bottom to top\".",
+        "returns": "A dictionary containing the layer information.\nContents:\nleft         left coordinate (canvas coordinates)\ntop          top coordinate\nright        right coordinate\nbottom       bottom coordinate\nwidth        width\nheight       height\nname         layer name\nlayer_id     LayerId (CLIP's Layer.MainId). This is the value used by CLIPWriter's methods\nand by clip://~/id/\nvisible      visibility\nopacity      opacity 0..255 (matching PSD / Kirikiri)\nopacity_raw  raw opacity 0..**256** (CLIP uses 256 levels)\nclipping     whether to clip to the layer below (0/1)\ncomposite    raw blend mode (CLIP's LayerComposite; the same values as CLIPWriter's\ncomposite_* constants)\ntype         blend mode (the corresponding Kirikiri mode). Modes without an equivalent\nfall back to ltPsNormal, so use composite when you need the exact mode\nblend_mode_key blend mode as a PSD four-character code, for comparing with psdfile's\ngetLayerInfo().blend_mode_key\nis_group     whether it is a folder layer\nis_filter    whether it is an adjustment layer (has no pixels of its own)\nis_text      whether it is a text layer\nhas_mask     whether it has a layer mask\nfolder       raw folder attributes (bit0=folder / bit4=collapsed)\ncollapsed    whether the folder is collapsed\nlayer_type_raw raw LayerType (bit12(4096)=adjustment layer / bit1(2)=has mask)\nparent_index layer index of the parent folder (-1 at the top level)\nchildren     array of layer indices of the direct children (bottom to top). An empty array for non-folders",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "clipfile:CLIP.getRoots": {
+      "hash": "a4cfc51a628c",
+      "ja": {
+        "summary": "最上位(ルート直下)のレイヤ番号配列を取得する。下から上の順",
+        "returns": "レイヤ番号の配列"
+      },
+      "tr": {
+        "summary": "Gets the array of top-level layer indices (directly under the root), bottom to top",
+        "returns": "Array of layer indices."
+      }
+    },
+    "clipfile:CLIP.getChildren": {
+      "hash": "7880e34031fd",
+      "ja": {
+        "summary": "フォルダの直接の子のレイヤ番号配列を取得する。下から上の順",
+        "returns": "レイヤ番号の配列(フォルダ以外は空配列)",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the array of layer indices of a folder's direct children, bottom to top",
+        "returns": "Array of layer indices (an empty array for non-folders).",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "clipfile:CLIP.getLayerIndexById": {
+      "hash": "9e80a16e8376",
+      "ja": {
+        "summary": "LayerId からレイヤ番号を引く",
+        "returns": "レイヤ番号。見つからなければ -1",
+        "params": {
+          "layerId": "getLayerInfo().layer_id の値"
+        }
+      },
+      "tr": {
+        "summary": "Looks up a layer index from a LayerId",
+        "returns": "The layer index, or -1 if not found.",
+        "params": {
+          "layerId": "Value of getLayerInfo().layer_id."
+        }
+      }
+    },
+    "clipfile:CLIP.getLayerAttribute": {
+      "hash": "2f63ecbc9c25",
+      "ja": {
+        "summary": "100% ミップの Offscreen 属性を取得する(ブロックグリッドや表現色の確認用)",
+        "returns": "%[ width:, height:,        // 論理サイズ\ncols:, rows:,           // ブロックグリッド\ncolor_mode:             // 33=RGBA / 17=グレー・モノクロ / 1=マスク\nnum_channels:           // 4 / 1 / 0\nbit_depth:              // 5=8bpp RGBA / 2=8bpp / 1=1bpp\nplane_bytes:,\nblock_width:, block_height:,\nhas_init_color:,\ninit_color:             // RGBA をパックした値\nblock_count:            // ブロック数\n]  実体が無ければ void\n\n**ここで返る width / height はキャンバスサイズとは限りません** — CSP は\nレイヤによって 256x256 ブロック境界に切り上げた大きさ(300x400 のキャンバスでも\n512x512 等)で画素を持ちます。`CLIPWriter.setPixels` に渡す Layer のサイズは\nこの値に合わせる必要があるので、書き換えるときはここで調べてください。",
+        "params": {
+          "no": "レイヤ番号",
+          "mask": "true でマスク側のミップ連鎖を見る。既定 false"
+        }
+      },
+      "tr": {
+        "summary": "Gets the Offscreen attributes of the 100% mipmap (for checking the block grid and expression color)",
+        "returns": "%[ width:, height:,        // logical size\ncols:, rows:,           // block grid\ncolor_mode:             // 33=RGBA / 17=gray, monochrome / 1=mask\nnum_channels:           // 4 / 1 / 0\nbit_depth:              // 5=8bpp RGBA / 2=8bpp / 1=1bpp\nplane_bytes:,\nblock_width:, block_height:,\nhas_init_color:,\ninit_color:             // packed RGBA value\nblock_count:            // number of blocks\n]  void if there is no data\n\n**The width / height returned here are not necessarily the canvas size.** CSP stores pixels\nfor some layers rounded up to 256x256 block boundaries (for example 512x512 even on a\n300x400 canvas). The size of the Layer passed to `CLIPWriter.setPixels` must match this value,\nso check it here when rewriting a layer.",
+        "params": {
+          "no": "Layer index.",
+          "mask": "true examines the mask's mip chain. Defaults to false."
+        }
+      }
+    },
+    "clipfile:CLIP.getLayerData": {
+      "hash": "e8219e1d60d0",
+      "ja": {
+        "summary": "レイヤ画像の読み出し(マスクをアルファに繰り込んだもの)",
+        "params": {
+          "layer": "読み出し先レイヤ",
+          "no": "レイヤ番号\n\nフォルダ・調整レイヤ・空レイヤは画像を持たないので何もしません\n(吉里吉里の Layer は 0 サイズにできないため)。\nデータ内容のほか以下のプロパティが自動的にレイヤに設定されます\nleft          左座標\ntop           上座標\nwidth         横幅\nheight        縦幅\ntype          合成モード\nopacity       不透明度(0..255 に正規化した値)\nvisible       表示状態\nimageLeft     0になります\nimageTop      0になります\nimageWidth    width になります\nimageHeight   height になります\nname          name が設定されます"
+        }
+      },
+      "tr": {
+        "summary": "Reads a layer image (with the mask folded into alpha)",
+        "params": {
+          "layer": "Destination layer.",
+          "no": "Layer index.\n\nFolders, adjustment layers and empty layers have no image, so nothing is done\n(a Kirikiri Layer cannot have zero size).\nIn addition to the image data, the following properties are set on the layer automatically:\nleft          left coordinate\ntop           top coordinate\nwidth         width\nheight        height\ntype          blend mode\nopacity       opacity (normalized to 0..255)\nvisible       visibility\nimageLeft     set to 0\nimageTop      set to 0\nimageWidth    set to width\nimageHeight   set to height\nname          set to the layer name"
+        }
+      }
+    },
+    "clipfile:CLIP.getLayerDataRaw": {
+      "hash": "81a7c3be4db6",
+      "ja": {
+        "summary": "レイヤ画像の読み出し(マスクを繰り込まない生画像)。",
+        "description": "設定されるプロパティは getLayerData と同じ",
+        "params": {
+          "layer": "読み出し先レイヤ",
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Reads a layer image (the raw image, without folding in the mask)",
+        "description": "The properties set are the same as getLayerData.",
+        "params": {
+          "layer": "Destination layer.",
+          "no": "Layer index."
+        }
+      }
+    },
+    "clipfile:CLIP.getLayerDataMask": {
+      "hash": "aaff7c2f6517",
+      "ja": {
+        "summary": "レイヤのマスクのみ(グレー)の読み出し。",
+        "description": "マスクを持たないレイヤでは何もしません。\nopacity は 255、type は ltPsNormal になります",
+        "params": {
+          "layer": "読み出し先レイヤ",
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Reads only the layer's mask (grayscale)",
+        "description": "Does nothing for layers without a mask.\nopacity is set to 255 and type to ltPsNormal.",
+        "params": {
+          "layer": "Destination layer.",
+          "no": "Layer index."
+        }
+      }
+    },
+    "clipfile:CLIP.getLayerRegion": {
+      "hash": "6d411025d722",
+      "ja": {
+        "summary": "レイヤ画像のうち指定矩形(キャンバス座標)だけを読み出す。",
+        "description": "CLIP は画素を 256x256 タイルで持っているので、**重なるタイルしか\n展開されません**。大きなレイヤの一部だけ欲しいときはこちらが安いです\n(PSD は行 RLE なので同じことができない = clipparse 固有の口)。\n読み出し先 Layer の left/top には x/y が設定されます。",
+        "params": {
+          "layer": "読み出し先レイヤ",
+          "no": "レイヤ番号",
+          "x": "矩形の左(キャンバス座標)",
+          "y": "矩形の上",
+          "w": "矩形の幅",
+          "h": "矩形の高さ",
+          "mode": "image_mode_*(既定 image_mode_masked)"
+        }
+      },
+      "tr": {
+        "summary": "Reads only the given rectangle (canvas coordinates) of a layer image",
+        "description": "CLIP stores pixels in 256x256 tiles, so **only the overlapping tiles are\ndecoded**. This is cheaper when you only need part of a large layer\n(PSD uses row RLE and cannot do the same, so this is specific to clipparse).\nThe left/top of the destination Layer are set to x/y.",
+        "params": {
+          "layer": "Destination layer.",
+          "no": "Layer index.",
+          "x": "Left of the rectangle (canvas coordinates).",
+          "y": "Top of the rectangle.",
+          "w": "Width of the rectangle.",
+          "h": "Height of the rectangle.",
+          "mode": "image_mode_* (defaults to image_mode_masked)."
+        }
+      }
+    },
+    "clipfile:CLIP.getBlend": {
+      "hash": "d539631b73e8",
+      "ja": {
+        "summary": "全レイヤを下から合成した画像の取得。",
+        "description": "psdfile の getBlend が「PSD に保存済みの合成結果を読むだけ」なのとは違い、\nこちらは clipparse 側で実際に合成します(CSP の CanvasPreview と一致するのが\n正しい状態)。合成モード 27 種・表現色 4 種・マスク・クリッピング・\n通過フォルダ・調整レイヤ 5 種に対応しています。\n保存済みの完成画をそのまま使いたいだけなら getPreviewPNG() の方が安いです。",
+        "returns": "取得に成功したら true",
+        "params": {
+          "layer": "格納先レイヤ(キャンバスサイズに調整される)"
+        }
+      },
+      "tr": {
+        "summary": "Gets the image of all layers composited from the bottom up",
+        "description": "Unlike psdfile's getBlend, which only reads the composited result saved in the PSD,\nthis one actually composites the layers in clipparse (the correct result matches CSP's\nCanvasPreview). It supports 27 blend modes, 4 expression colors, masks, clipping,\npass-through folders and 5 kinds of adjustment layers.\nIf you just want the saved finished image as is, getPreviewPNG() is cheaper.",
+        "returns": "true on success.",
+        "params": {
+          "layer": "Destination layer (resized to the canvas size)."
+        }
+      }
+    },
+    "clipfile:CLIP.getPreviewPNG": {
+      "hash": "20cedb27c968",
+      "ja": {
+        "summary": "ファイルに埋まっている完成画(CanvasPreview)を PNG の octet で返す。",
+        "description": "CSP が保存した画そのものなので合成の計算が不要ですが、**等倍とは限りません**。",
+        "returns": "PNG データの octet。無ければ void"
+      },
+      "tr": {
+        "summary": "Returns the finished image embedded in the file (CanvasPreview) as a PNG octet",
+        "description": "It is the image CSP saved, so no compositing is needed, but **it is not necessarily at full size**.",
+        "returns": "An octet of PNG data, or void if there is none."
+      }
+    },
+    "clipfile:CLIP.check": {
+      "hash": "1c16de11f1f5",
+      "ja": {
+        "summary": "全ブロックの構造アサーションを回す(診断用)",
+        "returns": "問題があればレポート文字列、問題が無ければ void"
+      },
+      "tr": {
+        "summary": "Runs structural assertions over all blocks (for diagnostics)",
+        "returns": "A report string if there are problems, or void if there are none."
+      }
+    },
+    "clipfile:CLIP.clearStorageCache": {
+      "hash": "cac904b2f6a9",
+      "ja": {
+        "summary": "ストレージとして保持されてるキャッシュをクリアする",
+        "description": "static メソッド。"
+      },
+      "tr": {
+        "summary": "Clears the cache held for the storage",
+        "description": "A static method."
+      }
+    }
+  }
+}

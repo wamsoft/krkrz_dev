@@ -1,0 +1,262 @@
+{
+  "class": "Threepp.Quaternion",
+  "entries": {
+    "krkrthreepp:Threepp.Quaternion": {
+      "hash": "e01fa852f8e8",
+      "ja": {
+        "summary": "クォータニオン（四元数）クラス",
+        "description": "回転を表現するクォータニオンです。ジンバルロックが発生しません。"
+      },
+      "tr": {
+        "summary": "Quaternion class",
+        "description": "A quaternion representing a rotation. It does not suffer from gimbal lock."
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.Quaternion": {
+      "hash": "cc9f450adc65",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "x": "X成分",
+          "y": "Y成分",
+          "z": "Z成分",
+          "w": "W成分"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "x": "X component.",
+          "y": "Y component.",
+          "z": "Z component.",
+          "w": "W component."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.x": {
+      "hash": "0427b67b00a5",
+      "ja": {
+        "summary": "X成分（読み取り専用）"
+      },
+      "tr": {
+        "summary": "X component (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.y": {
+      "hash": "9f1ca1b0312c",
+      "ja": {
+        "summary": "Y成分（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Y component (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.z": {
+      "hash": "c7c94bf5b47c",
+      "ja": {
+        "summary": "Z成分（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Z component (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.w": {
+      "hash": "0a708f375a0d",
+      "ja": {
+        "summary": "W成分（読み取り専用）"
+      },
+      "tr": {
+        "summary": "W component (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.set": {
+      "hash": "6a1d88aceb4a",
+      "ja": {
+        "summary": "値を設定"
+      },
+      "tr": {
+        "summary": "Sets the values"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another quaternion"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.setFromEuler": {
+      "hash": "a01f3d1f4fba",
+      "ja": {
+        "summary": "オイラー角から設定"
+      },
+      "tr": {
+        "summary": "Sets the quaternion from Euler angles"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.setFromAxisAngle": {
+      "hash": "e1029a715dbd",
+      "ja": {
+        "summary": "軸と角度から設定"
+      },
+      "tr": {
+        "summary": "Sets the quaternion from an axis and an angle"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.setFromRotationMatrix": {
+      "hash": "ac2190033b3e",
+      "ja": {
+        "summary": "回転行列から設定"
+      },
+      "tr": {
+        "summary": "Sets the quaternion from a rotation matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.setFromUnitVectors": {
+      "hash": "5ec36d6d11d8",
+      "ja": {
+        "summary": "2つの単位ベクトルから設定"
+      },
+      "tr": {
+        "summary": "Sets the quaternion from two unit vectors"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.angleTo": {
+      "hash": "e1430a057c9d",
+      "ja": {
+        "summary": "別のクォータニオンとの角度"
+      },
+      "tr": {
+        "summary": "Angle to another quaternion"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.rotateTowards": {
+      "hash": "dc92f4c18f7f",
+      "ja": {
+        "summary": "別のクォータニオンへ回転"
+      },
+      "tr": {
+        "summary": "Rotates toward another quaternion"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.identity": {
+      "hash": "e332dadd4f0f",
+      "ja": {
+        "summary": "単位クォータニオンに設定"
+      },
+      "tr": {
+        "summary": "Resets to the identity quaternion"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.invert": {
+      "hash": "b14abd3c4eb5",
+      "ja": {
+        "summary": "逆クォータニオン"
+      },
+      "tr": {
+        "summary": "Inverts the quaternion"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.conjugate": {
+      "hash": "61b6a7414022",
+      "ja": {
+        "summary": "共役"
+      },
+      "tr": {
+        "summary": "Conjugate"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.dot": {
+      "hash": "59e4ba141a53",
+      "ja": {
+        "summary": "内積"
+      },
+      "tr": {
+        "summary": "Dot product"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.lengthSq": {
+      "hash": "bcca19f55d78",
+      "ja": {
+        "summary": "長さの二乗"
+      },
+      "tr": {
+        "summary": "Squared length"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.length": {
+      "hash": "ce7ce2bb7e1f",
+      "ja": {
+        "summary": "長さ"
+      },
+      "tr": {
+        "summary": "Length"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.normalize": {
+      "hash": "a1166a207a2c",
+      "ja": {
+        "summary": "正規化"
+      },
+      "tr": {
+        "summary": "Normalizes the quaternion"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.multiply": {
+      "hash": "158cd6875be6",
+      "ja": {
+        "summary": "乗算"
+      },
+      "tr": {
+        "summary": "Multiplies by a quaternion"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.premultiply": {
+      "hash": "91eac0b09877",
+      "ja": {
+        "summary": "前置乗算"
+      },
+      "tr": {
+        "summary": "Premultiplies by a quaternion"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.multiplyQuaternions": {
+      "hash": "d97f975571b3",
+      "ja": {
+        "summary": "2つのクォータニオンの積"
+      },
+      "tr": {
+        "summary": "Product of two quaternions"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.slerp": {
+      "hash": "22cf0b30af96",
+      "ja": {
+        "summary": "球面線形補間"
+      },
+      "tr": {
+        "summary": "Spherical linear interpolation"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.slerpQuaternions": {
+      "hash": "13ba49ea0768",
+      "ja": {
+        "summary": "2つのクォータニオン間の球面線形補間"
+      },
+      "tr": {
+        "summary": "Spherical linear interpolation between two quaternions"
+      }
+    },
+    "krkrthreepp:Threepp.Quaternion.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

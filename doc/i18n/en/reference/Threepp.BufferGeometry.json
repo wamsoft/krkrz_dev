@@ -1,0 +1,169 @@
+{
+  "class": "Threepp.BufferGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.BufferGeometry": {
+      "hash": "0092de4a7fd9",
+      "ja": {
+        "summary": "バッファジオメトリ基底クラス",
+        "description": "頂点データを格納するジオメトリの基底クラスです。"
+      },
+      "tr": {
+        "summary": "Buffer geometry base class",
+        "description": "Base class for geometries that store vertex data."
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.BufferGeometry": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.type": {
+      "hash": "a4a2f9a1f704",
+      "ja": {
+        "summary": "ジオメトリの種類（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Geometry type (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.id": {
+      "hash": "510d24ceeef6",
+      "ja": {
+        "summary": "ID（読み取り専用）"
+      },
+      "tr": {
+        "summary": "ID (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.name": {
+      "hash": "77bc2b04522a",
+      "ja": {
+        "summary": "名前"
+      },
+      "tr": {
+        "summary": "Name"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.hasIndex": {
+      "hash": "9f00283e57d8",
+      "ja": {
+        "summary": "インデックスを持つか"
+      },
+      "tr": {
+        "summary": "Whether the geometry has an index"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.hasAttribute": {
+      "hash": "152d506e3480",
+      "ja": {
+        "summary": "指定した属性を持つか"
+      },
+      "tr": {
+        "summary": "Whether the geometry has the given attribute"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.computeBoundingBox": {
+      "hash": "8c62399ecdca",
+      "ja": {
+        "summary": "境界ボックスを計算"
+      },
+      "tr": {
+        "summary": "Computes the bounding box"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.computeBoundingSphere": {
+      "hash": "8565b95dd014",
+      "ja": {
+        "summary": "境界球を計算"
+      },
+      "tr": {
+        "summary": "Computes the bounding sphere"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.computeVertexNormals": {
+      "hash": "9ddaa1ac21f1",
+      "ja": {
+        "summary": "頂点法線を計算"
+      },
+      "tr": {
+        "summary": "Computes vertex normals"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.normalizeNormals": {
+      "hash": "f7734a93299a",
+      "ja": {
+        "summary": "法線を正規化"
+      },
+      "tr": {
+        "summary": "Normalizes the normals"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.rotateX": {
+      "hash": "33ef72c5d023",
+      "ja": {
+        "summary": "X軸回転"
+      },
+      "tr": {
+        "summary": "Rotates around the X axis"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.rotateY": {
+      "hash": "a2116c7a2660",
+      "ja": {
+        "summary": "Y軸回転"
+      },
+      "tr": {
+        "summary": "Rotates around the Y axis"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.rotateZ": {
+      "hash": "844003aed276",
+      "ja": {
+        "summary": "Z軸回転"
+      },
+      "tr": {
+        "summary": "Rotates around the Z axis"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.translate": {
+      "hash": "89ec109eb2ec",
+      "ja": {
+        "summary": "平行移動"
+      },
+      "tr": {
+        "summary": "Translates the geometry"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.scale": {
+      "hash": "ac976adef9b7",
+      "ja": {
+        "summary": "スケーリング"
+      },
+      "tr": {
+        "summary": "Scales the geometry"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.center": {
+      "hash": "256d07aded4c",
+      "ja": {
+        "summary": "中心に移動"
+      },
+      "tr": {
+        "summary": "Centers the geometry"
+      }
+    },
+    "krkrthreepp:Threepp.BufferGeometry.dispose": {
+      "hash": "4b8ce80d5ddf",
+      "ja": {
+        "summary": "リソースを解放"
+      },
+      "tr": {
+        "summary": "Releases resources"
+      }
+    }
+  }
+}

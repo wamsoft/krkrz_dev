@@ -1,0 +1,3560 @@
+{
+  "class": "Window",
+  "entries": {
+    "Window": {
+      "hash": "ee921630af96",
+      "ja": {
+        "summary": "Window クラスは、**ウィンドウ**を管理するためのクラスです。"
+      },
+      "tr": {
+        "summary": "The Window class manages a **window**."
+      }
+    },
+    "Window.Window": {
+      "hash": "66ba78e7c6ad",
+      "ja": {
+        "summary": "Window オブジェクトの構築",
+        "description": "Window クラスのオブジェクトを構築します。\n\nウィンドウは非表示の状態で作成され、位置やサイズは未定義 ( どこかにの位置に適当なサイズ ) です。",
+        "params": {
+          "parent": "親ウィンドウを指定します。\n\n親ウィンドウを指定すると、その子ウィンドウとして生成されます。\n\n指定しない場合は省略します。"
+        }
+      },
+      "tr": {
+        "summary": "Constructs a Window object",
+        "description": "Constructs an object of the Window class.\n\nThe window is created hidden, and its position and size are undefined (some arbitrary position and size).",
+        "params": {
+          "parent": "Parent window.\n\nIf a parent window is given, the window is created as its child.\n\nOmit it if not needed."
+        }
+      }
+    },
+    "Window.onMouseEnter": {
+      "hash": "85ea4857cbcc",
+      "ja": {
+        "summary": "マウスが入ってきた",
+        "description": "マウスがウィンドウのクライアント領域内に入ってきたときに発生します。"
+      },
+      "tr": {
+        "summary": "The mouse has entered",
+        "description": "Fired when the mouse enters the client area of the window."
+      }
+    },
+    "Window.onMouseLeave": {
+      "hash": "a4f99407007f",
+      "ja": {
+        "summary": "マウスが出ていった",
+        "description": "マウスがウィンドウのクライアント領域内から出ていったときに発生します。"
+      },
+      "tr": {
+        "summary": "The mouse has left",
+        "description": "Fired when the mouse leaves the client area of the window."
+      }
+    },
+    "Window.onClick": {
+      "hash": "984b7d6fe052",
+      "ja": {
+        "summary": "ウィンドウがクリックされた",
+        "description": "ウィンドウがクリックされた時に発生します。",
+        "params": {
+          "x": "ウィンドウがクリックされた位置の x 座標 ( クライアント座標での ) の値です。",
+          "y": "ウィンドウがクリックされた位置の y 座標 ( クライアント座標での ) の値です。"
+        }
+      },
+      "tr": {
+        "summary": "The window has been clicked",
+        "description": "Fired when the window is clicked.",
+        "params": {
+          "x": "x coordinate (in client coordinates) of the position where the window was clicked.",
+          "y": "y coordinate (in client coordinates) of the position where the window was clicked."
+        }
+      }
+    },
+    "Window.onDoubleClick": {
+      "hash": "996e3d541882",
+      "ja": {
+        "summary": "ウィンドウがダブルクリックされた",
+        "description": "ウィンドウがダブルクリックされた時に発生します。",
+        "params": {
+          "x": "ウィンドウがダブルクリックされた位置の x 座標 ( クライアント座標での ) の値です。",
+          "y": "ウィンドウがダブルクリックされた位置の y 座標 ( クライアント座標での ) の値です。"
+        }
+      },
+      "tr": {
+        "summary": "The window has been double-clicked",
+        "description": "Fired when the window is double-clicked.",
+        "params": {
+          "x": "x coordinate (in client coordinates) of the position where the window was double-clicked.",
+          "y": "y coordinate (in client coordinates) of the position where the window was double-clicked."
+        }
+      }
+    },
+    "Window.onMouseDown": {
+      "hash": "30392298fdc7",
+      "ja": {
+        "summary": "マウスのボタンが押された",
+        "description": "マウスボタンが押された時に発生します。",
+        "params": {
+          "x": "マウスのボタンが押された位置の x 座標 ( クライアント座標での ) の値です。",
+          "y": "マウスのボタンが押された位置の y 座標 ( クライアント座標での ) の値です。",
+          "button": "押されたマウスボタンです。以下のいずれかの値になります。\n\n`**mbLeft**    : `マウスの左ボタンが押された\n\n`**mbMiddle**  : `マウスの中ボタンが押された\n\n`**mbRight**   : `マウスの右ボタンが押された\n\n`**mbX1**      : `マウスのサイドキー第1ボタンが押された\n\n`**mbX2**      : `マウスのサイドキー第2ボタンが押された",
+          "shift": "マウスボタンが押されたときに同時に押されていたシフト系のキーの状態です。\n以下の値のビット OR による組み合わせになります。\n\n`**ssAlt**     : `ALT キーが押されていた\n\n`**ssShift**   : `SHIFT キーが押されていた\n\n`**ssCtrl**    : `CTRL キーが押されていた"
+        }
+      },
+      "tr": {
+        "summary": "A mouse button has been pressed",
+        "description": "Fired when a mouse button is pressed.",
+        "params": {
+          "x": "x coordinate (in client coordinates) of the position where the mouse button was pressed.",
+          "y": "y coordinate (in client coordinates) of the position where the mouse button was pressed.",
+          "button": "The mouse button that was pressed. One of the following values.\n\n`**mbLeft**    : `Left mouse button pressed\n\n`**mbMiddle**  : `Middle mouse button pressed\n\n`**mbRight**   : `Right mouse button pressed\n\n`**mbX1**      : `First side button pressed\n\n`**mbX2**      : `Second side button pressed",
+          "shift": "State of the shift-type keys held down when the mouse button was pressed.\nA bitwise OR of the following values.\n\n`**ssAlt**     : `ALT key was held down\n\n`**ssShift**   : `SHIFT key was held down\n\n`**ssCtrl**    : `CTRL key was held down"
+        }
+      }
+    },
+    "Window.onMouseUp": {
+      "hash": "c87609a28e8a",
+      "ja": {
+        "summary": "マウスのボタンが離された",
+        "description": "マウスボタンが離された時に発生します。",
+        "params": {
+          "x": "マウスのボタンが離された位置の x 座標 ( クライアント座標での ) の値です。",
+          "y": "マウスのボタンが離された位置の y 座標 ( クライアント座標での ) の値です。",
+          "button": "離されたマウスボタンです。以下のいずれかの値になります。\n\n`**mbLeft**    : `マウスの左ボタンが離された\n\n`**mbMiddle**  : `マウスの中ボタンが離された\n\n`**mbRight**   : `マウスの右ボタンが離された\n\n`**mbX1**      : `マウスのサイドキー第1ボタンが離された\n\n`**mbX2**      : `マウスのサイドキー第2ボタンが離された",
+          "shift": "マウスボタンが離された時に同時に押されていたシフト系のキーの状態です。\n以下の値のビット OR による組み合わせになります。\n\n`**ssAlt**     : `ALT キーが押されていた\n\n`**ssShift**   : `SHIFT キーが押されていた\n\n`**ssCtrl**    : `CTRL キーが押されていた"
+        }
+      },
+      "tr": {
+        "summary": "A mouse button has been released",
+        "description": "Fired when a mouse button is released.",
+        "params": {
+          "x": "x coordinate (in client coordinates) of the position where the mouse button was released.",
+          "y": "y coordinate (in client coordinates) of the position where the mouse button was released.",
+          "button": "The mouse button that was released. One of the following values.\n\n`**mbLeft**    : `Left mouse button released\n\n`**mbMiddle**  : `Middle mouse button released\n\n`**mbRight**   : `Right mouse button released\n\n`**mbX1**      : `First side button released\n\n`**mbX2**      : `Second side button released",
+          "shift": "State of the shift-type keys held down when the mouse button was released.\nA bitwise OR of the following values.\n\n`**ssAlt**     : `ALT key was held down\n\n`**ssShift**   : `SHIFT key was held down\n\n`**ssCtrl**    : `CTRL key was held down"
+        }
+      }
+    },
+    "Window.onMouseMove": {
+      "hash": "02719d86d0a5",
+      "ja": {
+        "summary": "マウスが移動した",
+        "description": "マウスが移動した時に発生します。",
+        "params": {
+          "x": "マウスが移動した位置の x 座標 ( クライアント座標での ) の値です。",
+          "y": "マウスが移動した位置の y 座標 ( クライアント座標での ) の値です。",
+          "shift": "マウスが移動していた時に同時に押されていたシフト系のキーやマウスのボタンの状態です。\n以下の値のビット OR による組み合わせになります。\n\n`**ssAlt**     : `ALT キーが押されていた\n\n`**ssShift**   : `SHIFT キーが押されていた\n\n`**ssCtrl**    : `CTRL キーが押されていた\n\n`**ssLeft**    : `マウスの左ボタンが押されていた\n\n`**ssMiddle**  : `マウスの中ボタンが押されていた\n\n`**ssRight**   : `マウスの右ボタンが押されていた"
+        }
+      },
+      "tr": {
+        "summary": "The mouse has moved",
+        "description": "Fired when the mouse moves.",
+        "params": {
+          "x": "x coordinate (in client coordinates) of the position the mouse moved to.",
+          "y": "y coordinate (in client coordinates) of the position the mouse moved to.",
+          "shift": "State of the shift-type keys and mouse buttons held down while the mouse was moving.\nA bitwise OR of the following values.\n\n`**ssAlt**     : `ALT key was held down\n\n`**ssShift**   : `SHIFT key was held down\n\n`**ssCtrl**    : `CTRL key was held down\n\n`**ssLeft**    : `Left mouse button was held down\n\n`**ssMiddle**  : `Middle mouse button was held down\n\n`**ssRight**   : `Right mouse button was held down"
+        }
+      }
+    },
+    "Window.onMouseWheel": {
+      "hash": "d6bc8f5f4075",
+      "ja": {
+        "summary": "マウスホイールが回転した",
+        "description": "マウスホイールが回転した時に発生します。",
+        "params": {
+          "shift": "マウスが移動していた時に同時に押されていたシフト系のキーやマウスのボタンの状態です。\n以下の値のビット OR による組み合わせになります。\n\n`**ssAlt**     : `ALT キーが押されていた\n\n`**ssShift**   : `SHIFT キーが押されていた\n\n`**ssCtrl**    : `CTRL キーが押されていた\n\n`**ssLeft**    : `マウスの左ボタンが押されていた\n\n`**ssMiddle**  : `マウスの中ボタンが押されていた\n\n`**ssRight**   : `マウスの右ボタンが押されていた",
+          "delta": "ホイールの回転角です。上方向(ユーザの反対側の方向)に回された場合は正、\n下方向(ユーザ側の方向)に回された場合は負の値になります。通常、最小量は 120\nとなります。",
+          "x": "ホイールが回転した位置の x 座標 ( クライアント座標での ) の値です。",
+          "y": "ホイールが回転した位置の y 座標 ( クライアント座標での ) の値です。"
+        }
+      },
+      "tr": {
+        "summary": "The mouse wheel has been rotated",
+        "description": "Fired when the mouse wheel is rotated.",
+        "params": {
+          "shift": "State of the shift-type keys and mouse buttons held down while the mouse was moving.\nA bitwise OR of the following values.\n\n`**ssAlt**     : `ALT key was held down\n\n`**ssShift**   : `SHIFT key was held down\n\n`**ssCtrl**    : `CTRL key was held down\n\n`**ssLeft**    : `Left mouse button was held down\n\n`**ssMiddle**  : `Middle mouse button was held down\n\n`**ssRight**   : `Right mouse button was held down",
+          "delta": "Wheel rotation angle. Positive when rotated upward (away from the user),\nnegative when rotated downward (toward the user). The minimum step is usually 120.",
+          "x": "x coordinate (in client coordinates) of the position where the wheel was rotated.",
+          "y": "y coordinate (in client coordinates) of the position where the wheel was rotated."
+        }
+      }
+    },
+    "Window.onTouchDown": {
+      "hash": "aa9bf28a456c",
+      "ja": {
+        "summary": "画面がタッチされた",
+        "description": "タッチパネルにタッチされた時に発生します。",
+        "params": {
+          "x": "タッチされた位置の x 座標 ( クライアント座標での ) の値です。",
+          "y": "タッチされた位置の y 座標 ( クライアント座標での ) の値です。",
+          "cx": "指が接触している横方向ピクセル数です。\n\nデバイスが対応していない場合は常に1です。",
+          "cy": "指が接触している縦方向ピクセル数です。\n\nデバイスが対応していない場合は常に1です。",
+          "id": "タッチIDです。\n\nマルチタッチ時、各位置ごとに固有の値が設定され、このIDによって位置を識別できます。"
+        }
+      },
+      "tr": {
+        "summary": "The screen has been touched",
+        "description": "Fired when the touch panel is touched.",
+        "params": {
+          "x": "x coordinate (in client coordinates) of the touched position.",
+          "y": "y coordinate (in client coordinates) of the touched position.",
+          "cx": "Horizontal contact size of the finger, in pixels.\n\nAlways 1 if the device does not support it.",
+          "cy": "Vertical contact size of the finger, in pixels.\n\nAlways 1 if the device does not support it.",
+          "id": "Touch ID.\n\nDuring multi-touch, each point gets a unique value, which identifies the point."
+        }
+      }
+    },
+    "Window.onTouchUp": {
+      "hash": "4e4370f3687a",
+      "ja": {
+        "summary": "画面から指が離された",
+        "description": "タッチパネルから指が離された時に発生します。",
+        "params": {
+          "x": "離された位置の x 座標 ( クライアント座標での ) の値です。",
+          "y": "離された位置の y 座標 ( クライアント座標での ) の値です。",
+          "cx": "指が接触している横方向ピクセル数です。\n\nデバイスが対応していない場合は常に1です。",
+          "cy": "指が接触している縦方向ピクセル数です。\n\nデバイスが対応していない場合は常に1です。",
+          "id": "タッチIDです。\n\nマルチタッチ時、各位置ごとに固有の値が設定され、このIDによって位置を識別できます。"
+        }
+      },
+      "tr": {
+        "summary": "A finger has been lifted from the screen",
+        "description": "Fired when a finger is lifted from the touch panel.",
+        "params": {
+          "x": "x coordinate (in client coordinates) of the released position.",
+          "y": "y coordinate (in client coordinates) of the released position.",
+          "cx": "Horizontal contact size of the finger, in pixels.\n\nAlways 1 if the device does not support it.",
+          "cy": "Vertical contact size of the finger, in pixels.\n\nAlways 1 if the device does not support it.",
+          "id": "Touch ID.\n\nDuring multi-touch, each point gets a unique value, which identifies the point."
+        }
+      }
+    },
+    "Window.onTouchMove": {
+      "hash": "095abace3ff5",
+      "ja": {
+        "summary": "指が移動した",
+        "description": "タッチパネル上で触れている指が移動した時に発生します。",
+        "params": {
+          "x": "タッチ位置の x 座標 ( クライアント座標での ) の値です。",
+          "y": "タッチ位置の y 座標 ( クライアント座標での ) の値です。",
+          "cx": "指が接触している横方向ピクセル数です。\n\nデバイスが対応していない場合は常に1です。",
+          "cy": "指が接触している縦方向ピクセル数です。\n\nデバイスが対応していない場合は常に1です。",
+          "id": "タッチIDです。\n\nマルチタッチ時、各位置ごとに固有の値が設定され、このIDによって位置を識別できます。"
+        }
+      },
+      "tr": {
+        "summary": "A finger has moved",
+        "description": "Fired when a finger touching the touch panel moves.",
+        "params": {
+          "x": "x coordinate (in client coordinates) of the touch position.",
+          "y": "y coordinate (in client coordinates) of the touch position.",
+          "cx": "Horizontal contact size of the finger, in pixels.\n\nAlways 1 if the device does not support it.",
+          "cy": "Vertical contact size of the finger, in pixels.\n\nAlways 1 if the device does not support it.",
+          "id": "Touch ID.\n\nDuring multi-touch, each point gets a unique value, which identifies the point."
+        }
+      }
+    },
+    "Window.onTouchScaling": {
+      "hash": "fa2a35612eb9",
+      "ja": {
+        "summary": "拡大操作した",
+        "description": "タッチパネル上でマルチタッチによって拡大操作した時に発生します。",
+        "params": {
+          "startdistance": "マルチタッチが開始された時のピクセル距離です。",
+          "currentdistance": "イベント発生時のタッチのピクセル距離です。",
+          "cx": "中心位置の x 座標です。**描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) で渡されます\n( [Window.setCursorPos](#setcursorpos) にそのまま渡せます )。レイヤ座標が必要なら [Layer.onTouchScaling](Layer.md#ontouchscaling) を使ってください。",
+          "cy": "中心位置の y 座標です。座標系は cx と同じです。",
+          "flag": "マルチタッチ状態フラグです。\n\n`**0x01**     : `マルチタッチが開始された最初のイベントに設定されています。"
+        }
+      },
+      "tr": {
+        "summary": "A zoom gesture has been made",
+        "description": "Fired when a multi-touch zoom gesture is made on the touch panel.",
+        "params": {
+          "startdistance": "Distance in pixels when the multi-touch began.",
+          "currentdistance": "Distance between touches in pixels when the event occurred.",
+          "cx": "x coordinate of the center. It is passed in **drawing area coordinates** (pixel coordinates with the top-left of the drawing area as the origin)\n(it can be passed to [Window.setCursorPos](#setcursorpos) as is). If you need layer coordinates, use [Layer.onTouchScaling](Layer.md#ontouchscaling).",
+          "cy": "y coordinate of the center. Same coordinate system as cx.",
+          "flag": "Multi-touch state flag.\n\n`**0x01**     : `Set on the first event after the multi-touch began."
+        }
+      }
+    },
+    "Window.onTouchRotate": {
+      "hash": "8810e5356162",
+      "ja": {
+        "summary": "回転操作した",
+        "description": "タッチパネル上でマルチタッチによって回転操作した時に発生します。",
+        "params": {
+          "startangle": "マルチタッチが開始された時のラジアン角度です。",
+          "currentangle": "イベント発生時のタッチのラジアン角度です。",
+          "distance": "イベント発生時のタッチのピクセル距離です。",
+          "cx": "中心位置の x 座標です。**描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) で渡されます\n( [Window.setCursorPos](#setcursorpos) にそのまま渡せます )。レイヤ座標が必要なら [Layer.onTouchRotate](Layer.md#ontouchrotate) を使ってください。",
+          "cy": "中心位置の y 座標です。座標系は cx と同じです。",
+          "flag": "マルチタッチ状態フラグです。\n\n`**0x01**     : `マルチタッチが開始された最初のイベントに設定されています。"
+        }
+      },
+      "tr": {
+        "summary": "A rotate gesture has been made",
+        "description": "Fired when a multi-touch rotate gesture is made on the touch panel.",
+        "params": {
+          "startangle": "Angle in radians when the multi-touch began.",
+          "currentangle": "Angle of the touch in radians when the event occurred.",
+          "distance": "Distance between touches in pixels when the event occurred.",
+          "cx": "x coordinate of the center. It is passed in **drawing area coordinates** (pixel coordinates with the top-left of the drawing area as the origin)\n(it can be passed to [Window.setCursorPos](#setcursorpos) as is). If you need layer coordinates, use [Layer.onTouchRotate](Layer.md#ontouchrotate).",
+          "cy": "y coordinate of the center. Same coordinate system as cx.",
+          "flag": "Multi-touch state flag.\n\n`**0x01**     : `Set on the first event after the multi-touch began."
+        }
+      }
+    },
+    "Window.onMultiTouch": {
+      "hash": "cdfc39ea7f0c",
+      "ja": {
+        "summary": "マルチタッチ状態が変化した",
+        "description": "マルチタッチ状態が開始されたり、移動したり、離れた時に発生します。\n\n座標情報は [Window.touchPointCount](Window.md#touchpointcount) プロパティと [Window.getTouchPoint](Window.md#gettouchpoint) メソッドで取得できます。"
+      },
+      "tr": {
+        "summary": "The multi-touch state has changed",
+        "description": "Fired when multi-touch begins, moves, or ends.\n\nCoordinates can be obtained with the [Window.touchPointCount](Window.md#touchpointcount) property and the [Window.getTouchPoint](Window.md#gettouchpoint) method."
+      }
+    },
+    "Window.onKeyDown": {
+      "hash": "e1074ab52bd8",
+      "ja": {
+        "summary": "キーが押された",
+        "description": "キーが押された時に発生します。",
+        "params": {
+          "key": "押されたキーの**仮想キーコード**の値です。",
+          "shift": "キーが押された時に同時に押されていたシフト系のキーやマウスのボタンの状態です。\n以下の値のビット OR による組み合わせになります。\n\n`**ssAlt**     : `ALT キーが押されていた\n\n`**ssShift**   : `SHIFT キーが押されていた\n\n`**ssCtrl**    : `CTRL キーが押されていた\n\n`**ssLeft**    : `マウスの左ボタンが押されていた\n\n`**ssMiddle**  : `マウスの中ボタンが押されていた\n\n`**ssRight**   : `マウスの右ボタンが押されていた\n\nまた、キーボードが長時間押され、キーリピートが発生している場合は\n以下の値も組み合わされます。\n\n`**ssRepeat**  : `キーリピートが発生した"
+        }
+      },
+      "tr": {
+        "summary": "A key has been pressed",
+        "description": "Fired when a key is pressed.",
+        "params": {
+          "key": "**Virtual key code** of the pressed key.",
+          "shift": "State of the shift-type keys and mouse buttons held down when the key was pressed.\nA bitwise OR of the following values.\n\n`**ssAlt**     : `ALT key was held down\n\n`**ssShift**   : `SHIFT key was held down\n\n`**ssCtrl**    : `CTRL key was held down\n\n`**ssLeft**    : `Left mouse button was held down\n\n`**ssMiddle**  : `Middle mouse button was held down\n\n`**ssRight**   : `Right mouse button was held down\n\nIn addition, if the key has been held long enough for key repeat to occur,\nthe following value is also included.\n\n`**ssRepeat**  : `Key repeat occurred"
+        }
+      }
+    },
+    "Window.onKeyUp": {
+      "hash": "cd1f7cb01d99",
+      "ja": {
+        "summary": "キーが離された",
+        "description": "キーが離された時に発生します。",
+        "params": {
+          "key": "離されたキーの**仮想キーコード**の値です。",
+          "shift": "キーが離された時に同時に押されていたシフト系のキーやマウスのボタンの状態です。\n以下の値のビット OR による組み合わせになります。\n\n`**ssAlt**     : `ALT キーが押されていた\n\n`**ssShift**   : `SHIFT キーが押されていた\n\n`**ssCtrl**    : `CTRL キーが押されていた\n\n`**ssLeft**    : `マウスの左ボタンが押されていた\n\n`**ssMiddle**  : `マウスの中ボタンが押されていた\n\n`**ssRight**   : `マウスの右ボタンが押されていた"
+        }
+      },
+      "tr": {
+        "summary": "A key has been released",
+        "description": "Fired when a key is released.",
+        "params": {
+          "key": "**Virtual key code** of the released key.",
+          "shift": "State of the shift-type keys and mouse buttons held down when the key was released.\nA bitwise OR of the following values.\n\n`**ssAlt**     : `ALT key was held down\n\n`**ssShift**   : `SHIFT key was held down\n\n`**ssCtrl**    : `CTRL key was held down\n\n`**ssLeft**    : `Left mouse button was held down\n\n`**ssMiddle**  : `Middle mouse button was held down\n\n`**ssRight**   : `Right mouse button was held down"
+        }
+      }
+    },
+    "Window.onKeyPress": {
+      "hash": "8119d75e55a6",
+      "ja": {
+        "summary": "文字が入力された",
+        "description": "文字が入力されたときに発生します。[Window.onKeyDown](Window.md#onkeydown) と異なるのは、onKeyDown が\n仮想キーコードを扱うのに対し、このイベントは文字そのものを扱います。押されたキーが\n文字とは関係のないキー (ファンクションキーなど) の場合はこのイベントは発生しません。\n\nCtrlキーと同時に押された場合は、以下に示すようなコントロールコードが送られてきます。\n\n`0x00 : `Ctrl+@\n\n`0x01 : `Ctrl+A\n\n`0x02 : `Ctrl+B\n\n`0x03 : `Ctrl+C\n\n`0x04 : `Ctrl+D\n\n`0x05 : `Ctrl+E\n\n`0x06 : `Ctrl+F\n\n`0x07 : `Ctrl+G\n\n`0x08 : `Ctrl+H\n\n`0x09 : `Ctrl+I\n\n`0x0A : `Ctrl+J\n\n`0x0B : `Ctrl+K\n\n`0x0C : `Ctrl+L\n\n`0x0D : `Ctrl+M\n\n`0x0E : `Ctrl+N\n\n`0x0F : `Ctrl+O\n\n`0x10 : `Ctrl+P\n\n`0x11 : `Ctrl+Q\n\n`0x12 : `Ctrl+R\n\n`0x13 : `Ctrl+S\n\n`0x14 : `Ctrl+T\n\n`0x15 : `Ctrl+U\n\n`0x16 : `Ctrl+V\n\n`0x17 : `Ctrl+W\n\n`0x18 : `Ctrl+X\n\n`0x19 : `Ctrl+Y\n\n`0x1A : `Ctrl+Z\n\n`0x1B : `Ctrl+[\n\n`0x1C : `Ctrl+\\\n\n`0x1D : `Ctrl+]\n\n`0x1E : `Ctrl+^\n\n`0x1F : `Ctrl+_",
+        "params": {
+          "key": "入力された文字です。"
+        }
+      },
+      "tr": {
+        "summary": "A character has been entered",
+        "description": "Fired when a character is entered. Unlike [Window.onKeyDown](Window.md#onkeydown), which deals with\nvirtual key codes, this event deals with the characters themselves. If the pressed key has nothing to do with\ncharacters (function keys, etc.), this event does not fire.\n\nWhen pressed together with the Ctrl key, control codes such as the following are sent.\n\n`0x00 : `Ctrl+@\n\n`0x01 : `Ctrl+A\n\n`0x02 : `Ctrl+B\n\n`0x03 : `Ctrl+C\n\n`0x04 : `Ctrl+D\n\n`0x05 : `Ctrl+E\n\n`0x06 : `Ctrl+F\n\n`0x07 : `Ctrl+G\n\n`0x08 : `Ctrl+H\n\n`0x09 : `Ctrl+I\n\n`0x0A : `Ctrl+J\n\n`0x0B : `Ctrl+K\n\n`0x0C : `Ctrl+L\n\n`0x0D : `Ctrl+M\n\n`0x0E : `Ctrl+N\n\n`0x0F : `Ctrl+O\n\n`0x10 : `Ctrl+P\n\n`0x11 : `Ctrl+Q\n\n`0x12 : `Ctrl+R\n\n`0x13 : `Ctrl+S\n\n`0x14 : `Ctrl+T\n\n`0x15 : `Ctrl+U\n\n`0x16 : `Ctrl+V\n\n`0x17 : `Ctrl+W\n\n`0x18 : `Ctrl+X\n\n`0x19 : `Ctrl+Y\n\n`0x1A : `Ctrl+Z\n\n`0x1B : `Ctrl+[\n\n`0x1C : `Ctrl+\\\n\n`0x1D : `Ctrl+]\n\n`0x1E : `Ctrl+^\n\n`0x1F : `Ctrl+_",
+        "params": {
+          "key": "The entered character."
+        }
+      }
+    },
+    "Window.onTextInput": {
+      "hash": "b010ca031fe0",
+      "ja": {
+        "summary": "テキスト入力イベント",
+        "description": "確定した入力文字列が届くイベントです。IME で変換確定した文字列は\nまとめて 1 回で届き、BMP 外の文字 ( 絵文字等 ) もサロゲートペアに\n分解されず 1 回で届きます。\n\n従来の [onKeyPress](#onkeypress) は UTF-16 の符号単位ごとの配信なので、\n**文字単位で受けたい入力欄の実装にはこちらを使います**。制御文字\n( BS / Enter / Tab / Esc 等 ) はこのイベントへは流れません\n( [onKeyDown](#onkeydown) / onKeyPress で受けてください )。\n\n[ElementsDialog](ElementsDialog.md) のテキスト入力欄がフォーカスを持っている間は、\nダイアログ側が入力を消費するのでこのイベントは発生しません。\n\n**プラットフォームによる差異**\n\nSDL3 系ビルドでは OS のテキスト入力イベントをそのまま配信します。\nWINVER ( Windows ネイティブ ) ビルドでは `WM_CHAR` から合成するため、\nonKeyPress と併発します ( 内容は同じ文字 )。\n\nLayer 側へは互換のため従来どおり UTF-16 符号単位へ分解した\n[Layer.onKeyPress](Layer.md#onkeypress) が配送されます。",
+        "params": {
+          "text": "入力された文字列。"
+        }
+      },
+      "tr": {
+        "summary": "Text input event",
+        "description": "An event that delivers committed input strings. A string committed in the IME\narrives all at once in a single event, and characters outside the BMP (emoji, etc.) also arrive in a single event\nwithout being split into surrogate pairs.\n\nThe traditional [onKeyPress](#onkeypress) is delivered per UTF-16 code unit,\nso **use this event when implementing input fields that need whole characters**. Control characters\n(BS / Enter / Tab / Esc, etc.) are not delivered to this event\n(handle them in [onKeyDown](#onkeydown) / onKeyPress).\n\nWhile a text input field of an [ElementsDialog](ElementsDialog.md) has focus,\nthe dialog consumes the input, so this event does not fire.\n\n**Platform differences**\n\nSDL3 builds deliver the OS text input events as they are.\nWINVER (native Windows) builds synthesize them from `WM_CHAR`,\nso they fire alongside onKeyPress (with the same characters).\n\nFor compatibility, layers still receive\n[Layer.onKeyPress](Layer.md#onkeypress) split into UTF-16 code units as before.",
+        "params": {
+          "text": "The entered string."
+        }
+      }
+    },
+    "Window.onResize": {
+      "hash": "05b715bbed29",
+      "ja": {
+        "summary": "ウィンドウのサイズが変化した",
+        "description": "ウィンドウのサイズが変化した時に発生します。\n\n実際のサイズは [Window.width](Window.md#width) プロパティや [Window.height](Window.md#height) プロパティなどで取得してください。"
+      },
+      "tr": {
+        "summary": "The window size has changed",
+        "description": "Fired when the window size changes.\n\nGet the actual size from properties such as [Window.width](Window.md#width) and [Window.height](Window.md#height)."
+      }
+    },
+    "Window.onFileDrop": {
+      "hash": "c8708d040467",
+      "ja": {
+        "summary": "ファイルがドロップされた",
+        "description": "ファイルがエクスプローラなどからウィンドウにドロップされたときに発生します。\n\n単一のファイルがドロップされた場合でも引数には配列オブジェクトが渡されます (最初の要素が\nそのファイルになります )。",
+        "params": {
+          "files": "ドロップされたファイル名が格納された配列(Array)オブジェクトです。"
+        }
+      },
+      "tr": {
+        "summary": "Files have been dropped",
+        "description": "Fired when files are dropped onto the window from Explorer or the like.\n\nEven when a single file is dropped, an array object is passed as the argument (the first element\nis that file).",
+        "params": {
+          "files": "Array object containing the names of the dropped files."
+        }
+      }
+    },
+    "Window.onCloseQuery": {
+      "hash": "4ea68bb2995e",
+      "ja": {
+        "summary": "ウィンドウを閉じる確認",
+        "description": "ウィンドウを閉じることができるかどうかを確認するためのイベントです。ウィンドウを閉じることが\nできない場合、上位クラスの同メソッドに引数として false を渡してください。",
+        "params": {
+          "canclose": "ウィンドウを閉じることができるかどうかが渡されます。下位クラスから上位クラスのイベントハンドラが\n呼ばれる課程で、下位クラスが決定した「ウィンドウを閉じることができるか」が渡されます。"
+        }
+      },
+      "tr": {
+        "summary": "Confirms closing the window",
+        "description": "An event for confirming whether the window can be closed. If the window cannot be closed,\npass false as the argument to the same method of the superclass.",
+        "params": {
+          "canclose": "Whether the window can be closed. As the event handlers are called from subclass up to superclass,\nthe subclass's decision on whether the window can be closed is passed here."
+        }
+      }
+    },
+    "Window.onPopupHide": {
+      "hash": "882f451a359c",
+      "ja": {
+        "summary": "ポップアップウィンドウを閉じる",
+        "description": "ポップアップウィンドウが閉じるべき時に発生するイベントです。このイベントは、[Window.stayOnTop](Window.md#stayontop) プロパティが真で、かつ、[Window.focusable](Window.md#focusable) プロパティが偽の場合、「他のウィンドウがクリックされた」あるいは「他のアプリケーションがアクティブになった」時に発生します。\n\n通常は、ここでウィンドウを閉じたり、非表示にする処理を行ってください。"
+      },
+      "tr": {
+        "summary": "Closes a popup window",
+        "description": "An event fired when a popup window should close. It fires when the [Window.stayOnTop](Window.md#stayontop) property is true and the [Window.focusable](Window.md#focusable) property is false, and either another window is clicked or another application becomes active.\n\nNormally you close or hide the window here."
+      }
+    },
+    "Window.onActivate": {
+      "hash": "8c6514d06d84",
+      "ja": {
+        "summary": "ウィンドウがアクティブになったとき",
+        "description": "ウィンドウがアクティブになったときに呼び出されるイベント関数を表します。\n\nこのイベントは、ウィンドウが既にアクティブの場合にも発生する可能性があるので注意してください (完全に onActivate → onDeactivate → onActivate → …… の順に発生する保証がない )。"
+      },
+      "tr": {
+        "summary": "When the window becomes active",
+        "description": "The event function called when the window becomes active.\n\nNote that this event may fire even when the window is already active (there is no guarantee that events strictly alternate onActivate → onDeactivate → onActivate → ...)."
+      }
+    },
+    "Window.onDeactivate": {
+      "hash": "1465abc965e3",
+      "ja": {
+        "summary": "ウィンドウが非アクティブになったとき",
+        "description": "ウィンドウが非アクティブになったときに呼び出されるイベント関数を表します。\n\nこのイベントは、ウィンドウが既に非アクティブの場合にも発生する可能性があるので注意してください (完全に onActivate → onDeactivate → onActivate → …… の順に発生する保証がない )。"
+      },
+      "tr": {
+        "summary": "When the window becomes inactive",
+        "description": "The event function called when the window becomes inactive.\n\nNote that this event may fire even when the window is already inactive (there is no guarantee that events strictly alternate onActivate → onDeactivate → onActivate → ...)."
+      }
+    },
+    "Window.onHintChanged": {
+      "hash": "fd25c20541ae",
+      "ja": {
+        "summary": "ヒントの状態が変化したとき",
+        "description": "ヒントの状態が変化したときに呼び出されるイベント関数を表します。\n\n表示/非表示に従いヒントの表示を行います。\n\nヒントをレイヤで表示する場合は、そのレイヤのマウスメッセージが無視されるように [Layer.hitThreshold](Layer.md#hitthreshold) を256に設定します。\n\nまた、[Layer.ignoreHintSensing](Layer.md#ignorehintsensing) もtrueを指定します。",
+        "params": {
+          "text": "ヒントに表示する文字列が渡されます。",
+          "x": "ヒント表示X軸座標値が渡されます。",
+          "y": "ヒント表示Y軸座標値が渡されます。",
+          "isshow": "ヒントを表示するか、非表示にするかが渡されます。"
+        }
+      },
+      "tr": {
+        "summary": "When the hint state changes",
+        "description": "The event function called when the hint state changes.\n\nShow or hide the hint accordingly.\n\nIf you display the hint with a layer, set that layer's [Layer.hitThreshold](Layer.md#hitthreshold) to 256 so that its mouse messages are ignored.\n\nAlso set [Layer.ignoreHintSensing](Layer.md#ignorehintsensing) to true.",
+        "params": {
+          "text": "String to display in the hint.",
+          "x": "X coordinate at which to display the hint.",
+          "y": "Y coordinate at which to display the hint.",
+          "isshow": "Whether to show or hide the hint."
+        }
+      }
+    },
+    "Window.onDisplayRotate": {
+      "hash": "f46d0f9e88e8",
+      "ja": {
+        "summary": "画面が回転されたとき(1.1.0以降)",
+        "description": "画面が回転されたときに呼び出されるイベント関数を表します。",
+        "params": {
+          "orientation": "画面の向き( orientation ) です。\n\n以下のいずれかの値になります。\n\noriUnknown (取得失敗/不明), oriPortrait(縦向き), oriLandscape(横向き)",
+          "angle": "角度です。\n\n角度 ( angle ) は、0、90、180、270、-1 のいずれかで、取得できなかった時は-1となります。\n\n角度は、そのデバイスデフォルトからの回転角なので、縦向きのデバイスでは縦向きで0となります。\n\n通常のデバイスだと、横向きで0が多ようです。\n\n縦向きが0になるのは最近の8インチタブレットなどで、縦向きが標準の向きとなっているものです。",
+          "bpp": "bits per pixel です。",
+          "width": "画面の幅です。",
+          "height": "画面の高さです。"
+        }
+      },
+      "tr": {
+        "summary": "When the display is rotated (1.1.0 and later)",
+        "description": "The event function called when the display is rotated.",
+        "params": {
+          "orientation": "Display orientation.\n\nOne of the following values.\n\noriUnknown (failed to get / unknown), oriPortrait (portrait), oriLandscape (landscape)",
+          "angle": "Angle.\n\nThe angle is one of 0, 90, 180, 270, or -1; it is -1 if it could not be obtained.\n\nThe angle is the rotation from the device's default orientation, so on a portrait device it is 0 in portrait.\n\nOn typical devices, 0 seems to be landscape in most cases.\n\nDevices where portrait is 0 are those whose standard orientation is portrait, such as recent 8-inch tablets.",
+          "bpp": "Bits per pixel.",
+          "width": "Display width.",
+          "height": "Display height."
+        }
+      }
+    },
+    "Window.close": {
+      "hash": "56c5939f4154",
+      "ja": {
+        "summary": "ウィンドウを閉じる",
+        "description": "[Window.showModal](Window.md#showmodal) メソッドで表示されたウィンドウを閉じます。ウィンドウを閉じる前に [Window.onCloseQuery](Window.md#onclosequery) イベントが発生し、ウィンドウを閉じることができるかどうかを確認することができます。"
+      },
+      "tr": {
+        "summary": "Closes the window",
+        "description": "Closes a window shown with the [Window.showModal](Window.md#showmodal) method. Before the window closes, the [Window.onCloseQuery](Window.md#onclosequery) event fires, which lets you confirm whether the window can be closed."
+      }
+    },
+    "Window.bringToFront": {
+      "hash": "3126f07cac27",
+      "ja": {
+        "summary": "ウィンドウを最前面に移動",
+        "description": "ウィンドウを最前面に移動します。アプリケーションが非アクティブの場合はアプリケーション\n自体もアクティブにします。"
+      },
+      "tr": {
+        "summary": "Brings the window to the front",
+        "description": "Brings the window to the front. If the application is inactive, it also activates the application itself."
+      }
+    },
+    "Window.update": {
+      "hash": "1ffa2b98154c",
+      "ja": {
+        "summary": "ウィンドウ内容の強制的な描画",
+        "description": "引数は現バージョンでは無視されます。\n\ntutNormal や tutEntire は実装されていません。",
+        "params": {
+          "type": "ウィンドウ描画のタイプを指定します。\n\n`**tutNormal**` を指定すると通常の描画 ( 差分描画 )、\n`**tutEntire**` を指定するとウィンドウ内容全体を描画します。"
+        }
+      },
+      "tr": {
+        "summary": "Forces the window contents to be drawn",
+        "description": "The argument is ignored in the current version.\n\ntutNormal and tutEntire are not implemented.",
+        "params": {
+          "type": "Type of window drawing.\n\n`**tutNormal**` draws normally (incremental drawing);\n`**tutEntire**` draws the entire window contents."
+        }
+      }
+    },
+    "Window.showModal": {
+      "hash": "492154a84b76",
+      "ja": {
+        "summary": "モーダルでウィンドウを表示",
+        "description": "ウィンドウを**モーダル** ( **モード付き** ) で表示します。\nこのメソッドはウィンドウを表示状態に\nし、かつ、他のウィンドウを一時的に無効にします。そのためユーザはこのウィンドウのみに\nアクセスできる状態になります ( これをモード付きの状態と呼びます )。ウィンドウが閉じられると\nモード付きの状態は解除されます。\n\nこのメソッドを呼び出す時点ではウィンドウは非表示でなくてはなりません。\nまた、ウィンドウが 1 つしか無い状態では呼び出せません ( 例外になります )。\n\nウィンドウは [Window.close](Window.md#close) が呼ばれるか、ウィンドウの\n閉じるボタンが押されるとモード付きの状態を抜け、`showModal` から処理が戻ります。\n\n> ウィンドウを複数作成できない環境 ( モバイル/コンソール等 ) では、\n> 2 枚目のウィンドウ自体が作成できないため例外になります。そのような環境では\n> モーダルウィンドウを使わない作りにしてください。\n\nモード付きの間は内部でネストしたイベントループが回るため、**描画・タイマー・\n連続ハンドラは動き続けます**。止まるのは他ウィンドウへのユーザ入力だけです。\nWindows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用できます\n( SDL3 ビルドは 2026-08-15 に対応 )。\n\n動作を確認できるコアデモは `window_multi` です。"
+      },
+      "tr": {
+        "summary": "Shows the window modally",
+        "description": "Shows the window **modally**.\nThis method makes the window visible\nand temporarily disables the other windows, so that the user can access only this window\n(this is called the modal state). When the window is closed,\nthe modal state ends.\n\nThe window must be hidden when this method is called.\nAlso, it cannot be called when there is only one window (an exception is thrown).\n\nWhen [Window.close](Window.md#close) is called or the window's\nclose button is pressed, the window leaves the modal state and `showModal` returns.\n\n> In environments where multiple windows cannot be created (mobile / consoles, etc.),\n> the second window itself cannot be created, so an exception is thrown. In such environments,\n> design without modal windows.\n\nWhile in the modal state, a nested event loop runs internally, so **drawing, timers and\ncontinuous handlers keep running**. Only user input to other windows is blocked.\nAvailable in both the native Windows (WINVER) build and the SDL3 build\n(the SDL3 build supports it since 2026-08-15).\n\nThe core demo `window_multi` shows this in action."
+      }
+    },
+    "Window.setMaskRegion": {
+      "hash": "e09350cce969",
+      "ja": {
+        "summary": "ウィンドウリージョンをマスクに従って設定",
+        "description": "ウィンドウリージョンをプライマリレイヤのマスク ( レイヤの不透明度の情報 ) に従って設定します。\n\nウィンドウを不定形にする事ができます。\n\n表示されるプライマリレイヤと、ウィンドウの大きさ、位置がずれないようにするには\n以下のことを行う必要があります。\n\n- [Window.borderStyle](Window.md#borderstyle) は bsNone に設定します。\n- [Layer.imageLeft](Layer.md#imageleft) および [Layer.imageTop](Layer.md#imagetop) は 0 に設定します。",
+        "params": {
+          "threshold": "マスクのスレッショルド ( 敷居値 ) を指定します。\n\nプライマリレイヤのマスク ( レイヤの不透明度の情報 ) のうち、この値よりも大きい部分の形に\nウィンドウが切り取られて表示されます。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the window region from the mask",
+        "description": "Sets the window region according to the mask (layer opacity information) of the primary layer.\n\nThis lets you make the window an irregular shape.\n\nTo keep the displayed primary layer aligned with the window size and position,\nyou need to do the following.\n\n- Set [Window.borderStyle](Window.md#borderstyle) to bsNone.\n- Set [Layer.imageLeft](Layer.md#imageleft) and [Layer.imageTop](Layer.md#imagetop) to 0.",
+        "params": {
+          "threshold": "Mask threshold.\n\nThe window is cut out to the shape of the parts of the primary layer's mask (layer opacity information)\nthat are greater than this value."
+        }
+      }
+    },
+    "Window.removeMaskRegion": {
+      "hash": "62c6bc561e0d",
+      "ja": {
+        "summary": "ウィンドウリージョンの解除",
+        "description": "[Window.setMaskRegion](Window.md#setmaskregion)で設定したウィンドウリージョンを解除し、ウィンドウを矩形に戻します。"
+      },
+      "tr": {
+        "summary": "Removes the window region",
+        "description": "Removes the window region set with [Window.setMaskRegion](Window.md#setmaskregion) and returns the window to a rectangle."
+      }
+    },
+    "Window.add": {
+      "hash": "64c04842ddc4",
+      "ja": {
+        "summary": "管理オブジェクトの追加",
+        "description": "管理オブジェクトを追加します。ここで指定されたオブジェクトは、ウィンドウが無効化\nされるときに自動的に無効化されるようになります。",
+        "params": {
+          "object": "管理されるオブジェクトを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Adds a managed object",
+        "description": "Adds a managed object. The object given here is automatically invalidated\nwhen the window is invalidated.",
+        "params": {
+          "object": "Object to be managed."
+        }
+      }
+    },
+    "Window.remove": {
+      "hash": "3eb9b00f2c3e",
+      "ja": {
+        "summary": "管理オブジェクトの削除",
+        "description": "管理オブジェクトのリストから指定されたオブジェクトを削除します。",
+        "params": {
+          "object": "管理オブジェクトのリストから削除するオブジェクトを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Removes a managed object",
+        "description": "Removes the given object from the list of managed objects.",
+        "params": {
+          "object": "Object to remove from the list of managed objects."
+        }
+      }
+    },
+    "Window.setSize": {
+      "hash": "4752de18f7ce",
+      "ja": {
+        "summary": "ウィンドウサイズの設定",
+        "description": "ウィンドウのサイズを指定します。\n\nウィンドウのサイズを指定するときには、[Window.width](Window.md#width) や\n[Window.height](Window.md#height) プロパティを個々に設定するよりも\nこのメソッドで一気に指定した方が効率的です。\n\n!!! tip \"内側 ( 描画領域 ) 基準の API を推奨します\"\n    この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは\n    プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で\n    変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では\n    内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する\n    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /\n    [Window.setInnerSize](Window.md#setinnersize) を使ってください。\n    枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /\n    [Window.frameHeight](Window.md#frameheight) を足せます。",
+        "params": {
+          "width": "ウィンドウの横幅を指定します。",
+          "height": "ウィンドウの縦幅を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the window size",
+        "description": "Sets the size of the window.\n\nWhen setting the window size, it is more efficient to set it at once with this method\nthan to set the [Window.width](Window.md#width) and\n[Window.height](Window.md#height) properties individually.\n\n!!! tip \"Prefer the inner (drawing area) based API\"\n    This value is the size of the **outer frame including window decorations**. Whether decorations exist and how thick they are\n    depends on the platform, the OS theme and [Window.borderStyle](Window.md#borderstyle);\n    in environments without decorations (mobile / consoles, or with `bsNone`) it is\n    equal to the inner size. For portable code, use\n    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /\n    [Window.setInnerSize](Window.md#setinnersize), which correspond directly to the game screen.\n    When you need the frame, you can add [Window.frameWidth](Window.md#framewidth) /\n    [Window.frameHeight](Window.md#frameheight).",
+        "params": {
+          "width": "Window width.",
+          "height": "Window height."
+        }
+      }
+    },
+    "Window.setMinSize": {
+      "hash": "b5a3589114c0",
+      "ja": {
+        "summary": "ウィンドウの最小サイズの設定",
+        "description": "ウィンドウの最小サイズを指定します。ウィンドウはこのメソッドで指定したサイズより小さくなることはできません。\n\n!!! note \"基準は内側 ( 描画領域 ) サイズ\"\n    指定する値は [Window.innerWidth](Window.md#innerwidth) /\n    [Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた\n    描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない\n    プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は\n    [Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。",
+        "params": {
+          "width": "ウィンドウの最小の横幅を指定します。0を指定すると制限は無くなります。",
+          "height": "ウィンドウの最小の縦幅を指定します。0を指定すると制限は無くなります。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the minimum window size",
+        "description": "Sets the minimum size of the window. The window cannot become smaller than the size given here.\n\n!!! note \"Based on the inner (drawing area) size\"\n    The values are the size of the drawing area excluding the window frame, the same as\n    [Window.innerWidth](Window.md#innerwidth) /\n    [Window.innerHeight](Window.md#innerheight) (changed from the outer size on 2026-08-17,\n    because an outer size cannot be defined on platforms without decorations). If you need values including the frame,\n    add [Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight).",
+        "params": {
+          "width": "Minimum window width. 0 removes the limit.",
+          "height": "Minimum window height. 0 removes the limit."
+        }
+      }
+    },
+    "Window.setMaxSize": {
+      "hash": "3b66e42ac737",
+      "ja": {
+        "summary": "ウィンドウの最大サイズの設定",
+        "description": "ウィンドウの最大サイズを指定します。ウィンドウはこのメソッドで指定したサイズより大きくなることはできません。\n\n!!! note \"基準は内側 ( 描画領域 ) サイズ\"\n    指定する値は [Window.innerWidth](Window.md#innerwidth) /\n    [Window.innerHeight](Window.md#innerheight) と同じ「ウィンドウ枠を除いた\n    描画領域」のサイズです ( 2026-08-17 に外形基準から変更。装飾を持たない\n    プラットフォームでは外形基準が定義できないため )。 枠込みの値が要る場合は\n    [Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight) を足してください。",
+        "params": {
+          "width": "ウィンドウの最大の横幅を指定します。0を指定すると制限は無くなります。",
+          "height": "ウィンドウの最大の縦幅を指定します。0を指定すると制限は無くなります。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the maximum window size",
+        "description": "Sets the maximum size of the window. The window cannot become larger than the size given here.\n\n!!! note \"Based on the inner (drawing area) size\"\n    The values are the size of the drawing area excluding the window frame, the same as\n    [Window.innerWidth](Window.md#innerwidth) /\n    [Window.innerHeight](Window.md#innerheight) (changed from the outer size on 2026-08-17,\n    because an outer size cannot be defined on platforms without decorations). If you need values including the frame,\n    add [Window.frameWidth](Window.md#framewidth) / [Window.frameHeight](Window.md#frameheight).",
+        "params": {
+          "width": "Maximum window width. 0 removes the limit.",
+          "height": "Maximum window height. 0 removes the limit."
+        }
+      }
+    },
+    "Window.setPos": {
+      "hash": "53dce66eb89a",
+      "ja": {
+        "summary": "ウィンドウ位置の設定",
+        "description": "ウィンドウの位置を指定します。\n\nウィンドウの位置を指定するときには、[Window.left](Window.md#left) や\n[Window.top](Window.md#top) プロパティを個々に設定するよりも\nこのメソッドで一気に指定した方が効率的です。",
+        "params": {
+          "left": "ウィンドウの左端位置を指定します。",
+          "top": "ウィンドウの上端位置を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the window position",
+        "description": "Sets the position of the window.\n\nWhen setting the window position, it is more efficient to set it at once with this method\nthan to set the [Window.left](Window.md#left) and\n[Window.top](Window.md#top) properties individually.",
+        "params": {
+          "left": "Left edge position of the window.",
+          "top": "Top edge position of the window."
+        }
+      }
+    },
+    "Window.setInnerSize": {
+      "hash": "ea12790cf2b1",
+      "ja": {
+        "summary": "クライアントサイズの設定",
+        "description": "ウィンドウのクライアントサイズを指定します。\n\nクライアントは、レイヤを表示可能なウィンドウ内の領域です。\n\nこのサイズを設定するとウィンドウのサイズもそれに応じて変化します。\n\nクライアントのサイズを指定するときには、[Window.innerWidth](Window.md#innerwidth) や\n[Window.innerHeight](Window.md#innerheight) プロパティを個々に設定するよりも\nこのメソッドで一気に指定した方が効率的です。",
+        "params": {
+          "width": "クライアントの横幅を指定します。",
+          "height": "クライアントの縦幅を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the client size",
+        "description": "Sets the client size of the window.\n\nThe client is the area inside the window where layers can be displayed.\n\nSetting this size also changes the window size accordingly.\n\nWhen setting the client size, it is more efficient to set it at once with this method\nthan to set the [Window.innerWidth](Window.md#innerwidth) and\n[Window.innerHeight](Window.md#innerheight) properties individually.",
+        "params": {
+          "width": "Client width.",
+          "height": "Client height."
+        }
+      }
+    },
+    "Window.setZoom": {
+      "hash": "5c035fefc56e",
+      "ja": {
+        "summary": "レイヤ拡大倍率の設定",
+        "description": "レイヤの拡大倍率を指定します。分子/分母で指定したサイズで画像が拡大、あるいは縮小されて表示されます。\n\n分子・分母が公約数を持つ場合は自動的に約分されるため、[Window.zoomNumer](Window.md#zoomnumer) プロパティや [Window.zoomDenom](Window.md#zoomdenom) プロパティで読み出される値は、このメソッドで指定した値とは異なる場合があります。\n\n現バージョンの吉里吉里では、拡大・縮小時に補間がかかるかどうかはグラフィックカードのハードウェアやドライバに影響されます。補間がかからないハードウェアやドライバの場合は、画質が荒くなります。\n\nオプションによっては、吉里吉里は拡大・縮小に使用可能なハードウェアを、倍率が変更されるたびに調査するため、このメソッドは拡大率を連続的に変化させて演出を行うような用途には適していません。\n\nこのメソッドは「ウィンドウの内側サイズ ( [Window.innerWidth](Window.md#innerwidth) /\n[Window.innerHeight](Window.md#innerheight) ) をレイヤサイズ × 倍率にする」という意味を持ちます。\nウィンドウがその大きさへリサイズされ、中身が倍率どおりに拡縮されて表示されます。\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドで挙動は同じです\n( WINVER 側は 2026-08-17 に揃えました。それ以前は倍率を覚えるだけで\nウィンドウはリサイズされず、[Window.setInnerSize](Window.md#setinnersize) で\n明示的に指定する必要がありました )。\n\n!!! note \"リサイズできない場合\"\n    ウィンドウサイズを変更できない環境 ( モバイル / コンソール等 ) や、\n    OS の最小ウィンドウサイズを下回る指定では、内側サイズが指定どおりに\n    ならないことがあります。その場合でもゲーム画面は\n    [Window.setViewport](Window.md#setviewport) の設定に従って内側へ配置されます。",
+        "params": {
+          "numer": "倍率の分子を整数で指定します。",
+          "denom": "倍率の分母を整数で指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the layer zoom ratio",
+        "description": "Sets the zoom ratio of the layers. The image is displayed enlarged or reduced by numerator/denominator.\n\nIf the numerator and denominator have a common divisor, the fraction is reduced automatically, so the values read from the [Window.zoomNumer](Window.md#zoomnumer) and [Window.zoomDenom](Window.md#zoomdenom) properties may differ from the values given to this method.\n\nIn the current version of Kirikiri, whether interpolation is applied when scaling depends on the graphics card hardware and driver. With hardware or drivers that do not interpolate, image quality is coarse.\n\nDepending on options, Kirikiri examines the hardware available for scaling every time the ratio changes, so this method is not suitable for effects that change the zoom ratio continuously.\n\nThis method means \"make the inner size of the window ( [Window.innerWidth](Window.md#innerwidth) /\n[Window.innerHeight](Window.md#innerheight) ) equal to the layer size times the ratio\".\nThe window is resized to that size, and the contents are scaled by the ratio.\nThe behavior is the same in the native Windows (WINVER) build and the SDL3 / generic builds\n(the WINVER side was aligned on 2026-08-17; before that it only remembered the ratio and\ndid not resize the window, so you had to set the size explicitly with [Window.setInnerSize](Window.md#setinnersize)).\n\n!!! note \"When the window cannot be resized\"\n    In environments where the window size cannot be changed (mobile / consoles, etc.), or when the requested size is\n    below the OS minimum window size, the inner size may not be as specified.\n    Even then, the game screen is placed inside according to the\n    [Window.setViewport](Window.md#setviewport) settings.",
+        "params": {
+          "numer": "Numerator of the ratio, as an integer.",
+          "denom": "Denominator of the ratio, as an integer."
+        }
+      }
+    },
+    "Window.setViewport": {
+      "hash": "9483fff603eb",
+      "ja": {
+        "summary": "ビューポート(表示画角)の一括設定",
+        "description": "外側ウインドウ([Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) で表される surface)の中に、内側ゲーム画面(primaryLayer のサイズ)をどのように配置するかをまとめて設定します。両者のサイズが一致していれば従来どおり全面等倍で表示され、異なるサイズにすると本設定に従ってゲームが surface 内へ配置され、余白が生じます。余白は [Window.viewportBgColor](Window.md#viewportbgcolor) や [Window.setViewportWallpaper](Window.md#setviewportwallpaper) で埋められます ( Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます。WINVER 対応は 2026-08-17 )。\n\nマウス座標は配置に応じて自動的にゲーム論理座標へ補正されるため、どの設定でも入力は正しくゲーム内部へ届きます。\n\n各引数は対応するプロパティ([Window.viewportFit](Window.md#viewportfit) など)を個別に設定するのと同じです。省略した引数は変更されません。\n\n旧来 ( 吉里吉里2 / 吉里吉里Z ) と同じ「ウインドウを広げてもゲームは原寸・左上」の\n表示にしたい場合は `setViewport(\"none\", 1.0, 0, 0)` を指定します\n( 詳しくは [Window.viewportFit](Window.md#viewportfit) を参照 )。\n\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。",
+        "params": {
+          "fit": "フィット方式を文字列で指定します。`\"contain\"`(アスペクト維持で収まる最大・レターボックス。既定) / `\"cover\"`(アスペクト維持で埋める最小・はみ出しは clip) / `\"fill\"`(アスペクト無視で全面引き伸ばし) / `\"none\"`(原寸) / `\"integer\"`(収まる範囲で最大の整数倍。最低 1 倍) / `\"custom\"`([Window.viewportZoom](Window.md#viewportzoom) の倍率を使用) のいずれか。",
+          "zoom": "`\"custom\"` 時の拡大倍率を実数で指定します(例 1.8 = 180%)。",
+          "alignX": "水平配置を実数で指定します。0=左 / 0.5=中央 / 1=右。",
+          "alignY": "垂直配置を実数で指定します。0=上 / 0.5=中央 / 1=下。",
+          "offsetX": "align 後に加算する水平オフセットを整数(px・surface 座標)で指定します。",
+          "offsetY": "align 後に加算する垂直オフセットを整数(px)で指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the viewport (display framing) at once",
+        "description": "Sets, all at once, how the inner game screen (the size of primaryLayer) is placed inside the outer window (the surface represented by [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight)). If the two sizes match, the game is shown full-size at 1:1 as before; if they differ, the game is placed in the surface according to these settings and margins appear. The margins can be filled with [Window.viewportBgColor](Window.md#viewportbgcolor) or [Window.setViewportWallpaper](Window.md#setviewportwallpaper) (available in both the native Windows (WINVER) build and the SDL3 / generic builds; WINVER support since 2026-08-17).\n\nMouse coordinates are automatically converted to game logical coordinates according to the placement, so input reaches the game correctly with any setting.\n\nEach argument is equivalent to setting the corresponding property ([Window.viewportFit](Window.md#viewportfit) etc.) individually. Omitted arguments are left unchanged.\n\nIf you want the legacy (Kirikiri 2 / Kirikiri Z) behavior where the game stays at its original size in the top-left even when the window is enlarged,\nspecify `setViewport(\"none\", 1.0, 0, 0)`\n(see [Window.viewportFit](Window.md#viewportfit) for details).\n\nAvailable in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17).",
+        "params": {
+          "fit": "Fit mode, as a string. One of `\"contain\"` (largest size that fits while keeping the aspect ratio, letterboxed; default) / `\"cover\"` (smallest size that fills while keeping the aspect ratio; overflow is clipped) / `\"fill\"` (stretch to fill, ignoring the aspect ratio) / `\"none\"` (original size) / `\"integer\"` (largest integer multiple that fits; at least 1x) / `\"custom\"` (use the ratio in [Window.viewportZoom](Window.md#viewportzoom)).",
+          "zoom": "Zoom ratio for `\"custom\"`, as a real number (e.g. 1.8 = 180%).",
+          "alignX": "Horizontal alignment, as a real number. 0 = left / 0.5 = center / 1 = right.",
+          "alignY": "Vertical alignment, as a real number. 0 = top / 0.5 = center / 1 = bottom.",
+          "offsetX": "Horizontal offset added after alignment, as an integer (px, surface coordinates).",
+          "offsetY": "Vertical offset added after alignment, as an integer (px)."
+        }
+      }
+    },
+    "Window.setViewportWallpaper": {
+      "hash": "15956f434d98",
+      "ja": {
+        "summary": "ビューポート余白の壁紙画像設定",
+        "description": "ビューポートで生じた余白(内側ゲーム画面の外側)を埋める壁紙画像を設定します。ゲーム描画より前に背景として描かれます。\n\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。",
+        "params": {
+          "image": "壁紙画像を指定します。ストレージ名(文字列)を渡すと内部で [Bitmap](Bitmap.md) を生成してロードします。[Layer](Layer.md) または [Bitmap](Bitmap.md) オブジェクトを直接渡すこともでき、その場合はオブジェクトが参照保持され、描画時に画像が取得されます。",
+          "fit": "壁紙のフィット方式を文字列で指定します。既定は `\"cover\"`。指定可能な値は [Window.setViewport](Window.md#setviewport) の fit と同じです。",
+          "alignX": "壁紙の水平配置を実数で指定します。0=左 / 0.5=中央 / 1=右。既定は 0.5。",
+          "alignY": "壁紙の垂直配置を実数で指定します。0=上 / 0.5=中央 / 1=下。既定は 0.5。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the wallpaper image for viewport margins",
+        "description": "Sets a wallpaper image that fills the margins created by the viewport (outside the inner game screen). It is drawn as a background before the game is drawn.\n\nAvailable in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17).",
+        "params": {
+          "image": "Wallpaper image. If you pass a storage name (string), a [Bitmap](Bitmap.md) is created and loaded internally. You can also pass a [Layer](Layer.md) or [Bitmap](Bitmap.md) object directly; in that case a reference to the object is kept and the image is fetched at drawing time.",
+          "fit": "Fit mode of the wallpaper, as a string. The default is `\"cover\"`. The allowed values are the same as fit of [Window.setViewport](Window.md#setviewport).",
+          "alignX": "Horizontal alignment of the wallpaper, as a real number. 0 = left / 0.5 = center / 1 = right. The default is 0.5.",
+          "alignY": "Vertical alignment of the wallpaper, as a real number. 0 = top / 0.5 = center / 1 = bottom. The default is 0.5."
+        }
+      }
+    },
+    "Window.clearViewportWallpaper": {
+      "hash": "3b61b6793f1c",
+      "ja": {
+        "summary": "ビューポート余白の壁紙画像解除",
+        "description": "[Window.setViewportWallpaper](Window.md#setviewportwallpaper) で設定した壁紙を解除します。以降、余白は [Window.viewportBgColor](Window.md#viewportbgcolor) の背景色のみで塗られます。\n\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。"
+      },
+      "tr": {
+        "summary": "Removes the wallpaper image for viewport margins",
+        "description": "Removes the wallpaper set with [Window.setViewportWallpaper](Window.md#setviewportwallpaper). From then on, the margins are filled only with the background color in [Window.viewportBgColor](Window.md#viewportbgcolor).\n\nAvailable in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17)."
+      }
+    },
+    "Window.postInputEvent": {
+      "hash": "d424f5dd9cf1",
+      "ja": {
+        "summary": "入力イベントの生成",
+        "description": "入力イベントを生成します。現バージョンではキー入力に関する３つのイベントを生成できます。\n\nこのメソッドは、イベントを非同期イベントとして生成します。つまり、このメソッドは、対応するイベントハンドラの終了を待たずに帰ります。実際にイベントハンドラが呼ばれて処理が行われるのは、いったん吉里吉里に制御が戻った後となります。\n\n入力イベントは、Windowクラスのほか、通常の入力イベントと同じく、Layerクラスの該当するイベントとしても発生します。\n\npostInputEvent('onKeyDown', %[key: VK_UP, shift: ssShift]);\n\npostInputEvent('onKeyUp',   %[key: VK_UP, shift: ssShift]);\n\n// 上カーソルキーを押す",
+        "params": {
+          "eventname": "イベント名称を指定します。以下の文字列で指定します。\n\n- \"**onKeyDown**\" は [Window.onKeyDown](Window.md#onkeydown) イベントを生成します。\n- \"**onKeyPress**\" は [Window.onKeyPress](Window.md#onkeypress) イベントを生成します。\n- \"**onKeyUp**\" は [Window.onKeyUp](Window.md#onkeyup) イベントを生成します。onKeyDownとonKeyUpは対になるので、onKeyDownを生成したら対応するonKeyUpも生成することを推奨します。",
+          "params": "イベントのパラメータが格納された辞書配列を指定します。\n\n- \"onKeyDown\" イベントや \"onKeyUp\" イベントでは、\"key\" に仮想キーコード、\"shift\" にシフト状態を格納します。\"shift\" を省略すると 0 であると見なされます。\n- \"onKeyPress\" イベントでは \"key\" に文字を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Generates an input event",
+        "description": "Generates an input event. The current version can generate three key input events.\n\nThis method generates the event as an asynchronous event. That is, it returns without waiting for the corresponding event handler to finish. The event handler is actually called once control returns to Kirikiri.\n\nLike ordinary input events, the generated input event also fires as the corresponding event of the Layer class, in addition to the Window class.\n\npostInputEvent('onKeyDown', %[key: VK_UP, shift: ssShift]);\n\npostInputEvent('onKeyUp',   %[key: VK_UP, shift: ssShift]);\n\n// Press the left cursor key",
+        "params": {
+          "eventname": "Event name. Specify one of the following strings.\n\n- \"**onKeyDown**\" generates the [Window.onKeyDown](Window.md#onkeydown) event.\n- \"**onKeyPress**\" generates the [Window.onKeyPress](Window.md#onkeypress) event.\n- \"**onKeyUp**\" generates the [Window.onKeyUp](Window.md#onkeyup) event. onKeyDown and onKeyUp come in pairs, so if you generate onKeyDown, it is recommended that you also generate the corresponding onKeyUp.",
+          "params": "Dictionary containing the event parameters.\n\n- For \"onKeyDown\" and \"onKeyUp\" events, put the virtual key code in \"key\" and the shift state in \"shift\". If \"shift\" is omitted, it is treated as 0.\n- For the \"onKeyPress\" event, put the character in \"key\"."
+        }
+      }
+    },
+    "Window.hideMouseCursor": {
+      "hash": "02fdb38bbccf",
+      "ja": {
+        "summary": "マウスカーソルを一時的に隠す",
+        "description": "マウスカーソルを一時的に隠します。マウスを少しでも動かすと\nマウスカーソルは再び表示されるようになります。\n\nこのメソッドは、[Window.mouseCursorState](Window.md#mousecursorstate)を`**mcsTempHidden**`に設定するのと同じ効果を持ちます。"
+      },
+      "tr": {
+        "summary": "Temporarily hides the mouse cursor",
+        "description": "Temporarily hides the mouse cursor. As soon as the mouse moves even slightly,\nthe cursor is shown again.\n\nThis method has the same effect as setting [Window.mouseCursorState](Window.md#mousecursorstate) to `**mcsTempHidden**`."
+      }
+    },
+    "Window.registerMessageReceiver": {
+      "hash": "06b42017825f",
+      "ja": {
+        "summary": "メッセージ受信関数の登録/登録削除",
+        "description": "このメソッドは C++ 等で記述されたプラグインから利用されることを想定しているメソッドです。TJS2\nからは正常に利用できません。\n\nこのメソッドでは、このウィンドウを通過するメッセージをトラップするためのメッセージ受信関数を\n登録することができます。メッセージ受信関数では通常のウィンドウメッセージの他、\nTVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもトラップすることができ、\nウィンドウが再構築や破棄されるタイミングにおいて、子ウィンドウを取り外すというような\n用途に使用できます。\n\n吉里吉里ソース配布パッケージ中の src/plugins/win32/wmrdump に簡単な使用法の説明があります。",
+        "params": {
+          "mode": "登録するか、登録削除するかどうかを指定します。\n\n**wrmRegister** を指定すると登録になります。**wrmUnregister** を\n指定すると登録削除になります。\n\nwrm で始まる定数は tp_stub.h に定義されています。",
+          "func": "メッセージ受信関数を指定します。\n\nメッセージ受信関数は bool __stdcall func(void *userdata, tTVPWindowMessage *Message)\nの形式である必要があり、このメソッドに渡す際にその関数ポインタを整数型にキャストして渡す\n必要があります。\n\n構造体 tTVPWindowMessage は tp_stub.h に定義されています。\n\nこの関数が true を返すと吉里吉里本体側はそのウィンドウメッセージに関知しなくなります。",
+          "userdata": "func 引数で指定された受信関数の userdata 引数に渡すためのデータポインタを指定します。\n\nこのメソッドに渡す際にはそのポインタを整数型にキャストして渡す必要があります。\n\nこの引数は mode 引数が wrmRegister でないときは無視されます。"
+        }
+      },
+      "tr": {
+        "summary": "Registers / unregisters a message receiver function",
+        "description": "This method is intended to be used from plugins written in C++ or the like. It cannot be used properly from TJS2.\n\nWith this method you can register a message receiver function that traps messages passing through this window. Besides ordinary window messages,\nthe receiver function can also trap two important messages, TVP_WM_DETACH and TVP_WM_ATTACH,\nwhich can be used, for example, to detach child windows when the window is rebuilt or destroyed.\n\nA brief usage example is in src/plugins/win32/wmrdump in the Kirikiri source distribution package.",
+        "params": {
+          "mode": "Whether to register or unregister.\n\n**wrmRegister** registers; **wrmUnregister**\nunregisters.\n\nThe constants starting with wrm are defined in tp_stub.h.",
+          "func": "Message receiver function.\n\nThe function must have the form bool __stdcall func(void *userdata, tTVPWindowMessage *Message),\nand its function pointer must be cast to an integer when passed to this method.\n\nThe tTVPWindowMessage structure is defined in tp_stub.h.\n\nIf this function returns true, the engine ignores that window message.",
+          "userdata": "Data pointer passed to the userdata argument of the receiver function given in func.\n\nThe pointer must be cast to an integer when passed to this method.\n\nThis argument is ignored unless mode is wrmRegister."
+        }
+      }
+    },
+    "Window.postMessage": {
+      "hash": "f91c2c05d7c5",
+      "ja": {
+        "summary": "ウィンドウメッセージのポスト",
+        "description": "このウィンドウのネイティブメッセージキューに、指定された\nウィンドウメッセージを非同期に投入します。\n主に C++ プラグインがウィンドウへ通知を送るための入口として使用されます。",
+        "params": {
+          "msg": "送るウィンドウメッセージ ID を整数で指定します。",
+          "wparam": "wParam に渡す値を整数で指定します。",
+          "lparam": "lParam に渡す値を整数で指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Posts a window message",
+        "description": "Asynchronously posts the given window message to this window's native message queue.\nMainly used by C++ plugins as an entry point for sending notifications to the window.",
+        "params": {
+          "msg": "Window message ID to send, as an integer.",
+          "wparam": "Value to pass as wParam, as an integer.",
+          "lparam": "Value to pass as lParam, as an integer."
+        }
+      }
+    },
+    "Window.getTouchPoint": {
+      "hash": "f18b6d51ec93",
+      "ja": {
+        "summary": "タッチ座標の取得",
+        "description": "現在のタッチ座標配列から指定インデックスの座標情報を取得します。\n\n座標数は [Window.touchPointCount](Window.md#touchpointcount) プロパティで取得できます。\n\n座標情報は以下の要素を含む辞書で返されます。\n\n`**startX**     : `このタッチの開始座標の x 座標値 ( クライアント座標系 ) です\n\n`**startY**   : `このタッチの開始座標の y 座標値 ( クライアント座標系 ) です\n\n`**x**    : `このタッチの現在座標の x 座標値 ( クライアント座標系 ) です\n\n`**y**    : `このタッチの現在座標の y 座標値 ( クライアント座標系 ) です\n\n`**ID**    : `このタッチの識別用 IDです",
+        "params": {
+          "index": "タッチ座標配列のインデックスを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets touch coordinates",
+        "description": "Gets the coordinate information at the given index of the current touch coordinate array.\n\nThe number of points can be obtained with the [Window.touchPointCount](Window.md#touchpointcount) property.\n\nThe coordinate information is returned as a dictionary containing the following elements.\n\n`**startX**     : `x coordinate of the start position of this touch (client coordinates)\n\n`**startY**   : `y coordinate of the start position of this touch (client coordinates)\n\n`**x**    : `x coordinate of the current position of this touch (client coordinates)\n\n`**y**    : `y coordinate of the current position of this touch (client coordinates)\n\n`**ID**    : `ID identifying this touch",
+        "params": {
+          "index": "Index in the touch coordinate array."
+        }
+      }
+    },
+    "Window.getMouseVelocity": {
+      "hash": "abb1616546c6",
+      "ja": {
+        "summary": "マウス座標移動速度の取得(1.1.0以降)",
+        "description": "現在のマウス移動速度を pixel / sec で取得します。\n\nウィンドウ内に入った瞬間から計測開始されています。\n\n[Window.resetMouseVelocity](Window.md#resetmousevelocity) を使用して計測をリセットし、任意のタイミングから計測できるようにできます。",
+        "returns": "取得が成功したか失敗したかが返ります",
+        "params": {
+          "x": "X軸方向のマウス座標移動速度が返ります。",
+          "y": "Y軸方向のマウス座標移動速度が返ります。",
+          "speed": "マウス座標移動速度が返ります。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the mouse movement speed (1.1.0 and later)",
+        "description": "Gets the current mouse movement speed in pixels/sec.\n\nMeasurement starts the moment the mouse enters the window.\n\nYou can reset the measurement with [Window.resetMouseVelocity](Window.md#resetmousevelocity) so that it is measured from any point in time you choose.",
+        "returns": "Whether the value was obtained successfully",
+        "params": {
+          "x": "Receives the mouse movement speed along the X axis.",
+          "y": "Receives the mouse movement speed along the Y axis.",
+          "speed": "Receives the mouse movement speed."
+        }
+      }
+    },
+    "Window.getTouchVelocity": {
+      "hash": "c80d5dcaa12e",
+      "ja": {
+        "summary": "タッチ座標移動速度の取得(1.1.0以降)",
+        "description": "現在のタッチ移動速度を pixel / sec で取得します。\n\n押下されてから離されるまでの間計測されています。\n\nマルチタッチ対応のため ID ごとに速度計測されています。\n\n[Window.onTouchUp](Window.md#ontouchup) イベントのメソッド呼び出しが終了すると計測している速度情報は消えてしまうので注意が必要です。",
+        "returns": "取得が成功したか失敗したかが返ります",
+        "params": {
+          "id": "タッチIDを指定します。",
+          "x": "X軸方向のタッチ座標移動速度が返ります。",
+          "y": "Y軸方向のタッチ座標移動速度が返ります。",
+          "speed": "タッチ座標移動速度が返ります。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the touch movement speed (1.1.0 and later)",
+        "description": "Gets the current touch movement speed in pixels/sec.\n\nIt is measured from when the touch goes down until it is released.\n\nFor multi-touch support, speed is measured per ID.\n\nNote that the measured speed information is discarded once the [Window.onTouchUp](Window.md#ontouchup) event method call finishes.",
+        "returns": "Whether the value was obtained successfully",
+        "params": {
+          "id": "Touch ID.",
+          "x": "Receives the movement speed along the X axis.",
+          "y": "Receives the movement speed along the Y axis.",
+          "speed": "Receives the movement speed."
+        }
+      }
+    },
+    "Window.resetMouseVelocity": {
+      "hash": "a5b35a740683",
+      "ja": {
+        "summary": "マウス座標移動速度計測のリセット(1.1.0以降)",
+        "description": "マウスの座標移動速度計測をリセットします。\n\nリセットすることで任意のタイミングから速度計測を開始することが出来ます。"
+      },
+      "tr": {
+        "summary": "Resets mouse movement speed measurement (1.1.0 and later)",
+        "description": "Resets the measurement of mouse movement speed.\n\nResetting lets you start measuring speed from any point in time."
+      }
+    },
+    "Window.visible": {
+      "hash": "22bf1c0d5805",
+      "ja": {
+        "summary": "ウィンドウが表示されているかどうか",
+        "description": "ウィンドウが表示されているかどうかを表します。値を設定することもできます。\n\n真ならばウィンドウが表示されていて、偽ならばウィンドウは非表示の状態です。"
+      },
+      "tr": {
+        "summary": "Whether the window is visible",
+        "description": "Indicates whether the window is visible. This property can also be set.\n\nIf true, the window is visible; if false, it is hidden."
+      }
+    },
+    "Window.caption": {
+      "hash": "9008f9bca0ce",
+      "ja": {
+        "summary": "ウィンドウのキャプション",
+        "description": "ウィンドウの**キャプション** ( タイトルバーのタイトル ) を表します。\n値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Window caption",
+        "description": "The window **caption** (the title in the title bar).\nThis property can also be set."
+      }
+    },
+    "Window.width": {
+      "hash": "70b710c01f86",
+      "ja": {
+        "summary": "ウィンドウの横幅",
+        "description": "ウィンドウの横幅 ( ウィンドウ装飾を含む外形の横幅 ) を表します。値を設定することもできます。\n\n!!! tip \"内側 ( 描画領域 ) 基準の API を推奨します\"\n    この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは\n    プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で\n    変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では\n    内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する\n    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /\n    [Window.setInnerSize](Window.md#setinnersize) を使ってください。\n    枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /\n    [Window.frameHeight](Window.md#frameheight) を足せます。"
+      },
+      "tr": {
+        "summary": "Window width",
+        "description": "The window width (the outer width including window decorations). This property can also be set.\n\n!!! tip \"Prefer the inner (drawing area) based API\"\n    This value is the size of the **outer frame including window decorations**. Whether decorations exist and how thick they are\n    depends on the platform, the OS theme and [Window.borderStyle](Window.md#borderstyle);\n    in environments without decorations (mobile / consoles, or with `bsNone`) it is\n    equal to the inner size. For portable code, use\n    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /\n    [Window.setInnerSize](Window.md#setinnersize), which correspond directly to the game screen.\n    When you need the frame, you can add [Window.frameWidth](Window.md#framewidth) /\n    [Window.frameHeight](Window.md#frameheight)."
+      }
+    },
+    "Window.height": {
+      "hash": "26dcbfc0cf99",
+      "ja": {
+        "summary": "ウィンドウの縦幅",
+        "description": "ウィンドウの縦幅 ( ウィンドウ装飾を含む外形の縦幅 ) を表します。値を設定することもできます。\n\n!!! tip \"内側 ( 描画領域 ) 基準の API を推奨します\"\n    この値は**ウィンドウ装飾を含む外形**のサイズです。装飾の有無や太さは\n    プラットフォーム・OS のテーマ・[Window.borderStyle](Window.md#borderstyle) で\n    変わり、装飾を持たない環境 ( モバイル / コンソール、`bsNone` 時 ) では\n    内側サイズと同値になります。 移植性のあるコードでは、ゲーム画面が直接対応する\n    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /\n    [Window.setInnerSize](Window.md#setinnersize) を使ってください。\n    枠のぶんが必要なときは [Window.frameWidth](Window.md#framewidth) /\n    [Window.frameHeight](Window.md#frameheight) を足せます。"
+      },
+      "tr": {
+        "summary": "Window height",
+        "description": "The window height (the outer height including window decorations). This property can also be set.\n\n!!! tip \"Prefer the inner (drawing area) based API\"\n    This value is the size of the **outer frame including window decorations**. Whether decorations exist and how thick they are\n    depends on the platform, the OS theme and [Window.borderStyle](Window.md#borderstyle);\n    in environments without decorations (mobile / consoles, or with `bsNone`) it is\n    equal to the inner size. For portable code, use\n    [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) /\n    [Window.setInnerSize](Window.md#setinnersize), which correspond directly to the game screen.\n    When you need the frame, you can add [Window.frameWidth](Window.md#framewidth) /\n    [Window.frameHeight](Window.md#frameheight)."
+      }
+    },
+    "Window.minWidth": {
+      "hash": "dcbab92873cf",
+      "ja": {
+        "summary": "ウィンドウの最小の横幅",
+        "description": "ウィンドウの最小の横幅 ( 内側 = 描画領域の横幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。"
+      },
+      "tr": {
+        "summary": "Minimum window width",
+        "description": "The minimum window width (inner = drawing area width). This property can also be set. 0 removes the limit."
+      }
+    },
+    "Window.minHeight": {
+      "hash": "40b7207f57e9",
+      "ja": {
+        "summary": "ウィンドウの最小の縦幅",
+        "description": "ウィンドウの最小の縦幅 ( 内側 = 描画領域の縦幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。"
+      },
+      "tr": {
+        "summary": "Minimum window height",
+        "description": "The minimum window height (inner = drawing area height). This property can also be set. 0 removes the limit."
+      }
+    },
+    "Window.maxWidth": {
+      "hash": "460881ab0add",
+      "ja": {
+        "summary": "ウィンドウの最大の横幅",
+        "description": "ウィンドウの最大の横幅 ( 内側 = 描画領域の横幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。"
+      },
+      "tr": {
+        "summary": "Maximum window width",
+        "description": "The maximum window width (inner = drawing area width). This property can also be set. 0 removes the limit."
+      }
+    },
+    "Window.maxHeight": {
+      "hash": "fc6eb7228676",
+      "ja": {
+        "summary": "ウィンドウの最大の縦幅",
+        "description": "ウィンドウの最大の縦幅 ( 内側 = 描画領域の縦幅 ) を表します。値を設定することもできます。0を指定すると制限は無くなります。"
+      },
+      "tr": {
+        "summary": "Maximum window height",
+        "description": "The maximum window height (inner = drawing area height). This property can also be set. 0 removes the limit."
+      }
+    },
+    "Window.left": {
+      "hash": "81a2aabde96f",
+      "ja": {
+        "summary": "ウィンドウの左端位置",
+        "description": "ウィンドウの左端位置を表します。値を設定することもできます。\n\n左端位置はスクリーンの原点 ( 左上隅 ) からの x 座標です。"
+      },
+      "tr": {
+        "summary": "Left edge position of the window",
+        "description": "The left edge position of the window. This property can also be set.\n\nThe left edge position is the x coordinate from the screen origin (top-left corner)."
+      }
+    },
+    "Window.top": {
+      "hash": "984c2cc4ee42",
+      "ja": {
+        "summary": "ウィンドウの上端位置",
+        "description": "ウィンドウの上端位置を表します。値を設定することもできます。\n\n上端位置はスクリーンの原点 ( 左上隅 ) からの y 座標です。"
+      },
+      "tr": {
+        "summary": "Top edge position of the window",
+        "description": "The top edge position of the window. This property can also be set.\n\nThe top edge position is the y coordinate from the screen origin (top-left corner)."
+      }
+    },
+    "Window.focusable": {
+      "hash": "882e496dc9eb",
+      "ja": {
+        "summary": "フォーカスを取得可能か",
+        "description": "フォーカスを取得可能かどうかを表します。値を設定することもできます。\n\n偽に設定すると、フォーカスを取得できなくなる、つまり、ウィンドウがアクティブにならなくなります。副作用として、タイトルバーをつかんでのウィンドウの移動やウィンドウのリサイズ、「×」ボタンを押してウィンドウを閉じる操作もできなくなります。\n\nキーボード入力を得たいときは [Window.trapKey](Window.md#trapkey) プロパティを使用することができます。\n\n通常、これは、ポップアップメニューのように、もっとも手前に表示されるが、それ自身はフォーカスを得ないウィンドウの実装に用います。\n\n現バージョンでは、ウィンドウがフルスクリーン化するとき、あるいはフルスクリーンから復帰するときに、このプロパティの設定内容が失われる可能性があります。"
+      },
+      "tr": {
+        "summary": "Whether the window can receive focus",
+        "description": "Indicates whether the window can receive focus. This property can also be set.\n\nIf set to false, the window can no longer receive focus, i.e. it never becomes active. As a side effect, you can no longer move the window by dragging the title bar, resize it, or close it with the close button.\n\nTo get keyboard input, you can use the [Window.trapKey](Window.md#trapkey) property.\n\nThis is normally used to implement windows that appear frontmost but do not take focus themselves, such as popup menus.\n\nIn the current version, this setting may be lost when the window switches to or returns from full screen."
+      }
+    },
+    "Window.trapKey": {
+      "hash": "f4a3b53d2c3a",
+      "ja": {
+        "summary": "キー入力をトラップするか",
+        "description": "キー入力をトラップするかどうかを表します。値を設定することもできます。\n\n真に設定すると、他のウィンドウで発生したキー入力イベントを横取りし、このウィンドウ上で発生させることができます。\n\n複数のウィンドウのこのプロパティが真に設定されている場合は、もっとも最後に作成したウィンドウに対してキー入力イベントが発生します。"
+      },
+      "tr": {
+        "summary": "Whether to trap key input",
+        "description": "Indicates whether to trap key input. This property can also be set.\n\nIf set to true, key input events that occur in other windows are intercepted and fired on this window.\n\nIf this property is true on multiple windows, key input events fire on the most recently created one."
+      }
+    },
+    "Window.innerWidth": {
+      "hash": "ea35ac674b13",
+      "ja": {
+        "summary": "クライアント領域の横幅",
+        "description": "クライアント領域の横幅を表します。\n値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Width of the client area",
+        "description": "The width of the client area.\nThis property can also be set."
+      }
+    },
+    "Window.innerHeight": {
+      "hash": "85b5d4bc807b",
+      "ja": {
+        "summary": "クライアント領域の縦幅",
+        "description": "クライアント領域の縦幅を表します。\n値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Height of the client area",
+        "description": "The height of the client area.\nThis property can also be set."
+      }
+    },
+    "Window.frameWidth": {
+      "hash": "04534e3c0492",
+      "ja": {
+        "summary": "ウィンドウ装飾の横幅",
+        "description": "ウィンドウの外形と内側 ( 描画領域 ) の横幅の差 ( = [Window.width](Window.md#width) - [Window.innerWidth](Window.md#innerwidth) ) を表します。左右の枠を合わせた値です。\n\nウィンドウ装飾を持たない環境 ( モバイル / コンソール、および [Window.borderStyle](Window.md#borderstyle) が `bsNone` のとき ) は 0 になります。\n\n外形基準で書かれたコードを内側基準へ移すときの変換に使えます。読み出し専用です。"
+      },
+      "tr": {
+        "summary": "Width of the window decorations",
+        "description": "The difference between the outer width and the inner (drawing area) width of the window ( = [Window.width](Window.md#width) - [Window.innerWidth](Window.md#innerwidth) ). This is the left and right frames combined.\n\nIt is 0 in environments without window decorations (mobile / consoles, and when [Window.borderStyle](Window.md#borderstyle) is `bsNone`).\n\nUseful for converting code written against the outer size to the inner size. Read-only."
+      }
+    },
+    "Window.frameHeight": {
+      "hash": "0ffc3b6d0b05",
+      "ja": {
+        "summary": "ウィンドウ装飾の縦幅",
+        "description": "ウィンドウの外形と内側 ( 描画領域 ) の縦幅の差 ( = [Window.height](Window.md#height) - [Window.innerHeight](Window.md#innerheight) ) を表します。タイトルバーと上下の枠を合わせた値です。\n\nウィンドウ装飾を持たない環境 ( モバイル / コンソール、および [Window.borderStyle](Window.md#borderstyle) が `bsNone` のとき ) は 0 になります。\n\n外形基準で書かれたコードを内側基準へ移すときの変換に使えます。読み出し専用です。"
+      },
+      "tr": {
+        "summary": "Height of the window decorations",
+        "description": "The difference between the outer height and the inner (drawing area) height of the window ( = [Window.height](Window.md#height) - [Window.innerHeight](Window.md#innerheight) ). This is the title bar and the top and bottom frames combined.\n\nIt is 0 in environments without window decorations (mobile / consoles, and when [Window.borderStyle](Window.md#borderstyle) is `bsNone`).\n\nUseful for converting code written against the outer size to the inner size. Read-only."
+      }
+    },
+    "Window.zoomNumer": {
+      "hash": "69ae98fa5988",
+      "ja": {
+        "summary": "レイヤ拡大倍率(分子)",
+        "description": "レイヤの拡大倍率の分子を表します。\n一応、値を設定することもできますが、値を設定する場合は [Window.setZoom](Window.md#setzoom) メソッドを使用してください。\n\n分母は [Window.zoomDenom](Window.md#zoomdenom) プロパティが表します。\n\n詳しくは [Window.setZoom](Window.md#setzoom) メソッドを参照してください。"
+      },
+      "tr": {
+        "summary": "Layer zoom ratio (numerator)",
+        "description": "The numerator of the layer zoom ratio.\nThis property can technically be set, but use the [Window.setZoom](Window.md#setzoom) method to set it.\n\nThe denominator is given by the [Window.zoomDenom](Window.md#zoomdenom) property.\n\nSee the [Window.setZoom](Window.md#setzoom) method for details."
+      }
+    },
+    "Window.zoomDenom": {
+      "hash": "b217a39aaa7b",
+      "ja": {
+        "summary": "レイヤ拡大倍率(分母)",
+        "description": "レイヤの拡大倍率の分母を表します。\n一応、値を設定することもできますが、値を設定する場合は [Window.setZoom](Window.md#setzoom) メソッドを使用してください。\n\n分子は [Window.zoomNumer](Window.md#zoomnumer) プロパティが表します。\n\n詳しくは [Window.setZoom](Window.md#setzoom) メソッドを参照してください。"
+      },
+      "tr": {
+        "summary": "Layer zoom ratio (denominator)",
+        "description": "The denominator of the layer zoom ratio.\nThis property can technically be set, but use the [Window.setZoom](Window.md#setzoom) method to set it.\n\nThe numerator is given by the [Window.zoomNumer](Window.md#zoomnumer) property.\n\nSee the [Window.setZoom](Window.md#setzoom) method for details."
+      }
+    },
+    "Window.aspectLock": {
+      "hash": "c6c0d956fe1a",
+      "ja": {
+        "summary": "ウインドウの縦横比の固定",
+        "description": "ウインドウの内側 ( [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) ) の縦横比を固定します。`\"16:9\"` のように `\"幅:高さ\"` 形式の文字列で指定し、空文字列 `\"\"` を設定すると解除されます。既定は `\"\"` ( 固定なし )。値を取得することもできます。\n\nゲーム画面 ( primaryLayer ) の比率と、ウインドウ全体の比率を**分離したいとき**に使います。たとえばウインドウ全体を 16:9 に保ったまま、その中へ 640x400 ( 8:5 ) のゲーム画面をドットバイドット ( `viewportFit = \"integer\"` ) やフィット ( `\"contain\"` ) で置く、という構成が作れます。UI ( Elements 等 ) を 16:9 の基本サイズで作っている場合、ウインドウが 16:9 に保たれていないと UI とゲーム画面の枠がずれてしまいます。\n\n固定を有効にすると、\n\n- ユーザによるウインドウのリサイズがこの比率へ拘束されます ( ドラッグ操作中も比率が保たれます )。\n- [Window.setZoom](Window.md#setzoom) が高さをこの比率から決めるようになります ( 従来は「primaryLayer のサイズ × 倍率」だったため、倍率を設定するたびにレイヤの比率へ戻っていました )。\n- 設定した時点の内側サイズも、**幅を基準に**この比率へ合わせられます。\n\nゲーム画面をその枠の中へどう配置するかは、従来どおり [Window.viewportFit](Window.md#viewportfit) などのビューポート設定が行います。本プロパティは「ウインドウの形」だけを決めます。\n\n```\nwindow.aspectLock = \"16:9\";        // ウインドウを 16:9 に固定\nwindow.viewportFit = \"integer\";    // その中にゲーム画面をドットバイドットで配置\nwindow.aspectLock = \"\";            // 固定を解除\n```\n\n!!! warning \"SDL3 / 汎用ビルド専用\"\n    Windows ネイティブ ( WINVER ) ビルドでは**何も行いません**。設定しても無視され、読み出すと常に空文字列が返ります。\n\n!!! note \"macOS での制限\"\n    macOS では、一度固定した比率を `\"\"` で解除しても、ユーザによるリサイズの拘束はウインドウを作り直すまで残ります ( 読み出し値は空になります )。OS 側の不具合でウインドウ操作時に落ちるのを避けるためです。比率の切り替え ( `\"4:3\"` → `\"16:9\"` など ) も同じ理由で、前の拘束が残ることがあります。"
+      },
+      "tr": {
+        "summary": "Locks the window aspect ratio",
+        "description": "Locks the aspect ratio of the inner area of the window ( [Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight) ). Specify a string in `\"width:height\"` form such as `\"16:9\"`; setting an empty string `\"\"` removes the lock. The default is `\"\"` (no lock). The value can also be read.\n\nUse this when you want to **separate** the aspect ratio of the game screen (primaryLayer) from that of the whole window. For example, you can keep the whole window at 16:9 while placing a 640x400 (8:5) game screen inside it pixel-perfect ( `viewportFit = \"integer\"` ) or fitted ( `\"contain\"` ). If your UI (Elements, etc.) is designed at a 16:9 base size and the window is not kept at 16:9, the UI and the game screen frame will be misaligned.\n\nWhen the lock is enabled,\n\n- user resizing of the window is constrained to this ratio (the ratio is kept even while dragging).\n- [Window.setZoom](Window.md#setzoom) determines the height from this ratio (previously it used \"primaryLayer size × ratio\", so the window reverted to the layer's aspect ratio every time the zoom was set).\n- the inner size at the time of setting is also adjusted to this ratio, **based on the width**.\n\nHow the game screen is placed within that frame is still determined by the viewport settings such as [Window.viewportFit](Window.md#viewportfit). This property determines only the shape of the window.\n\n```\nwindow.aspectLock = \"16:9\";        // ウインドウを 16:9 に固定\nwindow.viewportFit = \"integer\";    // その中にゲーム画面をドットバイドットで配置\nwindow.aspectLock = \"\";            // 固定を解除\n```\n\n!!! warning \"SDL3 / generic builds only\"\n    In the native Windows (WINVER) build this **does nothing**. Setting it is ignored, and reading it always returns an empty string.\n\n!!! note \"Limitation on macOS\"\n    On macOS, even after a locked ratio is released with `\"\"`, the constraint on user resizing remains until the window is recreated (the value reads back as empty). This avoids an OS-side bug that crashes on window operations. For the same reason, switching ratios (such as `\"4:3\"` → `\"16:9\"`) may leave the previous constraint in place."
+      }
+    },
+    "Window.viewportFit": {
+      "hash": "3f8bd763ea74",
+      "ja": {
+        "summary": "ビューポートのフィット方式",
+        "description": "内側ゲーム画面を外側ウインドウ(surface)へどのように収めるかを表す文字列です。\n値を設定することもできます。\n\n`\"contain\"`(アスペクト維持で収まる最大・レターボックス。既定) / `\"cover\"`(アスペクト維持で埋める最小・はみ出しは clip) / `\"fill\"`(アスペクト無視で全面引き伸ばし) / `\"none\"`(原寸) / `\"integer\"`(収まる範囲で最大の整数倍。最低 1 倍) / `\"custom\"`([Window.viewportZoom](Window.md#viewportzoom) の倍率を使用) のいずれか。\n\n\n!!! note \"旧来 ( 吉里吉里2 / 吉里吉里Z ) と同じ表示にしたい場合\"\n    既定の `\"contain\"` は、ウインドウが内側ゲーム画面と違うサイズになったときに\n    アスペクト維持で拡大縮小します。 ウインドウを広げてもゲームを原寸のまま\n    左上へ置く**旧来どおりの表示**にしたいときは、\n    `viewportFit = \"none\"` と [Window.viewportAlignX](Window.md#viewportalignx) /\n    [Window.viewportAlignY](Window.md#viewportaligny) `= 0` を明示してください。\n\n    なお [Window.setInnerSize](Window.md#setinnersize) でウインドウの内側サイズを\n    常に「primaryLayer のサイズ × [Window.setZoom](Window.md#setzoom) の倍率」に\n    保っている限り、どのフィット方式でも等倍 1:1 で表示されるため違いは出ません。\n    差が出るのは、ユーザがウインドウをリサイズ / 最大化した場合、拡大率の異なる\n    モニタへ移動した場合、およびウインドウサイズを変更できない環境\n    ( モバイル / コンソール ) です。\n\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。"
+      },
+      "tr": {
+        "summary": "Viewport fit mode",
+        "description": "A string indicating how the inner game screen is fitted into the outer window (surface).\nThis property can also be set.\n\nOne of `\"contain\"` (largest size that fits while keeping the aspect ratio, letterboxed; default) / `\"cover\"` (smallest size that fills while keeping the aspect ratio; overflow is clipped) / `\"fill\"` (stretch to fill, ignoring the aspect ratio) / `\"none\"` (original size) / `\"integer\"` (largest integer multiple that fits; at least 1x) / `\"custom\"` (use the ratio in [Window.viewportZoom](Window.md#viewportzoom)).\n\n\n!!! note \"For the same display as legacy versions (Kirikiri 2 / Kirikiri Z)\"\n    The default `\"contain\"` scales the game while keeping the aspect ratio when the window\n    has a different size from the inner game screen. If you want the **legacy display**, where the game stays\n    at its original size in the top-left even when the window is enlarged,\n    explicitly set `viewportFit = \"none\"` and [Window.viewportAlignX](Window.md#viewportalignx) /\n    [Window.viewportAlignY](Window.md#viewportaligny) `= 0`.\n\n    As long as you keep the inner size of the window equal to \"primaryLayer size × the\n    [Window.setZoom](Window.md#setzoom) ratio\" with [Window.setInnerSize](Window.md#setinnersize),\n    every fit mode displays at 1:1, so there is no difference.\n    Differences appear when the user resizes or maximizes the window, when it is moved to a monitor\n    with a different scaling factor, and in environments where the window size cannot be changed\n    (mobile / consoles).\n\nAvailable in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17)."
+      }
+    },
+    "Window.viewportZoom": {
+      "hash": "bc448603d2c3",
+      "ja": {
+        "summary": "ビューポートの拡大倍率",
+        "description": "[Window.viewportFit](Window.md#viewportfit) が `\"custom\"` のときに使用する拡大倍率を表す実数です(例 1.8 = 180%)。既定は 1.0。\n値を設定することもできます。\n\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。"
+      },
+      "tr": {
+        "summary": "Viewport zoom ratio",
+        "description": "A real number giving the zoom ratio used when [Window.viewportFit](Window.md#viewportfit) is `\"custom\"` (e.g. 1.8 = 180%). The default is 1.0.\nThis property can also be set.\n\nAvailable in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17)."
+      }
+    },
+    "Window.viewportAlignX": {
+      "hash": "d20cd070c9a8",
+      "ja": {
+        "summary": "ビューポートの水平配置",
+        "description": "余白が生じたときの内側ゲーム画面の水平配置を表す実数です。0=左 / 0.5=中央 / 1=右。既定は 0.5。\n値を設定することもできます。\n\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。"
+      },
+      "tr": {
+        "summary": "Viewport horizontal alignment",
+        "description": "A real number giving the horizontal alignment of the inner game screen when margins appear. 0 = left / 0.5 = center / 1 = right. The default is 0.5.\nThis property can also be set.\n\nAvailable in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17)."
+      }
+    },
+    "Window.viewportAlignY": {
+      "hash": "b10eed12700c",
+      "ja": {
+        "summary": "ビューポートの垂直配置",
+        "description": "余白が生じたときの内側ゲーム画面の垂直配置を表す実数です。0=上 / 0.5=中央 / 1=下。既定は 0.5。\n値を設定することもできます。\n\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。"
+      },
+      "tr": {
+        "summary": "Viewport vertical alignment",
+        "description": "A real number giving the vertical alignment of the inner game screen when margins appear. 0 = top / 0.5 = center / 1 = bottom. The default is 0.5.\nThis property can also be set.\n\nAvailable in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17)."
+      }
+    },
+    "Window.viewportOffsetX": {
+      "hash": "c4e8c6bd976e",
+      "ja": {
+        "summary": "ビューポートの水平オフセット",
+        "description": "align 後に加算する内側ゲーム画面の水平オフセットを表す整数です(px・surface 座標)。\n値を設定することもできます。\n\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。"
+      },
+      "tr": {
+        "summary": "Viewport horizontal offset",
+        "description": "An integer giving the horizontal offset of the inner game screen added after alignment (px, surface coordinates).\nThis property can also be set.\n\nAvailable in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17)."
+      }
+    },
+    "Window.viewportOffsetY": {
+      "hash": "a94670163d08",
+      "ja": {
+        "summary": "ビューポートの垂直オフセット",
+        "description": "align 後に加算する内側ゲーム画面の垂直オフセットを表す整数です(px・surface 座標)。\n値を設定することもできます。\n\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。"
+      },
+      "tr": {
+        "summary": "Viewport vertical offset",
+        "description": "An integer giving the vertical offset of the inner game screen added after alignment (px, surface coordinates).\nThis property can also be set.\n\nAvailable in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17)."
+      }
+    },
+    "Window.viewportBgColor": {
+      "hash": "f8f02e4517cd",
+      "ja": {
+        "summary": "ビューポート余白の背景色",
+        "description": "ビューポートで生じた余白を塗る背景色を `0xAARRGGBB` 形式の整数で表します (上位 8bit が alpha。不透明にするには `0xff` を付けます)。既定は `0xff000000` (不透明の黒)。\n値を設定することもできます。壁紙([Window.setViewportWallpaper](Window.md#setviewportwallpaper))が設定されている場合は壁紙が優先されます。\n\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。"
+      },
+      "tr": {
+        "summary": "Background color of viewport margins",
+        "description": "The background color used to fill margins created by the viewport, as an integer in `0xAARRGGBB` form (the upper 8 bits are alpha; add `0xff` for an opaque color). The default is `0xff000000` (opaque black).\nThis property can also be set. If a wallpaper ([Window.setViewportWallpaper](Window.md#setviewportwallpaper)) is set, the wallpaper takes priority.\n\nAvailable in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17)."
+      }
+    },
+    "Window.drawDevice": {
+      "hash": "e1cf94ec52f5",
+      "ja": {
+        "summary": "描画デバイス",
+        "description": "描画デバイスオブジェクトを表します。\n\n値を設定することもできます。値を設定すると、以前このウィンドウに指定されていた描画デバイスは自動的に\n無効になります (invalidateされます)。\n\nデフォルトで指定されているインスタンスはビルドによって異なります。Windows ネイティブ ( WINVER ) ビルドでは\n[Window.BasicDrawDevice](Window.BasicDrawDevice.md) ( Direct3D 11 )、SDL3 ビルドでは\n[SDLOGLDrawDevice](SDLOGLDrawDevice.md) ( OpenGL 有効ビルド時。無効ビルドでは\n[SDLDrawDevice](SDLDrawDevice.md)、Canvas を SDL_GPU で動かすビルドでは [GPUDrawDevice](GPUDrawDevice.md) ) です。起動オプション `-drawdevice` で起動時の既定を\n選択できます ( [コマンドラインオプション](../guide/CommandLine.md) )。なお SDL3 ビルドを\n`-drawdevice=sdl` で起動した場合、実行中に OpenGL 系のデバイスへ切り替えることはできません。\n\n独自の描画デバイス (プラグインで提供される物) を指定する場合は、そのプラグインのドキュメントに\n従ってください。"
+      },
+      "tr": {
+        "summary": "Draw device",
+        "description": "The draw device object.\n\nThis property can also be set. When set, the draw device previously assigned to this window is automatically\ninvalidated.\n\nThe default instance depends on the build. In the native Windows (WINVER) build it is\n[Window.BasicDrawDevice](Window.BasicDrawDevice.md) (Direct3D 11); in the SDL3 build it is\n[SDLOGLDrawDevice](SDLOGLDrawDevice.md) (in builds with OpenGL enabled; in builds without it,\n[SDLDrawDevice](SDLDrawDevice.md), and in builds that run Canvas on SDL_GPU, [GPUDrawDevice](GPUDrawDevice.md)). The default at startup can be chosen\nwith the `-drawdevice` command-line option ( [Command-line options](../guide/CommandLine.md) ). Note that when an SDL3 build is\nstarted with `-drawdevice=sdl`, you cannot switch to an OpenGL-based device at runtime.\n\nTo use a custom draw device (one provided by a plugin), follow that plugin's\ndocumentation."
+      }
+    },
+    "Window.borderStyle": {
+      "hash": "4eebfc9ff488",
+      "ja": {
+        "summary": "ウィンドウ外見",
+        "description": "ウィンドウの外見を表します。値を設定することもできます。\n\n以下の値を設定することができます。\n\n`**bsDialog**      :` サイズ変更不可の、ダイアログボックスと同様の外見を持ちます。\n\n`**bsSingle**      :` サイズ変更不可のウィンドウです。\n\n`**bsNone**        :` ボーダーのないウィンドウです。\n\n`**bsSizeable**    :` サイズ変更可の一般的なウィンドウです。デフォルトです。\n\n`**bsToolWindow**  :` サイズ変更不可のツールウィンドウ(キャプションの小さいウィンドウ) です。\n\n`**bsSizeToolWin** :` bsToolWindow と似ていますが、サイズ変更が可能です。"
+      },
+      "tr": {
+        "summary": "Window appearance",
+        "description": "The appearance of the window. This property can also be set.\n\nThe following values can be set.\n\n`**bsDialog**      :` Non-resizable, with an appearance like a dialog box.\n\n`**bsSingle**      :` Non-resizable window.\n\n`**bsNone**        :` Window without a border.\n\n`**bsSizeable**    :` Ordinary resizable window. This is the default.\n\n`**bsToolWindow**  :` Non-resizable tool window (a window with a small caption).\n\n`**bsSizeToolWin** :` Like bsToolWindow, but resizable."
+      }
+    },
+    "Window.stayOnTop": {
+      "hash": "5366a1997102",
+      "ja": {
+        "summary": "常に最上位に表示するかどうか",
+        "description": "ウィンドウを常に最上位 ( 一番手前 ) に表示するかどうかを表します。値を設定することもできます。\n\n真ならばウィンドウは常に最上位に表示されます。\n\n現バージョンでは、ウィンドウがフルスクリーン化するとき、あるいはフルスクリーンから復帰するときに、このプロパティの設定内容が失われる可能性があります。"
+      },
+      "tr": {
+        "summary": "Whether to always stay on top",
+        "description": "Indicates whether the window always stays on top (frontmost). This property can also be set.\n\nIf true, the window always stays on top.\n\nIn the current version, this setting may be lost when the window switches to or returns from full screen."
+      }
+    },
+    "Window.imeMode": {
+      "hash": "12a603ecbcfa",
+      "ja": {
+        "summary": "デフォルトのIMEモード",
+        "description": "デフォルトのIMEモードを表します。\n\nここで指定したモードは、どのレイヤにもフォーカスが無い状態に設定されるモードです。\n\n未指定の場合は **imClose**で、これはどのレイヤにもフォーカスが無い状態では IME は閉じている ( 英数入力 ) ということになります。\n\n指定可能な値については [Layer.imeMode](Layer.md#imemode) を参照してください。\n\n書き込みは Windows ネイティブ ( WINVER ) ビルドでのみ有効です。SDL3 ビルドでは\n読み書きとも未実装 ( 例外 ) です。\n\n設定は、どのレイヤにもフォーカスが無いときはその場で反映されます。フォーカスを\n持つレイヤがあるときはそのレイヤの [Layer.imeMode](Layer.md#imemode) が優先され、\nフォーカスが外れた時点でここで指定した既定値に戻ります。\n\nElementsDialog のテキスト入力欄に編集フォーカスがある間は、ここでの指定によらず\nIME が開かれます ( フォーカスが外れると、ここで指定した既定値に戻ります )。\nこの間はレイヤ側の [Layer.imeMode](Layer.md#imemode) の反映も保留され、\nフォーカスが外れた時点でまとめて適用されます。\n\nなお、このプロパティが返すのはあくまで**既定値**です。フォーカスのあるレイヤや\nElementsDialog によって実際に適用されている IME の状態は返らないので、\n「IME が開いているか」の確認には使えません\n( 確認には [Agent.dialogs](Agent.md#dialogs) の `textFocus` を使ってください )。"
+      },
+      "tr": {
+        "summary": "Default IME mode",
+        "description": "The default IME mode.\n\nThe mode given here is applied when no layer has focus.\n\nIf not specified, it is **imClose**, meaning the IME is closed (alphanumeric input) when no layer has focus.\n\nFor the allowed values, see [Layer.imeMode](Layer.md#imemode).\n\nWriting is effective only in the native Windows (WINVER) build. In the SDL3 build,\nboth reading and writing are not implemented (an exception is thrown).\n\nThe setting takes effect immediately when no layer has focus. When a layer has focus,\nthat layer's [Layer.imeMode](Layer.md#imemode) takes priority,\nand the default given here is restored when focus leaves.\n\nWhile a text input field of an ElementsDialog has editing focus, the IME is open regardless of this setting\n(when focus leaves, the default given here is restored).\nDuring that time, applying the layer's [Layer.imeMode](Layer.md#imemode) is also deferred,\nand it is applied when focus leaves.\n\nNote that this property returns only the **default**. It does not return the IME state actually applied\nby the focused layer or an ElementsDialog, so it cannot be used to check whether the IME is open\n(use `textFocus` of [Agent.dialogs](Agent.md#dialogs) for that)."
+      }
+    },
+    "Window.mouseCursorState": {
+      "hash": "aed36e0cadc2",
+      "ja": {
+        "summary": "マウスカーソル表示状態",
+        "description": "マウスカーソルの表示状態を表します。値を設定することもできます。\n\n`**mcsVisible**`を指定すると、マウスカーソルは表示状態になります。これはデフォルトの状態です。\n\n`**mcsTempHidden**`を指定すると、マウスカーソルは非表示状態になりますが、少しでもマウスを動かすと`mcsVisible`に変わり、表示状態になります。[Window.hideMouseCursor](Window.md#hidemousecursor)メソッドを呼び出すとこの状態になります。\n\n`**mcsHidden**`を指定すると、マウスカーソルは非表示状態になります。マウスを動かしても表示状態にはなりません。"
+      },
+      "tr": {
+        "summary": "Mouse cursor visibility state",
+        "description": "The visibility state of the mouse cursor. This property can also be set.\n\nWith `**mcsVisible**`, the mouse cursor is visible. This is the default.\n\nWith `**mcsTempHidden**`, the mouse cursor is hidden, but as soon as the mouse moves even slightly it changes to `mcsVisible` and becomes visible. Calling the [Window.hideMouseCursor](Window.md#hidemousecursor) method puts it in this state.\n\nWith `**mcsHidden**`, the mouse cursor is hidden. It does not become visible even when the mouse moves."
+      }
+    },
+    "Window.useMouseKey": {
+      "hash": "68ddc374afd8",
+      "ja": {
+        "summary": "マウスキーを使用するかどうか",
+        "description": "マウスキーを使用するかどうかを表します。値を設定することもできます。\n\n真ならばマウスキーを使用することができます。\n\nマウスキーが有効になると、カーソルキーを使ってマウスカーソルを移動させることが\nできますが、キー入力系のイベントはいっさい発生しなくなります。"
+      },
+      "tr": {
+        "summary": "Whether to use mouse keys",
+        "description": "Indicates whether to use mouse keys. This property can also be set.\n\nIf true, mouse keys can be used.\n\nWhen mouse keys are enabled, you can move the mouse cursor with the cursor keys,\nbut no key input events fire at all."
+      }
+    },
+    "Window.fullScreen": {
+      "hash": "a64fb99dcdca",
+      "ja": {
+        "summary": "フルスクリーンかどうか",
+        "description": "**フルスクリーン**かどうかを表します。値を設定することもできます。\n\n真を指定すると現在のウィンドウのクライアント領域がフルスクリーンになります。フルスクリーン\n時の画面解像度はクライアント領域のサイズになります。\n\n偽を指定するとウィンドウ表示になります。"
+      },
+      "tr": {
+        "summary": "Whether in full screen",
+        "description": "Indicates whether the window is in **full screen**. This property can also be set.\n\nIf true, the client area of the current window becomes full screen. The screen resolution in full screen\nis the size of the client area.\n\nIf false, the window is shown in windowed mode."
+      }
+    },
+    "Window.mainWindow": {
+      "hash": "97a5fde211e1",
+      "ja": {
+        "summary": "メインウィンドウ",
+        "description": "メインウィンドウ ( 最初に作成されたウィンドウ ) を表します。"
+      },
+      "tr": {
+        "summary": "Main window",
+        "description": "The main window (the first window created)."
+      }
+    },
+    "Window.focusedLayer": {
+      "hash": "449c2691afeb",
+      "ja": {
+        "summary": "フォーカスを持っているレイヤオブジェクト",
+        "description": "現在 **フォーカス** を持っているレイヤオブジェクトを表します。\n値を設定することもできます。\n\nnull の場合はどのレイヤもフォーカスを持っていません。レイヤオブジェクトを\n設定するとそのレイヤにフォーカスが移ります。"
+      },
+      "tr": {
+        "summary": "Layer object that has focus",
+        "description": "The layer object that currently has **focus**.\nThis property can also be set.\n\nIf null, no layer has focus. Setting a layer object\nmoves focus to that layer."
+      }
+    },
+    "Window.primaryLayer": {
+      "hash": "374b2bd06069",
+      "ja": {
+        "summary": "プライマリレイヤオブジェクト",
+        "description": "**プライマリレイヤ**オブジェクトを表します。"
+      },
+      "tr": {
+        "summary": "Primary layer object",
+        "description": "The **primary layer** object."
+      }
+    },
+    "Window.HWND": {
+      "hash": "933b2a1646fc",
+      "ja": {
+        "summary": "ウィンドウハンドル",
+        "description": "ウィンドウハンドルを表します。\n\nここで得られるのは整数ですが、プラグインなどでこの数値を使う場合は HWND 型に\nキャストして使ってください。"
+      },
+      "tr": {
+        "summary": "Window handle",
+        "description": "The window handle.\n\nIt is returned as an integer; when using this value in a plugin or the like, cast it to the HWND type."
+      }
+    },
+    "Window.touchScaleThreshold": {
+      "hash": "b5c2fda16a97",
+      "ja": {
+        "summary": "マルチタッチ拡大閾値",
+        "description": "マルチタッチで拡大を開始する閾値です。\n\n2つのタッチ位置の距離がこの値以上変化した時に拡大イベントが発生します。\n\n一度閾値を超えるといったん指が離されるまで拡大イベントは有効になります。"
+      },
+      "tr": {
+        "summary": "Multi-touch zoom threshold",
+        "description": "The threshold for starting a multi-touch zoom.\n\nA zoom event fires when the distance between the two touch points changes by this value or more.\n\nOnce the threshold is exceeded, zoom events stay enabled until the fingers are lifted."
+      }
+    },
+    "Window.touchRotateThreshold": {
+      "hash": "0e81065651c7",
+      "ja": {
+        "summary": "マルチタッチ回転閾値",
+        "description": "マルチタッチで回転を開始する閾値です。\n\n各タッチ位置の移動距離がこの値以上変化した時に回転イベントが発生します。\n\n一度閾値を超えるといったん指が離されるまで回転イベントは有効になります。"
+      },
+      "tr": {
+        "summary": "Multi-touch rotation threshold",
+        "description": "The threshold for starting a multi-touch rotation.\n\nA rotate event fires when the movement distance of each touch point changes by this value or more.\n\nOnce the threshold is exceeded, rotate events stay enabled until the fingers are lifted."
+      }
+    },
+    "Window.touchPointCount": {
+      "hash": "4d605f427614",
+      "ja": {
+        "summary": "タッチ数",
+        "description": "タッチパネルにタッチされている数です。"
+      },
+      "tr": {
+        "summary": "Number of touches",
+        "description": "The number of points currently touching the touch panel."
+      }
+    },
+    "Window.enableTouch": {
+      "hash": "280085e43ec7",
+      "ja": {
+        "summary": "タッチイベント有効/無効",
+        "description": "**タッチイベント**が有効かどうかを表します。値を設定することもできます。\n\n真を指定すると[Window.onTouchDown](Window.md#ontouchdown)等のイベントが有効になり、タッチ操作では[Window.onMouseDown](Window.md#onmousedown)などが発生しなくなります。\n\nタッチデバイスがありマルチタッチが有効な環境では、デフォルトが true になります。"
+      },
+      "tr": {
+        "summary": "Enables / disables touch events",
+        "description": "Indicates whether **touch events** are enabled. This property can also be set.\n\nIf true, events such as [Window.onTouchDown](Window.md#ontouchdown) are enabled, and touch operations no longer fire [Window.onMouseDown](Window.md#onmousedown) and the like.\n\nIn environments with a touch device and multi-touch enabled, the default is true."
+      }
+    },
+    "Window.waitVSync": {
+      "hash": "a41cdc8f3756",
+      "ja": {
+        "summary": "垂直同期待ち",
+        "description": "トランジション(画面切り替え)などでディスプレイの垂直同期を待ってから描画するかどうかの設定です。\n\n設定を変えると、画面のちらつきを抑えられる場合がありますが、描画のパフォーマンスが低下する場合もあります。\n\nデフォルトは真です ( 描画が軽い場面で過剰に再描画してフレームを撃ちすぎる現象を抑えるため )。従来のように常に再描画させたい場合は偽を設定してください。"
+      },
+      "tr": {
+        "summary": "Wait for vertical sync",
+        "description": "Whether to wait for the display's vertical sync before drawing, e.g. during transitions (screen switching).\n\nChanging this may reduce screen flicker, but may also lower drawing performance.\n\nThe default is true (to suppress excessive redraws that push out too many frames in scenes with light drawing). Set it to false if you want to always redraw as before."
+      }
+    },
+    "Window.hintDelay": {
+      "hash": "793f4aecb11c",
+      "ja": {
+        "summary": "ヒント表示待ち時間",
+        "description": "ヒントの表示待ち時間をミリ秒単位で表します。値を設定することもできます。\n\nデフォルトは500ミリ秒です。\n\n0を設定すると即座に [Window.onHintChanged](Window.md#onhintchanged) が呼び出されます(常時表示状態)。\n\n-1を設定するとヒントが表示されることはありません。"
+      },
+      "tr": {
+        "summary": "Hint display delay",
+        "description": "The delay before showing a hint, in milliseconds. This property can also be set.\n\nThe default is 500 milliseconds.\n\nIf set to 0, [Window.onHintChanged](Window.md#onhintchanged) is called immediately (always shown).\n\nIf set to -1, hints are never shown."
+      }
+    },
+    "Window.displayOrientation": {
+      "hash": "b2bb88bfa6af",
+      "ja": {
+        "summary": "ディスプレイの向き(1.1.0以降)",
+        "description": "ディスプレイの向きを表します。\n\noriUnknown (取得失敗/不明), oriPortrait(縦向き), oriLandscape(横向き)のいずれかの値です。"
+      },
+      "tr": {
+        "summary": "Display orientation (1.1.0 and later)",
+        "description": "The orientation of the display.\n\nOne of oriUnknown (failed to get / unknown), oriPortrait (portrait), or oriLandscape (landscape)."
+      }
+    },
+    "Window.displayRotate": {
+      "hash": "b4ddad979309",
+      "ja": {
+        "summary": "ディスプレイの回転角度(1.1.0以降)",
+        "description": "ディスプレイの回転角度を表します。\n\n0、90、180、270、-1 のいずれかで、取得できなかった時は-1です。"
+      },
+      "tr": {
+        "summary": "Display rotation angle (1.1.0 and later)",
+        "description": "The rotation angle of the display.\n\nOne of 0, 90, 180, 270, or -1; it is -1 if it could not be obtained."
+      }
+    },
+    "Window.displayDensity": {
+      "hash": "2cfc27e65eb4",
+      "ja": {
+        "summary": "画面密度(dpi)",
+        "description": "dpi 値を返します ( 96 が等倍 = 100%、192 なら 200% )。\n読み取りのみ可能です。\n\nウィンドウが乗っているディスプレイの値を返します。 マルチディスプレイで\n拡大率の異なるモニタへ移動すると値が変わります。\n\n!!! note \"モニタを移動してもウィンドウの大きさは変わりません\"\n拡大率の異なるモニタへ移動しても、\n[Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight)\n( 描画領域のピクセルサイズ ) は維持されます。変化するのは枠の太さだけで、\nゲーム画面の見え方も変わりません。 その代わり、拡大率の高いモニタでは\nウィンドウが見かけ上小さくなります。\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で\n実際の値を返します ( SDL3 側は 2026-08-17 まで 96 固定でした )。"
+      },
+      "tr": {
+        "summary": "Display density (dpi)",
+        "description": "Returns the dpi value (96 is 1x = 100%; 192 is 200%).\nRead-only.\n\nReturns the value of the display the window is on. With multiple displays, the value changes\nwhen the window moves to a monitor with a different scaling factor.\n\n!!! note \"Moving to another monitor does not change the window size\"\nEven when moved to a monitor with a different scaling factor,\n[Window.innerWidth](Window.md#innerwidth) / [Window.innerHeight](Window.md#innerheight)\n(the pixel size of the drawing area) are kept. Only the frame thickness changes,\nand the game screen looks the same. On the other hand, on a monitor with a higher scaling factor\nthe window appears smaller.\nBoth the native Windows (WINVER) build and the SDL3 / generic builds\nreturn the actual value (the SDL3 side was fixed at 96 until 2026-08-17)."
+      }
+    },
+    "Window.enableTouchMouse": {
+      "hash": "f4c2f7e5da65",
+      "ja": {
+        "summary": "タッチ操作のマウスエミュレーション有効/無効",
+        "description": "真の場合、タッチイベントを擬似的なマウスイベントに変換して\n`Window.onMouseDown` 系ハンドラに通知します。\n\n!!! note \"iOS / iPadOS のタッチ操作 ( 2026-10 から )\"\n    iOS 版はエンジンが独自にタッチをマウスへ変換し、次の 2 本指ジェスチャを加えます。\n    このプロパティを偽にするとジェスチャも含めて変換を止めます。\n\n    | 操作 | 通知されるもの |\n    |---|---|\n    | 1 本指で触れる | 約 100ms 保留してから左ボタン押下 ( 動かし始めた時点で確定 )。以後は通常のドラッグ / クリック |\n    | 2 本指でタップ ( 動かさずに離す ) | ESC キー ( 「戻る」。キーイベントとして届くので `onKeyDown` やホットキーで受けられる ) |\n    | 2 本指で上下に動かす | マウスホイール ( 指を上へ = 下方向へのスクロール ) |\n\n    1 本目が触れてから約 100ms 以内に 2 本目が触れると 2 本指ジェスチャになり、左クリックは発生しません。\n    座標はゲーム画面 ( レターボックス表示を考慮した描画領域 ) の座標で届きます。"
+      },
+      "tr": {
+        "summary": "Enables / disables mouse emulation for touch",
+        "description": "If true, touch events are converted into pseudo mouse events and\ndelivered to the `Window.onMouseDown` family of handlers.\n\n!!! note \"Touch on iOS / iPadOS (since 2026-10)\"\n    On iOS, the engine converts touches to mouse events itself and adds the following two-finger gestures.\n    Setting this property to false stops the conversion, including the gestures.\n\n    | Gesture | What is delivered |\n    |---|---|\n    | Touch with one finger | Left button press after a hold of about 100 ms (confirmed as soon as the finger starts moving). After that, ordinary drag / click |\n    | Tap with two fingers (lift without moving) | ESC key (\"back\"; delivered as a key event, so it can be handled with `onKeyDown` or hotkeys) |\n    | Move two fingers up or down | Mouse wheel (fingers up = scroll down) |\n\n    If the second finger touches within about 100 ms after the first, it becomes a two-finger gesture and no left click occurs.\n    Coordinates are delivered in game screen coordinates (the drawing area, taking letterboxing into account)."
+      }
+    },
+    "Window.innerSunken": {
+      "hash": "f9148f5f7d3c",
+      "ja": {
+        "summary": "内側くぼみ表示の有効/無効 ( 廃止予定 )",
+        "description": "真にするとウィンドウのクライアント領域に「くぼみ」風の縁取りを表示します。\n`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換プロパティで、\n新規コードでの使用は推奨しません。"
+      },
+      "tr": {
+        "summary": "Enables / disables the sunken inner border (deprecated)",
+        "description": "If true, a \"sunken\" style border is shown around the client area of the window.\nA compatibility property for builds with `USE_OBSOLETE_FUNCTIONS` enabled;\nnot recommended for new code."
+      }
+    },
+    "Window.layerEventTarget": {
+      "hash": "05cf00ad9b4e",
+      "ja": {
+        "summary": "レイヤイベントの転送先オブジェクト",
+        "description": "マウスやキー入力などのレイヤイベントを受け取るオブジェクトを指定します。\n通常は `Window` 自身が用いられます。null を設定するとデフォルトに戻ります。"
+      },
+      "tr": {
+        "summary": "Target object for layer events",
+        "description": "Specifies the object that receives layer events such as mouse and key input.\nNormally the `Window` itself is used. Setting null restores the default."
+      }
+    },
+    "Window.layerLeft": {
+      "hash": "1991f22e9a71",
+      "ja": {
+        "summary": "プライマリレイヤの X 位置 ( 廃止予定 )",
+        "description": "ウィンドウのクライアント領域内におけるプライマリレイヤの左端位置を取得 / 設定します。\n`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換プロパティです。\n新規コードでは `Window.setLayerPos` の代替経路を使用してください。"
+      },
+      "tr": {
+        "summary": "X position of the primary layer (deprecated)",
+        "description": "Gets or sets the left edge position of the primary layer within the client area of the window.\nA compatibility property for builds with `USE_OBSOLETE_FUNCTIONS` enabled.\nIn new code, use the alternative path of `Window.setLayerPos`."
+      }
+    },
+    "Window.layerTop": {
+      "hash": "8a3b2e2b0de4",
+      "ja": {
+        "summary": "プライマリレイヤの Y 位置 ( 廃止予定 )",
+        "description": "ウィンドウのクライアント領域内におけるプライマリレイヤの上端位置を取得 / 設定します。\n`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換プロパティです。"
+      },
+      "tr": {
+        "summary": "Y position of the primary layer (deprecated)",
+        "description": "Gets or sets the top edge position of the primary layer within the client area of the window.\nA compatibility property for builds with `USE_OBSOLETE_FUNCTIONS` enabled."
+      }
+    },
+    "Window.layerTreeOwnerInterface": {
+      "hash": "807b32230575",
+      "ja": {
+        "summary": "LayerTreeOwner インターフェースポインタ",
+        "description": "`iTVPLayerTreeOwner` インターフェースの C++ ポインタを 64bit 整数として返します。\nプラグインから直接ウィンドウのレイヤツリー所有者にアクセスする目的で使用します。\n読み出し専用。"
+      },
+      "tr": {
+        "summary": "LayerTreeOwner interface pointer",
+        "description": "Returns the C++ pointer to the `iTVPLayerTreeOwner` interface as a 64-bit integer.\nUsed by plugins to access the window's layer tree owner directly.\nRead-only."
+      }
+    },
+    "Window.mouseCursor": {
+      "hash": "17faa1524bec",
+      "ja": {
+        "summary": "マウスカーソルの設定",
+        "description": "現在のマウスカーソルを取得 / 設定します。\n\n設定時に文字列を渡した場合は、ストレージ名としてカーソル画像を読み込みます。\n数値を渡した場合は標準のマウスカーソル定数 ( `crArrow` 等 ) として解釈されます。"
+      },
+      "tr": {
+        "summary": "Mouse cursor setting",
+        "description": "Gets or sets the current mouse cursor.\n\nIf a string is given when setting, a cursor image is loaded using it as a storage name.\nIf a number is given, it is interpreted as a standard mouse cursor constant (`crArrow`, etc.)."
+      }
+    },
+    "Window.showScrollBars": {
+      "hash": "9eaaccafd6ab",
+      "ja": {
+        "summary": "スクロールバー表示の有効/無効 ( 廃止予定 )",
+        "description": "プライマリレイヤがウィンドウより大きい場合に、スクロールバーを表示するかどうかを\n取得 / 設定します。`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換プロパティです。"
+      },
+      "tr": {
+        "summary": "Enables / disables scroll bars (deprecated)",
+        "description": "Gets or sets whether to show scroll bars when the primary layer is larger than the window.\nA compatibility property for builds with `USE_OBSOLETE_FUNCTIONS` enabled."
+      }
+    },
+    "Window.beginMove": {
+      "hash": "1a0916f6e93f",
+      "ja": {
+        "summary": "ウィンドウのドラッグ移動開始 ( 廃止予定 )",
+        "description": "ウィンドウのタイトルバーをドラッグした場合と同等の移動操作を、現在のマウス位置から\n開始させます。`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換メソッドです。"
+      },
+      "tr": {
+        "summary": "Starts dragging the window (deprecated)",
+        "description": "Starts a move operation from the current mouse position, equivalent to dragging the window's title bar.\nA compatibility method for builds with `USE_OBSOLETE_FUNCTIONS` enabled."
+      }
+    },
+    "Window.requestUpdate": {
+      "hash": "d279b80f3244",
+      "ja": {
+        "summary": "描画更新の要求",
+        "description": "ウィンドウに対して再描画 ( 次回フレームでの `Update` ) を要求します。\n即時描画ではなく、次の更新タイミングでまとめて反映されます。"
+      },
+      "tr": {
+        "summary": "Requests a drawing update",
+        "description": "Requests a redraw of the window (an `Update` on the next frame).\nIt does not draw immediately; the update is applied together at the next update timing."
+      }
+    },
+    "Window.setLayerPos": {
+      "hash": "22d8c10143d5",
+      "ja": {
+        "summary": "プライマリレイヤ位置の設定 ( 廃止予定 )",
+        "description": "ウィンドウクライアント領域内のプライマリレイヤ位置 ( 左上 ) を設定します。\n`USE_OBSOLETE_FUNCTIONS` 有効ビルド向けの互換メソッドです。",
+        "params": {
+          "left": "X 座標",
+          "top": "Y 座標"
+        }
+      },
+      "tr": {
+        "summary": "Sets the primary layer position (deprecated)",
+        "description": "Sets the position (top-left) of the primary layer within the window's client area.\nA compatibility method for builds with `USE_OBSOLETE_FUNCTIONS` enabled.",
+        "params": {
+          "left": "X coordinate",
+          "top": "Y coordinate"
+        }
+      }
+    },
+    "Window.onPointerDown": {
+      "hash": "e80a1d88c1bc",
+      "ja": {
+        "summary": "何らかのポインティングデバイスで押下された",
+        "params": {
+          "type": "タッチもしくはマウスボタンの種類",
+          "x": "X位置",
+          "y": "Y位置",
+          "cx": "接触幅(ピクセル数)、マウスの時は1",
+          "cy": "接触高さ(ピクセル数)、マウスの時は1",
+          "shift": "修飾キー状態、タッチの時は0",
+          "id": "タッチID、マウスの時は常に0"
+        }
+      },
+      "tr": {
+        "summary": "Pressed with some pointing device",
+        "params": {
+          "type": "Type of touch or mouse button",
+          "x": "X position",
+          "y": "Y position",
+          "cx": "Contact width (pixels); 1 for the mouse",
+          "cy": "Contact height (pixels); 1 for the mouse",
+          "shift": "Modifier key state; 0 for touch",
+          "id": "Touch ID; always 0 for the mouse"
+        }
+      }
+    },
+    "Window.onPointerMove": {
+      "hash": "8dd205b2beec",
+      "ja": {
+        "summary": "何らかのポインティングデバイスが移動された",
+        "params": {
+          "type": "タッチもしくはマウス。マウスボタンの種類ではなく、マウスとして通知。",
+          "x": "X位置",
+          "y": "Y位置",
+          "cx": "接触幅(ピクセル数)、マウスの時は1",
+          "cy": "接触高さ(ピクセル数)、マウスの時は1",
+          "shift": "修飾キー状態(マウス押下状態を含む)、タッチの時は0",
+          "id": "タッチID、マウスの時は常に0"
+        }
+      },
+      "tr": {
+        "summary": "Some pointing device has moved",
+        "params": {
+          "type": "Touch or mouse. Reported as the mouse, not as a mouse button type.",
+          "x": "X position",
+          "y": "Y position",
+          "cx": "Contact width (pixels); 1 for the mouse",
+          "cy": "Contact height (pixels); 1 for the mouse",
+          "shift": "Modifier key state (including mouse button state); 0 for touch",
+          "id": "Touch ID; always 0 for the mouse"
+        }
+      }
+    },
+    "Window.onPointerUp": {
+      "hash": "c6a49b2bb467",
+      "ja": {
+        "summary": "何らかのポインティングデバイスが離された",
+        "params": {
+          "type": "タッチもしくはマウスボタンの種類",
+          "x": "X位置",
+          "y": "Y位置",
+          "cx": "接触幅(ピクセル数)、マウスの時は1",
+          "cy": "接触高さ(ピクセル数)、マウスの時は1",
+          "shift": "修飾キー状態、タッチの時は0",
+          "id": "タッチID、マウスの時は常に0"
+        }
+      },
+      "tr": {
+        "summary": "Some pointing device has been released",
+        "params": {
+          "type": "Type of touch or mouse button",
+          "x": "X position",
+          "y": "Y position",
+          "cx": "Contact width (pixels); 1 for the mouse",
+          "cy": "Contact height (pixels); 1 for the mouse",
+          "shift": "Modifier key state; 0 for touch",
+          "id": "Touch ID; always 0 for the mouse"
+        }
+      }
+    },
+    "Window.GLGetProcAddress": {
+      "hash": "9024b240d226",
+      "ja": {
+        "summary": "GL エントリポイント解決関数へのポインタ ( 整数 )",
+        "description": "GLES 系プラグイン ( EffekseerDevice 等 ) の oglbase として利用します。初回\nアクセス時に GL コンテキストが未初期化なら遅延生成してカレントにします\n( OGLDrawDevice / Canvas を使う場合でもウィンドウから取得できます )。GL を\n取得できない環境では 0 ( null ) を返します。"
+      },
+      "tr": {
+        "summary": "Pointer to the GL entry point resolver function (integer)",
+        "description": "Used as oglbase by GLES-based plugins (EffekseerDevice, etc.). On first\naccess, if the GL context has not been initialized yet, it is created lazily and made current\n(it can be obtained from the window even when using OGLDrawDevice / Canvas). In environments where GL\ncannot be obtained, it returns 0 (null)."
+      }
+    },
+    "Window.maximized": {
+      "hash": "b543b29182ce",
+      "ja": {
+        "summary": "最大化しているか",
+        "description": "ウィンドウが最大化されていれば真です。変更は\n[Window.maximize](Window.md#maximize) / [Window.showRestore](Window.md#showrestore) で行います。\n\nWINVER / SDL3 系ビルドの双方で利用できます。"
+      },
+      "tr": {
+        "summary": "Whether maximized",
+        "description": "True if the window is maximized. To change it, use\n[Window.maximize](Window.md#maximize) / [Window.showRestore](Window.md#showrestore).\n\nAvailable in both WINVER and SDL3-based builds."
+      }
+    },
+    "Window.minimized": {
+      "hash": "b9f1a2b21e8d",
+      "ja": {
+        "summary": "最小化しているか",
+        "description": "ウィンドウが最小化 ( アイコン化 ) されていれば真です。"
+      },
+      "tr": {
+        "summary": "Whether minimized",
+        "description": "True if the window is minimized (iconified)."
+      }
+    },
+    "Window.maximize": {
+      "hash": "bb88b5adf648",
+      "ja": {
+        "summary": "最大化",
+        "description": "ウィンドウを最大化します。\n[Window.onMaximizeQuery](Window.md#onmaximizequery) は通りません\n( プログラムからの最大化は意図したものとして扱います )。"
+      },
+      "tr": {
+        "summary": "Maximizes",
+        "description": "Maximizes the window.\nIt does not go through [Window.onMaximizeQuery](Window.md#onmaximizequery)\n(maximizing from the program is treated as intentional)."
+      }
+    },
+    "Window.minimize": {
+      "hash": "88b1adea7f94",
+      "ja": {
+        "summary": "最小化",
+        "description": "ウィンドウを最小化 ( アイコン化 ) します。"
+      },
+      "tr": {
+        "summary": "Minimizes",
+        "description": "Minimizes (iconifies) the window."
+      }
+    },
+    "Window.showRestore": {
+      "hash": "767b2d1e4cd1",
+      "ja": {
+        "summary": "元のサイズに戻す",
+        "description": "最大化 / 最小化されているウィンドウを元の位置とサイズに戻します。"
+      },
+      "tr": {
+        "summary": "Restores the original size",
+        "description": "Restores a maximized / minimized window to its original position and size."
+      }
+    },
+    "Window.getNormalRect": {
+      "hash": "dd31d14ab7ea",
+      "ja": {
+        "summary": "元の矩形の取得",
+        "description": "最大化 / 最小化していないときのウィンドウの外形矩形 ( 画面座標 ) を\n`%[ x, y, w, h ]` の辞書で返します。最大化中でも「元に戻したときの位置とサイズ」が\n取れるので、次回起動時の復元などに使えます。",
+        "returns": "矩形の辞書が返ります。取れない場合は void が返ります。"
+      },
+      "tr": {
+        "summary": "Gets the normal rectangle",
+        "description": "Returns the outer rectangle of the window (screen coordinates) when it is not maximized / minimized,\nas a dictionary `%[ x, y, w, h ]`. Even while maximized you can get the \"position and size when restored\",\nso it is useful for restoring on the next launch.",
+        "returns": "A rectangle dictionary, or void if it cannot be obtained."
+      }
+    },
+    "Window.getWindowRect": {
+      "hash": "fed34d43442b",
+      "ja": {
+        "summary": "ウィンドウ矩形の取得",
+        "description": "枠やタイトルバーを含むウィンドウの外形矩形を、画面座標の `%[ x, y, w, h ]` で返します。",
+        "returns": "矩形の辞書が返ります。"
+      },
+      "tr": {
+        "summary": "Gets the window rectangle",
+        "description": "Returns the outer rectangle of the window, including the frame and title bar, as `%[ x, y, w, h ]` in screen coordinates.",
+        "returns": "A rectangle dictionary."
+      }
+    },
+    "Window.getClientRect": {
+      "hash": "007897c8d728",
+      "ja": {
+        "summary": "クライアント矩形の取得",
+        "description": "描画領域 ( クライアント領域 ) の矩形を、画面座標の `%[ x, y, w, h ]` で返します。",
+        "returns": "矩形の辞書が返ります。"
+      },
+      "tr": {
+        "summary": "Gets the client rectangle",
+        "description": "Returns the rectangle of the drawing area (client area) as `%[ x, y, w, h ]` in screen coordinates.",
+        "returns": "A rectangle dictionary."
+      }
+    },
+    "Window.setCursorPos": {
+      "hash": "9ba3a5057964",
+      "ja": {
+        "summary": "マウスカーソル位置の指定 ( 描画領域座標 )",
+        "description": "**描画領域座標** ( 描画領域の左上を原点としたピクセル座標 ) でマウスカーソルの\n位置を指定します。\n\n[Layer.setCursorPos](Layer.md#setcursorpos) と同名ですが、**座標系が違います**。\nレイヤ座標の値を持っているなら、そちらを使ってください。こちらは「描画領域座標の\n値をそのまま入れたい」ときのためのものです。\n\n代表例は [Window.onTouchScaling](Window.md#ontouchscaling) や\n[Window.onTouchRotate](Window.md#ontouchrotate) の `cx` / `cy` です。これらは\nマウスイベントと違ってレイヤ座標へ変換されずに届くため、レイヤ座標へ直すには\n描画先の矩形が必要ですが、その矩形はスクリプトからは取得できません。\nこのメソッドならそのまま渡せます。\n\nWindows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で動作します。",
+        "params": {
+          "x": "描画領域座標での x 座標値をピクセル単位で指定します。",
+          "y": "描画領域座標での y 座標値をピクセル単位で指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the mouse cursor position (drawing area coordinates)",
+        "description": "Sets the mouse cursor position in **drawing area coordinates** (pixel coordinates with the top-left of the drawing area as the origin).\n\nIt has the same name as [Layer.setCursorPos](Layer.md#setcursorpos), but **the coordinate system differs**.\nIf you have values in layer coordinates, use that one instead. This one is for when you want to pass\nvalues in drawing area coordinates as they are.\n\nThe typical case is `cx` / `cy` of [Window.onTouchScaling](Window.md#ontouchscaling) and\n[Window.onTouchRotate](Window.md#ontouchrotate). Unlike mouse events, these arrive without being converted\nto layer coordinates; converting them would require the destination rectangle, which scripts cannot obtain.\nWith this method you can pass them as they are.\n\nWorks in both the native Windows (WINVER) build and the SDL3 / generic builds.",
+        "params": {
+          "x": "x coordinate in drawing area coordinates, in pixels.",
+          "y": "y coordinate in drawing area coordinates, in pixels."
+        }
+      }
+    },
+    "Window.getCursorPos": {
+      "hash": "f9f2cadf648b",
+      "ja": {
+        "summary": "マウスカーソル位置の取得 ( 描画領域座標 )",
+        "description": "[Window.setCursorPos](Window.md#setcursorpos) と同じ**描画領域座標**で、現在の\nマウスカーソル位置を `%[ x, y ]` の辞書で返します。\n\nレイヤ座標で読みたい場合は [Layer.cursorX](Layer.md#cursorx) /\n[Layer.cursorY](Layer.md#cursory) を使ってください。"
+      },
+      "tr": {
+        "summary": "Gets the mouse cursor position (drawing area coordinates)",
+        "description": "Returns the current mouse cursor position as a dictionary `%[ x, y ]`, in the same **drawing area coordinates**\nas [Window.setCursorPos](Window.md#setcursorpos).\n\nTo read it in layer coordinates, use [Layer.cursorX](Layer.md#cursorx) /\n[Layer.cursorY](Layer.md#cursory)."
+      }
+    },
+    "Window.setClientRect": {
+      "hash": "208ee6160f5c",
+      "ja": {
+        "summary": "クライアント矩形の設定",
+        "description": "クライアント領域が指定した画面座標の矩形になるよう、ウィンドウを移動・リサイズします。\n辞書に無い要素は現在の値のままです ( `%[ w:320 ]` なら幅だけ変わります )。",
+        "returns": "設定できれば真が返ります。",
+        "params": {
+          "rect": "`%[ x, y, w, h ]` の辞書を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the client rectangle",
+        "description": "Moves and resizes the window so that the client area becomes the given rectangle in screen coordinates.\nElements not in the dictionary keep their current values (`%[ w:320 ]` changes only the width).",
+        "returns": "True if it could be set.",
+        "params": {
+          "rect": "A dictionary `%[ x, y, w, h ]`."
+        }
+      }
+    },
+    "Window.disableResize": {
+      "hash": "a5e095224878",
+      "ja": {
+        "summary": "サイズ変更の禁止",
+        "description": "真にすると、ユーザが枠を掴んでウィンドウのサイズを変えられなくなります。\nSDL3 系ビルドでも有効です。"
+      },
+      "tr": {
+        "summary": "Disables resizing",
+        "description": "If true, the user can no longer resize the window by dragging its frame.\nAlso effective in SDL3-based builds."
+      }
+    },
+    "Window.disableMove": {
+      "hash": "146781937f4d",
+      "ja": {
+        "summary": "移動の禁止",
+        "description": "真にすると、ユーザがウィンドウを掴んで動かせなくなります。\n枠なしで表示するときに使います。\n\nWINVER ビルドでのみ効きます。SDL3 系ビルドは値を保持するだけです\n( SDL に移動を止める手段が無いため )。"
+      },
+      "tr": {
+        "summary": "Disables moving",
+        "description": "If true, the user can no longer move the window by dragging it.\nUsed when showing the window without a frame.\n\nEffective only in the WINVER build. SDL3-based builds only store the value\n(because SDL has no way to stop moving)."
+      }
+    },
+    "Window.registerExEvent": {
+      "hash": "a7582ef564b2",
+      "ja": {
+        "summary": "拡張イベントの有効化",
+        "description": "呼ぶと、ウィンドウ枠の操作に伴う次のイベントが発生するようになります。\n呼ぶまでは発生しません。\n\n| イベント | 発生するとき | SDL3 系ビルド |\n|---|---|---|\n| [onMove](Window.md#onmove) | 移動した | ○ |\n| [onMoving](Window.md#onmoving) | 移動中 | × |\n| [onResizing](Window.md#onresizing) | サイズ変更中 | × |\n| [onMoveSizeBegin](Window.md#onmovesizebegin) / [onMoveSizeEnd](Window.md#onmovesizeend) | 枠のドラッグ開始 / 終了 | × |\n| [onMinimize](Window.md#onminimize) / [onMaximize](Window.md#onmaximize) | 最小化 / 最大化した | ○ |\n| [onMaximizeQuery](Window.md#onmaximizequery) | 最大化しようとしている | × |\n| [onDPIChanged](Window.md#ondpichanged) | DPI が変わった | ○ |\n| [onDisplayChanged](Window.md#ondisplaychanged) | 画面構成が変わった | ○ |\n\nSDL3 系ビルドで × のものは、SDL がドラッグ中の問い合わせを持たず、\n結果しか通知しないため発生しません。"
+      },
+      "tr": {
+        "summary": "Enables extended events",
+        "description": "Once called, the following events related to window frame operations start firing.\nThey do not fire until it is called.\n\n| Event | Fires when | SDL3-based builds |\n|---|---|---|\n| [onMove](Window.md#onmove) | Moved | ○ |\n| [onMoving](Window.md#onmoving) | Moving | × |\n| [onResizing](Window.md#onresizing) | Resizing | × |\n| [onMoveSizeBegin](Window.md#onmovesizebegin) / [onMoveSizeEnd](Window.md#onmovesizeend) | Frame drag starts / ends | × |\n| [onMinimize](Window.md#onminimize) / [onMaximize](Window.md#onmaximize) | Minimized / maximized | ○ |\n| [onMaximizeQuery](Window.md#onmaximizequery) | About to maximize | × |\n| [onDPIChanged](Window.md#ondpichanged) | DPI changed | ○ |\n| [onDisplayChanged](Window.md#ondisplaychanged) | Display configuration changed | ○ |\n\nThe events marked × do not fire in SDL3-based builds, because SDL has no queries during dragging\nand only reports the result."
+      }
+    },
+    "Window.registerDeviceChange": {
+      "hash": "f49ae7d51154",
+      "ja": {
+        "summary": "デバイス変化の通知を有効化",
+        "description": "呼ぶと、入力デバイスの抜き差しで [Window.onDeviceChanged](Window.md#ondevicechanged)\nが発生するようになります。本体の入力 ( マウス / パッド ) は自分で追従するので、\nプラグイン等が自前でデバイスを列挙している場合に使います。",
+        "returns": "有効になれば真が返ります。"
+      },
+      "tr": {
+        "summary": "Enables device change notifications",
+        "description": "Once called, [Window.onDeviceChanged](Window.md#ondevicechanged)\nfires when input devices are plugged in or removed. The engine's own input (mouse / pad) follows changes by itself,\nso use this when a plugin or the like enumerates devices on its own.",
+        "returns": "True if enabled."
+      }
+    },
+    "Window.onMaximizeQuery": {
+      "hash": "da5a5dfeb38d",
+      "ja": {
+        "summary": "最大化の確認",
+        "description": "ユーザがウィンドウを最大化しようとしたときに発生します\n( [Window.registerExEvent](Window.md#registerexevent) の後、WINVER ビルドのみ )。\n最大化を止めたい場合は、上位クラスの同メソッドに false を渡してください。\n呼ばなければ既定どおり最大化します\n( [Window.onCloseQuery](Window.md#onclosequery) と同じ作りです )。\n```tjs\nfunction onMaximizeQuery() {\ngoPseudoFullScreen();           // 最大化のかわりに別の処理\nsuper.onMaximizeQuery(false);   // 最大化そのものは止める\n}\n```\nwindowEx プラグインの「ハンドラが真を返すと止まる」方式とは異なります。",
+        "params": {
+          "canmaximize": "最大化してよいかどうかを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Confirms maximizing",
+        "description": "Fired when the user tries to maximize the window\n(after [Window.registerExEvent](Window.md#registerexevent); WINVER build only).\nTo stop maximizing, pass false to the same method of the superclass.\nIf you do not call it, the window is maximized as usual\n(the same design as [Window.onCloseQuery](Window.md#onclosequery)).\n```tjs\nfunction onMaximizeQuery() {\ngoPseudoFullScreen();           // 最大化のかわりに別の処理\nsuper.onMaximizeQuery(false);   // 最大化そのものは止める\n}\n```\nThis differs from the windowEx plugin's approach, where returning true from the handler stops it.",
+        "params": {
+          "canmaximize": "Whether maximizing is allowed."
+        }
+      }
+    },
+    "Window.onMove": {
+      "hash": "ef91e45421c2",
+      "ja": {
+        "summary": "移動した",
+        "description": "ウィンドウが移動したときに発生します ( 要 [Window.registerExEvent](Window.md#registerexevent) )。",
+        "params": {
+          "x": "新しい位置の X 座標",
+          "y": "新しい位置の Y 座標"
+        }
+      },
+      "tr": {
+        "summary": "Moved",
+        "description": "Fired when the window has moved (requires [Window.registerExEvent](Window.md#registerexevent)).",
+        "params": {
+          "x": "X coordinate of the new position",
+          "y": "Y coordinate of the new position"
+        }
+      }
+    },
+    "Window.onMoving": {
+      "hash": "b159a7925a7b",
+      "ja": {
+        "summary": "移動中",
+        "description": "ユーザがウィンドウを移動している間に発生します\n( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )。\n渡された矩形を書き換えると、移動先を拘束できます。",
+        "params": {
+          "rect": "移動先の矩形 `%[ x, y, w, h ]`"
+        }
+      },
+      "tr": {
+        "summary": "Moving",
+        "description": "Fired while the user is moving the window\n(requires [Window.registerExEvent](Window.md#registerexevent); WINVER build only).\nRewriting the given rectangle constrains the destination.",
+        "params": {
+          "rect": "Destination rectangle `%[ x, y, w, h ]`"
+        }
+      }
+    },
+    "Window.onResizing": {
+      "hash": "27ba60442300",
+      "ja": {
+        "summary": "サイズ変更中",
+        "description": "ユーザがウィンドウのサイズを変えている間に発生します\n( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )。\n渡された矩形を書き換えると、サイズを拘束できます。",
+        "params": {
+          "rect": "変更後の矩形 `%[ x, y, w, h ]`",
+          "edge": "掴んでいる辺"
+        }
+      },
+      "tr": {
+        "summary": "Resizing",
+        "description": "Fired while the user is resizing the window\n(requires [Window.registerExEvent](Window.md#registerexevent); WINVER build only).\nRewriting the given rectangle constrains the size.",
+        "params": {
+          "rect": "Rectangle after the change `%[ x, y, w, h ]`",
+          "edge": "Edge being dragged"
+        }
+      }
+    },
+    "Window.onMoveSizeBegin": {
+      "hash": "413a69da93f3",
+      "ja": {
+        "summary": "枠のドラッグ開始",
+        "description": "( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )"
+      },
+      "tr": {
+        "summary": "Frame drag started",
+        "description": "(Requires [Window.registerExEvent](Window.md#registerexevent); WINVER build only)"
+      }
+    },
+    "Window.onMoveSizeEnd": {
+      "hash": "2d746d974a7c",
+      "ja": {
+        "summary": "枠のドラッグ終了",
+        "description": "( 要 [Window.registerExEvent](Window.md#registerexevent)、WINVER ビルドのみ )"
+      },
+      "tr": {
+        "summary": "Frame drag ended",
+        "description": "(Requires [Window.registerExEvent](Window.md#registerexevent); WINVER build only)"
+      }
+    },
+    "Window.onMinimize": {
+      "hash": "71d6de0d9080",
+      "ja": {
+        "summary": "最小化した",
+        "description": "( 要 [Window.registerExEvent](Window.md#registerexevent) )"
+      },
+      "tr": {
+        "summary": "Minimized",
+        "description": "(Requires [Window.registerExEvent](Window.md#registerexevent))"
+      }
+    },
+    "Window.onMaximize": {
+      "hash": "ba014a37538c",
+      "ja": {
+        "summary": "最大化した",
+        "description": "( 要 [Window.registerExEvent](Window.md#registerexevent) )"
+      },
+      "tr": {
+        "summary": "Maximized",
+        "description": "(Requires [Window.registerExEvent](Window.md#registerexevent))"
+      }
+    },
+    "Window.onDPIChanged": {
+      "hash": "b765e37dbb8c",
+      "ja": {
+        "summary": "DPI が変わった",
+        "description": "ウィンドウの DPI が変わったときに発生します\n( 要 [Window.registerExEvent](Window.md#registerexevent) )。\nSDL3 系ビルドでは表示倍率を `96 × 倍率` に換算して渡します。",
+        "params": {
+          "dpiX": "横方向の DPI",
+          "dpiY": "縦方向の DPI"
+        }
+      },
+      "tr": {
+        "summary": "DPI changed",
+        "description": "Fired when the window's DPI changes\n(requires [Window.registerExEvent](Window.md#registerexevent)).\nIn SDL3-based builds, the display scale is converted to `96 × scale` and passed.",
+        "params": {
+          "dpiX": "Horizontal DPI",
+          "dpiY": "Vertical DPI"
+        }
+      }
+    },
+    "Window.onDisplayChanged": {
+      "hash": "651d40f329e7",
+      "ja": {
+        "summary": "画面構成が変わった",
+        "description": "画面の解像度やモニタの構成が変わったときに発生します\n( 要 [Window.registerExEvent](Window.md#registerexevent) )。"
+      },
+      "tr": {
+        "summary": "Display configuration changed",
+        "description": "Fired when the screen resolution or monitor configuration changes\n(requires [Window.registerExEvent](Window.md#registerexevent))."
+      }
+    },
+    "Window.onDeviceChanged": {
+      "hash": "d817104a1f36",
+      "ja": {
+        "summary": "入力デバイスが抜き差しされた",
+        "description": "( 要 [Window.registerDeviceChange](Window.md#registerdevicechange) )",
+        "params": {
+          "arrival": "接続なら真、取り外しなら偽"
+        }
+      },
+      "tr": {
+        "summary": "An input device was plugged in or removed",
+        "description": "(Requires [Window.registerDeviceChange](Window.md#registerdevicechange))",
+        "params": {
+          "arrival": "True if connected, false if removed"
+        }
+      }
+    },
+    "Window.onPaste": {
+      "hash": "b5dbcbd2ef64",
+      "ja": {
+        "summary": "貼り付けの指示",
+        "description": "外部 ( ランチャ等 ) から貼り付けを指示されたとき ( `WM_PASTE` ) に発生します。\nWINVER ビルドのみです。"
+      },
+      "tr": {
+        "summary": "Paste requested",
+        "description": "Fired when a paste is requested from outside (a launcher, etc.) ( `WM_PASTE` ).\nWINVER build only."
+      }
+    },
+    "layerExSave:Window": {
+      "hash": "2ed3f9c3d854",
+      "ja": {
+        "summary": "ウインドウ拡張"
+      },
+      "tr": {
+        "summary": "Window extension"
+      }
+    },
+    "layerExSave:Window.startSaveLayerImage": {
+      "hash": "1023fff01e7d",
+      "ja": {
+        "summary": "TLG5/PNG 形式での画像の保存の開始",
+        "returns": "ハンドラ",
+        "params": {
+          "layer": "保存対象レイヤ",
+          "filename": "ファイル名（拡張子が.pngの時のみPNG形式保存，それ以外はTLG5）",
+          "tags": "タグ情報"
+        }
+      },
+      "tr": {
+        "summary": "Starts saving an image in TLG5/PNG format",
+        "returns": "Handler",
+        "params": {
+          "layer": "Layer to save",
+          "filename": "File name (saved as PNG only when the extension is .png; otherwise TLG5)",
+          "tags": "Tag information"
+        }
+      }
+    },
+    "layerExSave:Window.cancelSaveLayerImage": {
+      "hash": "f9d96896ed75",
+      "ja": {
+        "summary": "画像保存キャンセル",
+        "params": {
+          "handler": "ハンドラ"
+        }
+      },
+      "tr": {
+        "summary": "Cancels image saving",
+        "params": {
+          "handler": "Handler"
+        }
+      }
+    },
+    "layerExSave:Window.stopSaveLayerImage": {
+      "hash": "53dcdd3984b8",
+      "ja": {
+        "summary": "画像保存中止（中止した場合は終了イベントが来ません）",
+        "params": {
+          "handler": "ハンドラ"
+        }
+      },
+      "tr": {
+        "summary": "Aborts image saving (no completion event is sent when aborted)",
+        "params": {
+          "handler": "Handler"
+        }
+      }
+    },
+    "layerExSave:Window.onSaveLayerImageProgress": {
+      "hash": "13e268be23c7",
+      "ja": {
+        "summary": "保存処理実行中イベント",
+        "params": {
+          "handler": "ハンドラ",
+          "progress": "進行度合い(%表記)",
+          "layer": "レイヤ",
+          "filename": "ファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Saving in progress event",
+        "params": {
+          "handler": "Handler",
+          "progress": "Progress (in %)",
+          "layer": "Layer",
+          "filename": "File name"
+        }
+      }
+    },
+    "layerExSave:Window.onSaveLayerImageDone": {
+      "hash": "7f97f378554c",
+      "ja": {
+        "summary": "保存処理実行完了イベント",
+        "params": {
+          "handler": "ハンドラ",
+          "canceled": "キャンセルされたら1",
+          "filename": "ファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Saving completed event",
+        "params": {
+          "handler": "Handler",
+          "canceled": "1 if canceled",
+          "filename": "File name"
+        }
+      }
+    },
+    "menu:Window.menu": {
+      "hash": "c00374215eed",
+      "ja": {
+        "summary": "ルートメニューオブジェクト",
+        "description": "ルートメニューオブジェクト ( Menu クラスのオブジェクト ) を表します。\nこのルートメニューオブジェクトの子として登録されたメニューはメニューバーに並ぶことになります。"
+      },
+      "tr": {
+        "summary": "Root menu object",
+        "description": "The root menu object (an object of the Menu class).\nMenus registered as children of this root menu object appear in the menu bar."
+      }
+    },
+    "messenger:Window": {
+      "hash": "030bee506677",
+      "ja": {
+        "summary": "擬似コードによるマニュアル",
+        "description": "同一マシン上で起動している吉里吉里間での相互通信機能および\n外部アプリからの通信機能を提供します。\nやりとりされる データは WM_COPYDATA を用いて転送されます。"
+      },
+      "tr": {
+        "summary": "Manual in pseudo-code",
+        "description": "Provides mutual communication between Kirikiri instances running on the same machine and\ncommunication from external applications.\nData is transferred using WM_COPYDATA."
+      }
+    },
+    "messenger:Window.messageEnable": {
+      "hash": "b48973ab058c",
+      "ja": {
+        "summary": "メッセージ受信機能が有効かどうかを指定します。",
+        "description": "true にするとメッセージを受信するようになります。\nメッセージ受信が有効なら true"
+      },
+      "tr": {
+        "summary": "Specifies whether message receiving is enabled.",
+        "description": "Set true to start receiving messages.\ntrue if message receiving is enabled"
+      }
+    },
+    "messenger:Window.storeHWND": {
+      "hash": "e9d6439aafc6",
+      "ja": {
+        "summary": "HWND 情報を保存するかどうかを指定します。",
+        "description": "これの値を指定すると、実行ファイル名.キーの値 という名前の\nファイルが作成され、その中に現在の HWND 情報が出力されるようになります。\n外部アプリケーションからメッセージを送りたい場合は、このファイルに\n記録された HWND を参照することができます。\nフルスクリーン時など、HWND が変わった時には内容が自動的に更新されます。\nこのため、外部アプリケーションは送るときは毎回 HWND の値を参照しなおす必要があります。",
+        "returns": "保存用キーの値"
+      },
+      "tr": {
+        "summary": "Specifies whether to save HWND information.",
+        "description": "When this value is set, a file named \"(executable name).(key value)\" is created,\nand the current HWND information is written to it.\nIf an external application wants to send messages, it can refer to the HWND recorded in this file.\nThe contents are updated automatically when the HWND changes, e.g. in full screen.\nTherefore the external application must re-read the HWND value every time it sends.",
+        "returns": "Value of the key used for saving"
+      }
+    },
+    "messenger:Window.registerUserMessageReceiver": {
+      "hash": "eb61eac96649",
+      "ja": {
+        "summary": "ユーザ定義のメッセージハンドラを登録します。",
+        "description": "※TJS2 から関数を登録した場合（typeof proc == Object の場合)\nfunction receiver(userdata, wparam, lparam)\nの形式のファンクションであるとみなされます。\nこの時、userdata は渡した値そのままを、\nwparam, lparam は元メッセージのデータから整数にキャストした値を渡します。\n\n※TJS2 から文字列を登録した場合 (typeof proc == String の場合)\n該当オブジェクトの指定された文字列の関数を function name(userdata, wparam, lparam)\nの引数で呼びだします\n\n※プラグイン側から関数を登録する場合 (typeof proc == Integer の場合)\nstatic bool __stdcall receiver(iTJSDispatch2 *winobj, void *userdata, tTVPWindowMessage *Message)\nであるとみなされます。設定時は整数にキャストしてください。\nwinobj は該当するウインドウのオブジェクトです\nuserdata は整数にキャストした値でひきわたされます。",
+        "returns": "登録されたメッセージ番号を返す",
+        "params": {
+          "mode": "wrmRegister=0:登録 wrmUnRegister=1:解除",
+          "msg": "数値:メッセージ番号 文字列:RegisterWindowMessage して値を決定",
+          "proc": "呼び出しファンクション",
+          "userdata": "ユーザデータパラメータ"
+        }
+      },
+      "tr": {
+        "summary": "Registers a user-defined message handler.",
+        "description": "Note: When a function is registered from TJS2 (typeof proc == Object),\nit is assumed to be a function of the form\nfunction receiver(userdata, wparam, lparam).\nuserdata is passed as is,\nand wparam, lparam are the original message data cast to integers.\n\nNote: When a string is registered from TJS2 (typeof proc == String),\nthe function with that name on the object is called with the arguments function name(userdata, wparam, lparam).\n\nNote: When a function is registered from a plugin (typeof proc == Integer),\nit is assumed to be static bool __stdcall receiver(iTJSDispatch2 *winobj, void *userdata, tTVPWindowMessage *Message).\nCast it to an integer when setting.\nwinobj is the corresponding window object.\nuserdata is passed as a value cast to an integer.",
+        "returns": "Returns the registered message number",
+        "params": {
+          "mode": "wrmRegister=0: register, wrmUnRegister=1: unregister",
+          "msg": "Number: message number; string: value determined with RegisterWindowMessage",
+          "proc": "Function to call",
+          "userdata": "User data parameter"
+        }
+      }
+    },
+    "messenger:Window.sendUserMessage": {
+      "hash": "8bf4bd8fc133",
+      "ja": {
+        "summary": "低レベルメッセージ送信を実行します。",
+        "description": "全吉里吉里に指定のメッセージが送信されます",
+        "params": {
+          "msg": "メッセージ番号",
+          "wparam": "WPARAM (整数扱いで処理されます)",
+          "lparam": "LPARAM (整数扱いで処理されます)"
+        }
+      },
+      "tr": {
+        "summary": "Sends a low-level message.",
+        "description": "The message is sent to all Kirikiri instances.",
+        "params": {
+          "msg": "Message number",
+          "wparam": "WPARAM (treated as an integer)",
+          "lparam": "LPARAM (treated as an integer)"
+        }
+      }
+    },
+    "messenger:Window.sendUserMessageDirect": {
+      "hash": "433323d399ec",
+      "ja": {
+        "summary": "HWNDを指定して低レベルメッセージ送信を実行します。",
+        "description": "特定のウインドウに指定のメッセージが送信されます",
+        "params": {
+          "hwnd": "HWND数値",
+          "msg": "メッセージ番号",
+          "wparam": "WPARAM (整数扱いで処理されます)",
+          "lparam": "LPARAM (整数扱いで処理されます)"
+        }
+      },
+      "tr": {
+        "summary": "Sends a low-level message to the given HWND.",
+        "description": "The message is sent to the specific window.",
+        "params": {
+          "hwnd": "HWND value",
+          "msg": "Message number",
+          "wparam": "WPARAM (treated as an integer)",
+          "lparam": "LPARAM (treated as an integer)"
+        }
+      }
+    },
+    "messenger:Window.postUserMessage": {
+      "hash": "b65b3124bf14",
+      "ja": {
+        "summary": "低レベルメッセージをポストします。",
+        "description": "全吉里吉里に指定のメッセージがポストされます",
+        "params": {
+          "msg": "メッセージ番号",
+          "wparam": "WPARAM (整数扱いで処理されます)",
+          "lparam": "LPARAM (整数扱いで処理されます)"
+        }
+      },
+      "tr": {
+        "summary": "Posts a low-level message.",
+        "description": "The message is posted to all Kirikiri instances.",
+        "params": {
+          "msg": "Message number",
+          "wparam": "WPARAM (treated as an integer)",
+          "lparam": "LPARAM (treated as an integer)"
+        }
+      }
+    },
+    "messenger:Window.postUserMessageDirect": {
+      "hash": "91039bee8b75",
+      "ja": {
+        "summary": "HWNDを指定して低レベルメッセージをポストします。",
+        "description": "特定のウインドウに指定のメッセージがポストされます",
+        "params": {
+          "hwnd": "HWND数値",
+          "msg": "メッセージ番号",
+          "wparam": "WPARAM (整数扱いで処理されます)",
+          "lparam": "LPARAM (整数扱いで処理されます)"
+        }
+      },
+      "tr": {
+        "summary": "Posts a low-level message to the given HWND.",
+        "description": "The message is posted to the specific window.",
+        "params": {
+          "hwnd": "HWND value",
+          "msg": "Message number",
+          "wparam": "WPARAM (treated as an integer)",
+          "lparam": "LPARAM (treated as an integer)"
+        }
+      }
+    },
+    "messenger:Window.sendMessage": {
+      "hash": "9bf4cf870ffa",
+      "ja": {
+        "summary": "メッセージの送信を行います。",
+        "description": "起動している吉里吉里すべてに WM_COPYDATA メッセージを送信します。\n識別キーとメッセージの意味はそれぞれのアプリで適当に定めてください。",
+        "params": {
+          "key": "識別キー(文字列:256文字までなので注意)",
+          "message": "メッセージ(文字列)"
+        }
+      },
+      "tr": {
+        "summary": "Sends a message.",
+        "description": "Sends a WM_COPYDATA message to all running Kirikiri instances.\nDefine the meaning of the identification key and message as appropriate for each application.",
+        "params": {
+          "key": "Identification key (string; note the 256-character limit)",
+          "message": "Message (string)"
+        }
+      }
+    },
+    "messenger:Window.sendMessageDirect": {
+      "hash": "895356f12c5e",
+      "ja": {
+        "summary": "HWNDを指定してメッセージの送信を行います。",
+        "description": "指定したウインドウに WM_COPYDATA メッセージを送信します。\n受け取る側はsendMessageと共通の処理のため識別キーは必ず指定してください",
+        "params": {
+          "hwnd": "HWND数値",
+          "key": "識別キー(文字列:256文字までなので注意)",
+          "message": "メッセージ(文字列)"
+        }
+      },
+      "tr": {
+        "summary": "Sends a message to the given HWND.",
+        "description": "Sends a WM_COPYDATA message to the given window.\nThe receiver uses the same processing as for sendMessage, so always specify the identification key.",
+        "params": {
+          "hwnd": "HWND value",
+          "key": "Identification key (string; note the 256-character limit)",
+          "message": "Message (string)"
+        }
+      }
+    },
+    "messenger:Window.onMessageReceived": {
+      "hash": "bfab0af22825",
+      "ja": {
+        "summary": "イベント：メッセージ受信。",
+        "description": "ほかの吉里吉里、あるいは外部アプリから WM_COPYDATA メッセージを受信したときに呼び出されます\n呼び出し元はこれの呼び出しが終了するまでロックされてしまうため、\n速やかに処理を終了するようにしてください。",
+        "params": {
+          "key": "識別キー(文字列:256文字までなので注意)",
+          "message": "メッセージ(文字列)"
+        }
+      },
+      "tr": {
+        "summary": "Event: message received.",
+        "description": "Called when a WM_COPYDATA message is received from another Kirikiri instance or an external application.\nThe caller is blocked until this call returns,\nso finish processing promptly.",
+        "params": {
+          "key": "Identification key (string; note the 256-character limit)",
+          "message": "Message (string)"
+        }
+      }
+    },
+    "shellExecute:Window": {
+      "hash": "2f5cfe7d79c6",
+      "ja": {
+        "summary": "擬似コードによるマニュアル",
+        "description": "外部アプリを起動してその終了を待つ機構を提供します。\nウインドウメッセージとして WM_APP + 1 を利用しています"
+      },
+      "tr": {
+        "summary": "Manual in pseudo-code",
+        "description": "Provides a mechanism for launching an external application and waiting for it to finish.\nUses WM_APP + 1 as the window message."
+      }
+    },
+    "shellExecute:Window.shellExecute": {
+      "hash": "808046bd1a1e",
+      "ja": {
+        "summary": "バックグラウンドでの外部プログラムの実行",
+        "description": "処理がおわったら onShellExecuted イベントが発生します。",
+        "returns": "プロセスハンドル（失敗した場合は-1)。terminateProcess に渡すことができます。",
+        "params": {
+          "target": "プログラム",
+          "param": "引数"
+        }
+      },
+      "tr": {
+        "summary": "Runs an external program in the background",
+        "description": "The onShellExecuted event fires when it finishes.",
+        "returns": "Process handle (-1 on failure). Can be passed to terminateProcess.",
+        "params": {
+          "target": "Program",
+          "param": "Arguments"
+        }
+      }
+    },
+    "shellExecute:Window.terminateProcess": {
+      "hash": "3fe0506c7057",
+      "ja": {
+        "summary": "実行中の外部プログラムの強制終了",
+        "params": {
+          "process": "プロセスハンドル",
+          "endCode": "終了コード"
+        }
+      },
+      "tr": {
+        "summary": "Forcibly terminates a running external program",
+        "params": {
+          "process": "Process handle",
+          "endCode": "Exit code"
+        }
+      }
+    },
+    "shellExecute:Window.onShellExecuted": {
+      "hash": "aac631b89d38",
+      "ja": {
+        "summary": "イベント:シェル実行終了",
+        "params": {
+          "process": "プロセスハンドル",
+          "endCode": "終了コード"
+        }
+      },
+      "tr": {
+        "summary": "Event: shell execution finished",
+        "params": {
+          "process": "Process handle",
+          "endCode": "Exit code"
+        }
+      }
+    },
+    "shellExecute:Window.commandExecute": {
+      "hash": "c403f3f5f411",
+      "ja": {
+        "summary": "コンソール出力取得つきコマンドラインプログラムの実行",
+        "description": "コンソールの行単位出力で onCommandLineOutput イベントが発生します。\n処理がおわったら onShellExecuted イベントが発生します。",
+        "returns": "プロセスハンドル（失敗した場合は-1)。terminateProcess に渡すことができます。",
+        "params": {
+          "target": "プログラム",
+          "param": "引数"
+        }
+      },
+      "tr": {
+        "summary": "Runs a command-line program and captures its console output",
+        "description": "The onCommandLineOutput event fires for each line of console output.\nThe onShellExecuted event fires when it finishes.",
+        "returns": "Process handle (-1 on failure). Can be passed to terminateProcess.",
+        "params": {
+          "target": "Program",
+          "param": "Arguments"
+        }
+      }
+    },
+    "shellExecute:Window.commandSendSignal": {
+      "hash": "74396ebc62d7",
+      "ja": {
+        "summary": "Ctrl+Cイベントの送信(experimental:すべての環境で動作するとは限りません)",
+        "returns": "成功したらtrue",
+        "params": {
+          "process": "プロセスハンドル（commandExecuteしたプロセスのみ）",
+          "isBreak": "Ctrl+CではなくCtrl+Breakを送る"
+        }
+      },
+      "tr": {
+        "summary": "Sends a Ctrl+C event (experimental: may not work in all environments)",
+        "returns": "true on success",
+        "params": {
+          "process": "Process handle (only processes started with commandExecute)",
+          "isBreak": "Send Ctrl+Break instead of Ctrl+C"
+        }
+      }
+    },
+    "shellExecute:Window.onCommandLineOutput": {
+      "hash": "cede117a1dd8",
+      "ja": {
+        "summary": "イベント:コンソール出力",
+        "params": {
+          "process": "プロセスハンドル",
+          "text": "出力テキスト（１行単位）"
+        }
+      },
+      "tr": {
+        "summary": "Event: console output",
+        "params": {
+          "process": "Process handle",
+          "text": "Output text (one line at a time)"
+        }
+      }
+    },
+    "sigcheck:Window": {
+      "hash": "75e72b7c027a",
+      "ja": {
+        "summary": "擬似コードによるマニュアル",
+        "description": "バックグラウンドで署名チェックを行います。\nウインドウメッセージとして WM_APP + 2 と WM_APP + 3 を利用しています"
+      },
+      "tr": {
+        "summary": "Manual in pseudo-code",
+        "description": "Performs signature checks in the background.\nUses WM_APP + 2 and WM_APP + 3 as window messages."
+      }
+    },
+    "sigcheck:Window.checkSignature": {
+      "hash": "3735c918ed59",
+      "ja": {
+        "summary": "署名チェックの開始",
+        "description": "処理中に onCheckSignatureProgress、\n終了時に onCheckSignatureDone イベントが発生します。\nexe や dll の場合は署名はファイルに内蔵されます。xp3 などの場合は、\n元のファイルに .sig をつけた外部ファイルを署名として処理されます。",
+        "returns": "handler 識別ハンドラ",
+        "params": {
+          "filename": "確認対象ファイル",
+          "publickey": "公開鍵",
+          "info": "ユーザ情報"
+        }
+      },
+      "tr": {
+        "summary": "Starts a signature check",
+        "description": "onCheckSignatureProgress fires during processing,\nand onCheckSignatureDone fires when it finishes.\nFor exe and dll files, the signature is embedded in the file. For xp3 and the like,\nan external file named after the original file with .sig appended is treated as the signature.",
+        "returns": "handler: identification handler",
+        "params": {
+          "filename": "File to check",
+          "publickey": "Public key",
+          "info": "User information"
+        }
+      }
+    },
+    "sigcheck:Window.cancelCheckSignature": {
+      "hash": "773bcc484dc6",
+      "ja": {
+        "summary": "署名チェックのキャンセル",
+        "description": "実行中の署名チェックを速やかに停止させます。キャンセル終了になります。",
+        "params": {
+          "handler": "識別ハンドラ"
+        }
+      },
+      "tr": {
+        "summary": "Cancels a signature check",
+        "description": "Promptly stops a running signature check. It ends as canceled.",
+        "params": {
+          "handler": "Identification handler"
+        }
+      }
+    },
+    "sigcheck:Window.stopCheckSignature": {
+      "hash": "5f4526333a4b",
+      "ja": {
+        "summary": "署名チェックの中止",
+        "description": "実行中の署名チェックを速やかに停止させます。終了イベントは来ません。",
+        "params": {
+          "handler": "識別ハンドラ"
+        }
+      },
+      "tr": {
+        "summary": "Aborts a signature check",
+        "description": "Promptly stops a running signature check. No completion event is sent.",
+        "params": {
+          "handler": "Identification handler"
+        }
+      }
+    },
+    "sigcheck:Window.onCheckSignatureProgress": {
+      "hash": "d2eeff3b828c",
+      "ja": {
+        "summary": "イベント:署名チェック進捗",
+        "params": {
+          "handler": "識別ハンドラ",
+          "info": "ユーザ情報",
+          "percent": "進捗度合い 0〜100%"
+        }
+      },
+      "tr": {
+        "summary": "Event: signature check progress",
+        "params": {
+          "handler": "Identification handler",
+          "info": "User information",
+          "percent": "Progress, 0 to 100%"
+        }
+      }
+    },
+    "sigcheck:Window.onCheckSignatureDone": {
+      "hash": "ac98718aa3b0",
+      "ja": {
+        "summary": "イベント:署名チェック終了",
+        "params": {
+          "handler": "識別ハンドラ",
+          "info": "ユーザ情報",
+          "result": "結果 -2:エラー -1:キャンセル 0:チェック失敗 1:チェック成功",
+          "errormsg": "結果がエラーの場合のエラーメッセージ"
+        }
+      },
+      "tr": {
+        "summary": "Event: signature check finished",
+        "params": {
+          "handler": "Identification handler",
+          "info": "User information",
+          "result": "Result -2: error, -1: canceled, 0: check failed, 1: check succeeded",
+          "errormsg": "Error message when the result is an error"
+        }
+      }
+    },
+    "windowEx:Window": {
+      "hash": "68ac99352acf",
+      "ja": {
+        "summary": "Window拡張",
+        "description": "※本体の Window にも、最大化 / 最小化 / 復帰 (maximize / minimize / showRestore /\nmaximized / minimized)、矩形 (getWindowRect / getClientRect / setClientRect /\ngetNormalRect)、disableResize / disableMove、registerExEvent / registerDeviceChange\nと拡張イベントが入っています (SDL3 系ビルドでも利用可)。\n本プラグインを読み込むと、これらはプラグイン版で上書きされます。\n新しく書くスクリプトは本体版を前提にしてください。"
+      },
+      "tr": {
+        "summary": "Window extension",
+        "description": "Note: The engine's own Window also includes maximize / minimize / restore (maximize / minimize / showRestore /\nmaximized / minimized), rectangles (getWindowRect / getClientRect / setClientRect /\ngetNormalRect), disableResize / disableMove, registerExEvent / registerDeviceChange\nand the extended events (also available in SDL3-based builds).\nLoading this plugin overrides them with the plugin versions.\nNew scripts should assume the engine versions."
+      }
+    },
+    "windowEx:Window.maximize": {
+      "hash": "6a0c54343cdf",
+      "ja": {
+        "summary": "ウィンドウの最大化",
+        "description": "最大化ボタンを押した動作と同等\nサイズ固定ウィンドウでは機能しない"
+      },
+      "tr": {
+        "summary": "Maximizes the window",
+        "description": "Equivalent to pressing the maximize button.\nDoes not work on fixed-size windows."
+      }
+    },
+    "windowEx:Window.maximized": {
+      "hash": "32b347c25977",
+      "ja": {
+        "summary": "ウィンドウが最大化かどうか取得",
+        "description": "setterも一応あるが使わないことを推奨"
+      },
+      "tr": {
+        "summary": "Gets whether the window is maximized",
+        "description": "A setter exists, but using it is not recommended."
+      }
+    },
+    "windowEx:Window.minimize": {
+      "hash": "c5cd0791d549",
+      "ja": {
+        "summary": "ウィンドウの最小化（mainWindowではタスクバー収納，それ以外は画面左下に最小化）",
+        "description": "最小化ボタンを押した動作と同等"
+      },
+      "tr": {
+        "summary": "Minimizes the window (mainWindow goes to the taskbar; other windows are minimized to the bottom-left of the screen)",
+        "description": "Equivalent to pressing the minimize button."
+      }
+    },
+    "windowEx:Window.minimized": {
+      "hash": "3d584f68aad7",
+      "ja": {
+        "summary": "ウィンドウが最小化かどうか取得"
+      },
+      "tr": {
+        "summary": "Gets whether the window is minimized"
+      }
+    },
+    "windowEx:Window.showRestore": {
+      "hash": "ce57dc873178",
+      "ja": {
+        "summary": "ウィンドウ最大化・最小化の復帰"
+      },
+      "tr": {
+        "summary": "Restores the window from maximized / minimized"
+      }
+    },
+    "windowEx:Window.resetWindowIcon": {
+      "hash": "3bac1a62bee1",
+      "ja": {
+        "summary": "ウィンドウのタイトルバーアイコンを再設定する",
+        "description": "※ Vista でフルスクリーンから復帰するとアイコンが消える問題（吉里吉里v2.30で確認）の消極的対処メソッド"
+      },
+      "tr": {
+        "summary": "Resets the window's title bar icon",
+        "description": "Note: A workaround method for the problem where the icon disappears after returning from full screen on Vista (confirmed with Kirikiri v2.30)."
+      }
+    },
+    "windowEx:Window.setWindowIcon": {
+      "hash": "853bd4175db4",
+      "ja": {
+        "summary": "ウィンドウのタイトルバーアイコンを変更する",
+        "description": "※ アーカイブ内のファイル指定は不可，exeやDLLを指定した場合は一番最初のアイコンが設定される",
+        "params": {
+          "file": "アイコンファイルまたはvoid (voidか\"\"で初期状態にリセット）",
+          "withapp": "アプリケーションウィンドウのアイコンも一緒に変更するかどうか"
+        }
+      },
+      "tr": {
+        "summary": "Changes the window's title bar icon",
+        "description": "Note: Files inside archives cannot be specified. If an exe or DLL is given, its first icon is used.",
+        "params": {
+          "file": "Icon file or void (void or \"\" resets to the initial state)",
+          "withapp": "Whether to also change the icon of the application window"
+        }
+      }
+    },
+    "windowEx:Window.setWindowCornerPreference": {
+      "hash": "9c99b6d66bf5",
+      "ja": {
+        "summary": "ウィンドウの角の形状を変更する",
+        "description": "※ Windows 11 Build 22000 以降で使用可能",
+        "returns": "成功したらtrue",
+        "params": {
+          "type": "DWMWCP_* の値 (0=DEFAULT, 1=DONOTROUND, 2=ROUND, 3=ROUNDSMALL)"
+        }
+      },
+      "tr": {
+        "summary": "Changes the window corner shape",
+        "description": "Note: Available on Windows 11 Build 22000 and later.",
+        "returns": "true on success",
+        "params": {
+          "type": "A DWMWCP_* value (0=DEFAULT, 1=DONOTROUND, 2=ROUND, 3=ROUNDSMALL)"
+        }
+      }
+    },
+    "windowEx:Window.getClientRect": {
+      "hash": "33a7d381233a",
+      "ja": {
+        "summary": "クライアント・ウィンドウ領域，非最大化通常表示の領域の取得",
+        "description": "※ innerSunken枠分はクライアント領域に含まれるので注意\nクライアント領域",
+        "returns": "%[ x, y, w, h ] または void(取得失敗時)"
+      },
+      "tr": {
+        "summary": "Gets the client area, window area, and non-maximized normal area",
+        "description": "Note: the innerSunken border is included in the client area.\nClient area",
+        "returns": "%[ x, y, w, h ] or void (on failure)"
+      }
+    },
+    "windowEx:Window.getWindowRect": {
+      "hash": "4b601d31b8c7",
+      "ja": {
+        "summary": "ウィンドウ領域"
+      },
+      "tr": {
+        "summary": "Window area"
+      }
+    },
+    "windowEx:Window.getNormalRect": {
+      "hash": "89529068dbea",
+      "ja": {
+        "summary": "非最大化通常表示領域(@param nofix true:ワークエリア補正を行わない)"
+      },
+      "tr": {
+        "summary": "Non-maximized normal display area (@param nofix true: do not apply work area correction)"
+      }
+    },
+    "windowEx:Window.setClientRect": {
+      "hash": "d8575577b001",
+      "ja": {
+        "summary": "クライアント領域の設定",
+        "description": "rect の x,y,w,h のうち void のものは現在の値を使用します。",
+        "params": {
+          "rect": "%[ x,y,w,h ]"
+        }
+      },
+      "tr": {
+        "summary": "Sets the client area",
+        "description": "Values among x,y,w,h in rect that are void keep their current values.",
+        "params": {
+          "rect": "%[ x,y,w,h ]"
+        }
+      }
+    },
+    "windowEx:Window.bringTo": {
+      "hash": "93b5e739d53c",
+      "ja": {
+        "summary": "ウィンドウの Zオーダーを変更する",
+        "params": {
+          "win": "Windowオブジェクトまたは規定文字列または数値\nWindowオブジェクトなら，そのウィンドウの後ろに置かれる\n文字列の場合，\"bottom\" \"notopmost\" \"top\" \"topmost\" のいずれか（HWND_*相当）cf. SetWindowPos API\n数値の場合，ウィンドウハンドルと見なすか，HWND_* マクロの値を直指定する\n#define HWND_TOP        ((HWND)0)\n#define HWND_BOTTOM     ((HWND)1)\n#define HWND_TOPMOST    ((HWND)-1)\n#define HWND_NOTOPMOST  ((HWND)-2)",
+          "activate": "アクティブ状態にするかどうかのフラグ\ntrueにしてもアプリケーション自体はアクティブになりません（タスクバーの点滅などおこりません）"
+        }
+      },
+      "tr": {
+        "summary": "Changes the window's Z order",
+        "params": {
+          "win": "A Window object, a predefined string, or a number.\nIf a Window object, the window is placed behind that window.\nIf a string, one of \"bottom\" \"notopmost\" \"top\" \"topmost\" (equivalent to HWND_*); cf. SetWindowPos API.\nIf a number, it is treated as a window handle, or as a direct HWND_* macro value.\n#define HWND_TOP        ((HWND)0)\n#define HWND_BOTTOM     ((HWND)1)\n#define HWND_TOPMOST    ((HWND)-1)\n#define HWND_NOTOPMOST  ((HWND)-2)",
+          "activate": "Flag indicating whether to activate the window.\nEven if true, the application itself is not activated (no taskbar flashing, etc.)."
+        }
+      }
+    },
+    "windowEx:Window.sendToBack": {
+      "hash": "739750e6af03",
+      "ja": {
+        "summary": "bringTo(\"bottom\") の別名"
+      },
+      "tr": {
+        "summary": "Alias for bringTo(\"bottom\")"
+      }
+    },
+    "windowEx:Window.acquireImeControl": {
+      "hash": "5e53213fc457",
+      "ja": {
+        "summary": "IMEを再設定する(吉里吉里Z専用)",
+        "description": "実行環境が 吉里吉里Z の場合にTVP_WM_ACQUIREIMECONTROLをポストする",
+        "returns": "成功した場合はtrue"
+      },
+      "tr": {
+        "summary": "Reconfigures the IME (Kirikiri Z only)",
+        "description": "Posts TVP_WM_ACQUIREIMECONTROL when running on Kirikiri Z.",
+        "returns": "true on success"
+      }
+    },
+    "windowEx:Window.resetImeContext": {
+      "hash": "620a91a89782",
+      "ja": {
+        "summary": "IMEコンテキストを再設定する",
+        "description": "imDisableが再実装された場合や複数ウインドウでテキスト入力を使う場合に吉里吉里Z本体側(ImeControl.h)の設定と競合する可能性あり",
+        "returns": "成功した場合はtrue",
+        "params": {
+          "defval": "true:IACE_DEFAULT, false:NULL"
+        }
+      },
+      "tr": {
+        "summary": "Resets the IME context",
+        "description": "May conflict with the engine-side settings (ImeControl.h) of Kirikiri Z if imDisable is reimplemented or if text input is used in multiple windows.",
+        "returns": "true on success",
+        "params": {
+          "defval": "true: IACE_DEFAULT, false: NULL"
+        }
+      }
+    },
+    "windowEx:Window.registerExEvent": {
+      "hash": "c22f081defae",
+      "ja": {
+        "summary": "拡張イベントを有効にする",
+        "description": "このウィンドウのインスタンスについて\n説明に「■拡張イベント：」と記述されているコールバックが有効になる\n\nただし、下記のコールバックについては\nこの関数を実行した時点でインスタンスに存在しない場合には発生しないので注意\n（ない場合は後からインスタンスに関数を追加しても呼ばれない）\nonMoving      移動中\nonMove        移動\nonResizing    リサイズ中\nonNcMouseMove NonClient領域でのマウス移動"
+      },
+      "tr": {
+        "summary": "Enables extended events",
+        "description": "For this window instance,\nthe callbacks whose description says \"■ Extended event:\" are enabled.\n\nNote, however, that the following callbacks do not fire\nif they do not exist on the instance at the time this function is called\n(if they are missing, adding the functions to the instance later does not make them get called):\nonMoving      moving\nonMove        moved\nonResizing    resizing\nonNcMouseMove mouse movement in the non-client area"
+      }
+    },
+    "windowEx:Window.onMaximizeQuery": {
+      "hash": "145a0b8d0fa4",
+      "ja": {
+        "summary": "■拡張イベント：最大化を許可するかどうか確認",
+        "description": "※本体版は止め方が異なります。本体版は super.onMaximizeQuery(false) を呼ぶと止まり、\n戻り値は見ません ([Window.onMaximizeQuery](Window.md#onmaximizequery) を参照)。",
+        "returns": "true を返すと最大化を許可しない"
+      },
+      "tr": {
+        "summary": "■ Extended event: confirms whether to allow maximizing",
+        "description": "Note: the engine version stops it differently. In the engine version, calling super.onMaximizeQuery(false) stops it,\nand the return value is not examined (see [Window.onMaximizeQuery](Window.md#onmaximizequery)).",
+        "returns": "Return true to disallow maximizing"
+      }
+    },
+    "windowEx:Window.onMaximize": {
+      "hash": "0a52df5b1041",
+      "ja": {
+        "summary": "■拡張イベント：ウィンドウ最大化",
+        "description": "呼ばれた時点でウィンドウサイズは既に最大化されている"
+      },
+      "tr": {
+        "summary": "■ Extended event: window maximized",
+        "description": "When called, the window size has already been maximized."
+      }
+    },
+    "windowEx:Window.onMinimize": {
+      "hash": "bd5a153ba616",
+      "ja": {
+        "summary": "■拡張イベント：ウィンドウ最小化",
+        "description": "フルスクリーン中にAlt+Tabなどで別のアプリを選んだ場合や，mainWindow以外が最小化されたときに呼ばれる\nタスクバーに収納された場合は onHide イベントが呼ばれるので注意"
+      },
+      "tr": {
+        "summary": "■ Extended event: window minimized",
+        "description": "Called when another application is selected with Alt+Tab etc. during full screen, or when a window other than mainWindow is minimized.\nNote that when the window goes to the taskbar, the onHide event is called instead."
+      }
+    },
+    "windowEx:Window.onShow": {
+      "hash": "b89551857e11",
+      "ja": {
+        "summary": "■拡張イベント：ウィンドウ表示",
+        "description": "タスクバーから復帰したときなどに呼ばれる"
+      },
+      "tr": {
+        "summary": "■ Extended event: window shown",
+        "description": "Called, for example, when restored from the taskbar."
+      }
+    },
+    "windowEx:Window.onHide": {
+      "hash": "c4a00cfd256c",
+      "ja": {
+        "summary": "■拡張イベント：ウィンドウ非表示",
+        "description": "タスクバーに収納された時などに呼ばれる"
+      },
+      "tr": {
+        "summary": "■ Extended event: window hidden",
+        "description": "Called, for example, when the window goes to the taskbar."
+      }
+    },
+    "windowEx:Window.onMoveSizeBegin": {
+      "hash": "f65ab38e1727",
+      "ja": {
+        "summary": "■拡張イベント：リサイズ・移動開始通知/終了",
+        "description": "フレームやタイトルバーをドラッグ開始した時やAlt+SpaceでSやMを選んだ時（開始通知），\nおよび移動やリサイズが終了した時（終了通知）にそれぞれ呼ばれる\nonMovingやonResizing中に元のウィンドウ位置やサイズを参照したい時はここで保存しておくとよい\nリサイズか移動かは WM_ENTERSIZEMOVE/WM_EXITSIZEMOVE の都合で判定不可"
+      },
+      "tr": {
+        "summary": "■ Extended event: resize / move start notification / end",
+        "description": "Called when dragging of the frame or title bar starts, or when S or M is chosen from Alt+Space (start notification),\nand when the move or resize ends (end notification).\nIf you want to refer to the original window position or size during onMoving or onResizing, save them here.\nWhether it is a resize or a move cannot be determined, due to the nature of WM_ENTERSIZEMOVE/WM_EXITSIZEMOVE."
+      }
+    },
+    "windowEx:Window.onMoveSizeEnd": {
+      "hash": "210d4a2df54a",
+      "ja": {
+        "summary": "終了通知"
+      },
+      "tr": {
+        "summary": "End notification"
+      }
+    },
+    "windowEx:Window.onMoving": {
+      "hash": "c37c19155037",
+      "ja": {
+        "summary": "■拡張イベント：ウィンドウ移動中",
+        "description": "※Windowsでウィンドウ内容を表示したまま移動する設定（移動枠表示なし）の場合，すぐにonMoveが呼ばれる",
+        "params": {
+          "rect": "%[ x, y, w, h ] ウィンドウ座標"
+        }
+      },
+      "tr": {
+        "summary": "■ Extended event: window moving",
+        "description": "Note: if Windows is set to show window contents while moving (no move outline), onMove is called immediately.",
+        "params": {
+          "rect": "%[ x, y, w, h ] window coordinates"
+        }
+      }
+    },
+    "windowEx:Window.onMove": {
+      "hash": "c3cf834822f4",
+      "ja": {
+        "summary": "■拡張イベント：ウィンドウ移動（完了）",
+        "params": {
+          "x": "クライアント領域左上のスクリーン座標 X\n※ innerSunken枠分はクライアント領域に含まれるので注意",
+          "y": "クライアント領域左上のスクリーン座標 Y"
+        }
+      },
+      "tr": {
+        "summary": "■ Extended event: window moved (completed)",
+        "params": {
+          "x": "Screen X coordinate of the top-left of the client area\nNote: the innerSunken border is included in the client area.",
+          "y": "Screen Y coordinate of the top-left of the client area"
+        }
+      }
+    },
+    "windowEx:Window.onResizing": {
+      "hash": "84b5c108927c",
+      "ja": {
+        "summary": "■拡張イベント：サイズ変更中",
+        "description": "※Windowsでウィンドウ内容を表示したままリサイズする設定（サイズ枠表示なし）の場合，すぐにonResizeが呼ばれる",
+        "returns": "true を返すと rect の変更を反映（位置・サイズを強制指定）\nこの場合，つかんだ位置(rect.type)に応じてうまく書き換え内容を調整しないと\nサイズ変更中にウィンドウが動いてしまうことがあるので注意（⇒forceResizeRect()参照）",
+        "params": {
+          "rect": "%[ x, y, w, h, type ] 変更中サイズ（ウィンドウ座標）",
+          "rect.type": "ウィンドウのどこをつかんでサイズを変更しているか 1～8\n+1:左側, +2:右側, +3:上側, +6:下側  の組み合わせ（3進数的表現）\n4 3 5\n配置： 1   2\n7 6 8"
+        }
+      },
+      "tr": {
+        "summary": "■ Extended event: resizing",
+        "description": "Note: if Windows is set to show window contents while resizing (no size outline), onResize is called immediately.",
+        "returns": "Return true to apply changes to rect (forcing the position and size).\nIn this case, note that unless you adjust the changes properly according to the grabbed position (rect.type),\nthe window may move during resizing (see forceResizeRect()).",
+        "params": {
+          "rect": "%[ x, y, w, h, type ] size during the change (window coordinates)",
+          "rect.type": "Which part of the window is grabbed for resizing, 1 to 8.\nA combination of +1: left, +2: right, +3: top, +6: bottom (a base-3 style representation)\n4 3 5\nLayout: 1   2\n7 6 8"
+        }
+      }
+    },
+    "windowEx:Window.onDisplayChanged": {
+      "hash": "a0cc7031407d",
+      "ja": {
+        "summary": "■拡張イベント：ディスプレイ構成の変更通知",
+        "description": "解像度や色数、マルチモニタの構成（位置変更も含む）が変更されたときに呼ばれる"
+      },
+      "tr": {
+        "summary": "■ Extended event: display configuration change notification",
+        "description": "Called when the resolution, color depth, or multi-monitor configuration (including position changes) changes."
+      }
+    },
+    "windowEx:Window.onDPIChanged": {
+      "hash": "69cef1479355",
+      "ja": {
+        "summary": "■拡張イベント：ウィンドウのDPI変更通知",
+        "description": "DPIの設定を変えたりDPI値の異なるモニタ間を移動した場合に通知"
+      },
+      "tr": {
+        "summary": "■ Extended event: window DPI change notification",
+        "description": "Notified when the DPI setting is changed or the window moves between monitors with different DPI values."
+      }
+    },
+    "windowEx:Window.onEnterMenuLoop": {
+      "hash": "ecce1b72ca68",
+      "ja": {
+        "summary": "■拡張イベント：メニュー処理の開始・終了通知",
+        "description": "ウィンドウのメニュー処理（クリックやF10を押した場合など）の開始と終了の通知イベント\nWM_ENTERMENULOOP / WM_EXITMENULOOP 通知のコールバック\n\n※フルスクリーンにした場合のメニューではこのイベントは発生しないので注意！"
+      },
+      "tr": {
+        "summary": "■ Extended event: menu processing start / end notification",
+        "description": "Notification events for the start and end of the window's menu processing (clicking, pressing F10, etc.).\nCallbacks for the WM_ENTERMENULOOP / WM_EXITMENULOOP notifications.\n\nNote: this event does not fire for menus in full screen!"
+      }
+    },
+    "windowEx:Window.onExitMenuLoop": {
+      "hash": "3b0d220819a1",
+      "ja": {
+        "summary": "メニュー処理終了"
+      },
+      "tr": {
+        "summary": "Menu processing ended"
+      }
+    },
+    "windowEx:Window.onScreenSave": {
+      "hash": "b69870a4b2fd",
+      "ja": {
+        "summary": "■拡張イベント：スクリーンセーバー開始通知，モニタパワー変更通知",
+        "returns": "true を返すと制御抑制",
+        "params": {
+          "mode": "-1/1/2"
+        }
+      },
+      "tr": {
+        "summary": "■ Extended event: screen saver start notification, monitor power change notification",
+        "returns": "Return true to suppress the action",
+        "params": {
+          "mode": "-1/1/2"
+        }
+      }
+    },
+    "windowEx:Window.onDeviceChanged": {
+      "hash": "88efc5670604",
+      "ja": {
+        "summary": "■拡張イベント：デバイス追加・リムーブ通知",
+        "params": {
+          "arrival": "trueならデバイスが追加された, falseなら外された\n※registerExEvent()が呼んでいてかつregisterDeviceChange()を呼んでおく必要があるので注意"
+        }
+      },
+      "tr": {
+        "summary": "■ Extended event: device added / removed notification",
+        "params": {
+          "arrival": "true if a device was added, false if removed.\nNote: registerExEvent() must have been called, and registerDeviceChange() must also be called."
+        }
+      }
+    },
+    "windowEx:Window.registerDeviceChange": {
+      "hash": "48a4321c2ce1",
+      "ja": {
+        "summary": "onDeviceChanged拡張イベントを有効にする",
+        "params": {
+          "guid": "GUIDを示したoctet値（省略時HIDデバイスクラス）\n※登録できるGUIDはウィンドウにつき1つまでなので注意"
+        }
+      },
+      "tr": {
+        "summary": "Enables the onDeviceChanged extended event",
+        "params": {
+          "guid": "Octet value representing a GUID (HID device class if omitted).\nNote: only one GUID can be registered per window."
+        }
+      }
+    },
+    "windowEx:Window.onHotKeyPressed": {
+      "hash": "052af3d60ad2",
+      "ja": {
+        "summary": "■拡張イベント：ホットキーの入力",
+        "params": {
+          "id": "registerHotKeyで登録したID",
+          "mod": "モディファイアキー(ssShift, ssAlt, ssCtrl 等の組み合わせ）"
+        }
+      },
+      "tr": {
+        "summary": "■ Extended event: hotkey input",
+        "params": {
+          "id": "ID registered with registerHotKey",
+          "mod": "Modifier keys (a combination of ssShift, ssAlt, ssCtrl, etc.)"
+        }
+      }
+    },
+    "windowEx:Window.registerHotKey": {
+      "hash": "731e6b23c63b",
+      "ja": {
+        "summary": "ホットキーを登録する",
+        "returns": "登録出来たらtrue",
+        "params": {
+          "id": "登録するID (※0x0000～0xBFFFまで）",
+          "vk": "登録する仮想キー(VK_*), 省略時もしくは0の場合は登録解除",
+          "mod": "モディファイアキー(ssShift, ssAlt, ssCtrl 等の組み合わせ）"
+        }
+      },
+      "tr": {
+        "summary": "Registers a hotkey",
+        "returns": "true if registered",
+        "params": {
+          "id": "ID to register (0x0000 to 0xBFFF only)",
+          "vk": "Virtual key to register (VK_*); if omitted or 0, the registration is removed",
+          "mod": "Modifier keys (a combination of ssShift, ssAlt, ssCtrl, etc.)"
+        }
+      }
+    },
+    "windowEx:Window.disableResize": {
+      "hash": "4a4130e1c39e",
+      "ja": {
+        "summary": "リサイズの抑制",
+        "description": "setter は registerExEvent() で拡張イベントを登録していないと例外が発生する\ntrue に設定すると，borderStyle == bsSizeable の場合でも\n・ウィンドウ淵のサイズ変更カーソルが出なくなりサイズが変更できなくなる\n・システムメニュー(Alt+Space)のサイズ変更がグレーになり選択できなくなる\n最大化など他の方法でのサイズ変更は有効(onResizeも飛ぶ)"
+      },
+      "tr": {
+        "summary": "Suppresses resizing",
+        "description": "The setter throws an exception unless extended events have been registered with registerExEvent().\nWhen set to true, even if borderStyle == bsSizeable,\n- the resize cursor no longer appears on the window border, and the size cannot be changed\n- the Size item in the system menu (Alt+Space) is grayed out and cannot be selected\nResizing by other means, such as maximizing, still works (onResize is also fired)."
+      }
+    },
+    "windowEx:Window.onActivateChanged": {
+      "hash": "2a2a76269fe9",
+      "ja": {
+        "summary": "■拡張イベント：アクティブ状態変更通知",
+        "description": "※Window.onActivate や Window.onDeactivate と違うのは、（これは拡張イベント全般に言えることだが）\nSystem.eventDisabled == true でもイベントコールバックが飛んでくるという点\n\n例えば System.onDeactivate 時に System.eventDisabled=true（こうすると System.onActivateは\n飛んでこない）にして，このイベント通知で復帰させると「非アクティブ時に動作停止」といった機能を\n追加できるかもしれない（ただしこれはイベントを配信停止するだけなので，前との時間差を見るような\nタイマーを使ったアプリではあまり意味が無い）\nなお，System.eventDisabled=true 時は画面更新すら走らないので，他のウィンドウを上にするなどして\nWM_PAINT が発生すると画面が崩れる問題がある（後述の OverlayBitmap を使うなどする）",
+        "params": {
+          "active": "0:非アクティブ化 1:マウスクリック以外でアクティブ化 2:マウスクリックでアクティブ化",
+          "minimize": "0:ウィンドウは最小化されていない それ以外:最小化されている"
+        }
+      },
+      "tr": {
+        "summary": "■ Extended event: activation state change notification",
+        "description": "Note: unlike Window.onActivate and Window.onDeactivate, the callback fires even when System.eventDisabled == true\n(this applies to extended events in general).\n\nFor example, by setting System.eventDisabled=true in System.onDeactivate (which stops System.onActivate from\nfiring) and restoring it in this event notification, you may be able to add a feature like \"stop while inactive\"\n(however, this only stops event delivery, so it is not very meaningful for applications using timers\nthat look at elapsed time).\nAlso, while System.eventDisabled=true, not even screen updates run, so if WM_PAINT occurs, e.g. because another window\nis brought on top, the screen becomes corrupted (use the OverlayBitmap described below, etc.).",
+        "params": {
+          "active": "0: deactivated, 1: activated other than by a mouse click, 2: activated by a mouse click",
+          "minimize": "0: the window is not minimized; otherwise: minimized"
+        }
+      }
+    },
+    "windowEx:Window.setOverlayBitmap": {
+      "hash": "3893e8a71488",
+      "ja": {
+        "summary": "オーバーレイビットマップを表示・消去する",
+        "description": "指定画像でクライアント領域に子ウィンドウ（吉里吉里のではなくWindowsのそれ）をかぶせる\n・拡張イベントが有効でないと例外が発生する\n・オーバーレイ表示中は吉里吉里のレイヤ側にマウス系のメッセージが一切行かない\n・実質的に System.eventDisabled=true の時専用\n・TVP_WM_DETACH で自動消去される",
+        "params": {
+          "layer": "ビットマップ画像にコピーするレイヤ（void or省略時はオーバーレイ消去）"
+        }
+      },
+      "tr": {
+        "summary": "Shows / removes an overlay bitmap",
+        "description": "Covers the client area with a child window (a Windows one, not a Kirikiri one) showing the given image.\n- Throws an exception unless extended events are enabled.\n- While the overlay is shown, no mouse messages at all reach the Kirikiri layers.\n- Effectively intended only for when System.eventDisabled=true.\n- Removed automatically on TVP_WM_DETACH.",
+        "params": {
+          "layer": "Layer to copy into the bitmap image (void or omitted removes the overlay)"
+        }
+      }
+    },
+    "windowEx:Window.onNcMouseMove": {
+      "hash": "edd96fe4f557",
+      "ja": {
+        "summary": "■拡張イベント：非クライアントエリアマウスイベント",
+        "params": {
+          "x": "マウス座標 X",
+          "y": "マウス座標 Y",
+          "ht": "領域の種類（NCHITTEST定数）",
+          "btn": "マウスボタン（mbLeft, mbRight, mbMiddle）"
+        }
+      },
+      "tr": {
+        "summary": "■ Extended event: non-client area mouse event",
+        "params": {
+          "x": "Mouse X coordinate",
+          "y": "Mouse Y coordinate",
+          "ht": "Area type (NCHITTEST constant)",
+          "btn": "Mouse button (mbLeft, mbRight, mbMiddle)"
+        }
+      }
+    },
+    "windowEx:Window.ncHitTest": {
+      "hash": "b6c314379630",
+      "ja": {
+        "summary": "非クライアントエリア調査",
+        "returns": "領域の種類（NCHITTEST定数）",
+        "params": {
+          "x": "スクリーン座標 X",
+          "y": "スクリーン座標 Y"
+        }
+      },
+      "tr": {
+        "summary": "Examines the non-client area",
+        "returns": "Area type (NCHITTEST constant)",
+        "params": {
+          "x": "Screen X coordinate",
+          "y": "Screen Y coordinate"
+        }
+      }
+    },
+    "windowEx:Window.nchtError": {
+      "hash": "f19f369481fb",
+      "ja": {
+        "summary": "HTERROR"
+      },
+      "tr": {
+        "summary": "HTERROR"
+      }
+    },
+    "windowEx:Window.nchtTransparent": {
+      "hash": "1865a8e7c98c",
+      "ja": {
+        "summary": "HTTRANSPARENT"
+      },
+      "tr": {
+        "summary": "HTTRANSPARENT"
+      }
+    },
+    "windowEx:Window.nchtNoWhere": {
+      "hash": "51b81d652bf9",
+      "ja": {
+        "summary": "HTNOWHERE"
+      },
+      "tr": {
+        "summary": "HTNOWHERE"
+      }
+    },
+    "windowEx:Window.nchtClient": {
+      "hash": "4aa26983adc0",
+      "ja": {
+        "summary": "HTCLIENT"
+      },
+      "tr": {
+        "summary": "HTCLIENT"
+      }
+    },
+    "windowEx:Window.nchtCaption": {
+      "hash": "d785f671a5d5",
+      "ja": {
+        "summary": "HTCAPTION"
+      },
+      "tr": {
+        "summary": "HTCAPTION"
+      }
+    },
+    "windowEx:Window.nchtSysMenu": {
+      "hash": "da04b98c4e8c",
+      "ja": {
+        "summary": "HTSYSMENU"
+      },
+      "tr": {
+        "summary": "HTSYSMENU"
+      }
+    },
+    "windowEx:Window.nchtSize": {
+      "hash": "055c38adb24c",
+      "ja": {
+        "summary": "HTSIZE"
+      },
+      "tr": {
+        "summary": "HTSIZE"
+      }
+    },
+    "windowEx:Window.nchtGrowBox": {
+      "hash": "89c23da4e7bc",
+      "ja": {
+        "summary": "HTGROWBOX"
+      },
+      "tr": {
+        "summary": "HTGROWBOX"
+      }
+    },
+    "windowEx:Window.nchtMenu": {
+      "hash": "a1dc4a25286d",
+      "ja": {
+        "summary": "HTMENU"
+      },
+      "tr": {
+        "summary": "HTMENU"
+      }
+    },
+    "windowEx:Window.nchtHScroll": {
+      "hash": "3598cd2bb730",
+      "ja": {
+        "summary": "HTHSCROLL"
+      },
+      "tr": {
+        "summary": "HTHSCROLL"
+      }
+    },
+    "windowEx:Window.nchtVScroll": {
+      "hash": "87da1fe57da9",
+      "ja": {
+        "summary": "HTVSCROLL"
+      },
+      "tr": {
+        "summary": "HTVSCROLL"
+      }
+    },
+    "windowEx:Window.nchtMinButton": {
+      "hash": "03bcff11f1ba",
+      "ja": {
+        "summary": "HTMINBUTTON"
+      },
+      "tr": {
+        "summary": "HTMINBUTTON"
+      }
+    },
+    "windowEx:Window.nchtReduce": {
+      "hash": "c8124a3613aa",
+      "ja": {
+        "summary": "HTREDUCE"
+      },
+      "tr": {
+        "summary": "HTREDUCE"
+      }
+    },
+    "windowEx:Window.nchtMaxButton": {
+      "hash": "5e7b5424321f",
+      "ja": {
+        "summary": "HTMAXBUTTON"
+      },
+      "tr": {
+        "summary": "HTMAXBUTTON"
+      }
+    },
+    "windowEx:Window.nchtZoom": {
+      "hash": "1793f5038d87",
+      "ja": {
+        "summary": "HTZOOM"
+      },
+      "tr": {
+        "summary": "HTZOOM"
+      }
+    },
+    "windowEx:Window.nchtLeft": {
+      "hash": "755c92d58989",
+      "ja": {
+        "summary": "HTLEFT"
+      },
+      "tr": {
+        "summary": "HTLEFT"
+      }
+    },
+    "windowEx:Window.nchtRight": {
+      "hash": "4837e67c573b",
+      "ja": {
+        "summary": "HTRIGHT"
+      },
+      "tr": {
+        "summary": "HTRIGHT"
+      }
+    },
+    "windowEx:Window.nchtTop": {
+      "hash": "7ce36ea3f8c1",
+      "ja": {
+        "summary": "HTTOP"
+      },
+      "tr": {
+        "summary": "HTTOP"
+      }
+    },
+    "windowEx:Window.nchtTopLeft": {
+      "hash": "fe0df7c04a1c",
+      "ja": {
+        "summary": "HTTOPLEFT"
+      },
+      "tr": {
+        "summary": "HTTOPLEFT"
+      }
+    },
+    "windowEx:Window.nchtTopRight": {
+      "hash": "b2b295216c7e",
+      "ja": {
+        "summary": "HTTOPRIGHT"
+      },
+      "tr": {
+        "summary": "HTTOPRIGHT"
+      }
+    },
+    "windowEx:Window.nchtBottom": {
+      "hash": "81446ece7fbc",
+      "ja": {
+        "summary": "HTBOTTOM"
+      },
+      "tr": {
+        "summary": "HTBOTTOM"
+      }
+    },
+    "windowEx:Window.nchtBottomLeft": {
+      "hash": "0a64da27ace6",
+      "ja": {
+        "summary": "HTBOTTOMLEFT"
+      },
+      "tr": {
+        "summary": "HTBOTTOMLEFT"
+      }
+    },
+    "windowEx:Window.nchtBottomRight": {
+      "hash": "b98360797088",
+      "ja": {
+        "summary": "HTBOTTOMRIGHT"
+      },
+      "tr": {
+        "summary": "HTBOTTOMRIGHT"
+      }
+    },
+    "windowEx:Window.nchtBorder": {
+      "hash": "ee513f34b9f6",
+      "ja": {
+        "summary": "HTBORDER"
+      },
+      "tr": {
+        "summary": "HTBORDER"
+      }
+    },
+    "windowEx:Window.exSystemMenu": {
+      "hash": "5bd24073d063",
+      "ja": {
+        "summary": "システムメニューに追加",
+        "description": "setter は registerExEvent() で拡張イベントを登録していないと例外が発生する\nMenuItemまたは辞書の配列を指定する\nこのメニューが選択されると onExSystemMenuSelected(選択されたオブジェクト) コールバックが発生"
+      },
+      "tr": {
+        "summary": "Adds items to the system menu",
+        "description": "The setter throws an exception unless extended events have been registered with registerExEvent().\nSpecify an array of MenuItems or dictionaries.\nWhen one of these menu items is selected, the onExSystemMenuSelected(selected object) callback fires."
+      }
+    },
+    "windowEx:Window.enableNCMouseEvent": {
+      "hash": "4139f07cb523",
+      "ja": {
+        "summary": "以下特殊用途 WM_SETCURSORのコールバックonNonCapMouseEventを有効にする（デフォルト：false）"
+      },
+      "tr": {
+        "summary": "Special purpose from here on: enables onNonCapMouseEvent, the WM_SETCURSOR callback (default: false)"
+      }
+    },
+    "windowEx:Window.onNonCapMouseEvent": {
+      "hash": "f2f1916be487",
+      "ja": {
+        "summary": "WM_SETCURSORコールバック：ht=LOWORD(LParam), ev=HIWORD(LParam)"
+      },
+      "tr": {
+        "summary": "WM_SETCURSOR callback: ht=LOWORD(LParam), ev=HIWORD(LParam)"
+      }
+    },
+    "windowEx:Window.focusMenuByKey": {
+      "hash": "25b61240d630",
+      "ja": {
+        "summary": "SC_KEYMENUを送る"
+      },
+      "tr": {
+        "summary": "Sends SC_KEYMENU"
+      }
+    },
+    "windowEx:Window.onStartKeyMenu": {
+      "hash": "179b4771dd5c",
+      "ja": {
+        "summary": "SC_KEYMENU通知コールバック"
+      },
+      "tr": {
+        "summary": "SC_KEYMENU notification callback"
+      }
+    },
+    "windowEx:Window.onAccelKeyMenu": {
+      "hash": "641cc6c7bed8",
+      "ja": {
+        "summary": "WM_MENUCHAR通知コールバック"
+      },
+      "tr": {
+        "summary": "WM_MENUCHAR notification callback"
+      }
+    },
+    "windowEx:Window.setMessageHook": {
+      "hash": "64b38636c8cc",
+      "ja": {
+        "summary": "メッセージフックを設定(on:有効, ev:イベント番号またはイベント名文字：省略時全部）"
+      },
+      "tr": {
+        "summary": "Sets a message hook (on: enable, ev: event number or event name string; all if omitted)"
+      }
+    },
+    "windowEx:Window.onWindowsMessageHook": {
+      "hash": "63044825686a",
+      "ja": {
+        "summary": "setMessageHookで指定したイベント発生時のコールバック"
+      },
+      "tr": {
+        "summary": "Callback for when an event specified with setMessageHook occurs"
+      }
+    },
+    "windowEx:Window.getNotificationNum": {
+      "hash": "33dfcfc7293c",
+      "ja": {
+        "summary": "WM_XXXイベント番号を取得（WM_は除いて渡す）"
+      },
+      "tr": {
+        "summary": "Gets a WM_XXX event number (pass the name without WM_)"
+      }
+    },
+    "windowEx:Window.getNotificationName": {
+      "hash": "2c9638f4dfb8",
+      "ja": {
+        "summary": "イベント番号からWM_XXXを取得（WM_を除いて返る）"
+      },
+      "tr": {
+        "summary": "Gets WM_XXX from an event number (returned without WM_)"
+      }
+    },
+    "windowExProgress:Window": {
+      "hash": "2ed3f9c3d854",
+      "ja": {
+        "summary": "ウインドウ拡張"
+      },
+      "tr": {
+        "summary": "Window extension"
+      }
+    },
+    "windowExProgress:Window.PBS_SMOOTH": {
+      "hash": "6f8de5677f20",
+      "ja": {
+        "summary": "プログレスバースタイル指定 プログレスバースムーズ指定"
+      },
+      "tr": {
+        "summary": "Progress bar style: smooth progress bar"
+      }
+    },
+    "windowExProgress:Window.PBS_VERTICAL": {
+      "hash": "5acf7606c80a",
+      "ja": {
+        "summary": "プログレスバー垂直配置指定"
+      },
+      "tr": {
+        "summary": "Progress bar vertical orientation"
+      }
+    },
+    "windowExProgress:Window.startProgress": {
+      "hash": "0d12acc87194",
+      "ja": {
+        "summary": "プログレス処理を開始する。",
+        "description": "吉里吉里が実行ブロック中でも正常に表示継続します。\nプログレスバー初期化パラメータ\nprogressBarEnable: プログレスバーを表示するかどうか(デフォルト:true)\nprogressBarStyle: プログレスバーのスタイル (デフォルト:なし)\nprogressBarLeft: プログレスバー表示位置X (デフォルト:自動センタリング)\nprogressBarTop: プログレスバー表示位置Y (デフォルト:自動センタリング)\nprogressBarWidth: プログレスバー横幅 (デフォルト:ウインドウ横幅の 1/3)\nprogressBarHeight: プログレスバー縦幅 (デフォルト:ウインドウ縦幅の 1/10)\nprogressBarColor: プログレスバー色 0xRRGGBB (デフォルト:デフォルト色)\nprogressBarBackColor: プログレスバー背景色 0xRRGGBB (デフォルト:デフォルト色)\n\nキャンセルボタン初期化パラメータ\ncancelButtonEnable: キャンセルボタンを表示するかどうか(デフォルト:true)\ncancelButtonCaption: キャンセルボタンに表示するテキスト(デフォルト:Cancel)\ncancelButtonLeft: キャンセルボタン表示位置X (デフォルト:自動センタリング)\ncancelButtonTop: キャンセルボタン表示位置Y (デフォルト:下から heightの３倍の位置)\ncancelButtonWidth: キャンセルボタン横幅 (デフォルト:テキスト文字数*12+8)\ncancelButtonHeight: キャンセルボタン縦幅 (デフォルト:20)\n\n背景画像初期化パラメータ(未実装)\nbackGround: 背景指定 レイヤ：レイヤの画像を直接参照 数値:該当色で塗りつぶし デフォルト:なし\n\nメッセージ初期化パラメータ(未実装)\nmessages: メッセージ情報またはその配列\nleft: 表示座標X\ntop: 表示座標Y\ntext: 初期表示テキスト\nsize: 表示サイズ\ncolor: 表示カラー\nshadowColor: 影色\nshadowDistanceX: 影のずれ指定\nshadowDistanceY: 影のずれ指定\nfont: フォント指定\nfontStyle: フォントスタイル",
+        "params": {
+          "init": "初期化データ(辞書)"
+        }
+      },
+      "tr": {
+        "summary": "Starts progress processing.",
+        "description": "The display continues correctly even while Kirikiri is blocked executing.\nProgress bar initialization parameters\nprogressBarEnable: whether to show the progress bar (default: true)\nprogressBarStyle: progress bar style (default: none)\nprogressBarLeft: progress bar X position (default: centered automatically)\nprogressBarTop: progress bar Y position (default: centered automatically)\nprogressBarWidth: progress bar width (default: 1/3 of the window width)\nprogressBarHeight: progress bar height (default: 1/10 of the window height)\nprogressBarColor: progress bar color 0xRRGGBB (default: default color)\nprogressBarBackColor: progress bar background color 0xRRGGBB (default: default color)\n\nCancel button initialization parameters\ncancelButtonEnable: whether to show the cancel button (default: true)\ncancelButtonCaption: text shown on the cancel button (default: Cancel)\ncancelButtonLeft: cancel button X position (default: centered automatically)\ncancelButtonTop: cancel button Y position (default: three times height from the bottom)\ncancelButtonWidth: cancel button width (default: number of text characters * 12 + 8)\ncancelButtonHeight: cancel button height (default: 20)\n\nBackground image initialization parameters (not implemented)\nbackGround: background; layer: refers to the layer's image directly; number: fill with that color; default: none\n\nMessage initialization parameters (not implemented)\nmessages: message information or an array of it\nleft: display X coordinate\ntop: display Y coordinate\ntext: initial text\nsize: display size\ncolor: display color\nshadowColor: shadow color\nshadowDistanceX: shadow offset\nshadowDistanceY: shadow offset\nfont: font\nfontStyle: font style",
+        "params": {
+          "init": "Initialization data (dictionary)"
+        }
+      }
+    },
+    "windowExProgress:Window.doProgress": {
+      "hash": "55444e90553e",
+      "ja": {
+        "summary": "プログレス処理の経過状態を通知する。",
+        "returns": "キャンセル要求があれば true",
+        "params": {
+          "percent": "経過状態をパーセント指定"
+        }
+      },
+      "tr": {
+        "summary": "Reports the progress of progress processing.",
+        "returns": "true if cancellation has been requested",
+        "params": {
+          "percent": "Progress, in percent"
+        }
+      }
+    },
+    "windowExProgress:Window.setProgressMessage": {
+      "hash": "806bc942aaf6",
+      "ja": {
+        "summary": "プログレス処理のテキストを差し替える",
+        "params": {
+          "id": "テキストID(登録順)",
+          "text": "表示テキスト"
+        }
+      },
+      "tr": {
+        "summary": "Replaces the text of progress processing",
+        "params": {
+          "id": "Text ID (in registration order)",
+          "text": "Text to display"
+        }
+      }
+    },
+    "windowExProgress:Window.endProgress": {
+      "hash": "c3945464df1f",
+      "ja": {
+        "summary": "プログレス処理を終了する。"
+      },
+      "tr": {
+        "summary": "Ends progress processing."
+      }
+    }
+  }
+}

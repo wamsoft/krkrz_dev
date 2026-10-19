@@ -6,6 +6,13 @@ Output : doc/reference/<ClassName>.md (one file per class)
 Usage:
   python tools/docgen/tjsdoc.py --in src/plugins/binaryStream/manual.tjs
   python tools/docgen/tjsdoc.py --in src/plugins --out doc/reference
+
+翻訳 (公開ドキュメントの他言語版。方針 = TODO-i18n.md C):
+  # 翻訳カタログ doc/i18n/<lang>/reference/<Class>.json を作成 / 更新
+  python tools/docgen/tjsdoc.py --in doc/manual --in src/plugins --extract en
+  # カタログの訳を当てて doc/reference/<Class>.<lang>.md を生成
+  python tools/docgen/tjsdoc.py --in doc/manual --in src/plugins --lang en
+  カタログ・見出し語の書式は refi18n.py を参照。
 """
 
 from __future__ import annotations
@@ -17,6 +24,46 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
+
+# 出力の見出し語。既定は日本語 (従来出力そのまま)。--lang 指定時は
+# doc/i18n/<lang>/reference_labels.json の値で上書きする (refi18n.load_labels)。
+L = {
+    "event": "イベント",
+    "constructor": "コンストラクタ",
+    "method": "メソッド",
+    "args": "引数",
+    "type": "型",
+    "default": "既定値",
+    "desc": "説明",
+    "returns": "戻り値",
+    "type_prefix": "型: ",
+    "property_access": "プロパティ \\ アクセス: ",
+    "type_bold": "**型**: ",
+    "const": "定数",
+    "value_prefix": "値: ",
+    "explanation": "解説",
+    "related": "関連:",
+    "members": "メンバー一覧",
+    "constructors": "コンストラクタ",
+    "properties": "プロパティ",
+    "methods": "メソッド",
+    "events": "イベント",
+    "consts": "定数",
+    "extends": "継承元: ",
+    "extension": "拡張",
+    "plugin_extension": "プラグイン拡張: ",
+    "multi_plugin": "このクラスは複数のプラグインから拡張されています。",
+    "exp_inline": "**⚠ 実験中** — 予告なく変更・削除されることがあります。",
+    "exp_title": "実験中 ( 安定保証の対象外 )",
+    "exp_body": [
+        "この API はまだ形が固まっていません。**予告なく変更・削除される",
+        "ことがあります** ( 非互換変更でもメジャー番号は上がりません )。",
+        "版の上げ方は [バージョン運用]"
+        "(https://github.com/wamsoft/krkrz_develop/blob/master/doc/Versioning.md)",
+        "を参照してください。",
+    ],
+    "untranslated": "",
+}
 
 
 # ---------------------------------------------------------------------------
@@ -165,6 +212,9 @@ HEADING_SUFFIX_RE = re.compile(
 )
 
 
+RULE_LINE_RE = re.compile(r"^\s*[=\-*#~]{4,}\s*$")
+
+
 def is_section_heading(text):
     """Heuristic: short categorical comments like '// 定数' or '// FontStyle 定義'
     are section headings, not member documentation. Skip them silently."""
@@ -279,6 +329,13 @@ def parse_doc_block(comment_block):
     # Drop section-heading line comments ('// 定数', '// FontStyle 定義' etc.)
     segments = [s for s in segments
                 if not (s[0] == "line" and is_section_heading(s[1]))]
+    # '// =====' / '// -----' の罫線で囲んだ節見出しブロックは、最後の罫線までを
+    # 捨てる (罫線より後ろの行コメントだけをメンバーの解説として残す)。
+    last_rule = max((i for i, sg in enumerate(segments)
+                     if sg[0] == "line" and RULE_LINE_RE.match(sg[1])), default=-1)
+    if last_rule >= 0:
+        segments = [sg for i, sg in enumerate(segments)
+                    if i > last_rule or sg[0] != "line"]
 
     doc = Doc()
     summary_lines = []
@@ -501,8 +558,13 @@ def parse_class_body(body, nested_out=None, parent_name=""):
             name = m.group(1)
             value = (m.group(2) or "").strip()
             doc = parse_doc_block(comment_block)
+            # 同じ行の後置コメント (const A = 0;  // 説明) はこの定数の解説。
+            # 拾わないと次の定数の前置コメント扱いになり、説明が 1 つずつずれる。
+            trailing, p = collect_trailing_line_comment(body, m.end())
+            if trailing and not doc.summary:
+                doc.summary = trailing.lstrip("<").strip()
             members.append(Member(kind="const", name=name, value=value, doc=doc))
-            pos = m.end()
+            pos = p
             # const grouped with comma share one declaration; advance again
             continue
 
@@ -580,15 +642,8 @@ def experimental_note(doc, inline=False):
         return ""
     extra = "" if doc.experimental == "1" else " " + doc.experimental
     if inline:
-        return "**⚠ 実験中** — 予告なく変更・削除されることがあります。" + extra.strip()
-    lines = [
-        '!!! warning "実験中 ( 安定保証の対象外 )"',
-        "    この API はまだ形が固まっていません。**予告なく変更・削除される",
-        "    ことがあります** ( 非互換変更でもメジャー番号は上がりません )。",
-        "    版の上げ方は [バージョン運用]"
-        "(https://github.com/wamsoft/krkrz_develop/blob/master/doc/Versioning.md)",
-        "    を参照してください。",
-    ]
+        return L["exp_inline"] + extra.strip()
+    lines = [f'!!! warning "{L["exp_title"]}"'] + ["    " + ln for ln in L["exp_body"]]
     if extra.strip():
         lines += ["", "    " + extra.strip()]
     return "\n".join(lines)
@@ -602,14 +657,14 @@ def render_member(m, cls):
     if m.kind == "function":
         short = cls.name.split(".")[-1]
         if m.doc.kind_hint == "event":
-            kind = "イベント"
+            kind = L["event"]
         elif m.name == short:
-            kind = "コンストラクタ"
+            kind = L["constructor"]
         else:
-            kind = "メソッド"
+            kind = L["method"]
         parts.append(kind)
         if m.args:
-            parts.append("**引数**")
+            parts.append(f"**{L['args']}**")
             # Merge type info from signature and javadoc; signature wins.
             jdoc_types = {p[0]: p[1] for p in m.doc.params if p[1]}
             jdoc_descs = {p[0]: p[2] for p in m.doc.params}
@@ -619,8 +674,8 @@ def render_member(m, cls):
                 d = jdoc_descs.get(arg_name, "")
                 merged.append((arg_name, arg_default, t, d))
             has_type = any(t for _, _, t, _ in merged)
-            headers = (["引数", "型", "既定値", "説明"] if has_type
-                       else ["引数", "既定値", "説明"])
+            headers = ([L["args"], L["type"], L["default"], L["desc"]] if has_type
+                       else [L["args"], L["default"], L["desc"]])
             rows = []
             for arg_name, arg_default, t, d in merged:
                 default_md = f"`{arg_default}`" if arg_default else "`&nbsp;`"
@@ -631,23 +686,23 @@ def render_member(m, cls):
                     rows.append([f"`{arg_name}`", default_md, d])
             parts.append(md_table(headers, rows))
         if m.doc.returns or m.doc.return_type:
-            parts.append("**戻り値**")
+            parts.append(f"**{L['returns']}**")
             if m.doc.return_type:
-                parts.append(f"型: `{m.doc.return_type}`")
+                parts.append(f"{L['type_prefix']}`{m.doc.return_type}`")
             if m.doc.returns:
                 parts.append(m.doc.returns)
     elif m.kind == "property":
         access = {"r": "r", "w": "w", "rw": "r/w"}[m.access]
-        parts.append(f"プロパティ \\ アクセス: `{access}`")
+        parts.append(f"{L['property_access']}`{access}`")
         if m.doc.type_hint:
-            parts.append(f"**型**: `{m.doc.type_hint}`")
+            parts.append(f"{L['type_bold']}`{m.doc.type_hint}`")
     elif m.kind == "const":
-        parts.append("定数")
+        parts.append(L["const"])
         if m.value:
-            parts.append(f"値: `{m.value}`")
+            parts.append(f"{L['value_prefix']}`{m.value}`")
 
     if m.doc.summary or m.doc.description:
-        parts.append("**解説**")
+        parts.append(f"**{L['explanation']}**")
         if m.doc.summary:
             parts.append(m.doc.summary)
         if m.doc.description:
@@ -660,7 +715,7 @@ def render_member(m, cls):
                 links.append(f"[{ref}]({cls_name}.md#{slug(mem)})")
             else:
                 links.append(f"[{ref}]({ref}.md)")
-        parts.append("**関連:** " + " / ".join(links))
+        parts.append(f"**{L['related']}** " + " / ".join(links))
     return "\n\n".join(parts)
 
 
@@ -678,21 +733,21 @@ def _render_index(ctors, props, methods, events, consts,
                   heading_level=2, item_heading_level=3):
     h = "#" * heading_level
     h2 = "#" * item_heading_level
-    parts = [f"{h} メンバー一覧"]
+    parts = [f"{h} {L['members']}"]
     if ctors:
-        parts.append(f"{h2} コンストラクタ")
+        parts.append(f"{h2} {L['constructors']}")
         parts.append("\n".join(f"- [{m.name}](#{slug(m.name)})" for m in ctors))
     if props:
-        parts.append(f"{h2} プロパティ")
+        parts.append(f"{h2} {L['properties']}")
         parts.append("\n".join(f"- [{m.name}](#{slug(m.name)})" for m in props))
     if methods:
-        parts.append(f"{h2} メソッド")
+        parts.append(f"{h2} {L['methods']}")
         parts.append("\n".join(f"- [{m.name}](#{slug(m.name)})" for m in methods))
     if events:
-        parts.append(f"{h2} イベント")
+        parts.append(f"{h2} {L['events']}")
         parts.append("\n".join(f"- [{m.name}](#{slug(m.name)})" for m in events))
     if consts:
-        parts.append(f"{h2} 定数")
+        parts.append(f"{h2} {L['consts']}")
         parts.append("\n".join(f"- [{m.name}](#{slug(m.name)})" for m in consts))
     return "\n\n".join(parts)
 
@@ -707,7 +762,7 @@ def render_primary(cls):
     if cls.doc.description:
         parts.append(cls.doc.description)
     if cls.extends:
-        parts.append(f"継承元: [{cls.extends}]({cls.extends}.md)")
+        parts.append(f"{L['extends']}[{cls.extends}]({cls.extends}.md)")
 
     ctors, props, methods, events, consts = _split_members(cls)
     parts.append(_render_index(ctors, props, methods, events, consts))
@@ -720,8 +775,8 @@ def render_primary(cls):
 
 
 def render_extension(cls):
-    label = cls.source or "拡張"
-    parts = [f"## プラグイン拡張: {label}"]
+    label = cls.source or L["extension"]
+    parts = [f"## {L['plugin_extension']}{label}"]
     exp = experimental_note(cls.doc)
     if exp:
         parts.append(exp)
@@ -756,7 +811,7 @@ def render_group(group):
         # No core — synthesize a stub primary
         name = group[0].name
         parts = [f"# {name}",
-                 f"このクラスは複数のプラグインから拡張されています。"]
+                 L["multi_plugin"]]
         for ext in group:
             parts.append(render_extension(ext))
         return "\n\n".join(parts) + "\n"
@@ -824,6 +879,12 @@ def main(argv=None):
                     help="input manual.tjs file or directory (repeatable)")
     ap.add_argument("--out", dest="out", default=str(REPO / "doc" / "reference"),
                     help="output directory (default: doc/reference)")
+    ap.add_argument("--extract", metavar="LANG",
+                    help="翻訳カタログ doc/i18n/LANG/reference/*.json を作成・更新する (md は書かない)")
+    ap.add_argument("--lang", metavar="LANG",
+                    help="カタログの訳を当てて <Class>.LANG.md を生成する (訳が 1 つも無いクラスは出さない)")
+    ap.add_argument("--i18n-dir", default=str(REPO / "doc" / "i18n"),
+                    help="翻訳カタログの置き場 (default: doc/i18n)")
     args = ap.parse_args(argv)
 
     out_dir = Path(args.out)
@@ -849,6 +910,27 @@ def main(argv=None):
     groups = {}
     for cls in all_classes:
         groups.setdefault(cls.name, []).append(cls)
+
+    if args.extract or args.lang:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import refi18n
+        i18n_dir = Path(args.i18n_dir)
+        if args.extract:
+            return refi18n.extract(groups, args.extract, i18n_dir)
+        L.update(refi18n.load_labels(args.lang, i18n_dir))
+        written = 0
+        for name, group in groups.items():
+            tgroup = refi18n.apply(group, args.lang, i18n_dir, L.get("untranslated", ""))
+            sub = out_dir / "threepp" if (name == "Threepp" or name.startswith("Threepp.")) else out_dir
+            target = sub / f"{name}.{args.lang}.md"
+            if tgroup is None:
+                if target.exists():
+                    target.unlink()   # 訳が無くなったら古い生成物を消す (日本語版へフォールバック)
+                continue
+            target.write_text(render_group(tgroup), encoding="utf-8")
+            written += 1
+        print(f"done: {written} translated class page(s) for '{args.lang}'")
+        return 0
 
     for name, group in groups.items():
         # threepp (krkrthreepp) は 110 クラスと多く、flat な reference ルートを埋めない

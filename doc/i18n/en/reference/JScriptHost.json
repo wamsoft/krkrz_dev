@@ -1,0 +1,128 @@
+{
+  "class": "JScriptHost",
+  "entries": {
+    "win32ole:JScriptHost": {
+      "hash": "5c9b11d681fb",
+      "ja": {
+        "description": "JScript 実行用ホスト。IActiveScript を利用して JScript の式評価と結果取得ができます。\n例:\nvar js = new JScriptHost();\nvar r = js.eval(\"1+2\"); // -> 3\njs.addGlobal(\"tvp\", global); // TJS の global オブジェクトを JScript 側に追加\nvar v = js.eval(\"tvp.version\");"
+      },
+      "tr": {
+        "description": "Host for running JScript. Uses IActiveScript to evaluate JScript expressions and get their results.\nExample:\nvar js = new JScriptHost();\nvar r = js.eval(\"1+2\"); // -> 3\njs.addGlobal(\"tvp\", global); // expose the TJS global object to JScript\nvar v = js.eval(\"tvp.version\");"
+      }
+    },
+    "win32ole:JScriptHost.JScriptHost": {
+      "hash": "80d3bc364914",
+      "ja": {
+        "summary": "コンストラクタ",
+        "description": "JScript エンジンを生成して接続します。"
+      },
+      "tr": {
+        "summary": "Constructor",
+        "description": "Creates and connects a JScript engine."
+      }
+    },
+    "win32ole:JScriptHost.eval": {
+      "hash": "c27226077bcb",
+      "ja": {
+        "summary": "式評価",
+        "returns": "評価結果 (数値/文字列/bool/IDispatch ラップ 等)",
+        "params": {
+          "code": "評価する JScript の式文字列"
+        }
+      },
+      "tr": {
+        "summary": "Evaluates an expression",
+        "returns": "The result (number, string, bool, wrapped IDispatch, etc.).",
+        "params": {
+          "code": "JScript expression to evaluate, as a string."
+        }
+      }
+    },
+    "win32ole:JScriptHost.addGlobal": {
+      "hash": "3f7ac8eb5d00",
+      "ja": {
+        "summary": "グローバルオブジェクト追加（JScript 内部の namedObject 一覧に登録）",
+        "params": {
+          "name": "JScript 側で参照する名前",
+          "obj": "追加するオブジェクト (TJS オブジェクト; IDispatch として公開)"
+        }
+      },
+      "tr": {
+        "summary": "Adds a global object (registers it in JScript's list of named objects)",
+        "params": {
+          "name": "Name used to refer to it from JScript.",
+          "obj": "Object to add (a TJS object, exposed as IDispatch)."
+        }
+      }
+    },
+    "win32ole:JScriptHost.reset": {
+      "hash": "85fee5841b2b",
+      "ja": {
+        "summary": "エンジン再初期化",
+        "description": "スクリプト状態を初期化し直します。"
+      },
+      "tr": {
+        "summary": "Reinitializes the engine",
+        "description": "Resets the script state."
+      }
+    },
+    "win32ole:JScriptHost.invoke": {
+      "hash": "0ea65f4feccb",
+      "ja": {
+        "summary": "メソッドの実行",
+        "params": {
+          "name": "メソッド名",
+          "...": "以下パラメータ"
+        }
+      },
+      "tr": {
+        "summary": "Invokes a method",
+        "params": {
+          "name": "Method name.",
+          "...": "Arguments to pass."
+        }
+      }
+    },
+    "win32ole:JScriptHost.set": {
+      "hash": "588b08744441",
+      "ja": {
+        "summary": "プロパティの設定",
+        "params": {
+          "name": "プロパティ名"
+        }
+      },
+      "tr": {
+        "summary": "Sets a property",
+        "params": {
+          "name": "Property name."
+        }
+      }
+    },
+    "win32ole:JScriptHost.get": {
+      "hash": "5a1b0462077e",
+      "ja": {
+        "summary": "プロパティの取得",
+        "returns": "設定値",
+        "params": {
+          "name": "プロパティ名"
+        }
+      },
+      "tr": {
+        "summary": "Gets a property",
+        "returns": "The property value.",
+        "params": {
+          "name": "Property name."
+        }
+      }
+    },
+    "win32ole:JScriptHost.missing": {
+      "hash": "aff40094f9c0",
+      "ja": {
+        "summary": "TJS missing処理。未登録の名前はそのまま set/get/invoke 処理が試みられます"
+      },
+      "tr": {
+        "summary": "TJS missing handler. Unregistered names are tried as set/get/invoke as-is"
+      }
+    }
+  }
+}

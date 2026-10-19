@@ -1,0 +1,306 @@
+{
+  "class": "KAGParser",
+  "entries": {
+    "KAGParserEx:KAGParser": {
+      "hash": "29cb64619f37",
+      "ja": {
+        "summary": "擬似コードによるマニュアル",
+        "description": "吉里吉里Z KAGParserEx プラグイン。\n\nKAG シナリオファイルを解析する KAGParser クラスを提供します。\nPlugins.link(\"KAGParserEx.dll\") でリンクすると、KAGParser クラスが本プラグ\nインの拡張版に置き換わります ( アンリンクすると元に戻ります )。\n\nKAGParser は KAG シナリオを先頭 ( または指定ラベル ) から解釈し、\ngetNextTag() を呼ぶたびに「次のタグ」を辞書として返す字句解析器です。\n文字の表示やタグの実行そのものは行いません ( KAG3 の MainWindow などの\n利用側が getNextTag() の返すタグを解釈して実行します )。\n\n使用例:\nvar parser = new KAGParser();\nparser.loadScenario(\"first.ks\");\nparser.goToLabel(\"*start\");\nvar tag;\nwhile((tag = parser.getNextTag()) !== void) {\n// tag.tagname にタグ名、その他のメンバに属性が入る\n}\n\ngetNextTag() が返す辞書には、タグ名が tagname メンバとして、タグの属性が\n「属性名 => 値 ( 文字列 )」の形で格納されます。地の文は 1 文字ずつ\ntagname が \"ch\" の擬似タグ ( text メンバに文字 ) として、改行は tagname が\n\"r\" の擬似タグ ( 行末では eol=true 付き ) として返されます。\n\nprocessSpecialTags が真 ( 既定 ) のとき、以下のシステムタグはパーサ内部で\n処理され、getNextTag() の返り値としては現れません:\nif / ignore / elsif / else / endif / endignore ( 条件分岐 )、\nmacro / endmacro / erasemacro ( マクロの記録・削除 )、\npmacro / erasepmacro ( パラメータマクロの登録・削除 )、\njump / call / return ( シナリオ内ジャンプ・呼び出し )、\nemb ( 式の評価結果の埋め込み )。\n\nオリジナルの KAGParser ( 吉里吉里Z 本体組み込み版 ) からの拡張点:\n- multiLineTagEnabled プロパティによるタグの複数行記述\n( 行末に \" \\\" を置き、次の行の先頭を \";\" で始める )\n- getNextTag() の返り値に taglist メンバ ( タグ名を記載順に格納した\n配列 ) を追加\n- パラメータマクロ展開機能 ( paramMacros プロパティ / pmacro ・\nerasepmacro システムタグ )。登録済みのパラメータ名がタグ中に現れると、\nそこに登録済みパラメータ列を差し込んだものとして処理されます\n- emb タグに escape パラメータを追加。escape=false を指定すると\n\"[～]\" 形式の評価結果をエスケープせず通常のタグとして評価します\n- マクロ展開の「*」( 残りの全パラメータ ) より前に書かれたパラメータも\n有効になります ( オリジナルでは上書きされて消える )"
+      },
+      "tr": {
+        "summary": "Manual written as pseudo-code",
+        "description": "Kirikiri Z KAGParserEx plugin.\n\nProvides the KAGParser class, which parses KAG scenario files.\nLinking it with Plugins.link(\"KAGParserEx.dll\") replaces the KAGParser class with\nthis plugin's extended version (unlinking restores the original).\n\nKAGParser is a lexer that interprets a KAG scenario from the beginning (or from a given label)\nand returns the \"next tag\" as a dictionary on each call to getNextTag().\nIt does not display text or execute tags itself (the caller, such as KAG3's MainWindow,\ninterprets and executes the tags returned by getNextTag()).\n\nExample:\nvar parser = new KAGParser();\nparser.loadScenario(\"first.ks\");\nparser.goToLabel(\"*start\");\nvar tag;\nwhile((tag = parser.getNextTag()) !== void) {\n// tag.tagname holds the tag name; the other members hold the attributes\n}\n\nThe dictionary returned by getNextTag() holds the tag name in the tagname member and the tag's\nattributes as \"attribute name => value (string)\". Body text is returned one character at a time\nas a pseudo-tag whose tagname is \"ch\" (the character is in the text member), and line breaks as a\npseudo-tag whose tagname is \"r\" (with eol=true at the end of a line).\n\nWhen processSpecialTags is true (the default), the following system tags are handled inside\nthe parser and do not appear in the values returned by getNextTag():\nif / ignore / elsif / else / endif / endignore (conditionals),\nmacro / endmacro / erasemacro (recording and deleting macros),\npmacro / erasepmacro (registering and deleting parameter macros),\njump / call / return (jumps and calls within the scenario),\nemb (embedding the result of an expression).\n\nExtensions over the original KAGParser (the version built into Kirikiri Z):\n- Tags can span multiple lines via the multiLineTagEnabled property\n(put \" \\\" at the end of a line and start the next line with \";\")\n- The value returned by getNextTag() has a taglist member (an array of the tag names\nin the order they were written)\n- Parameter macro expansion (the paramMacros property / the pmacro and\nerasepmacro system tags). When a registered parameter name appears in a tag,\nit is processed as if the registered parameter list had been inserted there\n- The emb tag accepts an escape parameter. With escape=false, a result in\n\"[...]\" form is not escaped and is evaluated as a normal tag\n- Parameters written before \"*\" (all remaining parameters) in a macro expansion\nremain in effect (in the original they are overwritten and lost)"
+      }
+    },
+    "KAGParserEx:KAGParser.KAGParser": {
+      "hash": "0cff4494fcc6",
+      "ja": {
+        "summary": "コンストラクタ（引数なし）"
+      },
+      "tr": {
+        "summary": "Constructor (no arguments)"
+      }
+    },
+    "KAGParserEx:KAGParser.loadScenario": {
+      "hash": "b7c1d11fecb7",
+      "ja": {
+        "summary": "シナリオファイルを読み込む",
+        "description": "解析位置はファイルの先頭になります。すでに同じストレージが\n読み込まれている場合は再読み込みは行われません。",
+        "params": {
+          "storage": "読み込むシナリオファイル ( .ks ) のストレージ名"
+        }
+      },
+      "tr": {
+        "summary": "Loads a scenario file",
+        "description": "The parse position moves to the beginning of the file. If the same storage is\nalready loaded, it is not reloaded.",
+        "params": {
+          "storage": "Storage name of the scenario file (.ks) to load."
+        }
+      }
+    },
+    "KAGParserEx:KAGParser.goToLabel": {
+      "hash": "6c865b873a7d",
+      "ja": {
+        "summary": "指定ラベルへ移動する",
+        "description": "現在のシナリオファイル内の指定ラベル位置へ解析位置を移動します。",
+        "params": {
+          "label": "移動先のラベル名。\"*ラベル名\" のように先頭に * を付けて指定"
+        }
+      },
+      "tr": {
+        "summary": "Moves to the given label",
+        "description": "Moves the parse position to the given label in the current scenario file.",
+        "params": {
+          "label": "Name of the destination label, with a leading *, as in \"*labelname\"."
+        }
+      }
+    },
+    "KAGParserEx:KAGParser.callLabel": {
+      "hash": "11c84c94d608",
+      "ja": {
+        "summary": "呼び出しスタックに現在位置を積んでから指定ラベルへ移動する",
+        "description": "return システムタグで呼び出し元の位置へ戻ることができます。\n現在の呼び出しの深さは callStackDepth プロパティで取得できます。",
+        "params": {
+          "label": "移動先のラベル名。\"*ラベル名\" のように先頭に * を付けて指定"
+        }
+      },
+      "tr": {
+        "summary": "Pushes the current position onto the call stack and moves to the given label",
+        "description": "The return system tag returns to the calling position.\nThe current call depth is available from the callStackDepth property.",
+        "params": {
+          "label": "Name of the destination label, with a leading *, as in \"*labelname\"."
+        }
+      }
+    },
+    "KAGParserEx:KAGParser.getNextTag": {
+      "hash": "73d2b6865e1b",
+      "ja": {
+        "summary": "次のタグを取得する",
+        "description": "タグ名が tagname メンバに、タグの属性が「属性名 => 値」の\n形で格納されます。地の文は tagname=\"ch\" ( text メンバに 1 文字 )、\n改行は tagname=\"r\" ( 行末では eol=true 付き ) の擬似タグとして返ります。\ninterrupt() による中断要求があった場合は tagname=\"interrupt\" の擬似タグが\n返ります。\n\nKAGParserEx 拡張として、taglist メンバ ( その辞書に格納されたタグ名を\n記載順に並べた配列 ) が追加されています。\n\n返される辞書オブジェクトは KAGParser が内部で使い回すため、内容を保持\nしたい場合は複製してください。",
+        "returns": "タグの情報が格納された辞書オブジェクト。シナリオ終端に達した\n場合は void"
+      },
+      "tr": {
+        "summary": "Gets the next tag",
+        "description": "The tag name is stored in the tagname member and the tag's attributes as\n\"attribute name => value\". Body text is returned as a pseudo-tag with tagname=\"ch\" (one character\nin the text member), and line breaks as a pseudo-tag with tagname=\"r\" (with eol=true at the end of a line).\nIf an interruption was requested with interrupt(), a pseudo-tag with tagname=\"interrupt\"\nis returned.\n\nAs a KAGParserEx extension, a taglist member is added (an array of the tag names stored\nin that dictionary, in the order they were written).\n\nKAGParser reuses the returned dictionary object internally, so copy it if you need to\nkeep its contents.",
+        "returns": "A dictionary object holding the tag information, or void when the end of the\nscenario is reached."
+      }
+    },
+    "KAGParserEx:KAGParser.assign": {
+      "hash": "162a3d02d86a",
+      "ja": {
+        "summary": "他の KAGParser オブジェクトの状態を複製する",
+        "params": {
+          "src": "複製元の KAGParser オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Copies the state of another KAGParser object",
+        "params": {
+          "src": "KAGParser object to copy from."
+        }
+      }
+    },
+    "KAGParserEx:KAGParser.clear": {
+      "hash": "fbf85f8c1dc0",
+      "ja": {
+        "summary": "状態をクリアする",
+        "description": "読み込んだシナリオ・呼び出しスタック・マクロなどの状態を\n初期状態に戻します。"
+      },
+      "tr": {
+        "summary": "Clears the state",
+        "description": "Resets the loaded scenario, call stack, macros and other state\nto the initial state."
+      }
+    },
+    "KAGParserEx:KAGParser.store": {
+      "hash": "22a0a6448763",
+      "ja": {
+        "summary": "状態を辞書として取り出す",
+        "description": "返された辞書を保存しておき、restore() に渡すことで状態を\n復元できます。栞 ( セーブデータ ) への保存に利用できます。",
+        "returns": "現在の状態 ( 解析位置・呼び出しスタック・マクロ等 ) を表す\n辞書オブジェクト"
+      },
+      "tr": {
+        "summary": "Returns the state as a dictionary",
+        "description": "Keep the returned dictionary and pass it to restore() to restore\nthe state. Useful for storing it in save data (bookmarks).",
+        "returns": "A dictionary object representing the current state (parse position, call stack, macros, etc.)."
+      }
+    },
+    "KAGParserEx:KAGParser.restore": {
+      "hash": "e7d73d68e69f",
+      "ja": {
+        "summary": "store() で取り出した状態を復元する",
+        "params": {
+          "dic": "store() の返した辞書オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Restores a state obtained with store()",
+        "params": {
+          "dic": "Dictionary object returned by store()."
+        }
+      }
+    },
+    "KAGParserEx:KAGParser.clearCallStack": {
+      "hash": "83baabd36e69",
+      "ja": {
+        "summary": "呼び出しスタックをクリアする",
+        "description": "callLabel() で積まれた呼び出しスタックをすべて破棄します。"
+      },
+      "tr": {
+        "summary": "Clears the call stack",
+        "description": "Discards everything pushed onto the call stack by callLabel()."
+      }
+    },
+    "KAGParserEx:KAGParser.interrupt": {
+      "hash": "7f6e7794b902",
+      "ja": {
+        "summary": "解析の中断を要求する",
+        "description": "次に getNextTag() がタグを返すタイミングで、通常のタグの\nかわりに tagname=\"interrupt\" の擬似タグが返ります。非同期イベント処理\nなどから解析ループを中断したい場合に使用します。"
+      },
+      "tr": {
+        "summary": "Requests that parsing be interrupted",
+        "description": "The next time getNextTag() returns a tag, a pseudo-tag with tagname=\"interrupt\"\nis returned instead of the normal tag. Use it to break out of the parse loop from\nasynchronous event handling and the like."
+      }
+    },
+    "KAGParserEx:KAGParser.resetInterrupt": {
+      "hash": "1e259a327bdc",
+      "ja": {
+        "summary": "interrupt() による中断要求を取り消す"
+      },
+      "tr": {
+        "summary": "Cancels an interruption requested with interrupt()"
+      }
+    },
+    "KAGParserEx:KAGParser.curStorage": {
+      "hash": "9247358eb521",
+      "ja": {
+        "summary": "現在解析中のシナリオのストレージ名。値を設定すると loadScenario() と同じ動作をする"
+      },
+      "tr": {
+        "summary": "Storage name of the scenario being parsed. Setting it behaves like loadScenario()"
+      }
+    },
+    "KAGParserEx:KAGParser.curLabel": {
+      "hash": "e2fac7b37abc",
+      "ja": {
+        "summary": "最後に通過したラベル名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Name of the last label passed (read-only)"
+      }
+    },
+    "KAGParserEx:KAGParser.curLine": {
+      "hash": "901b70b3d0f1",
+      "ja": {
+        "summary": "現在解析中の行番号 ( 0 起点 )（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Line number being parsed, starting at 0 (read-only)"
+      }
+    },
+    "KAGParserEx:KAGParser.curPos": {
+      "hash": "2a74d6237060",
+      "ja": {
+        "summary": "現在解析中の行内の文字位置 ( 0 起点 )（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Character position within the line being parsed, starting at 0 (read-only)"
+      }
+    },
+    "KAGParserEx:KAGParser.curLineStr": {
+      "hash": "15c33eed3fcf",
+      "ja": {
+        "summary": "現在解析中の行の内容（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Contents of the line being parsed (read-only)"
+      }
+    },
+    "KAGParserEx:KAGParser.processSpecialTags": {
+      "hash": "16116c1e594d",
+      "ja": {
+        "summary": "システムタグ ( if / macro / jump / emb など ) をパーサ内部で処理するか。",
+        "description": "偽にするとこれらも通常のタグとして getNextTag() から返される。既定は真"
+      },
+      "tr": {
+        "summary": "Whether system tags (if / macro / jump / emb, etc.) are handled inside the parser",
+        "description": "If false, these are also returned from getNextTag() as normal tags. Defaults to true."
+      }
+    },
+    "KAGParserEx:KAGParser.ignoreCR": {
+      "hash": "ab980ab245e6",
+      "ja": {
+        "summary": "真にするとシナリオ中の改行を無視する ( \"r\" 擬似タグを返さない )。既定は偽"
+      },
+      "tr": {
+        "summary": "If true, line breaks in the scenario are ignored (no \"r\" pseudo-tags are returned). Defaults to false"
+      }
+    },
+    "KAGParserEx:KAGParser.debugLevel": {
+      "hash": "a7dd101b806e",
+      "ja": {
+        "summary": "デバッグ出力のレベル。0 ( 出力しない )、1 ( 簡易 )、2 ( 詳細 ) のいずれか"
+      },
+      "tr": {
+        "summary": "Debug output level: 0 (none), 1 (brief) or 2 (detailed)"
+      }
+    },
+    "KAGParserEx:KAGParser.macros": {
+      "hash": "22d55e12af29",
+      "ja": {
+        "summary": "記録されているマクロの辞書 ( マクロ名 => マクロ内容の文字列 )（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Dictionary of recorded macros (macro name => macro body string) (read-only)"
+      }
+    },
+    "KAGParserEx:KAGParser.paramMacros": {
+      "hash": "1e1090c136dd",
+      "ja": {
+        "summary": "パラメータマクロの辞書（読み取り専用・KAGParserEx 拡張）。",
+        "description": "「パラメータ名 => [ パラメータ名, 値, パラメータ名, 値, ... ]」の形で\n登録すると、タグ中に登録済みパラメータ名が現れたとき、そこに登録内容を\n差し込んだものとして処理される。値の先頭の % や & は実行時に展開される。\npmacro / erasepmacro システムタグでも登録・削除できる"
+      },
+      "tr": {
+        "summary": "Dictionary of parameter macros (read-only; KAGParserEx extension)",
+        "description": "When registered as \"parameter name => [ parameter name, value, parameter name, value, ... ]\",\nan occurrence of a registered parameter name in a tag is processed as if the registered contents\nhad been inserted there. A leading % or & in a value is expanded at run time.\nEntries can also be registered and deleted with the pmacro / erasepmacro system tags."
+      }
+    },
+    "KAGParserEx:KAGParser.macroParams": {
+      "hash": "679dcdb8e2b5",
+      "ja": {
+        "summary": "現在実行中のマクロに渡された引数の辞書（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Dictionary of the arguments passed to the macro currently running (read-only)"
+      }
+    },
+    "KAGParserEx:KAGParser.mp": {
+      "hash": "a41e70af093c",
+      "ja": {
+        "summary": "macroParams の別名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Alias for macroParams (read-only)"
+      }
+    },
+    "KAGParserEx:KAGParser.callStackDepth": {
+      "hash": "ba12a369db02",
+      "ja": {
+        "summary": "callLabel() による呼び出しスタックの深さ（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Depth of the call stack built by callLabel() (read-only)"
+      }
+    },
+    "KAGParserEx:KAGParser.multiLineTagEnabled": {
+      "hash": "65bbadc35e21",
+      "ja": {
+        "summary": "タグの複数行記述を有効にするか ( KAGParserEx 拡張 )。既定は偽。",
+        "description": "真にすると、行末に \" \\\" ( 直前に 1 つ以上の空白が必要 ) を置き、\n次の行の先頭を \";\" で始めることで、タグを複数行に分けて記述できる。\nタグ名は必ず 1 行目に記述する必要がある"
+      },
+      "tr": {
+        "summary": "Whether tags may span multiple lines (KAGParserEx extension). Defaults to false",
+        "description": "If true, a tag can be split across lines by putting \" \\\" at the end of a line\n(at least one space is required before it) and starting the next line with \";\".\nThe tag name must be on the first line."
+      }
+    }
+  }
+}

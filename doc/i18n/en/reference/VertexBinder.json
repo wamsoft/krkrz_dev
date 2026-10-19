@@ -1,0 +1,90 @@
+{
+  "class": "VertexBinder",
+  "entries": {
+    "VertexBinder": {
+      "hash": "f3e49203954b",
+      "ja": {
+        "description": "VertexBinderはVertexBufferとシェーダーに入力する頂点情報を関連付けるためのクラスです。\nShaderProgramのプロパティにはこのクラスのインスタンスを設定します。\nShaderProgramに設定されたVertexBinderは、Canvas.drawMeshで呼び出された時シェーダーへ頂点情報として渡されます。"
+      },
+      "tr": {
+        "description": "VertexBinder associates a VertexBuffer with the vertex attributes fed to a shader.\nInstances of this class are assigned to ShaderProgram properties.\nA VertexBinder set on a ShaderProgram is passed to the shader as vertex data when Canvas.drawMesh is called."
+      }
+    },
+    "VertexBinder.VertexBinder": {
+      "hash": "0af128386c75",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "vertex": "関連付けるVertexBuffer",
+          "stride": "頂点ごとのストライドをバイト数で指定します。XY座標をfloat型で渡すのであればsizeof(float)*2なので、8を指定します。",
+          "componentCount": "頂点要素数を渡します。XY座標を渡すのであれば2を指定します。RGBAカラーなら4です。",
+          "offset": "VertexBufferの先頭からのオフセットをバイト数で指定します。一つのVertexBufferで複数の頂点情報を格納している場合に使用します。",
+          "normalize": "正規化するかどうかを指定します。trueの場合、非float型の時[-1.0～0.0～1.0]の間に正規化されシェーダーに送られます。"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "vertex": "The VertexBuffer to associate.",
+          "stride": "Per-vertex stride in bytes. For XY coordinates as floats this is sizeof(float)*2, so specify 8.",
+          "componentCount": "Number of components per vertex. Specify 2 for XY coordinates, or 4 for an RGBA color.",
+          "offset": "Offset in bytes from the start of the VertexBuffer. Use this when a single VertexBuffer stores several kinds of vertex data.",
+          "normalize": "Whether to normalize. If true, non-float values are normalized to the range [-1.0 to 0.0 to 1.0] before being sent to the shader."
+        }
+      }
+    },
+    "VertexBinder.vertexBuffer": {
+      "hash": "5c3de37b250c",
+      "ja": {
+        "summary": "頂点バッファ(VertexBufferクラス readonly)"
+      },
+      "tr": {
+        "summary": "Vertex buffer (VertexBuffer class, read-only)"
+      }
+    },
+    "VertexBinder.stride": {
+      "hash": "257dc3fe4974",
+      "ja": {
+        "summary": "頂点ごとのストライド(バイト数)",
+        "description": "デフォルトは0。"
+      },
+      "tr": {
+        "summary": "Per-vertex stride (bytes)",
+        "description": "Defaults to 0."
+      }
+    },
+    "VertexBinder.componentCount": {
+      "hash": "05e62c03aef3",
+      "ja": {
+        "summary": "頂点要素数 (1～4)",
+        "description": "デフォルトは4\nXY座標の時は、2を指定する。"
+      },
+      "tr": {
+        "summary": "Number of components per vertex (1 to 4)",
+        "description": "Defaults to 4.\nSpecify 2 for XY coordinates."
+      }
+    },
+    "VertexBinder.offset": {
+      "hash": "675fde15d3a3",
+      "ja": {
+        "summary": "頂点バッファオフセット(バイト数)",
+        "description": "デフォルトは0。\nVertexBufferの先頭からのバイトオフセットを指定する。\n一つのVertexBufferで複数の頂点情報を格納している場合に使用します。"
+      },
+      "tr": {
+        "summary": "Vertex buffer offset (bytes)",
+        "description": "Defaults to 0.\nSpecifies the byte offset from the start of the VertexBuffer.\nUse this when a single VertexBuffer stores several kinds of vertex data."
+      }
+    },
+    "VertexBinder.normalize": {
+      "hash": "89e46e3019f7",
+      "ja": {
+        "summary": "正規化するかどうか",
+        "description": "デフォルトはfalse。\ntrueの場合、非float型の時[-1.0～0.0～1.0]の間に正規化されシェーダーに送られます。\n色情報などubyte形で0～255で色を指定し、その色を0.0～1.0に正規化してシェーダーで使う等するときに指定します。"
+      },
+      "tr": {
+        "summary": "Whether to normalize",
+        "description": "Defaults to false.\nIf true, non-float values are normalized to the range [-1.0 to 0.0 to 1.0] before being sent to the shader.\nUse this, for example, when you specify colors as ubyte values from 0 to 255 and want the shader to receive them normalized to 0.0 to 1.0."
+      }
+    }
+  }
+}

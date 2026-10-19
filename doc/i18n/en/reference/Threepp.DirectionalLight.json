@@ -1,0 +1,105 @@
+{
+  "class": "Threepp.DirectionalLight",
+  "entries": {
+    "krkrthreepp:Threepp.DirectionalLight": {
+      "hash": "9486bfb8fcb5",
+      "ja": {
+        "summary": "平行光源（太陽光のような光）",
+        "description": "無限遠から平行に照射される光源です。影を落とすことができます。\n\n影を落とすには castShadow=true にし、renderer.setShadowMapEnabled(true) と、\n影を受ける側の receiveShadow=true が必要です。\n平行光源の影は正投影カメラで焼くので、シーンを覆う範囲を setShadowOrthoBounds で指定します。"
+      },
+      "tr": {
+        "summary": "Directional light (like sunlight)",
+        "description": "A light whose rays are emitted in parallel from infinitely far away. It can cast shadows.\n\nTo cast shadows, set castShadow=true, call renderer.setShadowMapEnabled(true),\nand set receiveShadow=true on the receiving objects.\nDirectional light shadows are rendered with an orthographic camera, so specify the area covering the scene with setShadowOrthoBounds."
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLight.DirectionalLight": {
+      "hash": "c91078f1e598",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "color": "光の色 (0xRRGGBB)",
+          "intensity": "光の強度"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "color": "Light color (0xRRGGBB).",
+          "intensity": "Light intensity."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLight.type": {
+      "hash": "6329d7d4a542",
+      "ja": {
+        "summary": "\"DirectionalLight\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"DirectionalLight\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLight.setShadowMapSize": {
+      "hash": "b82110712d1d",
+      "ja": {
+        "summary": "シャドウマップ解像度 (既定 2048x2048)"
+      },
+      "tr": {
+        "summary": "Shadow map resolution (default 2048x2048)"
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLight.setShadowBias": {
+      "hash": "eeb49b75ef3d",
+      "ja": {
+        "summary": "影のアクネ対策バイアス (例 -0.0005)"
+      },
+      "tr": {
+        "summary": "Shadow bias to reduce shadow acne (e.g. -0.0005)"
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLight.setShadowNormalBias": {
+      "hash": "3fb6131d7c96",
+      "ja": {
+        "summary": "法線方向バイアス"
+      },
+      "tr": {
+        "summary": "Bias along the normal"
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLight.setShadowRadius": {
+      "hash": "608bd86dc8e5",
+      "ja": {
+        "summary": "ソフトシャドウ半径 (PCF)"
+      },
+      "tr": {
+        "summary": "Soft shadow radius (PCF)"
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLight.setShadowNearFar": {
+      "hash": "f7803d0ec7c7",
+      "ja": {
+        "summary": "影用カメラの near/far"
+      },
+      "tr": {
+        "summary": "near/far of the shadow camera"
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLight.setShadowOrthoBounds": {
+      "hash": "14866c199270",
+      "ja": {
+        "summary": "平行光源の影範囲(正投影)"
+      },
+      "tr": {
+        "summary": "Shadow area of the directional light (orthographic)"
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLight.dispose": {
+      "hash": "4b8ce80d5ddf",
+      "ja": {
+        "summary": "リソースを解放"
+      },
+      "tr": {
+        "summary": "Releases resources"
+      }
+    }
+  }
+}

@@ -2704,7 +2704,7 @@ from 引数には、変換元の画像表現形式に対応する描画方式(df
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `x` | `&nbsp;` | マウスカーソルの ( このレイヤの表示座標における ) x 座標値をピクセル単位で指定します。<br>この値は [Layer.cursorX](Layer.md#cursorx) プロパティでも設定／取得する事ができます。 |
-| `y` | `&nbsp;` | マウスカーソルの ( このレイヤの表示座標における ) y 座標値をピクセル単位で指定します。<br>この値は [Layer.cursorX](Layer.md#cursorx) プロパティでも設定／取得する事ができます。 |
+| `y` | `&nbsp;` | マウスカーソルの ( このレイヤの表示座標における ) y 座標値をピクセル単位で指定します。<br>この値は [Layer.cursorY](Layer.md#cursory) プロパティでも設定／取得する事ができます。 |
 
 **解説**
 
@@ -2802,7 +2802,7 @@ from 引数には、変換元の画像表現形式に対応する描画方式(df
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `left` | `&nbsp;` | 注視する ( このレイヤの表示座標における ) x 座標値をピクセル単位で指定します。<br>この値は [Layer.attentionLeft](Layer.md#attentionleft) プロパティでも設定／取得する事ができます。 |
-| `top` | `&nbsp;` | 注視する ( このレイヤの表示座標における ) x 座標値をピクセル単位で指定します。<br>この値は [Layer.attentionTop](Layer.md#attentiontop) プロパティでも設定／取得する事ができます。 |
+| `top` | `&nbsp;` | 注視する ( このレイヤの表示座標における ) y 座標値をピクセル単位で指定します。<br>この値は [Layer.attentionTop](Layer.md#attentiontop) プロパティでも設定／取得する事ができます。 |
 
 **解説**
 
@@ -3693,10 +3693,12 @@ style, app
 
 スタイルタグ付きテキストを描画
 
-<style:名前> タグでスタイルを切り替えながらテキストを描画します。
+`<style:名前>` タグでスタイルを切り替えながらテキストを描画します。
 styles / appearances に単体オブジェクトを渡すと "default" キーとして扱われます。
 
 使用例:
+
+```tjs
 // 単一スタイルで描画
 layer.drawStyledText(
 "テキスト",
@@ -3714,6 +3716,7 @@ layer.drawStyledText(
 RichText.HALIGN_LEFT, RichText.VALIGN_TOP,
 styles, apps
 );
+```
 
 ---
 
@@ -4143,7 +4146,9 @@ layer.drawRectEx(10, 10, 200, 100, 0, 0xFF000000, 2);  // 黒枠のみ
 
 **解説**
 
-描画のアンチエイリアス指定(SmoothingMode) @description デフォルト SmoothingModeAntiAlias
+描画のアンチエイリアス指定(SmoothingMode)
+
+デフォルト SmoothingModeAntiAlias
 
 ---
 
@@ -4153,7 +4158,9 @@ layer.drawRectEx(10, 10, 200, 100, 0, 0xFF000000, 2);  // 黒枠のみ
 
 **解説**
 
-テキスト描画のレンダリング指定(TextRenderingHint) @description デフォルト TextRenderingHintAntiAlias
+テキスト描画のレンダリング指定(TextRenderingHint)
+
+デフォルト TextRenderingHintAntiAlias
 
 ---
 
@@ -4332,7 +4339,7 @@ record = true の状態の場合、viewTransform を指定すると
 
 **解説**
 
-円錐の描画
+扇形 (パイ) の描画
 
 ---
 
@@ -5411,9 +5418,7 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 **解説**
 
-レイヤイメージをクロップ（上下左右の余白透明部分を切り取る）したときの
-
-サイズを取得します。
+レイヤイメージをクロップ（上下左右の余白透明部分を切り取る）したときのサイズを取得します。
 
 ---
 
@@ -5427,9 +5432,7 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 **解説**
 
-レイヤイメージをクロップ（上下左右の完全透明部分(0x00000000)を切り取る）したときの
-
-サイズを取得します。
+レイヤイメージをクロップ（上下左右の完全透明部分(0x00000000)を切り取る）したときのサイズを取得します。
 
 ---
 
@@ -5537,12 +5540,12 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `threthold` | `0` | αの下限 |
+| `threshold` | `0` | αの閾値。αがこの値以下のピクセルを塗りつぶす |
 | `fillColor` | `0` | 塗りつぶし色(0x00RRGGBB) |
 
 **解説**
 
-αが指定以下の部分を指定色で塗りつぶすする
+αが指定以下の部分を指定色で塗りつぶす
 
 ---
 
@@ -5884,7 +5887,7 @@ Province画像がない場合は例外（一度もdfProvinceに描画してい�
 
 **解説**
 
-円錐の描画
+扇形 (パイ) の描画
 
 ---
 

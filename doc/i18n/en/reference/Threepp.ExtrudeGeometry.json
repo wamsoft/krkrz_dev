@@ -1,0 +1,33 @@
+{
+  "class": "Threepp.ExtrudeGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.ExtrudeGeometry": {
+      "hash": "69f7594ea9bf",
+      "ja": {
+        "summary": "ExtrudeGeometry（押し出しジオメトリ）",
+        "description": "Shapeを押し出して3Dジオメトリを生成"
+      },
+      "tr": {
+        "summary": "ExtrudeGeometry (extruded geometry)",
+        "description": "Generates 3D geometry by extruding a Shape."
+      }
+    },
+    "krkrthreepp:Threepp.ExtrudeGeometry.ExtrudeGeometry": {
+      "hash": "b5fc05c115c8",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "shape": "Shapeオブジェクトまたは配列",
+          "options": "押し出しオプション（辞書）\n- curveSegments: カーブの分割数\n- steps: 押し出しのステップ数\n- depth: 押し出しの深さ\n- bevelEnabled: ベベルを有効にするか\n- bevelThickness: ベベルの厚さ\n- bevelSize: ベベルのサイズ\n- bevelOffset: ベベルのオフセット\n- bevelSegments: ベベルの分割数"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "shape": "A Shape object or an array of them.",
+          "options": "Extrusion options (dictionary)\n- curveSegments: number of segments on curves\n- steps: number of extrusion steps\n- depth: extrusion depth\n- bevelEnabled: whether to apply a bevel\n- bevelThickness: bevel thickness\n- bevelSize: bevel size\n- bevelOffset: bevel offset\n- bevelSegments: number of bevel segments"
+        }
+      }
+    }
+  }
+}

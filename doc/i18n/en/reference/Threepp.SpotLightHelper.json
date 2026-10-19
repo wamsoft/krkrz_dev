@@ -1,0 +1,51 @@
+{
+  "class": "Threepp.SpotLightHelper",
+  "entries": {
+    "krkrthreepp:Threepp.SpotLightHelper": {
+      "hash": "dcfdbac06629",
+      "ja": {
+        "summary": "スポットライトヘルパー",
+        "description": "スポットライトのコーンを可視化します。"
+      },
+      "tr": {
+        "summary": "Spotlight helper",
+        "description": "Visualizes the cone of a spotlight."
+      }
+    },
+    "krkrthreepp:Threepp.SpotLightHelper.SpotLightHelper": {
+      "hash": "68879fad7ad0",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "light": "可視化するライト",
+          "color": "ヘルパーの色（省略時はライトの色）"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "light": "Light to visualize.",
+          "color": "Color of the helper (defaults to the light's color)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.SpotLightHelper.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLightHelper.update": {
+      "hash": "0c9639963fd8",
+      "ja": {
+        "summary": "ヘルパーを更新"
+      },
+      "tr": {
+        "summary": "Updates the helper"
+      }
+    }
+  }
+}

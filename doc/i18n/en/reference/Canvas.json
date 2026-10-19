@@ -1,0 +1,571 @@
+{
+  "class": "Canvas",
+  "entries": {
+    "Canvas": {
+      "hash": "99cf56bec5d2",
+      "ja": {
+        "description": "Canvasは描画機能を提供するクラスです。\nWindowを生成すると、プロパティcanvasが自動的に作られます。\n使用する時は、このWindowのcanvasプロパティを使用します。"
+      },
+      "tr": {
+        "description": "Canvas provides drawing functionality.\nWhen a Window is created, its canvas property is created automatically.\nTo draw, use the canvas property of that Window."
+      }
+    },
+    "Canvas.clearColor": {
+      "hash": "52fa2dd70878",
+      "ja": {
+        "summary": "クリア色指定・描画処理前の画面クリア色"
+      },
+      "tr": {
+        "summary": "Clear color: the color used to clear the screen before drawing"
+      }
+    },
+    "Canvas.clear": {
+      "hash": "08830cd70881",
+      "ja": {
+        "summary": "描画領域全体をクリア",
+        "params": {
+          "argb": "クリア色(未指定時はclearColorプロパティでクリアされる)"
+        }
+      },
+      "tr": {
+        "summary": "Clears the whole drawing area",
+        "params": {
+          "argb": "Clear color (if omitted, the clearColor property is used)."
+        }
+      }
+    },
+    "Canvas.capture": {
+      "hash": "26b27ca2dddc",
+      "ja": {
+        "summary": "現在の描画内容全体をBitmap/Texture/Offscreenにキャプチャ",
+        "description": "ビットマップのサイズはスクリーンサイズに補正\nTexture/Offscreenの場合は変更されない",
+        "params": {
+          "dest": "キャプチャ先Bitmap/Texture/Offscreen",
+          "front": "front bufferからのキャプチャかback bufferからのキャプチャかの指定。trueでfront、falseでback"
+        }
+      },
+      "tr": {
+        "summary": "Captures the entire current drawing into a Bitmap/Texture/Offscreen",
+        "description": "A Bitmap is resized to the screen size.\nA Texture/Offscreen is not resized.",
+        "params": {
+          "dest": "The destination Bitmap/Texture/Offscreen.",
+          "front": "Whether to capture from the front buffer or the back buffer. true for front, false for back."
+        }
+      }
+    },
+    "Canvas.renderTarget": {
+      "hash": "33d9a77fb703",
+      "ja": {
+        "summary": "描画ターゲット指定",
+        "description": "Offscreenクラスを指定可能。\nnull/void指定で直接描画に。"
+      },
+      "tr": {
+        "summary": "Render target",
+        "description": "An Offscreen object can be specified.\nSpecify null/void to draw directly."
+      }
+    },
+    "Canvas.blendMode": {
+      "hash": "8932255ab9f9",
+      "ja": {
+        "summary": "描画の合成モード指定",
+        "description": "bmDisable, bmOpaque, bmAlpha, bmAdd, bmAddWithAlpha が指定可能。\nここにないブレンド方法が必要であればシェーダーを記述する。"
+      },
+      "tr": {
+        "summary": "Blend mode for drawing",
+        "description": "bmDisable, bmOpaque, bmAlpha, bmAdd, and bmAddWithAlpha can be specified.\nIf you need a blend method not listed here, write a shader."
+      }
+    },
+    "Canvas.matrix": {
+      "hash": "1d1fdde2101f",
+      "ja": {
+        "summary": "描画マトリックス指定",
+        "description": "(Matrix32 クラス)"
+      },
+      "tr": {
+        "summary": "Drawing matrix",
+        "description": "(Matrix32 class)"
+      }
+    },
+    "Canvas.save": {
+      "hash": "2c83d8916b75",
+      "ja": {
+        "summary": "matrix と clip の状態を保存する(スタック)"
+      },
+      "tr": {
+        "summary": "Saves the matrix and clip state (stack)"
+      }
+    },
+    "Canvas.restore": {
+      "hash": "51146fa81de4",
+      "ja": {
+        "summary": "matrix と clip の状態を復元する(スタック)"
+      },
+      "tr": {
+        "summary": "Restores the matrix and clip state (stack)"
+      }
+    },
+    "Canvas.fill": {
+      "hash": "f10d6b39d0bc",
+      "ja": {
+        "summary": "色での塗りつぶし",
+        "description": "XY座標はmatrixで指定する。",
+        "params": {
+          "width": "塗りつぶし範囲幅",
+          "height": "塗りつぶし範囲高さ",
+          "colors": "4頂点の頂点カラーARGB。単独数値なら単色、配列なら4頂点個別指定",
+          "shader": "塗りつぶしシェーダー。nullの時defaultFillShaderで塗りつぶされる"
+        }
+      },
+      "tr": {
+        "summary": "Fills with a color",
+        "description": "The XY position is specified with matrix.",
+        "params": {
+          "width": "Width of the area to fill.",
+          "height": "Height of the area to fill.",
+          "colors": "ARGB vertex colors for the 4 vertices. A single number gives a solid color; an array specifies each of the 4 vertices.",
+          "shader": "Fill shader. If null, defaultFillShader is used."
+        }
+      }
+    },
+    "Canvas.drawMesh": {
+      "hash": "800f9478a6a9",
+      "ja": {
+        "summary": "メッシュ描画",
+        "description": "メッシュ(VertexBinder:頂点情報)は、呼び出し前にshaderに関連付け(プロパティで設定)しておく必要があります。\nテクスチャ情報も同様に関連付けしておく必要があります。\n呼出し後shaderに関連付けた情報は解除(=void)してください。",
+        "params": {
+          "shader": "テクスチャや頂点情報まで関連付けられたシェーダーを指定する",
+          "count": "描画する頂点数",
+          "primitiveType": "トライアングルなどの指定",
+          "offset": "頂点配列の中で描画開始するオフセット"
+        }
+      },
+      "tr": {
+        "summary": "Draws a mesh",
+        "description": "The mesh (VertexBinder: vertex data) must be associated with shader (set through its properties) before the call.\nTexture information must be associated in the same way.\nAfter the call, clear the information associated with shader (set it to void).",
+        "params": {
+          "shader": "A shader with textures and vertex data already associated.",
+          "count": "Number of vertices to draw.",
+          "primitiveType": "Primitive type, such as triangles.",
+          "offset": "Offset in the vertex array at which to start drawing."
+        }
+      }
+    },
+    "Canvas.drawMesh@2": {
+      "hash": "1991de9e6029",
+      "ja": {
+        "summary": "メッシュ描画のインデックスバッファ使用版",
+        "description": "メッシュ(VertexBinder:頂点情報)は、呼び出し前にshaderに関連付け(プロパティで設定)しておく必要があります。\nテクスチャ情報も同様に関連付けしておく必要があります。\n呼出し後shaderに関連付けた情報は解除(=void)してください。",
+        "params": {
+          "shader": "テクスチャや頂点情報まで関連付けられたシェーダーを指定する",
+          "index": "インデックスバッファを指定する",
+          "count": "描画するインデックス数",
+          "primitiveType": "トライアングルなどの指定"
+        }
+      },
+      "tr": {
+        "summary": "Draws a mesh using an index buffer",
+        "description": "The mesh (VertexBinder: vertex data) must be associated with shader (set through its properties) before the call.\nTexture information must be associated in the same way.\nAfter the call, clear the information associated with shader (set it to void).",
+        "params": {
+          "shader": "A shader with textures and vertex data already associated.",
+          "index": "The index buffer.",
+          "count": "Number of indices to draw.",
+          "primitiveType": "Primitive type, such as triangles."
+        }
+      }
+    },
+    "Canvas.drawTexture": {
+      "hash": "e0682d7a5d01",
+      "ja": {
+        "summary": "1枚のテクスチャを描画",
+        "description": "defaultShaderで描画されます。\n位置や拡大縮小、回転は matrix で指定します。\nテクスチャはTextureクラスだけでなく、Offscreenクラスを指定しても問題ありません。\nOffscreenクラスを指定する場合は、renderTargetからそのOffscreenクラスは外されていることが前提(循環しないように)です。",
+        "params": {
+          "texture": "描画に使用するテクスチャを指定します"
+        }
+      },
+      "tr": {
+        "summary": "Draws one texture",
+        "description": "Drawn with defaultShader.\nPosition, scaling, and rotation are specified with matrix.\nYou can specify an Offscreen object as well as a Texture object.\nWhen you specify an Offscreen, it must not be the current renderTarget (to avoid a cycle).",
+        "params": {
+          "texture": "The texture to draw."
+        }
+      }
+    },
+    "Canvas.drawTexture@2": {
+      "hash": "c52b0904e3ed",
+      "ja": {
+        "summary": "1枚のテクスチャをシェーダー指定して描画",
+        "description": "位置や拡大縮小、回転は matrix で指定します。\nテクスチャはTextureクラスだけでなく、Offscreenクラスを指定しても問題ありません。\nOffscreenクラスを指定する場合は、renderTargetからそのOffscreenクラスは外されていることが前提(循環しないように)です。",
+        "params": {
+          "texture": "描画に使用するテクスチャを指定します",
+          "shader": "描画に使用するシェーダーを指定します"
+        }
+      },
+      "tr": {
+        "summary": "Draws one texture with a specified shader",
+        "description": "Position, scaling, and rotation are specified with matrix.\nYou can specify an Offscreen object as well as a Texture object.\nWhen you specify an Offscreen, it must not be the current renderTarget (to avoid a cycle).",
+        "params": {
+          "texture": "The texture to draw.",
+          "shader": "The shader to use for drawing."
+        }
+      }
+    },
+    "Canvas.drawTexture@3": {
+      "hash": "ca7e423c358b",
+      "ja": {
+        "summary": "2枚のテクスチャをシェーダー指定して描画",
+        "description": "位置や拡大縮小、回転は matrix で指定します。\nテクスチャはTextureクラスだけでなく、Offscreenクラスを指定しても問題ありません。\nOffscreenクラスを指定する場合は、renderTargetからそのOffscreenクラスは外されていることが前提(循環しないように)です。",
+        "params": {
+          "texture": "描画に使用するテクスチャを指定します",
+          "texture2": "描画に使用する2枚目のテクスチャを指定します",
+          "shader": "描画に使用するシェーダーを指定します"
+        }
+      },
+      "tr": {
+        "summary": "Draws two textures with a specified shader",
+        "description": "Position, scaling, and rotation are specified with matrix.\nYou can specify an Offscreen object as well as a Texture object.\nWhen you specify an Offscreen, it must not be the current renderTarget (to avoid a cycle).",
+        "params": {
+          "texture": "The texture to draw.",
+          "texture2": "The second texture to use for drawing.",
+          "shader": "The shader to use for drawing."
+        }
+      }
+    },
+    "Canvas.drawTexture@4": {
+      "hash": "ec2f5dbc376f",
+      "ja": {
+        "summary": "3枚のテクスチャをシェーダー指定して描画",
+        "description": "位置や拡大縮小、回転は matrix で指定します。\nテクスチャはTextureクラスだけでなく、Offscreenクラスを指定しても問題ありません。\nOffscreenクラスを指定する場合は、renderTargetからそのOffscreenクラスは外されていることが前提(循環しないように)です。\nOpenGL ES 2.0の場合はテクスチャ最大8枚、3.0は頂点側最大16枚，フラグメント側最大16枚なので、まだ追加できますが、とりあえずは3枚まで定義しています。\n将来的にはテクスチャを配列で渡すバージョンを作り、4枚以上はそちらで対応も検討します。",
+        "params": {
+          "texture": "描画に使用するテクスチャを指定します",
+          "texture2": "描画に使用する2枚目のテクスチャを指定します",
+          "texture3": "描画に使用する3枚目のテクスチャを指定します",
+          "shader": "描画に使用するシェーダーを指定します"
+        }
+      },
+      "tr": {
+        "summary": "Draws three textures with a specified shader",
+        "description": "Position, scaling, and rotation are specified with matrix.\nYou can specify an Offscreen object as well as a Texture object.\nWhen you specify an Offscreen, it must not be the current renderTarget (to avoid a cycle).\nOpenGL ES 2.0 allows up to 8 textures, and 3.0 allows up to 16 on the vertex side and 16 on the fragment side, so more could be added, but for now up to 3 are defined.\nA future version that takes textures as an array may be added to handle 4 or more.",
+        "params": {
+          "texture": "The texture to draw.",
+          "texture2": "The second texture to use for drawing.",
+          "texture3": "The third texture to use for drawing.",
+          "shader": "The shader to use for drawing."
+        }
+      }
+    },
+    "Canvas.drawTransition": {
+      "hash": "8d2374da44b7",
+      "ja": {
+        "summary": "表裏 2 枚のテクスチャをクロスフェード描画",
+        "description": "front → back を進行度 phase で混色して描画します。\nシェーダーは内蔵されているため ShaderProgram を用意する必要はありません。\n位置や拡大縮小、回転は matrix で指定します ( drawTexture と同じ規約で、\nblendMode / クリップにも従います )。\nテクスチャは Texture クラスだけでなく Offscreen クラスも指定できます。",
+        "params": {
+          "front": "表側 ( phase=0.0 で表示される ) テクスチャ",
+          "back": "裏側 ( phase=1.0 で表示される ) テクスチャ",
+          "phase": "進行度 0.0〜1.0 ( 範囲外はクランプされます )"
+        }
+      },
+      "tr": {
+        "summary": "Draws a crossfade between front and back textures",
+        "description": "Draws front blended toward back according to the progress value phase.\nThe shader is built in, so you do not need to prepare a ShaderProgram.\nPosition, scaling, and rotation are specified with matrix (the same convention as drawTexture;\nblendMode and clipping are also respected).\nYou can specify an Offscreen object as well as a Texture object.",
+        "params": {
+          "front": "Front texture (shown at phase=0.0).",
+          "back": "Back texture (shown at phase=1.0).",
+          "phase": "Progress from 0.0 to 1.0 (values outside the range are clamped)."
+        }
+      }
+    },
+    "Canvas.drawTransition@2": {
+      "hash": "b2e76019c97c",
+      "ja": {
+        "summary": "表裏 2 枚のテクスチャをユニバーサルトランジション描画",
+        "description": "rule 画像 ( グレースケール ) の値が小さい画素ほど早く back 側へ\n切り替わります。切替の閾値は phase * (1 + vague/255) をスイープするため、\nphase=1.0 で必ず全画素が back になります。境界は vague の幅でぼかされます。\n\nrule テクスチャは tcfAlpha 形式で作成してください\n( 例: `new Texture(\"rule.png\", tcfAlpha)` )。rule に null を渡すと\nクロスフェードとして動作します。\n\nElements ダイアログのフロー画面切替エフェクト ( JSON `transitions` の\n`effect` / `rule` / `vague` ) と同じ意味論・同じ rule 資材が使えます。",
+        "params": {
+          "front": "表側テクスチャ",
+          "back": "裏側テクスチャ",
+          "phase": "進行度 0.0〜1.0",
+          "rule": "rule 画像テクスチャ ( tcfAlpha )。null でクロスフェード",
+          "vague": "境界ぼかし幅 ( rule 値スケール 0〜255 )"
+        }
+      },
+      "tr": {
+        "summary": "Draws a universal transition between front and back textures",
+        "description": "Pixels with smaller values in the rule image (grayscale) switch to back\nsooner. The switching threshold sweeps phase * (1 + vague/255), so\nevery pixel is back at phase=1.0. The boundary is blurred over a width of vague.\n\nCreate the rule texture in tcfAlpha format\n(for example, `new Texture(\"rule.png\", tcfAlpha)`). Passing null for rule\nmakes it behave as a crossfade.\n\nIt has the same semantics as, and can use the same rule assets as, the screen-transition effects of Elements dialog flows\n(`effect` / `rule` / `vague` in the JSON `transitions`).",
+        "params": {
+          "front": "Front texture.",
+          "back": "Back texture.",
+          "phase": "Progress from 0.0 to 1.0.",
+          "rule": "Rule image texture (tcfAlpha). null for a crossfade.",
+          "vague": "Boundary blur width (on the rule value scale, 0 to 255)."
+        }
+      }
+    },
+    "Canvas.drawTextureAtlas": {
+      "hash": "ad9d0a4dde0b",
+      "ja": {
+        "summary": "テクスチャの一部分を描画",
+        "description": "defaultShaderで描画されます。",
+        "params": {
+          "rect": "テクスチャ内で描画する矩形領域",
+          "texture": "描画するテクスチャ"
+        }
+      },
+      "tr": {
+        "summary": "Draws part of a texture",
+        "description": "Drawn with defaultShader.",
+        "params": {
+          "rect": "The rectangle within the texture to draw.",
+          "texture": "The texture to draw."
+        }
+      }
+    },
+    "Canvas.drawTextureAtlas@2": {
+      "hash": "4d46254513f7",
+      "ja": {
+        "summary": "テクスチャの一部分を描画(シェーダー指定あり)",
+        "params": {
+          "rect": "テクスチャ内で描画する矩形領域",
+          "texture": "描画するテクスチャ",
+          "shader": "描画に使用するシェーダー"
+        }
+      },
+      "tr": {
+        "summary": "Draws part of a texture (with a shader)",
+        "params": {
+          "rect": "The rectangle within the texture to draw.",
+          "texture": "The texture to draw.",
+          "shader": "The shader to use for drawing."
+        }
+      }
+    },
+    "Canvas.draw9Patch": {
+      "hash": "b2c0db24d42b",
+      "ja": {
+        "summary": "9patchを利用して描画",
+        "description": "描画に使用するTextureは9patch情報が読み込まれている必要があります。\n指定できるのはTextureクラスのみです。",
+        "returns": "マージン情報を返します。",
+        "params": {
+          "texture": "描画するテクスチャ",
+          "width": "描画する幅",
+          "height": "描画する高さ",
+          "shader": "描画に使用するシェーダー。省略可能。"
+        }
+      },
+      "tr": {
+        "summary": "Draws using 9-patch",
+        "description": "The Texture used for drawing must have 9-patch information loaded.\nOnly Texture objects can be specified.",
+        "returns": "The margin information.",
+        "params": {
+          "texture": "The texture to draw.",
+          "width": "Width to draw.",
+          "height": "Height to draw.",
+          "shader": "The shader to use for drawing. Optional."
+        }
+      }
+    },
+    "Canvas.defaultShader": {
+      "hash": "a84be2e8239e",
+      "ja": {
+        "summary": "テクスチャの描画に使用されるデフォルトのシェーダー(drawTextureでtexture1枚のみ渡した時のシェーダー)",
+        "description": "設定もできるが、基本的に変更する必要はない。\nvoidを入れると組み込みの初期デフォルトシェーダーに戻る。\n\n既定シェーダーの a_opacity uniform は Canvas 生成時に 1.0 が設定される。\n半透明で描画したい場合のみ `canvas.defaultShader.a_opacity` を変更する。\n自作シェーダーで a_opacity を宣言した場合は呼び出し側での設定が必要\n(未設定の uniform は GL 初期値 0 = 完全透明になる点に注意)。"
+      },
+      "tr": {
+        "summary": "The default shader used to draw textures (the shader used when drawTexture is given a single texture)",
+        "description": "It can be set, but there is basically no need to change it.\nAssigning void restores the built-in initial default shader.\n\nThe a_opacity uniform of the default shader is set to 1.0 when the Canvas is created.\nChange `canvas.defaultShader.a_opacity` only when you want to draw semi-transparently.\nIf your own shader declares a_opacity, the caller must set it\n(note that an unset uniform has the GL initial value 0, which is fully transparent)."
+      }
+    },
+    "Canvas.defaultFillShader": {
+      "hash": "3dcf4eff780d",
+      "ja": {
+        "summary": "fill時に使用されるデフォルトのシェーダー",
+        "description": "設定もできるが、基本的に変更する必要はない\nvoidを入れると組み込みの初期デフォルトシェーダーに戻る。"
+      },
+      "tr": {
+        "summary": "The default shader used by fill",
+        "description": "It can be set, but there is basically no need to change it.\nAssigning void restores the built-in initial default shader."
+      }
+    },
+    "Canvas.width": {
+      "hash": "e46a3e8296ad",
+      "ja": {
+        "summary": "描画領域の幅",
+        "description": "基本的にはクライアント領域と一致、Windowリサイズから再描画まで一時的にずれる期間(1フレーム)があります。"
+      },
+      "tr": {
+        "summary": "Width of the drawing area",
+        "description": "Normally matches the client area, but there is a brief period (one frame) between a Window resize and the redraw when they differ."
+      }
+    },
+    "Canvas.height": {
+      "hash": "87b26a4b3e48",
+      "ja": {
+        "summary": "描画領域の高さ",
+        "description": "基本的にはクライアント領域と一致、Windowリサイズから再描画まで一時的にずれる期間(1フレーム)があります。"
+      },
+      "tr": {
+        "summary": "Height of the drawing area",
+        "description": "Normally matches the client area, but there is a brief period (one frame) between a Window resize and the redraw when they differ."
+      }
+    },
+    "Canvas.clipRect": {
+      "hash": "36235fa4aaef",
+      "ja": {
+        "summary": "クリッピング用矩形のRectクラス",
+        "description": "canvas.clipRect.set( l, t, r, b ); 等で呼び出せます。\nenableClipRect で有効/無効設定可"
+      },
+      "tr": {
+        "summary": "Rect object for the clipping rectangle",
+        "description": "Use it as in canvas.clipRect.set( l, t, r, b );.\nEnable or disable it with enableClipRect."
+      }
+    },
+    "Canvas.enableClipRect": {
+      "hash": "3935bfb05ab7",
+      "ja": {
+        "summary": "矩形でクリッピングするかどうかの設定",
+        "description": "true の時、clipRectプロパティによってクリッピングされる"
+      },
+      "tr": {
+        "summary": "Whether to clip with a rectangle",
+        "description": "When true, drawing is clipped by the clipRect property."
+      }
+    },
+    "Canvas.beginEffect": {
+      "hash": "5fd88ba1bd46",
+      "ja": {
+        "summary": "ポストエフェクトの捕捉を開始する",
+        "description": "ここから [endEffect](#endeffect) までの描画を中間バッファ\n(透明クリア済み) に捕捉する。ネスト可。閉じ忘れはフレーム終端で破棄され\n警告ログが出る。\nコマンド仕様や内部構造の詳細は\n[3D グラフィックシステム](../guide/Graphic3DSystem.md) を参照。"
+      },
+      "tr": {
+        "summary": "Starts capturing for a post effect",
+        "description": "Captures the drawing from here until [endEffect](#endeffect) into an intermediate buffer\n(cleared to transparent). Can be nested. If you forget to close it, it is discarded at the end of the frame\nand a warning is logged.\nFor details of the command specification and internal structure, see\n[3D Graphics System](../guide/Graphic3DSystem.md)."
+      }
+    },
+    "Canvas.endEffect": {
+      "hash": "18211840c991",
+      "ja": {
+        "summary": "捕捉した描画に加工コマンド列を適用して合成する",
+        "description": "[beginEffect](#begineffect) からの描画に commands を順に\n適用し、現在の blendMode で直前の描画先へ合成する。加工は CPU 読み戻し\nなしに GPU 内で完結する。\n\nコマンドは `%[ cmd:\"名前\", ... ]` の Dictionary 配列で指定する:\nLUT 系 ( gamma / adjustGamma / light / lut )、\n混合系 ( grayscale / colorize / modulate / noise / generateWhiteNoise /\novercolor )、近傍系 ( boxBlur / gaussianBlur )。\n各コマンドのパラメータと融合規則は\n[3D グラフィックシステム](../guide/Graphic3DSystem.md) を参照。\n\nopacity (0〜255) を指定すると、合成時に捕捉内容の α へ掛ける (gles プラグインの\nGLESAdaptor.endEffect と同じ)。OpenGL 描画・GPU 描画の Canvas とも同じ結果になる。",
+        "params": {
+          "commands": "加工コマンド ( Dictionary ) の配列。省略すると素通し合成。",
+          "opacity": "合成時の不透明度 (0〜255)。"
+        }
+      },
+      "tr": {
+        "summary": "Applies a sequence of processing commands to the captured drawing and composites it",
+        "description": "Applies commands in order to the drawing since [beginEffect](#begineffect)\nand composites the result into the previous drawing target with the current blendMode. The processing completes\nentirely on the GPU without reading back to the CPU.\n\nCommands are specified as an array of Dictionaries of the form `%[ cmd:\"name\", ... ]`:\nLUT-based (gamma / adjustGamma / light / lut),\nmixing (grayscale / colorize / modulate / noise / generateWhiteNoise /\novercolor), and neighborhood (boxBlur / gaussianBlur).\nFor the parameters of each command and the fusion rules, see\n[3D Graphics System](../guide/Graphic3DSystem.md).\n\nIf opacity (0 to 255) is specified, it is multiplied into the alpha of the captured content when compositing (the same as\nGLESAdaptor.endEffect in the gles plugin). The result is the same for both OpenGL-based and GPU-based Canvas.",
+        "params": {
+          "commands": "An array of processing commands (Dictionaries). If omitted, the capture is composited unchanged.",
+          "opacity": "Opacity when compositing (0 to 255)."
+        }
+      }
+    },
+    "Canvas.beginMaskClip": {
+      "hash": "63be4878af0d",
+      "ja": {
+        "summary": "マスククリップの捕捉を開始する",
+        "description": "ここから [endMaskClip](#endmaskclip) までの描画を捕捉する。\nどんな描画にも安全に使える画像クリップ方式。"
+      },
+      "tr": {
+        "summary": "Starts capturing for a mask clip",
+        "description": "Captures the drawing from here until [endMaskClip](#endmaskclip).\nAn image-based clipping method that is safe to use with any kind of drawing."
+      }
+    },
+    "Canvas.endMaskClip": {
+      "hash": "8392f13a645b",
+      "ja": {
+        "summary": "捕捉した描画にマスクの α を乗算して合成する",
+        "description": "mask の α を乗算して直前の描画先へ合成する。マスク矩形の\n外側は α=0 (完全クリップ)。CPU 版 Layer.clipAlphaRect 相当。",
+        "params": {
+          "mask": "マスクに使う Texture / Offscreen。void で素通し合成。",
+          "x": "マスクを置く X 位置",
+          "y": "マスクを置く Y 位置"
+        }
+      },
+      "tr": {
+        "summary": "Multiplies the captured drawing by the mask alpha and composites it",
+        "description": "Multiplies by the alpha of mask and composites into the previous drawing target. Outside the mask\nrectangle, alpha=0 (fully clipped). Equivalent to the CPU-side Layer.clipAlphaRect.",
+        "params": {
+          "mask": "The Texture / Offscreen to use as the mask. void composites unchanged.",
+          "x": "X position at which to place the mask.",
+          "y": "Y position at which to place the mask."
+        }
+      }
+    },
+    "Canvas.beginStencilClip": {
+      "hash": "a34b344979db",
+      "ja": {
+        "summary": "ステンシルクリップを開始する",
+        "description": "マスクの α をステンシルバッファへ書き込み、\n[endStencilClip](#endstencilclip) までの描画を切り抜く。単純なテクスチャ\n描画向けの軽量方式 (自前でステンシルを使う描画とは競合するので、その\n場合はマスククリップを使う)。",
+        "params": {
+          "mask": "マスクに使う Texture / Offscreen",
+          "x": "マスクを置く X 位置",
+          "y": "マスクを置く Y 位置",
+          "threshold": "α 閾値 ( 1〜255 )"
+        }
+      },
+      "tr": {
+        "summary": "Starts a stencil clip",
+        "description": "Writes the mask alpha into the stencil buffer and clips the drawing until\n[endStencilClip](#endstencilclip). A lightweight method for simple texture\ndrawing (it conflicts with drawing that uses the stencil itself; in that\ncase use a mask clip).",
+        "params": {
+          "mask": "The Texture / Offscreen to use as the mask.",
+          "x": "X position at which to place the mask.",
+          "y": "Y position at which to place the mask.",
+          "threshold": "Alpha threshold (1 to 255)."
+        }
+      }
+    },
+    "Canvas.endStencilClip": {
+      "hash": "39b0f0bdf9fb",
+      "ja": {
+        "summary": "ステンシルクリップを終了する"
+      },
+      "tr": {
+        "summary": "Ends the stencil clip"
+      }
+    },
+    "Canvas.enableCulling": {
+      "hash": "3e4fa4c0b74a",
+      "ja": {
+        "summary": "表裏カリングを行うかどうかの設定",
+        "description": "true の時は行う、false の時は行わない、デフォルトはfalse。"
+      },
+      "tr": {
+        "summary": "Whether to perform face culling",
+        "description": "true enables it and false disables it. The default is false."
+      }
+    },
+    "Canvas.flush": {
+      "hash": "bb67755a208f",
+      "ja": {
+        "summary": "描画をフラッシュする",
+        "description": "描画を反映したいrenderTargetを入れ替える場合などに使われます。\nonDraw中にrenderTargetを入れ替えると、内部的にflushは呼ばれるので、明示的な呼び出しは不要です。"
+      },
+      "tr": {
+        "summary": "Flushes drawing",
+        "description": "Used, for example, when switching the renderTarget whose drawing you want to commit.\nSwitching renderTarget during onDraw calls flush internally, so an explicit call is not needed."
+      }
+    },
+    "Canvas.drawText": {
+      "hash": "6ac87d1ca24c",
+      "ja": {
+        "summary": "テキスト描画(未実装)",
+        "params": {
+          "font": "フォント",
+          "x": "X位置",
+          "y": "Y位置",
+          "text": "テキスト",
+          "color": "色指定"
+        }
+      },
+      "tr": {
+        "summary": "Draws text (not implemented)",
+        "params": {
+          "font": "Font.",
+          "x": "X position.",
+          "y": "Y position.",
+          "text": "Text.",
+          "color": "Color."
+        }
+      }
+    }
+  }
+}

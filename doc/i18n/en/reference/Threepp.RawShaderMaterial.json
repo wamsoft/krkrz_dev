@@ -1,0 +1,61 @@
+{
+  "class": "Threepp.RawShaderMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.RawShaderMaterial": {
+      "hash": "13f587136b16",
+      "ja": {
+        "summary": "Raw シェーダーマテリアル",
+        "description": "threepp組み込みのuniformやattributeなしのカスタムシェーダーです。"
+      },
+      "tr": {
+        "summary": "Raw shader material",
+        "description": "A custom shader without threepp's built-in uniforms and attributes."
+      }
+    },
+    "krkrthreepp:Threepp.RawShaderMaterial.RawShaderMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.RawShaderMaterial.type": {
+      "hash": "f8e43a197ac3",
+      "ja": {
+        "summary": "\"RawShaderMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"RawShaderMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.RawShaderMaterial.vertexShader": {
+      "hash": "9f649b6b17e2",
+      "ja": {
+        "summary": "頂点シェーダーコード"
+      },
+      "tr": {
+        "summary": "Vertex shader code"
+      }
+    },
+    "krkrthreepp:Threepp.RawShaderMaterial.fragmentShader": {
+      "hash": "1bd21ef81cfb",
+      "ja": {
+        "summary": "フラグメントシェーダーコード"
+      },
+      "tr": {
+        "summary": "Fragment shader code"
+      }
+    },
+    "krkrthreepp:Threepp.RawShaderMaterial.uniformsNeedUpdate": {
+      "hash": "36b4a1d1f662",
+      "ja": {
+        "summary": "uniformの更新が必要か"
+      },
+      "tr": {
+        "summary": "Whether the uniforms need to be updated"
+      }
+    }
+  }
+}

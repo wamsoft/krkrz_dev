@@ -1,0 +1,49 @@
+{
+  "class": "Threepp.Sprite",
+  "entries": {
+    "krkrthreepp:Threepp.Sprite": {
+      "hash": "79848edea9ba",
+      "ja": {
+        "summary": "スプライトオブジェクト",
+        "description": "常にカメラを向く2D平面です。"
+      },
+      "tr": {
+        "summary": "Sprite object",
+        "description": "A 2D plane that always faces the camera."
+      }
+    },
+    "krkrthreepp:Threepp.Sprite.Sprite": {
+      "hash": "591cd0765e5e",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "material": "マテリアル (SpriteMaterial)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "material": "Material (SpriteMaterial)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Sprite.type": {
+      "hash": "e9446be0c3d8",
+      "ja": {
+        "summary": "\"Sprite\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"Sprite\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Sprite.center": {
+      "hash": "c3bb9de65383",
+      "ja": {
+        "summary": "中心位置 (Vector2、読み取り専用)"
+      },
+      "tr": {
+        "summary": "Center position (Vector2, read-only)"
+      }
+    }
+  }
+}

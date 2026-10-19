@@ -1,0 +1,97 @@
+{
+  "class": "Threepp.MeshPhongMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.MeshPhongMaterial": {
+      "hash": "330c176043c8",
+      "ja": {
+        "summary": "Phong マテリアル",
+        "description": "拡散反射と鏡面反射を考慮したマテリアルです。光沢のある表面に適しています。"
+      },
+      "tr": {
+        "summary": "Phong material",
+        "description": "A material that models both diffuse and specular reflection. Suitable for shiny surfaces."
+      }
+    },
+    "krkrthreepp:Threepp.MeshPhongMaterial.MeshPhongMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.MeshPhongMaterial.type": {
+      "hash": "c981c774b371",
+      "ja": {
+        "summary": "\"MeshPhongMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"MeshPhongMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshPhongMaterial.color": {
+      "hash": "7df053f299de",
+      "ja": {
+        "summary": "色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshPhongMaterial.emissive": {
+      "hash": "46338bd53dc5",
+      "ja": {
+        "summary": "発光色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Emissive color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshPhongMaterial.specular": {
+      "hash": "ce2265e6ebc7",
+      "ja": {
+        "summary": "鏡面反射色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Specular color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshPhongMaterial.shininess": {
+      "hash": "359fabd0accd",
+      "ja": {
+        "summary": "光沢度"
+      },
+      "tr": {
+        "summary": "Shininess"
+      }
+    },
+    "krkrthreepp:Threepp.MeshPhongMaterial.wireframe": {
+      "hash": "27e1aa449133",
+      "ja": {
+        "summary": "ワイヤーフレーム表示"
+      },
+      "tr": {
+        "summary": "Renders as wireframe"
+      }
+    },
+    "krkrthreepp:Threepp.MeshPhongMaterial.wireframeLinewidth": {
+      "hash": "c1d0eb798128",
+      "ja": {
+        "summary": "ワイヤーフレームの線幅"
+      },
+      "tr": {
+        "summary": "Wireframe line width"
+      }
+    },
+    "krkrthreepp:Threepp.MeshPhongMaterial.flatShading": {
+      "hash": "52340f07423e",
+      "ja": {
+        "summary": "フラットシェーディング"
+      },
+      "tr": {
+        "summary": "Flat shading"
+      }
+    }
+  }
+}

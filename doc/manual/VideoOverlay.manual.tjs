@@ -465,9 +465,9 @@ class VideoOverlay {
 	property segmentLoopStartFrame { getter; }
 
 	/**
-	 * セグメントループの開始フレーム
+	 * セグメントループの終了フレーム
 	 *
-	 * セグメントループの始端フレームです。
+	 * セグメントループの終端フレームです。
 	 * @see VideoOverlay.setSegmentLoop
 	 */
 	property segmentLoopEndFrame { getter; }

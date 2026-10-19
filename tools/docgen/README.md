@@ -184,3 +184,39 @@ read-write のものは bare 宣言のまま据え置き（bare = rw が規約�
 
 mkdocs の設定は `mkdocs.yml`（リポジトリ直下）。検索は組み込み plugin
 （lunr.js ベース、日本語対応の separator 設定済み）。
+
+## 翻訳 (公開ドキュメントの他言語版)
+
+方針の SSOT は [TODO-i18n.md](../../TODO-i18n.md) の C。対象は公開サイトの範囲だけ。
+サイトは mkdocs-static-i18n (接尾辞方式) で、`Foo.md` の訳を隣の `Foo.<lang>.md` に置く。
+訳の無いページは日本語版がそのまま出る。翻訳用の資材 (カタログ・用語集) は
+`doc/i18n/` に置き、サイトには出さない。訳語は [doc/i18n/glossary.md](../../doc/i18n/glossary.md) に揃える。
+
+| ツール | 役割 |
+|---|---|
+| `tjsdoc.py --extract <lang>` | reference の翻訳カタログ `doc/i18n/<lang>/reference/<Class>.json` を作成・更新 (原文が変わった訳には `stale` が付く) |
+| `refi18n.py dump <lang> <Class>` | 未訳 / 要再訳の原文を JSON で表示 |
+| `refi18n.py merge <lang> <Class> <file>` | 訳 (`{key: {summary, description, returns, params}}`) をカタログへ取り込む |
+| `tjsdoc.py --lang <lang>` | カタログの訳を当てて `doc/reference/<Class>.<lang>.md` を生成 (訳が 1 つも無いクラスは出さない) |
+| `check_translations.py <lang>` | 手書きページ (`source_hash` 比較) と reference カタログの訳済み / 要再訳 / 未訳を集計 |
+| `check_translations.py <lang> --stamp <file>` | 訳し終えたページの `source_hash` を今の原文に合わせる |
+
+reference の見出し語 (「引数」等) は `doc/i18n/<lang>/reference_labels.json`。
+
+### 手順 (reference)
+
+```bash
+python tools/docgen/tjsdoc.py --in doc/manual --in src/plugins --extract en
+python tools/docgen/refi18n.py dump en Layer > /tmp/Layer.ja.json   # これを訳して
+python tools/docgen/refi18n.py merge en Layer /tmp/Layer.en.json
+python tools/docgen/tjsdoc.py --in doc/manual --in src/plugins --lang en
+```
+
+manual.tjs を直したら `--extract` をやり直す (日本語の再生成と同じタイミング)。
+
+### 手順 (手書きページ)
+
+1. `doc/guide/Foo.md` を訳して `doc/guide/Foo.en.md` を作る (リンク先は `Foo.md` のまま書く。
+   英語版が無いページへのリンクは日本語版へ落ちる)
+2. `python tools/docgen/check_translations.py en --stamp doc/guide/Foo.en.md`
+3. nav の見出しは `mkdocs.yml` の `nav_translations` (en)

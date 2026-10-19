@@ -1,0 +1,238 @@
+{
+  "class": "Threepp.Box3",
+  "entries": {
+    "krkrthreepp:Threepp.Box3": {
+      "hash": "e4fab2c9a6eb",
+      "ja": {
+        "summary": "軸平行境界ボックス (AABB) クラス"
+      },
+      "tr": {
+        "summary": "Axis-aligned bounding box (AABB) class"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.Box3": {
+      "hash": "de0926ec2b81",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "min": "最小座標 (Vector3)",
+          "max": "最大座標 (Vector3)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "min": "Lower bound (Vector3).",
+          "max": "Upper bound (Vector3)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Box3.min": {
+      "hash": "c3384eae6658",
+      "ja": {
+        "summary": "最小座標（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Lower bound (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.max": {
+      "hash": "400d06d05732",
+      "ja": {
+        "summary": "最大座標（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Upper bound (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.set": {
+      "hash": "6a1d88aceb4a",
+      "ja": {
+        "summary": "値を設定"
+      },
+      "tr": {
+        "summary": "Sets the values"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.clone": {
+      "hash": "85fb5d83b57e",
+      "ja": {
+        "summary": "クローン"
+      },
+      "tr": {
+        "summary": "Clones the box"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another box"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.makeEmpty": {
+      "hash": "eed6a7f45d0b",
+      "ja": {
+        "summary": "空にする"
+      },
+      "tr": {
+        "summary": "Makes the box empty"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.isEmpty": {
+      "hash": "34a58d6d1801",
+      "ja": {
+        "summary": "空かどうか"
+      },
+      "tr": {
+        "summary": "Whether the box is empty"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.getCenter": {
+      "hash": "7dd560d21ba3",
+      "ja": {
+        "summary": "中心を取得"
+      },
+      "tr": {
+        "summary": "Gets the center"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.getSize": {
+      "hash": "b1b5bafbab36",
+      "ja": {
+        "summary": "サイズを取得"
+      },
+      "tr": {
+        "summary": "Gets the size"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.expandByPoint": {
+      "hash": "57487c01e606",
+      "ja": {
+        "summary": "点で拡張"
+      },
+      "tr": {
+        "summary": "Expands the box to include a point"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.expandByVector": {
+      "hash": "5e51d4dcbe15",
+      "ja": {
+        "summary": "ベクトルで拡張"
+      },
+      "tr": {
+        "summary": "Expands the box by a vector"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.expandByScalar": {
+      "hash": "4f2d680f4214",
+      "ja": {
+        "summary": "スカラーで拡張"
+      },
+      "tr": {
+        "summary": "Expands the box by a scalar"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.containsPoint": {
+      "hash": "5f9389247350",
+      "ja": {
+        "summary": "点を含むか"
+      },
+      "tr": {
+        "summary": "Whether the box contains a point"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.containsBox": {
+      "hash": "9903099183a6",
+      "ja": {
+        "summary": "ボックスを含むか"
+      },
+      "tr": {
+        "summary": "Whether the box contains another box"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.intersectsBox": {
+      "hash": "f36d014500a1",
+      "ja": {
+        "summary": "ボックスと交差するか"
+      },
+      "tr": {
+        "summary": "Whether the box intersects another box"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.intersectsSphere": {
+      "hash": "393f00bfc6a1",
+      "ja": {
+        "summary": "球と交差するか"
+      },
+      "tr": {
+        "summary": "Whether the box intersects a sphere"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.intersectsPlane": {
+      "hash": "2e714ade0a7e",
+      "ja": {
+        "summary": "平面と交差するか"
+      },
+      "tr": {
+        "summary": "Whether the box intersects a plane"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.distanceToPoint": {
+      "hash": "f70c67301822",
+      "ja": {
+        "summary": "点との距離"
+      },
+      "tr": {
+        "summary": "Distance to a point"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.intersect": {
+      "hash": "56e860688959",
+      "ja": {
+        "summary": "交差部分を取得"
+      },
+      "tr": {
+        "summary": "Gets the intersection"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.union_": {
+      "hash": "70dd627a970b",
+      "ja": {
+        "summary": "和集合を取得"
+      },
+      "tr": {
+        "summary": "Gets the union"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.applyMatrix4": {
+      "hash": "74a4de2a266d",
+      "ja": {
+        "summary": "行列を適用"
+      },
+      "tr": {
+        "summary": "Applies a matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.translate": {
+      "hash": "89ec109eb2ec",
+      "ja": {
+        "summary": "平行移動"
+      },
+      "tr": {
+        "summary": "Translates the box"
+      }
+    },
+    "krkrthreepp:Threepp.Box3.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

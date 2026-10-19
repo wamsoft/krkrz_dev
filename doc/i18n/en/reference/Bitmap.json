@@ -1,0 +1,445 @@
+{
+  "class": "Bitmap",
+  "entries": {
+    "Bitmap": {
+      "hash": "f9e6ab979116",
+      "ja": {
+        "summary": "Bitmap クラスは、画像情報を保持するクラスです。",
+        "description": "[Layer](Layer.md) と異なり表示要素ではないため、ウィンドウやレイヤツリーとは無関係に単体で生成でき、\n描画しても再描画通知は発生しません。画面に出さない作業用画像や素材の保持に用います。\n\nBitmap 自身は描画メソッドを持ちません。合成・塗りつぶし・文字描画・フィルタなどを行うには\n[ImageFunction](ImageFunction.md) クラスのメソッドに Bitmap オブジェクトを渡します。\n\nLayer との受け渡しは [Layer.copyToBitmapFromMainImage](Layer.md#copytobitmapfrommainimage) /\n[Layer.copyFromBitmapToMainImage](Layer.md#copyfrombitmaptomainimage) で行うほか、\nLayer の `copyRect` / `operateRect` / `stretchCopy` / `operateStretch` / `affineCopy` / `operateAffine` /\n`copy9Patch` にはコピー元 ( 演算元 ) として Bitmap を直接指定できます。\n\n三者の関係と使い分けは [Layer と Bitmap と ImageFunction](../guide/LayerAndBitmap.md) を参照してください。"
+      },
+      "tr": {
+        "summary": "The Bitmap class holds an image.",
+        "description": "Unlike [Layer](Layer.md), it is not a display element, so it can be created on its own, independent of any window or layer tree,\nand drawing to it does not trigger redraw notifications. Use it for off-screen working images and for holding assets.\n\nBitmap itself has no drawing methods. To composite, fill, draw text, apply filters and so on,\npass the Bitmap object to methods of the [ImageFunction](ImageFunction.md) class.\n\nTo exchange images with a Layer, use [Layer.copyToBitmapFromMainImage](Layer.md#copytobitmapfrommainimage) /\n[Layer.copyFromBitmapToMainImage](Layer.md#copyfrombitmaptomainimage). In addition, a Bitmap can be passed directly as the source (operand) of\nLayer's `copyRect` / `operateRect` / `stretchCopy` / `operateStretch` / `affineCopy` / `operateAffine` /\n`copy9Patch`.\n\nFor how the three relate and when to use which, see [Layer, Bitmap and ImageFunction](../guide/LayerAndBitmap.md)."
+      }
+    },
+    "Bitmap.Bitmap": {
+      "hash": "f47c6548f54e",
+      "ja": {
+        "summary": "Bitmap オブジェクトの構築",
+        "description": "Bitmap クラスのオブジェクトを構築します。\n\n初期状態では 幅と高さは32ピクセルになっています。"
+      },
+      "tr": {
+        "summary": "Constructs a Bitmap object",
+        "description": "Constructs an object of the Bitmap class.\n\nInitially, the width and height are 32 pixels."
+      }
+    },
+    "Bitmap.Bitmap@2": {
+      "hash": "50d4b236dd4c",
+      "ja": {
+        "summary": "Bitmap オブジェクトの構築",
+        "description": "Bitmap クラスのオブジェクトを指定の大きさで構築します。",
+        "params": {
+          "width": "画像の幅を指定します。",
+          "height": "画像の高さを指定します。",
+          "bpp": "画像の各ピクセルのビット数を指定します。\n\n32 か 8 のいずれかを指定してください。"
+        }
+      },
+      "tr": {
+        "summary": "Constructs a Bitmap object",
+        "description": "Constructs an object of the Bitmap class with the given size.",
+        "params": {
+          "width": "Image width.",
+          "height": "Image height.",
+          "bpp": "Number of bits per pixel.\n\nSpecify either 32 or 8."
+        }
+      }
+    },
+    "Bitmap.Bitmap@3": {
+      "hash": "8bea1349ac6a",
+      "ja": {
+        "summary": "Bitmap オブジェクトの構築",
+        "description": "Bitmap クラスのオブジェクトをファイルから構築します。",
+        "params": {
+          "filename": "画像のファイル名を指定します。",
+          "colorkey": "カラーキーを指定します。\n\n値は [Layer.loadImages](Layer.md#loadimages) と同じです。"
+        }
+      },
+      "tr": {
+        "summary": "Constructs a Bitmap object",
+        "description": "Constructs an object of the Bitmap class from a file.",
+        "params": {
+          "filename": "Image file name.",
+          "colorkey": "Color key.\n\nThe values are the same as for [Layer.loadImages](Layer.md#loadimages)."
+        }
+      }
+    },
+    "Bitmap.onLoaded": {
+      "hash": "aea287a913ef",
+      "ja": {
+        "summary": "非同期読込みが完了した",
+        "description": "非同期読込みが完了した時に発生します。\n\n読み込んだ画像は [Layer.copyFromBitmapToMainImage](Layer.md#copyfrombitmaptomainimage) で Layer にコピーできます。\n\n読込み処理は非同期であるため、読込みが完了した時に、その画像を渡す Layer が既に無効化されている可能性があります。\n\n本イベントで他のオブジェクトへアクセスする場合は、無効化されていないか確認して下さい。\n\nもしくは、本イベントが完了するまで対象オブジェクトが無効化されないようにしてください。",
+        "params": {
+          "meta": "読み込んだ画像のタグ情報です。",
+          "async": "非同期で読み込まれたかどうかです。\n\n画像データがキャッシュ内にある場合、 [Bitmap.loadAsync](Bitmap.md#loadasync) 実行中に本イベントが発生します。",
+          "error": "画像読込みでエラーが発生したかどうかです。",
+          "message": "エラーメッセージです。\n\nエラーが発生した場合、エラーメッセージが渡されます。"
+        }
+      },
+      "tr": {
+        "summary": "Asynchronous loading has completed",
+        "description": "Fired when asynchronous loading completes.\n\nThe loaded image can be copied to a Layer with [Layer.copyFromBitmapToMainImage](Layer.md#copyfrombitmaptomainimage).\n\nBecause loading is asynchronous, the Layer you intend to pass the image to may already have been invalidated when loading completes.\n\nIf you access other objects in this event, check that they have not been invalidated.\n\nAlternatively, make sure the target objects are not invalidated until this event completes.",
+        "params": {
+          "meta": "Tag information of the loaded image.",
+          "async": "Whether the image was loaded asynchronously.\n\nIf the image data is in the cache, this event fires while [Bitmap.loadAsync](Bitmap.md#loadasync) is still executing.",
+          "error": "Whether an error occurred while loading the image.",
+          "message": "Error message.\n\nIf an error occurred, the error message is passed here."
+        }
+      }
+    },
+    "Bitmap.getPixel": {
+      "hash": "54f77307fedf",
+      "ja": {
+        "summary": "ピクセル値の取得",
+        "description": "画像のピクセル値を取得します。",
+        "returns": "ピクセル値",
+        "params": {
+          "x": "取得する x 座標値をピクセル単位で指定します。",
+          "y": "取得する y 座標値をピクセル単位で指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets a pixel value",
+        "description": "Gets a pixel value of the image.",
+        "returns": "Pixel value",
+        "params": {
+          "x": "x coordinate to read, in pixels.",
+          "y": "y coordinate to read, in pixels."
+        }
+      }
+    },
+    "Bitmap.setPixel": {
+      "hash": "d7730b64861a",
+      "ja": {
+        "summary": "ピクセル値の設定",
+        "description": "画像のピクセル値を設定します。",
+        "params": {
+          "x": "設定する x 座標値をピクセル単位で指定します。",
+          "y": "設定する y 座標値をピクセル単位で指定します。",
+          "value": "設定するピクセル値を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets a pixel value",
+        "description": "Sets a pixel value of the image.",
+        "params": {
+          "x": "x coordinate to write, in pixels.",
+          "y": "y coordinate to write, in pixels.",
+          "value": "Pixel value to set."
+        }
+      }
+    },
+    "Bitmap.getMaskPixel": {
+      "hash": "dd2efa6fff4b",
+      "ja": {
+        "summary": "ピクセルのアルファ値の取得",
+        "description": "画像のピクセルのアルファ値を取得します。",
+        "returns": "ピクセルのアルファ値",
+        "params": {
+          "x": "取得する x 座標値をピクセル単位で指定します。",
+          "y": "取得する y 座標値をピクセル単位で指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the alpha value of a pixel",
+        "description": "Gets the alpha value of a pixel of the image.",
+        "returns": "Alpha value of the pixel",
+        "params": {
+          "x": "x coordinate to read, in pixels.",
+          "y": "y coordinate to read, in pixels."
+        }
+      }
+    },
+    "Bitmap.setMaskPixel": {
+      "hash": "8ff3760578fd",
+      "ja": {
+        "summary": "ピクセルのアルファ値の設定",
+        "description": "画像のピクセルのアルファ値を設定します。",
+        "params": {
+          "x": "設定する x 座標値をピクセル単位で指定します。",
+          "y": "設定する y 座標値をピクセル単位で指定します。",
+          "value": "設定するピクセルのアルファ値を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the alpha value of a pixel",
+        "description": "Sets the alpha value of a pixel of the image.",
+        "params": {
+          "x": "x coordinate to write, in pixels.",
+          "y": "y coordinate to write, in pixels.",
+          "value": "Alpha value of the pixel to set."
+        }
+      }
+    },
+    "Bitmap.independ": {
+      "hash": "39b6d9a33f43",
+      "ja": {
+        "summary": "画像の共有の解除",
+        "description": "画像の共有状態を強制的に解除します。\n\n吉里吉里は、assignImages などで画像をまるごとコピーした場合、実際には\n画像バッファのコピーを行わず、同一の画像を共有するようになります。\n\n通常、画像に変更を加えようとする直前でこの共有状態は自動的に解除されますが、\nこのメソッドで強制的に解除することができます。\n\ncopy 引数に false を指定した場合は、画像の共有は解除されますが、元の画像を\n引き継ぐことは保証されません ( 画像の内容は不定になります ) が、共有の解除を\nより高速に行うことができます。画像全部を書き換える場合は元の画像を\n引き継ぐ必要はありませんので、描画を行う前にあらかじめこのメソッドに false を\n指定して呼び出すと効率が良くなる場合があります。\n\nこのメソッドは、画像が共有されていない場合は何もしません。",
+        "params": {
+          "copy": "共有状態を解除する際、元の画像をコピーするかどうかを指定します。\n\n真を指定すると元の画像をコピーします。偽を指定すると元の画像はコピーされず、画像の\n内容は不定となります。"
+        }
+      },
+      "tr": {
+        "summary": "Stops sharing the image",
+        "description": "Forces the image out of the shared state.\n\nWhen you copy a whole image, e.g. with assignImages, Kirikiri does not actually copy the\nimage buffer; the objects share the same image instead.\n\nNormally the sharing is broken automatically just before the image is modified,\nbut this method lets you break it explicitly.\n\nIf you pass false for the copy argument, the sharing is broken but the original image is not\nguaranteed to be carried over (the image contents become undefined); in exchange, breaking the sharing\nis faster. If you are going to rewrite the whole image you do not need the original,\nso calling this method with false before drawing may be more efficient.\n\nThis method does nothing if the image is not shared.",
+        "params": {
+          "copy": "Whether to copy the original image when breaking the sharing.\n\nIf true, the original image is copied. If false, it is not copied and the image\ncontents are undefined."
+        }
+      }
+    },
+    "Bitmap.setSize": {
+      "hash": "f33206a37d35",
+      "ja": {
+        "summary": "画像サイズの設定",
+        "description": "画像サイズを指定します。",
+        "params": {
+          "width": "画像の横幅をピクセル単位で指定します。\n\nこの値は [Bitmap.width](Bitmap.md#width) プロパティでも取得や設定ができます。",
+          "height": "画像の縦幅をピクセル単位で指定します。\n\nこの値は [Bitmap.height](Bitmap.md#height) プロパティでも取得や設定ができます。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the image size",
+        "description": "Sets the image size.",
+        "params": {
+          "width": "Image width in pixels.\n\nThis value can also be read and written via the [Bitmap.width](Bitmap.md#width) property.",
+          "height": "Image height in pixels.\n\nThis value can also be read and written via the [Bitmap.height](Bitmap.md#height) property."
+        }
+      }
+    },
+    "Bitmap.copyFrom": {
+      "hash": "0554ac54beb6",
+      "ja": {
+        "summary": "画像のコピー",
+        "description": "画像のコピーを行います。\n\nコピーといっても、実際は「同じ画像を二つ以上のオブジェクトで共有している」という状態になるだけなので\nこのメソッドはほとんど実行時間がかかりません。",
+        "params": {
+          "src": "コピー元の Bitmap オブジェクトを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Copies an image",
+        "description": "Copies an image.\n\nThe \"copy\" merely makes two or more objects share the same image,\nso this method takes almost no time.",
+        "params": {
+          "src": "Source Bitmap object."
+        }
+      }
+    },
+    "Bitmap.save": {
+      "hash": "cb4f6afd5327",
+      "ja": {
+        "summary": "画像の保存",
+        "description": "name で指定したストレージ (ファイル) に、type で指定した画像形式でファイルを保存します。",
+        "params": {
+          "name": "保存するストレージ名を指定します。",
+          "type": "保存する画像形式を文字列で指定します。現バージョンでは以下の形式を指定可能です。\n\n\"**bmp**\" または \"**bmp32**\"\n\n32bpp の BMP です。アルファチャンネル(マスク)も保存します。\n\n\"**bmp24**\"\n\n24bpp の BMP です。アルファチャンネル(マスク)は保存されません。\n\n\"**bmp8**\"\n\n8bpp の BMP です。アルファチャンネル(マスク)は保存されません。画像は\n252色の固定パレットによる4×4組織化ディザリングを用いて減色されます。\n\n\"**jpg**\"\n\nJPEG です。アルファチャンネル(マスク)は保存されません。画像は\nクオリティー90%で保存されます。\n\n\"**jpg###**\"\n\nJPEG です。アルファチャンネル(マスク)は保存されません。画像は\n###で指定されたクオリティーで保存されます。\"jpg010\" で 10%、\"jpg100\" で 100%、\"jpg080\" で 80%です。\n\n\"**png**\"\n\n32bpp の PNG です。アルファチャンネル(マスク)も保存します。\n\n\"**png24**\"\n\n24bpp の PNG です。アルファチャンネル(マスク)は保存されません。\n\n\"**tlg5**\"\n\n32bpp の TLG5 です。アルファチャンネル(マスク)も保存します。\n\n\"**tlg524**\"\n\n24bpp の TLG5 です。アルファチャンネル(マスク)は保存されません。\n\n\"**tlg6**\"\n\n32bpp の TLG6 です。アルファチャンネル(マスク)も保存します。\n\n\"**tlg624**\"\n\n24bpp の TLG6 です。アルファチャンネル(マスク)は保存されません。",
+          "meta": "TLG 形式の場合、保存するタグ情報を辞書形式で指定します。\n\nその他の形式の場合は追加オプションを指定します(1.3.0以降)。\n\n指定可能なオプションはgetSaveOptionで取得可能です。"
+        }
+      },
+      "tr": {
+        "summary": "Saves the image",
+        "description": "Saves the image to the storage (file) specified by name, in the image format specified by type.",
+        "params": {
+          "name": "Name of the storage to save to.",
+          "type": "Image format to save in, as a string. The current version supports the following formats.\n\n\"**bmp**\" or \"**bmp32**\"\n\n32bpp BMP. The alpha channel (mask) is saved too.\n\n\"**bmp24**\"\n\n24bpp BMP. The alpha channel (mask) is not saved.\n\n\"**bmp8**\"\n\n8bpp BMP. The alpha channel (mask) is not saved. The image is\ncolor-reduced with 4x4 ordered dithering to a fixed 252-color palette.\n\n\"**jpg**\"\n\nJPEG. The alpha channel (mask) is not saved. The image is\nsaved at 90% quality.\n\n\"**jpg###**\"\n\nJPEG. The alpha channel (mask) is not saved. The image is\nsaved at the quality given by ###: \"jpg010\" is 10%, \"jpg100\" is 100%, \"jpg080\" is 80%.\n\n\"**png**\"\n\n32bpp PNG. The alpha channel (mask) is saved too.\n\n\"**png24**\"\n\n24bpp PNG. The alpha channel (mask) is not saved.\n\n\"**tlg5**\"\n\n32bpp TLG5. The alpha channel (mask) is saved too.\n\n\"**tlg524**\"\n\n24bpp TLG5. The alpha channel (mask) is not saved.\n\n\"**tlg6**\"\n\n32bpp TLG6. The alpha channel (mask) is saved too.\n\n\"**tlg624**\"\n\n24bpp TLG6. The alpha channel (mask) is not saved.",
+          "meta": "For TLG formats, the tag information to save, as a dictionary.\n\nFor other formats, additional options (1.3.0 and later).\n\nThe available options can be obtained with getSaveOption."
+        }
+      }
+    },
+    "Bitmap.load": {
+      "hash": "290e4bb3b102",
+      "ja": {
+        "summary": "画像の読み込み",
+        "description": "画像を読み込みます。\n\n戻り値としてタグ情報(その画像のレイヤタイプや表示位置など、画像そのものに対する情報)の辞書配列が返ります。\n\n画像がタグ情報を持たない場合は null が返ります。\n\n現バージョンでは、タグ情報は PNG, TLG5/6 形式のみが持つことができます。取得可能な情報については、[画像フォーマットコンバータ](../guide/TPC.md) を参照してください。",
+        "returns": "タグ情報の辞書配列",
+        "params": {
+          "image": "読み込む画像ストレージを指定します。",
+          "colorkey": "読み込む画像のカラーキー ( 透明色 ) を指定します。\n\n0xRRGGBB 形式で色を指定すると、その色をカラーキーとします。\n\n`**clPalIdx**` に 任意のパレットインデックスを加算した数値を指定すると、\nそのパレットインデックスが透明色になります ( 256 色以下の画像の場合 )。\n\n`**clAdapt**` を指定すると、画像の一番上のラインにおいて\nもっとも多く使われている色が自動的に透明色になります。\n\n`**clAlphaMat**` に 0xRRGGBB\n形式の色を表す数値を加算したものを指定すると、画像がその色の上に\nαブレンド(ltAlphaの方式)を用いて重ね合わせられます。\nたとえば、(clAlphaMat + 0xffffff) を指定すると、\n読み込まれた画像が白い色の上に重ね合わせられます。\n画像は全て不透明な画像となります\n( 画像は全て不透明となりますが、\nこのモードではタグ情報はいっさい変更されないので\n注意してください )。"
+        }
+      },
+      "tr": {
+        "summary": "Loads an image",
+        "description": "Loads an image.\n\nReturns a dictionary of tag information (information about the image itself, such as its layer type and display position).\n\nIf the image has no tag information, null is returned.\n\nIn the current version, only PNG and TLG5/6 images can carry tag information. For the information available, see [Image Format Converter](../guide/TPC.md).",
+        "returns": "Dictionary of tag information",
+        "params": {
+          "image": "Image storage to load.",
+          "colorkey": "Color key (transparent color) of the image to load.\n\nIf you specify a color in 0xRRGGBB format, that color becomes the color key.\n\nIf you specify `**clPalIdx**` plus a palette index,\nthat palette index becomes transparent (for images with 256 colors or fewer).\n\nIf you specify `**clAdapt**`, the color used most often in the top line of the image\nautomatically becomes transparent.\n\nIf you specify `**clAlphaMat**` plus a color in 0xRRGGBB\nformat, the image is composited onto that color\nusing alpha blending (the ltAlpha method).\nFor example, specifying (clAlphaMat + 0xffffff)\ncomposites the loaded image onto white.\nThe resulting image is fully opaque\n(note that although the image becomes fully opaque,\nthis mode does not change the tag information at all)."
+        }
+      }
+    },
+    "Bitmap.loadAsync": {
+      "hash": "37a33c61e74c",
+      "ja": {
+        "summary": "画像の非同期読み込み",
+        "description": "画像を非同期で読み込みます。\n\n読込みの完了は [Bitmap.onLoaded](Bitmap.md#onloaded) で受け取れます。\n\n非同期読込み中か否かは [Bitmap.loading](Bitmap.md#loading) で確認できます。\n\n非同期読込み中は [Bitmap.loading](Bitmap.md#loading) 以外のメンバへアクセスすると例外が発生します。\n\n[Bitmap.onLoaded](Bitmap.md#onloaded) の説明も確認してください。",
+        "params": {
+          "image": "読み込む画像ストレージを指定します。\n\nここで指定するファイル名は拡張子を含んだものになることに注意してください。\n\n拡張子がないとファイルが見つからずエラーとなります。"
+        }
+      },
+      "tr": {
+        "summary": "Loads an image asynchronously",
+        "description": "Loads an image asynchronously.\n\nCompletion is reported via [Bitmap.onLoaded](Bitmap.md#onloaded).\n\nYou can check whether asynchronous loading is in progress with [Bitmap.loading](Bitmap.md#loading).\n\nWhile asynchronous loading is in progress, accessing any member other than [Bitmap.loading](Bitmap.md#loading) throws an exception.\n\nSee also the description of [Bitmap.onLoaded](Bitmap.md#onloaded).",
+        "params": {
+          "image": "Image storage to load.\n\nNote that the file name must include the extension.\n\nWithout an extension the file is not found and an error occurs."
+        }
+      }
+    },
+    "Bitmap.loadHeader": {
+      "hash": "3e2f0bf6fcd6",
+      "ja": {
+        "summary": "画像情報の読み込み(1.3.0以降)",
+        "description": "画像情報のみを読み込みます。\n\n画像の読み込みは行われないため、情報のみを得たい時は高速に読み込めます。\n\n返される辞書のwidth, heightは必須で、その他の情報は画像形式に依存します。",
+        "returns": "情報の辞書配列",
+        "params": {
+          "image": "読み込む画像ストレージを指定します。\n\nここで指定するファイル名は拡張子を含んだものになることに注意してください。\n\n拡張子がないとファイルが見つからずエラーとなります。"
+        }
+      },
+      "tr": {
+        "summary": "Loads image information (1.3.0 and later)",
+        "description": "Loads only the image information.\n\nThe image itself is not loaded, so this is fast when you only need the information.\n\nThe returned dictionary always contains width and height; other information depends on the image format.",
+        "returns": "Dictionary of information",
+        "params": {
+          "image": "Image storage to load.\n\nNote that the file name must include the extension.\n\nWithout an extension the file is not found and an error occurs."
+        }
+      }
+    },
+    "Bitmap.getSaveOption": {
+      "hash": "7b6391f8d56e",
+      "ja": {
+        "summary": "画像保存追加情報取得(1.3.0以降)",
+        "description": "画像保存時に指定可能な追加情報を取得します。",
+        "returns": "追加情報の辞書配列",
+        "params": {
+          "type": "画像形式を指定します。\n\n指定方法はsaveメソッドと同じ形式です。"
+        }
+      },
+      "tr": {
+        "summary": "Gets additional save options (1.3.0 and later)",
+        "description": "Gets the additional information that can be specified when saving an image.",
+        "returns": "Dictionary of additional information",
+        "params": {
+          "type": "Image format.\n\nSpecified in the same form as for the save method."
+        }
+      }
+    },
+    "Bitmap.width": {
+      "hash": "1feba852ffcb",
+      "ja": {
+        "summary": "画像横幅",
+        "description": "画像の横幅をピクセル単位で指定します。\n\n値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Image width",
+        "description": "Image width in pixels.\n\nThis property can also be set."
+      }
+    },
+    "Bitmap.height": {
+      "hash": "a51ad7f1e6ca",
+      "ja": {
+        "summary": "画像縦幅",
+        "description": "画像の縦幅をピクセル単位で指定します。\n\n値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Image height",
+        "description": "Image height in pixels.\n\nThis property can also be set."
+      }
+    },
+    "Bitmap.buffer": {
+      "hash": "235fca6af656",
+      "ja": {
+        "summary": "画像バッファポインタ",
+        "description": "画像 ( 色とマスク(不透明度)の情報を含む 32bpp のビットマップ ) の画像バッファ左上隅へのポインタ\nを表します。\n\nこのプロパティは、プラグインなどのために画像バッファへの直接のアクセスの手段を提供する\nためにあります。\n\n整数型で返されますが、プラグインなどでは適切な型 ( const unsigned long * 等 ) にキャストして使って\nください。\n\nこのプロパティで得られたポインタには値を書き込まないでください。\n[Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) で得られたポインタならば書き込むことができます。\n\n画像のサイズは [Bitmap.width](Bitmap.md#width) と [Bitmap.height](Bitmap.md#height) プロパティが\n表しています。\n\nポインタの計算方法は [Bitmap.bufferPitch](Bitmap.md#bufferpitch) を参照してください。"
+      },
+      "tr": {
+        "summary": "Image buffer pointer",
+        "description": "Pointer to the top-left corner of the image buffer (a 32bpp bitmap containing color and mask (opacity) information).\n\nThis property provides direct access to the image buffer for plugins and the like.\n\nIt is returned as an integer; in a plugin, cast it to an appropriate type (const unsigned long * etc.) before use.\n\nDo not write to the pointer obtained from this property.\nYou can write to the pointer obtained from [Bitmap.bufferForWrite](Bitmap.md#bufferforwrite).\n\nThe image size is given by the [Bitmap.width](Bitmap.md#width) and [Bitmap.height](Bitmap.md#height) properties.\n\nFor how to compute pointers, see [Bitmap.bufferPitch](Bitmap.md#bufferpitch)."
+      }
+    },
+    "Bitmap.bufferForWrite": {
+      "hash": "c2379f4a9db4",
+      "ja": {
+        "summary": "画像バッファポインタ(書き込み用)",
+        "description": "画像 ( 色とマスク(不透明度)の情報を含む 32bpp のビットマップ ) の画像バッファ左上隅へのポインタ\nを表します。\n\nこのプロパティは、プラグインなどのために画像バッファへの直接のアクセスの手段を提供する\nためにあります。\n\n整数型で返されますが、プラグインなどでは適切な型 ( unsigned long * 等 ) にキャストして使って\nください。\n\nこのプロパティで得られたポインタには [Bitmap.buffer](Bitmap.md#buffer) と異なり、\n値を書き込むことができます。吉里吉里内部では全く同じ画像は複数のオブジェト間で共有しますが、\nこのプロパティを参照するとその共有状態を解除します。\n\n画像のサイズは [Bitmap.width](Bitmap.md#width) と [Bitmap.height](Bitmap.md#height) プロパティが\n表しています。\n\nポインタの計算方法は [Bitmap.bufferPitch](Bitmap.md#bufferpitch) を参照してください。"
+      },
+      "tr": {
+        "summary": "Image buffer pointer (for writing)",
+        "description": "Pointer to the top-left corner of the image buffer (a 32bpp bitmap containing color and mask (opacity) information).\n\nThis property provides direct access to the image buffer for plugins and the like.\n\nIt is returned as an integer; in a plugin, cast it to an appropriate type (unsigned long * etc.) before use.\n\nUnlike [Bitmap.buffer](Bitmap.md#buffer), you can write to the pointer obtained from this property. Internally, Kirikiri shares identical images among multiple objects;\nreading this property breaks that sharing.\n\nThe image size is given by the [Bitmap.width](Bitmap.md#width) and [Bitmap.height](Bitmap.md#height) properties.\n\nFor how to compute pointers, see [Bitmap.bufferPitch](Bitmap.md#bufferpitch)."
+      }
+    },
+    "Bitmap.bufferPitch": {
+      "hash": "9ef36e6eb2d2",
+      "ja": {
+        "summary": "画像バッファピッチ",
+        "description": "画像 ( 色とマスク(不透明度)の情報を含む 32bpp のビットマップ ) の画像バッファのピッチ\n( 一つ下のスキャンラインまでのバイト数 ) を表します。\n\nこのプロパティは、プラグインなどのために画像バッファへの直接のアクセスの手段を提供する\nためにあります。\n\ntjs_uint32 が 32bit の整数型、tjs_uint8 が 8bit (1byte) の整数型として、画像位置 (x, y) への\nポインタは C 言語で書くと以下のように計算することができます。\n\n`( (tjs_uint32*)( (tjs_uint8*)buffer + y*bufferPitch )) + x`\n\nこのプロパティは、次のスキャンラインまでのピクセル数ではなく、バイト数を返すことに\n注意してください。この数値は画像横幅ぴったりに必要なバイト数よりも若干大きい場合があります。\n\nこのプロパティは値が負になり得ますので注意してください。"
+      },
+      "tr": {
+        "summary": "Image buffer pitch",
+        "description": "Pitch of the image buffer (a 32bpp bitmap containing color and mask (opacity) information),\ni.e. the number of bytes to the next scan line down.\n\nThis property provides direct access to the image buffer for plugins and the like.\n\nWith tjs_uint32 as a 32-bit integer type and tjs_uint8 as an 8-bit (1-byte) integer type, the pointer to image position (x, y)\ncan be computed in C as follows.\n\n`( (tjs_uint32*)( (tjs_uint8*)buffer + y*bufferPitch )) + x`\n\nNote that this property returns the number of bytes to the next scan line, not the number of pixels.\nThe value may be somewhat larger than the number of bytes strictly required for the image width.\n\nNote that this value can be negative."
+      }
+    },
+    "Bitmap.loading": {
+      "hash": "5fafa2977610",
+      "ja": {
+        "summary": "非同期読込み中確認",
+        "description": "非同期読込み中かどうかを表します。\n\nこの値が真の時非同期読込み中です。\n\n非同期読込み中に他のメンバにアクセスすると例外が発生するので注意してください。"
+      },
+      "tr": {
+        "summary": "Whether asynchronous loading is in progress",
+        "description": "Indicates whether asynchronous loading is in progress.\n\nWhile this is true, asynchronous loading is in progress.\n\nNote that accessing other members during asynchronous loading throws an exception."
+      }
+    },
+    "Bitmap.imageWidth": {
+      "hash": "06c9d0e72592",
+      "ja": {
+        "summary": "画像の横幅 ([Bitmap.width](Bitmap.md#width) の別名)",
+        "description": "画像の横幅をピクセル単位で表します。[Bitmap.width](Bitmap.md#width) と同じ値を返す読み取り専用の別名です。\n\nDrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.imageWidth](Layer.md#imagewidth) と同名)。"
+      },
+      "tr": {
+        "summary": "Image width (alias of [Bitmap.width](Bitmap.md#width))",
+        "description": "Image width in pixels. A read-only alias that returns the same value as [Bitmap.width](Bitmap.md#width).\n\nIt exists so that draw devices and plugins can get the image through a property of the same name without distinguishing between [Layer](Layer.md) and Bitmap (same name as [Layer.imageWidth](Layer.md#imagewidth))."
+      }
+    },
+    "Bitmap.imageHeight": {
+      "hash": "c2e14778d4c9",
+      "ja": {
+        "summary": "画像の縦幅 ([Bitmap.height](Bitmap.md#height) の別名)",
+        "description": "画像の縦幅をピクセル単位で表します。[Bitmap.height](Bitmap.md#height) と同じ値を返す読み取り専用の別名です。\n\nDrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.imageHeight](Layer.md#imageheight) と同名)。"
+      },
+      "tr": {
+        "summary": "Image height (alias of [Bitmap.height](Bitmap.md#height))",
+        "description": "Image height in pixels. A read-only alias that returns the same value as [Bitmap.height](Bitmap.md#height).\n\nIt exists so that draw devices and plugins can get the image through a property of the same name without distinguishing between [Layer](Layer.md) and Bitmap (same name as [Layer.imageHeight](Layer.md#imageheight))."
+      }
+    },
+    "Bitmap.mainImageBuffer": {
+      "hash": "420c4632c9d7",
+      "ja": {
+        "summary": "画像バッファポインタ ([Bitmap.buffer](Bitmap.md#buffer) の別名)",
+        "description": "画像バッファ左上隅へのポインタを表します。[Bitmap.buffer](Bitmap.md#buffer) と同じ値を返す読み取り専用の別名です。\n\nDrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBuffer](Layer.md#mainimagebuffer) と同名)。このポインタには値を書き込まないでください。書き込む場合は [Bitmap.mainImageBufferForWrite](Bitmap.md#mainimagebufferforwrite) を使用してください。"
+      },
+      "tr": {
+        "summary": "Image buffer pointer (alias of [Bitmap.buffer](Bitmap.md#buffer))",
+        "description": "Pointer to the top-left corner of the image buffer. A read-only alias that returns the same value as [Bitmap.buffer](Bitmap.md#buffer).\n\nIt exists so that draw devices and plugins can get the image through a property of the same name without distinguishing between [Layer](Layer.md) and Bitmap (same name as [Layer.mainImageBuffer](Layer.md#mainimagebuffer)). Do not write to this pointer; to write, use [Bitmap.mainImageBufferForWrite](Bitmap.md#mainimagebufferforwrite)."
+      }
+    },
+    "Bitmap.mainImageBufferForWrite": {
+      "hash": "9f5bd6f78cb3",
+      "ja": {
+        "summary": "画像バッファポインタ(書き込み用) ([Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) の別名)",
+        "description": "書き込み可能な画像バッファ左上隅へのポインタを表します。[Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) と同じ値を返す読み取り専用の別名です(参照すると画像の共有状態が解除されます)。\n\nDrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBufferForWrite](Layer.md#mainimagebufferforwrite) と同名)。"
+      },
+      "tr": {
+        "summary": "Image buffer pointer for writing (alias of [Bitmap.bufferForWrite](Bitmap.md#bufferforwrite))",
+        "description": "Pointer to the top-left corner of the writable image buffer. A read-only alias that returns the same value as [Bitmap.bufferForWrite](Bitmap.md#bufferforwrite) (reading it breaks image sharing).\n\nIt exists so that draw devices and plugins can get the image through a property of the same name without distinguishing between [Layer](Layer.md) and Bitmap (same name as [Layer.mainImageBufferForWrite](Layer.md#mainimagebufferforwrite))."
+      }
+    },
+    "Bitmap.mainImageBufferPitch": {
+      "hash": "b1dfc94210b4",
+      "ja": {
+        "summary": "画像バッファピッチ ([Bitmap.bufferPitch](Bitmap.md#bufferpitch) の別名)",
+        "description": "画像バッファのピッチ(一つ下のスキャンラインまでのバイト数)を表します。[Bitmap.bufferPitch](Bitmap.md#bufferpitch) と同じ値を返す読み取り専用の別名です(値が負になり得ます)。\n\nDrawDevice やプラグインが [Layer](Layer.md) と Bitmap を区別せず、同名のプロパティ経由で画像イメージを取得できるようにするために用意されています([Layer.mainImageBufferPitch](Layer.md#mainimagebufferpitch) と同名)。"
+      },
+      "tr": {
+        "summary": "Image buffer pitch (alias of [Bitmap.bufferPitch](Bitmap.md#bufferpitch))",
+        "description": "Pitch of the image buffer (the number of bytes to the next scan line down). A read-only alias that returns the same value as [Bitmap.bufferPitch](Bitmap.md#bufferpitch) (the value can be negative).\n\nIt exists so that draw devices and plugins can get the image through a property of the same name without distinguishing between [Layer](Layer.md) and Bitmap (same name as [Layer.mainImageBufferPitch](Layer.md#mainimagebufferpitch))."
+      }
+    }
+  }
+}

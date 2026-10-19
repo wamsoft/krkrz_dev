@@ -1,0 +1,539 @@
+{
+  "class": "Threepp.Vector3",
+  "entries": {
+    "krkrthreepp:Threepp.Vector3": {
+      "hash": "5c9a9e302fa5",
+      "ja": {
+        "summary": "3D ベクトルクラス",
+        "description": "3次元ベクトルを表現します。配列 [x, y, z] や辞書 %[x:, y:, z:] からも変換可能です。"
+      },
+      "tr": {
+        "summary": "3D vector class",
+        "description": "Represents a three-dimensional vector. It can also be converted from an array [x, y, z] or a dictionary %[x:, y:, z:]."
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.Vector3": {
+      "hash": "48a983a88670",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "x": "X成分",
+          "y": "Y成分",
+          "z": "Z成分"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "x": "X component.",
+          "y": "Y component.",
+          "z": "Z component."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.x": {
+      "hash": "47331c99acf6",
+      "ja": {
+        "summary": "X成分"
+      },
+      "tr": {
+        "summary": "X component"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.y": {
+      "hash": "10da840d7edc",
+      "ja": {
+        "summary": "Y成分"
+      },
+      "tr": {
+        "summary": "Y component"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.z": {
+      "hash": "db20e148f4a8",
+      "ja": {
+        "summary": "Z成分"
+      },
+      "tr": {
+        "summary": "Z component"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.set": {
+      "hash": "6a1d88aceb4a",
+      "ja": {
+        "summary": "値を設定"
+      },
+      "tr": {
+        "summary": "Sets the values"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.setScalar": {
+      "hash": "b1b2d95d0c16",
+      "ja": {
+        "summary": "すべての成分を同じ値に設定"
+      },
+      "tr": {
+        "summary": "Sets all components to the same value"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.setX": {
+      "hash": "a6e8f5ce3337",
+      "ja": {
+        "summary": "X成分を設定"
+      },
+      "tr": {
+        "summary": "Sets the X component"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.setY": {
+      "hash": "7acbb30ce439",
+      "ja": {
+        "summary": "Y成分を設定"
+      },
+      "tr": {
+        "summary": "Sets the Y component"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.setZ": {
+      "hash": "13f11ff071b6",
+      "ja": {
+        "summary": "Z成分を設定"
+      },
+      "tr": {
+        "summary": "Sets the Z component"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.copy": {
+      "hash": "4104057db919",
+      "ja": {
+        "summary": "別のベクトルからコピー"
+      },
+      "tr": {
+        "summary": "Copies another vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.add": {
+      "hash": "8b6686aba3ec",
+      "ja": {
+        "summary": "ベクトルを加算"
+      },
+      "tr": {
+        "summary": "Adds a vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.addScalar": {
+      "hash": "8ad520e5e808",
+      "ja": {
+        "summary": "スカラーを加算"
+      },
+      "tr": {
+        "summary": "Adds a scalar"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.addVectors": {
+      "hash": "d1f60d7e1965",
+      "ja": {
+        "summary": "2つのベクトルの和を設定"
+      },
+      "tr": {
+        "summary": "Sets this vector to the sum of two vectors"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.addScaledVector": {
+      "hash": "85b24d738862",
+      "ja": {
+        "summary": "スケーリングして加算"
+      },
+      "tr": {
+        "summary": "Adds a scaled vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.sub": {
+      "hash": "c68b9b12f40d",
+      "ja": {
+        "summary": "ベクトルを減算"
+      },
+      "tr": {
+        "summary": "Subtracts a vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.subScalar": {
+      "hash": "6c77b1851a38",
+      "ja": {
+        "summary": "スカラーを減算"
+      },
+      "tr": {
+        "summary": "Subtracts a scalar"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.subVectors": {
+      "hash": "3d7209042a6f",
+      "ja": {
+        "summary": "2つのベクトルの差を設定"
+      },
+      "tr": {
+        "summary": "Sets this vector to the difference of two vectors"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.multiply": {
+      "hash": "93d8635ef65f",
+      "ja": {
+        "summary": "ベクトル同士の成分ごとの乗算"
+      },
+      "tr": {
+        "summary": "Component-wise multiplication by a vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.multiplyScalar": {
+      "hash": "107fd79be5c9",
+      "ja": {
+        "summary": "スカラー乗算"
+      },
+      "tr": {
+        "summary": "Multiplies by a scalar"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.multiplyVectors": {
+      "hash": "31bb175a9e69",
+      "ja": {
+        "summary": "2つのベクトルの成分ごとの積を設定"
+      },
+      "tr": {
+        "summary": "Sets this vector to the component-wise product of two vectors"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.applyAxisAngle": {
+      "hash": "c0bdfa0476d7",
+      "ja": {
+        "summary": "軸と角度で回転"
+      },
+      "tr": {
+        "summary": "Rotates by an axis and an angle"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.applyEuler": {
+      "hash": "c4f7a08bef94",
+      "ja": {
+        "summary": "オイラー角で回転"
+      },
+      "tr": {
+        "summary": "Rotates by Euler angles"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.applyMatrix3": {
+      "hash": "b571cab202a0",
+      "ja": {
+        "summary": "3x3行列を適用"
+      },
+      "tr": {
+        "summary": "Applies a 3x3 matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.applyMatrix4": {
+      "hash": "f8e8e8efc20f",
+      "ja": {
+        "summary": "4x4行列を適用"
+      },
+      "tr": {
+        "summary": "Applies a 4x4 matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.applyQuaternion": {
+      "hash": "50a9c12bbe32",
+      "ja": {
+        "summary": "クォータニオンで回転"
+      },
+      "tr": {
+        "summary": "Rotates by a quaternion"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.project": {
+      "hash": "05d30006762e",
+      "ja": {
+        "summary": "カメラに投影"
+      },
+      "tr": {
+        "summary": "Projects the vector with a camera"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.unproject": {
+      "hash": "be17080b0d11",
+      "ja": {
+        "summary": "投影を解除"
+      },
+      "tr": {
+        "summary": "Unprojects the vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.transformDirection": {
+      "hash": "55568e96c410",
+      "ja": {
+        "summary": "方向ベクトルを変換"
+      },
+      "tr": {
+        "summary": "Transforms a direction vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.divide": {
+      "hash": "7878ed26cbc4",
+      "ja": {
+        "summary": "ベクトル同士の成分ごとの除算"
+      },
+      "tr": {
+        "summary": "Component-wise division by a vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.divideScalar": {
+      "hash": "f9f14bb084a2",
+      "ja": {
+        "summary": "スカラー除算"
+      },
+      "tr": {
+        "summary": "Divides by a scalar"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.min": {
+      "hash": "4a745db701d2",
+      "ja": {
+        "summary": "各成分の最小値"
+      },
+      "tr": {
+        "summary": "Component-wise minimum"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.max": {
+      "hash": "27b96caba674",
+      "ja": {
+        "summary": "各成分の最大値"
+      },
+      "tr": {
+        "summary": "Component-wise maximum"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.clamp": {
+      "hash": "fb9a0933acb7",
+      "ja": {
+        "summary": "各成分をクランプ"
+      },
+      "tr": {
+        "summary": "Clamps each component"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.clampScalar": {
+      "hash": "5c037c77d288",
+      "ja": {
+        "summary": "スカラー範囲でクランプ"
+      },
+      "tr": {
+        "summary": "Clamps to a scalar range"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.clampLength": {
+      "hash": "a66d4223cfcf",
+      "ja": {
+        "summary": "長さをクランプ"
+      },
+      "tr": {
+        "summary": "Clamps the length"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.floor": {
+      "hash": "ea5c7dedc6b3",
+      "ja": {
+        "summary": "各成分を切り捨て"
+      },
+      "tr": {
+        "summary": "Rounds each component down"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.ceil": {
+      "hash": "c3bb7d4df030",
+      "ja": {
+        "summary": "各成分を切り上げ"
+      },
+      "tr": {
+        "summary": "Rounds each component up"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.round": {
+      "hash": "17bb1e45e0aa",
+      "ja": {
+        "summary": "各成分を四捨五入"
+      },
+      "tr": {
+        "summary": "Rounds each component to the nearest integer"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.negate": {
+      "hash": "64b818cc1cbb",
+      "ja": {
+        "summary": "符号反転"
+      },
+      "tr": {
+        "summary": "Negates the vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.dot": {
+      "hash": "59e4ba141a53",
+      "ja": {
+        "summary": "内積"
+      },
+      "tr": {
+        "summary": "Dot product"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.lengthSq": {
+      "hash": "bcca19f55d78",
+      "ja": {
+        "summary": "長さの二乗"
+      },
+      "tr": {
+        "summary": "Squared length"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.length": {
+      "hash": "ce7ce2bb7e1f",
+      "ja": {
+        "summary": "長さ"
+      },
+      "tr": {
+        "summary": "Length"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.manhattanLength": {
+      "hash": "92c36639ffd1",
+      "ja": {
+        "summary": "マンハッタン距離"
+      },
+      "tr": {
+        "summary": "Manhattan length"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.normalize": {
+      "hash": "a1166a207a2c",
+      "ja": {
+        "summary": "正規化"
+      },
+      "tr": {
+        "summary": "Normalizes the vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.setLength": {
+      "hash": "206581a5fa78",
+      "ja": {
+        "summary": "長さを設定"
+      },
+      "tr": {
+        "summary": "Sets the length"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.lerp": {
+      "hash": "b528f239b5c4",
+      "ja": {
+        "summary": "線形補間"
+      },
+      "tr": {
+        "summary": "Linear interpolation"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.lerpVectors": {
+      "hash": "af4f4cd7d503",
+      "ja": {
+        "summary": "2つのベクトル間の線形補間"
+      },
+      "tr": {
+        "summary": "Linear interpolation between two vectors"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.cross": {
+      "hash": "a391e7a30907",
+      "ja": {
+        "summary": "外積"
+      },
+      "tr": {
+        "summary": "Cross product"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.crossVectors": {
+      "hash": "77f353705bdc",
+      "ja": {
+        "summary": "2つのベクトルの外積"
+      },
+      "tr": {
+        "summary": "Cross product of two vectors"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.reflect": {
+      "hash": "12b51681ea03",
+      "ja": {
+        "summary": "反射"
+      },
+      "tr": {
+        "summary": "Reflection"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.angleTo": {
+      "hash": "851b0af9775c",
+      "ja": {
+        "summary": "別のベクトルとの角度"
+      },
+      "tr": {
+        "summary": "Angle to another vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.distanceTo": {
+      "hash": "e82f1d864609",
+      "ja": {
+        "summary": "別のベクトルとの距離"
+      },
+      "tr": {
+        "summary": "Distance to another vector"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.distanceToSquared": {
+      "hash": "4c8c4e2e9d05",
+      "ja": {
+        "summary": "距離の二乗"
+      },
+      "tr": {
+        "summary": "Squared distance"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.manhattanDistanceTo": {
+      "hash": "92c36639ffd1",
+      "ja": {
+        "summary": "マンハッタン距離"
+      },
+      "tr": {
+        "summary": "Manhattan distance"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.setFromMatrixPosition": {
+      "hash": "959595ec1511",
+      "ja": {
+        "summary": "行列の位置成分を取得"
+      },
+      "tr": {
+        "summary": "Gets the translation component of a matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.setFromMatrixScale": {
+      "hash": "2f626c8cb0f1",
+      "ja": {
+        "summary": "行列のスケール成分を取得"
+      },
+      "tr": {
+        "summary": "Gets the scale component of a matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Vector3.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

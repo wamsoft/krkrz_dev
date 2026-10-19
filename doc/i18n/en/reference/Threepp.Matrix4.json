@@ -1,0 +1,315 @@
+{
+  "class": "Threepp.Matrix4",
+  "entries": {
+    "krkrthreepp:Threepp.Matrix4": {
+      "hash": "7fbe1a8d23a4",
+      "ja": {
+        "summary": "4x4 行列クラス",
+        "description": "変換行列を表現します。"
+      },
+      "tr": {
+        "summary": "4x4 matrix class",
+        "description": "Represents a transformation matrix."
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.Matrix4": {
+      "hash": "b18b621733bb",
+      "ja": {
+        "summary": "コンストラクタ",
+        "description": "単位行列を生成します"
+      },
+      "tr": {
+        "summary": "Constructor",
+        "description": "Creates an identity matrix."
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.set": {
+      "hash": "3642b37ac684",
+      "ja": {
+        "summary": "要素を設定"
+      },
+      "tr": {
+        "summary": "Sets the elements"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.identity": {
+      "hash": "5e5b96acd1e5",
+      "ja": {
+        "summary": "単位行列に設定"
+      },
+      "tr": {
+        "summary": "Resets to the identity matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.copyPosition": {
+      "hash": "c56c821c7708",
+      "ja": {
+        "summary": "位置成分のみコピー"
+      },
+      "tr": {
+        "summary": "Copies only the translation component"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.extractBasis": {
+      "hash": "941ec7cca17c",
+      "ja": {
+        "summary": "基底ベクトルを抽出"
+      },
+      "tr": {
+        "summary": "Extracts the basis vectors"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makeBasis": {
+      "hash": "a4710d171adc",
+      "ja": {
+        "summary": "基底ベクトルから行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a matrix from basis vectors"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.extractRotation": {
+      "hash": "4db1443f5849",
+      "ja": {
+        "summary": "回転成分を抽出"
+      },
+      "tr": {
+        "summary": "Extracts the rotation component"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makeRotationFromEuler": {
+      "hash": "d4890eafcd4c",
+      "ja": {
+        "summary": "オイラー角から回転行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a rotation matrix from Euler angles"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makeRotationFromQuaternion": {
+      "hash": "6c5d452cfdfc",
+      "ja": {
+        "summary": "クォータニオンから回転行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a rotation matrix from a quaternion"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.lookAt": {
+      "hash": "d2fd3177c2f7",
+      "ja": {
+        "summary": "視線行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a look-at matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.multiply": {
+      "hash": "158cd6875be6",
+      "ja": {
+        "summary": "乗算"
+      },
+      "tr": {
+        "summary": "Multiplies by a matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.premultiply": {
+      "hash": "91eac0b09877",
+      "ja": {
+        "summary": "前置乗算"
+      },
+      "tr": {
+        "summary": "Premultiplies by a matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.multiplyMatrices": {
+      "hash": "24a8ed81ce1f",
+      "ja": {
+        "summary": "2つの行列の積"
+      },
+      "tr": {
+        "summary": "Product of two matrices"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.multiplyScalar": {
+      "hash": "107fd79be5c9",
+      "ja": {
+        "summary": "スカラー乗算"
+      },
+      "tr": {
+        "summary": "Multiplies by a scalar"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.determinant": {
+      "hash": "b4cda915629b",
+      "ja": {
+        "summary": "行列式"
+      },
+      "tr": {
+        "summary": "Determinant"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.transpose": {
+      "hash": "572d8f2be607",
+      "ja": {
+        "summary": "転置"
+      },
+      "tr": {
+        "summary": "Transposes the matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.setPosition": {
+      "hash": "4c22fe16d27d",
+      "ja": {
+        "summary": "位置を設定"
+      },
+      "tr": {
+        "summary": "Sets the position"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.invert": {
+      "hash": "160c2010a79c",
+      "ja": {
+        "summary": "逆行列"
+      },
+      "tr": {
+        "summary": "Inverts the matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.scale": {
+      "hash": "ac976adef9b7",
+      "ja": {
+        "summary": "スケーリング"
+      },
+      "tr": {
+        "summary": "Scales the matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.getMaxScaleOnAxis": {
+      "hash": "7e2a747a04ea",
+      "ja": {
+        "summary": "軸の最大スケール値"
+      },
+      "tr": {
+        "summary": "Maximum scale along any axis"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makeTranslation": {
+      "hash": "9a2dd1491127",
+      "ja": {
+        "summary": "平行移動行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a translation matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makeRotationX": {
+      "hash": "c79afb086b71",
+      "ja": {
+        "summary": "X軸回転行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a rotation matrix around the X axis"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makeRotationY": {
+      "hash": "b5f5664696d4",
+      "ja": {
+        "summary": "Y軸回転行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a rotation matrix around the Y axis"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makeRotationZ": {
+      "hash": "dd1472987639",
+      "ja": {
+        "summary": "Z軸回転行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a rotation matrix around the Z axis"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makeRotationAxis": {
+      "hash": "2f7606b152da",
+      "ja": {
+        "summary": "任意軸回転行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a rotation matrix around an arbitrary axis"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makeScale": {
+      "hash": "da3735c82fca",
+      "ja": {
+        "summary": "スケーリング行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a scale matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makeShear": {
+      "hash": "534ca222b6ab",
+      "ja": {
+        "summary": "せん断行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a shear matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.compose": {
+      "hash": "ba6b9ca9b838",
+      "ja": {
+        "summary": "位置・回転・スケールから合成"
+      },
+      "tr": {
+        "summary": "Composes the matrix from position, rotation and scale"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.decompose": {
+      "hash": "109239032cf4",
+      "ja": {
+        "summary": "位置・回転・スケールに分解"
+      },
+      "tr": {
+        "summary": "Decomposes the matrix into position, rotation and scale"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makePerspective": {
+      "hash": "6129171eff38",
+      "ja": {
+        "summary": "透視投影行列を生成"
+      },
+      "tr": {
+        "summary": "Creates a perspective projection matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.makeOrthographic": {
+      "hash": "179996d92094",
+      "ja": {
+        "summary": "正射影行列を生成"
+      },
+      "tr": {
+        "summary": "Creates an orthographic projection matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix4.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

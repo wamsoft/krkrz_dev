@@ -4,6 +4,10 @@
 
 無限遠から平行に照射される光源です。影を落とすことができます。
 
+影を落とすには castShadow=true にし、renderer.setShadowMapEnabled(true) と、
+影を受ける側の receiveShadow=true が必要です。
+平行光源の影は正投影カメラで焼くので、シーンを覆う範囲を setShadowOrthoBounds で指定します。
+
 ## メンバー一覧
 
 ### コンストラクタ
@@ -66,7 +70,7 @@
 
 **解説**
 
---- 影(ShadowMap) --- このライトで影を落とすには castShadow=true にし、 renderer.setShadowMapEnabled(true) と、影を受ける側の receiveShadow=true が必要。 平行光源の影は正投影カメラで焼くので、シーンを覆う範囲を setShadowOrthoBounds で指定する。
+シャドウマップ解像度 (既定 2048x2048)
 
 ---
 

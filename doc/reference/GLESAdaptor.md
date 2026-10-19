@@ -13,7 +13,7 @@ OpenGL ES の描画コンテキストを保持できるアダプター (EGLベ�
 ### プロパティ
 
 - [screenWidth](#screenwidth)
-- [screenHeihgt](#screenheihgt)
+- [screenHeight](#screenheight)
 - [blendMode](#blendmode)
 
 ### メソッド
@@ -60,7 +60,7 @@ OpenGL ES の描画コンテキストを保持できるアダプター (EGLベ�
 
 ---
 
-### screenHeihgt
+### screenHeight
 
 プロパティ \ アクセス: `r/w`
 
@@ -153,12 +153,12 @@ OpenGL描画処理実行
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `layer` | `&nbsp;` | レイヤ または GLESTexture |
-| `a` | `&nbsp;` |  |
-| `b` | `&nbsp;` |  |
-| `c` | `&nbsp;` |  |
-| `d` | `&nbsp;` |  |
-| `tx` | `&nbsp;` |  |
-| `ty` | `&nbsp;` |  |
+| `a` | `&nbsp;` | アフィン変換行列 (2x2) の a 成分 |
+| `b` | `&nbsp;` | アフィン変換行列 (2x2) の b 成分 |
+| `c` | `&nbsp;` | アフィン変換行列 (2x2) の c 成分 |
+| `d` | `&nbsp;` | アフィン変換行列 (2x2) の d 成分 |
+| `tx` | `&nbsp;` | 平行移動 X |
+| `ty` | `&nbsp;` | 平行移動 Y |
 | `opacity` | `&nbsp;` | 不透明度 0～255 (省略時 255) |
 
 **解説**
@@ -248,10 +248,10 @@ type は吉里吉里の合成モード値 (tTVPBlendOperationMode):
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `left` | `&nbsp;` |  |
-| `top` | `&nbsp;` |  |
-| `width` | `&nbsp;` |  |
-| `height` | `&nbsp;` |  |
+| `left` | `&nbsp;` | クリップ矩形の左端 (レイヤ座標、左上原点) |
+| `top` | `&nbsp;` | クリップ矩形の上端 (レイヤ座標、左上原点) |
+| `width` | `&nbsp;` | クリップ矩形の幅 |
+| `height` | `&nbsp;` | クリップ矩形の高さ |
 
 **解説**
 
@@ -324,8 +324,8 @@ endStencilClip();
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `mask` | `&nbsp;` | マスク画像 (GLESTexture または Layer)。void なら素通し合成<br>(矩形クリップだけを合成時に確実に適用したい場合に使う) |
-| `x` | `&nbsp;` |  |
-| `y` | `&nbsp;` |  |
+| `x` | `&nbsp;` | マスク配置位置 X (レイヤ座標) |
+| `y` | `&nbsp;` | マスク配置位置 Y (レイヤ座標) |
 
 **解説**
 
@@ -346,8 +346,8 @@ endStencilClip();
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `mask` | `&nbsp;` | マスク画像 (GLESTexture または Layer) |
-| `x` | `&nbsp;` |  |
-| `y` | `&nbsp;` |  |
+| `x` | `&nbsp;` | マスク配置位置 X (レイヤ座標) |
+| `y` | `&nbsp;` | マスク配置位置 Y (レイヤ座標) |
 | `threshold` | `&nbsp;` | クリップを有効とする α 閾値 (1～255、省略不可) |
 
 **解説**

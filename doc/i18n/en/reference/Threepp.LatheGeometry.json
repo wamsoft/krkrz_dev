@@ -1,0 +1,46 @@
+{
+  "class": "Threepp.LatheGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.LatheGeometry": {
+      "hash": "efda6cdaaa98",
+      "ja": {
+        "summary": "旋盤ジオメトリ",
+        "description": "2D輪郭を回転軸周りに回転させて3D形状を生成します。"
+      },
+      "tr": {
+        "summary": "Lathe geometry",
+        "description": "Generates a 3D shape by rotating a 2D profile around an axis."
+      }
+    },
+    "krkrthreepp:Threepp.LatheGeometry.LatheGeometry": {
+      "hash": "56a0236be4d4",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "points": "輪郭点の配列 (Vector2の配列または [x,y] の配列)",
+          "segments": "セグメント数",
+          "phiStart": "開始角度 (ラジアン)",
+          "phiLength": "回転角度 (ラジアン)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "points": "Array of profile points (an array of Vector2 or of [x,y]).",
+          "segments": "Number of segments.",
+          "phiStart": "Start angle (radians).",
+          "phiLength": "Angle of rotation (radians)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.LatheGeometry.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    }
+  }
+}

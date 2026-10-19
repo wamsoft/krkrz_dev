@@ -1,0 +1,34 @@
+{
+  "class": "Threepp.Sky",
+  "entries": {
+    "krkrthreepp:Threepp.Sky": {
+      "hash": "32a393a5ad2e",
+      "ja": {
+        "summary": "空オブジェクト",
+        "description": "大気散乱シミュレーションによる空を表現します。"
+      },
+      "tr": {
+        "summary": "Sky object",
+        "description": "Renders a sky using an atmospheric scattering simulation."
+      }
+    },
+    "krkrthreepp:Threepp.Sky.Sky": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.Sky.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    }
+  }
+}

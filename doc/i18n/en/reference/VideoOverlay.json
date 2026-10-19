@@ -1,0 +1,878 @@
+{
+  "class": "VideoOverlay",
+  "entries": {
+    "VideoOverlay": {
+      "hash": "1731f050b29e",
+      "ja": {
+        "summary": "VideoOverlay クラスは、動画を表示するための表示領域を作成するクラスです。吉里吉里のレイヤに表示を行うこともできます。",
+        "description": "動画再生機構 (krmovie) は本体実行可能ファイルに統合されており、別途 DLL を添付する必要はありません。\n再生には DirectShow を使わず、WebM は movie-player (libvpx)、MPEG-1 は pl_mpeg、それ以外 (WMV/ASF/MP4 等) は\nMedia Foundation でデコードします。MP4/WMV など Media Foundation ネイティブ形式は既定でハードウェアデコード\nされます (コマンドラインオプション -mediaengine=no で無効化可能)。旧 theora (krdstheora.dll) は非対応です。\n\nレイヤでの再生を除き、オーバーレイによる再生では、VideoOverlay クラスの表示領域は、すべてのレイヤよりも手前に表示され、透過することはできません。\n\nレイヤでの再生は、オーバーレイでの再生に比べ、再生時のプロセッサの負荷は高くなる傾向にあります。\n\nSDL 版ほか (Windows ネイティブ版以外) で再生できるのは WebM と MPEG-1 です。\n\n**再生の終わり方 (レイヤでの再生)**: 最終フレームも他のフレームと同じだけ (1 フレーム分の時間)\n表示してから、終了 (onStatusChanged の `\"stop\"`) またはループの巻き戻し (onPeriod の `perLoop`) に\nなります。終了後もレイヤには最終フレームが残ります。ループするアニメーションを作るときに、\n継ぎ目のために先頭と同じ絵を最後に足す必要はありません (足すと先頭の絵が 2 フレーム分続きます)。"
+      },
+      "tr": {
+        "summary": "The VideoOverlay class creates a display area for showing movies. It can also display on Kirikiri layers.",
+        "description": "The movie playback mechanism (krmovie) is integrated into the engine executable, so no separate DLL needs to be shipped.\nPlayback does not use DirectShow: WebM is decoded with movie-player (libvpx), MPEG-1 with pl_mpeg, and everything else (WMV/ASF/MP4 and so on) with\nMedia Foundation. Formats native to Media Foundation, such as MP4/WMV, are hardware-decoded by default\n(this can be disabled with the command-line option -mediaengine=no). The former theora support (krdstheora.dll) is not available.\n\nExcept for playback on a layer, with overlay playback the display area of the VideoOverlay class is shown in front of all layers and cannot be transparent.\n\nPlayback on a layer tends to put a higher load on the processor than overlay playback.\n\nThe SDL build and other non-native-Windows builds can play WebM and MPEG-1.\n\n**How playback ends (playback on a layer)**: the last frame is shown for the same duration as any other frame (one frame's worth of time)\nbefore playback ends (`\"stop\"` in onStatusChanged) or rewinds for a loop (`perLoop` in onPeriod).\nThe last frame stays on the layer after playback ends. When making a looping animation, you do not need to\nappend a copy of the first picture at the end to make the seam (if you do, the first picture lasts for two frames)."
+      }
+    },
+    "VideoOverlay.VideoOverlay": {
+      "hash": "d26d71237cb3",
+      "ja": {
+        "summary": "VideoOverlay オブジェクトの構築",
+        "description": "VideoOverlay クラスのオブジェクトを構築します。",
+        "params": {
+          "window": "このレイヤを保有することになるウィンドウ ( [Window](Window.md) クラスの\nオブジェクト ) を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Constructs a VideoOverlay object",
+        "description": "Constructs an object of the VideoOverlay class.",
+        "params": {
+          "window": "The window (an object of the [Window](Window.md) class) that will own this\nlayer."
+        }
+      }
+    },
+    "VideoOverlay.onStatusChanged": {
+      "hash": "bc925cfd7020",
+      "ja": {
+        "summary": "ステータスが変更された",
+        "description": "このオブジェクトのステータスが変更されたときに発生します。\n\nready は、vomMFEVR モードの時のみ発生します。",
+        "params": {
+          "status": "ステータス文字列を表します。\n\n以下のいずれかです。\n\n`\"**unload**\"   : ` メディアが開かれてない\n\n`\"**ready**\"    : ` メディアの準備が完了している\n\n`\"**play**\"     : ` メディアは再生中である\n\n`\"**stop**\"     : ` メディアは停止中である\n\n`\"**pause**\"    : ` メディアは一時停止中である"
+        }
+      },
+      "tr": {
+        "summary": "The status changed",
+        "description": "Occurs when the status of this object changes.\n\nready occurs only in vomMFEVR mode.",
+        "params": {
+          "status": "The status string.\n\nOne of the following.\n\n`\"**unload**\"   : ` no media is open\n\n`\"**ready**\"    : ` the media is ready\n\n`\"**play**\"     : ` the media is playing\n\n`\"**stop**\"     : ` the media is stopped\n\n`\"**pause**\"    : ` the media is paused"
+        }
+      }
+    },
+    "VideoOverlay.onPeriod": {
+      "hash": "ca775a0ff34c",
+      "ja": {
+        "summary": "Periodイベントが発生した",
+        "description": "ループの終端や、 setPeriodEventによって指定されたフレームに達した場合、または prepare メソッドにより再生準備が完了した場合に呼び出されるメソッドです。\n\nループの終端や、 setPeriodEvent によって指定されたフレームに達した場合にこのイベントが呼ばれる時点では、再生状況によっては、すでに再生位置が指定された位置を超えている場合があります。現在の実際の再生位置を取得するには frame プロパティを参照してください。",
+        "params": {
+          "type": "Periodイベントのタイプを表します。\n\n以下のいずれかです。\n\n`**perLoop**    : ` (通常の)ループの終端に達した。最終フレームを 1 フレーム分表示した後、\n先頭へ巻き戻した時点で 1 周につき 1 回発生します\n\n`**perSegLoop** : ` セグメントループの終端に達した\n\n`**perPeriod**  : ` setPeriodEvent メソッドで指定されたフレームに達した\n\n`**perPrepare** : ` prepare メソッドによる再生準備が完了した"
+        }
+      },
+      "tr": {
+        "summary": "A period event occurred",
+        "description": "Called when the end of a loop or the frame specified with setPeriodEvent is reached, or when playback preparation by the prepare method completes.\n\nWhen this event is called because the end of a loop or the frame specified with setPeriodEvent was reached, the playback position may already be past the specified position, depending on playback conditions. To get the actual current playback position, read the frame property.",
+        "params": {
+          "type": "The type of the period event.\n\nOne of the following.\n\n`**perLoop**    : ` the end of a (normal) loop was reached. Occurs once per cycle, at the point where playback rewinds to the beginning\nafter the last frame has been shown for one frame\n\n`**perSegLoop** : ` the end of a segment loop was reached\n\n`**perPeriod**  : ` the frame specified with the setPeriodEvent method was reached\n\n`**perPrepare** : ` playback preparation by the prepare method completed"
+        }
+      }
+    },
+    "VideoOverlay.onFrameUpdate": {
+      "hash": "c1ee8d5e2685",
+      "ja": {
+        "summary": "ビデオフレームが更新された",
+        "description": "ビデオフレームが更新された後に呼び出されるメソッドです。\n\n引数であるframeは現在表示されているビデオフレームと完全に一致しているとは限りません。\n\n先頭フレーム (フレーム 0) の表示でも発生します。フレーム番号は先頭フレームを 0 として数えます\n(MP4 のようにタイムスタンプが 0 より後ろから始まる素材でも、先頭フレームが 0 です)。\n\nレイヤ描画モード、ミキサーモード時のみ利用可能です。",
+        "params": {
+          "frame": "ビデオのフレーム番号"
+        }
+      },
+      "tr": {
+        "summary": "The video frame was updated",
+        "description": "Called after the video frame is updated.\n\nThe frame argument does not necessarily match the video frame currently displayed exactly.\n\nIt also occurs when the first frame (frame 0) is shown. Frame numbers count the first frame as 0\n(even for material whose timestamps start after 0, such as MP4, the first frame is 0).\n\nAvailable only in layer drawing mode and mixer mode.",
+        "params": {
+          "frame": "The video frame number."
+        }
+      }
+    },
+    "VideoOverlay.open": {
+      "hash": "891344b405d2",
+      "ja": {
+        "summary": "メディアを開く",
+        "description": "指定されたメディアを開きます。\n\n再生可能な主な形式は WebM (VP8/VP9、アルファ対応)、MPEG-1 (拡張子 .mpeg / .mpg / .mpv)、\nWMV / ASF、MP4 (.mp4 / .m4v / .mov、H.264 / HEVC)、AVI (内部コーデック依存) です。\n\nWebM は透過 (アルファ) 付き動画に対応します。MP4 / WMV などは既定でハードウェアデコードされます。\n\nMPEG-1 は規格上、フレームレートが 23.976 / 24 / 25 / 29.97 / 30 / 50 / 59.94 / 60 fps に限られます。\n8fps のような低いフレームレートの素材は、同じフレームを繰り返して 24fps 等にしてから変換してください。\n\n開いた時点でも onStatusChanged に `\"stop\"` が届きます。再生の終了を検出するときは、\n直前が `\"play\"` だった `\"stop\"` だけを終了として扱ってください。",
+        "params": {
+          "storage": "指定されたメディアを開きます。"
+        }
+      },
+      "tr": {
+        "summary": "Opens media",
+        "description": "Opens the specified media.\n\nThe main playable formats are WebM (VP8/VP9, with alpha support), MPEG-1 (extensions .mpeg / .mpg / .mpv),\nWMV / ASF, MP4 (.mp4 / .m4v / .mov, H.264 / HEVC), and AVI (depending on the internal codec).\n\nWebM supports movies with transparency (alpha). MP4 / WMV and similar formats are hardware-decoded by default.\n\nBy specification, MPEG-1 frame rates are limited to 23.976 / 24 / 25 / 29.97 / 30 / 50 / 59.94 / 60 fps.\nFor material with a low frame rate such as 8 fps, repeat frames to reach 24 fps or similar before converting.\n\n`\"stop\"` is also delivered to onStatusChanged when the media is opened. When detecting the end of playback,\ntreat only a `\"stop\"` that follows `\"play\"` as the end.",
+        "params": {
+          "storage": "The media to open."
+        }
+      }
+    },
+    "VideoOverlay.play": {
+      "hash": "21473e948792",
+      "ja": {
+        "summary": "再生開始",
+        "description": "メディアの再生を開始します。\n\n一時停止中なら続きから、停止後や最後まで再生した後なら先頭から再生します。"
+      },
+      "tr": {
+        "summary": "Starts playback",
+        "description": "Starts playing the media.\n\nIf paused, playback resumes from where it was; after stopping or after playing to the end, it starts from the beginning."
+      }
+    },
+    "VideoOverlay.stop": {
+      "hash": "e56b49423329",
+      "ja": {
+        "summary": "再生停止",
+        "description": "メディアの再生を停止します。"
+      },
+      "tr": {
+        "summary": "Stops playback",
+        "description": "Stops playing the media."
+      }
+    },
+    "VideoOverlay.pause": {
+      "hash": "88c7999f57f0",
+      "ja": {
+        "summary": "一時停止",
+        "description": "メディアの再生を一時停止します。"
+      },
+      "tr": {
+        "summary": "Pauses playback",
+        "description": "Pauses playing the media."
+      }
+    },
+    "VideoOverlay.rewind": {
+      "hash": "dbbd06afff06",
+      "ja": {
+        "summary": "巻き戻し",
+        "description": "メディアの再生位置を先頭に移動します。"
+      },
+      "tr": {
+        "summary": "Rewinds",
+        "description": "Moves the playback position of the media to the beginning."
+      }
+    },
+    "VideoOverlay.prepare": {
+      "hash": "282be1c91ec2",
+      "ja": {
+        "summary": "再生準備",
+        "description": "メディアの1フレーム目を指定されているレイヤーに描画し、描画終了時にonPeriodイベントを発生させます。\nprepareメソッド コール後の再生は、onPeriodイベントを待機してから行ってください。\n\nmodeが `vomLayer` (レイヤーモード) のときのみ意味を持ちます。\n\n準備中は音声を再生しません。準備が終わった時点でメディアは先頭位置で停止しているので、\nonPeriod (perPrepare) を受けてから play を呼べば先頭から再生されます。"
+      },
+      "tr": {
+        "summary": "Prepares playback",
+        "description": "Draws the first frame of the media to the specified layer and raises an onPeriod event when drawing finishes.\nAfter calling the prepare method, wait for the onPeriod event before starting playback.\n\nMeaningful only when mode is `vomLayer` (layer mode).\n\nNo audio is played during preparation. When preparation finishes, the media is stopped at the beginning,\nso calling play after receiving onPeriod (perPrepare) plays from the beginning."
+      }
+    },
+    "VideoOverlay.setSegmentLoop": {
+      "hash": "a492c7650129",
+      "ja": {
+        "summary": "フレーム間ループの設定",
+        "description": "指定されたフレーム間でループ処理を行います。\n\nループ終端(goFrame)では、onPeriodイベントが発生します。\n\ncomeFrameのフレームにはムービーファイルにキーフレームを設定しておく必要があります。\n\n設定されていない場合は、\nループ終点から始点へ移動時に指定されたフレームに最も近いキーフレームへ再生位置が移動することになります。",
+        "params": {
+          "comeFrame": "ループ移動先フレーム(ループの始端フレーム)。再生がgoFrameに達したとき、再生ヘッドはこのフレームに移動します。",
+          "goFrame": "ループ終点フレーム(ループの終端フレーム)。このフレームの1つ前のフレームの表示が終了した時、再生ヘッドはcomeFrameへ移動します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets a loop between frames",
+        "description": "Loops between the specified frames.\n\nAn onPeriod event occurs at the loop end (goFrame).\n\nThe frame at comeFrame must be a keyframe in the movie file.\n\nIf it is not,\nwhen moving from the loop end to the loop start, the playback position moves to the keyframe closest to the specified frame.",
+        "params": {
+          "comeFrame": "The loop destination frame (the start frame of the loop). When playback reaches goFrame, the playhead moves to this frame.",
+          "goFrame": "The loop end frame. When the frame just before this one has finished displaying, the playhead moves to comeFrame."
+        }
+      }
+    },
+    "VideoOverlay.cancelSegmentLoop": {
+      "hash": "b3b3dd201fb0",
+      "ja": {
+        "summary": "フレーム間ループの解除",
+        "description": "setSegmentLoopメソッドで指定したセグメント間ループを解除します。"
+      },
+      "tr": {
+        "summary": "Cancels the loop between frames",
+        "description": "Cancels the segment loop set with the setSegmentLoop method."
+      }
+    },
+    "VideoOverlay.close": {
+      "hash": "e9cd92c526e7",
+      "ja": {
+        "summary": "メディアを閉じる",
+        "description": "メディアを閉じます。\n\nメディアを再生するために確保されていたリソースなどもすべて解放します。"
+      },
+      "tr": {
+        "summary": "Closes the media",
+        "description": "Closes the media.\n\nAll resources allocated for playing the media are also released."
+      }
+    },
+    "VideoOverlay.setPeriodEvent": {
+      "hash": "36ef51bca989",
+      "ja": {
+        "summary": "指定フレームでのイベント発生の指定",
+        "description": "指定したフレームでonPeriodイベントを発生させます。\n\nonPeriodイベントは、一度発生すると解除されます。再び発生させたい場合は再度このメソッドで設定してください。",
+        "params": {
+          "eventFrame": "onPeriodイベントを発生させるフレームを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Requests an event at a specified frame",
+        "description": "Raises an onPeriod event at the specified frame.\n\nOnce the onPeriod event occurs, the request is cleared. To raise it again, set it again with this method.",
+        "params": {
+          "eventFrame": "The frame at which to raise the onPeriod event."
+        }
+      }
+    },
+    "VideoOverlay.cancelPeriodEvent": {
+      "hash": "774160da32f7",
+      "ja": {
+        "summary": "指定フレームでのイベント発生の解除",
+        "description": "setPeriodEventメソッドで設定したイベント発生を解除します。"
+      },
+      "tr": {
+        "summary": "Cancels the event at a specified frame",
+        "description": "Cancels the event set with the setPeriodEvent method."
+      }
+    },
+    "VideoOverlay.setPos": {
+      "hash": "19ac6a985b7a",
+      "ja": {
+        "summary": "再生矩形の左上位置を指定",
+        "description": "メディアを再生するための矩形領域の左上位置を指定します。\n\n座標は、ウィンドウのクライアント ( レイヤを表示可能な領域 ) 内での座標で、ピクセル単位で\n指定します。\n\n> オーバーレイ / ミキサー再生 (vomOverlay / vomMixer) では、再生矩形 (setPos / setSize / setBounds / left / top / width / height) をどれも指定していない間、動画は画面全体に表示されます。指定するとゲーム画面の上のその矩形に表示されます。座標はプライマリレイヤの座標で、ウィンドウの拡大縮小に合わせて表示先へ写されます。",
+        "params": {
+          "left": "メディアを再生するための矩形領域の左端位置を指定します。",
+          "top": "メディアを再生するための矩形領域の上端位置を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the top-left position of the playback rectangle",
+        "description": "Sets the top-left position of the rectangular area used to play the media.\n\nCoordinates are in pixels, relative to the window's client area (the area where layers can be\ndisplayed).\n\n> In overlay / mixer playback (vomOverlay / vomMixer), while none of the playback rectangle settings (setPos / setSize / setBounds / left / top / width / height) have been specified, the movie is shown over the whole screen. Once specified, it is shown in that rectangle over the game screen. The coordinates are primary layer coordinates and are mapped to the display following the window's scaling.",
+        "params": {
+          "left": "Left edge of the rectangular area used to play the media.",
+          "top": "Top edge of the rectangular area used to play the media."
+        }
+      }
+    },
+    "VideoOverlay.setSize": {
+      "hash": "b199a14b4e6c",
+      "ja": {
+        "summary": "再生矩形のサイズを指定",
+        "description": "メディアを再生するための矩形領域のサイズをピクセル単位で指定します。\n\n現バージョンでは、レイヤ再生時にはこのメソッドを使用することはできません。\n\n> オーバーレイ / ミキサー再生 (vomOverlay / vomMixer) では、再生矩形 (setPos / setSize / setBounds / left / top / width / height) をどれも指定していない間、動画は画面全体に表示されます。指定するとゲーム画面の上のその矩形に表示されます。座標はプライマリレイヤの座標で、ウィンドウの拡大縮小に合わせて表示先へ写されます。",
+        "params": {
+          "width": "メディアを再生するための矩形領域の横幅を指定します。",
+          "height": "メディアを再生するための矩形領域の縦幅を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the size of the playback rectangle",
+        "description": "Sets the size, in pixels, of the rectangular area used to play the media.\n\nIn the current version, this method cannot be used during layer playback.\n\n> In overlay / mixer playback (vomOverlay / vomMixer), while none of the playback rectangle settings (setPos / setSize / setBounds / left / top / width / height) have been specified, the movie is shown over the whole screen. Once specified, it is shown in that rectangle over the game screen. The coordinates are primary layer coordinates and are mapped to the display following the window's scaling.",
+        "params": {
+          "width": "Width of the rectangular area used to play the media.",
+          "height": "Height of the rectangular area used to play the media."
+        }
+      }
+    },
+    "VideoOverlay.setBounds": {
+      "hash": "6458e3b884de",
+      "ja": {
+        "summary": "再生矩形の位置とサイズを指定",
+        "description": "メディアを再生するための矩形領域の位置とサイズを指定します。\n\n座標は、ウィンドウのクライアント ( レイヤを表示可能な領域 ) 内での座標で、ピクセル単位で\n指定します。\n\n現バージョンでは、レイヤ再生時にはこのメソッドで指定できるのは位置だけで、サイズは無視されます。\n\n> オーバーレイ / ミキサー再生 (vomOverlay / vomMixer) では、再生矩形 (setPos / setSize / setBounds / left / top / width / height) をどれも指定していない間、動画は画面全体に表示されます。指定するとゲーム画面の上のその矩形に表示されます。座標はプライマリレイヤの座標で、ウィンドウの拡大縮小に合わせて表示先へ写されます。",
+        "params": {
+          "left": "メディアを再生するための矩形領域の左端位置を指定します。",
+          "top": "メディアを再生するための矩形領域の上端位置を指定します。",
+          "width": "メディアを再生するための矩形領域の横幅を指定します。",
+          "height": "メディアを再生するための矩形領域の縦幅を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the position and size of the playback rectangle",
+        "description": "Sets the position and size of the rectangular area used to play the media.\n\nCoordinates are in pixels, relative to the window's client area (the area where layers can be\ndisplayed).\n\nIn the current version, during layer playback only the position can be set with this method; the size is ignored.\n\n> In overlay / mixer playback (vomOverlay / vomMixer), while none of the playback rectangle settings (setPos / setSize / setBounds / left / top / width / height) have been specified, the movie is shown over the whole screen. Once specified, it is shown in that rectangle over the game screen. The coordinates are primary layer coordinates and are mapped to the display following the window's scaling.",
+        "params": {
+          "left": "Left edge of the rectangular area used to play the media.",
+          "top": "Top edge of the rectangular area used to play the media.",
+          "width": "Width of the rectangular area used to play the media.",
+          "height": "Height of the rectangular area used to play the media."
+        }
+      }
+    },
+    "VideoOverlay.selectAudioStream": {
+      "hash": "7566516db872",
+      "ja": {
+        "summary": "音声ストリームの選択",
+        "description": "指定した音声ストリーム番号を有効にします。\n\n音声ストリームを複数含まないビデオでは使用できません。",
+        "params": {
+          "streamNumber": "音声ストリーム番号を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Selects an audio stream",
+        "description": "Enables the specified audio stream number.\n\nCannot be used with videos that do not contain multiple audio streams.",
+        "params": {
+          "streamNumber": "The audio stream number."
+        }
+      }
+    },
+    "VideoOverlay.setMixingLayer": {
+      "hash": "249ca0b1896e",
+      "ja": {
+        "summary": "ミキシング対象レイヤの設定",
+        "description": "指定したレイヤーとビデオのミキシングを行います。\n\nミキシングはこのメソッドが呼び出された時のレイヤー画像と行われます。\n\nレイヤー画像の更新を反映するには、再度このメソッドを呼び出す必要があります。\n\nVideOverlay.OnFrameUpdate を使用して、\nレイヤー画像が更新されたことを調べてこのメソッドを呼び出すようにすれば、自動的に更新が反映されるようになります。\nonFrameUpdateで毎フレームこのメソッドを呼び出した場合、かなり負荷がかかりますのでそれは避けた方が良いです。\n\nミキサーモードでのみ利用可能です。",
+        "params": {
+          "layer": "レイヤー"
+        }
+      },
+      "tr": {
+        "summary": "Sets the layer to mix",
+        "description": "Mixes the specified layer with the video.\n\nMixing uses the layer image as it was when this method was called.\n\nTo reflect updates to the layer image, you need to call this method again.\n\nIf you use VideOverlay.OnFrameUpdate to detect\nthat the layer image has been updated and call this method then, updates are reflected automatically.\nCalling this method every frame from onFrameUpdate puts a considerable load on the system, so avoid doing that.\n\nAvailable only in mixer mode.",
+        "params": {
+          "layer": "The layer."
+        }
+      }
+    },
+    "VideoOverlay.resetMixingLayer": {
+      "hash": "ec1452a7eefa",
+      "ja": {
+        "summary": "ミキシング対象レイヤの設定解除",
+        "description": "ビデオとレイヤーのミキシングを解除します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Clears the layer to mix",
+        "description": "Stops mixing the video with the layer.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.position": {
+      "hash": "4fbc55684a39",
+      "ja": {
+        "summary": "再生位置",
+        "description": "メディアの再生位置を ms 単位で表します。値を設定することもできます。\n\n先頭フレームの位置を 0 とします。"
+      },
+      "tr": {
+        "summary": "Playback position",
+        "description": "The playback position of the media in ms. You can also set this value.\n\nThe position of the first frame is 0."
+      }
+    },
+    "VideoOverlay.frame": {
+      "hash": "a4efca774ac5",
+      "ja": {
+        "summary": "現在のフレーム",
+        "description": "メディアの再生位置をフレーム単位で表します。値を設定することもできます。\n\n先頭フレームを 0 とします。"
+      },
+      "tr": {
+        "summary": "Current frame",
+        "description": "The playback position of the media in frames. You can also set this value.\n\nThe first frame is 0."
+      }
+    },
+    "VideoOverlay.loop": {
+      "hash": "6604fe0ded40",
+      "ja": {
+        "summary": "ループ再生をするかどうか",
+        "description": "ループ再生の有効無効を表します。値を設定することもできます。\n\n真ならばループ、偽ならば非ループです。\n\nループ再生では、最終フレームを 1 フレーム分表示してから先頭へ戻り、onPeriod (`perLoop`) が\n発生します。ループ中は onStatusChanged の `\"stop\"` は発生しません。SDL 版ほかでも有効です。"
+      },
+      "tr": {
+        "summary": "Whether to loop playback",
+        "description": "Indicates whether loop playback is enabled. You can also set this value.\n\nTrue loops; false does not.\n\nIn loop playback, the last frame is shown for one frame before returning to the beginning, and onPeriod (`perLoop`)\noccurs. While looping, `\"stop\"` in onStatusChanged does not occur. This also works in the SDL build and others."
+      }
+    },
+    "VideoOverlay.width": {
+      "hash": "315aa2ced3ac",
+      "ja": {
+        "summary": "再生矩形の横幅",
+        "description": "再生矩形の横幅を表します。値を設定することもできます。\n\nこのプロパティは、現バージョンではレイヤ再生時は使用できません(常にサイズはビデオのサイズと同じになります)。"
+      },
+      "tr": {
+        "summary": "Width of the playback rectangle",
+        "description": "The width of the playback rectangle. You can also set this value.\n\nIn the current version, this property cannot be used during layer playback (the size is always the same as the video size)."
+      }
+    },
+    "VideoOverlay.height": {
+      "hash": "d9cda0eeef8f",
+      "ja": {
+        "summary": "再生矩形の縦幅",
+        "description": "再生矩形の縦幅を表します。値を設定することもできます。\n\nこのプロパティは、現バージョンではレイヤ再生時は使用できません(常にサイズはビデオのサイズと同じになります)。"
+      },
+      "tr": {
+        "summary": "Height of the playback rectangle",
+        "description": "The height of the playback rectangle. You can also set this value.\n\nIn the current version, this property cannot be used during layer playback (the size is always the same as the video size)."
+      }
+    },
+    "VideoOverlay.left": {
+      "hash": "f1997b8815d4",
+      "ja": {
+        "summary": "再生矩形の左端位置",
+        "description": "再生矩形の左端位置を表します。値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Left edge of the playback rectangle",
+        "description": "The left edge of the playback rectangle. You can also set this value."
+      }
+    },
+    "VideoOverlay.top": {
+      "hash": "782d02abdcb3",
+      "ja": {
+        "summary": "再生矩形の上端位置",
+        "description": "再生矩形の上端位置を表します。値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Top edge of the playback rectangle",
+        "description": "The top edge of the playback rectangle. You can also set this value."
+      }
+    },
+    "VideoOverlay.visible": {
+      "hash": "8e54d18df801",
+      "ja": {
+        "summary": "可視かどうか",
+        "description": "再生領域が可視かどうかを指定します。値を設定することもできます。\n\n真ならば可視、偽ならば不可視です。"
+      },
+      "tr": {
+        "summary": "Whether visible",
+        "description": "Specifies whether the playback area is visible. You can also set this value.\n\nTrue means visible; false means invisible."
+      }
+    },
+    "VideoOverlay.fps": {
+      "hash": "7ae1534c74ba",
+      "ja": {
+        "summary": "フレームレート",
+        "description": "フレームレート(フレーム/秒)を表します。\n\nファイルにフレームレートが記録されていない (または 1fps 未満の不正な値の) WebM では 0 になり、\nその場合 frame / numberOfFrame も 0 になります。"
+      },
+      "tr": {
+        "summary": "Frame rate",
+        "description": "The frame rate (frames per second).\n\nFor WebM files that have no frame rate recorded (or have an invalid value below 1 fps), this is 0,\nand in that case frame / numberOfFrame are also 0."
+      }
+    },
+    "VideoOverlay.numberOfFrame": {
+      "hash": "6041bba0207f",
+      "ja": {
+        "summary": "全フレーム数",
+        "description": "全フレーム数を表します。"
+      },
+      "tr": {
+        "summary": "Total number of frames",
+        "description": "The total number of frames."
+      }
+    },
+    "VideoOverlay.totalTime": {
+      "hash": "9470da40a60d",
+      "ja": {
+        "summary": "合計時間",
+        "description": "合計時間をms単位で表します。"
+      },
+      "tr": {
+        "summary": "Total time",
+        "description": "The total time in ms."
+      }
+    },
+    "VideoOverlay.layer1": {
+      "hash": "32a621638e77",
+      "ja": {
+        "summary": "描画レイヤ指定1",
+        "description": "レイヤ描画モード時、描画するレイヤを表します。値を設定することもできます。\n\nlayer1 プロパティと layer2 プロパティを異なるレイヤに設定することにより、同時に２つのレイヤに同じ動画を表示させることができます。"
+      },
+      "tr": {
+        "summary": "Drawing layer 1",
+        "description": "The layer to draw to in layer drawing mode. You can also set this value.\n\nBy setting the layer1 and layer2 properties to different layers, you can show the same movie on two layers at the same time."
+      }
+    },
+    "VideoOverlay.layer2": {
+      "hash": "77e3aa707744",
+      "ja": {
+        "summary": "描画レイヤ指定2",
+        "description": "レイヤ描画モード時、描画するレイヤを表します。値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Drawing layer 2",
+        "description": "The layer to draw to in layer drawing mode. You can also set this value."
+      }
+    },
+    "VideoOverlay.mode": {
+      "hash": "0bc4e6a6b3a0",
+      "ja": {
+        "summary": "再生モードの指定",
+        "description": "再生方式を表します。オープン前に設定してください (オープン後の変更は無効)。\n\n- **vomOverlay** (既定, オーバーレイ): 動画を全画面前面に表示します。Windows では\nmp4/H.264/HEVC/wmv/asf などは既定でハードウェアデコード (Media Foundation の\nIMFMediaEngine) を用い、映像は描画デバイス (BasicDrawDevice) の Direct3D11 バック\nバッファへ直接合成されます。webm/mpeg はソフトウェアデコードです。このモードでは\n{@link VideoOverlay.setMixingLayer setMixingLayer} による追加画像合成は行われません。\n- **vomMixer** (ミキサー): オーバーレイ + 追加画像合成。ハードウェアデコードを使わず\n必ずソフトウェア合成経路になり、{@link VideoOverlay.setMixingLayer setMixingLayer}\nによる画像合成が利用できます (音声も内部処理となり音量制御が確実に効きます)。\n- **vomLayer** (レイヤ描画): 動画をレイヤ ({@link VideoOverlay.layer1 layer1} /\n{@link VideoOverlay.layer2 layer2}) の画像として描画します。\n- **vomMFEVR**: 旧 Media Foundation + EVR モード。現在は vomOverlay と同じ動作です\n(値は互換のため残されています)。\n\nハードウェアデコードはコマンドラインオプション **-mediaengine=no** で無効化でき、その\n場合は全形式ソフトウェアデコードになります。"
+      },
+      "tr": {
+        "summary": "Playback mode",
+        "description": "The playback method. Set it before opening (changes after opening have no effect).\n\n- **vomOverlay** (default, overlay): shows the movie full-screen in front. On Windows,\nmp4/H.264/HEVC/wmv/asf and similar formats use hardware decoding (Media Foundation's\nIMFMediaEngine) by default, and the video is composited directly into the Direct3D11 back\nbuffer of the draw device (BasicDrawDevice). webm/mpeg use software decoding. In this mode,\nno additional image compositing with {@link VideoOverlay.setMixingLayer setMixingLayer} is performed.\n- **vomMixer** (mixer): overlay plus additional image compositing. It does not use hardware decoding and\nalways takes the software compositing path, so image compositing with {@link VideoOverlay.setMixingLayer setMixingLayer}\nis available (audio is also processed internally, so volume control reliably takes effect).\n- **vomLayer** (layer drawing): draws the movie as the image of a layer ({@link VideoOverlay.layer1 layer1} /\n{@link VideoOverlay.layer2 layer2}).\n- **vomMFEVR**: the former Media Foundation + EVR mode. It now behaves the same as vomOverlay\n(the value is kept for compatibility).\n\nHardware decoding can be disabled with the command-line option **-mediaengine=no**, in which\ncase all formats are software-decoded."
+      }
+    },
+    "VideoOverlay.playRate": {
+      "hash": "868fce0589aa",
+      "ja": {
+        "summary": "再生速度",
+        "description": "メディアの再生速度を設定します。\n\n1.0 を指定すると通常の再生速度、0.5 では半分の再生速度、2では2倍の再生速度となります。\n\n設定可能な範囲はデコーダ / コーデックに依存します。\n\n参考 : 音声付の動画の場合、概ね 0.0 より大きい値から 2.0 までの値が設定可能です。音声なしの動画の場合、0.0 より大きい値から double の範囲内で設定可能ですが、実際の再生速度は処理速度によって上限が決まります。"
+      },
+      "tr": {
+        "summary": "Playback rate",
+        "description": "Sets the playback rate of the media.\n\n1.0 is normal speed, 0.5 is half speed, and 2 is double speed.\n\nThe range that can be set depends on the decoder / codec.\n\nFor reference: for movies with audio, values from just above 0.0 up to about 2.0 can generally be set. For movies without audio, any value greater than 0.0 within the range of a double can be set, but the actual playback speed is capped by processing speed."
+      }
+    },
+    "VideoOverlay.segmentLoopStartFrame": {
+      "hash": "765bb66671b5",
+      "ja": {
+        "summary": "セグメントループの開始フレーム",
+        "description": "セグメントループの始端フレームです。"
+      },
+      "tr": {
+        "summary": "Start frame of the segment loop",
+        "description": "The start frame of the segment loop."
+      }
+    },
+    "VideoOverlay.segmentLoopEndFrame": {
+      "hash": "2f9870d0fa73",
+      "ja": {
+        "summary": "セグメントループの終了フレーム",
+        "description": "セグメントループの終端フレームです。"
+      },
+      "tr": {
+        "summary": "End frame of the segment loop",
+        "description": "The end frame of the segment loop."
+      }
+    },
+    "VideoOverlay.periodEventFrame": {
+      "hash": "02d5ca8f005e",
+      "ja": {
+        "summary": "ピリオドイベントフレーム",
+        "description": "periodイベントを発生させるフレームです。\n\n未設定の場合は負の値となります。"
+      },
+      "tr": {
+        "summary": "Period event frame",
+        "description": "The frame at which to raise the period event.\n\nNegative if not set."
+      }
+    },
+    "VideoOverlay.audioBalance": {
+      "hash": "da7e0b3bc7b3",
+      "ja": {
+        "summary": "音声バランス(パニング)",
+        "description": "パン (音像位置) を表します。値を設定することもできます。\n\n音の聞こえる左右の位置を指定することができます。\n\n-100000 ～ 0 ～ 100000 の数値で指定し、 -100000 が 完全に左、0 が中央、100000 が完全に右になります。\n\nステレオのソースを再生する場合は、パンは、左右どちらかのチャンネルを減衰させることで実現されます(0を指定すると両チャンネルが出力され、-100000を指定すると左チャンネルのみが出力される)。"
+      },
+      "tr": {
+        "summary": "Audio balance (panning)",
+        "description": "The pan (stereo position). You can also set this value.\n\nSpecifies the left/right position from which the sound is heard.\n\nSpecify a number from -100000 through 0 to 100000, where -100000 is fully left, 0 is center, and 100000 is fully right.\n\nWhen playing a stereo source, panning is achieved by attenuating either the left or the right channel (0 outputs both channels, and -100000 outputs only the left channel)."
+      }
+    },
+    "VideoOverlay.audioVolume": {
+      "hash": "886c1a2318a6",
+      "ja": {
+        "summary": "音声ボリューム",
+        "description": "再生する音量を表します。値を設定することもできます。\n\n0 ～ 100000 の数値で指定し、 0 が完全ミュート、100000 が 100% の音量となります。"
+      },
+      "tr": {
+        "summary": "Audio volume",
+        "description": "The playback volume. You can also set this value.\n\nSpecify a number from 0 to 100000, where 0 is fully muted and 100000 is 100% volume."
+      }
+    },
+    "VideoOverlay.numberOfAudioStream": {
+      "hash": "f95770108afd",
+      "ja": {
+        "summary": "音声ストリーム数",
+        "description": "MPEGファイルのみで利用可能です。\nオーディオストリーム数を取得できます。"
+      },
+      "tr": {
+        "summary": "Number of audio streams",
+        "description": "Available only for MPEG files.\nGets the number of audio streams."
+      }
+    },
+    "VideoOverlay.enabledAudioStream": {
+      "hash": "e978b258fa61",
+      "ja": {
+        "summary": "再生対象音声ストリーム番号",
+        "description": "MPEGファイルのみで利用可能です。\n再生対象のオーディオストリーム番号を取得できます。\nオーディオストリームが見付からない場合は-1を返します。"
+      },
+      "tr": {
+        "summary": "Audio stream number being played",
+        "description": "Available only for MPEG files.\nGets the number of the audio stream being played.\nReturns -1 if no audio stream is found."
+      }
+    },
+    "VideoOverlay.mixingMovieAlpha": {
+      "hash": "f999473dee5c",
+      "ja": {
+        "summary": "ビデオの透明度",
+        "description": "0.0(完全に透明)～1.0(完全に不透明)の範囲でビデオの透明度を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Video transparency",
+        "description": "The transparency of the video, from 0.0 (fully transparent) to 1.0 (fully opaque).\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.mixingMovieBGColor": {
+      "hash": "454f106acba5",
+      "ja": {
+        "summary": "ビデオの背景色",
+        "description": "ビデオの背景色を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Video background color",
+        "description": "The background color of the video.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.contrastRangeMin": {
+      "hash": "9bf70ac9d41a",
+      "ja": {
+        "summary": "ビデオのコントラストレンジ最小値",
+        "description": "コントラストの幅の最小値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Minimum of the video contrast range",
+        "description": "The minimum of the contrast range.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.contrastRangeMax": {
+      "hash": "794250ab9aec",
+      "ja": {
+        "summary": "ビデオのコントラストレンジ最大値",
+        "description": "コントラストの幅の最大値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Maximum of the video contrast range",
+        "description": "The maximum of the contrast range.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.contrastDefaultValue": {
+      "hash": "d89af515017d",
+      "ja": {
+        "summary": "ビデオのコントラスト既定値",
+        "description": "コントラストの既定値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Default video contrast",
+        "description": "The default contrast value.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.contrastStepSize": {
+      "hash": "b9401e263721",
+      "ja": {
+        "summary": "ビデオのコントラスト増減ステップ値",
+        "description": "contrastRangeMin から contrastRangeMax への有効な増分を表します。\n\nこの値の単位でコントラストを変更できます。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Step size for video contrast",
+        "description": "The valid increment from contrastRangeMin to contrastRangeMax.\n\nThe contrast can be changed in units of this value.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.contrast": {
+      "hash": "4880b00204b2",
+      "ja": {
+        "summary": "ビデオのコントラスト",
+        "description": "ビデオのコントラストを表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Video contrast",
+        "description": "The contrast of the video.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.brightnessRangeMin": {
+      "hash": "10aca390ed3f",
+      "ja": {
+        "summary": "ビデオの輝度レンジ最小値",
+        "description": "輝度の幅の最小値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Minimum of the video brightness range",
+        "description": "The minimum of the brightness range.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.brightnessRangeMax": {
+      "hash": "14d09a757687",
+      "ja": {
+        "summary": "ビデオの輝度レンジ最大値",
+        "description": "輝度の幅の最大値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Maximum of the video brightness range",
+        "description": "The maximum of the brightness range.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.brightnessDefaultValue": {
+      "hash": "b2b0896fd865",
+      "ja": {
+        "summary": "ビデオの輝度既定値",
+        "description": "輝度の既定値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Default video brightness",
+        "description": "The default brightness value.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.brightnessStepSize": {
+      "hash": "6dcfa07fba64",
+      "ja": {
+        "summary": "ビデオの輝度増減ステップ値",
+        "description": "brightnessRangeMin から brightnessRangeMax への有効な増分を表します。\n\nこの値の単位で輝度を変更できます。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Step size for video brightness",
+        "description": "The valid increment from brightnessRangeMin to brightnessRangeMax.\n\nThe brightness can be changed in units of this value.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.brightness": {
+      "hash": "8283ecb9a377",
+      "ja": {
+        "summary": "ビデオの輝度",
+        "description": "ビデオの輝度を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Video brightness",
+        "description": "The brightness of the video.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.hueRangeMin": {
+      "hash": "bf635d994e01",
+      "ja": {
+        "summary": "ビデオの色相レンジ最小値",
+        "description": "色相の幅の最小値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Minimum of the video hue range",
+        "description": "The minimum of the hue range.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.hueRangeMax": {
+      "hash": "0d832190c26d",
+      "ja": {
+        "summary": "ビデオの色相レンジ最大値",
+        "description": "色相の幅の最大値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Maximum of the video hue range",
+        "description": "The maximum of the hue range.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.hueDefaultValue": {
+      "hash": "515866650ddb",
+      "ja": {
+        "summary": "ビデオの色相既定値",
+        "description": "色相の既定値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Default video hue",
+        "description": "The default hue value.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.hueStepSize": {
+      "hash": "cd708caf535f",
+      "ja": {
+        "summary": "ビデオの色相増減ステップ値",
+        "description": "hueRangeMin から hueRangeMax への有効な増分を表します。\n\nこの値の単位で色相を変更できます。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Step size for video hue",
+        "description": "The valid increment from hueRangeMin to hueRangeMax.\n\nThe hue can be changed in units of this value.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.hue": {
+      "hash": "660a227fecdb",
+      "ja": {
+        "summary": "ビデオの色相",
+        "description": "ビデオの色相を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Video hue",
+        "description": "The hue of the video.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.saturationRangeMin": {
+      "hash": "b6f9bf4ab02a",
+      "ja": {
+        "summary": "ビデオの彩度レンジ最小値",
+        "description": "彩度の幅の最小値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Minimum of the video saturation range",
+        "description": "The minimum of the saturation range.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.saturationRangeMax": {
+      "hash": "1d2a29ab753c",
+      "ja": {
+        "summary": "ビデオの彩度レンジ最大値",
+        "description": "彩度の幅の最大値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Maximum of the video saturation range",
+        "description": "The maximum of the saturation range.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.saturationDefaultValue": {
+      "hash": "1d4ff6bd0965",
+      "ja": {
+        "summary": "ビデオの彩度既定値",
+        "description": "彩度の既定値を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Default video saturation",
+        "description": "The default saturation value.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.saturationStepSize": {
+      "hash": "6baef3e73c5c",
+      "ja": {
+        "summary": "ビデオの彩度増減ステップ値",
+        "description": "saturationRangeMin から saturationRangeMax への有効な増分を表します。\n\nこの値の単位で彩度を変更できます。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Step size for video saturation",
+        "description": "The valid increment from saturationRangeMin to saturationRangeMax.\n\nThe saturation can be changed in units of this value.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.saturation": {
+      "hash": "566525b9a558",
+      "ja": {
+        "summary": "ビデオの彩度",
+        "description": "ビデオの彩度を表します。\n\nミキサーモードでのみ利用可能です。"
+      },
+      "tr": {
+        "summary": "Video saturation",
+        "description": "The saturation of the video.\n\nAvailable only in mixer mode."
+      }
+    },
+    "VideoOverlay.originalWidth": {
+      "hash": "9fa6b86b7c08",
+      "ja": {
+        "summary": "ビデオの実際の幅",
+        "description": "格納されているビデオの幅です。"
+      },
+      "tr": {
+        "summary": "Actual width of the video",
+        "description": "The width of the stored video."
+      }
+    },
+    "VideoOverlay.originalHeight": {
+      "hash": "5a55c38a8153",
+      "ja": {
+        "summary": "ビデオの実際の高さ",
+        "description": "格納されているビデオの高さです。"
+      },
+      "tr": {
+        "summary": "Actual height of the video",
+        "description": "The height of the stored video."
+      }
+    },
+    "VideoOverlay.enabledVideoStream": {
+      "hash": "dbace6bc3c95",
+      "ja": {
+        "summary": "有効化中のビデオストリーム番号",
+        "description": "現在再生に使用しているビデオストリームのインデックスを取得 / 設定します。\n設定すると `SelectVideoStream` が呼ばれ、対応するストリームに切り替わります。"
+      },
+      "tr": {
+        "summary": "Index of the enabled video stream",
+        "description": "Gets or sets the index of the video stream currently used for playback.\nSetting it calls `SelectVideoStream` and switches to the corresponding stream."
+      }
+    },
+    "VideoOverlay.numberOfVideoStream": {
+      "hash": "328b4b808e96",
+      "ja": {
+        "summary": "ビデオストリーム数",
+        "description": "開いている動画に含まれるビデオストリームの本数を返します。読み出し専用。"
+      },
+      "tr": {
+        "summary": "Number of video streams",
+        "description": "Returns the number of video streams in the open movie. Read-only."
+      }
+    },
+    "VideoOverlay.onCallbackCommand": {
+      "hash": "f6979998ac7b",
+      "ja": {
+        "summary": "カスタムコマンドコールバック ( イベント )",
+        "description": "動画プレーヤーから任意のコマンド通知を受け取った際に発火するイベントです。",
+        "params": {
+          "command": "コマンド名を指定します。",
+          "arg": "コマンドに付随する引数を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Custom command callback (event)",
+        "description": "An event that fires when an arbitrary command notification is received from the movie player.",
+        "params": {
+          "command": "The command name.",
+          "arg": "The argument accompanying the command."
+        }
+      }
+    }
+  }
+}

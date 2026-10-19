@@ -17,6 +17,8 @@ extra_javascript:
 
 theme:
   name: material
+  # 他言語版の未訳ページに注記を出す (tools/docgen/theme_overrides/main.html)
+  custom_dir: tools/docgen/theme_overrides
   language: ja
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -48,6 +50,148 @@ plugins:
   - search:
       lang: ja
       separator: '[\s\-,:!=\[\]()"/]+|\.(?!\d)|&[lg]t;'
+  # 英語版 (/en/)。訳は Foo.en.md (接尾辞方式)。未訳ページは日本語版をそのまま出す。
+  # 言語を増やすときは languages に 1 項目足す (方針 = TODO-i18n.md C)。
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: ja
+          default: true
+          name: 日本語
+          build: true
+        - locale: en
+          name: English
+          build: true
+          site_name: Kirikiri Z Documentation
+          site_description: Kirikiri Z (吉里吉里Z) TJS2 reference, guides and specifications
+          nav_translations:
+            "ホーム": "Home"
+            "デモ": "Demos"
+            "吉里吉里Z": "Kirikiri Z"
+            "入門・運用": "Getting started"
+            "起動": "Startup"
+            "コマンドラインオプション": "Command-line options"
+            "吉里吉里設定": "Kirikiri settings"
+            "コンソール": "Console"
+            "デバッグ": "Debugging"
+            "環境依存の不具合": "Environment-specific problems"
+            "著作権など": "Copyrights"
+            "ライセンス情報の取得と表示": "Getting and showing license information"
+            "同梱ライセンス一覧": "Bundled licenses"
+            "ファイル一覧": "File list"
+            "サブシステム": "Subsystems"
+            "イベントシステム": "Event system"
+            "グラフィックシステム": "Graphics system"
+            "Layer と Bitmap と ImageFunction": "Layer, Bitmap and ImageFunction"
+            "3Dグラフィックシステム": "3D graphics system"
+            "サウンドシステム": "Sound system"
+            "ストレージシステム": "Storage system"
+            "ダイアログ": "Dialogs"
+            "読み上げ (スクリーンリーダー)": "Screen reader support"
+            "フォントシステム": "Font system"
+            "トランジション": "Transitions"
+            "プラグイン": "Plugins"
+            "標準ツール": "Standard tools"
+            "標準ツールについて": "About the standard tools"
+            "xp3 アーカイブツール": "xp3 archive tool"
+            "キー・署名ツール": "Key and signing tool"
+            "ファイル破損チェックツール": "File corruption checker"
+            "画像フォーマットコンバータ": "Image format converter"
+            "音声フォーマットコンバータ": "Audio format converter"
+            "ループチューナ": "Loop tuner"
+            "リリーサ": "Releaser"
+            "レンダリング済みフォントデータの作成": "Creating pre-rendered font data"
+            "定数一覧": "Constants"
+            "仮想キーコード": "Virtual key codes"
+            "マウスカーソル": "Mouse cursors"
+            "色定数": "Color constants"
+            "TJS2言語仕様": "TJS2 language"
+            "概要": "Overview"
+            "TJS2 について": "About TJS2"
+            "スタイルなど": "Style"
+            "構文": "Syntax"
+            "トークン": "Tokens"
+            "項": "Factors"
+            "式と演算子": "Expressions and operators"
+            "ステートメントとブロック": "Statements and blocks"
+            "if ステートメント": "if statement"
+            "switch ステートメント": "switch statement"
+            "for ステートメント": "for statement"
+            "while ステートメント": "while statement"
+            "with ステートメント": "with statement"
+            "例外処理": "Exception handling"
+            "プリプロセッサ": "Preprocessor"
+            "言語要素": "Language elements"
+            "変数": "Variables"
+            "データ型": "Data types"
+            "関数": "Functions"
+            "クラス": "Classes"
+            "プロパティ": "Properties"
+            "内部仕様": "Internals"
+            "組み込み方法": "Embedding"
+            "基本型": "Basic types"
+            "iTJSDispatch2 インターフェース": "iTJSDispatch2 interface"
+            "tTJSVariant 型": "tTJSVariant type"
+            "仮想マシン": "Virtual machine"
+            "クラスリファレンス": "Class reference"
+            "吉里吉里Z コアクラス": "Kirikiri Z core classes"
+            "吉里吉里Z 3D機能クラス": "Kirikiri Z 3D classes"
+            "吉里吉里Z 管理機能クラス": "Kirikiri Z management classes"
+            "TJS2 組み込みクラス・型": "TJS2 built-in classes and types"
+            "Array クラス": "Array class"
+            "Date クラス": "Date class"
+            "Dictionary クラス": "Dictionary class"
+            "Exception クラス": "Exception class"
+            "Math クラス": "Math class"
+            "Math.RandomGenerator クラス": "Math.RandomGenerator class"
+            "RegExp クラス": "RegExp class"
+            "文字列": "Strings"
+            "オクテット列": "Octets"
+            "プラグイン拡張クラス": "Plugin classes"
+            "GLES 描画 (krkrgles)": "GLES drawing (krkrgles)"
+            "描画 (layerExDraw)": "Drawing (layerExDraw)"
+            "リッチテキスト (krkr_richtext)": "Rich text (krkr_richtext)"
+            "リソース (resourceRW)": "Resources (resourceRW)"
+            "TJS 組み込み拡張": "TJS built-in extensions"
+            "仕様書": "Specifications"
+            "システム構成": "System architecture"
+            "ファイルフォーマット": "File formats"
+            "動画再生機能": "Movie playback"
+            "画像処理機能": "Image processing"
+            "音声再生機能": "Sound playback"
+            "アクセシビリティ (スクリーンリーダー)": "Accessibility (screen readers)"
+            "周辺情報": "Topics"
+            "ユーザー向け情報": "For users"
+            "エンジン設定ツール": "Engine settings tool"
+            "TJS2 で利用する機能": "Engine features used from TJS2"
+            "ツールチップの表示方法": "Showing tooltips"
+            "非同期画像読み込み": "Asynchronous image loading"
+            "吉里吉里2と吉里吉里Zの判別方法": "Telling Kirikiri 2 and Kirikiri Z apart"
+            "動画の再生方法": "Playing movies"
+            "Wamsoft 派生版で削除/追加された機能": "Features removed/added in the Wamsoft fork"
+            "吉里吉里Zで削除された機能": "Features removed in Kirikiri Z"
+            "サポートするファイルフォーマット": "Supported file formats"
+            "型指定構文": "Type annotation syntax"
+            "よくある落とし穴": "Common pitfalls"
+            "ツール": "Tools"
+            "本体 (exe) 変更者向け情報": "For engine (exe) modifiers"
+            "エンジン設定の追加/編集": "Adding/editing engine settings"
+            "吉里吉里Z固有のクラッキング対策": "Anti-cracking measures specific to Kirikiri Z"
+            "メモリ不足対策": "Dealing with low memory"
+            "メモリ観測・リーク調査": "Memory observation and leak hunting"
+            "描画スレッドプール利用率の計測 (DrawStats)": "Measuring draw thread pool usage (DrawStats)"
+            "Elements UI 機構の全体像": "Overview of the Elements UI"
+            "ゲームパッド入力": "Gamepad input"
+            "ゲームパッド状態の観察 (PadOverlay)": "Observing gamepad state (PadOverlay)"
+            "REPL (対話型 TJS シェル)": "REPL (interactive TJS shell)"
+            "Steam Deck 実機確認 (リリース前チェック)": "Steam Deck check (before release)"
+            "Linux 版の配布パッケージ (krkrz_linux)": "Linux distribution package (krkrz_linux)"
+            "ゲーム画面の表示画角制御 (ビューポート)": "Viewport control"
+            "ログ出力": "Logging"
+            "ライセンス": "License"
 
 markdown_extensions:
   - admonition
@@ -62,12 +206,15 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.details
 
-# 自動生成のメタファイル類はサイト内に出さない
+# 自動生成のメタファイル類と翻訳用資材 (doc/i18n: カタログ・用語集) はサイト内に出さない
 exclude_docs: |
   _missing.md
   _inventory.json
+  i18n/
 
 nav:
+  # index.md を nav に入れておかないと i18n プラグインがホームを見つけられない (strict で失敗)
+  - ホーム: index.md
   - デモ: demos.md
   - 吉里吉里Z:
     - guide/about.md

@@ -1,0 +1,420 @@
+{
+  "class": "Agent",
+  "entries": {
+    "Agent": {
+      "hash": "f90fe3d54591",
+      "ja": {
+        "summary": "Agent クラスはエージェント駆動 (テスト/自動化) のための API を提供するクラスです。このクラスからオブジェクトを作成することはできません。System と同様に `Agent.click(...)` のように直接呼び出して使用します。",
+        "description": "このクラスは、入力イベント ( マウス / キー / ホイール ) の注入、実画面のキャプチャ、Elements ダイアログの観測・操作を行うための機能を提供します。外部エージェントから吉里吉里を駆動して動作を検証する用途を想定しています。\n\nこのクラスは REPL 機能が有効なとき ( コマンドラインオプションの `-repl` / `-replfile` / `-replweb` のいずれか ) かつ Elements を有効にしたビルドでのみ利用できます ( REPL 駆動については REPL.md を参照 )。\n\n座標はすべて論理座標で指定します。`shift` 引数はシフト状態のビットフラグで、既定値は 0 です。`button` 引数は 0 = 左ボタン / 1 = 右ボタン / 2 = 中ボタンです。`vk` 引数は仮想キーコードの数値です。ダイアログ系のメソッド ( `dialogs` / `dialogTree` / `closeDialog` / `closeAllDialogs` / `dialogClick` / `dialogFocus` / `text` ) は Elements を有効にしたビルドでのみ動作します。"
+      },
+      "tr": {
+        "summary": "The Agent class provides an API for agent-driven operation (testing / automation). You cannot create objects from this class; like System, call its members directly, as in `Agent.click(...)`.",
+        "description": "This class provides injection of input events ( mouse / key / wheel ), capture of the actual screen, and observation and manipulation of Elements dialogs. It is intended for driving Kirikiri from an external agent to verify behavior.\n\nThis class is only available when the REPL feature is enabled ( any of the command-line options `-repl` / `-replfile` / `-replweb` ) and in builds with Elements enabled ( see REPL.md for REPL-driven operation ).\n\nAll coordinates are logical coordinates. The `shift` argument is a bit flag of the shift state; the default is 0. The `button` argument is 0 = left button / 1 = right button / 2 = middle button. The `vk` argument is a numeric virtual key code. The dialog-related methods ( `dialogs` / `dialogTree` / `closeDialog` / `closeAllDialogs` / `dialogClick` / `dialogFocus` / `text` ) only work in builds with Elements enabled."
+      }
+    },
+    "Agent.ignoreRealMouse": {
+      "hash": "81f4e42c28c6",
+      "ja": {
+        "summary": "実マウス入力を捨てる ( 動作テスト用 )",
+        "description": "真にすると**実マウスの入力をすべて捨て**、Agent から注入された入力だけを\n通します。自動テストで「入力は全部 Agent が出す」前提を作るためのもので、\n人がうっかりポインタを動かしても測定が汚れません。\n\n起動オプション `-ignoremouse=yes` を付けると最初から有効です。\n\nhover 判定やカーソル参照は**仮想カーソル位置**を見るようになっており、\nAgent の注入でその位置が更新されるので、有効にしてもホバーやフォーカスは\n従来どおり動きます。\n\n⚠ 有効にすると**人の手ではマウス操作できなくなります**。検証用です。"
+      },
+      "tr": {
+        "summary": "Discards real mouse input ( for behavior testing )",
+        "description": "When true, **all real mouse input is discarded** and only input injected by Agent\nis passed through. This establishes the premise that \"all input comes from Agent\" in automated tests,\nso a person accidentally moving the pointer does not spoil the measurement.\n\nThe command-line option `-ignoremouse=yes` enables it from startup.\n\nHover detection and cursor queries look at the **virtual cursor position**,\nwhich Agent's injected input updates, so hover and focus keep working\nas usual even when this is enabled.\n\n⚠ When enabled, **the mouse can no longer be operated by hand**. It is meant for verification."
+      }
+    },
+    "Agent.mouseMove": {
+      "hash": "42b89c5b5ec1",
+      "ja": {
+        "summary": "マウス移動の注入",
+        "description": "指定した論理座標へのマウス移動イベントを注入します。",
+        "params": {
+          "x": "移動先の X 座標を論理座標で指定します。",
+          "y": "移動先の Y 座標を論理座標で指定します。",
+          "shift": "シフト状態のビットフラグを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Injects a mouse move",
+        "description": "Injects a mouse move event to the given logical coordinates.",
+        "params": {
+          "x": "Destination X coordinate, in logical coordinates.",
+          "y": "Destination Y coordinate, in logical coordinates.",
+          "shift": "Bit flag of the shift state."
+        }
+      }
+    },
+    "Agent.mouseDown": {
+      "hash": "698679b73722",
+      "ja": {
+        "summary": "マウスボタン押下の注入",
+        "description": "指定した論理座標でのマウスボタン押下イベントを注入します。",
+        "params": {
+          "x": "X 座標を論理座標で指定します。",
+          "y": "Y 座標を論理座標で指定します。",
+          "button": "ボタン番号を指定します ( 0 = 左 / 1 = 右 / 2 = 中 )。",
+          "shift": "シフト状態のビットフラグを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Injects a mouse button press",
+        "description": "Injects a mouse button press event at the given logical coordinates.",
+        "params": {
+          "x": "X coordinate, in logical coordinates.",
+          "y": "Y coordinate, in logical coordinates.",
+          "button": "Button number ( 0 = left / 1 = right / 2 = middle ).",
+          "shift": "Bit flag of the shift state."
+        }
+      }
+    },
+    "Agent.mouseUp": {
+      "hash": "8ec0c08b654a",
+      "ja": {
+        "summary": "マウスボタン解放の注入",
+        "description": "指定した論理座標でのマウスボタン解放イベントを注入します。",
+        "params": {
+          "x": "X 座標を論理座標で指定します。",
+          "y": "Y 座標を論理座標で指定します。",
+          "button": "ボタン番号を指定します ( 0 = 左 / 1 = 右 / 2 = 中 )。",
+          "shift": "シフト状態のビットフラグを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Injects a mouse button release",
+        "description": "Injects a mouse button release event at the given logical coordinates.",
+        "params": {
+          "x": "X coordinate, in logical coordinates.",
+          "y": "Y coordinate, in logical coordinates.",
+          "button": "Button number ( 0 = left / 1 = right / 2 = middle ).",
+          "shift": "Bit flag of the shift state."
+        }
+      }
+    },
+    "Agent.click": {
+      "hash": "f07bcb14cc9a",
+      "ja": {
+        "summary": "クリックの注入",
+        "description": "指定した論理座標に対して、hover ( 移動 ) → 押下 → 解放 を一括で注入し、\n1 回のクリック操作を再現します。",
+        "params": {
+          "x": "X 座標を論理座標で指定します。",
+          "y": "Y 座標を論理座標で指定します。",
+          "button": "ボタン番号を指定します ( 0 = 左 / 1 = 右 / 2 = 中 )。",
+          "shift": "シフト状態のビットフラグを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Injects a click",
+        "description": "Injects hover ( move ) → press → release at the given logical coordinates in one go,\nreproducing a single click.",
+        "params": {
+          "x": "X coordinate, in logical coordinates.",
+          "y": "Y coordinate, in logical coordinates.",
+          "button": "Button number ( 0 = left / 1 = right / 2 = middle ).",
+          "shift": "Bit flag of the shift state."
+        }
+      }
+    },
+    "Agent.wheel": {
+      "hash": "38cd16080c24",
+      "ja": {
+        "summary": "マウスホイールの注入",
+        "description": "マウスホイールの回転イベントを注入します。",
+        "params": {
+          "delta": "回転量を指定します ( 1 ノッチ = 120 単位 )。",
+          "x": "X 座標を論理座標で指定します。",
+          "y": "Y 座標を論理座標で指定します。",
+          "shift": "シフト状態のビットフラグを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Injects a mouse wheel event",
+        "description": "Injects a mouse wheel rotation event.",
+        "params": {
+          "delta": "Rotation amount ( 1 notch = 120 units ).",
+          "x": "X coordinate, in logical coordinates.",
+          "y": "Y coordinate, in logical coordinates.",
+          "shift": "Bit flag of the shift state."
+        }
+      }
+    },
+    "Agent.keyDown": {
+      "hash": "edcddee6647f",
+      "ja": {
+        "summary": "キー押下の注入",
+        "description": "キー押下イベントを注入します。",
+        "params": {
+          "vk": "仮想キーコード ( VK_* ) の数値を指定します。",
+          "shift": "シフト状態のビットフラグを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Injects a key press",
+        "description": "Injects a key press event.",
+        "params": {
+          "vk": "Numeric virtual key code ( VK_* ).",
+          "shift": "Bit flag of the shift state."
+        }
+      }
+    },
+    "Agent.keyUp": {
+      "hash": "cd67845d9ee7",
+      "ja": {
+        "summary": "キー解放の注入",
+        "description": "キー解放イベントを注入します。",
+        "params": {
+          "vk": "仮想キーコード ( VK_* ) の数値を指定します。",
+          "shift": "シフト状態のビットフラグを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Injects a key release",
+        "description": "Injects a key release event.",
+        "params": {
+          "vk": "Numeric virtual key code ( VK_* ).",
+          "shift": "Bit flag of the shift state."
+        }
+      }
+    },
+    "Agent.keyPress": {
+      "hash": "128c3f29ba02",
+      "ja": {
+        "summary": "キー押下＋解放の注入",
+        "description": "キーの押下と解放を一括で注入し、1 回のキー入力を再現します。\n\n注入されるのは**キーイベントだけ**です。文字入力イベント\n( [Window.onKeyPress](Window.md#onkeypress) ) は OS のテキスト入力経路を\n通って発生するため、このメソッドでは発生しません。自動テストで文字を\n入力したい場合は Elements の入力欄と [Agent.text](Agent.md#text) を\n使用してください。",
+        "params": {
+          "vk": "仮想キーコード ( VK_* ) の数値を指定します。",
+          "shift": "シフト状態のビットフラグを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Injects a key press + release",
+        "description": "Injects a key press and release in one go, reproducing a single keystroke.\n\nOnly **key events** are injected. Character input events\n( [Window.onKeyPress](Window.md#onkeypress) ) are generated through the OS text input path,\nso this method does not trigger them. To enter text in automated tests,\nuse an Elements input field together with [Agent.text](Agent.md#text).",
+        "params": {
+          "vk": "Numeric virtual key code ( VK_* ).",
+          "shift": "Bit flag of the shift state."
+        }
+      }
+    },
+    "Agent.text": {
+      "hash": "3ef61abac63c",
+      "ja": {
+        "summary": "テキストの送出",
+        "description": "アクティブな Elements ダイアログの入力欄 ( input_box ) へ UTF-8 テキストを\n送出します。対象となる入力欄が無い場合は無視されます。",
+        "params": {
+          "str": "送出する UTF-8 テキストを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sends text",
+        "description": "Sends UTF-8 text to the input field ( input_box ) of the active Elements dialog.\nIgnored if there is no target input field.",
+        "params": {
+          "str": "UTF-8 text to send."
+        }
+      }
+    },
+    "Agent.dialogs": {
+      "hash": "5c103d2b524a",
+      "ja": {
+        "summary": "アクティブなダイアログ一覧の取得",
+        "description": "現在アクティブな Elements ダイアログの記述子の配列を返します。",
+        "returns": "ダイアログ記述子の配列が返ります。各要素は\n`%[index, modal, active, screen, focused, textFocus, x, y, w, h]` 形式の辞書です。\n\n`textFocus` は「テキスト入力ウィジェット ( input_box 等 ) が編集フォーカスを\n持っているか」で、ソフトキーボードや IME を開くかどうかの判断に使われている値\nそのものです。日本語入力が始まらない等の切り分けに使えます。\n\n`screen` はフロー ( navigator ) の現画面名で、単発のダイアログでは空です。\n`focused` はフォーカス中のウィジェット id ですが、**id を追跡する仕掛けを持つ\n画面でのみ埋まります**。空だからフォーカスが無い、という意味ではありません\n( フォーカスの有無を見たいときは `textFocus` か\n[Agent.dialogTree](Agent.md#dialogtree) を使ってください )。"
+      },
+      "tr": {
+        "summary": "Gets the list of active dialogs",
+        "description": "Returns an array of descriptors of the currently active Elements dialogs.",
+        "returns": "An array of dialog descriptors. Each element is a dictionary of the form\n`%[index, modal, active, screen, focused, textFocus, x, y, w, h]`.\n\n`textFocus` indicates whether a text input widget ( input_box, etc. ) has editing focus;\nit is the very value used to decide whether to open the software keyboard or IME.\nUseful for isolating problems such as Japanese input not starting.\n\n`screen` is the current screen name of a flow ( navigator ); it is empty for a standalone dialog.\n`focused` is the id of the focused widget, but **it is filled in only on screens that have\na mechanism for tracking ids**. Empty does not mean there is no focus\n( to check whether anything has focus, use `textFocus` or\n[Agent.dialogTree](Agent.md#dialogtree) )."
+      }
+    },
+    "Agent.imeStatus": {
+      "hash": "82ab14eb0de0",
+      "ja": {
+        "summary": "IME 状態の取得",
+        "description": "ウィンドウごとの IME 関連の状態を返します。「入力欄にキャレットは出ているのに\n日本語が打てない」といった不具合の切り分け用です。\n\nWindows ネイティブ ( WINVER ) ビルドでのみ中身が入ります。他のビルドでは\n常に空の配列が返ります。",
+        "returns": "各ウィンドウの状態を表す辞書の配列が返ります。主な項目は次のとおりです。\n\n`contextAttached` … 入力コンテキストが結び付いているか。**偽なら IME は完全に\n無効**で、[Window.imeMode](Window.md#imemode) も半角/全角キーも効きません。\n`conversion` も 0 になります。\n\n偽になるのは、フォーカスのあるレイヤの\n[imeMode](Layer.md#imemode) が `imDisable` のとき (既定値です) か、\n外部から `Window.resetImeContext(false)` 等で切られたときです。\n前者は**正常な状態**で、`imDisable` 以外のレイヤへフォーカスが移れば\n自動的に結び直されます。テキスト欄に入っているのに偽のままなら後者を疑います。\n\n`hasFocus` … このウィンドウがキーボードフォーカスを持つか。偽の間は IME モードの\n適用そのものが行われません。\n\n`keyTrapperIsSelf` … 偽の場合、`trapKey` が真の別ウィンドウのモードが適用されます。\n\n`imeMode` … 実際に適用しているモード。`defaultImeMode` は\n[Window.imeMode](Window.md#imemode) が返す既定値です。\n\n`overrideActive` … ElementsDialog のテキスト欄が IME を握っているか。\n`contextForced` はそのために入力コンテキストを結び直したか。\n\n`areaX` / `areaY` / `areaW` / `areaH` / `areaCursor` … IME の変換 / 変換候補\nウィンドウを寄せるために最後にホストへ渡した矩形 ( ウィンドウクライアント\n座標 px ) と、その左端からのキャレット相対 x です。`areaValid` が偽なら\nテキスト欄に編集フォーカスがありません。\n\nほかに `visible` / `trapKeys` / `attentionPoint` / `controlImeState` /\n`disabledBySelf` / `imeAvailable` / `open` / `savedImeMode` / `conversion` /\n`sentence` / `index` / `isMain` があります。SDL3 ビルドでは\n`textInputActive` と上記の area 系のみが入ります。"
+      },
+      "tr": {
+        "summary": "Gets the IME state",
+        "description": "Returns IME-related state for each window. Intended for isolating problems such as\n\"the caret appears in the input field, but Japanese cannot be typed\".\n\nIt only has content in the native Windows ( WINVER ) build. Other builds\nalways return an empty array.",
+        "returns": "An array of dictionaries describing each window's state. The main items are as follows.\n\n`contextAttached` … whether an input context is associated. **If false, the IME is completely\ndisabled**: neither [Window.imeMode](Window.md#imemode) nor the Hankaku/Zenkaku key has any effect,\nand `conversion` is also 0.\n\nIt becomes false when the focused layer's\n[imeMode](Layer.md#imemode) is `imDisable` (the default), or when\nthe context has been cut externally, e.g. by `Window.resetImeContext(false)`.\nThe former is **a normal state**; the context is reassociated automatically when focus moves\nto a layer other than `imDisable`. If it stays false while in a text field, suspect the latter.\n\n`hasFocus` … whether this window has keyboard focus. While false, the IME mode\nis not applied at all.\n\n`keyTrapperIsSelf` … if false, the mode of another window whose `trapKey` is true is applied.\n\n`imeMode` … the mode actually applied. `defaultImeMode` is the default value returned by\n[Window.imeMode](Window.md#imemode).\n\n`overrideActive` … whether an ElementsDialog text field holds the IME.\n`contextForced` indicates whether the input context was reassociated for that purpose.\n\n`areaX` / `areaY` / `areaW` / `areaH` / `areaCursor` … the rectangle last passed to the host to position\nthe IME composition / candidate windows ( window client\ncoordinates in px ), and the caret x relative to its left edge. If `areaValid` is false,\nno text field has editing focus.\n\nOther items are `visible` / `trapKeys` / `attentionPoint` / `controlImeState` /\n`disabledBySelf` / `imeAvailable` / `open` / `savedImeMode` / `conversion` /\n`sentence` / `index` / `isMain`. SDL3 builds only fill in\n`textInputActive` and the area items above."
+      }
+    },
+    "Agent.dialogTree": {
+      "hash": "e956569aaa9b",
+      "ja": {
+        "summary": "ダイアログのウィジェット一覧の取得",
+        "description": "指定したダイアログの、id を持つウィジェットの一覧を返します。",
+        "returns": "ウィジェットの配列が返ります。各要素は `%[id, type, value]`\n形式の辞書です。",
+        "params": {
+          "index": "対象とするダイアログのインデックスを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the list of a dialog's widgets",
+        "description": "Returns the list of widgets with an id in the given dialog.",
+        "returns": "An array of widgets. Each element is a dictionary of the form `%[id, type, value]`.",
+        "params": {
+          "index": "Index of the target dialog."
+        }
+      }
+    },
+    "Agent.closeDialog": {
+      "hash": "015c90311a37",
+      "ja": {
+        "summary": "ダイアログを閉じる",
+        "description": "最前面の Elements ダイアログを閉じます。",
+        "params": {
+          "index": "対象とするダイアログのインデックスを指定します ( 現状この\n引数は無視され、常に最前面のダイアログが閉じられます )。"
+        }
+      },
+      "tr": {
+        "summary": "Closes a dialog",
+        "description": "Closes the frontmost Elements dialog.",
+        "params": {
+          "index": "Index of the target dialog ( currently this\nargument is ignored and the frontmost dialog is always closed )."
+        }
+      }
+    },
+    "Agent.closeAllDialogs": {
+      "hash": "498997f77ccc",
+      "ja": {
+        "summary": "すべてのダイアログを閉じる",
+        "description": "すべての Elements ダイアログを強制的に閉じます。"
+      },
+      "tr": {
+        "summary": "Closes all dialogs",
+        "description": "Forcibly closes all Elements dialogs."
+      }
+    },
+    "Agent.dialogClick": {
+      "hash": "ea571319d379",
+      "ja": {
+        "summary": "ダイアログのウィジェットを実行する",
+        "description": "指定したダイアログの id を持つウィジェットへ focus を移動し、実行します\n( Enter 相当 )。座標を指定する必要はありません。",
+        "params": {
+          "index": "対象とするダイアログのインデックスを指定します。",
+          "id": "実行するウィジェットの id を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Activates a dialog widget",
+        "description": "Moves focus to the widget with the given id in the given dialog and activates it\n( equivalent to Enter ). No coordinates are needed.",
+        "params": {
+          "index": "Index of the target dialog.",
+          "id": "id of the widget to activate."
+        }
+      }
+    },
+    "Agent.dialogFocus": {
+      "hash": "0416bd3d64f8",
+      "ja": {
+        "summary": "ダイアログのウィジェットへ focus を移動する",
+        "description": "指定したダイアログの id を持つウィジェットへ focus を移動します。",
+        "params": {
+          "index": "対象とするダイアログのインデックスを指定します。",
+          "id": "focus を移動するウィジェットの id を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Moves focus to a dialog widget",
+        "description": "Moves focus to the widget with the given id in the given dialog.",
+        "params": {
+          "index": "Index of the target dialog.",
+          "id": "id of the widget to move focus to."
+        }
+      }
+    },
+    "Agent.captureScreen": {
+      "hash": "15cb6d07669a",
+      "ja": {
+        "summary": "実画面を PNG 保存する",
+        "description": "次フレームの present 込みで実画面を読み戻し、path へ PNG 保存する要求を\n立てます。x, y, w, h で保存範囲を指定でき、w / h を 0 にすると画面全体に\nなります。",
+        "returns": "保存先パスが返ります。",
+        "params": {
+          "path": "保存先の統一ストレージパス ( .png ) を指定します。",
+          "x": "保存範囲の左端を指定します。",
+          "y": "保存範囲の上端を指定します。",
+          "w": "保存範囲の幅を指定します ( 0 で画面全体 )。",
+          "h": "保存範囲の高さを指定します ( 0 で画面全体 )。"
+        }
+      },
+      "tr": {
+        "summary": "Saves the actual screen as PNG",
+        "description": "Requests that the actual screen be read back, including the next frame's present, and saved as PNG to path.\nx, y, w, h specify the area to save; setting w / h to 0 captures the whole\nscreen.",
+        "returns": "The destination path.",
+        "params": {
+          "path": "Destination unified storage path ( .png ).",
+          "x": "Left edge of the area to save.",
+          "y": "Top edge of the area to save.",
+          "w": "Width of the area to save ( 0 for the whole screen ).",
+          "h": "Height of the area to save ( 0 for the whole screen )."
+        }
+      }
+    },
+    "Agent.lastCapture": {
+      "hash": "ccf3d8d89742",
+      "ja": {
+        "summary": "直近のキャプチャ結果の取得",
+        "description": "直近の [Agent.captureScreen](Agent.md#capturescreen) の結果を返します。",
+        "returns": "`%[path, width, height, ok]` 形式の辞書が返ります。"
+      },
+      "tr": {
+        "summary": "Gets the most recent capture result",
+        "description": "Returns the result of the most recent [Agent.captureScreen](Agent.md#capturescreen).",
+        "returns": "A dictionary of the form `%[path, width, height, ok]`."
+      }
+    },
+    "Agent.a11yTree": {
+      "hash": "88109466dd74",
+      "ja": {
+        "summary": "読み上げツリーの取得",
+        "description": "スクリーンリーダーに見えている読み上げツリーを JSON 文字列で返します。\nスクリーンリーダーが繋がっていなくても取れます。\n\n`{\"dialogs\":[{\"index\",\"screen\",\"modal\",\"tree\"}],\"game\":{\"hidden\",\"tree\"}}` の形で、\n`dialogs` は表示中のダイアログ、`game` はゲーム本体\n( [ElementsDialog.setGameA11y](ElementsDialog.md#setgamea11y) /\n[ElementsDialog.a11yLayers](ElementsDialog.md#a11ylayers) ) のノードです\n( 無ければ `null`。`hidden` はモーダルなダイアログの下で隠れているか )。\nノードの `id` は画面 JSON の `\"id\"` か setGameA11y の id で、無いものは\n`\"#<16 進>\"` になります。REPL の `.a11y` と同じです。",
+        "returns": "読み上げツリーの JSON 文字列が返ります。"
+      },
+      "tr": {
+        "summary": "Gets the accessibility tree",
+        "description": "Returns the accessibility tree seen by screen readers as a JSON string.\nIt is available even when no screen reader is connected.\n\nThe form is `{\"dialogs\":[{\"index\",\"screen\",\"modal\",\"tree\"}],\"game\":{\"hidden\",\"tree\"}}`;\n`dialogs` are the dialogs being shown, and `game` is the node for the game itself\n( [ElementsDialog.setGameA11y](ElementsDialog.md#setgamea11y) /\n[ElementsDialog.a11yLayers](ElementsDialog.md#a11ylayers) )\n( `null` if absent; `hidden` indicates whether it is hidden under a modal dialog ).\nA node's `id` is the `\"id\"` from the screen JSON or the id given to setGameA11y; nodes without one\nget `\"#<hex>\"`. Same as the REPL `.a11y` command.",
+        "returns": "The accessibility tree as a JSON string."
+      }
+    },
+    "Agent.a11yLog": {
+      "hash": "0bcb03d21aba",
+      "ja": {
+        "summary": "読み上げログの取得",
+        "description": "「スクリーンリーダーがおおよそ何と読むか」を 1 行ずつ記録したログを返します。\n行は `[focus]` / `[value]` / `[state]` / `[caret]` / `[selected]` / `[polite]` などで\n始まり、[ElementsDialog.announce](ElementsDialog.md#announce) もここに残ります。\nログは REPL が動いているときだけ溜まります。REPL の `.a11ylog` と同じです。\n\n```tjs\nvar r = Agent.a11yLog(since);\nfor (var i = 0; i < r.lines.count; i++) Debug.message(r.lines[i]);\nsince = r.next;   // 次回は差分だけ\n```",
+        "returns": "`%[lines, next]` 形式の辞書が返ります。`next` を次回の since に渡すと差分だけ取れます。",
+        "params": {
+          "since": "この位置以降の行を返します ( 省略で先頭から )。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the screen reader log",
+        "description": "Returns a log that records, one line at a time, roughly what a screen reader would say.\nLines start with `[focus]` / `[value]` / `[state]` / `[caret]` / `[selected]` / `[polite]`, etc.,\nand [ElementsDialog.announce](ElementsDialog.md#announce) is recorded here too.\nThe log only accumulates while the REPL is running. Same as the REPL `.a11ylog` command.\n\n```tjs\nvar r = Agent.a11yLog(since);\nfor (var i = 0; i < r.lines.count; i++) Debug.message(r.lines[i]);\nsince = r.next;   // 次回は差分だけ\n```",
+        "returns": "A dictionary of the form `%[lines, next]`. Passing `next` as since next time returns only the new lines.",
+        "params": {
+          "since": "Returns lines from this position on ( from the beginning if omitted )."
+        }
+      }
+    },
+    "Agent.a11yAction": {
+      "hash": "07689b49e991",
+      "ja": {
+        "summary": "スクリーンリーダーと同じ経路で操作する",
+        "description": "[Agent.a11yTree](Agent.md#a11ytree) のノードを、スクリーンリーダーからの操作と\n同じ経路で操作します ( キー入力の合成ではありません )。読み上げ対応の検証に使います。\n最前面のダイアログから探し、モーダルなダイアログが無ければゲーム本体のノードも\n探します。REPL の `.a11ydo` と同じです。",
+        "returns": "操作できたら真が返ります。",
+        "params": {
+          "node": "操作するノードの `id`。",
+          "action": "`\"click\"` / `\"focus\"` / `\"increment\"` / `\"decrement\"` / `\"set_value\"`。",
+          "arg": "`\"set_value\"` のときの値。"
+        }
+      },
+      "tr": {
+        "summary": "Operates via the same path as a screen reader",
+        "description": "Operates a node of [Agent.a11yTree](Agent.md#a11ytree) through the same path as operations from\na screen reader ( not synthesized key input ). Used to verify screen reader support.\nSearches from the frontmost dialog; if there is no modal dialog, the game's own nodes are\nsearched too. Same as the REPL `.a11ydo` command.",
+        "returns": "True if the operation succeeded.",
+        "params": {
+          "node": "`id` of the node to operate.",
+          "action": "`\"click\"` / `\"focus\"` / `\"increment\"` / `\"decrement\"` / `\"set_value\"`.",
+          "arg": "Value for `\"set_value\"`."
+        }
+      }
+    }
+  }
+}

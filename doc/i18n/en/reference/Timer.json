@@ -1,0 +1,88 @@
+{
+  "class": "Timer",
+  "entries": {
+    "Timer": {
+      "hash": "f32d9e6c77c9",
+      "ja": {
+        "summary": "Timer クラスは、一定時間ごとにイベントを発生するためのクラスです。"
+      },
+      "tr": {
+        "summary": "The Timer class raises events at regular intervals."
+      }
+    },
+    "Timer.Timer": {
+      "hash": "eb86936dd45e",
+      "ja": {
+        "summary": "Timer オブジェクトの構築",
+        "description": "Timer クラスのオブジェクトを構築します。\n\n初期状態では interval プロパティは 1000、enabled プロパティは偽になっています。",
+        "params": {
+          "owner": "イベントの発生先を指定します。",
+          "actionname": "owner で指定したイベントの発生先オブジェクトで、イベントを受け取るメソッド名を\n指定します。空文字列を指定すると owner はメソッドとみなされ、イベントの周期ごとに\nowner が直接呼ばれます。"
+        }
+      },
+      "tr": {
+        "summary": "Constructs a Timer object",
+        "description": "Constructs an object of the Timer class.\n\nInitially, the interval property is 1000 and the enabled property is false.",
+        "params": {
+          "owner": "Target that receives the event.",
+          "actionname": "Name of the method on the owner object that receives the event.\nIf you pass an empty string, owner itself is treated as a method and is called\ndirectly at every interval."
+        }
+      }
+    },
+    "Timer.onTimer": {
+      "hash": "da7a94e6d247",
+      "ja": {
+        "summary": "タイマー周期が来た",
+        "description": "タイマーの周期ごとに呼ばれます。"
+      },
+      "tr": {
+        "summary": "The timer interval has elapsed",
+        "description": "Called at every timer interval."
+      }
+    },
+    "Timer.interval": {
+      "hash": "ef17a98538f5",
+      "ja": {
+        "summary": "イベントの発生周期",
+        "description": "イベントの発生**周期**を表します。値を設定することもできます。\n\n単位は ms ( ミリ秒 ) で、指定された時間ごとにイベントが発生します。\n\n実数で発生周期を指定することもできます。現バージョンでは、1/65536ミリ秒精度で\n指定することができます (小数点以下の数値は、この精度に丸められます)。\n\n1/65536ミリ秒程度の精度があると言っても、実際にこの精度でイベントハンドラが呼び出される保証はありません。\n実際には、イベントが呼び出されるタイミングには3～10ms程度のぶれがあります。\nしかし、平均的・長期的にはこのプロパティで指定した周期でイベントが発生するように自動的に調整が行われます。"
+      },
+      "tr": {
+        "summary": "Event interval",
+        "description": "Represents the event **interval**. This property can also be set.\n\nThe unit is ms (milliseconds); an event occurs each time the specified period elapses.\n\nYou can also specify the interval as a real number. In the current version it can be specified\nwith a precision of 1/65536 ms (fractional values are rounded to this precision).\n\nEven with a precision of about 1/65536 ms, there is no guarantee that the event handler is actually called with that precision.\nIn practice, the timing of events jitters by about 3 to 10 ms.\nHowever, the timing is adjusted automatically so that, on average and over the long term, events occur at the interval specified by this property."
+      }
+    },
+    "Timer.capacity": {
+      "hash": "e29353dee22a",
+      "ja": {
+        "summary": "イベントの最大発生許容量",
+        "description": "どれだけのイベントを、一時期に発生させることができるかを指定します。値を設定することもできます。\n\nタイマの周期よりも長い処理が行われた時など、タイマイベントを処理しきれない場合があります。\nこのとき、タイマはイベントをイベントキューには溜めますが、そのイベントキューに溜めるイベントの数には上限があります。\nこのプロパティはその最大数を指定します。\n\nイベントを処理する段階になった場合、吉里吉里はキューに溜まった数のイベントを一時期に処理しようとします。\n\n1を指定すると、イベントキューには最大1個までしかイベントが溜まりません。0 を指定するとイベントキューに溜まるイベントの数に\n制限はなくなりますが、あまりにイベントが溜まりすぎると、フリーズしたようになる可能性があるので注意してください。\n\nデフォルトは 6 です。"
+      },
+      "tr": {
+        "summary": "Maximum number of pending events",
+        "description": "Specifies how many events can be raised at once. This property can also be set.\n\nThe timer may be unable to keep up with its events, for example when processing takes longer than the timer interval.\nIn that case the timer stores events in the event queue, but the number of events it can store there is limited.\nThis property specifies that maximum.\n\nWhen it is time to process events, Kirikiri tries to process all the events in the queue at once.\n\nIf you specify 1, at most one event is stored in the event queue. If you specify 0, there is no limit to the number of\nqueued events, but note that if too many events pile up, the application may appear to freeze.\n\nThe default is 6."
+      }
+    },
+    "Timer.enabled": {
+      "hash": "8f3ed990440d",
+      "ja": {
+        "summary": "イベントを発生させるかどうか",
+        "description": "イベントを発生させるかどうかを表します。値を設定することもできます。\n\n真ならばイベントが発生します。偽ならばイベントは発生しません。"
+      },
+      "tr": {
+        "summary": "Whether events are raised",
+        "description": "Indicates whether events are raised. This property can also be set.\n\nIf true, events are raised. If false, no events are raised."
+      }
+    },
+    "Timer.mode": {
+      "hash": "c3d93e848690",
+      "ja": {
+        "summary": "モード",
+        "description": "動作のモードを表します。値を設定することもできます。\n\n以下の値のいずれかを指定します。\n\n`**atmNormal**    : ` 通常のイベント配信の優先度でイベントが配信されます。\n\n`**atmExclusive** : ` 他の非同期イベントよりも優先されて配信されます\n\n`**atmAtIdle**    : ` アイドル状態 ( 他に配信するイベントが無くなったとき ) に配信されます。"
+      },
+      "tr": {
+        "summary": "Mode",
+        "description": "Represents the operating mode. This property can also be set.\n\nSpecify one of the following values.\n\n`**atmNormal**    : ` Events are delivered with normal event-delivery priority.\n\n`**atmExclusive** : ` Events are delivered ahead of other asynchronous events.\n\n`**atmAtIdle**    : ` Events are delivered when idle (when there are no other events to deliver)."
+      }
+    }
+  }
+}

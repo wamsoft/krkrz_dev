@@ -126,4 +126,4 @@ dm(@"gallery: ${scenes.count} scene(s)");
 if (scenes.count == 0) { System.inform("シーンが読み込めませんでした"); System.exit(1); }
 
 // hub 型: メニュー ⇄ 各デモを ESC / クリックで行き来する
-runDemoHub(scenes, "krkrz デモ ギャラリー");
+runDemoHub(scenes, %[ ja : "krkrz デモ ギャラリー", en : "krkrz demo gallery" ]);

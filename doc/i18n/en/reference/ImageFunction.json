@@ -1,0 +1,431 @@
+{
+  "class": "ImageFunction",
+  "entries": {
+    "ImageFunction": {
+      "hash": "f8d41f08a26e",
+      "ja": {
+        "summary": "ImageFunction クラスは、画像を操作するクラスです。",
+        "description": "このクラスからオブジェクトを作成することはできません。すべてのメソッドはクラスメソッド ( static ) として\n`ImageFunction.operateRect(...)` のように直接呼び出します。\n\n操作対象は [Bitmap](Bitmap.md) オブジェクトのみで、[Layer](Layer.md) オブジェクトは指定できません。\nLayer が持つ同名の描画メソッドから、Layer 固有の事情 ( face / holdAlpha / クリップ矩形といった\nプロパティ、および描画後の再描画通知 ) を取り除き、すべてを明示引数にしたものと考えてください。\n演算モードに `omAuto` を指定した場合、Bitmap には [Layer.type](Layer.md#type) にあたる情報が無いため\n常に `omAlpha` として扱われます。\n\nLayer / Bitmap との関係と使い分けは [Layer と Bitmap と ImageFunction](../guide/LayerAndBitmap.md) を参照してください。"
+      },
+      "tr": {
+        "summary": "The ImageFunction class manipulates images.",
+        "description": "You cannot create objects of this class. All methods are class methods (static) and are called directly, as in\n`ImageFunction.operateRect(...)`.\n\nOnly [Bitmap](Bitmap.md) objects can be operated on; [Layer](Layer.md) objects cannot be specified.\nThink of these as the drawing methods of the same name on Layer with the Layer-specific aspects (properties such as face / holdAlpha / the clip rectangle,\nand the redraw notification after drawing) removed and everything turned into explicit arguments.\nIf `omAuto` is specified as the operation mode, it is always treated as `omAlpha`, because a Bitmap has no information\ncorresponding to [Layer.type](Layer.md#type).\n\nFor how Layer and Bitmap relate and when to use each, see [Layer, Bitmap, and ImageFunction](../guide/LayerAndBitmap.md)."
+      }
+    },
+    "ImageFunction.operateAffine": {
+      "hash": "7337ad3a9f00",
+      "ja": {
+        "summary": "アフィン変換演算合成",
+        "description": "指定された重ね合わせ元 Bitmap の矩形を、重ね合わせ先にアフィン変換を行いながら演算合成します。",
+        "params": {
+          "dst": "重ね合わせ先の Bitmap オブジェクトを指定します。",
+          "src": "重ね合わせ元の Bitmap オブジェクトを指定します。",
+          "A": "A パラメータです。affine 引数によって解釈が変わります。",
+          "B": "B パラメータです。affine 引数によって解釈が変わります。",
+          "C": "C パラメータです。affine 引数によって解釈が変わります。",
+          "D": "D パラメータです。affine 引数によって解釈が変わります。",
+          "E": "E パラメータです。affine 引数によって解釈が変わります。",
+          "F": "F パラメータです。affine 引数によって解釈が変わります。",
+          "srcrect": "重ね合わせる矩形を ( 重ね合わせ元 Bitmap の画像位置における ) ピクセル単位で Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。",
+          "cliprect": "クリッピング矩形を ( 重ね合わせ先 Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時クリッピングは行われません。",
+          "affine": "続く６つの引数 (A ～ F パラメータ)をどのように扱うかを指定します。\n\n真を指定すると、６つのパラメータはそれぞれ以下のように解釈されます。\n\n`A   : 2Dアフィン変換行列の a`\n\n`B   : 2Dアフィン変換行列の b`\n\n`C   : 2Dアフィン変換行列の c`\n\n`D   : 2Dアフィン変換行列の d`\n\n`E   : 2Dアフィン変換行列の tx`\n\n`F   : 2Dアフィン変換行列の ty`\n\nアフィン変換により、重ね合わせ元の画像位置 (x, y) ( ただし、重ね合わせ元矩形の左上隅を (0, 0) とする ) は以下の式により、重ね合わせ先の画像位置 (x', y')に変換されます。\n\nx' =  a*x + c*y + tx\n\ny' =  b*x + d*y + ty\n\n偽を指定すると、６つのパラメータはそれぞれ以下のように解釈されます。\n\n`A   : コピー元矩形の左上隅の点の、コピー先での画像位置における X 座標位置(x0)`\n\n`B   : コピー元矩形の左上隅の点の、コピー先での画像位置における Y 座標位置(y0)`\n\n`C   : コピー元矩形の右上隅の点の、コピー先での画像位置における X 座標位置(x1)`\n\n`D   : コピー元矩形の右上隅の点の、コピー先での画像位置における Y 座標位置(y1)`\n\n`E   : コピー元矩形の左下隅の点の、コピー先での画像位置における X 座標位置(x2)`\n\n`F   : コピー元矩形の左下隅の点の、コピー先での画像位置における Y 座標位置(y2)`\n\n偽を指定した場合、重ね合わせ元の右下隅に対応する、重ね合わせ先位置(x3, y3)は自動的に以下の式によって計算されます。\n\nx3 = x1 - x0 + x2\n\ny3 = y1 - y0 + y2",
+          "mode": "演算のモードを指定します。\n\n`**omPsNormal**` が指定された場合はPhotoshop互換のアルファ合成が行われます(現バージョンでは未実装です)。\n\n`**omPsAdditive**` が指定された場合はPhotoshop互換の覆い焼き(リニア)合成が行われます(現バージョンでは未実装です)。\n\n`**omPsSubtractive**` が指定された場合はPhotoshop互換の焼き込み(リニア)合成が行われます(現バージョンでは未実装です)。\n\n`**omPsMultiplicative**` が指定された場合はPhotoshop互換の乗算合成が行われます(現バージョンでは未実装です)。\n\n`**omPsScreen**` が指定された場合はPhotoshop互換のスクリーン合成が行われます(現バージョンでは未実装です)。\n\n`**omPsOverlay**` が指定された場合はPhotoshop互換のオーバーレイ合成が行われます(現バージョンでは未実装です)。\n\n`**omPsHardLight**` が指定された場合はPhotoshop互換のハードライト合成が行われます(現バージョンでは未実装です)。\n\n`**omPsSoftLight**` が指定された場合はPhotoshop互換のソフトライト合成が行われます(現バージョンでは未実装です)。\n\n`**omPsColorDodge**` が指定された場合はPhotoshop互換の覆い焼きカラー合成が行われます(現バージョンでは未実装です)。\n\n`**omPsColorDodge5**` が指定された場合はPhotoshopのバージョン5.x 以下と互換の覆い焼きカラー合成が行われます(現バージョンでは未実装です)。\n\n`**omPsColorBurn**` が指定された場合はPhotoshop互換の焼き込みカラー合成が行われます(現バージョンでは未実装です)。\n\n`**omPsLighten**` が指定された場合はPhotoshop互換の比較(明)合成が行われます(現バージョンでは未実装です)。\n\n`**omPsDarken**` が指定された場合はPhotoshop互換の比較(暗)合成が行われます(現バージョンでは未実装です)。\n\n`**omPsDifference**` が指定された場合はPhotoshop互換の差の絶対値合成が行われます(現バージョンでは未実装です)。\n\n`**omPsDifference5**` が指定された場合はPhotoshopのバージョン 5.x 以下と互換の差の絶対値合成が行われます(現バージョンでは未実装です)。\n\n`**omPsExclusion**` が指定された場合はPhotoshop互換の除外合成が行われます(現バージョンでは未実装です)。\n\n`**omAdditive**` が指定された場合は加算合成が行われます(現バージョンでは未実装です)。\n\n`**omSubtractive**` が指定された場合は減算合成が行われます(現バージョンでは未実装です)。\n\n`**omMultiplicative**` が指定された場合は乗算合成が行われます(現バージョンでは未実装です)。\n\n`**omDodge**` が指定された場合は覆い焼き合成が行われます(現バージョンでは未実装です)。\n\n`**omDarken**` が指定された場合は比較(暗)合成が行われます(現バージョンでは未実装です)。\n\n`**omLighten**` が指定された場合は比較(明)合成が行われます(現バージョンでは未実装です)。\n\n`**omScreen**` が指定された場合はスクリーン乗算合成が行われます(現バージョンでは未実装です)。\n\n`**omAlpha**` が指定された場合はアルファ合成が行われます。\n\n`**omAddAlpha**` が指定された場合は加算アルファ合成が行われます。この場合は、face が dfOpaque かつ hda が偽のとき、type 引数に stFastLinear を指定することにより線形補間が可能です。\n\n`**omOpaque**` が指定された場合は src のアルファ情報は無視され、src は常に完全不透明であると見なされます。この場合は、face が dfOpaque かつ hda が偽のとき、type 引数に stFastLinear を指定することにより線形補間が可能です。",
+          "face": "描画方式を指定します。\n\n`**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。\n\n`**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。\n\n`**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。",
+          "opa": "重ね合わせの不透明度 ( 0 ～ 255 ) を指定します。",
+          "type": "アフィン変換のタイプを指定します。\n\n`**stNearest**    ` : 最近傍点法が用いられます\n\n`**stFastLinear** ` : 低精度の線形補間が用いられます(一部実装)\n\n`**stLinear**     ` : 線形補間が用いられます(未実装)\n\n`**stCubic**      ` : ３次元補間が用いられます(未実装)\n\n速度は stNearest > stFastLinear > stLinear > stCubic の順に高速ですが、画質は速度が\n速ければ速いモードほど低画質になります。\n\nstFastLinear や stLinear, stCubic に対しては、stRefNoClip をビット論理和で追加指定\nすることができ、この場合は、コピーするビットマップの領域外を参照して色を合成することを\n許可します。これを指定しない場合は、転送元ビットマップの周囲に余裕があったとしても、\n転送元ビットマップの範囲外を参照することはありません(範囲外の色はもっとも近い位置にある\n範囲内のピクセルの色と見なされます)。",
+          "hda": "アルファチャンネルを保護するかどうかを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Composites with an affine transform",
+        "description": "Composites the specified rectangle of the source Bitmap onto the destination while applying an affine transform.",
+        "params": {
+          "dst": "The destination Bitmap object.",
+          "src": "The source Bitmap object.",
+          "A": "Parameter A. Its interpretation depends on the affine argument.",
+          "B": "Parameter B. Its interpretation depends on the affine argument.",
+          "C": "Parameter C. Its interpretation depends on the affine argument.",
+          "D": "Parameter D. Its interpretation depends on the affine argument.",
+          "E": "Parameter E. Its interpretation depends on the affine argument.",
+          "F": "Parameter F. Its interpretation depends on the affine argument.",
+          "srcrect": "The rectangle to composite, as a Rect object in pixels (in image coordinates of the source Bitmap).\n\nIf omitted, the whole image is used.",
+          "cliprect": "The clipping rectangle, as a Rect object (in image coordinates of the destination Bitmap).\n\nIf omitted, no clipping is performed.",
+          "affine": "How the following six arguments (parameters A to F) are interpreted.\n\nIf true, the six parameters are interpreted as follows.\n\n`A   : a of the 2D affine transform matrix`\n\n`B   : b of the 2D affine transform matrix`\n\n`C   : c of the 2D affine transform matrix`\n\n`D   : d of the 2D affine transform matrix`\n\n`E   : tx of the 2D affine transform matrix`\n\n`F   : ty of the 2D affine transform matrix`\n\nWith the affine transform, a source image position (x, y) (where the top-left corner of the source rectangle is (0, 0)) is transformed into the destination image position (x', y') by the following formulas.\n\nx' =  a*x + c*y + tx\n\ny' =  b*x + d*y + ty\n\nIf false, the six parameters are interpreted as follows.\n\n`A   : X coordinate in the destination image of the top-left corner of the source rectangle (x0)`\n\n`B   : Y coordinate in the destination image of the top-left corner of the source rectangle (y0)`\n\n`C   : X coordinate in the destination image of the top-right corner of the source rectangle (x1)`\n\n`D   : Y coordinate in the destination image of the top-right corner of the source rectangle (y1)`\n\n`E   : X coordinate in the destination image of the bottom-left corner of the source rectangle (x2)`\n\n`F   : Y coordinate in the destination image of the bottom-left corner of the source rectangle (y2)`\n\nIf false, the destination position (x3, y3) corresponding to the bottom-right corner of the source is calculated automatically by the following formulas.\n\nx3 = x1 - x0 + x2\n\ny3 = y1 - y0 + y2",
+          "mode": "The operation mode.\n\n`**omPsNormal**`: Photoshop-compatible alpha blending is performed (not implemented in the current version).\n\n`**omPsAdditive**`: Photoshop-compatible Linear Dodge blending is performed (not implemented in the current version).\n\n`**omPsSubtractive**`: Photoshop-compatible Linear Burn blending is performed (not implemented in the current version).\n\n`**omPsMultiplicative**`: Photoshop-compatible Multiply blending is performed (not implemented in the current version).\n\n`**omPsScreen**`: Photoshop-compatible Screen blending is performed (not implemented in the current version).\n\n`**omPsOverlay**`: Photoshop-compatible Overlay blending is performed (not implemented in the current version).\n\n`**omPsHardLight**`: Photoshop-compatible Hard Light blending is performed (not implemented in the current version).\n\n`**omPsSoftLight**`: Photoshop-compatible Soft Light blending is performed (not implemented in the current version).\n\n`**omPsColorDodge**`: Photoshop-compatible Color Dodge blending is performed (not implemented in the current version).\n\n`**omPsColorDodge5**`: Color Dodge blending compatible with Photoshop 5.x and earlier is performed (not implemented in the current version).\n\n`**omPsColorBurn**`: Photoshop-compatible Color Burn blending is performed (not implemented in the current version).\n\n`**omPsLighten**`: Photoshop-compatible Lighten blending is performed (not implemented in the current version).\n\n`**omPsDarken**`: Photoshop-compatible Darken blending is performed (not implemented in the current version).\n\n`**omPsDifference**`: Photoshop-compatible Difference blending is performed (not implemented in the current version).\n\n`**omPsDifference5**`: Difference blending compatible with Photoshop 5.x and earlier is performed (not implemented in the current version).\n\n`**omPsExclusion**`: Photoshop-compatible Exclusion blending is performed (not implemented in the current version).\n\n`**omAdditive**`: additive blending is performed (not implemented in the current version).\n\n`**omSubtractive**`: subtractive blending is performed (not implemented in the current version).\n\n`**omMultiplicative**`: multiplicative blending is performed (not implemented in the current version).\n\n`**omDodge**`: dodge blending is performed (not implemented in the current version).\n\n`**omDarken**`: darken (comparison) blending is performed (not implemented in the current version).\n\n`**omLighten**`: lighten (comparison) blending is performed (not implemented in the current version).\n\n`**omScreen**`: screen blending is performed (not implemented in the current version).\n\n`**omAlpha**`: alpha blending is performed.\n\n`**omAddAlpha**`: additive alpha blending is performed. In this case, when face is dfOpaque and hda is false, linear interpolation is possible by specifying stFastLinear as the type argument.\n\n`**omOpaque**`: the alpha information of src is ignored and src is always treated as fully opaque. In this case, when face is dfOpaque and hda is false, linear interpolation is possible by specifying stFastLinear as the type argument.",
+          "face": "The drawing method.\n\n`**dfAlpha**`: the image is treated as an image with an alpha channel when drawn.\n\n`**dfAddAlpha**`: the image is treated as an image with an additive alpha channel when drawn.\n\n`**dfOpaque**`: the image is treated as fully opaque when drawn.",
+          "opa": "The opacity of the composite (0 to 255).",
+          "type": "The type of affine transform.\n\n`**stNearest**    ` : nearest neighbor is used\n\n`**stFastLinear** ` : low-precision linear interpolation is used (partially implemented)\n\n`**stLinear**     ` : linear interpolation is used (not implemented)\n\n`**stCubic**      ` : bicubic interpolation is used (not implemented)\n\nSpeed is fastest in the order stNearest > stFastLinear > stLinear > stCubic, but the faster the mode,\nthe lower the image quality.\n\nFor stFastLinear, stLinear, and stCubic, you can add stRefNoClip with a bitwise OR;\nthis allows colors outside the area of the bitmap being copied to be referenced when compositing.\nWithout it, pixels outside the source bitmap's range are never referenced, even if the source bitmap\nhas room around it (colors outside the range are treated as the color of the nearest pixel\nwithin the range).",
+          "hda": "Whether to protect the alpha channel."
+        }
+      }
+    },
+    "ImageFunction.operateRect": {
+      "hash": "9fe7606f377d",
+      "ja": {
+        "summary": "矩形演算合成",
+        "description": "指定された演算元 Bitmap の矩形部分を演算先の Bitmap の指定位置に指定のモードで演算合成します。",
+        "params": {
+          "dst": "重ね合わせ先の Bitmap オブジェクトを指定します。",
+          "dleft": "演算先の矩形の左端位置を ( 演算先 Bitmap の画像位置における ) ピクセル単位で指定します。",
+          "dtop": "演算先の矩形の上端位置を ( 演算先 Bitmap の画像位置における ) ピクセル単位で指定します。",
+          "src": "演算元の Bitmap オブジェクトを指定します。\n\n未指定時全体が対象になります。",
+          "srcrect": "演算する矩形を ( 演算元 Bitmap の画像位置における ) ピクセル単位で Rect オブジェクトで指定します。\n\n未指定時全体が対象になります。",
+          "cliprect": "クリッピング矩形を ( 重ね合わせ先 Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時クリッピングは行われません。",
+          "mode": "演算のモードを指定します。\n\n`**omPsNormal**` が指定された場合はPhotoshop互換のアルファ合成が行われます。\n\n`**omPsAdditive**` が指定された場合はPhotoshop互換の覆い焼き(リニア)合成が行われます。\n\n`**omPsSubtractive**` が指定された場合はPhotoshop互換の焼き込み(リニア)合成が行われます。\n\n`**omPsMultiplicative**` が指定された場合はPhotoshop互換の乗算合成が行われます。\n\n`**omPsScreen**` が指定された場合はPhotoshop互換のスクリーン合成が行われます。\n\n`**omPsOverlay**` が指定された場合はPhotoshop互換のオーバーレイ合成が行われます。\n\n`**omPsHardLight**` が指定された場合はPhotoshop互換のハードライト合成が行われます。\n\n`**omPsSoftLight**` が指定された場合はPhotoshop互換のソフトライト合成が行われます。\n\n`**omPsColorDodge**` が指定された場合はPhotoshop互換の覆い焼きカラー合成が行われます。\n\n`**omPsColorDodge5**` が指定された場合はPhotoshopのバージョン5.x 以下と互換の覆い焼きカラー合成が行われます。\n\n`**omPsColorBurn**` が指定された場合はPhotoshop互換の焼き込みカラー合成が行われます。\n\n`**omPsLighten**` が指定された場合はPhotoshop互換の比較(明)合成が行われます。\n\n`**omPsDarken**` が指定された場合はPhotoshop互換の比較(暗)合成が行われます。\n\n`**omPsDifference**` が指定された場合はPhotoshop互換の差の絶対値合成が行われます。\n\n`**omPsDifference5**` が指定された場合はPhotoshopのバージョン 5.x 以下と互換の差の絶対値合成が行われます。\n\n`**omPsExclusion**` が指定された場合はPhotoshop互換の除外合成が行われます。\n\n`**omAdditive**` が指定された場合は加算合成が行われます。\n\n`**omSubtractive**` が指定された場合は減算合成が行われます。\n\n`**omMultiplicative**` が指定された場合は乗算合成が行われます。\n\n`**omDodge**` が指定された場合は覆い焼き合成が行われます。\n\n`**omDarken**` が指定された場合は比較(暗)合成が行われます。\n\n`**omLighten**` が指定された場合は比較(明)合成が行われます。\n\n`**omScreen**` が指定された場合はスクリーン乗算合成が行われます。\n\n`**omAlpha**` が指定された場合はアルファ合成が行われます。\n\n`**omAddAlpha**` が指定された場合は加算アルファ合成が行われます。\n\n`**omOpaque**` が指定された場合は src のアルファ情報は無視され、src は常に完全不透明であると見なされます。",
+          "face": "描画方式を指定します。\n\n`**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。\n\n`**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。\n\n`**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。",
+          "opa": "演算の強度 ( 0 ～ 255 ) を指定します。",
+          "hda": "アルファチャンネルを保護するかどうかを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Composites a rectangle",
+        "description": "Composites the rectangle of the specified source Bitmap at the specified position of the destination Bitmap using the specified mode.",
+        "params": {
+          "dst": "The destination Bitmap object.",
+          "dleft": "Left edge of the destination rectangle, in pixels (in image coordinates of the destination Bitmap).",
+          "dtop": "Top edge of the destination rectangle, in pixels (in image coordinates of the destination Bitmap).",
+          "src": "The source Bitmap object.\n\nIf omitted, the whole image is used.",
+          "srcrect": "The rectangle to operate on, as a Rect object in pixels (in image coordinates of the source Bitmap).\n\nIf omitted, the whole image is used.",
+          "cliprect": "The clipping rectangle, as a Rect object (in image coordinates of the destination Bitmap).\n\nIf omitted, no clipping is performed.",
+          "mode": "The operation mode.\n\n`**omPsNormal**`: Photoshop-compatible alpha blending is performed.\n\n`**omPsAdditive**`: Photoshop-compatible Linear Dodge blending is performed.\n\n`**omPsSubtractive**`: Photoshop-compatible Linear Burn blending is performed.\n\n`**omPsMultiplicative**`: Photoshop-compatible Multiply blending is performed.\n\n`**omPsScreen**`: Photoshop-compatible Screen blending is performed.\n\n`**omPsOverlay**`: Photoshop-compatible Overlay blending is performed.\n\n`**omPsHardLight**`: Photoshop-compatible Hard Light blending is performed.\n\n`**omPsSoftLight**`: Photoshop-compatible Soft Light blending is performed.\n\n`**omPsColorDodge**`: Photoshop-compatible Color Dodge blending is performed.\n\n`**omPsColorDodge5**`: Color Dodge blending compatible with Photoshop 5.x and earlier is performed.\n\n`**omPsColorBurn**`: Photoshop-compatible Color Burn blending is performed.\n\n`**omPsLighten**`: Photoshop-compatible Lighten blending is performed.\n\n`**omPsDarken**`: Photoshop-compatible Darken blending is performed.\n\n`**omPsDifference**`: Photoshop-compatible Difference blending is performed.\n\n`**omPsDifference5**`: Difference blending compatible with Photoshop 5.x and earlier is performed.\n\n`**omPsExclusion**`: Photoshop-compatible Exclusion blending is performed.\n\n`**omAdditive**`: additive blending is performed.\n\n`**omSubtractive**`: subtractive blending is performed.\n\n`**omMultiplicative**`: multiplicative blending is performed.\n\n`**omDodge**`: dodge blending is performed.\n\n`**omDarken**`: darken (comparison) blending is performed.\n\n`**omLighten**`: lighten (comparison) blending is performed.\n\n`**omScreen**`: screen blending is performed.\n\n`**omAlpha**`: alpha blending is performed.\n\n`**omAddAlpha**`: additive alpha blending is performed.\n\n`**omOpaque**`: the alpha information of src is ignored and src is always treated as fully opaque.",
+          "face": "The drawing method.\n\n`**dfAlpha**`: the image is treated as an image with an alpha channel when drawn.\n\n`**dfAddAlpha**`: the image is treated as an image with an additive alpha channel when drawn.\n\n`**dfOpaque**`: the image is treated as fully opaque when drawn.",
+          "opa": "The strength of the operation (0 to 255).",
+          "hda": "Whether to protect the alpha channel."
+        }
+      }
+    },
+    "ImageFunction.operateStretch": {
+      "hash": "3c9fc9a681f2",
+      "ja": {
+        "summary": "拡大縮小演算合成",
+        "description": "指定された重ね合わせ元 Bitmap の矩形を、重ね合わせ先 Bitmap の矩形に演算合成します。\n\n重ね合わせ元矩形と重ね合わせ先矩形のサイズが異なる場合は拡大または縮小が行われます。",
+        "params": {
+          "dst": "重ね合わせ先の Bitmap オブジェクトを指定します。",
+          "src": "重ね合わせ元の Bitmap オブジェクトを指定します。",
+          "dstrect": "重ね合わせ先の矩形を ( 重ね合わせ先 Bitmap の画像位置における ) ピクセル単位で Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。",
+          "srcrect": "重ね合わせる矩形を ( 重ね合わる Bitmap の画像位置における ) ピクセル単位で Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。",
+          "cliprect": "クリッピング矩形を ( 重ね合わせ先 Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時クリッピングは行われません。",
+          "mode": "演算のモードを指定します。\n\n`**omPsNormal**` が指定された場合はPhotoshop互換のアルファ合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsAdditive**` が指定された場合はPhotoshop互換の覆い焼き(リニア)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsSubtractive**` が指定された場合はPhotoshop互換の焼き込み(リニア)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsMultiplicative**` が指定された場合はPhotoshop互換の乗算合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsScreen**` が指定された場合はPhotoshop互換のスクリーン合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsOverlay**` が指定された場合はPhotoshop互換のオーバーレイ合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsHardLight**` が指定された場合はPhotoshop互換のハードライト合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsSoftLight**` が指定された場合はPhotoshop互換のソフトライト合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsColorDodge**` が指定された場合はPhotoshop互換の覆い焼きカラー合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsColorDodge5**` が指定された場合はPhotoshopのバージョン5.x 以下と互換の覆い焼きカラー合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsColorBurn**` が指定された場合はPhotoshop互換の焼き込みカラー合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsLighten**` が指定された場合はPhotoshop互換の比較(明)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsDarken**` が指定された場合はPhotoshop互換の比較(暗)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsDifference**` が指定された場合はPhotoshop互換の差の絶対値合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsDifference5**` が指定された場合はPhotoshopのバージョン 5.x 以下と互換の差の絶対値合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omPsExclusion**` が指定された場合はPhotoshop互換の除外合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omAdditive**` が指定された場合は加算合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omSubtractive**` が指定された場合は減算合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omMultiplicative**` が指定された場合は乗算合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omDodge**` が指定された場合は覆い焼き合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omDarken**` が指定された場合は比較(暗)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omLighten**` が指定された場合は比較(明)合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omScreen**` が指定された場合はスクリーン乗算合成が行われます(1.3以降ではstNearestとstFastLinear以外で実装)。\n\n`**omAlpha**` が指定された場合はアルファ合成が行われます。\n\n`**omAddAlpha**` が指定された場合は加算アルファ合成が行われます。この場合は、face が dfOpaque かつ hda が偽のとき、type 引数に stFastLinear を指定することにより線形補間が可能です。\n\n`**omOpaque**` が指定された場合は src のアルファ情報は無視され、src は常に完全不透明であると見なされます。この場合は、face が dfOpaque かつ hda が偽のとき、type 引数に stFastLinear を指定することにより線形補間が可能です。",
+          "face": "描画方式を指定します。\n\n`**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。\n\n`**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。\n\n`**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。",
+          "opa": "演算の強度 ( 0 ～ 255 ) を指定します。",
+          "type": "拡大縮小のタイプを指定します。\n\n`**stNearest**          ` : 最近傍点法が用いられます\n\n`**stFastLinear**       ` : 低精度の線形補間が用いられます(一部実装)\n\n`**stSemiFastLinear**   ` : 固定小数線形補間が用いられます(1.3以降)\n\n`**stLinear**           ` : 線形補間が用いられます(1.3以降実装変更)\n\n`**stFastCubic**        ` : 固定小数３次元補間が用いられます(1.3以降)\n\n`**stCubic**            ` : ３次元補間が用いられます(1.3以降実装変更)\n\n`**stFastLanczos2**     ` : 固定小数Lanczos補間の範囲4x4が用いられます(1.3以降)\n\n`**stLanczos2**         ` : Lanczos補間の範囲4x4が用いられます(1.3以降)\n\n`**stFastLanczos3**     ` : 固定小数Lanczos補間の範囲6x6が用いられます(1.3以降)\n\n`**stLanczos3**         ` : Lanczos補間の範囲6x6が用いられます(1.3以降)\n\n`**stFastSpline16**     ` : 固定小数スプライン補間4x4が用いられます(1.3以降)\n\n`**stSpline16**         ` : スプライン補間4x4が用いられます(1.3以降)\n\n`**stFastSpline36**     ` : 固定小数スプライン補間6x6が用いられます(1.3以降)\n\n`**stSpline36**         ` : スプライン補間6x6が用いられます(1.3以降)\n\n`**stFastAreaAvg**      ` : 固定小数面積平均縮小が用いられます。拡大は出来ません(1.3以降)\n\n`**stAreaAvg**          ` : 面積平均縮小が用いられます。拡大は出来ません(1.3以降)\n\n`**stFastGaussian**     ` : 固定小数ガウス補間4x4が用いられます(1.3以降)\n\n`**stGaussian**         ` : ガウス補間4x4が用いられます(1.3以降)\n\n`**stFastBlackmanSinc** ` : 固定小数Blackman-Sinc補間8x8が用いられます(1.3以降)\n\n`**stBlackmanSinc**     ` : Blackman-Sinc補間8x8が用いられます(1.3以降)\n\n速度は stNearest > stFastLinear > stLinear > stCubic の順に高速ですが、画質は速度が\n速ければ速いタイプほど低画質になります。\n\nstCubic 以降の補間方法は十分高画質で好みの差とも言えます。\n\nただし、ガウス補間についてはぼやけたような画質になります。\n\nstFastLinear と他の線形補間(stSemiFastLinear と stLinear)の差は縮小時に大きく出ます。\n\nstFastLinear は、常に周囲4画素を参照するのに対して、stSemiFastLinear、stLinear は、縮小時は\n等倍時の影響範囲が4画素となるような範囲、つまりより広い範囲の画素を参照し補間するためより高画質です\n(アルゴリズム的には本来の線形補間です)。\n\nstFastLinear に対しては、stRefNoClip をビット論理和で追加指定することができ、この場合は、\nコピーするビットマップの領域外を参照して色を合成することを許可します。これを指定しない場合は、\n転送元ビットマップの周囲に余裕があったとしても、転送元ビットマップの範囲外を参照することは\nありません(範囲外の色はもっとも近い位置にある範囲内のピクセルの色と見なされます)。",
+          "hda": "アルファチャンネルを保護するかどうかを指定します。",
+          "option": "1.3以降で追加されました。\n\n３次元補間時のシャープネスです。他の補間方法では現在のところ意味を持ちません。\n\nシャープネスの値をプラス方向に大きくするとぼやけていき、マイナス方向に大きくしていくとシャープになっていきます。"
+        }
+      },
+      "tr": {
+        "summary": "Composites with scaling",
+        "description": "Composites the specified rectangle of the source Bitmap into a rectangle of the destination Bitmap.\n\nIf the source and destination rectangles differ in size, the image is enlarged or reduced.",
+        "params": {
+          "dst": "The destination Bitmap object.",
+          "src": "The source Bitmap object.",
+          "dstrect": "The destination rectangle, as a Rect object in pixels (in image coordinates of the destination Bitmap).\n\nIf omitted, the whole image is used.",
+          "srcrect": "The rectangle to composite, as a Rect object in pixels (in image coordinates of the source Bitmap).\n\nIf omitted, the whole image is used.",
+          "cliprect": "The clipping rectangle, as a Rect object (in image coordinates of the destination Bitmap).\n\nIf omitted, no clipping is performed.",
+          "mode": "The operation mode.\n\n`**omPsNormal**`: Photoshop-compatible alpha blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsAdditive**`: Photoshop-compatible Linear Dodge blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsSubtractive**`: Photoshop-compatible Linear Burn blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsMultiplicative**`: Photoshop-compatible Multiply blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsScreen**`: Photoshop-compatible Screen blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsOverlay**`: Photoshop-compatible Overlay blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsHardLight**`: Photoshop-compatible Hard Light blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsSoftLight**`: Photoshop-compatible Soft Light blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsColorDodge**`: Photoshop-compatible Color Dodge blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsColorDodge5**`: Color Dodge blending compatible with Photoshop 5.x and earlier is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsColorBurn**`: Photoshop-compatible Color Burn blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsLighten**`: Photoshop-compatible Lighten blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsDarken**`: Photoshop-compatible Darken blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsDifference**`: Photoshop-compatible Difference blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsDifference5**`: Difference blending compatible with Photoshop 5.x and earlier is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omPsExclusion**`: Photoshop-compatible Exclusion blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omAdditive**`: additive blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omSubtractive**`: subtractive blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omMultiplicative**`: multiplicative blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omDodge**`: dodge blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omDarken**`: darken (comparison) blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omLighten**`: lighten (comparison) blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omScreen**`: screen blending is performed (since 1.3, implemented for types other than stNearest and stFastLinear).\n\n`**omAlpha**`: alpha blending is performed.\n\n`**omAddAlpha**`: additive alpha blending is performed. In this case, when face is dfOpaque and hda is false, linear interpolation is possible by specifying stFastLinear as the type argument.\n\n`**omOpaque**`: the alpha information of src is ignored and src is always treated as fully opaque. In this case, when face is dfOpaque and hda is false, linear interpolation is possible by specifying stFastLinear as the type argument.",
+          "face": "The drawing method.\n\n`**dfAlpha**`: the image is treated as an image with an alpha channel when drawn.\n\n`**dfAddAlpha**`: the image is treated as an image with an additive alpha channel when drawn.\n\n`**dfOpaque**`: the image is treated as fully opaque when drawn.",
+          "opa": "The strength of the operation (0 to 255).",
+          "type": "The type of scaling.\n\n`**stNearest**          ` : nearest neighbor is used\n\n`**stFastLinear**       ` : low-precision linear interpolation is used (partially implemented)\n\n`**stSemiFastLinear**   ` : fixed-point linear interpolation is used (since 1.3)\n\n`**stLinear**           ` : linear interpolation is used (implementation changed in 1.3)\n\n`**stFastCubic**        ` : fixed-point bicubic interpolation is used (since 1.3)\n\n`**stCubic**            ` : bicubic interpolation is used (implementation changed in 1.3)\n\n`**stFastLanczos2**     ` : fixed-point Lanczos interpolation over a 4x4 range is used (since 1.3)\n\n`**stLanczos2**         ` : Lanczos interpolation over a 4x4 range is used (since 1.3)\n\n`**stFastLanczos3**     ` : fixed-point Lanczos interpolation over a 6x6 range is used (since 1.3)\n\n`**stLanczos3**         ` : Lanczos interpolation over a 6x6 range is used (since 1.3)\n\n`**stFastSpline16**     ` : fixed-point 4x4 spline interpolation is used (since 1.3)\n\n`**stSpline16**         ` : 4x4 spline interpolation is used (since 1.3)\n\n`**stFastSpline36**     ` : fixed-point 6x6 spline interpolation is used (since 1.3)\n\n`**stSpline36**         ` : 6x6 spline interpolation is used (since 1.3)\n\n`**stFastAreaAvg**      ` : fixed-point area-averaging reduction is used; cannot enlarge (since 1.3)\n\n`**stAreaAvg**          ` : area-averaging reduction is used; cannot enlarge (since 1.3)\n\n`**stFastGaussian**     ` : fixed-point 4x4 Gaussian interpolation is used (since 1.3)\n\n`**stGaussian**         ` : 4x4 Gaussian interpolation is used (since 1.3)\n\n`**stFastBlackmanSinc** ` : fixed-point 8x8 Blackman-Sinc interpolation is used (since 1.3)\n\n`**stBlackmanSinc**     ` : 8x8 Blackman-Sinc interpolation is used (since 1.3)\n\nSpeed is fastest in the order stNearest > stFastLinear > stLinear > stCubic, but the faster the type,\nthe lower the image quality.\n\nThe interpolation methods from stCubic onward all give sufficiently high quality; choosing among them is largely a matter of taste.\n\nGaussian interpolation, however, produces a somewhat blurry result.\n\nThe difference between stFastLinear and the other linear interpolations (stSemiFastLinear and stLinear) is most visible when reducing.\n\nstFastLinear always references the 4 surrounding pixels, whereas stSemiFastLinear and stLinear, when reducing,\nreference a range scaled so that it corresponds to 4 pixels at 1x, that is, a wider range of pixels, which gives higher quality\n(algorithmically, this is true linear interpolation).\n\nFor stFastLinear, you can add stRefNoClip with a bitwise OR; this\nallows colors outside the area of the bitmap being copied to be referenced when compositing. Without it,\npixels outside the source bitmap's range are never referenced, even if the source bitmap has room around it\n(colors outside the range are treated as the color of the nearest pixel within the range).",
+          "hda": "Whether to protect the alpha channel.",
+          "option": "Added in 1.3.\n\nSharpness for bicubic interpolation. Currently has no meaning for other interpolation methods.\n\nIncreasing the sharpness value in the positive direction makes the result blurrier; increasing it in the negative direction makes it sharper."
+        }
+      }
+    },
+    "ImageFunction.flipLR": {
+      "hash": "814c10beaea6",
+      "ja": {
+        "summary": "左右反転",
+        "description": "画像の左右反転を行います。",
+        "params": {
+          "bmp": "反転する Bitmap オブジェクトを指定します。",
+          "rect": "反転する領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。"
+        }
+      },
+      "tr": {
+        "summary": "Flips horizontally",
+        "description": "Flips the image horizontally.",
+        "params": {
+          "bmp": "The Bitmap object to flip.",
+          "rect": "The area to flip, as a Rect object (in image coordinates of the Bitmap).\n\nIf omitted, the whole image is used."
+        }
+      }
+    },
+    "ImageFunction.flipUD": {
+      "hash": "ba6bdc0b6b45",
+      "ja": {
+        "summary": "上下反転",
+        "description": "画像の上下反転を行います。",
+        "params": {
+          "bmp": "反転する Bitmap オブジェクトを指定します。",
+          "rect": "反転する領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。"
+        }
+      },
+      "tr": {
+        "summary": "Flips vertically",
+        "description": "Flips the image vertically.",
+        "params": {
+          "bmp": "The Bitmap object to flip.",
+          "rect": "The area to flip, as a Rect object (in image coordinates of the Bitmap).\n\nIf omitted, the whole image is used."
+        }
+      }
+    },
+    "ImageFunction.adjustGamma": {
+      "hash": "76aec24b6c06",
+      "ja": {
+        "summary": "ガンマ補正",
+        "description": "画像に対してガンマ補正を実行します。\n\nガンマ値には 1.0 を指定するとガンマ曲線が直線になります。\n\n出力最低値と出力最高値は各成分の輝度の最低値と最高値を指定するものです。\n\n最高値に最低値よりも低い値を設定すると画像を反転させることができます。\n\nisaddalpha が true の場合、このメソッドは加算アルファ合成用の特別なガンマ補正ルーチンを用います。\n\nこのルーチンは加算アルファ合成のうち、アルファ合成に相当する成分に対してはガンマ補正を行いますが、加算合成に相当する成分に対してはガンマ補正を行いません。",
+        "params": {
+          "bmp": "ガンマ補正する Bitmap オブジェクトを指定します。",
+          "rgamma": "赤成分のガンマ値 ( 0.0 ～ 1.0 ～ 9.0 ) を指定します。",
+          "rfloor": "赤成分の出力最低値 ( 0 ～ 255 ) を指定します。",
+          "rceil": "赤成分の出力最大値 ( 0 ～ 255 ) を指定します。",
+          "ggamma": "緑成分のガンマ値 ( 0.0 ～ 1.0 ～ 9.0 ) を指定します。",
+          "gfloor": "緑成分の出力最低値 ( 0 ～ 255 ) を指定します。",
+          "gceil": "緑成分の出力最大値 ( 0 ～ 255 ) を指定します。",
+          "bgamma": "青成分のガンマ値 ( 0.0 ～ 1.0 ～ 9.0 ) を指定します。",
+          "bfloor": "青成分の出力最低値 ( 0 ～ 255 ) を指定します。",
+          "bceil": "青成分の出力最大値 ( 0 ～ 255 ) を指定します。",
+          "cliprect": "クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。",
+          "isaddalpha": "加算合成アルファ形式かどうかを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gamma correction",
+        "description": "Applies gamma correction to the image.\n\nA gamma value of 1.0 makes the gamma curve a straight line.\n\nThe minimum and maximum output values specify the lowest and highest luminance of each component.\n\nSetting the maximum lower than the minimum inverts the image.\n\nIf isaddalpha is true, this method uses a special gamma correction routine for additive alpha blending.\n\nThis routine applies gamma correction to the part of additive alpha blending that corresponds to alpha blending, but not to the part that corresponds to additive blending.",
+        "params": {
+          "bmp": "The Bitmap object to gamma-correct.",
+          "rgamma": "Gamma value of the red component (0.0 through 1.0 to 9.0).",
+          "rfloor": "Minimum output value of the red component (0 to 255).",
+          "rceil": "Maximum output value of the red component (0 to 255).",
+          "ggamma": "Gamma value of the green component (0.0 through 1.0 to 9.0).",
+          "gfloor": "Minimum output value of the green component (0 to 255).",
+          "gceil": "Maximum output value of the green component (0 to 255).",
+          "bgamma": "Gamma value of the blue component (0.0 through 1.0 to 9.0).",
+          "bfloor": "Minimum output value of the blue component (0 to 255).",
+          "bceil": "Maximum output value of the blue component (0 to 255).",
+          "cliprect": "The clipping area, as a Rect object (in image coordinates of the Bitmap).\n\nIf omitted, the whole image is used.",
+          "isaddalpha": "Whether the image is in additive alpha format."
+        }
+      }
+    },
+    "ImageFunction.doBoxBlur": {
+      "hash": "df3912b61ec0",
+      "ja": {
+        "summary": "矩形ブラーをかける",
+        "description": "ブラー(ぼかし)をかけます。アルゴリズムは「矩形ブラー」(box blur)です。\n\n矩形ブラーは、xblurとyblurの２つのパラメータによって表現される「範囲」中のピクセルの輝度の平均値をとる物です。たとえば xblur=10 yblur=2 の場合は、対象のピクセルを中心に、横方向は -10～10、縦方向は -2～2 の矩形範囲のピクセルの輝度の平均をとり、それが最終的なそのピクセルの輝度となります。\n\n範囲の面積は (xblur×2+1) × (yblur×2+1) で計算することができます。現バージョンではこの面積が 256 未満 の場合は、面積が256以上の場合よりも高速なアルゴリズムが採用されます。\n\nisalpha が true の場合は、アルファ合成用の特別なアルゴリズムを使用しますので、少々遅くなります。\n\nfalse の場合は、より高速なアルゴリズムとなります。",
+        "params": {
+          "bmp": "矩形ブラーをかける Bitmap オブジェクトを指定します。",
+          "xblur": "横方向のブラーの範囲を指定します。",
+          "yblur": "縦方向のブラーの範囲を指定します。",
+          "cliprect": "クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。",
+          "isalpha": "アルファチャンネルを持つかどうかを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Applies a box blur",
+        "description": "Applies a blur. The algorithm is a box blur.\n\nA box blur takes the average luminance of the pixels within the range given by the two parameters xblur and yblur. For example, with xblur=10 and yblur=2, the average luminance of the pixels in the rectangle from -10 to 10 horizontally and -2 to 2 vertically, centered on the target pixel, becomes that pixel's final luminance.\n\nThe area of the range is (xblur x 2 + 1) x (yblur x 2 + 1). In the current version, if this area is less than 256, a faster algorithm is used than when it is 256 or more.\n\nIf isalpha is true, a special algorithm for alpha blending is used, which is somewhat slower.\n\nIf false, a faster algorithm is used.",
+        "params": {
+          "bmp": "The Bitmap object to blur.",
+          "xblur": "The horizontal blur range.",
+          "yblur": "The vertical blur range.",
+          "cliprect": "The clipping area, as a Rect object (in image coordinates of the Bitmap).\n\nIf omitted, the whole image is used.",
+          "isalpha": "Whether the image has an alpha channel."
+        }
+      }
+    },
+    "ImageFunction.doGrayScale": {
+      "hash": "597ab2af6f14",
+      "ja": {
+        "summary": "グレースケール変換",
+        "description": "画像をグレースケールに変換します。\n\nrweight / gweight / bweight を省略すると BT.709 相当の重み\n(0.2126 / 0.7152 / 0.0722) を使います (従来の挙動)。 重みの扱いは\n[Layer.doGrayScale](Layer.md#dograyscale) と同じです。",
+        "params": {
+          "bmp": "グレースケール変換する Bitmap オブジェクトを指定します。",
+          "cliprect": "クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。",
+          "rweight": "赤成分の重みを指定します。3 つとも省略するか 3 つとも指定してください。",
+          "gweight": "緑成分の重みを指定します。",
+          "bweight": "青成分の重みを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Converts to grayscale",
+        "description": "Converts the image to grayscale.\n\nIf rweight / gweight / bweight are omitted, BT.709-equivalent weights\n(0.2126 / 0.7152 / 0.0722) are used (the previous behavior). The weights are handled the same way as in\n[Layer.doGrayScale](Layer.md#dograyscale).",
+        "params": {
+          "bmp": "The Bitmap object to convert to grayscale.",
+          "cliprect": "The clipping area, as a Rect object (in image coordinates of the Bitmap).\n\nIf omitted, the whole image is used.",
+          "rweight": "Weight of the red component. Omit all three or specify all three.",
+          "gweight": "Weight of the green component.",
+          "bweight": "Weight of the blue component."
+        }
+      }
+    },
+    "ImageFunction.colorRect": {
+      "hash": "3552f9392b6a",
+      "ja": {
+        "summary": "矩形半透明塗りつぶし",
+        "description": "指定された Bitmap 画像の矩形を指定された方法で塗りつぶします。\n\n[ImageFunction.fillRect](ImageFunction.md#fillrect) と異なり、透明度を指定して半透明で塗りつぶすことができます。",
+        "params": {
+          "bmp": "塗り潰す Bitmap オブジェクトを指定します。",
+          "value": "塗りつぶす色や値を指定します。\n\nこの値は、face 引数の値によって意味が変わります。\n\n`**dfAlpha**    ` : 0xRRGGBB 形式で色を指定してください\n\n`**dfAddAlpha** ` : 0xRRGGBB 形式で色を指定してください\n\n`**dfOpaque**   ` : 0xRRGGBB 形式で色を指定してください\n\n`**dfMask**     ` : マスク(不透明度)の値 ( 0 ～ 255 ) を指定してください\n\ndfOpaque を指定した場合は、マスク情報は無視されます。また、dfMask を指定した場合は、色の情報はそのままになります。\n\ndfAlpha の場合でかつ opa が負の場合はこの引数は無視されます。",
+          "opa": "塗りつぶす不透明度 ( -255 ～ 0 ～ 255 ) を指定します。\n\nこの引数は、face の値が dfMask や dfProvince の場合は無視されます ( 常に完全不透明 )。\n\n負の数の指定は face が dfAlpha の場合のみに有効で、\nこの場合は value 引数は無視され、画像から不透明度が取り除かれます (\n-255 を指定すると矩形は完全に透明になります )。",
+          "rect": "塗りつぶす矩形を ( 画像位置における ) ピクセル単位で Rect オブジェクトで指定します。\n\n未指定の場合全体が対象となります。",
+          "face": "描画方式を指定します。\n\n`**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。\n\n`**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。\n\n`**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。",
+          "cliprect": "クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。"
+        }
+      },
+      "tr": {
+        "summary": "Fills a rectangle semi-transparently",
+        "description": "Fills a rectangle of the specified Bitmap image using the specified method.\n\nUnlike [ImageFunction.fillRect](ImageFunction.md#fillrect), you can specify an opacity and fill semi-transparently.",
+        "params": {
+          "bmp": "The Bitmap object to fill.",
+          "value": "The color or value to fill with.\n\nIts meaning depends on the face argument.\n\n`**dfAlpha**    ` : specify a color in 0xRRGGBB format\n\n`**dfAddAlpha** ` : specify a color in 0xRRGGBB format\n\n`**dfOpaque**   ` : specify a color in 0xRRGGBB format\n\n`**dfMask**     ` : specify a mask (opacity) value (0 to 255)\n\nWith dfOpaque, the mask information is ignored. With dfMask, the color information is left unchanged.\n\nWith dfAlpha and a negative opa, this argument is ignored.",
+          "opa": "The fill opacity (-255 through 0 to 255).\n\nThis argument is ignored when face is dfMask or dfProvince (always fully opaque).\n\nNegative values are valid only when face is dfAlpha;\nin that case the value argument is ignored and opacity is removed from the image\n(specifying -255 makes the rectangle fully transparent).",
+          "rect": "The rectangle to fill, as a Rect object in pixels (in image coordinates).\n\nIf omitted, the whole image is used.",
+          "face": "The drawing method.\n\n`**dfAlpha**`: the image is treated as an image with an alpha channel when drawn.\n\n`**dfAddAlpha**`: the image is treated as an image with an additive alpha channel when drawn.\n\n`**dfOpaque**`: the image is treated as fully opaque when drawn.",
+          "cliprect": "The clipping area, as a Rect object (in image coordinates of the Bitmap).\n\nIf omitted, the whole image is used."
+        }
+      }
+    },
+    "ImageFunction.drawText": {
+      "hash": "6e3a95ac63ef",
+      "ja": {
+        "summary": "文字描画",
+        "description": "Bitmap に文字を描画します。\n\nface に dfOpaque を指定した場合、描画先のマスクが破壊されるか保護されるかは hda によります。",
+        "returns": "描画領域 ( Rect オブジェクト )",
+        "params": {
+          "bmp": "文字描画する Bitmap オブジェクトを指定します。",
+          "font": "描画するフォントを Font オブジェクトで指定します。",
+          "x": "文字描画を開始する原点の ( 画像位置における ) x 座標をピクセル単位で指定します。",
+          "y": "文字描画を開始する原点の ( 画像位置における ) y 座標をピクセル単位で指定します。",
+          "text": "描画する文字を指定します。",
+          "color": "描画する文字の色を 0xRRGGBB 形式で指定します。",
+          "opa": "描画する文字の不透明度 ( -255 ～ 0 ～ 255 ) を指定します。\n\n負の数の指定は face が dfAlpha の場合のみに有効で、\nこの場合は文字の形に不透明度が取り除かれる事になります ( 値が小さいほど\n効果が大きくなります )。",
+          "aa": "アンチエイリアスを行うかどうかを指定します。\n\n真を指定するとアンチエイリアスが行われます。偽を指定すると行われません。",
+          "face": "描画方式を指定します。\n\n`**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。\n\n`**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。\n\n`**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。",
+          "shadowlevel": "影の不透明度を指定します。shadowwidth 引数の値によって適切な値は変動します。\n\n0 を指定すると影は描画されません。",
+          "shadowcolor": "影の色を 0xRRGGBB 形式で指定します。",
+          "shadowwidth": "影の幅 ( ぼけ ) を指定します。 0 がもっともシャープ ( ぼけない ) で、値を大きく\nすると影をぼかすことができます。",
+          "shadowofsx": "影の位置の x 座標の値をピクセル単位で指定します。 0 を指定すると影は真下に描画されます。",
+          "shadowofsy": "影の位置の y 座標の値をピクセル単位で指定します。 0 を指定すると影は真下に描画されます。",
+          "hda": "アルファチャンネルを保護するかどうかを指定します。",
+          "cliprect": "クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。"
+        }
+      },
+      "tr": {
+        "summary": "Draws text",
+        "description": "Draws text on a Bitmap.\n\nWhen face is dfOpaque, whether the destination mask is destroyed or protected depends on hda.",
+        "returns": "The drawn area (a Rect object).",
+        "params": {
+          "bmp": "The Bitmap object to draw text on.",
+          "font": "The font to draw with, as a Font object.",
+          "x": "The x coordinate, in pixels, of the origin where text drawing starts (in image coordinates).",
+          "y": "The y coordinate, in pixels, of the origin where text drawing starts (in image coordinates).",
+          "text": "The text to draw.",
+          "color": "The text color, in 0xRRGGBB format.",
+          "opa": "The opacity of the text (-255 through 0 to 255).\n\nNegative values are valid only when face is dfAlpha;\nin that case opacity is removed in the shape of the text (the smaller the value,\nthe stronger the effect).",
+          "aa": "Whether to anti-alias.\n\nTrue enables anti-aliasing; false disables it.",
+          "face": "The drawing method.\n\n`**dfAlpha**`: the image is treated as an image with an alpha channel when drawn.\n\n`**dfAddAlpha**`: the image is treated as an image with an additive alpha channel when drawn.\n\n`**dfOpaque**`: the image is treated as fully opaque when drawn.",
+          "shadowlevel": "The opacity of the shadow. The appropriate value depends on the shadowwidth argument.\n\nSpecifying 0 draws no shadow.",
+          "shadowcolor": "The shadow color, in 0xRRGGBB format.",
+          "shadowwidth": "The width (blur) of the shadow. 0 is the sharpest (no blur); larger\nvalues blur the shadow more.",
+          "shadowofsx": "The x offset of the shadow, in pixels. Specifying 0 draws the shadow directly below.",
+          "shadowofsy": "The y offset of the shadow, in pixels. Specifying 0 draws the shadow directly below.",
+          "hda": "Whether to protect the alpha channel.",
+          "cliprect": "The clipping area, as a Rect object (in image coordinates of the Bitmap).\n\nIf omitted, the whole image is used."
+        }
+      }
+    },
+    "ImageFunction.drawGlyph": {
+      "hash": "0203f7509d6b",
+      "ja": {
+        "summary": "文字描画",
+        "description": "Bitmap にグリフを描画します。\n\nface に dfOpaque を指定した場合、描画先のマスクが破壊されるか保護されるかは hda によります。\n\nグリフは、glyph : Array[9] = [ width, height, originx, originy, incx, incy, inc, bitmap(Octet), colors ] の様な形式の配列を指定します。\n\nグリフの colors が省略された場合は、256階調であると判断されます。",
+        "returns": "描画領域 ( Rect オブジェクト )",
+        "params": {
+          "bmp": "文字描画する Bitmap オブジェクトを指定します。",
+          "x": "文字描画を開始する原点の ( 画像位置における ) x 座標をピクセル単位で指定します。",
+          "y": "文字描画を開始する原点の ( 画像位置における ) y 座標をピクセル単位で指定します。",
+          "glyph": "描画するグリフを指定します。",
+          "color": "描画する文字の色を 0xRRGGBB 形式で指定します。",
+          "opa": "描画する文字の不透明度 ( -255 ～ 0 ～ 255 ) を指定します。\n\n負の数の指定は face が dfAlpha の場合のみに有効で、\nこの場合は文字の形に不透明度が取り除かれる事になります ( 値が小さいほど\n効果が大きくなります )。",
+          "aa": "アンチエイリアスを行うかどうかを指定します。\n\n真を指定するとアンチエイリアスが行われます。偽を指定すると行われません。",
+          "face": "描画方式を指定します。\n\n`**dfAlpha**` が指定された場合は画像はアルファチャンネルつき画像と見なされ、描画されます。\n\n`**dfAddAlpha**` が指定された場合は画像は加算アルファチャンネルつき画像として見なされ、描画されます。\n\n`**dfOpaque**` が指定された場合は画像はすべて完全不透明であると見なされ、描画されます。",
+          "shadowlevel": "影の不透明度を指定します。shadowwidth 引数の値によって適切な値は変動します。\n\n0 を指定すると影は描画されません。",
+          "shadowcolor": "影の色を 0xRRGGBB 形式で指定します。",
+          "shadowwidth": "影の幅 ( ぼけ ) を指定します。 0 がもっともシャープ ( ぼけない ) で、値を大きく\nすると影をぼかすことができます。",
+          "shadowofsx": "影の位置の x 座標の値をピクセル単位で指定します。 0 を指定すると影は真下に描画されます。",
+          "shadowofsy": "影の位置の y 座標の値をピクセル単位で指定します。 0 を指定すると影は真下に描画されます。",
+          "hda": "アルファチャンネルを保護するかどうかを指定します。",
+          "cliprect": "クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。"
+        }
+      },
+      "tr": {
+        "summary": "Draws text",
+        "description": "Draws a glyph on a Bitmap.\n\nWhen face is dfOpaque, whether the destination mask is destroyed or protected depends on hda.\n\nThe glyph is specified as an array of the form glyph : Array[9] = [ width, height, originx, originy, incx, incy, inc, bitmap(Octet), colors ].\n\nIf colors is omitted from the glyph, 256 levels are assumed.",
+        "returns": "The drawn area (a Rect object).",
+        "params": {
+          "bmp": "The Bitmap object to draw text on.",
+          "x": "The x coordinate, in pixels, of the origin where text drawing starts (in image coordinates).",
+          "y": "The y coordinate, in pixels, of the origin where text drawing starts (in image coordinates).",
+          "glyph": "The glyph to draw.",
+          "color": "The text color, in 0xRRGGBB format.",
+          "opa": "The opacity of the text (-255 through 0 to 255).\n\nNegative values are valid only when face is dfAlpha;\nin that case opacity is removed in the shape of the text (the smaller the value,\nthe stronger the effect).",
+          "aa": "Whether to anti-alias.\n\nTrue enables anti-aliasing; false disables it.",
+          "face": "The drawing method.\n\n`**dfAlpha**`: the image is treated as an image with an alpha channel when drawn.\n\n`**dfAddAlpha**`: the image is treated as an image with an additive alpha channel when drawn.\n\n`**dfOpaque**`: the image is treated as fully opaque when drawn.",
+          "shadowlevel": "The opacity of the shadow. The appropriate value depends on the shadowwidth argument.\n\nSpecifying 0 draws no shadow.",
+          "shadowcolor": "The shadow color, in 0xRRGGBB format.",
+          "shadowwidth": "The width (blur) of the shadow. 0 is the sharpest (no blur); larger\nvalues blur the shadow more.",
+          "shadowofsx": "The x offset of the shadow, in pixels. Specifying 0 draws the shadow directly below.",
+          "shadowofsy": "The y offset of the shadow, in pixels. Specifying 0 draws the shadow directly below.",
+          "hda": "Whether to protect the alpha channel.",
+          "cliprect": "The clipping area, as a Rect object (in image coordinates of the Bitmap).\n\nIf omitted, the whole image is used."
+        }
+      }
+    },
+    "ImageFunction.fillRect": {
+      "hash": "7a04ae9bdad3",
+      "ja": {
+        "summary": "矩形塗りつぶし",
+        "description": "指定された Bitmap 画像の矩形を指定された方法で塗りつぶします。",
+        "params": {
+          "bmp": "塗り潰す Bitmap オブジェクトを指定します。",
+          "value": "塗りつぶす色や値を指定します。\n\nこの値は、isalpha の値によって意味が変わります。\n\n`**true**  ` : 0xAARRGGBB 形式で不透明度と色を指定してください。メインとマスクの両方が塗りつぶされます。\n\n`**false** ` : 0xRRGGBB 形式で色を指定してください。",
+          "rect": "塗りつぶす矩形を ( 画像位置における ) ピクセル単位で Rect オブジェクトで指定します。\n\n未指定の場合全体が対象となります。",
+          "isalpha": "アルファチャンネルを持つかどうかを指定します。",
+          "cliprect": "クリッピング領域を ( Bitmap の画像位置における )  Rect オブジェクトで指定します。\n\n未指定時全体が対象となります。"
+        }
+      },
+      "tr": {
+        "summary": "Fills a rectangle",
+        "description": "Fills a rectangle of the specified Bitmap image using the specified method.",
+        "params": {
+          "bmp": "The Bitmap object to fill.",
+          "value": "The color or value to fill with.\n\nIts meaning depends on isalpha.\n\n`**true**  ` : specify opacity and color in 0xAARRGGBB format. Both the main image and the mask are filled.\n\n`**false** ` : specify a color in 0xRRGGBB format.",
+          "rect": "The rectangle to fill, as a Rect object in pixels (in image coordinates).\n\nIf omitted, the whole image is used.",
+          "isalpha": "Whether the image has an alpha channel.",
+          "cliprect": "The clipping area, as a Rect object (in image coordinates of the Bitmap).\n\nIf omitted, the whole image is used."
+        }
+      }
+    },
+    "ImageFunction.copy9Patch": {
+      "hash": "9bf0f4b05846",
+      "ja": {
+        "summary": "9 path を利用した画像コピー(マルチプラットフォーム版以降)",
+        "description": "9 path ( slice ) を利用した画像コピーを行います。\n返されるマージン情報はRectクラスのオブジェクトです。\nこのマージン内にテキストなど描画します。",
+        "returns": "マージン情報",
+        "params": {
+          "dst": "コピー先Bitmap",
+          "src": "コピー元Bitmap"
+        }
+      },
+      "tr": {
+        "summary": "Copies an image using 9-patch (multi-platform version and later)",
+        "description": "Copies an image using 9-patch (slicing).\nThe returned margin information is a Rect object.\nDraw text and the like within these margins.",
+        "returns": "The margin information.",
+        "params": {
+          "dst": "Destination Bitmap.",
+          "src": "Source Bitmap."
+        }
+      }
+    }
+  }
+}

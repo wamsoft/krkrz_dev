@@ -130,7 +130,7 @@ UI とゲーム画面の枠がずれてしまうため、この固定が要り�
 | [viewportAlignY](../../reference/Window.md#viewportaligny) | 垂直配置 0=上 / 0.5=中央 / 1=下 |
 | [viewportOffsetX](../../reference/Window.md#viewportoffsetx) | 水平オフセット ( px ) |
 | [viewportOffsetY](../../reference/Window.md#viewportoffsety) | 垂直オフセット ( px ) |
-| [viewportBgColor](../../reference/Window.md#viewportbgcolor) | 余白の背景色 `0xRRGGBB` |
+| [viewportBgColor](../../reference/Window.md#viewportbgcolor) | 余白の背景色 `0xAARRGGBB` ( 上位 8bit はアルファ。不透明にするには `0xff` 。既定 `0xff000000` ) |
 | [aspectLock](../../reference/Window.md#aspectlock) | ウインドウ自体の縦横比を固定 ( `"16:9"` 等 )。既定 `""` = 固定なし。**SDL3 / 汎用ビルド専用** |
 
 ### メソッド

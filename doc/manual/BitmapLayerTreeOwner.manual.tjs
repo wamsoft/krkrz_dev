@@ -139,7 +139,7 @@ class BitmapLayerTreeOwner {
 	function fireMouseOutOfWindow();
 
 	/**
-	 * マウス押下をレイヤに通知します
+	 * マウスボタンを離したことをレイヤに通知します
 	 * @param x マウスのボタンが離された位置の x 座標 ( クライアント座標 )
 	 * @param y マウスのボタンが離された位置の y 座標 ( クライアント座標 )
 	 * @param mb 離されたマウスボタン

@@ -1,0 +1,123 @@
+{
+  "class": "LineParser",
+  "entries": {
+    "lineParser:LineParser.LineParser": {
+      "hash": "e0102268796b",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "target": "イベントを転送するターゲット。未指定時は自分に送る"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "target": "Target to forward events to. If omitted, events are sent to this object."
+        }
+      }
+    },
+    "lineParser:LineParser.init": {
+      "hash": "30c4e7362791",
+      "ja": {
+        "summary": "処理対象テキストの初期化",
+        "params": {
+          "text": "テキスト"
+        }
+      },
+      "tr": {
+        "summary": "Initializes the text to process",
+        "params": {
+          "text": "Text."
+        }
+      }
+    },
+    "lineParser:LineParser.initStorage": {
+      "hash": "587fa891d540",
+      "ja": {
+        "summary": "処理対象テキストの初期化",
+        "params": {
+          "filename": "テキストのファイル名",
+          "utf8": "UTF-8 のファイルを使う場合は true"
+        }
+      },
+      "tr": {
+        "summary": "Initializes the text to process",
+        "params": {
+          "filename": "File name of the text.",
+          "utf8": "true for a UTF-8 file."
+        }
+      }
+    },
+    "lineParser:LineParser.getNextLine": {
+      "hash": "bcb2ed9682a3",
+      "ja": {
+        "summary": "次の行の情報を文字列として取得する",
+        "returns": "行"
+      },
+      "tr": {
+        "summary": "Gets the next line as a string",
+        "returns": "The line."
+      }
+    },
+    "lineParser:LineParser.currentLineNumber": {
+      "hash": "18b225be68b6",
+      "ja": {
+        "summary": "現在の処理済み行番号を取得する"
+      },
+      "tr": {
+        "summary": "Gets the number of the line processed so far"
+      }
+    },
+    "lineParser:LineParser.parse": {
+      "hash": "8ce37d063d27",
+      "ja": {
+        "summary": "テキストに対するパース処理を実行する。",
+        "description": "行ごとに doLine() イベントを呼び出す。",
+        "params": {
+          "text": "テキスト。省略時は現在設定中のテキストに対して処理を行なう"
+        }
+      },
+      "tr": {
+        "summary": "Parses text",
+        "description": "Calls the doLine() event for each line.",
+        "params": {
+          "text": "Text. If omitted, the currently set text is parsed."
+        }
+      }
+    },
+    "lineParser:LineParser.parseStorage": {
+      "hash": "7f556cc2608c",
+      "ja": {
+        "summary": "テキストに対するパース処理を実行する。",
+        "params": {
+          "filename": "テキストのファイル名",
+          "utf8": "UTF-8 のファイルを使う場合は true"
+        }
+      },
+      "tr": {
+        "summary": "Parses text",
+        "params": {
+          "filename": "File name of the text.",
+          "utf8": "true for a UTF-8 file."
+        }
+      }
+    },
+    "lineParser:LineParser.doLine": {
+      "hash": "aadb541dd9c7",
+      "ja": {
+        "summary": "parse/parseStorage で呼び出されるイベント",
+        "params": {
+          "text": "行のテキスト情報",
+          "lineNo": "行番号(1からになる)"
+        }
+      },
+      "tr": {
+        "summary": "Event called from parse/parseStorage",
+        "params": {
+          "text": "Text of the line.",
+          "lineNo": "Line number (starting at 1)."
+        }
+      }
+    }
+  }
+}

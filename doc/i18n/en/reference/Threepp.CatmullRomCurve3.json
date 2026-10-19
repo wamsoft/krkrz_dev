@@ -1,0 +1,73 @@
+{
+  "class": "Threepp.CatmullRomCurve3",
+  "entries": {
+    "krkrthreepp:Threepp.CatmullRomCurve3": {
+      "hash": "047fb55ac038",
+      "ja": {
+        "summary": "CatmullRom スプライン曲線",
+        "description": "制御点を通過する滑らかな曲線を生成します。"
+      },
+      "tr": {
+        "summary": "Catmull-Rom spline curve",
+        "description": "Generates a smooth curve that passes through the control points."
+      }
+    },
+    "krkrthreepp:Threepp.CatmullRomCurve3.CatmullRomCurve3": {
+      "hash": "5113bbeb49eb",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "points": "制御点の配列 (Vector3の配列または [x,y,z] の配列)",
+          "closed": "閉曲線かどうか",
+          "curveType": "曲線タイプ (centripetal, chordal, catmullrom)",
+          "tension": "テンション値 (catmullrom タイプ用)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "points": "Array of control points (an array of Vector3 or of [x,y,z]).",
+          "closed": "Whether the curve is closed.",
+          "curveType": "Curve type (centripetal, chordal, catmullrom).",
+          "tension": "Tension (for the catmullrom type)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.CatmullRomCurve3.closed": {
+      "hash": "ff724ce6a0d1",
+      "ja": {
+        "summary": "閉曲線フラグ"
+      },
+      "tr": {
+        "summary": "Whether the curve is closed"
+      }
+    },
+    "krkrthreepp:Threepp.CatmullRomCurve3.tension": {
+      "hash": "50863c943b32",
+      "ja": {
+        "summary": "テンション"
+      },
+      "tr": {
+        "summary": "Tension"
+      }
+    },
+    "krkrthreepp:Threepp.CatmullRomCurve3.getLength": {
+      "hash": "8d98a47bcea4",
+      "ja": {
+        "summary": "曲線の長さを取得"
+      },
+      "tr": {
+        "summary": "Gets the length of the curve"
+      }
+    },
+    "krkrthreepp:Threepp.CatmullRomCurve3.getPoint": {
+      "hash": "1be3886a14b6",
+      "ja": {
+        "summary": "パラメータ t (0-1) の点を取得"
+      },
+      "tr": {
+        "summary": "Gets the point at parameter t (0-1)"
+      }
+    }
+  }
+}

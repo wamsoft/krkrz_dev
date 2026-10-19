@@ -1,0 +1,70 @@
+{
+  "class": "Threepp.MeshBasicMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.MeshBasicMaterial": {
+      "hash": "1628821d2af3",
+      "ja": {
+        "summary": "基本マテリアル",
+        "description": "ライティングを考慮しない最もシンプルなマテリアルです。"
+      },
+      "tr": {
+        "summary": "Basic material",
+        "description": "The simplest material; it is not affected by lighting."
+      }
+    },
+    "krkrthreepp:Threepp.MeshBasicMaterial.MeshBasicMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.MeshBasicMaterial.type": {
+      "hash": "92e67556570e",
+      "ja": {
+        "summary": "\"MeshBasicMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"MeshBasicMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshBasicMaterial.color": {
+      "hash": "7df053f299de",
+      "ja": {
+        "summary": "色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshBasicMaterial.wireframe": {
+      "hash": "27e1aa449133",
+      "ja": {
+        "summary": "ワイヤーフレーム表示"
+      },
+      "tr": {
+        "summary": "Renders as wireframe"
+      }
+    },
+    "krkrthreepp:Threepp.MeshBasicMaterial.wireframeLinewidth": {
+      "hash": "c1d0eb798128",
+      "ja": {
+        "summary": "ワイヤーフレームの線幅"
+      },
+      "tr": {
+        "summary": "Wireframe line width"
+      }
+    },
+    "krkrthreepp:Threepp.MeshBasicMaterial.setMap": {
+      "hash": "745d2b3bdc3a",
+      "ja": {
+        "summary": "カラーテクスチャを設定 (textureFromLayer() の戻り値等)"
+      },
+      "tr": {
+        "summary": "Sets the color texture (e.g. the return value of textureFromLayer())"
+      }
+    }
+  }
+}

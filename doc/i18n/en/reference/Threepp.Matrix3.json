@@ -1,0 +1,167 @@
+{
+  "class": "Threepp.Matrix3",
+  "entries": {
+    "krkrthreepp:Threepp.Matrix3": {
+      "hash": "445337199d1a",
+      "ja": {
+        "summary": "3x3 行列クラス"
+      },
+      "tr": {
+        "summary": "3x3 matrix class"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.Matrix3": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.set": {
+      "hash": "3642b37ac684",
+      "ja": {
+        "summary": "要素を設定"
+      },
+      "tr": {
+        "summary": "Sets the elements"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.identity": {
+      "hash": "5e5b96acd1e5",
+      "ja": {
+        "summary": "単位行列に設定"
+      },
+      "tr": {
+        "summary": "Resets to the identity matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.setFromMatrix4": {
+      "hash": "0a407c586efb",
+      "ja": {
+        "summary": "Matrix4から設定"
+      },
+      "tr": {
+        "summary": "Sets the matrix from a Matrix4"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.multiply": {
+      "hash": "158cd6875be6",
+      "ja": {
+        "summary": "乗算"
+      },
+      "tr": {
+        "summary": "Multiplies by a matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.premultiply": {
+      "hash": "91eac0b09877",
+      "ja": {
+        "summary": "前置乗算"
+      },
+      "tr": {
+        "summary": "Premultiplies by a matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.multiplyMatrices": {
+      "hash": "24a8ed81ce1f",
+      "ja": {
+        "summary": "2つの行列の積"
+      },
+      "tr": {
+        "summary": "Product of two matrices"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.multiplyScalar": {
+      "hash": "107fd79be5c9",
+      "ja": {
+        "summary": "スカラー乗算"
+      },
+      "tr": {
+        "summary": "Multiplies by a scalar"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.determinant": {
+      "hash": "b4cda915629b",
+      "ja": {
+        "summary": "行列式"
+      },
+      "tr": {
+        "summary": "Determinant"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.invert": {
+      "hash": "160c2010a79c",
+      "ja": {
+        "summary": "逆行列"
+      },
+      "tr": {
+        "summary": "Inverts the matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.transpose": {
+      "hash": "572d8f2be607",
+      "ja": {
+        "summary": "転置"
+      },
+      "tr": {
+        "summary": "Transposes the matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.getNormalMatrix": {
+      "hash": "3411ab585aa9",
+      "ja": {
+        "summary": "法線行列を取得"
+      },
+      "tr": {
+        "summary": "Gets the normal matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.scale": {
+      "hash": "ac976adef9b7",
+      "ja": {
+        "summary": "スケーリング"
+      },
+      "tr": {
+        "summary": "Scales the matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.rotate": {
+      "hash": "9793742af13d",
+      "ja": {
+        "summary": "回転"
+      },
+      "tr": {
+        "summary": "Rotates the matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.translate": {
+      "hash": "89ec109eb2ec",
+      "ja": {
+        "summary": "平行移動"
+      },
+      "tr": {
+        "summary": "Translates the matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Matrix3.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

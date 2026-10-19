@@ -1,0 +1,82 @@
+{
+  "class": "WaveSoundBuffer.PhaseVocoder",
+  "entries": {
+    "WaveSoundBuffer.PhaseVocoder": {
+      "hash": "3175c3c83296",
+      "ja": {
+        "summary": "WaveSoundBuffer.PhaseVocoder クラスは、このインスタンスを [WaveSoundBuffer.filters](WaveSoundBuffer.md#filters) に登録して使用するためのフィルタで、Phase Vocoder (位相ボコーダ) の機能を提供します。",
+        "description": "Phase Vocoder では、再生速度を保ったままでの音程の変更 (ピッチ・シフタ) や、音程を保ったままでの再生速度の変更 (タイム・シフタ) を行うことができます。"
+      },
+      "tr": {
+        "summary": "WaveSoundBuffer.PhaseVocoder is a filter that you register in [WaveSoundBuffer.filters](WaveSoundBuffer.md#filters); it provides a phase vocoder.",
+        "description": "A phase vocoder can change pitch while keeping the playback speed (pitch shifting) and change playback speed while keeping the pitch (time stretching)."
+      }
+    },
+    "WaveSoundBuffer.PhaseVocoder.PhaseVocoder": {
+      "hash": "c3a1491bd455",
+      "ja": {
+        "summary": "PhaseVocoder オブジェクトの構築",
+        "description": "WaveSoundBuffer.PhaseVocoder クラスのオブジェクトを構築します。\n\n作成したインスタンスは [WaveSoundBuffer.filters](WaveSoundBuffer.md#filters) で WaveSoundBuffer の\nインスタンスに登録してください。"
+      },
+      "tr": {
+        "summary": "Constructs a PhaseVocoder object",
+        "description": "Constructs an object of the WaveSoundBuffer.PhaseVocoder class.\n\nRegister the created instance with a WaveSoundBuffer instance through\n[WaveSoundBuffer.filters](WaveSoundBuffer.md#filters)."
+      }
+    },
+    "WaveSoundBuffer.PhaseVocoder.interface": {
+      "hash": "43de7a575023",
+      "ja": {
+        "summary": "インターフェースオブジェクトを取得",
+        "description": "内部的に使用されます。スクリプトからは使用しないでください。"
+      },
+      "tr": {
+        "summary": "Gets the interface object",
+        "description": "Used internally. Do not use it from scripts."
+      }
+    },
+    "WaveSoundBuffer.PhaseVocoder.time": {
+      "hash": "6fde329f4748",
+      "ja": {
+        "summary": "時間軸方向のスケール",
+        "description": "時間軸方向のスケールを表します。値を設定することもできます。\n\n指定可能な数値は 0 を超える実数です。ただし、あまりに小さい数値はCPU負荷が高くなり、最悪の場合は再生ができない場合があります。また、1.95を超えたあたりから音質が悪くなり、overlapを大きくしても音質を改善できない場合があります(内部アルゴリズムの特性に起因しています)。\n\n1.0 を指定すると 時間軸方向のスケールは変わりません(再生速度は変わりません)。\n\nたとえば 1.5 を指定すると、時間軸方向のスケールが1.5倍になり、遅く再生されます (再生に1.5倍の時間がかかるようになります)。\n\nたとえば 0.5 を指定すると、時間軸方向のスケールが0.5倍になり、速く再生されます (倍速で再生されます)。\ntime プロパティも pitch プロパティも 1 の場合でも Phase Vocoder フィルタは動作し、音質は多少劣化し、CPU 時間も使用します。両方とも 1 のまま使うのであれば、フィルタ配列からこのフィルタをはずしておいたほうがよいでしょう。\n\nこのプロパティへの変更はリアルタイムに反映されますが、バッファリングの関係で、実際にそれが再生されるまでに2秒程度の時間がかかります。また、切り替わり時にノイズが乗る事があります。"
+      },
+      "tr": {
+        "summary": "Time-axis scale",
+        "description": "The scale along the time axis. You can also set this value.\n\nAny real number greater than 0 can be specified. However, very small values increase CPU load and, in the worst case, may make playback impossible. Also, sound quality degrades above about 1.95, and increasing overlap may not improve it (due to the characteristics of the internal algorithm).\n\nSpecifying 1.0 leaves the time-axis scale unchanged (the playback speed does not change).\n\nFor example, specifying 1.5 scales the time axis by 1.5, so playback is slower (it takes 1.5 times as long).\n\nFor example, specifying 0.5 scales the time axis by 0.5, so playback is faster (double speed).\nEven when both the time and pitch properties are 1, the phase vocoder filter still runs, slightly degrading sound quality and consuming CPU time. If you keep both at 1, it is better to remove this filter from the filter array.\n\nChanges to this property take effect in real time, but because of buffering it takes about 2 seconds before they are actually heard. Noise may also occur at the switch."
+      }
+    },
+    "WaveSoundBuffer.PhaseVocoder.pitch": {
+      "hash": "a10394406cb0",
+      "ja": {
+        "summary": "周波数軸方向のスケール",
+        "description": "周波数軸方向のスケールを表します。値を設定することもできます。\n\n指定可能な数値は 0.0 を超える数値です。\n\n1.0 を指定すると 周波数軸方向のスケールは変わりません(音程は変わりません)。\n\nたとえば 1.0594630943593 を指定すると、半音分、音程があがります。\n\nたとえば 0.9438743126817 を指定すると、半音分、音程が下がります。\n\ntime プロパティも pitch プロパティも 1 の場合でも Phase Vocoder フィルタは動作し、音質は多少劣化し、CPU 時間も使用します。両方とも 1 のまま使うのであれば、フィルタ配列からこのフィルタをはずしておいたほうがよいでしょう。\n\nこのプロパティへの変更はリアルタイムに反映されますが、バッファリングの関係で、実際にそれが再生されるまでに2秒程度の時間がかかります。"
+      },
+      "tr": {
+        "summary": "Frequency-axis scale",
+        "description": "The scale along the frequency axis. You can also set this value.\n\nAny number greater than 0.0 can be specified.\n\nSpecifying 1.0 leaves the frequency-axis scale unchanged (the pitch does not change).\n\nFor example, specifying 1.0594630943593 raises the pitch by a semitone.\n\nFor example, specifying 0.9438743126817 lowers the pitch by a semitone.\n\nEven when both the time and pitch properties are 1, the phase vocoder filter still runs, slightly degrading sound quality and consuming CPU time. If you keep both at 1, it is better to remove this filter from the filter array.\n\nChanges to this property take effect in real time, but because of buffering it takes about 2 seconds before they are actually heard."
+      }
+    },
+    "WaveSoundBuffer.PhaseVocoder.window": {
+      "hash": "c92b1cff51e8",
+      "ja": {
+        "summary": "ウィンドウサイズ",
+        "description": "PhaseVocoder内部で使用している FFT (高速フーリエ変換) のウィンドウサイズ(フレームサイズ)を表します。\n64～32768の間の2の累乗の数値を指定してください。デフォルトは4096です。\n\nこの数値を大きくすると、周波数軸方向の分解能は高くなります(音程が狂いにくくなります)が、時間軸方向の分解能が低くなります(音のアタックがにぶくなります)。\n\n値を大きくするとCPUをより使用するようになります。音質を落とさずにすむ、最低の値を探してください。\n\n44.1KHzの音声ではウィンドウサイズ=256ぐらいがよいでしょう。楽曲ではウィンドウサイズ=4096ぐらいが良いでしょう。\n\nこのプロパティへの変更は、[WaveSoundBuffer.open](WaveSoundBuffer.md#open)メソッドが実行されたときに反映されます。"
+      },
+      "tr": {
+        "summary": "Window size",
+        "description": "The window size (frame size) of the FFT (fast Fourier transform) used inside PhaseVocoder.\nSpecify a power of two between 64 and 32768. The default is 4096.\n\nIncreasing this value raises frequency resolution (pitch is less likely to drift) but lowers time resolution (attacks become duller).\n\nLarger values use more CPU. Look for the smallest value that does not degrade sound quality.\n\nFor speech at 44.1 kHz, a window size of about 256 works well. For music, a window size of about 4096 works well.\n\nChanges to this property take effect when the [WaveSoundBuffer.open](WaveSoundBuffer.md#open) method is executed."
+      }
+    },
+    "WaveSoundBuffer.PhaseVocoder.overlap": {
+      "hash": "427e9d2add17",
+      "ja": {
+        "summary": "オーバーラップカウント",
+        "description": "オーバーラップカウント (オーバーサンプリング係数) を表します。\n\n0か2～32の間の2の累乗の数値を指定してください。デフォルトは0です。\n\n0を指定すると、現在のtimeプロパティの値に従って、適切な値が設定されます。\n\nこの数値を大きくすると、時間軸方向の分解能が高くなります。とくに再生速度を遅くする場合は多めの数値をしていすると良いでしょう。\n\n値を大きくするとCPUをより使用するようになります。\n\nこのプロパティへの変更はリアルタイムに反映されますが、バッファリングの関係で、実際にそれが再生されるまでに2秒程度の時間がかかります。また、切り替わり時にノイズが乗る事があります。"
+      },
+      "tr": {
+        "summary": "Overlap count",
+        "description": "The overlap count (oversampling factor).\n\nSpecify 0 or a power of two between 2 and 32. The default is 0.\n\nWith 0, an appropriate value is chosen according to the current value of the time property.\n\nIncreasing this value raises time resolution. It is a good idea to specify a larger value especially when slowing down playback.\n\nLarger values use more CPU.\n\nChanges to this property take effect in real time, but because of buffering it takes about 2 seconds before they are actually heard. Noise may also occur at the switch."
+      }
+    }
+  }
+}

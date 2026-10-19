@@ -1,0 +1,571 @@
+{
+  "class": "Scripts",
+  "entries": {
+    "Scripts": {
+      "hash": "02f18449ee8a",
+      "ja": {
+        "summary": "Scripts クラスは TJS2 に関するメソッドやプロパティを管理します。このクラスからオブジェクトを作成することはできません。"
+      },
+      "tr": {
+        "summary": "The Scripts class manages methods and properties related to TJS2. You cannot create objects of this class."
+      }
+    },
+    "Scripts.execStorage": {
+      "hash": "6717ace958c7",
+      "ja": {
+        "summary": "ストレージ上のスクリプトの実行",
+        "description": "指定されたストレージを読み込み、その内容を TJS2 スクリプトとして実行します。\n\nスクリプトを実行中に発生した例外はこのメソッド内では捕捉されませんので、このメソッドの\n呼び出し側で捕捉することができます。",
+        "returns": "スクリプトを実行した結果が戻ります。",
+        "params": {
+          "storage": "実行するストレージを指定します。",
+          "mode": "ファイルを読み込む際のモード文字列を指定します。\"o\" に続いてオフセットを10進で指定するとファイルのそのバイト位置からの読み込みになります。",
+          "context": "実行コンテキストを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Executes a script in a storage",
+        "description": "Reads the specified storage and executes its contents as a TJS2 script.\n\nExceptions raised while the script runs are not caught inside this method, so the caller\ncan catch them.",
+        "returns": "The result of executing the script.",
+        "params": {
+          "storage": "Storage to execute.",
+          "mode": "Mode string used when reading the file. \"o\" followed by a decimal offset starts reading from that byte position in the file.",
+          "context": "Execution context."
+        }
+      }
+    },
+    "Scripts.evalStorage": {
+      "hash": "0d71d1c3e669",
+      "ja": {
+        "summary": "ストレージ上の式の評価",
+        "description": "指定されたストレージを読み込み、その内容を TJS2 式として評価します。\n\nスクリプトを実行中に発生した例外はこのメソッド内では捕捉されませんので、このメソッドの\n呼び出し側で捕捉することができます。",
+        "returns": "式を評価した結果が戻ります。",
+        "params": {
+          "storage": "評価するストレージを指定します。",
+          "mode": "ファイルを読み込む際のモード文字列を指定します。\"o\" に続いてオフセットを10進で指定するとファイルのそのバイト位置からの読み込みになります。",
+          "context": "実行コンテキストを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Evaluates an expression in a storage",
+        "description": "Reads the specified storage and evaluates its contents as a TJS2 expression.\n\nExceptions raised while the script runs are not caught inside this method, so the caller\ncan catch them.",
+        "returns": "The result of evaluating the expression.",
+        "params": {
+          "storage": "Storage to evaluate.",
+          "mode": "Mode string used when reading the file. \"o\" followed by a decimal offset starts reading from that byte position in the file.",
+          "context": "Execution context."
+        }
+      }
+    },
+    "Scripts.compileStorage": {
+      "hash": "095e189a9152",
+      "ja": {
+        "summary": "ストレージ上のスクリプトのコンパイル",
+        "description": "指定されたストレージを読み込み、その内容をコンパイルしてバイトコードファイルとして出力します。\n\nコンパイルされたバイトコードファイルは execStorage もしくは、evalStorage で通常のスクリプトと同じように実行できます。",
+        "params": {
+          "inputfile": "コンパイル対象ストレージを指定します。",
+          "outputfile": "出力バイトコードストレージを指定します。",
+          "isresult": "戻り値が必要かどうかを指定します。",
+          "outputdebug": "デバッグ情報を含めるかどうかを指定します。",
+          "isexpression": "式かどうかを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Compiles a script in a storage",
+        "description": "Reads the specified storage, compiles its contents and writes them out as a bytecode file.\n\nThe compiled bytecode file can be run with execStorage or evalStorage just like a regular script.",
+        "params": {
+          "inputfile": "Storage to compile.",
+          "outputfile": "Output bytecode storage.",
+          "isresult": "Whether a return value is needed.",
+          "outputdebug": "Whether to include debug information.",
+          "isexpression": "Whether the contents are an expression."
+        }
+      }
+    },
+    "Scripts.exec": {
+      "hash": "0930073d03f4",
+      "ja": {
+        "summary": "スクリプトの実行",
+        "description": "script で指定された文字列を TJS2 スクリプトとして実行します。\n\nスクリプトを実行中に発生した例外はこのメソッド内では捕捉されませんので、このメソッドの\n呼び出し側で捕捉することができます。",
+        "returns": "スクリプトを実行した結果が戻ります。",
+        "params": {
+          "script": "実行するスクリプトを文字列で指定します。",
+          "name": "エラーメッセージ用ファイル名の指定",
+          "linesof": "エラーメッセージ用行番号の指定",
+          "context": "実行コンテキストを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Executes a script",
+        "description": "Executes the string given in script as a TJS2 script.\n\nExceptions raised while the script runs are not caught inside this method, so the caller\ncan catch them.",
+        "returns": "The result of executing the script.",
+        "params": {
+          "script": "Script to execute, as a string.",
+          "name": "File name used in error messages",
+          "linesof": "Line number used in error messages",
+          "context": "Execution context."
+        }
+      }
+    },
+    "Scripts.eval": {
+      "hash": "e77c06eaea29",
+      "ja": {
+        "summary": "式の評価",
+        "description": "expression で指定された文字列を TJS2 式として実行します。\n\nスクリプトを実行中に発生した例外はこのメソッド内では捕捉されませんので、このメソッドの\n呼び出し側で捕捉することができます。",
+        "returns": "式を評価した結果が戻ります。",
+        "params": {
+          "expression": "実行する式を文字列で指定します。",
+          "name": "エラーメッセージ用ファイル名の指定",
+          "linesof": "エラーメッセージ用行番号の指定",
+          "context": "実行コンテキストを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Evaluates an expression",
+        "description": "Executes the string given in expression as a TJS2 expression.\n\nExceptions raised while the script runs are not caught inside this method, so the caller\ncan catch them.",
+        "returns": "The result of evaluating the expression.",
+        "params": {
+          "expression": "Expression to execute, as a string.",
+          "name": "File name used in error messages",
+          "linesof": "Line number used in error messages",
+          "context": "Execution context."
+        }
+      }
+    },
+    "Scripts.dump": {
+      "hash": "8cfe08c55963",
+      "ja": {
+        "summary": "コンテキストのダンプ",
+        "description": "現時点で TJS2 に読み込まれているスクリプトブロック内の各コンテキストの内容の詳細を\nローカルファイルに出力します。主に VM コードの逆アセンブル結果が出力されます。\n\n出力ファイルは、吉里吉里の実行可能ファイルと同じフォルダに出力され、そのファイル名は\n吉里吉里の実行可能ファイルに .dump.txt が付加されたものになります。"
+      },
+      "tr": {
+        "summary": "Dumps contexts",
+        "description": "Writes detailed contents of each context in the script blocks currently loaded into TJS2\nto a local file. The output is mainly a disassembly of the VM code.\n\nThe file is written to the same folder as the Kirikiri executable, and its name is\nthe executable's file name with .dump.txt appended."
+      }
+    },
+    "Scripts.getTraceString": {
+      "hash": "bdce2c2dcf99",
+      "ja": {
+        "summary": "呼び出し履歴の取得",
+        "description": "メソッドの呼び出し履歴を文字列として取得します。このメソッドが呼ばれた時点での履歴を取得することができます。\n\nこのメソッドを使用するには、コマンドラインオプションで -debug (デバッグモード) が有効になっていなければなりません。デバッグモードが無効の場合はこのメソッドは空文字列を返します。\n\n返される文字列はたとえば 'messagelayer.tjs(1561)[(function) addButton] <-- mainwindow.tjs(4463)[(function expression) (anonymous)] <-- conductor.tjs(427)[(function) onTag] <-- conductor.tjs(95)[(function) timerCallback]' のような物です。",
+        "returns": "呼び出し履歴を文字列化した物",
+        "params": {
+          "limit": "履歴を取得する最大呼び出し深さを指定します。この引数を省略するか 0 を指定すると、取得できる限りの履歴を取得します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the call stack",
+        "description": "Gets the method call history (call stack) as a string, as of the moment this method is called.\n\nTo use this method, debug mode must be enabled with the -debug command-line option. If debug mode is disabled, this method returns an empty string.\n\nThe returned string looks like 'messagelayer.tjs(1561)[(function) addButton] <-- mainwindow.tjs(4463)[(function expression) (anonymous)] <-- conductor.tjs(427)[(function) onTag] <-- conductor.tjs(95)[(function) timerCallback]'.",
+        "returns": "The call history as a string",
+        "params": {
+          "limit": "Maximum call depth to retrieve. If omitted or 0, as much history as possible is retrieved."
+        }
+      }
+    },
+    "Scripts.setCallMissing": {
+      "hash": "966ee90b4bde",
+      "ja": {
+        "summary": "メンバが見つからない時に呼び出されるハンドラの登録",
+        "description": "メンバが見つからない時に呼び出されるハンドラを登録します。",
+        "params": {
+          "missing": "メンバが見つからない時に呼び出されるハンドラ。"
+        }
+      },
+      "tr": {
+        "summary": "Registers a handler called when a member is not found",
+        "description": "Registers a handler that is called when a member is not found.",
+        "params": {
+          "missing": "Handler called when a member is not found."
+        }
+      }
+    },
+    "Scripts.getClassNames": {
+      "hash": "fbddfc3dc904",
+      "ja": {
+        "summary": "クラス名を取得",
+        "description": "オブジェクトからクラス名を取得します。",
+        "returns": "クラス名の配列",
+        "params": {
+          "object": "クラス名を取得するオブジェクト。"
+        }
+      },
+      "tr": {
+        "summary": "Gets class names",
+        "description": "Gets the class names of an object.",
+        "returns": "Array of class names",
+        "params": {
+          "object": "Object whose class names to get."
+        }
+      }
+    },
+    "Scripts.textEncoding": {
+      "hash": "105197f407ad",
+      "ja": {
+        "summary": "スクリプトを読み込む時に使用するテキストエンコーディングを指定",
+        "description": "スクリプトを読み込む時に使用するテキストエンコーディングを指定します。\n\n現在指定できるのは\"UTF-8\"か\"Shift_JIS\"のどちらかです。"
+      },
+      "tr": {
+        "summary": "Text encoding used to read scripts",
+        "description": "Specifies the text encoding used to read scripts.\n\nCurrently either \"UTF-8\" or \"Shift_JIS\" can be specified."
+      }
+    },
+    "Scripts.dumpStringHeap": {
+      "hash": "6f7206ca3326",
+      "ja": {
+        "summary": "文字列ヒープのダンプ",
+        "description": "TJS2 ランタイムが管理している文字列ヒープの内容をデバッグ出力します。\n`TJS_DEBUG_DUMP_STRING` を有効にしてビルドされたエンジンでのみ呼び出せます。\nメモリリーク調査などのデバッグ用途専用。"
+      },
+      "tr": {
+        "summary": "Dumps the string heap",
+        "description": "Writes the contents of the string heap managed by the TJS2 runtime to the debug output.\nCan be called only on an engine built with `TJS_DEBUG_DUMP_STRING` enabled.\nIntended solely for debugging, such as investigating memory leaks."
+      }
+    },
+    "json:Scripts": {
+      "hash": "dddaf5692ec0",
+      "ja": {
+        "summary": "擬似コードによるマニュアル"
+      },
+      "tr": {
+        "summary": "Manual written as pseudo-code"
+      }
+    },
+    "json:Scripts.evalJSON": {
+      "hash": "3cce9a621421",
+      "ja": {
+        "summary": "JSON の文字列を解析して Array または Dictionary を返す",
+        "returns": "Array または Dictionary",
+        "params": {
+          "jsonText": "JSON が格納されたテキスト"
+        }
+      },
+      "tr": {
+        "summary": "Parses a JSON string and returns an Array or Dictionary",
+        "returns": "Array or Dictionary",
+        "params": {
+          "jsonText": "Text containing JSON"
+        }
+      }
+    },
+    "json:Scripts.evalJSONStorage": {
+      "hash": "25ceb4a16ac6",
+      "ja": {
+        "summary": "JSON のファイルを解析して Array または Dictionary を返す",
+        "returns": "Array または Dictionary",
+        "params": {
+          "jsonFile": "JSON が格納されたテキストファイルのファイル名",
+          "utf8": "入力エンコーディング指定。true なら UTF-8、falseなら現在のコードページ"
+        }
+      },
+      "tr": {
+        "summary": "Parses a JSON file and returns an Array or Dictionary",
+        "returns": "Array or Dictionary",
+        "params": {
+          "jsonFile": "File name of the text file containing JSON",
+          "utf8": "Input encoding. true for UTF-8, false for the current code page"
+        }
+      }
+    },
+    "json:Scripts.saveJSON": {
+      "hash": "98fca89435d4",
+      "ja": {
+        "summary": "データを JSON 形式で保存する",
+        "params": {
+          "jsonFile": "格納先ファイル",
+          "obj": "保存対象オブジェクト",
+          "utf8": "出力エンコーディング指定。true なら UTF-8、falseなら現在のコードページ",
+          "newline": "改行コード 0:CRLF 1:LF"
+        }
+      },
+      "tr": {
+        "summary": "Saves data in JSON format",
+        "params": {
+          "jsonFile": "Destination file",
+          "obj": "Object to save",
+          "utf8": "Output encoding. true for UTF-8, false for the current code page",
+          "newline": "Line ending 0:CRLF 1:LF"
+        }
+      }
+    },
+    "json:Scripts.toJSONString": {
+      "hash": "7ae5d8ab878f",
+      "ja": {
+        "summary": "データを JSON 形式の文字列に変換する",
+        "returns": "JSON 形式のテキスト",
+        "params": {
+          "newline": "改行コード 0:CRLF 1:LF"
+        }
+      },
+      "tr": {
+        "summary": "Converts data to a JSON string",
+        "returns": "Text in JSON format",
+        "params": {
+          "newline": "Line ending 0:CRLF 1:LF"
+        }
+      }
+    },
+    "saveStruct:Scripts.toStructString": {
+      "hash": "055048e2579c",
+      "ja": {
+        "description": "optionのデフォルト値がArray/Dictionaryと違うので注意（デバッグ用途を想定）",
+        "returns": "saveStruct に準じた形の文字列を返す",
+        "params": {
+          "target": "文字列化する対象（辞書・配列以外の int/real/string/octet/null/void も可能）",
+          "newline": "改行コード 0:CRLF 1:LF",
+          "option": "整形オプション sso* の組み合わせ（後述）もしくは直接数値指定"
+        }
+      },
+      "tr": {
+        "description": "Note that the default value of option differs from that of Array/Dictionary (intended for debugging).",
+        "returns": "A string in the same form as saveStruct produces",
+        "params": {
+          "target": "Value to stringify (besides dictionaries and arrays, int/real/string/octet/null/void are also accepted)",
+          "newline": "Line ending 0:CRLF 1:LF",
+          "option": "Formatting options: a combination of sso* (described below) or a numeric value"
+        }
+      }
+    },
+    "scriptsEx:Scripts.getObjectKeys": {
+      "hash": "af93b67ab9e1",
+      "ja": {
+        "summary": "オブジェクトのメンバ名一覧を返す",
+        "returns": "キーが格納された配列",
+        "params": {
+          "obj": "対象オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Returns the list of an object's member names",
+        "returns": "Array containing the keys",
+        "params": {
+          "obj": "Target object"
+        }
+      }
+    },
+    "scriptsEx:Scripts.getObjectCount": {
+      "hash": "2d4ecc24c9dd",
+      "ja": {
+        "summary": "オブジェクトのメンバ個数を返す",
+        "returns": "個数を返す",
+        "params": {
+          "obj": "対象オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Returns the number of an object's members",
+        "returns": "The number of members",
+        "params": {
+          "obj": "Target object"
+        }
+      }
+    },
+    "scriptsEx:Scripts.getObjectContext": {
+      "hash": "4c1f6028faf3",
+      "ja": {
+        "summary": "オブジェクトのコンテキストを返す",
+        "returns": "コンテキストオブジェクト",
+        "params": {
+          "obj": "対象オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Returns an object's context",
+        "returns": "Context object",
+        "params": {
+          "obj": "Target object"
+        }
+      }
+    },
+    "scriptsEx:Scripts.isNullContext": {
+      "hash": "630457ace39b",
+      "ja": {
+        "summary": "オブジェクトのコンテキスト判定",
+        "returns": "コンテキストが null",
+        "params": {
+          "obj": "対象オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Checks an object's context",
+        "returns": "true if the context is null",
+        "params": {
+          "obj": "Target object"
+        }
+      }
+    },
+    "scriptsEx:Scripts.equalStruct": {
+      "hash": "2bbbe76c4077",
+      "ja": {
+        "summary": "オブジェクト同士を比較する。辞書/配列の場合は中身の要素が再帰的に比較されます",
+        "returns": "等しければ true",
+        "params": {
+          "obj1": "オブジェクトその1",
+          "obj2": "オブジェクトその2"
+        }
+      },
+      "tr": {
+        "summary": "Compares two objects. For dictionaries and arrays, their elements are compared recursively",
+        "returns": "true if equal",
+        "params": {
+          "obj1": "First object",
+          "obj2": "Second object"
+        }
+      }
+    },
+    "scriptsEx:Scripts.equalStructNumericLoose": {
+      "hash": "c50f9442da13",
+      "ja": {
+        "summary": "オブジェクト同士を比較する。辞書/配列の場合は中身の要素が再帰的に比較されます",
+        "description": "数値がゆるく比較されます(0.0 と 0 を等しいとして扱います)",
+        "returns": "等しければ true",
+        "params": {
+          "obj1": "オブジェクトその1",
+          "obj2": "オブジェクトその2"
+        }
+      },
+      "tr": {
+        "summary": "Compares two objects. For dictionaries and arrays, their elements are compared recursively",
+        "description": "Numbers are compared loosely (0.0 and 0 are treated as equal).",
+        "returns": "true if equal",
+        "params": {
+          "obj1": "First object",
+          "obj2": "Second object"
+        }
+      }
+    },
+    "scriptsEx:Scripts.foreach": {
+      "hash": "6b4205ceb3d8",
+      "ja": {
+        "summary": "オブジェクトのメンバの全参照",
+        "returns": "中断時に返された値",
+        "params": {
+          "obj": "処理対象オブジェクト(辞書または配列)",
+          "func": "呼び出し関数。func(key, value, args*) の形で呼ばれます。\n無名関数などコンテキストが null の場合は自動的に thisコンテキストで動作します\n関数がなにかしら値を返すと処理が中断されます",
+          "args": "追加引数\n配列の場合は単純にループによる参照になります。辞書やオブジェクトは iTJSDispatch2::EnumMebers の呼び出しになります"
+        }
+      },
+      "tr": {
+        "summary": "Iterates over all members of an object",
+        "returns": "The value returned when iteration was stopped",
+        "params": {
+          "obj": "Object to process (dictionary or array)",
+          "func": "Function to call. It is called as func(key, value, args*).\nIf its context is null, as with an anonymous function, it automatically runs with the this context.\nIf the function returns any value, iteration stops.",
+          "args": "Additional arguments\nArrays are iterated with a simple loop. Dictionaries and objects are iterated by calling iTJSDispatch2::EnumMebers."
+        }
+      }
+    },
+    "scriptsEx:Scripts.getMD5HashString": {
+      "hash": "109dd32016e1",
+      "ja": {
+        "summary": "octet の MD5ハッシュ値の取得",
+        "returns": "ハッシュ値（32文字の16進数ハッシュ文字列（小文字））",
+        "params": {
+          "octet": "対象オクテット"
+        }
+      },
+      "tr": {
+        "summary": "Gets the MD5 hash of an octet",
+        "returns": "Hash value (32-character lowercase hexadecimal string)",
+        "params": {
+          "octet": "Target octet"
+        }
+      }
+    },
+    "scriptsEx:Scripts.clone": {
+      "hash": "1b6c5b7fc09f",
+      "ja": {
+        "summary": "値のクローンを返す。",
+        "params": {
+          "obj": "クローン元\nvoid/数値/文字列/octet は元の値をそのまま返します。\n辞書・配列オブジェクトは、deep copy 処理したものを返します。入れ子は再帰処理されます。\n一般オブジェクトは \"clone\" メソッドが存在すればその帰り値を、なければ元の値をそのまま返します"
+        }
+      },
+      "tr": {
+        "summary": "Returns a clone of a value.",
+        "params": {
+          "obj": "Value to clone\nvoid, numbers, strings and octets are returned as is.\nDictionary and array objects are deep-copied; nested values are processed recursively.\nFor other objects, the return value of their \"clone\" method is returned if it exists; otherwise the original value is returned as is."
+        }
+      }
+    },
+    "scriptsEx:Scripts.rehash": {
+      "hash": "e2efa3500ab6",
+      "ja": {
+        "summary": "TJSDoRehash()を呼ぶ",
+        "description": "TJSCustomObjectベースのオブジェクトのハッシュテーブルサイズの再構築フラグを立てます。\n（辞書やほとんどのクラスおよびインスタンスのオブジェクトが対象になります）\n\n解説：\nハッシュテーブルサイズはそのオブジェクトの持つ要素数により決定されます。\nフラグが立った後，オブジェクトに何か書き込んだタイミングで再計算を行い，\nテーブルサイズが変わった場合にのみ再構築が行われます。（サイズ＝2^(要素数のビット数+2)程度？）\n普段，吉里吉里は定期的（アイドル時かつ前回から1.5秒以上経過している時）に\nTJSDoRehash()が呼ばれているので特に気にする必要はありませんが，\nアイドルを挟まずに大量に要素を追加する場合において\nカウンタで何千〜万回に1回等の間隔で呼び出すようにすると効果的かと思われます。"
+      },
+      "tr": {
+        "summary": "Calls TJSDoRehash()",
+        "description": "Sets the flag that rebuilds the hash table size of TJSCustomObject-based objects.\n(This covers dictionaries and most class and instance objects.)\n\nExplanation:\nThe hash table size is determined by the number of elements the object holds.\nAfter the flag is set, the size is recalculated the next time something is written to the object,\nand the table is rebuilt only if its size changes. (Size is roughly 2^(bit count of the element count + 2)?)\nNormally Kirikiri calls TJSDoRehash() periodically (when idle and at least 1.5 seconds have passed since the last call),\nso you usually do not need to worry about it.\nHowever, when adding a large number of elements without any idle time in between,\nit may be effective to call this at intervals such as once every few thousand to tens of thousands of additions, using a counter."
+      }
+    },
+    "scriptsEx:Scripts.propSet": {
+      "hash": "833f5271942e",
+      "ja": {
+        "summary": "指定オブジェクトのPropSet/Getを呼ぶ",
+        "returns": "取得した値(propGetのみ，set時はvoid)",
+        "params": {
+          "obj": "対象オブジェクト",
+          "member": "メンバ名(typeof member == \"Integer\"ならProp{Set,Get}ByNumを呼ぶ)",
+          "value": "セットする値(propSetのみ)",
+          "flag": "フラグ(Scripts.pf* の\"|\"(or)による組み合わせ指定，もしくは0)\nScripts.pfMemberEnsure    : (set時)メンバを新規追加する場合に指定（ない場合は既存メンバのみ書き換え可能）\nScripts.pfMemberMustExist : (get時)メンバがない場合はエラー（辞書のundefinedもvoidを返さずエラーになります）\nScripts.pfIgnoreProp      : (get/set時)プロパティの動作を無視（TJSの&指定と同じ動作です）\nScripts.pfHiddenMember    : (set時)隠しメンバ指定（assignStruct/saveStruct等のEnumMembers系の処理で無視されます）\nScripts.pfStaticMember    : (set時)Staticメンバ指定（クラスオブジェクトなどに使用します）"
+        }
+      },
+      "tr": {
+        "summary": "Calls PropSet/PropGet on the specified object",
+        "returns": "The retrieved value (propGet only; void for set)",
+        "params": {
+          "obj": "Target object",
+          "member": "Member name (if typeof member == \"Integer\", Prop{Set,Get}ByNum is called)",
+          "value": "Value to set (propSet only)",
+          "flag": "Flags (a combination of Scripts.pf* joined with \"|\" (or), or 0)\nScripts.pfMemberEnsure    : (set) Specify when adding a new member (without it, only existing members can be rewritten)\nScripts.pfMemberMustExist : (get) Error if the member does not exist (undefined dictionary entries also raise an error instead of returning void)\nScripts.pfIgnoreProp      : (get/set) Ignore property behavior (same as the & specifier in TJS)\nScripts.pfHiddenMember    : (set) Hidden member (ignored by EnumMembers-based processing such as assignStruct/saveStruct)\nScripts.pfStaticMember    : (set) Static member (used for class objects and the like)"
+        }
+      }
+    },
+    "scriptsEx:Scripts.safeEvalStorage": {
+      "hash": "e79227fe8a6a",
+      "ja": {
+        "summary": "(const)つき辞書／配列を安全に評価する",
+        "returns": "評価されたデータ",
+        "params": {
+          "storage": "評価するストレージ（バイトコードバイナリは不可／saveStructで(const)つきで保存された辞書／配列が対象）",
+          "mode": "モード文字列",
+          "context": "実行コンテキスト"
+        }
+      },
+      "tr": {
+        "summary": "Safely evaluates a dictionary/array marked (const)",
+        "returns": "The evaluated data",
+        "params": {
+          "storage": "Storage to evaluate (bytecode binaries are not allowed; intended for dictionaries/arrays saved by saveStruct with (const))",
+          "mode": "Mode string",
+          "context": "Execution context"
+        }
+      }
+    },
+    "windowEx:Scripts": {
+      "hash": "3837a3e2966d",
+      "ja": {
+        "summary": "Scripts拡張"
+      },
+      "tr": {
+        "summary": "Scripts extensions"
+      }
+    },
+    "windowEx:Scripts.setEvalErrorLog": {
+      "hash": "0122686d8f0d",
+      "ja": {
+        "summary": "Scripts.evalのエラーログ出力抑制",
+        "description": "enabled に false を設定すると Scripts.eval の評価処理を\nTVPExecuteExpression 経由で行うようになり，例外発生時にログが出力されない\n吉里吉里のバージョンアップに伴い仕様が変わる可能性があるので注意のこと",
+        "returns": "元の値",
+        "params": {
+          "enabled": "出力許可"
+        }
+      },
+      "tr": {
+        "summary": "Suppresses error logging from Scripts.eval",
+        "description": "Setting enabled to false makes Scripts.eval evaluate through\nTVPExecuteExpression, so no log is written when an exception occurs.\nNote that this behavior may change in future versions of Kirikiri.",
+        "returns": "The previous value",
+        "params": {
+          "enabled": "Whether logging is allowed"
+        }
+      }
+    }
+  }
+}

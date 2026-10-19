@@ -1,0 +1,82 @@
+{
+  "class": "SDLOGLDrawDevice",
+  "entries": {
+    "SDLOGLDrawDevice": {
+      "hash": "abed5af3683f",
+      "ja": {
+        "summary": "SDLOGLDrawDevice クラスは、このインスタンスを [Window.drawDevice](Window.md#drawdevice) に登録して使用するための DrawDevice で、SDL3 ビルドで OpenGL ES を直接使ってレイヤ合成結果を画面へ描画します。SDL3 ビルド (KRKRZ_VARIANT=SDL) 専用で、WINVER ビルドには含まれません。",
+        "description": "OpenGL 有効ビルド ( 既定構成 ) の SDL3 では**起動時の既定 DrawDevice** として最初から登録されているため、通常は意識する必要はありません。起動オプション `-drawdevice=sdlogl` で明示することもできます ( [コマンドラインオプション](../guide/CommandLine.md) )。\n\n[SDLDrawDevice](SDLDrawDevice.md) ( `SDL_Renderer` 経由 ) との違いは、SDL のレンダラ抽象を介さず OpenGL ES へ直接テクスチャ更新・描画を行う点です。[OGLDrawDevice](OGLDrawDevice.md) ( [Canvas](Canvas.md) / [Texture](Texture.md) / [ShaderProgram](ShaderProgram.md) 等の TJS 公開 GL クラス群を持つフル機能版 ) から、それら TJS 公開ロジックを除いた「レイヤ描画 + 動画再生」のシンプル版にあたります。GL コンテキストは OGLDrawDevice と共有可能で、Canvas 等を使いたくなったら Window.drawDevice へ [OGLDrawDevice](OGLDrawDevice.md) をセットして切り替えられます。\n\n利用には OpenGL ES が使える環境が必要です ( OS の OpenGL ドライバの ES プロファイル、または ANGLE の `libEGL.dll` / `libGLESv2.dll`。`-forceegl` で EGL 強制も可能 )。"
+      },
+      "tr": {
+        "summary": "SDLOGLDrawDevice is a DrawDevice that you register in [Window.drawDevice](Window.md#drawdevice); in the SDL3 build it draws the layer compositing result to the screen using OpenGL ES directly. It is available only in the SDL3 build (KRKRZ_VARIANT=SDL) and is not included in the WINVER build.",
+        "description": "In the SDL3 build with OpenGL enabled (the default configuration), it is registered from the start as the **default DrawDevice at startup**, so you normally do not need to think about it. You can also select it explicitly with the command-line option `-drawdevice=sdlogl` ([command-line options](../guide/CommandLine.md)).\n\nThe difference from [SDLDrawDevice](SDLDrawDevice.md) (which goes through `SDL_Renderer`) is that it updates textures and draws with OpenGL ES directly, without SDL's renderer abstraction. It is a simplified version of [OGLDrawDevice](OGLDrawDevice.md) (the full-featured version with the GL classes exposed to TJS, such as [Canvas](Canvas.md) / [Texture](Texture.md) / [ShaderProgram](ShaderProgram.md)) that drops the TJS-exposed logic and keeps only \"layer drawing + movie playback\". The GL context can be shared with OGLDrawDevice, so if you want to use Canvas and the like, you can switch by setting an [OGLDrawDevice](OGLDrawDevice.md) in Window.drawDevice.\n\nIt requires an environment where OpenGL ES is available (the ES profile of the OS OpenGL driver, or ANGLE's `libEGL.dll` / `libGLESv2.dll`; `-forceegl` forces EGL)."
+      }
+    },
+    "SDLOGLDrawDevice.SDLOGLDrawDevice": {
+      "hash": "433b75253a15",
+      "ja": {
+        "summary": "SDLOGLDrawDevice オブジェクトの構築",
+        "description": "SDLOGLDrawDevice クラスのオブジェクトを構築します。\n\nOpenGL 有効ビルドの SDL3 では起動時の既定 DrawDevice として最初から Window.drawDevice に登録されているので、新たに登録する必要はありません。"
+      },
+      "tr": {
+        "summary": "Constructs an SDLOGLDrawDevice object",
+        "description": "Constructs an object of the SDLOGLDrawDevice class.\n\nIn the SDL3 build with OpenGL enabled, it is registered in Window.drawDevice from the start as the default DrawDevice, so you do not need to register one yourself."
+      }
+    },
+    "SDLOGLDrawDevice.interface": {
+      "hash": "1cd82fca475d",
+      "ja": {
+        "summary": "インターフェースオブジェクトを取得",
+        "description": "プラグインなどで DrawDevice オブジェクトを利用するためにあります。"
+      },
+      "tr": {
+        "summary": "Gets the interface object",
+        "description": "Provided so that plugins and the like can use the DrawDevice object."
+      }
+    },
+    "SDLOGLDrawDevice.window": {
+      "hash": "57fb16b31728",
+      "ja": {
+        "summary": "関連付けられた Window オブジェクトを取得",
+        "description": "この DrawDevice をセットしている Window オブジェクトを返します。"
+      },
+      "tr": {
+        "summary": "Gets the associated Window object",
+        "description": "Returns the Window object this DrawDevice is set on."
+      }
+    },
+    "SDLOGLDrawDevice.glVideoPresenterHost": {
+      "hash": "12e20ffddaa7",
+      "ja": {
+        "summary": "オーバーレイ動画 presenter 登録口 (ポインタ値)",
+        "description": "オーバーレイ動画側がこの GL デバイスへ pull 型で合成するために読み取る presenter host\nへのポインタ値です (WINVER の [videoPresenterHost](Window.BasicDrawDevice.md#videopresenterhost) /\nSDL の [sdlVideoPresenterHost](SDLDrawDevice.md#sdlvideopresenterhost) と同じ規約)。\n通常はエンジン内部/プラグインが使用します。"
+      },
+      "tr": {
+        "summary": "Registration point for the overlay movie presenter (pointer value)",
+        "description": "A pointer value to the presenter host that the overlay movie reads in order to composite into this GL device in a pull model\n(the same convention as [videoPresenterHost](Window.BasicDrawDevice.md#videopresenterhost) in WINVER /\n[sdlVideoPresenterHost](SDLDrawDevice.md#sdlvideopresenterhost) in SDL).\nNormally used by the engine internals or plugins."
+      }
+    },
+    "SDLOGLDrawDevice.dialogRendererHost": {
+      "hash": "e39de868ef72",
+      "ja": {
+        "summary": "Elements ダイアログ renderer host (ポインタ値)",
+        "description": "Elements のオーバーレイ描画アダプタを取得するための host へのポインタ値です。\n通常はエンジン内部/プラグインが使用します。"
+      },
+      "tr": {
+        "summary": "Elements dialog renderer host (pointer value)",
+        "description": "A pointer value to the host used to obtain the Elements overlay drawing adapter.\nNormally used by the engine internals or plugins."
+      }
+    },
+    "SDLOGLDrawDevice.viewportBackgroundHost": {
+      "hash": "53cff7f8bf7c",
+      "ja": {
+        "summary": "ビューポート余白塗り登録口 (ポインタ値)",
+        "description": "ゲーム画面が描画領域全体を覆わないときの余白 ( [Window.viewportBgColor](Window.md#viewportbgcolor) /\n[Window.setViewportWallpaper](Window.md#setviewportwallpaper) ) を受け取る\n`iTVPViewportBackgroundHost` へのポインタ値です。 Window はこのプロパティが非 0 の\nときだけ余白設定を反映します ( プロパティを持たない描画デバイスでは余白の塗り分けは\n効かず、そのデバイス既定の塗りつぶしのままになります )。 通常はエンジン内部/プラグインが\n使用します。"
+      },
+      "tr": {
+        "summary": "Registration point for filling the viewport margins (pointer value)",
+        "description": "A pointer value to the `iTVPViewportBackgroundHost` that receives the margin settings used when the game screen does not cover the whole\ndrawing area ([Window.viewportBgColor](Window.md#viewportbgcolor) /\n[Window.setViewportWallpaper](Window.md#setviewportwallpaper)). Window applies the margin settings only when this property\nis nonzero (with a draw device that lacks this property, the margins cannot be filled separately\nand keep that device's default fill). Normally used by the engine internals or plugins."
+      }
+    }
+  }
+}

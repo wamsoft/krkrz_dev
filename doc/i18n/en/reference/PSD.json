@@ -1,0 +1,1496 @@
+{
+  "class": "PSD",
+  "entries": {
+    "psdfile:PSD": {
+      "hash": "281d418eba10",
+      "ja": {
+        "summary": "擬似コードによるマニュアル",
+        "description": "PSDファイルストレージ機能\n以下のパス名でPSDファイルのレイヤ画像を直接ファイルとしてロードできます\n\npsd://PSDファイル名/root/フォルダ名/.../レイヤ名.bmp\npsd://PSDファイル名/id/レイヤID.bmp\n\n・PSDファイル名はベース名のみで小文字で正規化されます\n・フォルダ名、レイヤ名は全て小文字で正規化されて含まれる\"/\" は \"_\" に置換されます\n・名前が重複する場合は後にあるものが優先になります"
+      },
+      "tr": {
+        "summary": "Manual written as pseudo-code",
+        "description": "PSD file storage\nLayer images in a PSD file can be loaded directly as files using the following paths:\n\npsd://PSDfilename/root/foldername/.../layername.bmp\npsd://PSDfilename/id/layerID.bmp\n\n- The PSD file name is the base name only, normalized to lowercase\n- Folder and layer names are all normalized to lowercase, and any \"/\" they contain is replaced with \"_\"\n- If names collide, the later one takes precedence"
+      }
+    },
+    "psdfile:PSD.load": {
+      "hash": "7bf1136c1040",
+      "ja": {
+        "summary": "PSD画像のロード",
+        "returns": "ロードに成功したら true",
+        "params": {
+          "filename": "ファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Loads a PSD image",
+        "returns": "true if loading succeeded.",
+        "params": {
+          "filename": "File name."
+        }
+      }
+    },
+    "psdfile:PSD.loadOctet": {
+      "hash": "f3ea4b12b7c3",
+      "ja": {
+        "summary": "octet に入った PSD データをロードする。",
+        "description": "バイト列は内部バッファへコピーされるので、呼び出し後に octet を破棄しても\nかまわない。ファイル名を持たないため psd:// ストレージへは登録されない。",
+        "returns": "ロードに成功したら true",
+        "params": {
+          "data": "PSD ファイル全体を格納した octet"
+        }
+      },
+      "tr": {
+        "summary": "Loads PSD data held in an octet",
+        "description": "The byte sequence is copied into an internal buffer, so the octet may be discarded\nafter the call. Since there is no file name, it is not registered in the psd:// storage.",
+        "returns": "true if loading succeeded.",
+        "params": {
+          "data": "An octet containing the entire PSD file."
+        }
+      }
+    },
+    "psdfile:PSD.clear": {
+      "hash": "7c7f08dacf30",
+      "ja": {
+        "summary": "保持しているデータを明示的に破棄する。",
+        "description": "吉里吉里のオブジェクト寿命は GC 依存なので、大きな PSD を掴んだままに\nしたくないときに呼ぶ。以後の参照系は \"no data\" 例外になる。"
+      },
+      "tr": {
+        "summary": "Explicitly discards the data held",
+        "description": "Object lifetime in Kirikiri depends on GC, so call this when you do not want to keep\na large PSD held. Subsequent queries throw a \"no data\" exception."
+      }
+    },
+    "psdfile:PSD.assignAutoIds": {
+      "hash": "b16c7cfc587f",
+      "ja": {
+        "summary": "LayerIDが未設定のレイヤに対してID番号を自動割り付け(base_id+1からlayer_no順に)",
+        "description": "Photoshop互換系のpsd保存ツールではレイヤIDが割り付けられないケースがあるため，psd://~/id/ が正しくロードできない問題がある\n基本的にはload直後に呼ぶことを推奨",
+        "returns": "IDを設定したレイヤの枚数",
+        "params": {
+          "base_id": "割り付けID最小番号-1(※既存のいずれかのレイヤIDがこれより大きかったらその値が利用される)"
+        }
+      },
+      "tr": {
+        "summary": "Automatically assigns IDs to layers without a LayerID (from base_id+1, in layer_no order)",
+        "description": "Some Photoshop-compatible tools save PSD files without assigning layer IDs, so psd://~/id/ cannot load them correctly.\nIt is generally recommended to call this right after load.",
+        "returns": "Number of layers that were assigned an ID.",
+        "params": {
+          "base_id": "The smallest ID to assign, minus 1 (if any existing layer ID is larger than this, that value is used instead)."
+        }
+      }
+    },
+    "psdfile:PSD.width": {
+      "hash": "233e0c048af6",
+      "ja": {
+        "summary": "画像横幅"
+      },
+      "tr": {
+        "summary": "Image width"
+      }
+    },
+    "psdfile:PSD.height": {
+      "hash": "ac07781e89f2",
+      "ja": {
+        "summary": "画像縦幅"
+      },
+      "tr": {
+        "summary": "Image height"
+      }
+    },
+    "psdfile:PSD.channels": {
+      "hash": "83d4edd97657",
+      "ja": {
+        "summary": "チャンネル数"
+      },
+      "tr": {
+        "summary": "Number of channels"
+      }
+    },
+    "psdfile:PSD.depth": {
+      "hash": "e0f9a1b128ee",
+      "ja": {
+        "summary": "1チャンネルあたりのビット数(1/8/16/32)"
+      },
+      "tr": {
+        "summary": "Bits per channel (1/8/16/32)"
+      }
+    },
+    "psdfile:PSD.color_mode": {
+      "hash": "279c8d83cbf6",
+      "ja": {
+        "summary": "カラーモード"
+      },
+      "tr": {
+        "summary": "Color mode"
+      }
+    },
+    "psdfile:PSD.layer_count": {
+      "hash": "1a2de914d631",
+      "ja": {
+        "summary": "レイヤ数"
+      },
+      "tr": {
+        "summary": "Number of layers"
+      }
+    },
+    "psdfile:PSD.hresolution": {
+      "hash": "faec58d634c5",
+      "ja": {
+        "summary": "水平解像度(dpi, 既定72, image resource 1005)"
+      },
+      "tr": {
+        "summary": "Horizontal resolution (dpi, default 72, image resource 1005)"
+      }
+    },
+    "psdfile:PSD.vresolution": {
+      "hash": "948f4993d2a5",
+      "ja": {
+        "summary": "垂直解像度(dpi, 既定72)"
+      },
+      "tr": {
+        "summary": "Vertical resolution (dpi, default 72)"
+      }
+    },
+    "psdfile:PSD.merged_alpha": {
+      "hash": "ad486c00427b",
+      "ja": {
+        "summary": "合成済み画像にアルファチャンネルが含まれるか"
+      },
+      "tr": {
+        "summary": "Whether the merged image contains an alpha channel"
+      }
+    },
+    "psdfile:PSD.getLayerType": {
+      "hash": "4533dd66d736",
+      "ja": {
+        "summary": "レイヤ種別の取得",
+        "returns": "レイヤ種別",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the layer type",
+        "returns": "The layer type.",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerName": {
+      "hash": "42f8cadac797",
+      "ja": {
+        "summary": "レイヤの名前の取得",
+        "returns": "レイヤ名称",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the layer name",
+        "returns": "The layer name.",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerInfo": {
+      "hash": "52d23f788bd8",
+      "ja": {
+        "summary": "レイヤの情報の取得",
+        "returns": "レイヤ情報がはいった辞書\n辞書の内容\nlayer_type   レイヤ種別\ntop          上座標\nleft         左座標\nbottom       底座標\nright        右座標\nwidth        横幅\nheight       縦幅\nblend_mode   合成モード(blend_mode_*。未知のモードは blend_mode_invalid)\nblend_mode_key PSD 上の生の合成モードキー(4文字。3文字キーは末尾に空白が付く\nことに注意 \"mul \" 等)。未知モードもそのまま得られるので、\n読んだ値をそのまま書き戻すなら setLayerBlendMode にこれを渡す\nopacity      不透明度\nfill_opacity 塗りの不透明度\nvisible      表示状態\nname         レイヤ名\nlayer_id     レイヤID\ngroup_layer_id 親レイヤID\nparent_index 親フォルダのレイヤ番号(トップレベルは -1)。layer_id は PSD に\nよっては未設定(-1)なので、階層を組むならこちらが確実。\n構造編集(deleteLayer/moveLayer/duplicateLayer/addLayer 等)の\nあとも再計算される\ntype         合成モード（吉里吉里の対応モード)\nclipping\tクリッピングマスクの対象か？\nmask\t\tレイヤマスクを持っているかどうか？\nmask_params  マスクパラメータ(density/feather)。マスクを持ちパラメータ\nブロックが実在するレイヤのみ存在。指定された項目だけ持つ\n%[ user_density:   // ユーザーマスク濃度 0..255\nuser_feather:   // ユーザーマスクぼかし(px)\nvector_density: // ベクタマスク濃度 0..255\nvector_feather: // ベクタマスクぼかし(px)\n]\nlayer_comp    レイヤーカンプ情報(カンプIDをキーとした辞書)\n%[ <id>: [ id,       // カンプID(getLayerComp() を参照してください)\noffset_x, // レイヤのXオフセット\noffset_y, // レイヤのYオフセット\nenable,   // 表示状態フラグ\n],... ]\ntext         テキストレイヤ情報(テキストレイヤ layer_type==layer_type_text のときのみ存在。\nそれ以外のレイヤではキー自体が存在しない)\n%[ text:          // 本文全体(改行は復帰文字 CR)\norientation:   // \"horizontal\" または \"vertical\"(縦書き)\njustification: // 先頭段落の行揃え 0=左 1=右 2=中央\ntransform:     // アフィン変換 `[ xx, xy, yx, yy, tx, ty ]` (tx,ty=平行移動)\nruns: [        // 文字スタイルのラン配列(本文の並び順)\n%[ length:       // 適用文字数(UTF-16 コードユニット。絵文字等サロゲートは2)\nfont:         // 解決済みフォント名\nsize_px:      // フォントサイズ(pt)\ncolor:        // RGBA 各 0..1 の配列 `[ r, g, b, a ]` (未指定なら存在しない)\ntracking:     // トラッキング(字送り, 1/1000 em)\nkerning:      // 手動カーニング\nauto_kerning: // 自動カーニング(メトリクス/オプティカル)有効か\nbold:         // 疑似ボールド(FauxBold)\nitalic:       // 疑似イタリック(FauxItalic)\nunderline:    // 下線(Underline)\n],... ]\nparagraphs: [   // 段落別の行揃え(box text で段落ごとに揃えが変わる用)\n%[ length:        // 段落の文字数(UTF-16 コードユニット)\njustification: // 行揃え 0=左 1=右 2=中央\n],... ]\n]\n以下 additional information （※詳細はPSD仕様書を参照のこと）\nobsolete\ntransparency_protected\npixel_data_irrelevant",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets layer information",
+        "returns": "A dictionary containing the layer information.\nContents:\nlayer_type   layer type\ntop          top coordinate\nleft         left coordinate\nbottom       bottom coordinate\nright        right coordinate\nwidth        width\nheight       height\nblend_mode   blend mode (blend_mode_*; unknown modes are blend_mode_invalid)\nblend_mode_key raw blend mode key in the PSD (4 characters; note that 3-character keys have\na trailing space, as in \"mul \"). Unknown modes are returned as is, so\nto write back the value you read, pass this to setLayerBlendMode\nopacity      opacity\nfill_opacity fill opacity\nvisible      visibility\nname         layer name\nlayer_id     layer ID\ngroup_layer_id parent layer ID\nparent_index layer index of the parent folder (-1 at the top level). layer_id may be\nunset (-1) in some PSD files, so this is more reliable for building the hierarchy.\nIt is recalculated after structural edits\n(deleteLayer/moveLayer/duplicateLayer/addLayer, etc.)\ntype         blend mode (the corresponding Kirikiri mode)\nclipping\twhether the layer is the target of a clipping mask\nmask\t\twhether the layer has a layer mask\nmask_params  mask parameters (density/feather). Present only for layers that have a mask\nand an actual parameter block. Contains only the items specified\n%[ user_density:   // user mask density 0..255\nuser_feather:   // user mask feather (px)\nvector_density: // vector mask density 0..255\nvector_feather: // vector mask feather (px)\n]\nlayer_comp    layer comp information (a dictionary keyed by comp ID)\n%[ <id>: [ id,       // comp ID (see getLayerComp())\noffset_x, // X offset of the layer\noffset_y, // Y offset of the layer\nenable,   // visibility flag\n],... ]\ntext         text layer information (present only for text layers, layer_type==layer_type_text;\nfor other layers the key itself does not exist)\n%[ text:          // entire body text (line breaks are carriage returns, CR)\norientation:   // \"horizontal\" or \"vertical\" (vertical text)\njustification: // alignment of the first paragraph 0=left 1=right 2=center\ntransform:     // affine transform `[ xx, xy, yx, yy, tx, ty ]` (tx,ty=translation)\nruns: [        // array of character style runs (in body text order)\n%[ length:       // number of characters it applies to (UTF-16 code units; surrogates such as emoji count as 2)\nfont:         // resolved font name\nsize_px:      // font size (pt)\ncolor:        // RGBA array, each 0..1, `[ r, g, b, a ]` (absent if unspecified)\ntracking:     // tracking (1/1000 em)\nkerning:      // manual kerning\nauto_kerning: // whether automatic kerning (metrics/optical) is enabled\nbold:         // faux bold (FauxBold)\nitalic:       // faux italic (FauxItalic)\nunderline:    // underline (Underline)\n],... ]\nparagraphs: [   // per-paragraph alignment (for box text whose alignment varies per paragraph)\n%[ length:        // number of characters in the paragraph (UTF-16 code units)\njustification: // alignment 0=left 1=right 2=center\n],... ]\n]\nAdditional information follows (see the PSD specification for details)\nobsolete\ntransparency_protected\npixel_data_irrelevant",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerData": {
+      "hash": "b11d2778b21f",
+      "ja": {
+        "summary": "レイヤデータの読み出し",
+        "params": {
+          "layer": "読み出し先レイヤ",
+          "no": "レイヤ番号\nlayer_type が layer_type_normal の場合のみ読み込みできます\nイメージとマスクを合成した状態で読み出します。\nデータ内容のほか以下のプロパティが自動的にレイヤに設定されます\nleft          左座標\ntop           上座標\nwidth         横幅\nheight        縦幅\ntype          合成モード\nopacity       不透明度\nfill_opacity\t 塗りの不透明度\nvisible       表示状態\nimageLeft     0になります\nimageTop      0になります\nimageWidth    width になります\nimageHeight   height になります\nname          name が設定されます"
+        }
+      },
+      "tr": {
+        "summary": "Reads layer data",
+        "params": {
+          "layer": "Destination layer.",
+          "no": "Layer index.\nCan be read only when layer_type is layer_type_normal.\nReads the image with the mask applied.\nIn addition to the image data, the following properties are set on the layer automatically:\nleft          left coordinate\ntop           top coordinate\nwidth         width\nheight        height\ntype          blend mode\nopacity       opacity\nfill_opacity\t fill opacity\nvisible       visibility\nimageLeft     set to 0\nimageTop      set to 0\nimageWidth    set to width\nimageHeight   set to height\nname          set to the layer name"
+        }
+      }
+    },
+    "psdfile:PSD.getLayerDataRaw": {
+      "hash": "24983b92d7db",
+      "ja": {
+        "summary": "レイヤデータの読み出し",
+        "params": {
+          "layer": "読み出し先レイヤ",
+          "no": "レイヤ番号\nlayer_type が layer_type_normal の場合のみ読み込みできます\nイメージのみを読み出します。\nデータ内容のほか以下のプロパティが自動的にレイヤに設定されます\nleft          左座標\ntop           上座標\nwidth         横幅\nheight        縦幅\ntype          合成モード\nopacity       不透明度\nfill_opacity\t 塗りの不透明度\nvisible       表示状態\nimageLeft     0になります\nimageTop      0になります\nimageWidth    width になります\nimageHeight   height になります\nname          name が設定されます"
+        }
+      },
+      "tr": {
+        "summary": "Reads layer data",
+        "params": {
+          "layer": "Destination layer.",
+          "no": "Layer index.\nCan be read only when layer_type is layer_type_normal.\nReads only the image.\nIn addition to the image data, the following properties are set on the layer automatically:\nleft          left coordinate\ntop           top coordinate\nwidth         width\nheight        height\ntype          blend mode\nopacity       opacity\nfill_opacity\t fill opacity\nvisible       visibility\nimageLeft     set to 0\nimageTop      set to 0\nimageWidth    set to width\nimageHeight   set to height\nname          set to the layer name"
+        }
+      }
+    },
+    "psdfile:PSD.getLayerDataMask": {
+      "hash": "cb603677f9e2",
+      "ja": {
+        "summary": "レイヤデータの読み出し",
+        "params": {
+          "layer": "読み出し先レイヤ",
+          "no": "レイヤ番号\nlayer_type が layer_type_normal の場合のみ読み込みできます\nマスクのみを読み出します。\nマスクのイメージサイズが0でdefualtMaskColorのみが設定されているケースでは、\n「レイヤサイズを0には設定できない」と言う吉里吉里の制限を回避するため、\n(0,0)-(1,1)の最小サイズのレイヤをダミーで作り、defaultMaskColorでfillして返します。\nデータ内容のほか以下のプロパティが自動的にレイヤに設定されます\nleft          左座標\ntop           上座標\nwidth         横幅\nheight        縦幅\ntype          合成モード\nopacity       不透明度\nfill_opacity\t 塗りの不透明度\nvisible       表示状態\nimageLeft     0になります\nimageTop      0になります\nimageWidth    width になります\nimageHeight   height になります\nname          name が設定されます\ndefaultMaskColor  取得領域外のマスクカラー(常に0か255のどちらか)"
+        }
+      },
+      "tr": {
+        "summary": "Reads layer data",
+        "params": {
+          "layer": "Destination layer.",
+          "no": "Layer index.\nCan be read only when layer_type is layer_type_normal.\nReads only the mask.\nIf the mask image size is 0 and only defualtMaskColor is set,\nthen to work around Kirikiri's restriction that a layer size cannot be 0,\na dummy layer of the minimum size (0,0)-(1,1) is created, filled with defaultMaskColor, and returned.\nIn addition to the image data, the following properties are set on the layer automatically:\nleft          left coordinate\ntop           top coordinate\nwidth         width\nheight        height\ntype          blend mode\nopacity       opacity\nfill_opacity\t fill opacity\nvisible       visibility\nimageLeft     set to 0\nimageTop      set to 0\nimageWidth    set to width\nimageHeight   set to height\nname          set to the layer name\ndefaultMaskColor  mask color outside the stored area (always either 0 or 255)"
+        }
+      }
+    },
+    "psdfile:PSD.getSlices": {
+      "hash": "9e31b9ab8ea4",
+      "ja": {
+        "summary": "スライスデータの読み出し",
+        "returns": "スライス情報辞書 %[ top, left, bottom, right, slices:[ %[ id, group_id, left, top, bottom, right ], ... ] ]\nスライス情報がない場合は void を返す\nスライスの一番最後は全スライスを含むサイズのスライスのようです"
+      },
+      "tr": {
+        "summary": "Reads slice data",
+        "returns": "Slice information dictionary %[ top, left, bottom, right, slices:[ %[ id, group_id, left, top, bottom, right ], ... ] ]\nReturns void if there is no slice information.\nThe last slice appears to be one whose size covers all slices."
+      }
+    },
+    "psdfile:PSD.getGuides": {
+      "hash": "d3ccc756a157",
+      "ja": {
+        "summary": "ガイドデータの読み出し",
+        "returns": "ガイド情報辞書 %[ vertical:[ x1, x2, ... ], horizontal:[ y1, y2, ... ] ]\nガイド情報がない場合は void を返す"
+      },
+      "tr": {
+        "summary": "Reads guide data",
+        "returns": "Guide information dictionary %[ vertical:[ x1, x2, ... ], horizontal:[ y1, y2, ... ] ]\nReturns void if there is no guide information."
+      }
+    },
+    "psdfile:PSD.getBlend": {
+      "hash": "e152c5c069af",
+      "ja": {
+        "summary": "合成結果の取得。",
+        "description": "ライブラリ中で合成を行うわけではなく、PSDに保存された合成結果を読み出します。\n保存方法によってはこの画像は存在しない可能性があります。\nまた、レイヤが存在しないカラーモード(2値、インデックスカラー)の場合には\n画像データはこのメソッドで取得する必要があります。",
+        "returns": "取得に成功したら true",
+        "params": {
+          "layer": "格納先レイヤ"
+        }
+      },
+      "tr": {
+        "summary": "Gets the composited result",
+        "description": "The library does not composite anything itself; it reads the composited result saved in the PSD.\nDepending on how the file was saved, this image may not exist.\nFor color modes without layers (bitmap, indexed color),\nthe image data must be obtained with this method.",
+        "returns": "true on success.",
+        "params": {
+          "layer": "Destination layer."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerComp": {
+      "hash": "f48febc4ec76",
+      "ja": {
+        "summary": "レイヤーカンプデータの読み出し",
+        "returns": "カンプ情報辞書 %[ last_applied_id,  // Photoshop上で最後に適用状態だったカンプID\ncomps:[ %[ id,                // カンプID\nrecord_visibility, // 表示/非表示を記録しているか\nrecord_position,   // 位置を記録しているか\nrecord_appearance, // 外観(レイヤーエフェクト)を記録しているか\nname,              // カンプ名\ncomment,           // コメント\n],... ] ]\nカンプ情報がない場合は void を返す\n\n・record_xxx フラグが立っていない場合は最後に適用したカンプ(last_applied_id ではなく\nプログラムで最後に適用したカンプ)の状態を引き継ぎます\n・カンプIDに対応した各レイヤーごとの表示状態情報は、レイヤー情報の layer_comp\nプロパティにカンプIDをキーとした辞書に格納してあります。"
+      },
+      "tr": {
+        "summary": "Reads layer comp data",
+        "returns": "Comp information dictionary %[ last_applied_id,  // ID of the comp last applied in Photoshop\ncomps:[ %[ id,                // comp ID\nrecord_visibility, // whether visibility is recorded\nrecord_position,   // whether position is recorded\nrecord_appearance, // whether appearance (layer effects) is recorded\nname,              // comp name\ncomment,           // comment\n],... ] ]\nReturns void if there is no comp information.\n\n- If a record_xxx flag is not set, the state of the last applied comp (the comp last applied\nby the program, not last_applied_id) carries over\n- The visibility information of each layer for each comp ID is stored in the layer_comp\nproperty of the layer information, as a dictionary keyed by comp ID."
+      }
+    },
+    "psdfile:PSD.getLayerMask": {
+      "hash": "aafce6c264ab",
+      "ja": {
+        "summary": "レイヤマスクの詳細を取得する",
+        "returns": "%[ top:, left:, bottom:, right:, // マスク矩形\nwidth:, height:,\ndefault_color:  // マスク領域外の値 0..255\nflags:          // 生のフラグバイト\nrelative:       // 位置がレイヤ相対か(bit0)\ndisabled:       // マスクが無効か(bit1)\ninverted:       // 反転(bit2、廃止仕様)\nfrom_render:    // 他データのレンダリング由来か(bit3)\nhas_parameters: // density/feather ブロックを持つか(bit4)\nuser_density:   // ユーザーマスク濃度 0..255(無ければキー自体なし)\nuser_feather:   // ユーザーマスクぼかし(px、同上)\nvector_density: // ベクタマスク濃度(同上)\nvector_feather: // ベクタマスクぼかし(同上)\nreal: %[        // real/user mask (無ければキー自体なし)\nflags:, background:,\ntop:, left:, bottom:, right:, // enclosing 矩形\n]\n]  マスクを持たない場合は void",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the details of a layer mask",
+        "returns": "%[ top:, left:, bottom:, right:, // mask rectangle\nwidth:, height:,\ndefault_color:  // value outside the mask area 0..255\nflags:          // raw flag byte\nrelative:       // whether the position is relative to the layer (bit0)\ndisabled:       // whether the mask is disabled (bit1)\ninverted:       // inverted (bit2, obsolete)\nfrom_render:    // whether it comes from rendering other data (bit3)\nhas_parameters: // whether it has a density/feather block (bit4)\nuser_density:   // user mask density 0..255 (the key is absent if none)\nuser_feather:   // user mask feather (px; same as above)\nvector_density: // vector mask density (same as above)\nvector_feather: // vector mask feather (same as above)\nreal: %[        // real/user mask (the key is absent if none)\nflags:, background:,\ntop:, left:, bottom:, right:, // enclosing rectangle\n]\n]  void if the layer has no mask",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerBlendingRanges": {
+      "hash": "fc8ffab82637",
+      "ja": {
+        "summary": "レイヤのブレンド範囲を取得する。",
+        "description": "source/dest は 32bit の生値で、上下 16bit に黒側/白側の範囲が詰まっている(詳細は PSD 仕様書を参照)。",
+        "returns": "%[ gray:     %[ source:, dest: ],\nchannels: [ %[ source:, dest: ],... ]\n]  ブレンド範囲ブロックが無い場合は void",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the layer's blending ranges.",
+        "description": "source/dest are raw 32-bit values, with the black and white ranges packed into the upper and lower 16 bits (see the PSD specification for details).",
+        "returns": "%[ gray:     %[ source:, dest: ],\nchannels: [ %[ source:, dest: ],... ]\n]  void if there is no blending ranges block",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerSheetColor": {
+      "hash": "0c9bc99c0ea2",
+      "ja": {
+        "summary": "レイヤパネルの色ラベル('lclr')を取得する",
+        "returns": "%[ index: // 0..11\nname:  // \"none\" \"red\" \"orange\" \"yellow\" \"green\" \"blue\"\n// \"violet\" \"gray\" \"seafoam\" \"indigo\" \"magenta\" \"fuschia\"\n]  lclr ブロックが無い場合は void\n(index 0/\"none\" は「明示的にラベル無し」なので void とは区別される)",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the color label of the Layers panel ('lclr')",
+        "returns": "%[ index: // 0..11\nname:  // \"none\" \"red\" \"orange\" \"yellow\" \"green\" \"blue\"\n// \"violet\" \"gray\" \"seafoam\" \"indigo\" \"magenta\" \"fuschia\"\n]  void if there is no lclr block\n(index 0/\"none\" means \"explicitly no label\", so it is distinguished from void)",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerInfoKeys": {
+      "hash": "3cddc90c9a3c",
+      "ja": {
+        "summary": "レイヤが持つ追加レイヤ情報ブロックの 4CC キー一覧を取得する。",
+        "description": "getLayerDescriptor / getLayerDescriptorBytes に渡せるキーの調査用。",
+        "returns": "キー文字列(4文字)の配列",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the list of 4CC keys of the additional layer information blocks in the layer",
+        "description": "Useful for finding keys to pass to getLayerDescriptor / getLayerDescriptorBytes.",
+        "returns": "Array of key strings (4 characters each).",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerDescriptor": {
+      "hash": "b8838fd48b05",
+      "ja": {
+        "summary": "追加レイヤ情報ブロックを Photoshop ディスクリプタとして辞書化する。",
+        "description": "型に応じて以下へ変換される:\n整数/実数     → 数値\n真偽         → 1/0\n文字列       → 文字列\nUnitFloat    → %[ value:, unit: ]  unit は \"points\" \"millimeters\" \"angle\"\n\"density\" \"distance\" \"none\" \"percent\"\n\"pixels\" のいずれか\nEnumerated   → %[ type:, value: ]\nList         → 配列\nDescriptor   → 辞書(入れ子)\nRawData      → octet\nClass/Alias  → 文字列\nReference    → void",
+        "returns": "辞書。キーが無い・解析できない場合は void",
+        "params": {
+          "no": "レイヤ番号",
+          "key": "4文字のキー(\"lfx2\" 等)",
+          "skip": "ディスクリプタ本体前のバージョン接頭バイト数。\n-1 で既知キー(lfx2/SoCo/GdFl/PtFl/SoLd/SoLE/vstk/CgEd/vscg/vogk)\nは自動判定、それ以外は 0。既定 -1"
+        }
+      },
+      "tr": {
+        "summary": "Converts an additional layer information block, as a Photoshop descriptor, into a dictionary",
+        "description": "Values are converted according to their type:\nInteger/Double → number\nBoolean        → 1/0\nString         → string\nUnitFloat      → %[ value:, unit: ]  unit is one of \"points\" \"millimeters\" \"angle\"\n\"density\" \"distance\" \"none\" \"percent\"\n\"pixels\"\nEnumerated     → %[ type:, value: ]\nList           → array\nDescriptor     → dictionary (nested)\nRawData        → octet\nClass/Alias    → string\nReference      → void",
+        "returns": "A dictionary, or void if the key does not exist or cannot be parsed.",
+        "params": {
+          "no": "Layer index.",
+          "key": "4-character key (\"lfx2\", etc.).",
+          "skip": "Number of version prefix bytes before the descriptor body.\n-1 detects it automatically for known keys (lfx2/SoCo/GdFl/PtFl/SoLd/SoLE/vstk/CgEd/vscg/vogk)\nand uses 0 for others. Defaults to -1."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerDescriptorBytes": {
+      "hash": "1b340d0d8885",
+      "ja": {
+        "summary": "追加レイヤ情報ブロックの生バイトを取得する",
+        "returns": "octet。キーが無い場合は void",
+        "params": {
+          "no": "レイヤ番号",
+          "key": "4文字のキー"
+        }
+      },
+      "tr": {
+        "summary": "Gets the raw bytes of an additional layer information block",
+        "returns": "An octet, or void if the key does not exist.",
+        "params": {
+          "no": "Layer index.",
+          "key": "4-character key."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerEffects": {
+      "hash": "80bf0df565c3",
+      "ja": {
+        "summary": "レイヤ効果('lfx2')のディスクリプタ辞書を取得する。",
+        "description": "ドロップシャドウ/光彩/オーバーレイ/境界線/ベベル等が入れ子の辞書で入る。\ngetLayerDescriptor(no, \"lfx2\") と同じ。",
+        "returns": "辞書。効果が無い場合は void",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the descriptor dictionary of the layer effects ('lfx2')",
+        "description": "Drop shadow, glow, overlay, stroke, bevel and so on are stored as nested dictionaries.\nSame as getLayerDescriptor(no, \"lfx2\").",
+        "returns": "A dictionary, or void if there are no effects.",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerFill": {
+      "hash": "93fc5052a8ef",
+      "ja": {
+        "summary": "塗りつぶしレイヤの内容('SoCo'単色/'GdFl'グラデーション/'PtFl'パターン)を取得する",
+        "returns": "%[ type: // \"solid\" / \"gradient\" / \"pattern\"\ndata: // ディスクリプタ辞書\n]  塗りつぶしレイヤでない場合は void",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the contents of a fill layer ('SoCo' solid color / 'GdFl' gradient / 'PtFl' pattern)",
+        "returns": "%[ type: // \"solid\" / \"gradient\" / \"pattern\"\ndata: // descriptor dictionary\n]  void if the layer is not a fill layer",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getColorTable": {
+      "hash": "e772a1a7118f",
+      "ja": {
+        "summary": "カラーテーブル(インデックスカラー文書のパレット)を取得する",
+        "returns": "%[ valid_count:        // 有効なエントリ数\ntransparency_index: // 透明色インデックス(-1 で無し)\ncolors: [ 0xAARRGGBB, ... ] // 常に 256 エントリ\n]  カラーテーブルが無い場合は void"
+      },
+      "tr": {
+        "summary": "Gets the color table (the palette of an indexed color document)",
+        "returns": "%[ valid_count:        // number of valid entries\ntransparency_index: // transparent color index (-1 if none)\ncolors: [ 0xAARRGGBB, ... ] // always 256 entries\n]  void if there is no color table"
+      }
+    },
+    "psdfile:PSD.getGlobalLayerMask": {
+      "hash": "e4abed9ca595",
+      "ja": {
+        "summary": "global layer mask info(マスク表示用のオーバーレイ色)を取得する",
+        "returns": "%[ overlay_color_space:,\ncolor: [ c1, c2, c3, c4 ],\nopacity: // 0..100\nkind:    // 0=反転 / 1=全マスク / 128=レイヤ毎\n]  ブロックが空/不在の場合は void"
+      },
+      "tr": {
+        "summary": "Gets the global layer mask info (the overlay color used to display masks)",
+        "returns": "%[ overlay_color_space:,\ncolor: [ c1, c2, c3, c4 ],\nopacity: // 0..100\nkind:    // 0=inverted / 1=color selected / 128=per layer\n]  void if the block is empty or absent"
+      }
+    },
+    "psdfile:PSD.getImageResourceIds": {
+      "hash": "85182c40b921",
+      "ja": {
+        "summary": "文書が持つイメージリソースの ID 一覧を取得する",
+        "returns": "ID(整数)の配列"
+      },
+      "tr": {
+        "summary": "Gets the list of image resource IDs in the document",
+        "returns": "Array of IDs (integers)."
+      }
+    },
+    "psdfile:PSD.getImageResource": {
+      "hash": "b0a711a216f8",
+      "ja": {
+        "summary": "イメージリソースの生バイトを取得する。デコードは呼び出し側の責任。",
+        "returns": "octet。該当リソースが無い場合は void",
+        "params": {
+          "id": "リソースID(1039=ICCプロファイル, 1058=EXIF, 1060=XMP,\n1036/1033=サムネイル, 1005=解像度, 1032=グリッド/ガイド 等)"
+        }
+      },
+      "tr": {
+        "summary": "Gets the raw bytes of an image resource. Decoding is up to the caller",
+        "returns": "An octet, or void if the resource does not exist.",
+        "params": {
+          "id": "Resource ID (1039=ICC profile, 1058=EXIF, 1060=XMP,\n1036/1033=thumbnail, 1005=resolution, 1032=grid/guides, etc.)."
+        }
+      }
+    },
+    "psdfile:PSD.getICCProfile": {
+      "hash": "2d088f36b74c",
+      "ja": {
+        "summary": "ICC プロファイル(リソース 1039)の生バイト。無ければ void"
+      },
+      "tr": {
+        "summary": "Raw bytes of the ICC profile (resource 1039). void if none"
+      }
+    },
+    "psdfile:PSD.getEXIF": {
+      "hash": "120e899adf00",
+      "ja": {
+        "summary": "EXIF(リソース 1058)の生バイト。無ければ void"
+      },
+      "tr": {
+        "summary": "Raw bytes of EXIF (resource 1058). void if none"
+      }
+    },
+    "psdfile:PSD.getXMP": {
+      "hash": "a74a7bd47549",
+      "ja": {
+        "summary": "XMP パケット(リソース 1060)を文字列で取得する。中身は UTF-8 の XML。",
+        "description": "不正な UTF-8 が入っている可能性を考えるなら getImageResource(1060) で\n生バイトを取ること。",
+        "returns": "文字列。無ければ void"
+      },
+      "tr": {
+        "summary": "Gets the XMP packet (resource 1060) as a string. The contents are UTF-8 XML",
+        "description": "If the data might contain invalid UTF-8, get the raw bytes with\ngetImageResource(1060) instead.",
+        "returns": "A string, or void if none."
+      }
+    },
+    "psdfile:PSD.getThumbnail": {
+      "hash": "9e11db5e2914",
+      "ja": {
+        "summary": "埋め込みサムネイルを取得する(リソース 1036=RGB順 / 旧 1033=BGR順)",
+        "returns": "%[ format:      // \"jpeg\"(JFIF JPEG) または \"raw\"\nwidth:, height:,\nbits:        // 1ピクセルあたりのビット数\nresource_id: // 1036 または 1033\ndata:        // ペイロードの octet(28バイトのヘッダを除いたもの)\n]  サムネイルが無い場合は void"
+      },
+      "tr": {
+        "summary": "Gets the embedded thumbnail (resource 1036 = RGB order / legacy 1033 = BGR order)",
+        "returns": "%[ format:      // \"jpeg\" (JFIF JPEG) or \"raw\"\nwidth:, height:,\nbits:        // bits per pixel\nresource_id: // 1036 or 1033\ndata:        // payload octet (excluding the 28-byte header)\n]  void if there is no thumbnail"
+      }
+    },
+    "psdfile:PSD.save": {
+      "hash": "7ce069f70909",
+      "ja": {
+        "summary": "現在の内容を PSD ファイルとして書き出す",
+        "returns": "成功したら true",
+        "params": {
+          "filename": "保存先ファイル名(ローカルパス)"
+        }
+      },
+      "tr": {
+        "summary": "Writes the current contents as a PSD file",
+        "returns": "true on success.",
+        "params": {
+          "filename": "Destination file name (local path)."
+        }
+      }
+    },
+    "psdfile:PSD.createBlank": {
+      "hash": "e9f66b5b615a",
+      "ja": {
+        "summary": "この PSD を空の 8bit 文書(白の合成画像)として初期化する。",
+        "description": "以後 addLayer(...) でレイヤを足して save() できる。",
+        "returns": "成功したら true",
+        "params": {
+          "width": "幅",
+          "height": "高さ",
+          "mode": "カラーモード(color_mode_*、既定 color_mode_rgb)。\n**現状 color_mode_rgb 以外は false を返します**\n(新規作成に対応しているのは 8bit RGB のみ)。\n画素編集系(addLayer/setLayerPixels/setMergedImage)も同様に\n8bit RGB 文書のみ対応です"
+        }
+      },
+      "tr": {
+        "summary": "Initializes this PSD as an empty 8-bit document (with a white merged image)",
+        "description": "You can then add layers with addLayer(...) and save().",
+        "returns": "true on success.",
+        "params": {
+          "width": "Width.",
+          "height": "Height.",
+          "mode": "Color mode (color_mode_*, defaults to color_mode_rgb).\n**Currently returns false for anything other than color_mode_rgb**\n(only 8-bit RGB is supported for new documents).\nPixel editing (addLayer/setLayerPixels/setMergedImage) likewise\nsupports only 8-bit RGB documents."
+        }
+      }
+    },
+    "psdfile:PSD.deleteLayer": {
+      "hash": "afb9321b7d90",
+      "ja": {
+        "summary": "レイヤを 1 枚削除する",
+        "returns": "成功したら true(範囲外で false)",
+        "params": {
+          "index": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Deletes one layer",
+        "returns": "true on success (false if out of range).",
+        "params": {
+          "index": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.moveLayer": {
+      "hash": "42d1d97173d6",
+      "ja": {
+        "summary": "レイヤを from から to へ移動する",
+        "returns": "成功したら true",
+        "params": {
+          "from": "移動元レイヤ番号",
+          "to": "移動先(削除後リストでの挿入位置)"
+        }
+      },
+      "tr": {
+        "summary": "Moves a layer from from to to",
+        "returns": "true on success.",
+        "params": {
+          "from": "Source layer index.",
+          "to": "Destination (insertion position in the list after removal)."
+        }
+      }
+    },
+    "psdfile:PSD.groupSpan": {
+      "hash": "3d145a8604ec",
+      "ja": {
+        "summary": "レイヤがレイヤ一覧上で占める「塊」を返す。",
+        "description": "フォルダ(layer_type_folder)の場合は対応する区切り(layer_type_hidden)から\n自分自身までの範囲(入れ子も内側に含む)、それ以外は自分自身 1 枚だけ。\nmoveLayerRange と組み合わせてフォルダごと動かすのに使う。",
+        "returns": "%[ start: // 塊の先頭レイヤ番号\ncount: // 塊の枚数\n]  範囲外なら void",
+        "params": {
+          "index": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Returns the \"block\" a layer occupies in the layer list",
+        "description": "For a folder (layer_type_folder), the range from the corresponding divider (layer_type_hidden)\nto the folder itself (including nested content); for anything else, just the layer itself.\nUse it with moveLayerRange to move a whole folder.",
+        "returns": "%[ start: // first layer index of the block\ncount: // number of layers in the block\n]  void if out of range",
+        "params": {
+          "index": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.moveLayerSibling": {
+      "hash": "77ebe15b4dba",
+      "ja": {
+        "summary": "レイヤを同じ階層の隣の兄弟と入れ替える。",
+        "description": "フォルダは区切り+中身をまとめた塊として動き、隣がフォルダならその塊ごと\n飛び越える。階層をまたぐ移動はしない。",
+        "returns": "移動後のレイヤ番号。端まで来ていて動かせない場合や範囲外は -1",
+        "params": {
+          "index": "レイヤ番号",
+          "up": "true でレイヤパネル表示上ひとつ上(レイヤ一覧では後ろ)へ。\n既定 true"
+        }
+      },
+      "tr": {
+        "summary": "Swaps a layer with its adjacent sibling at the same level",
+        "description": "A folder moves as one block (divider plus contents), and if the neighbor is a folder, it jumps over\nthat whole block. It does not move across hierarchy levels.",
+        "returns": "The layer index after moving. -1 if it is already at the end and cannot move, or if out of range.",
+        "params": {
+          "index": "Layer index.",
+          "up": "true moves one step up as shown in the Layers panel (later in the layer list).\nDefaults to true."
+        }
+      }
+    },
+    "psdfile:PSD.moveLayerRange": {
+      "hash": "be452bd7a38a",
+      "ja": {
+        "summary": "レイヤ一覧上の [from, from+count) の範囲をまとめて to の位置へ動かす",
+        "description": "低水準の操作。フォルダごと動かすなら groupSpan の戻り値を渡す。",
+        "returns": "成功したら true(引数が不正なら false)",
+        "params": {
+          "from": "移動元先頭レイヤ番号",
+          "count": "移動する枚数",
+          "to": "移動先(「取り除く前」のレイヤ一覧でのインデックス)"
+        }
+      },
+      "tr": {
+        "summary": "Moves the range [from, from+count) of the layer list to position to as a group",
+        "description": "A low-level operation. To move a whole folder, pass the return value of groupSpan.",
+        "returns": "true on success (false if the arguments are invalid).",
+        "params": {
+          "from": "First layer index to move.",
+          "count": "Number of layers to move.",
+          "to": "Destination (index in the layer list before removal)."
+        }
+      }
+    },
+    "psdfile:PSD.duplicateLayer": {
+      "hash": "3e34dc041e63",
+      "ja": {
+        "summary": "レイヤを複製する(元の直後に挿入)",
+        "returns": "複製の新レイヤ番号(失敗で -1)",
+        "params": {
+          "index": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Duplicates a layer (inserted right after the original)",
+        "returns": "New layer index of the duplicate (-1 on failure).",
+        "params": {
+          "index": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.copyLayerFrom": {
+      "hash": "89c0517935d7",
+      "ja": {
+        "summary": "別の PSD インスタンスからレイヤをコピー挿入する。",
+        "description": "カラーモード/ビット深度が一致している必要がある。コピー元 PSD は\nこの PSD の save() が終わるまで生存している必要がある。",
+        "returns": "新レイヤ番号(失敗で -1)",
+        "params": {
+          "src": "コピー元 PSD インスタンス",
+          "srcIndex": "コピー元レイヤ番号",
+          "destIndex": "挿入位置(負値で末尾)"
+        }
+      },
+      "tr": {
+        "summary": "Copies and inserts a layer from another PSD instance",
+        "description": "The color mode and bit depth must match. The source PSD must stay alive\nuntil save() on this PSD has finished.",
+        "returns": "New layer index (-1 on failure).",
+        "params": {
+          "src": "Source PSD instance.",
+          "srcIndex": "Source layer index.",
+          "destIndex": "Insertion position (a negative value appends at the end)."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerName": {
+      "hash": "af5e903edc90",
+      "ja": {
+        "summary": "レイヤを改名する(pascal 名 + luni 名の両方を更新)",
+        "returns": "成功したら true",
+        "params": {
+          "index": "レイヤ番号",
+          "name": "新しい名前"
+        }
+      },
+      "tr": {
+        "summary": "Renames a layer (updates both the Pascal name and the luni name)",
+        "returns": "true on success.",
+        "params": {
+          "index": "Layer index.",
+          "name": "New name."
+        }
+      }
+    },
+    "psdfile:PSD.setFillOpacity": {
+      "hash": "bdf5ca672fe1",
+      "ja": {
+        "summary": "塗り不透明度(fill opacity)を編集する",
+        "returns": "成功したら true",
+        "params": {
+          "index": "レイヤ番号",
+          "opacity": "0..255"
+        }
+      },
+      "tr": {
+        "summary": "Edits the fill opacity",
+        "returns": "true on success.",
+        "params": {
+          "index": "Layer index.",
+          "opacity": "0..255"
+        }
+      }
+    },
+    "psdfile:PSD.setLayerOpacity": {
+      "hash": "bd9604b99434",
+      "ja": {
+        "summary": "不透明度を編集する",
+        "returns": "成功したら true(範囲外のレイヤ番号で false)",
+        "params": {
+          "index": "レイヤ番号",
+          "opacity": "0..255(範囲外はクランプされる)"
+        }
+      },
+      "tr": {
+        "summary": "Edits the opacity",
+        "returns": "true on success (false if the layer index is out of range).",
+        "params": {
+          "index": "Layer index.",
+          "opacity": "0..255 (out-of-range values are clamped)."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerClipping": {
+      "hash": "aa9186537986",
+      "ja": {
+        "summary": "クリッピングマスクの対象かどうかを編集する",
+        "returns": "成功したら true",
+        "params": {
+          "index": "レイヤ番号",
+          "clipping": "0=base / 1=non-base(クリッピング対象)"
+        }
+      },
+      "tr": {
+        "summary": "Edits whether the layer is the target of a clipping mask",
+        "returns": "true on success.",
+        "params": {
+          "index": "Layer index.",
+          "clipping": "0=base / 1=non-base (clipped)."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerVisible": {
+      "hash": "e1fdc5605e98",
+      "ja": {
+        "summary": "表示状態を編集する",
+        "returns": "成功したら true",
+        "params": {
+          "index": "レイヤ番号",
+          "visible": "表示するか"
+        }
+      },
+      "tr": {
+        "summary": "Edits the visibility",
+        "returns": "true on success.",
+        "params": {
+          "index": "Layer index.",
+          "visible": "Whether to show the layer."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerBlendMode": {
+      "hash": "2cfe0eb4d54b",
+      "ja": {
+        "summary": "合成モードを編集する",
+        "returns": "成功したら true",
+        "params": {
+          "index": "レイヤ番号",
+          "mode": "blend_mode_* 定数、または PSD 上の生のキー文字列(4文字。\n\"norm\" \"mul \" \"scrn\" など。3文字キーは末尾の空白が必須)。\ngetLayerInfo().blend_mode_key の値をそのまま渡せる"
+        }
+      },
+      "tr": {
+        "summary": "Edits the blend mode",
+        "returns": "true on success.",
+        "params": {
+          "index": "Layer index.",
+          "mode": "A blend_mode_* constant, or the raw key string in the PSD (4 characters,\nsuch as \"norm\" \"mul \" \"scrn\"; 3-character keys require the trailing space).\nThe value of getLayerInfo().blend_mode_key can be passed as is."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerEffects": {
+      "hash": "8a13c38a2667",
+      "ja": {
+        "summary": "レイヤ効果('lfx2')の値を編集する。",
+        "description": "changes は getLayerEffects() と同じ形の「部分辞書」で、指定した葉の値だけが\n上書きされる。構造/クラスID/型/キー順はそのまま保たれ、指定しなかった項目や\nディスクリプタ側に存在しないキーは無視される(そのためバイト一致が保たれる)。\n値の与え方:\n数値/文字列/真偽 → そのまま\nUnitFloat        → %[ value: ] か生の数値(単位は変更しない)\nEnumerated       → %[ type:, value: ] か値だけの文字列\nList             → 配列(先頭から既存要素数までを順に上書き)\nDescriptor       → 辞書(入れ子でマージ)\nlfx2 ブロックを持たないレイヤの場合は例外。",
+        "params": {
+          "index": "レイヤ番号",
+          "changes": "部分辞書"
+        }
+      },
+      "tr": {
+        "summary": "Edits the values of the layer effects ('lfx2')",
+        "description": "changes is a \"partial dictionary\" in the same shape as getLayerEffects(); only the leaf values given\nare overwritten. The structure, class IDs, types and key order are kept as they are, and items not given\nor keys that do not exist in the descriptor are ignored (so the bytes otherwise stay identical).\nHow to give values:\nnumber/string/boolean → as is\nUnitFloat             → %[ value: ] or a raw number (the unit is not changed)\nEnumerated            → %[ type:, value: ] or just the value string\nList                  → array (overwrites existing elements in order, up to the existing count)\nDescriptor            → dictionary (merged recursively)\nThrows an exception if the layer has no lfx2 block.",
+        "params": {
+          "index": "Layer index.",
+          "changes": "Partial dictionary."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerDescriptor": {
+      "hash": "2168c9e9b393",
+      "ja": {
+        "summary": "任意の追加レイヤ情報キーに対する setLayerEffects の一般版",
+        "description": "塗りつぶしレイヤの 'SoCo'/'GdFl'/'PtFl' 等に使う。\n該当キーを持たないレイヤの場合は例外。",
+        "params": {
+          "index": "レイヤ番号",
+          "key": "4文字のキー",
+          "changes": "部分辞書",
+          "skip": "ディスクリプタ本体前のバージョン接頭バイト数\n(-1 で既知キーは自動判定。既定 -1)"
+        }
+      },
+      "tr": {
+        "summary": "General version of setLayerEffects for any additional layer information key",
+        "description": "Used for things such as 'SoCo'/'GdFl'/'PtFl' of fill layers.\nThrows an exception if the layer does not have the key.",
+        "params": {
+          "index": "Layer index.",
+          "key": "4-character key.",
+          "changes": "Partial dictionary.",
+          "skip": "Number of version prefix bytes before the descriptor body\n(-1 detects it automatically for known keys. Defaults to -1)."
+        }
+      }
+    },
+    "psdfile:PSD.setMaskDisabled": {
+      "hash": "e9aaff5f71e0",
+      "ja": {
+        "summary": "マスク無効フラグを編集する(マスクを持つレイヤのみ)",
+        "returns": "成功したら true",
+        "params": {
+          "index": "レイヤ番号",
+          "disabled": "マスクを無効にするか"
+        }
+      },
+      "tr": {
+        "summary": "Edits the mask disabled flag (layers with a mask only)",
+        "returns": "true on success.",
+        "params": {
+          "index": "Layer index.",
+          "disabled": "Whether to disable the mask."
+        }
+      }
+    },
+    "psdfile:PSD.setMaskDensity": {
+      "hash": "0499eb047eba",
+      "ja": {
+        "summary": "ユーザーマスク濃度を編集する(マスクを持つレイヤのみ)",
+        "returns": "成功したら true",
+        "params": {
+          "index": "レイヤ番号",
+          "density": "0..255"
+        }
+      },
+      "tr": {
+        "summary": "Edits the user mask density (layers with a mask only)",
+        "returns": "true on success.",
+        "params": {
+          "index": "Layer index.",
+          "density": "0..255"
+        }
+      }
+    },
+    "psdfile:PSD.setMaskFeather": {
+      "hash": "bd224543d4bf",
+      "ja": {
+        "summary": "ユーザーマスクぼかしを編集する(マスクを持つレイヤのみ)",
+        "returns": "成功したら true",
+        "params": {
+          "index": "レイヤ番号",
+          "feather": "ぼかし半径(px)"
+        }
+      },
+      "tr": {
+        "summary": "Edits the user mask feather (layers with a mask only)",
+        "returns": "true on success.",
+        "params": {
+          "index": "Layer index.",
+          "feather": "Feather radius (px)."
+        }
+      }
+    },
+    "psdfile:PSD.setMaskDefaultColor": {
+      "hash": "255bc92658f3",
+      "ja": {
+        "summary": "マスク既定色を編集する(マスクを持つレイヤのみ)",
+        "returns": "成功したら true",
+        "params": {
+          "index": "レイヤ番号",
+          "color": "0..255"
+        }
+      },
+      "tr": {
+        "summary": "Edits the mask default color (layers with a mask only)",
+        "returns": "true on success.",
+        "params": {
+          "index": "Layer index.",
+          "color": "0..255"
+        }
+      }
+    },
+    "psdfile:PSD.setLayerPixels": {
+      "hash": "aaa83907b805",
+      "ja": {
+        "summary": "既存レイヤの画素を Layer オブジェクトの内容で差し替える。",
+        "description": "Layer の imageWidth×imageHeight・BGRA を取り込む。left/top は保持し\nwidth/height は更新される。8bit RGB 文書のみ。",
+        "returns": "成功したら true",
+        "params": {
+          "index": "レイヤ番号",
+          "layer": "画素供給元 Layer"
+        }
+      },
+      "tr": {
+        "summary": "Replaces the pixels of an existing layer with the contents of a Layer object",
+        "description": "Takes in imageWidth×imageHeight of the Layer as BGRA. left/top are kept and\nwidth/height are updated. 8-bit RGB documents only.",
+        "returns": "true on success.",
+        "params": {
+          "index": "Layer index.",
+          "layer": "Layer that supplies the pixels."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerMaskPixels": {
+      "hash": "53f4fbeef2bd",
+      "ja": {
+        "summary": "レイヤのマスク画素を Layer オブジェクトの内容(B 成分をグレーとして使用)で差し替える。",
+        "description": "マスク矩形も (top,left,imageWidth,imageHeight) に設定する。\nマスクが無ければ新規作成する。8bit 文書のみ。",
+        "returns": "成功したら true",
+        "params": {
+          "index": "レイヤ番号",
+          "layer": "マスク供給元 Layer",
+          "top": "マスク上端",
+          "left": "マスク左端"
+        }
+      },
+      "tr": {
+        "summary": "Replaces a layer's mask pixels with the contents of a Layer object (the B component is used as gray).",
+        "description": "Also sets the mask rectangle to (top,left,imageWidth,imageHeight).\nCreates a mask if there is none. 8-bit documents only.",
+        "returns": "true on success.",
+        "params": {
+          "index": "Layer index.",
+          "layer": "Layer that supplies the mask.",
+          "top": "Top edge of the mask.",
+          "left": "Left edge of the mask."
+        }
+      }
+    },
+    "psdfile:PSD.addLayer": {
+      "hash": "3395a055fa5f",
+      "ja": {
+        "summary": "新規画像レイヤを追加する。Layer の imageWidth×imageHeight・BGRA を取り込む。",
+        "description": "8bit RGB 文書のみ。",
+        "returns": "新レイヤ番号(失敗で -1)",
+        "params": {
+          "name": "レイヤ名",
+          "left": "左座標",
+          "top": "上座標",
+          "layer": "画素供給元 Layer",
+          "blendMode": "合成モード(blend_mode_*、既定 blend_mode_normal)",
+          "opacity": "不透明度 0..255(既定 255)",
+          "destIndex": "挿入位置(負値で末尾)"
+        }
+      },
+      "tr": {
+        "summary": "Adds a new image layer. Takes in imageWidth×imageHeight of the Layer as BGRA",
+        "description": "8-bit RGB documents only.",
+        "returns": "New layer index (-1 on failure).",
+        "params": {
+          "name": "Layer name.",
+          "left": "Left coordinate.",
+          "top": "Top coordinate.",
+          "layer": "Layer that supplies the pixels.",
+          "blendMode": "Blend mode (blend_mode_*, defaults to blend_mode_normal).",
+          "opacity": "Opacity 0..255 (defaults to 255).",
+          "destIndex": "Insertion position (a negative value appends at the end)."
+        }
+      }
+    },
+    "psdfile:PSD.setMergedImage": {
+      "hash": "d01bc5a93691",
+      "ja": {
+        "summary": "合成済み画像(プレビュー/getBlend の元)を Layer の内容で差し替える。",
+        "description": "Layer のサイズは canvas サイズ(width×height)と一致している必要がある。\n8bit RGB 文書のみ。",
+        "returns": "成功したら true",
+        "params": {
+          "layer": "画素供給元 Layer"
+        }
+      },
+      "tr": {
+        "summary": "Replaces the merged image (the source of the preview and getBlend) with the contents of a Layer",
+        "description": "The Layer size must match the canvas size (width×height).\n8-bit RGB documents only.",
+        "returns": "true on success.",
+        "params": {
+          "layer": "Layer that supplies the pixels."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerText": {
+      "hash": "6814cee6b5bf",
+      "ja": {
+        "summary": "テキストレイヤの本文を差し替える(スタイルは先頭ランに畳まれる)。",
+        "description": "テキストレイヤ以外や TySh ブロックが無い場合は例外。",
+        "params": {
+          "index": "レイヤ番号",
+          "text": "新しい本文(改行は \\r)"
+        }
+      },
+      "tr": {
+        "summary": "Replaces the body text of a text layer (styles collapse into the first run)",
+        "description": "Throws an exception for non-text layers or if there is no TySh block.",
+        "params": {
+          "index": "Layer index.",
+          "text": "New body text (line breaks are \\r)."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerRunStyle": {
+      "hash": "95626443465c",
+      "ja": {
+        "summary": "テキストレイヤの runIndex 番目のラン(getLayerInfo().text.runs に対応)のスタイルを編集する。",
+        "description": "style 辞書のうち指定されたキーだけ上書きする。\n%[ font:      // フォント名。文書のフォントセットに無ければ追加される\n// (getLayerFonts() が返す PostScript 風の名前。表示名では\n//  ないことに注意。手元に無い名前は Photoshop 側で代替される)\nsize_px:   // フォントサイズ(px)\ncolor:     // RGBA 各 0..1 の配列 `[ r, g, b, a ]` (a 省略で `[ r, g, b ]` も可)\ntracking:  // トラッキング(1/1000 em)\nkerning:   // 手動カーニング\nbold:      // 疑似ボールド(FauxBold) true/false\nitalic:    // 疑似イタリック(FauxItalic) true/false\nunderline: // 下線(Underline) true/false\n]\n本文とランの長さは変わらない。継承でキーを持たないランには追加される。\nテキストレイヤ以外や runIndex 範囲外の場合は例外。",
+        "params": {
+          "index": "レイヤ番号",
+          "runIndex": "ラン番号",
+          "style": "スタイル辞書"
+        }
+      },
+      "tr": {
+        "summary": "Edits the style of run runIndex of a text layer (corresponding to getLayerInfo().text.runs).",
+        "description": "Only the keys given in the style dictionary are overwritten.\n%[ font:      // font name; added to the document's font set if missing\n// (the PostScript-style name returned by getLayerFonts(), not the\n//  display name. Names not available locally are substituted by Photoshop)\nsize_px:   // font size (px)\ncolor:     // RGBA array, each 0..1, `[ r, g, b, a ]` (`[ r, g, b ]` without a is also accepted)\ntracking:  // tracking (1/1000 em)\nkerning:   // manual kerning\nbold:      // faux bold (FauxBold) true/false\nitalic:    // faux italic (FauxItalic) true/false\nunderline: // underline (Underline) true/false\n]\nThe body text and run lengths do not change. Keys are added to runs that lack them through inheritance.\nThrows an exception for non-text layers or if runIndex is out of range.",
+        "params": {
+          "index": "Layer index.",
+          "runIndex": "Run index.",
+          "style": "Style dictionary."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerRichText": {
+      "hash": "be8989f2fdba",
+      "ja": {
+        "summary": "テキストレイヤの本文とラン構成/段落構成をまとめて差し替える。",
+        "description": "setLayerText はスタイルを先頭ランに畳んでしまうので、本文を変えつつ\n部分ごとに書式を変えたい場合はこちらを使う。\n\nruns / paragraphs の length は UTF-16 コードユニット数(絵文字等サロゲート\nペアは 2)。length の合計が本文長と合わない場合は末尾要素が過不足を吸収する\n(伸ばす/切り詰める)。長さ 0 の要素は捨てられる。void や空配列を渡すと\n単一ラン/単一段落に畳まれる。末尾に改行(\\r)が無ければ補われる。\n各ランのスタイルは「元の先頭ランを雛形にして指定キーだけ上書き」なので、\n指定しなかった書式は元の見た目のまま残る。\n\nテキストレイヤ以外の場合は例外。",
+        "params": {
+          "index": "レイヤ番号",
+          "text": "新しい本文(改行は \\r)",
+          "runs": "[ %[ length: // 適用文字数\n…setLayerRunStyle の style と同じキー\n],... ]   省略可",
+          "paragraphs": "[ %[ length:        // 段落の文字数\njustification: // 行揃え 0=左 1=右 2=中央\n],... ]   省略可"
+        }
+      },
+      "tr": {
+        "summary": "Replaces the body text, run structure and paragraph structure of a text layer at once",
+        "description": "setLayerText collapses styles into the first run, so use this when you want to change the body text\nwhile formatting parts of it differently.\n\nThe length of runs / paragraphs is in UTF-16 code units (surrogate pairs such as emoji\ncount as 2). If the lengths do not add up to the body text length, the last element absorbs the difference\n(extended or truncated). Zero-length elements are discarded. Passing void or an empty array\ncollapses into a single run / single paragraph. A trailing line break (\\r) is added if missing.\nEach run's style is \"the original first run used as a template, with only the given keys overwritten\",\nso formatting you do not specify keeps its original appearance.\n\nThrows an exception for non-text layers.",
+        "params": {
+          "index": "Layer index.",
+          "text": "New body text (line breaks are \\r).",
+          "runs": "[ %[ length: // number of characters it applies to\n...the same keys as style in setLayerRunStyle\n],... ]   optional",
+          "paragraphs": "[ %[ length:        // number of characters in the paragraph\njustification: // alignment 0=left 1=right 2=center\n],... ]   optional"
+        }
+      }
+    },
+    "psdfile:PSD.setLayerJustification": {
+      "hash": "3d9192ab7861",
+      "ja": {
+        "summary": "テキストレイヤの段落の行揃えだけを変更する(本文もラン構成も変えない)。",
+        "description": "テキストレイヤ以外や paraIndex 範囲外の場合は例外。",
+        "params": {
+          "index": "レイヤ番号",
+          "justification": "行揃え 0=左 1=右 2=中央",
+          "paraIndex": "対象段落番号(getLayerInfo().text.paragraphs に対応)。\n負値で全段落。既定 -1"
+        }
+      },
+      "tr": {
+        "summary": "Changes only the paragraph alignment of a text layer (the body text and runs are unchanged)",
+        "description": "Throws an exception for non-text layers or if paraIndex is out of range.",
+        "params": {
+          "index": "Layer index.",
+          "justification": "Alignment 0=left 1=right 2=center.",
+          "paraIndex": "Target paragraph index (corresponding to getLayerInfo().text.paragraphs).\nA negative value means all paragraphs. Defaults to -1."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerFonts": {
+      "hash": "cf4bce3b3385",
+      "ja": {
+        "summary": "テキストレイヤが持つフォント名の一覧を返す(フォント選択 UI の候補用)。",
+        "description": "setLayerRunStyle / setLayerRichText の font に渡せる名前。\nテキストレイヤ以外の場合は例外。",
+        "returns": "フォント名の配列",
+        "params": {
+          "index": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Returns the list of font names in a text layer (candidates for a font selection UI)",
+        "description": "Names that can be passed as font to setLayerRunStyle / setLayerRichText.\nThrows an exception for non-text layers.",
+        "returns": "Array of font names.",
+        "params": {
+          "index": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerTextTransform": {
+      "hash": "b80bf4c6ca52",
+      "ja": {
+        "summary": "テキストレイヤの配置(アフィン変換)を取得する。",
+        "description": "getLayerInfo().text.transform と同じ値。テキストレイヤ以外は例外。",
+        "returns": "`[ xx, xy, yx, yy, tx, ty ]` (tx,ty=平行移動)",
+        "params": {
+          "index": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the placement (affine transform) of a text layer",
+        "description": "Same value as getLayerInfo().text.transform. Throws an exception for non-text layers.",
+        "returns": "`[ xx, xy, yx, yy, tx, ty ]` (tx,ty=translation)",
+        "params": {
+          "index": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerTextTransform": {
+      "hash": "9003b8344ad9",
+      "ja": {
+        "summary": "テキストレイヤの配置(アフィン変換)を差し替える。",
+        "description": "書き換わるのはテキスト情報だけで、レイヤ矩形(焼き込み済みラスタ)は\n動かない。単純な平行移動には moveTextLayer を使うこと。\nテキストレイヤ以外や要素数不足の場合は例外。",
+        "params": {
+          "index": "レイヤ番号",
+          "matrix": "[ xx, xy, yx, yy, tx, ty ] の 6 要素配列"
+        }
+      },
+      "tr": {
+        "summary": "Replaces the placement (affine transform) of a text layer",
+        "description": "Only the text information is rewritten; the layer rectangle (the baked raster)\ndoes not move. Use moveTextLayer for a simple translation.\nThrows an exception for non-text layers or if there are too few elements.",
+        "params": {
+          "index": "Layer index.",
+          "matrix": "6-element array [ xx, xy, yx, yy, tx, ty ]."
+        }
+      }
+    },
+    "psdfile:PSD.moveTextLayer": {
+      "hash": "36ef8b3b1d51",
+      "ja": {
+        "summary": "テキストレイヤを平行移動する。",
+        "description": "アフィン変換の tx/ty とレイヤ矩形(マスク矩形があればそれも)を同じだけずらすので、\nPSD 内蔵のラスタも一緒に動く。テキストレイヤ以外の場合は例外。",
+        "params": {
+          "index": "レイヤ番号",
+          "dx": "X 移動量(px)",
+          "dy": "Y 移動量(px)"
+        }
+      },
+      "tr": {
+        "summary": "Translates a text layer.",
+        "description": "Shifts tx/ty of the affine transform and the layer rectangle (and the mask rectangle, if any) by the same amount,\nso the raster stored in the PSD moves along with it. Throws an exception for non-text layers.",
+        "params": {
+          "index": "Layer index.",
+          "dx": "Amount to move in X (px).",
+          "dy": "Amount to move in Y (px)."
+        }
+      }
+    },
+    "psdfile:PSD.getLayerTextBounds": {
+      "hash": "c29819cec3c0",
+      "ja": {
+        "summary": "テキストレイヤの流し込み枠を取得する(アフィン変換のローカル座標。",
+        "description": "文書上の位置は transform の tx/ty を足したもの)。\nテキストレイヤ以外の場合は例外。",
+        "returns": "%[ left:, top:, right:, bottom: ]",
+        "params": {
+          "index": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the text frame of a text layer (in the local coordinates of the affine transform;",
+        "description": "the position in the document is obtained by adding tx/ty of transform).\nThrows an exception for non-text layers.",
+        "returns": "%[ left:, top:, right:, bottom: ]",
+        "params": {
+          "index": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.setLayerTextBounds": {
+      "hash": "cd71999cb6dd",
+      "ja": {
+        "summary": "テキストレイヤの流し込み枠を差し替える(アフィン変換のローカル座標)。",
+        "description": "実際に流し込みが変わるのは段落テキスト(ボックステキスト)のみで、\nポイントテキストでは Photoshop 側が字形から枠を作り直す。\nテキストレイヤ以外の場合は例外。",
+        "params": {
+          "index": "レイヤ番号",
+          "left": "左",
+          "top": "上",
+          "right": "右",
+          "bottom": "下"
+        }
+      },
+      "tr": {
+        "summary": "Replaces the text frame of a text layer (in the local coordinates of the affine transform)",
+        "description": "The text flow actually changes only for paragraph text (box text);\nfor point text, Photoshop rebuilds the frame from the glyphs.\nThrows an exception for non-text layers.",
+        "params": {
+          "index": "Layer index.",
+          "left": "Left.",
+          "top": "Top.",
+          "right": "Right.",
+          "bottom": "Bottom."
+        }
+      }
+    },
+    "psdfile:PSD.clearStorageCache": {
+      "hash": "cac904b2f6a9",
+      "ja": {
+        "summary": "ストレージとして保持されてるキャッシュをクリアする",
+        "description": "static メソッド。"
+      },
+      "tr": {
+        "summary": "Clears the cache held for the storage",
+        "description": "A static method."
+      }
+    },
+    "psdfile:PSD.getComposite": {
+      "hash": "1155d49104fa",
+      "ja": {
+        "summary": "レイヤから文書を合成する。",
+        "returns": "再現できなかったものの数\n%[ skipped_adjustments, unsupported_clip_base, unsupported_effects ]",
+        "params": {
+          "layer": "格納先レイヤ (文書サイズになる)",
+          "effects": "レイヤー効果を描くか (省略時 true)",
+          "background": "不透明な背景色 0xRRGGBB (省略 / void なら透明)"
+        }
+      },
+      "tr": {
+        "summary": "Composites the document from its layers",
+        "returns": "Counts of things that could not be reproduced:\n%[ skipped_adjustments, unsupported_clip_base, unsupported_effects ]",
+        "params": {
+          "layer": "Destination layer (resized to the document size).",
+          "effects": "Whether to draw layer effects (defaults to true).",
+          "background": "Opaque background color 0xRRGGBB (transparent if omitted / void)."
+        }
+      }
+    },
+    "psdfile:PSD.renderLayer": {
+      "hash": "18e92e2e628a",
+      "ja": {
+        "summary": "レイヤ 1 枚を効果込みで透明な面へ描く (下のレイヤとは重ねない)。",
+        "description": "マスク・塗りつぶしやシェイプの中身・不透明度・効果を反映する。\n格納先レイヤの left/top は文書上の位置で、矩形は効果のはみ出し\n(影・光彩・境界線) を含む。",
+        "returns": "描いたら true。グループ / 区切り / 調整レイヤ / 空のレイヤは false",
+        "params": {
+          "layer": "格納先レイヤ",
+          "no": "レイヤ番号",
+          "effects": "レイヤー効果を描くか (省略時 true)"
+        }
+      },
+      "tr": {
+        "summary": "Draws a single layer, with effects, onto a transparent surface (not stacked on the layers below)",
+        "description": "Applies the mask, the contents of fill and shape layers, opacity and effects.\nleft/top of the destination layer are its position in the document, and the rectangle includes\nany overflow from effects (shadows, glows, strokes).",
+        "returns": "true if something was drawn. false for groups, dividers, adjustment layers and empty layers.",
+        "params": {
+          "layer": "Destination layer.",
+          "no": "Layer index.",
+          "effects": "Whether to draw layer effects (defaults to true)."
+        }
+      }
+    },
+    "psdfile:PSD.getVectorMask": {
+      "hash": "36c15ef7fbfd",
+      "ja": {
+        "summary": "ベクタマスク (シェイプレイヤは 'vsms')。座標は文書ピクセル。",
+        "returns": "%[ key, inverted, not_linked, disabled, path ]。無ければ void\npath = %[ subpaths:[ %[ closed, operation, index,\nknots:[ %[ anchor:[x,y], preceding:[x,y], leaving:[x,y], linked ], ... ] ], ... ],\ninitial_fill, clipboard ]\noperation はサブパスの合成方法 (-1 直前とひとまとまり / 0 中マド /\n1 結合 / 2 前面の型抜き / 3 交差)。preceding は前の区間の制御点、\nleaving は次の区間の制御点。",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Vector mask ('vsms' for shape layers). Coordinates are in document pixels",
+        "returns": "%[ key, inverted, not_linked, disabled, path ], or void if none.\npath = %[ subpaths:[ %[ closed, operation, index,\nknots:[ %[ anchor:[x,y], preceding:[x,y], leaving:[x,y], linked ], ... ] ], ... ],\ninitial_fill, clipboard ]\noperation is how the subpath is combined (-1 grouped with the previous one / 0 exclude overlapping /\n1 combine / 2 subtract front shape / 3 intersect). preceding is the control point of the previous segment,\nand leaving the control point of the next segment.",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getPaths": {
+      "hash": "ed60300830ea",
+      "ja": {
+        "summary": "保存パス (リソース 2000〜2997) と作業パス (1025)。",
+        "returns": "[ %[ id, kind:\"saved\"|\"work\", name:<octet>, unicode_name, path ], ... ]\npath は getVectorMask と同じ形"
+      },
+      "tr": {
+        "summary": "Saved paths (resources 2000 to 2997) and the work path (1025)",
+        "returns": "[ %[ id, kind:\"saved\"|\"work\", name:<octet>, unicode_name, path ], ... ]\npath has the same shape as in getVectorMask."
+      }
+    },
+    "psdfile:PSD.getLayerShape": {
+      "hash": "c9d669be3bbd",
+      "ja": {
+        "summary": "シェイプレイヤの情報 ('vscg' 塗り / 'vstk' 線 / 'vogk' ライブシェイプ)。",
+        "returns": "%[ fill_enabled, stroke_enabled,\nfill:%[ kind:\"solid\"|\"gradient\"|\"pattern\", descriptor ],\nstroke:%[ width (px), alignment:\"inside\"|\"center\"|\"outside\",\ncap:\"butt\"|\"round\"|\"square\", join:\"miter\"|\"round\"|\"bevel\",\nmiter_limit, dashes:[px...], dash_offset (px), opacity (0..1),\nblend_mode, content_kind, content ],\norigins:[ %[ type:\"rectangle\"|\"rounded_rectangle\"|\"line\"|\"ellipse\",\ntype_id, index, box:[l,t,r,b], radii:[左上,右上,右下,左下],\nline:[x0,y0,x1,y1], line_weight, invalidated ], ... ],\npath ]\nどれも無ければ void。pt 指定の線幅は文書の解像度で px に換算済み",
+        "params": {
+          "no": "レイヤ番号"
+        }
+      },
+      "tr": {
+        "summary": "Shape layer information ('vscg' fill / 'vstk' stroke / 'vogk' live shape)",
+        "returns": "%[ fill_enabled, stroke_enabled,\nfill:%[ kind:\"solid\"|\"gradient\"|\"pattern\", descriptor ],\nstroke:%[ width (px), alignment:\"inside\"|\"center\"|\"outside\",\ncap:\"butt\"|\"round\"|\"square\", join:\"miter\"|\"round\"|\"bevel\",\nmiter_limit, dashes:[px...], dash_offset (px), opacity (0..1),\nblend_mode, content_kind, content ],\norigins:[ %[ type:\"rectangle\"|\"rounded_rectangle\"|\"line\"|\"ellipse\",\ntype_id, index, box:[l,t,r,b], radii:[top-left,top-right,bottom-right,bottom-left],\nline:[x0,y0,x1,y1], line_weight, invalidated ], ... ],\npath ]\nvoid if none of these exist. Stroke widths given in pt are converted to px using the document resolution.",
+        "params": {
+          "no": "Layer index."
+        }
+      }
+    },
+    "psdfile:PSD.getShapeMask": {
+      "hash": "97ef2b64f4f7",
+      "ja": {
+        "summary": "シェイプ / ベクタマスクのパスをラスタライズする (アンチエイリアス付き)。",
+        "description": "格納先レイヤには被覆率を B=G=R=値, A=255 で入れる (getLayerDataMask と同じ形)。\nマスクの濃度・ぼかしは掛けない。",
+        "returns": "%[ left, top, width, height ]。ベクタマスクが無い (stroke なら線が無い) と void",
+        "params": {
+          "layer": "格納先レイヤ (left/top は文書上の位置。文書の外にはみ出しうる)",
+          "no": "レイヤ番号",
+          "part": "\"fill\" (パスの内側) / \"stroke\" (シェイプの線) / \"both\" (省略時)"
+        }
+      },
+      "tr": {
+        "summary": "Rasterizes the path of a shape / vector mask (with anti-aliasing)",
+        "description": "The coverage is stored in the destination layer as B=G=R=value, A=255 (the same form as getLayerDataMask).\nThe mask density and feather are not applied.",
+        "returns": "%[ left, top, width, height ]. void if there is no vector mask (for stroke, if there is no stroke).",
+        "params": {
+          "layer": "Destination layer (left/top are its position in the document; it may extend outside the document).",
+          "no": "Layer index.",
+          "part": "\"fill\" (inside of the path) / \"stroke\" (the shape's stroke) / \"both\" (default)."
+        }
+      }
+    },
+    "psdfile:PSD.flattenPath": {
+      "hash": "9acc43a1f050",
+      "ja": {
+        "summary": "パスを折れ線にする。",
+        "description": "static メソッド。",
+        "returns": "[ %[ closed, operation, points:[ [x,y], ... ] ], ... ]",
+        "params": {
+          "path": "getVectorMask の path と同じ形の辞書、またはサブパスの配列。\nknot は [x, y] だけでもよい (直線の頂点)。closed の省略は true、\noperation の省略は -1",
+          "tolerance": "曲線からのずれの上限 (px、省略時 0.1)"
+        }
+      },
+      "tr": {
+        "summary": "Converts a path into polylines.",
+        "description": "A static method.",
+        "returns": "[ %[ closed, operation, points:[ [x,y], ... ] ], ... ]",
+        "params": {
+          "path": "A dictionary in the same shape as path in getVectorMask, or an array of subpaths.\nA knot may be just [x, y] (a straight-line vertex). closed defaults to true and\noperation to -1.",
+          "tolerance": "Maximum deviation from the curve (px, defaults to 0.1)."
+        }
+      }
+    },
+    "psdfile:PSD.rasterizePath": {
+      "hash": "409db6832fa4",
+      "ja": {
+        "summary": "パスの塗りをラスタライズする (被覆率を B=G=R=値, A=255 で)。",
+        "description": "static メソッド。",
+        "params": {
+          "layer": "格納先レイヤ (width x height になる)",
+          "path": "flattenPath と同じ",
+          "width": "幅",
+          "height": "高さ",
+          "left": "格納先の左上に当たるパス座標 (省略時 0)",
+          "top": "同上 (省略時 0)"
+        }
+      },
+      "tr": {
+        "summary": "Rasterizes the fill of a path (coverage as B=G=R=value, A=255).",
+        "description": "A static method.",
+        "params": {
+          "layer": "Destination layer (resized to width x height).",
+          "path": "Same as flattenPath.",
+          "width": "Width.",
+          "height": "Height.",
+          "left": "Path coordinate corresponding to the top-left of the destination (defaults to 0).",
+          "top": "Same as above (defaults to 0)."
+        }
+      }
+    },
+    "psdfile:PSD.strokePath": {
+      "hash": "8cc19b0bb362",
+      "ja": {
+        "summary": "パスの線をラスタライズする (被覆率を B=G=R=値, A=255 で)。",
+        "description": "static メソッド。",
+        "params": {
+          "layer": "格納先レイヤ (width x height になる)",
+          "path": "flattenPath と同じ",
+          "width": "幅",
+          "height": "高さ",
+          "style": "%[ left, top, line_width (省略時 1), alignment:\"center\"|\"inside\"|\"outside\",\ncap:\"butt\"|\"round\"|\"square\", join:\"miter\"|\"round\"|\"bevel\",\nmiter_limit (線幅に対する比、省略時 4), dashes:[線,間隔,...] (px),\ndash_offset (px) ]\ninside / outside は閉じたサブパスの片側にだけ線幅ぶん描く"
+        }
+      },
+      "tr": {
+        "summary": "Rasterizes the stroke of a path (coverage as B=G=R=value, A=255).",
+        "description": "A static method.",
+        "params": {
+          "layer": "Destination layer (resized to width x height).",
+          "path": "Same as flattenPath.",
+          "width": "Width.",
+          "height": "Height.",
+          "style": "%[ left, top, line_width (defaults to 1), alignment:\"center\"|\"inside\"|\"outside\",\ncap:\"butt\"|\"round\"|\"square\", join:\"miter\"|\"round\"|\"bevel\",\nmiter_limit (ratio to the line width, defaults to 4), dashes:[dash,gap,...] (px),\ndash_offset (px) ]\ninside / outside draw the full line width on only one side of closed subpaths."
+        }
+      }
+    },
+    "psdfile:PSD.setThreads": {
+      "hash": "0db71677c48e",
+      "ja": {
+        "summary": "描画系 (getComposite / renderLayer / ラスタライズ) の並列処理のスレッド数。",
+        "description": "static メソッド。\n大きな画像は行ごとに複数のスレッドへ分けて処理する (結果はスレッド数によらない)。\n主な描画モードの合成は、AVX2 の CPU なら 8 画素ずつの SIMD 版で処理する。",
+        "params": {
+          "count": "使うスレッド数 (呼び出し元を含む)。0 = 自動 (論理コア数、最大 16)、\n1 = 分けない。プラグインの登録解除のときに作業スレッドは止める"
+        }
+      },
+      "tr": {
+        "summary": "Number of threads used for parallel processing in rendering (getComposite / renderLayer / rasterization).",
+        "description": "A static method.\nLarge images are split by rows across multiple threads (the result does not depend on the thread count).\nOn CPUs with AVX2, compositing for the main blend modes uses a SIMD version that processes 8 pixels at a time.",
+        "params": {
+          "count": "Number of threads to use (including the caller). 0 = automatic (number of logical cores, up to 16),\n1 = no splitting. The worker threads are stopped when the plugin is unregistered."
+        }
+      }
+    },
+    "psdfile:PSD.getThreads": {
+      "hash": "c4ab1cdc16b6",
+      "ja": {
+        "summary": "static method",
+        "returns": "描画系が実際に使うスレッド数"
+      },
+      "tr": {
+        "summary": "static method",
+        "returns": "Number of threads actually used for rendering."
+      }
+    }
+  }
+}

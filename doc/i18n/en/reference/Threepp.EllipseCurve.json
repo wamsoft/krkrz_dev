@@ -1,0 +1,135 @@
+{
+  "class": "Threepp.EllipseCurve",
+  "entries": {
+    "krkrthreepp:Threepp.EllipseCurve": {
+      "hash": "4337d0610f11",
+      "ja": {
+        "summary": "楕円カーブ",
+        "description": "楕円または円弧を表現するカーブです。"
+      },
+      "tr": {
+        "summary": "Ellipse curve",
+        "description": "A curve representing an ellipse or an arc."
+      }
+    },
+    "krkrthreepp:Threepp.EllipseCurve.EllipseCurve": {
+      "hash": "5231de031102",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "aX": "中心X座標",
+          "aY": "中心Y座標",
+          "xRadius": "X方向の半径",
+          "yRadius": "Y方向の半径",
+          "aStartAngle": "開始角度 (ラジアン)",
+          "aEndAngle": "終了角度 (ラジアン)",
+          "aClockwise": "時計回りかどうか",
+          "aRotation": "楕円の回転角度 (ラジアン)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "aX": "X coordinate of the center.",
+          "aY": "Y coordinate of the center.",
+          "xRadius": "Radius along X.",
+          "yRadius": "Radius along Y.",
+          "aStartAngle": "Start angle (radians).",
+          "aEndAngle": "End angle (radians).",
+          "aClockwise": "Whether the ellipse is drawn clockwise.",
+          "aRotation": "Rotation angle of the ellipse (radians)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.EllipseCurve.aX": {
+      "hash": "6a66c22be269",
+      "ja": {
+        "summary": "中心X座標"
+      },
+      "tr": {
+        "summary": "X coordinate of the center"
+      }
+    },
+    "krkrthreepp:Threepp.EllipseCurve.aY": {
+      "hash": "b86958003796",
+      "ja": {
+        "summary": "中心Y座標"
+      },
+      "tr": {
+        "summary": "Y coordinate of the center"
+      }
+    },
+    "krkrthreepp:Threepp.EllipseCurve.xRadius": {
+      "hash": "1d11d4a3d1dc",
+      "ja": {
+        "summary": "X方向の半径"
+      },
+      "tr": {
+        "summary": "Radius along X"
+      }
+    },
+    "krkrthreepp:Threepp.EllipseCurve.yRadius": {
+      "hash": "243058ff60fe",
+      "ja": {
+        "summary": "Y方向の半径"
+      },
+      "tr": {
+        "summary": "Radius along Y"
+      }
+    },
+    "krkrthreepp:Threepp.EllipseCurve.aStartAngle": {
+      "hash": "2d7afd4332f6",
+      "ja": {
+        "summary": "開始角度"
+      },
+      "tr": {
+        "summary": "Start angle"
+      }
+    },
+    "krkrthreepp:Threepp.EllipseCurve.aEndAngle": {
+      "hash": "5f2fcfd1df0b",
+      "ja": {
+        "summary": "終了角度"
+      },
+      "tr": {
+        "summary": "End angle"
+      }
+    },
+    "krkrthreepp:Threepp.EllipseCurve.aClockwise": {
+      "hash": "c094c863591c",
+      "ja": {
+        "summary": "時計回りフラグ"
+      },
+      "tr": {
+        "summary": "Clockwise flag"
+      }
+    },
+    "krkrthreepp:Threepp.EllipseCurve.aRotation": {
+      "hash": "5a58a950c711",
+      "ja": {
+        "summary": "回転角度"
+      },
+      "tr": {
+        "summary": "Rotation angle"
+      }
+    },
+    "krkrthreepp:Threepp.EllipseCurve.getLength": {
+      "hash": "8d98a47bcea4",
+      "ja": {
+        "summary": "曲線の長さを取得"
+      },
+      "tr": {
+        "summary": "Gets the length of the curve"
+      }
+    },
+    "krkrthreepp:Threepp.EllipseCurve.getPoint": {
+      "hash": "1be3886a14b6",
+      "ja": {
+        "summary": "パラメータ t (0-1) の点を取得"
+      },
+      "tr": {
+        "summary": "Gets the point at parameter t (0-1)"
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "class": "Pad",
+  "entries": {
+    "windowEx:Pad": {
+      "hash": "4d3dee1c6315",
+      "ja": {
+        "description": "Pad拡張"
+      },
+      "tr": {
+        "description": "Pad extensions"
+      }
+    },
+    "windowEx:Pad.registerExEvent": {
+      "hash": "1076ac9cacd8",
+      "ja": {
+        "summary": "拡張イベントを有効にする（登録失敗で例外が発生）",
+        "description": "拡張イベントとして以下が発生：\nonClose  閉じるボタンが押された\n\n※borderStyleなどの変更によりウィンドウが作り直されるとイベントが発生しなくなるので注意\n⇒その場合は再度registerExEvent()を呼ぶ"
+      },
+      "tr": {
+        "summary": "Enables extended events (throws an exception if registration fails)",
+        "description": "The following extended event is raised:\nonClose  The close button was pressed\n\nNote: if the window is recreated (for example by changing borderStyle), the events stop firing.\nIn that case, call registerExEvent() again."
+      }
+    }
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "class": "GdiPlus.Appearance",
+  "entries": {
+    "layerExDraw:GdiPlus.Appearance": {
+      "hash": "4516c8469b77",
+      "ja": {
+        "summary": "描画外観情報",
+        "description": "Illustrator のアピアランスをイメージしてください。\n描画に対して、複数のブラシ（塗り）とペン（線）を指定できます。\n先に追加した方が下に入ります"
+      },
+      "tr": {
+        "summary": "Drawing appearance",
+        "description": "Think of it as Illustrator's Appearance.\nYou can specify multiple brushes (fills) and pens (strokes) for a drawing.\nItems added earlier are placed underneath."
+      }
+    },
+    "layerExDraw:GdiPlus.Appearance.Appearance": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "layerExDraw:GdiPlus.Appearance.clear": {
+      "hash": "e960dad0c5db",
+      "ja": {
+        "summary": "情報のクリア"
+      },
+      "tr": {
+        "summary": "Clears the information"
+      }
+    },
+    "layerExDraw:GdiPlus.Appearance.addBrush": {
+      "hash": "8726fe868d15",
+      "ja": {
+        "summary": "ブラシの追加",
+        "description": "ブラシ情報定義\n基本  点指定は [x,y] の配列または %[x:x, y:y] の辞書\n矩形指定は [x,y,width,height] の配列または %[x:x, y:y, width:w, height:h] の辞書\n色指定は ARGB 32bit整数値\nパラメータについては GDI+ のドキュメントを見て研究してください\n\ntype: ブラシ種別 BrushType で指定\n\nBrushTypeSolidColor の場合 ※直接ARGBで色指定した場合と同じです\ncolor: 色指定(未指定時は白)\n\nBrushTypeHatchFill の場合\nhatchStyle: ハッチの種類(未指定時は HatchStyleHorizontal)\nforeColor: 前景色(未指定時は白)\nbackColor: 背景色(未指定時は黒)\n\nBrushTypeTextureFill の場合\nimage: 画像指定\nwrapMode: 繰り返しパターン指定(未指定時は WrapModeTile)\ndstRect: テクスチャ領域矩形指定(未指定時は画像全部)\n\nBrushTypePathGradient の場合\npoints: 点指定の配列\ncenterColor: 中心色\ncenterPoint: 中心点\nfocusScale: focus scales指定 [xScale,yScale] または %[xScale:, yScale:]\nsurroundColors: 周囲色指定。色の配列\n---- 以下は BrushTypeLinearGradientでも共通\nblend: ブレンドファクター指定。数値配列で [blendFactors, blendPositions] または辞書\nblendBellShape: ブレンド形状指定(bell形状) [focus, scale]\nblendTriangularShape: ブレンド形状指定(三角形状) [focus, scale]\ngammaCorrection: ガンマ補正を有効にするかどうか true/false\ninterpolationColors: [presetColors(色配列), blendPositions(数値配列)]\n\nBrushTypeLinearGradient の場合\n共通\ncolor1: 開始色指定\ncolor2: 終了色指定\nwrapMode: 繰り返しパターン指定(未指定時は WrapModeTile)\nポイント指定\npoint1: 開始点\npoint2: 終了点\n※角度は自動で決まる模様\n矩形指定\nrect: ポイント指定。左上が開始、右下が終了\nangle: 角度指定 (rect指定の場合だけ有効)\nisAngleScalable (角度指定がスケーラブルかどうか)\nmode: モード指定(省略時は LinearGradientModeHorizontal) angle 指定が無い場合に有効",
+        "params": {
+          "colorOrBrush": "ARGB色指定またはブラシ情報（辞書）",
+          "ox": "表示オフセットX",
+          "oy": "表示オフセットY"
+        }
+      },
+      "tr": {
+        "summary": "Adds a brush",
+        "description": "Brush definition\nBasics: a point is an array [x,y] or a dictionary %[x:x, y:y]\nA rectangle is an array [x,y,width,height] or a dictionary %[x:x, y:y, width:w, height:h]\nA color is a 32-bit ARGB integer\nFor the parameters, study the GDI+ documentation.\n\ntype: brush type, specified with BrushType\n\nFor BrushTypeSolidColor (same as specifying an ARGB color directly)\ncolor: color (white if omitted)\n\nFor BrushTypeHatchFill\nhatchStyle: hatch style (HatchStyleHorizontal if omitted)\nforeColor: foreground color (white if omitted)\nbackColor: background color (black if omitted)\n\nFor BrushTypeTextureFill\nimage: image\nwrapMode: wrap pattern (WrapModeTile if omitted)\ndstRect: texture area rectangle (whole image if omitted)\n\nFor BrushTypePathGradient\npoints: array of points\ncenterColor: center color\ncenterPoint: center point\nfocusScale: focus scales, [xScale,yScale] or %[xScale:, yScale:]\nsurroundColors: surround colors, an array of colors\n---- The following also apply to BrushTypeLinearGradient\nblend: blend factors, a numeric array [blendFactors, blendPositions] or a dictionary\nblendBellShape: blend shape (bell-shaped) [focus, scale]\nblendTriangularShape: blend shape (triangular) [focus, scale]\ngammaCorrection: whether to enable gamma correction, true/false\ninterpolationColors: [presetColors (array of colors), blendPositions (numeric array)]\n\nFor BrushTypeLinearGradient\nCommon\ncolor1: start color\ncolor2: end color\nwrapMode: wrap pattern (WrapModeTile if omitted)\nPoint form\npoint1: start point\npoint2: end point\nNote: the angle appears to be determined automatically\nRectangle form\nrect: rectangle; the top-left is the start and the bottom-right is the end\nangle: angle (only valid in rectangle form)\nisAngleScalable (whether the angle is scalable)\nmode: mode (LinearGradientModeHorizontal if omitted); effective when angle is not specified",
+        "params": {
+          "colorOrBrush": "ARGB color or brush definition (dictionary)",
+          "ox": "Display offset X",
+          "oy": "Display offset Y"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Appearance.addPen": {
+      "hash": "e19bcf4c3753",
+      "ja": {
+        "summary": "ペンの追加",
+        "description": "ペン情報定義: widthOrOption が辞書の場合は詳細情報定義になります\nパラメータについては GDI+ のドキュメントを見て研究してください\n\nwidth: ペン幅指定\nalignment: アラインメント：省略時は PenAlignmentCenter\ncompoundArray: compound array 指定。数値配列\ndashCap: ダッシュの cap style の指定。省略時は DashCapFlat\ndashOffset: ダッシュのオフセット指定。省略時は0\ndashStyle: ダッシュスタイル。配列にするとユーザ定義(数値配列)。デフォルトは DasyStyleSolid\nstartCap: 開始位置の cap style の指定。省略時は LineCapFlat，辞書時はAdjustableArrowCap\nendCap: 終了位置の cap style の指定。省略時は LineCapFlat，辞書時はAdjustableArrowCap\nlineJoin: 結合形状指定。 省略時は LineJoinMiter\nmiterLimit: miter limit 指定（数値)\n\nAdjustableArrowCap：LineCapArrowAnchorでは不満なあなたに\nwidth(矢印幅), height(矢印高さ), filled(trueなら三角形，falseなら三又) が指定が可能",
+        "params": {
+          "colorOrBrush": "ARGB色指定またはブラシ情報（辞書）",
+          "widthOrOption": "ペン幅またはペン情報（辞書）",
+          "ox": "表示オフセットX",
+          "oy": "表示オフセットY"
+        }
+      },
+      "tr": {
+        "summary": "Adds a pen",
+        "description": "Pen definition: if widthOrOption is a dictionary, it is a detailed definition.\nFor the parameters, study the GDI+ documentation.\n\nwidth: pen width\nalignment: alignment; PenAlignmentCenter if omitted\ncompoundArray: compound array, a numeric array\ndashCap: cap style of dashes; DashCapFlat if omitted\ndashOffset: dash offset; 0 if omitted\ndashStyle: dash style. An array (numeric) gives a user-defined pattern. The default is DasyStyleSolid\nstartCap: cap style at the start. LineCapFlat if omitted; AdjustableArrowCap if a dictionary\nendCap: cap style at the end. LineCapFlat if omitted; AdjustableArrowCap if a dictionary\nlineJoin: join style; LineJoinMiter if omitted\nmiterLimit: miter limit (number)\n\nAdjustableArrowCap: for when LineCapArrowAnchor is not enough\nwidth (arrow width), height (arrow height), and filled (true for a triangle, false for a three-pronged arrow) can be specified",
+        "params": {
+          "colorOrBrush": "ARGB color or brush definition (dictionary)",
+          "widthOrOption": "Pen width or pen definition (dictionary)",
+          "ox": "Display offset X",
+          "oy": "Display offset Y"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Appearance": {
+      "hash": "4516c8469b77",
+      "ja": {
+        "summary": "描画外観情報",
+        "description": "Illustrator のアピアランスをイメージしてください。\n描画に対して、複数のブラシ（塗り）とペン（線）を指定できます。\n先に追加した方が下に入ります"
+      },
+      "tr": {
+        "summary": "Drawing appearance",
+        "description": "Think of it as Illustrator's Appearance.\nYou can specify multiple brushes (fills) and pens (strokes) for a drawing.\nItems added earlier are placed underneath."
+      }
+    },
+    "layerExVector:GdiPlus.Appearance.Appearance": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "layerExVector:GdiPlus.Appearance.clear": {
+      "hash": "e960dad0c5db",
+      "ja": {
+        "summary": "情報のクリア"
+      },
+      "tr": {
+        "summary": "Clears the information"
+      }
+    },
+    "layerExVector:GdiPlus.Appearance.addBrush": {
+      "hash": "66863b036721",
+      "ja": {
+        "summary": "ブラシの追加",
+        "description": "ブラシ情報定義\n基本  点指定は [x,y] の配列または %[x:x, y:y] の辞書\n色指定は ARGB 32bit整数値\n\ntype: ブラシ種別 BrushType で指定\n\nBrushTypeSolidColor の場合 ※直接ARGBで色指定した場合と同じです\ncolor: 色指定(未指定時は白)\n\nBrushTypePathGradient の場合 (RadialGradient として近似実装)\ncenterPoint: 中心点\ncenterColor: 中心色\nradius: 半径(未指定時は100)\n\nBrushTypeLinearGradient の場合\npoint1: 開始点\npoint2: 終了点\ncolor1: 開始色指定\ncolor2: 終了色指定",
+        "params": {
+          "colorOrBrush": "ARGB色指定またはブラシ情報（辞書）",
+          "ox": "表示オフセットX",
+          "oy": "表示オフセットY"
+        }
+      },
+      "tr": {
+        "summary": "Adds a brush",
+        "description": "Brush definition\nBasics: a point is an array [x,y] or a dictionary %[x:x, y:y]\nA color is a 32-bit ARGB integer\n\ntype: brush type, specified with BrushType\n\nFor BrushTypeSolidColor (same as specifying an ARGB color directly)\ncolor: color (white if omitted)\n\nFor BrushTypePathGradient (approximated with a RadialGradient)\ncenterPoint: center point\ncenterColor: center color\nradius: radius (100 if omitted)\n\nFor BrushTypeLinearGradient\npoint1: start point\npoint2: end point\ncolor1: start color\ncolor2: end color",
+        "params": {
+          "colorOrBrush": "ARGB color or brush definition (dictionary)",
+          "ox": "Display offset X",
+          "oy": "Display offset Y"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Appearance.addPen": {
+      "hash": "7745fd13eec1",
+      "ja": {
+        "summary": "ペンの追加",
+        "description": "ペン情報定義: widthOrOption が辞書の場合は詳細情報定義になります\n\nwidth: ペン幅指定\nstartCap / endCap: cap style の指定。LineCap定数で指定。省略時は LineCapFlat\nlineJoin: 結合形状指定。LineJoin定数で指定。省略時は LineJoinBevel\nmiterLimit: miter limit 指定（数値)\ndashStyle: ダッシュパターン。数値の配列で指定\ndashOffset: ダッシュのオフセット指定。省略時は0",
+        "params": {
+          "colorOrBrush": "ARGB色指定またはブラシ情報（辞書）",
+          "widthOrOption": "ペン幅またはペン情報（辞書）",
+          "ox": "表示オフセットX",
+          "oy": "表示オフセットY"
+        }
+      },
+      "tr": {
+        "summary": "Adds a pen",
+        "description": "Pen definition: if widthOrOption is a dictionary, it is a detailed definition.\n\nwidth: pen width\nstartCap / endCap: cap style, specified with a LineCap constant. LineCapFlat if omitted\nlineJoin: join style, specified with a LineJoin constant. LineJoinBevel if omitted\nmiterLimit: miter limit (number)\ndashStyle: dash pattern, specified as a numeric array\ndashOffset: dash offset; 0 if omitted",
+        "params": {
+          "colorOrBrush": "ARGB color or brush definition (dictionary)",
+          "widthOrOption": "Pen width or pen definition (dictionary)",
+          "ox": "Display offset X",
+          "oy": "Display offset Y"
+        }
+      }
+    }
+  }
+}

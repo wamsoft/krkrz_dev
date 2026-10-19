@@ -1,0 +1,390 @@
+{
+  "class": "Threepp.Object3D",
+  "entries": {
+    "krkrthreepp:Threepp.Object3D": {
+      "hash": "515c5d352fd8",
+      "ja": {
+        "summary": "3Dオブジェクトの基底クラス",
+        "description": "シーングラフ内のすべての3Dオブジェクトの基底となるクラスです。"
+      },
+      "tr": {
+        "summary": "Base class for 3D objects",
+        "description": "The base class for all 3D objects in the scene graph."
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.Object3D": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.type": {
+      "hash": "d84029c54caa",
+      "ja": {
+        "summary": "オブジェクトの種類（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Object type (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.id": {
+      "hash": "bf6bde5ff1ef",
+      "ja": {
+        "summary": "オブジェクトID（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Object ID (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.name": {
+      "hash": "710597592108",
+      "ja": {
+        "summary": "オブジェクト名"
+      },
+      "tr": {
+        "summary": "Object name"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.visible": {
+      "hash": "18b878eda495",
+      "ja": {
+        "summary": "表示/非表示"
+      },
+      "tr": {
+        "summary": "Visibility"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.castShadow": {
+      "hash": "f2b643c96508",
+      "ja": {
+        "summary": "影を落とすか"
+      },
+      "tr": {
+        "summary": "Whether the object casts shadows"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.receiveShadow": {
+      "hash": "1b0e253fbd9f",
+      "ja": {
+        "summary": "影を受けるか"
+      },
+      "tr": {
+        "summary": "Whether the object receives shadows"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.frustumCulled": {
+      "hash": "3c704d7c343c",
+      "ja": {
+        "summary": "視錐台カリングを行うか"
+      },
+      "tr": {
+        "summary": "Whether frustum culling is performed"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.renderOrder": {
+      "hash": "37a48cd88726",
+      "ja": {
+        "summary": "描画順序"
+      },
+      "tr": {
+        "summary": "Render order"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.position": {
+      "hash": "bb3c423cff20",
+      "ja": {
+        "summary": "位置 (Vector3、値コピー = 実質読み取り専用)",
+        "description": "注意: position/rotation/scale/quaternion の getter は「値のコピー」を返すため、\nobj.position.set(...) や obj.position.x = ... を書いても本体には反映されません。\n位置・回転・スケールを変えるには setPosition/setRotation/setScale (quaternion は setQuaternion) を使ってください。"
+      },
+      "tr": {
+        "summary": "Position (Vector3; a copy of the value, so effectively read-only)",
+        "description": "Note: the position/rotation/scale/quaternion getters return a copy of the value, so\nwriting obj.position.set(...) or obj.position.x = ... does not affect the object.\nUse setPosition/setRotation/setScale (setQuaternion for quaternion) to change the position, rotation and scale."
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.rotation": {
+      "hash": "138991f5cf28",
+      "ja": {
+        "summary": "回転 (Euler、値コピー = 実質読み取り専用)"
+      },
+      "tr": {
+        "summary": "Rotation (Euler; a copy of the value, so effectively read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.quaternion": {
+      "hash": "1f97a5316d33",
+      "ja": {
+        "summary": "回転 (Quaternion、値コピー = 実質読み取り専用)"
+      },
+      "tr": {
+        "summary": "Rotation (Quaternion; a copy of the value, so effectively read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.scale": {
+      "hash": "f02ecdd474c7",
+      "ja": {
+        "summary": "スケール (Vector3、値コピー = 実質読み取り専用)"
+      },
+      "tr": {
+        "summary": "Scale (Vector3; a copy of the value, so effectively read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.up": {
+      "hash": "e591aeab3cb5",
+      "ja": {
+        "summary": "上方向ベクトル (Vector3、値コピー)"
+      },
+      "tr": {
+        "summary": "Up vector (Vector3; a copy of the value)"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.setPosition": {
+      "hash": "5a930f1084e0",
+      "ja": {
+        "summary": "位置を設定 (position.set の代わりにこれを使う)"
+      },
+      "tr": {
+        "summary": "Sets the position (use this instead of position.set)"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.setRotation": {
+      "hash": "5629e13d5305",
+      "ja": {
+        "summary": "回転(オイラー角ラジアン)を設定"
+      },
+      "tr": {
+        "summary": "Sets the rotation (Euler angles in radians)"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.setScale": {
+      "hash": "7b1b5c7a14f8",
+      "ja": {
+        "summary": "スケールを設定"
+      },
+      "tr": {
+        "summary": "Sets the scale"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.add": {
+      "hash": "675c794db567",
+      "ja": {
+        "summary": "子オブジェクトを追加",
+        "params": {
+          "object": "追加するObject3D"
+        }
+      },
+      "tr": {
+        "summary": "Adds a child object",
+        "params": {
+          "object": "Object3D to add."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.remove": {
+      "hash": "71ece7ab5cd4",
+      "ja": {
+        "summary": "子オブジェクトを削除",
+        "params": {
+          "object": "削除するObject3D"
+        }
+      },
+      "tr": {
+        "summary": "Removes a child object",
+        "params": {
+          "object": "Object3D to remove."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.removeFromParent": {
+      "hash": "f4232546f977",
+      "ja": {
+        "summary": "親から自身を削除"
+      },
+      "tr": {
+        "summary": "Removes this object from its parent"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.clear": {
+      "hash": "992a0611f21e",
+      "ja": {
+        "summary": "すべての子オブジェクトを削除"
+      },
+      "tr": {
+        "summary": "Removes all child objects"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.lookAt": {
+      "hash": "c17ddb562268",
+      "ja": {
+        "summary": "指定した点を向く",
+        "params": {
+          "x": "X座標",
+          "y": "Y座標",
+          "z": "Z座標"
+        }
+      },
+      "tr": {
+        "summary": "Rotates the object to face a point",
+        "params": {
+          "x": "X coordinate.",
+          "y": "Y coordinate.",
+          "z": "Z coordinate."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.rotateX": {
+      "hash": "33ef72c5d023",
+      "ja": {
+        "summary": "X軸回転"
+      },
+      "tr": {
+        "summary": "Rotates around the X axis"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.rotateY": {
+      "hash": "a2116c7a2660",
+      "ja": {
+        "summary": "Y軸回転"
+      },
+      "tr": {
+        "summary": "Rotates around the Y axis"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.rotateZ": {
+      "hash": "844003aed276",
+      "ja": {
+        "summary": "Z軸回転"
+      },
+      "tr": {
+        "summary": "Rotates around the Z axis"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.rotateOnAxis": {
+      "hash": "be931a8e77da",
+      "ja": {
+        "summary": "任意軸回転（ローカル）"
+      },
+      "tr": {
+        "summary": "Rotates around an arbitrary axis (local space)"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.rotateOnWorldAxis": {
+      "hash": "51e2cf4bc01a",
+      "ja": {
+        "summary": "任意軸回転（ワールド）"
+      },
+      "tr": {
+        "summary": "Rotates around an arbitrary axis (world space)"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.translateX": {
+      "hash": "8752e1938bfe",
+      "ja": {
+        "summary": "X軸移動"
+      },
+      "tr": {
+        "summary": "Translates along the X axis"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.translateY": {
+      "hash": "b25d03be0e02",
+      "ja": {
+        "summary": "Y軸移動"
+      },
+      "tr": {
+        "summary": "Translates along the Y axis"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.translateZ": {
+      "hash": "37d6816a7ad3",
+      "ja": {
+        "summary": "Z軸移動"
+      },
+      "tr": {
+        "summary": "Translates along the Z axis"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.translateOnAxis": {
+      "hash": "ba136e3a776d",
+      "ja": {
+        "summary": "任意軸移動"
+      },
+      "tr": {
+        "summary": "Translates along an arbitrary axis"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.updateMatrix": {
+      "hash": "04e6df7aed6c",
+      "ja": {
+        "summary": "ローカル行列を更新"
+      },
+      "tr": {
+        "summary": "Updates the local matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.updateMatrixWorld": {
+      "hash": "7f9f41fa41a0",
+      "ja": {
+        "summary": "ワールド行列を更新"
+      },
+      "tr": {
+        "summary": "Updates the world matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.treeJson": {
+      "hash": "5e54c4606926",
+      "ja": {
+        "summary": "サブツリーを JSON 文字列で一括ダンプ (外部インスペクタのシーンツリー表示用)。",
+        "description": "1 ノード = {id,name,type,visible,pos:[x,y,z],children:[…]}",
+        "returns": "JSON 文字列"
+      },
+      "tr": {
+        "summary": "Dumps the whole subtree as a JSON string (for displaying the scene tree in an external inspector).",
+        "description": "Each node = {id,name,type,visible,pos:[x,y,z],children:[…]}",
+        "returns": "JSON string."
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.setQuaternion": {
+      "hash": "20ebc7a19cb1",
+      "ja": {
+        "summary": "回転を Quaternion の成分で設定",
+        "description": "quaternion プロパティは値のコピーを返すので、書き戻しはこれを使う (Object3D のみ)。"
+      },
+      "tr": {
+        "summary": "Sets the rotation from quaternion components",
+        "description": "The quaternion property returns a copy of the value, so use this to write it back (Object3D only)."
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.getWorldPosition": {
+      "hash": "a3068eb8092c",
+      "ja": {
+        "summary": "-> Vector3 (ワールド座標)",
+        "description": "getWorldPosition / getWorldQuaternion / getWorldScale は matrixWorld から算出する。\n返り値が最新であるには、直前に render するか updateMatrixWorld(true) を\n呼んでおくこと(親をたどって world 行列を確定させる必要がある)。\n立ち絵フレーミングで骨(head/hips 等)の world 座標を得るのに使う。"
+      },
+      "tr": {
+        "summary": "-> Vector3 (world position)",
+        "description": "getWorldPosition / getWorldQuaternion / getWorldScale are computed from matrixWorld.\nFor the result to be up to date, render or call updateMatrixWorld(true) just before\n(the world matrix must be resolved by walking up the parents).\nUseful for getting the world coordinates of bones (head, hips, etc.) when framing a character portrait."
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.getWorldQuaternion": {
+      "hash": "4acb57d7eb8a",
+      "ja": {
+        "summary": "-> Quaternion (ワールド回転)"
+      },
+      "tr": {
+        "summary": "-> Quaternion (world rotation)"
+      }
+    },
+    "krkrthreepp:Threepp.Object3D.getWorldScale": {
+      "hash": "4db2d950d93a",
+      "ja": {
+        "summary": "-> Vector3 (ワールドスケール)"
+      },
+      "tr": {
+        "summary": "-> Vector3 (world scale)"
+      }
+    }
+  }
+}

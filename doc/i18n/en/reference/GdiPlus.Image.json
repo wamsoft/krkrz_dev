@@ -1,0 +1,188 @@
+{
+  "class": "GdiPlus.Image",
+  "entries": {
+    "layerExDraw:GdiPlus.Image": {
+      "hash": "1a075e9c94e4",
+      "ja": {
+        "summary": "画像情報を取り扱うクラス",
+        "description": "※ベクトル画像データの領域は座標が負の領域にある場合もあります"
+      },
+      "tr": {
+        "summary": "Class that handles image information",
+        "description": "Note: the area of vector image data may extend into negative coordinates."
+      }
+    },
+    "layerExDraw:GdiPlus.Image.Image": {
+      "hash": "879c39950fa7",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "filename": "ファイル名。指定された場合は自動的にロードします"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "filename": "File name. If specified, the image is loaded automatically."
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Image.load": {
+      "hash": "5f759e6eca0a",
+      "ja": {
+        "summary": "画像をロードする",
+        "params": {
+          "filename": "画像ファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Loads an image",
+        "params": {
+          "filename": "Image file name"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Image.Clone": {
+      "hash": "0873f428c122",
+      "ja": {
+        "returns": "このオブジェクトの複製(Image)"
+      },
+      "tr": {
+        "returns": "A copy of this object (Image)"
+      }
+    },
+    "layerExDraw:GdiPlus.Image.GetBounds": {
+      "hash": "bd87e924a9ad",
+      "ja": {
+        "summary": "Bounds情報の取得",
+        "returns": "Bounds情報(RectF) 単位 pixel"
+      },
+      "tr": {
+        "summary": "Gets the bounds",
+        "returns": "Bounds (RectF), in pixels"
+      }
+    },
+    "layerExDraw:GdiPlus.Image.GetHorizontalResolution": {
+      "hash": "777e9e849e33",
+      "ja": {
+        "returns": "水平方向解像度(dpi)"
+      },
+      "tr": {
+        "returns": "Horizontal resolution (dpi)"
+      }
+    },
+    "layerExDraw:GdiPlus.Image.GetVerticalResolution": {
+      "hash": "4fe2e8bc7578",
+      "ja": {
+        "returns": "垂直方向解像度(dpi)"
+      },
+      "tr": {
+        "returns": "Vertical resolution (dpi)"
+      }
+    },
+    "layerExDraw:GdiPlus.Image.GetWidth": {
+      "hash": "6bd5a624d0b2",
+      "ja": {
+        "returns": "横幅 (pixel値：整数)"
+      },
+      "tr": {
+        "returns": "Width (pixels, integer)"
+      }
+    },
+    "layerExDraw:GdiPlus.Image.GetHeight": {
+      "hash": "ac27f7bd1869",
+      "ja": {
+        "returns": "縦幅 (pixel値:整数)"
+      },
+      "tr": {
+        "returns": "Height (pixels, integer)"
+      }
+    },
+    "layerExVector:GdiPlus.Image": {
+      "hash": "bfb0ae6078e6",
+      "ja": {
+        "description": "画像情報を取り扱うクラス\n※ベクトル画像データの領域は座標が負の領域にある場合もあります"
+      },
+      "tr": {
+        "description": "Class that handles image information.\nNote: the area of vector image data may extend into negative coordinates."
+      }
+    },
+    "layerExVector:GdiPlus.Image.Image": {
+      "hash": "879c39950fa7",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "filename": "ファイル名。指定された場合は自動的にロードします"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "filename": "File name. If specified, the image is loaded automatically."
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Image.load": {
+      "hash": "5f759e6eca0a",
+      "ja": {
+        "summary": "画像をロードする",
+        "params": {
+          "filename": "画像ファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Loads an image",
+        "params": {
+          "filename": "Image file name"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Image.Clone": {
+      "hash": "0873f428c122",
+      "ja": {
+        "returns": "このオブジェクトの複製(Image)"
+      },
+      "tr": {
+        "returns": "A copy of this object (Image)"
+      }
+    },
+    "layerExVector:GdiPlus.Image.GetBounds": {
+      "hash": "bd87e924a9ad",
+      "ja": {
+        "summary": "Bounds情報の取得",
+        "returns": "Bounds情報(RectF) 単位 pixel"
+      },
+      "tr": {
+        "summary": "Gets the bounds",
+        "returns": "Bounds (RectF), in pixels"
+      }
+    },
+    "layerExVector:GdiPlus.Image.width": {
+      "hash": "72cdb746eef7",
+      "ja": {
+        "summary": "横幅 (read only)"
+      },
+      "tr": {
+        "summary": "Width (read-only)"
+      }
+    },
+    "layerExVector:GdiPlus.Image.height": {
+      "hash": "2dd43d4b3565",
+      "ja": {
+        "summary": "縦幅 (read only)"
+      },
+      "tr": {
+        "summary": "Height (read-only)"
+      }
+    },
+    "layerExVector:GdiPlus.Image.isLoaded": {
+      "hash": "9e5ec17d84a5",
+      "ja": {
+        "summary": "ロード済みかどうか (read only)"
+      },
+      "tr": {
+        "summary": "Whether an image is loaded (read-only)"
+      }
+    }
+  }
+}

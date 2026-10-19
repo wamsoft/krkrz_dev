@@ -1,0 +1,130 @@
+{
+  "class": "RichText.ParagraphLayout",
+  "entries": {
+    "krkr_richtext:RichText.ParagraphLayout": {
+      "hash": "2e5632701aca",
+      "ja": {
+        "summary": "パラグラフ（複数行）テキストレイアウトクラス",
+        "description": "複数行テキストのレイアウト計算結果を保持します。\nレイアウトと描画を分離することで、計測結果の再利用や\n逐次表示（maxChars 指定）に利用できます。\n\n使用例:\nvar pl = new RichText.ParagraphLayout();\npl.layout(\"長いテキスト...\", 300, style);\nDebug.message(\"行数: \" + pl.lineCount);\nlayer.drawParagraphLayout(pl, 10, 10, 300, 200,\nRichText.HALIGN_LEFT, RichText.VALIGN_TOP, style, app);"
+      },
+      "tr": {
+        "summary": "Paragraph (multi-line) text layout class",
+        "description": "Holds the layout result for multi-line text.\nSeparating layout from drawing lets you reuse measurements\nand display text progressively (with maxChars).\n\nExample:\nvar pl = new RichText.ParagraphLayout();\npl.layout(\"長いテキスト...\", 300, style);\nDebug.message(\"行数: \" + pl.lineCount);\nlayer.drawParagraphLayout(pl, 10, 10, 300, 200,\nRichText.HALIGN_LEFT, RichText.VALIGN_TOP, style, app);"
+      }
+    },
+    "krkr_richtext:RichText.ParagraphLayout.ParagraphLayout": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkr_richtext:RichText.ParagraphLayout.layout": {
+      "hash": "5e88049bbc01",
+      "ja": {
+        "summary": "パラグラフのレイアウト（計測）を実行",
+        "params": {
+          "text": "テキスト",
+          "maxWidth": "最大幅",
+          "style": "RichText.Style オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Lays out (measures) the paragraph",
+        "params": {
+          "text": "Text",
+          "maxWidth": "Maximum width",
+          "style": "RichText.Style object"
+        }
+      }
+    },
+    "krkr_richtext:RichText.ParagraphLayout.getLineInfo": {
+      "hash": "f827b4920ebe",
+      "ja": {
+        "summary": "行情報を取得",
+        "returns": "行情報の辞書 %[startIndex, endIndex, width, height]",
+        "params": {
+          "index": "行インデックス（0〜lineCount-1）"
+        }
+      },
+      "tr": {
+        "summary": "Gets line information",
+        "returns": "Line information dictionary %[startIndex, endIndex, width, height]",
+        "params": {
+          "index": "Line index (0 to lineCount-1)"
+        }
+      }
+    },
+    "krkr_richtext:RichText.ParagraphLayout.clone": {
+      "hash": "7ca2f9fbc07f",
+      "ja": {
+        "summary": "複製",
+        "returns": "複製された ParagraphLayout オブジェクト"
+      },
+      "tr": {
+        "summary": "Duplicates the layout",
+        "returns": "The duplicated ParagraphLayout object"
+      }
+    },
+    "krkr_richtext:RichText.ParagraphLayout.lineCount": {
+      "hash": "879894198da7",
+      "ja": {
+        "summary": "行数（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Number of lines (read-only)"
+      }
+    },
+    "krkr_richtext:RichText.ParagraphLayout.totalHeight": {
+      "hash": "fac85dfa4b95",
+      "ja": {
+        "summary": "全行の高さ合計（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Total height of all lines (read-only)"
+      }
+    },
+    "krkr_richtext:RichText.ParagraphLayout.maxWidth": {
+      "hash": "a755004b6c2b",
+      "ja": {
+        "summary": "最大行幅（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Maximum line width (read-only)"
+      }
+    },
+    "krkr_richtext:RichText.ParagraphLayout.totalCharCount": {
+      "hash": "1c711a35e4ae",
+      "ja": {
+        "summary": "全行の文字数合計（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Total number of characters in all lines (read-only)"
+      }
+    },
+    "krkr_richtext:RichText.ParagraphLayout.lineSpacing": {
+      "hash": "be5d7210eeac",
+      "ja": {
+        "summary": "行間",
+        "description": "デフォルト: 0"
+      },
+      "tr": {
+        "summary": "Line spacing",
+        "description": "Default: 0"
+      }
+    },
+    "krkr_richtext:RichText.ParagraphLayout.breakStrategy": {
+      "hash": "db5b9383b541",
+      "ja": {
+        "summary": "行分割戦略",
+        "description": "RichText.BREAK_GREEDY / BREAK_HIGH_QUALITY / BREAK_BALANCED\nデフォルト: BREAK_HIGH_QUALITY"
+      },
+      "tr": {
+        "summary": "Line-breaking strategy",
+        "description": "RichText.BREAK_GREEDY / BREAK_HIGH_QUALITY / BREAK_BALANCED\nDefault: BREAK_HIGH_QUALITY"
+      }
+    }
+  }
+}

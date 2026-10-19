@@ -1,0 +1,90 @@
+{
+  "class": "Threepp.GLTFModel",
+  "entries": {
+    "krkrthreepp:Threepp.GLTFModel": {
+      "hash": "87cbc589c6b0",
+      "ja": {
+        "summary": "ロード済み glTF モデル (GLTFLoader の戻り値)",
+        "description": "モデルのシーングラフとアニメ情報を保持する。"
+      },
+      "tr": {
+        "summary": "A loaded glTF model (returned by GLTFLoader)",
+        "description": "Holds the model's scene graph and animation information."
+      }
+    },
+    "krkrthreepp:Threepp.GLTFModel.getScene": {
+      "hash": "189dc3cf32a7",
+      "ja": {
+        "summary": "-> Threepp.Group (Scene に add して描画)"
+      },
+      "tr": {
+        "summary": "-> Threepp.Group (add it to a Scene to render it)"
+      }
+    },
+    "krkrthreepp:Threepp.GLTFModel.getAnimationCount": {
+      "hash": "0efe682ee134",
+      "ja": {
+        "summary": "-> int (内蔵アニメクリップ数)"
+      },
+      "tr": {
+        "summary": "-> int (number of built-in animation clips)"
+      }
+    },
+    "krkrthreepp:Threepp.GLTFModel.getAnimationName": {
+      "hash": "c3625c69274c",
+      "ja": {
+        "summary": "(i) -> string (クリップ名)"
+      },
+      "tr": {
+        "summary": "(i) -> string (clip name)"
+      }
+    },
+    "krkrthreepp:Threepp.GLTFModel.getAnimationDuration": {
+      "hash": "e001e494932d",
+      "ja": {
+        "summary": "(i) -> float (秒)"
+      },
+      "tr": {
+        "summary": "(i) -> float (seconds)"
+      }
+    },
+    "krkrthreepp:Threepp.GLTFModel.getPartCount": {
+      "hash": "5a8a65878f79",
+      "ja": {
+        "summary": "-> int (モデル内のメッシュ数。深さ優先の出現順)",
+        "description": "同じモデルを何百個も並べたいとき、GLB を個数ぶん読んで Mesh を並べると\ndraw call がそのまま個数になる。getPartGeometry / getPartMaterial で取り出して\nInstancedMesh へまとめると 1 個で済む。"
+      },
+      "tr": {
+        "summary": "-> int (number of meshes in the model, in depth-first order of appearance)",
+        "description": "To place hundreds of copies of the same model, loading the GLB once per copy and placing Meshes\nresults in one draw call per copy. Extracting the parts with getPartGeometry / getPartMaterial and\ncombining them into an InstancedMesh needs only one."
+      }
+    },
+    "krkrthreepp:Threepp.GLTFModel.getPartGeometry": {
+      "hash": "ee5ba4d27a00",
+      "ja": {
+        "summary": "(i) -> BufferGeometry"
+      },
+      "tr": {
+        "summary": "(i) -> BufferGeometry"
+      }
+    },
+    "krkrthreepp:Threepp.GLTFModel.getPartMaterial": {
+      "hash": "94304a0306bc",
+      "ja": {
+        "summary": "(i) -> Material (元を共有。テクスチャを持つため)"
+      },
+      "tr": {
+        "summary": "(i) -> Material (shares the original, since it holds the textures)"
+      }
+    },
+    "krkrthreepp:Threepp.GLTFModel.getPartName": {
+      "hash": "794eb89a4d17",
+      "ja": {
+        "summary": "(i) -> string (どのパーツか見分ける用)"
+      },
+      "tr": {
+        "summary": "(i) -> string (for telling parts apart)"
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "class": "Threepp.SkinnedMesh",
+  "entries": {
+    "krkrthreepp:Threepp.SkinnedMesh": {
+      "hash": "63076c1ccd31",
+      "ja": {
+        "summary": "スキニングメッシュ",
+        "description": "スケルトンアニメーション対応のメッシュです。"
+      },
+      "tr": {
+        "summary": "Skinned mesh",
+        "description": "A mesh that supports skeletal animation."
+      }
+    },
+    "krkrthreepp:Threepp.SkinnedMesh.SkinnedMesh": {
+      "hash": "d513203824d8",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "geometry": "ジオメトリ",
+          "material": "マテリアル"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "geometry": "Geometry.",
+          "material": "Material."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.SkinnedMesh.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.SkinnedMesh.bind": {
+      "hash": "aa0d7fbc2a79",
+      "ja": {
+        "summary": "スケルトンをバインド"
+      },
+      "tr": {
+        "summary": "Binds a skeleton"
+      }
+    },
+    "krkrthreepp:Threepp.SkinnedMesh.pose": {
+      "hash": "9de8c7e203b7",
+      "ja": {
+        "summary": "ポーズを設定"
+      },
+      "tr": {
+        "summary": "Sets the pose"
+      }
+    },
+    "krkrthreepp:Threepp.SkinnedMesh.normalizeSkinWeights": {
+      "hash": "a4677da40e60",
+      "ja": {
+        "summary": "スキンウェイトを正規化"
+      },
+      "tr": {
+        "summary": "Normalizes the skin weights"
+      }
+    }
+  }
+}

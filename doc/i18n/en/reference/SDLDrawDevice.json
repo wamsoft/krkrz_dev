@@ -1,0 +1,82 @@
+{
+  "class": "SDLDrawDevice",
+  "entries": {
+    "SDLDrawDevice": {
+      "hash": "290d42f054bf",
+      "ja": {
+        "summary": "SDLDrawDevice クラスは、このインスタンスを [Window.drawDevice](Window.md#drawdevice) に登録して使用するための DrawDevice で、SDL3 (`SDL_Renderer` + `SDL_Texture`) を用いた標準的な描画機能を提供します。SDL3 ビルド (KRKRZ_VARIANT=SDL) 専用で、WINVER ビルドには含まれません。",
+        "description": "SDL3 ビルドの起動時の既定 DrawDevice は、OpenGL 有効ビルドでは OpenGL ES ベースの [SDLOGLDrawDevice](SDLOGLDrawDevice.md)、OpenGL 無効ビルドではこのクラスです。起動オプション `-drawdevice=sdl` を指定すると OpenGL 有効ビルドでもこのクラスで起動できます ( [コマンドラインオプション](../guide/CommandLine.md) )。`SDL_Renderer` のバックエンドは自動選択で、`-renderer` オプションで明示できます。\n\nなお、このクラスで起動した場合、実行中に OpenGL 系 ( [SDLOGLDrawDevice](SDLOGLDrawDevice.md) / [OGLDrawDevice](OGLDrawDevice.md) ) へ切り替えることはできません ( OpenGL の初期化が通りません )。OpenGL 機能 ( [Canvas](Canvas.md) 等 ) を使う場合は最初から OpenGL 系の DrawDevice で起動してください。"
+      },
+      "tr": {
+        "summary": "SDLDrawDevice is a DrawDevice that you register in [Window.drawDevice](Window.md#drawdevice); it provides standard drawing using SDL3 (`SDL_Renderer` + `SDL_Texture`). It is available only in the SDL3 build (KRKRZ_VARIANT=SDL) and is not included in the WINVER build.",
+        "description": "In the SDL3 build, the default DrawDevice at startup is the OpenGL ES-based [SDLOGLDrawDevice](SDLOGLDrawDevice.md) in builds with OpenGL enabled, and this class in builds with OpenGL disabled. Specifying the command-line option `-drawdevice=sdl` starts with this class even in a build with OpenGL enabled ([command-line options](../guide/CommandLine.md)). The `SDL_Renderer` backend is chosen automatically and can be set explicitly with the `-renderer` option.\n\nIf you start with this class, you cannot switch to an OpenGL device ([SDLOGLDrawDevice](SDLOGLDrawDevice.md) / [OGLDrawDevice](OGLDrawDevice.md)) at run time (OpenGL initialization fails). To use OpenGL features ([Canvas](Canvas.md) and so on), start with an OpenGL DrawDevice from the beginning."
+      }
+    },
+    "SDLDrawDevice.SDLDrawDevice": {
+      "hash": "6ff9e706c522",
+      "ja": {
+        "summary": "SDLDrawDevice オブジェクトの構築",
+        "description": "SDLDrawDevice クラスのオブジェクトを構築します。\n\nこのクラスが起動時の既定 ( OpenGL 無効ビルド、または `-drawdevice=sdl` 指定時 ) の場合、Window.drawDevice には最初からこのクラスのインスタンスが登録されているので、新たに登録する必要はありません。"
+      },
+      "tr": {
+        "summary": "Constructs an SDLDrawDevice object",
+        "description": "Constructs an object of the SDLDrawDevice class.\n\nWhen this class is the startup default (in a build with OpenGL disabled, or when `-drawdevice=sdl` is specified), an instance of it is already registered in Window.drawDevice, so you do not need to register one yourself."
+      }
+    },
+    "SDLDrawDevice.interface": {
+      "hash": "1cd82fca475d",
+      "ja": {
+        "summary": "インターフェースオブジェクトを取得",
+        "description": "プラグインなどで DrawDevice オブジェクトを利用するためにあります。"
+      },
+      "tr": {
+        "summary": "Gets the interface object",
+        "description": "Provided so that plugins and the like can use the DrawDevice object."
+      }
+    },
+    "SDLDrawDevice.window": {
+      "hash": "57fb16b31728",
+      "ja": {
+        "summary": "関連付けられた Window オブジェクトを取得",
+        "description": "この DrawDevice をセットしている Window オブジェクトを返します。"
+      },
+      "tr": {
+        "summary": "Gets the associated Window object",
+        "description": "Returns the Window object this DrawDevice is set on."
+      }
+    },
+    "SDLDrawDevice.sdlVideoPresenterHost": {
+      "hash": "da702fe20eda",
+      "ja": {
+        "summary": "オーバーレイ動画 presenter 登録口 (ポインタ値)",
+        "description": "オーバーレイ動画側がこの DrawDevice へ pull 型で合成するために読み取る presenter host\nへのポインタ値です (WINVER の [videoPresenterHost](Window.BasicDrawDevice.md#videopresenterhost) と同じ規約)。\n通常はエンジン内部/プラグインが使用します。"
+      },
+      "tr": {
+        "summary": "Registration point for the overlay movie presenter (pointer value)",
+        "description": "A pointer value to the presenter host that the overlay movie reads in order to composite into this DrawDevice in a pull model\n(the same convention as [videoPresenterHost](Window.BasicDrawDevice.md#videopresenterhost) in WINVER).\nNormally used by the engine internals or plugins."
+      }
+    },
+    "SDLDrawDevice.dialogRendererHost": {
+      "hash": "e39de868ef72",
+      "ja": {
+        "summary": "Elements ダイアログ renderer host (ポインタ値)",
+        "description": "Elements のオーバーレイ描画アダプタを取得するための host へのポインタ値です。\n通常はエンジン内部/プラグインが使用します。"
+      },
+      "tr": {
+        "summary": "Elements dialog renderer host (pointer value)",
+        "description": "A pointer value to the host used to obtain the Elements overlay drawing adapter.\nNormally used by the engine internals or plugins."
+      }
+    },
+    "SDLDrawDevice.viewportBackgroundHost": {
+      "hash": "53cff7f8bf7c",
+      "ja": {
+        "summary": "ビューポート余白塗り登録口 (ポインタ値)",
+        "description": "ゲーム画面が描画領域全体を覆わないときの余白 ( [Window.viewportBgColor](Window.md#viewportbgcolor) /\n[Window.setViewportWallpaper](Window.md#setviewportwallpaper) ) を受け取る\n`iTVPViewportBackgroundHost` へのポインタ値です。 Window はこのプロパティが非 0 の\nときだけ余白設定を反映します ( プロパティを持たない描画デバイスでは余白の塗り分けは\n効かず、そのデバイス既定の塗りつぶしのままになります )。 通常はエンジン内部/プラグインが\n使用します。"
+      },
+      "tr": {
+        "summary": "Registration point for filling the viewport margins (pointer value)",
+        "description": "A pointer value to the `iTVPViewportBackgroundHost` that receives the margin settings used when the game screen does not cover the whole\ndrawing area ([Window.viewportBgColor](Window.md#viewportbgcolor) /\n[Window.setViewportWallpaper](Window.md#setviewportwallpaper)). Window applies the margin settings only when this property\nis nonzero (with a draw device that lacks this property, the margins cannot be filled separately\nand keep that device's default fill). Normally used by the engine internals or plugins."
+      }
+    }
+  }
+}

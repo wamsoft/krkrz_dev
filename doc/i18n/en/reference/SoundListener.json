@@ -1,0 +1,132 @@
+{
+  "class": "SoundListener",
+  "entries": {
+    "SoundListener": {
+      "hash": "3d808c9f2af5",
+      "ja": {
+        "summary": "SoundListener クラスは 3D 音声定位における「リスナー」を制御するためのクラスです。このクラスからオブジェクトを作成することはできません。System と同様に `SoundListener.setPosition(...)` のように直接呼び出して使用します。",
+        "description": "このクラスは miniaudio ベースの 3D 音声定位における、エンジンで共有されるリスナー ( listener 0 ) を制御します。音源側は WaveSoundBuffer の [use3D](WaveSoundBuffer.md#use3d) や set3DPosition 等で設定します。\n\n座標系は miniaudio に準じます ( 右手系・Y up・任意単位、既定では forward = -Z, up = +Y、コーン角はラジアン )。\n\nなお HRTF には対応していません。ステレオ環境では前後の区別はつかず、L / R のパンと距離による減衰のみが反映されます。"
+      },
+      "tr": {
+        "summary": "The SoundListener class controls the \"listener\" for 3D sound positioning. You cannot create objects of this class. As with System, call its members directly, as in `SoundListener.setPosition(...)`.",
+        "description": "This class controls the listener shared by the engine (listener 0) for the miniaudio-based 3D sound positioning. Sound sources are configured on the WaveSoundBuffer side with [use3D](WaveSoundBuffer.md#use3d), set3DPosition, and so on.\n\nThe coordinate system follows miniaudio (right-handed, Y up, arbitrary units; by default forward = -Z and up = +Y; cone angles are in radians).\n\nHRTF is not supported. On stereo output, front and back cannot be distinguished; only L/R panning and distance attenuation are applied."
+      }
+    },
+    "SoundListener.enabled": {
+      "hash": "1aa76a23be6e",
+      "ja": {
+        "summary": "リスナー ( 3D 定位 ) を有効にするか",
+        "description": "リスナー ( 3D 定位 ) を有効にするかどうかを表します。値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Whether the listener (3D positioning) is enabled",
+        "description": "Indicates whether the listener (3D positioning) is enabled. You can also set this value."
+      }
+    },
+    "SoundListener.setPosition": {
+      "hash": "b4d18b66366c",
+      "ja": {
+        "summary": "リスナー位置の設定",
+        "description": "リスナーの位置を設定します。",
+        "params": {
+          "x": "位置の X 成分を指定します。",
+          "y": "位置の Y 成分を指定します。",
+          "z": "位置の Z 成分を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the listener position",
+        "description": "Sets the position of the listener.",
+        "params": {
+          "x": "X component of the position.",
+          "y": "Y component of the position.",
+          "z": "Z component of the position."
+        }
+      }
+    },
+    "SoundListener.setDirection": {
+      "hash": "aac06754a973",
+      "ja": {
+        "summary": "リスナーの向きの設定",
+        "description": "リスナーの向き ( forward ベクトル ) を設定します。",
+        "params": {
+          "x": "forward ベクトルの X 成分を指定します。",
+          "y": "forward ベクトルの Y 成分を指定します。",
+          "z": "forward ベクトルの Z 成分を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the listener direction",
+        "description": "Sets the direction of the listener (the forward vector).",
+        "params": {
+          "x": "X component of the forward vector.",
+          "y": "Y component of the forward vector.",
+          "z": "Z component of the forward vector."
+        }
+      }
+    },
+    "SoundListener.setWorldUp": {
+      "hash": "610cf917b98c",
+      "ja": {
+        "summary": "ワールドの上方向ベクトルの設定",
+        "description": "ワールドの上方向 ( up ) ベクトルを設定します。",
+        "params": {
+          "x": "up ベクトルの X 成分を指定します。",
+          "y": "up ベクトルの Y 成分を指定します。",
+          "z": "up ベクトルの Z 成分を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the world up vector",
+        "description": "Sets the world up vector.",
+        "params": {
+          "x": "X component of the up vector.",
+          "y": "Y component of the up vector.",
+          "z": "Z component of the up vector."
+        }
+      }
+    },
+    "SoundListener.setVelocity": {
+      "hash": "423127dbf124",
+      "ja": {
+        "summary": "リスナー速度の設定",
+        "description": "ドップラー計算に用いるリスナーの速度を設定します。",
+        "params": {
+          "x": "速度の X 成分を指定します。",
+          "y": "速度の Y 成分を指定します。",
+          "z": "速度の Z 成分を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the listener velocity",
+        "description": "Sets the listener velocity used for Doppler calculations.",
+        "params": {
+          "x": "X component of the velocity.",
+          "y": "Y component of the velocity.",
+          "z": "Z component of the velocity."
+        }
+      }
+    },
+    "SoundListener.setCone": {
+      "hash": "520f277bf8d7",
+      "ja": {
+        "summary": "リスナーの指向性コーンの設定",
+        "description": "リスナーの指向性コーンを設定します。角度はラジアンで指定します。",
+        "params": {
+          "innerAngleRad": "コーンの内側角度をラジアンで指定します。",
+          "outerAngleRad": "コーンの外側角度をラジアンで指定します。",
+          "outerGain": "コーンの外側でのゲインを指定します ( 0 〜 1 )。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the listener's directional cone",
+        "description": "Sets the directional cone of the listener. Angles are in radians.",
+        "params": {
+          "innerAngleRad": "Inner angle of the cone, in radians.",
+          "outerAngleRad": "Outer angle of the cone, in radians.",
+          "outerGain": "Gain outside the cone (0 to 1)."
+        }
+      }
+    }
+  }
+}

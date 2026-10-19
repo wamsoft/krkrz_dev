@@ -29,9 +29,7 @@ tTJSVariant の内部型を表す列挙型です。tTJSVariant::**Type** メソ�
 
 内部型のうち、オブジェクトは参照カウンタ方式による管理を行います。
 
-tTJSVariant 自体は参照カウンタの管理を自動的に行いますが、tTJSVariant から
-
-を取得する各メソッドや、tTJSVariantClosure 型を取得するメソッドからオブジェクトへのポインタを取り出したあとの、参照カウンタの管理には関知しないので注意してください。
+tTJSVariant 自体は参照カウンタの管理を自動的に行いますが、tTJSVariant から [iTJSDispatch2](interface.md) を取得する各メソッドや、tTJSVariantClosure 型を取得するメソッドからオブジェクトへのポインタを取り出したあとの、参照カウンタの管理には関知しないので注意してください。
 
 ## オブジェクト型
 

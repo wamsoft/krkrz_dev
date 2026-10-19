@@ -151,7 +151,11 @@
 
 **解説**
 
-注意: position/rotation/scale/quaternion の getter は「値のコピー」を返すため、 obj.position.set(...) や obj.position.x = ... を書いても本体には反映されません。 位置・回転・スケールを変えるには下の setPosition/setRotation/setScale を使ってください。
+位置 (Vector3、値コピー = 実質読み取り専用)
+
+注意: position/rotation/scale/quaternion の getter は「値のコピー」を返すため、
+obj.position.set(...) や obj.position.x = ... を書いても本体には反映されません。
+位置・回転・スケールを変えるには setPosition/setRotation/setScale (quaternion は setQuaternion) を使ってください。
 
 ---
 
@@ -523,7 +527,9 @@ JSON 文字列
 
 **解説**
 
-quaternion プロパティは値のコピーを返すので、書き戻しはこれを使う (Object3D のみ)
+回転を Quaternion の成分で設定
+
+quaternion プロパティは値のコピーを返すので、書き戻しはこれを使う (Object3D のみ)。
 
 ---
 
@@ -533,7 +539,12 @@ quaternion プロパティは値のコピーを返すので、書き戻しはこ
 
 **解説**
 
---- ワールド変換の取得 (matrixWorld から算出) --- 返り値が最新であるには、直前に render するか updateMatrixWorld(true) を 呼んでおくこと(親をたどって world 行列を確定させる必要がある)。 立ち絵フレーミングで骨(head/hips 等)の world 座標を得るのに使う。
+-> Vector3 (ワールド座標)
+
+getWorldPosition / getWorldQuaternion / getWorldScale は matrixWorld から算出する。
+返り値が最新であるには、直前に render するか updateMatrixWorld(true) を
+呼んでおくこと(親をたどって world 行列を確定させる必要がある)。
+立ち絵フレーミングで骨(head/hips 等)の world 座標を得るのに使う。
 
 ---
 

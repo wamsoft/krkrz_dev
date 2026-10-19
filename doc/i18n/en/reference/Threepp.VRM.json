@@ -1,0 +1,412 @@
+{
+  "class": "Threepp.VRM",
+  "entries": {
+    "krkrthreepp:Threepp.VRM": {
+      "hash": "c94a5bd1d44d",
+      "ja": {
+        "summary": "VRM モデル 1 体",
+        "description": "getScene() の Group を Scene に add。毎フレーム update(dt) を呼ぶ。"
+      },
+      "tr": {
+        "summary": "A single VRM model",
+        "description": "Add the Group from getScene() to a Scene, and call update(dt) every frame."
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getScene": {
+      "hash": "6fe421c3fd3c",
+      "ja": {
+        "summary": "描画用ルート -> Threepp.Group (Scene に add する)"
+      },
+      "tr": {
+        "summary": "Root for rendering -> Threepp.Group (add it to a Scene)"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getBoneCount": {
+      "hash": "77f762e4394c",
+      "ja": {
+        "summary": "raw ボーン数 -> int"
+      },
+      "tr": {
+        "summary": "Number of raw bones -> int"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getBoneNode": {
+      "hash": "6c0e31d2f79c",
+      "ja": {
+        "summary": "VRM human bone 名 -> Threepp.Bone (無ければ void)"
+      },
+      "tr": {
+        "summary": "VRM human bone name -> Threepp.Bone (void if not found)"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getNormalizedBoneNode": {
+      "hash": "c5988d021c75",
+      "ja": {
+        "summary": "正規化リグのノード -> Threepp.Object3D"
+      },
+      "tr": {
+        "summary": "Node of the normalized rig -> Threepp.Object3D"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.resetNormalizedPose": {
+      "hash": "1931d4ada026",
+      "ja": {
+        "summary": "正規化ポーズを rest に戻す"
+      },
+      "tr": {
+        "summary": "Returns the normalized pose to rest"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.update": {
+      "hash": "e5bb414d76f7",
+      "ja": {
+        "summary": "毎フレーム更新",
+        "description": "humanoid リグ転写 + 制約(node_constraint) + 表情 + 視線 + 揺れ物(springBone) をまとめて反映する。",
+        "params": {
+          "dt": "前フレームからの経過秒 (揺れ物の物理積分に使う。0 だと揺れは止まる)"
+        }
+      },
+      "tr": {
+        "summary": "Per-frame update",
+        "description": "Applies humanoid rig transfer + constraints (node_constraint) + expressions + look-at + spring bones (springBone) all together.",
+        "params": {
+          "dt": "Seconds elapsed since the previous frame (used for physics integration of spring bones; 0 stops the motion)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.VRM.setExpression": {
+      "hash": "f4ce89a05402",
+      "ja": {
+        "summary": "表情ウェイト設定 (name: \"happy\"/\"blink\"/\"aa\" 等, weight 0..1)"
+      },
+      "tr": {
+        "summary": "Sets an expression weight (name: \"happy\"/\"blink\"/\"aa\", etc.; weight 0..1)"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getExpression": {
+      "hash": "7171a8222bf5",
+      "ja": {
+        "summary": "-> float"
+      },
+      "tr": {
+        "summary": "-> float"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getExpressionCount": {
+      "hash": "2b7280c2c75d",
+      "ja": {
+        "summary": "-> int"
+      },
+      "tr": {
+        "summary": "-> int"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getExpressionName": {
+      "hash": "066f8b4923a5",
+      "ja": {
+        "summary": "i 番目の表情名 -> string (範囲外は \"\")"
+      },
+      "tr": {
+        "summary": "Name of the i-th expression -> string (\"\" if out of range)"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.expressionListJson": {
+      "hash": "2a905214c89c",
+      "ja": {
+        "summary": "全表情の一括 JSON '[{\"name\":…,\"weight\":…},…]' (Web UI 用)"
+      },
+      "tr": {
+        "summary": "JSON of all expressions at once '[{\"name\":…,\"weight\":…},…]' (for web UIs)"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.setMorph": {
+      "hash": "2323ba328576",
+      "ja": {
+        "summary": "名前で個別モーフを設定 (VRoid: \"Fcl_*\" 等)",
+        "description": "ブレンドシェイプを直接指定する。表情の後に override として適用される。"
+      },
+      "tr": {
+        "summary": "Sets an individual morph by name (VRoid: \"Fcl_*\", etc.)",
+        "description": "Specifies a blend shape directly. Applied as an override after expressions."
+      }
+    },
+    "krkrthreepp:Threepp.VRM.clearMorphs": {
+      "hash": "751f52d972c8",
+      "ja": {
+        "summary": "生モーフ全解除"
+      },
+      "tr": {
+        "summary": "Clears all raw morphs"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getMorphCount": {
+      "hash": "2b7280c2c75d",
+      "ja": {
+        "summary": "-> int"
+      },
+      "tr": {
+        "summary": "-> int"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getMorphName": {
+      "hash": "bf9ab0c1439e",
+      "ja": {
+        "summary": "i 番目のモーフ名 -> string"
+      },
+      "tr": {
+        "summary": "Name of the i-th morph -> string"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.morphListJson": {
+      "hash": "685ca85fc7ee",
+      "ja": {
+        "summary": "全モーフ名の一括 JSON '[\"Fcl_ALL_Neutral\",…]' (Web UI 用)"
+      },
+      "tr": {
+        "summary": "JSON of all morph names at once '[\"Fcl_ALL_Neutral\",…]' (for web UIs)"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.setLookAtTarget": {
+      "hash": "0a1df1e5072c",
+      "ja": {
+        "summary": "注視点(ワールド座標)を設定"
+      },
+      "tr": {
+        "summary": "Sets the look-at target (world coordinates)"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.clearLookAtTarget": {
+      "hash": "3636c3190f35",
+      "ja": {
+        "summary": "注視を解除"
+      },
+      "tr": {
+        "summary": "Clears the look-at target"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.hasLookAt": {
+      "hash": "9dde04b55d40",
+      "ja": {
+        "summary": "視線機能を持つか -> bool"
+      },
+      "tr": {
+        "summary": "Whether the model has look-at support -> bool"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.applyAnimation": {
+      "hash": "3a624bd03f81",
+      "ja": {
+        "summary": "VRM アニメーションを時刻 time(秒) で適用する。適用後 update(dt) で raw ボーンへ転写。",
+        "params": {
+          "vrmAnimation": "Threepp.VRMAnimation",
+          "time": "秒"
+        }
+      },
+      "tr": {
+        "summary": "Applies a VRM animation at time (seconds). After applying, update(dt) transfers it to the raw bones.",
+        "params": {
+          "vrmAnimation": "Threepp.VRMAnimation",
+          "time": "Seconds."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.VRM.applyAnimationBlend": {
+      "hash": "1d366686c016",
+      "ja": {
+        "summary": "クロスフェード用 (blend 0..1)"
+      },
+      "tr": {
+        "summary": "For cross-fading (blend 0..1)"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.applyPose": {
+      "hash": "64d4d1803e82",
+      "ja": {
+        "summary": "ポーズを適用。arr は [ボーン名, qx, qy, qz, qw, …] の平坦配列。",
+        "description": "回転は正規化リグのローカル回転。",
+        "params": {
+          "blend": "0..1 (省略時 1 = 即時)"
+        }
+      },
+      "tr": {
+        "summary": "Applies a pose. arr is a flat array of [bone name, qx, qy, qz, qw, …].",
+        "description": "The rotations are local rotations of the normalized rig.",
+        "params": {
+          "blend": "0..1 (default 1 = immediate)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.VRM.applyHipsOffset": {
+      "hash": "4e60db5d1472",
+      "ja": {
+        "summary": "hips を rest からのオフセットへ (ルートモーション)"
+      },
+      "tr": {
+        "summary": "Moves the hips to an offset from rest (root motion)"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getHipsOffset": {
+      "hash": "b47d7c327092",
+      "ja": {
+        "summary": "-> Vector3"
+      },
+      "tr": {
+        "summary": "-> Vector3"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.captureRestPose": {
+      "hash": "0f62ff344e1f",
+      "ja": {
+        "summary": "rest 正規化姿勢を記録"
+      },
+      "tr": {
+        "summary": "Records the rest normalized pose"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.blendToRest": {
+      "hash": "512935a97b3a",
+      "ja": {
+        "summary": "rest へ slerp (素立ち復帰)"
+      },
+      "tr": {
+        "summary": "Slerps toward rest (back to a neutral standing pose)"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.setOffset": {
+      "hash": "a257139b4052",
+      "ja": {
+        "summary": "キャラ全体を平行移動"
+      },
+      "tr": {
+        "summary": "Translates the whole character"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.setColliderScale": {
+      "hash": "67a91bd6111f",
+      "ja": {
+        "summary": "springBone コライダー半径の一律スケール (既定 1.0=忠実)。",
+        "description": "VRoid 系はコライダーが体にタイトで胴体側面が手薄なため、髪が服に埋まる場合は\n1.2〜1.4 程度にすると改善する (opt-in・標準外)。"
+      },
+      "tr": {
+        "summary": "Uniform scale for springBone collider radii (default 1.0 = faithful).",
+        "description": "VRoid models have colliders that fit the body tightly and cover the sides of the torso poorly, so if hair sinks into clothing,\na value around 1.2 to 1.4 helps (opt-in; non-standard)."
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getColliderScale": {
+      "hash": "7171a8222bf5",
+      "ja": {
+        "summary": "-> float"
+      },
+      "tr": {
+        "summary": "-> float"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.resetSpringBones": {
+      "hash": "4f09b6ac2398",
+      "ja": {
+        "summary": "揺れものを現在の姿勢で静止させる (慣性を 0 にする)。",
+        "description": "ロード直後・服装替え・大きな姿勢変更・セーブ復元の後に呼ぶと髪が暴れない。"
+      },
+      "tr": {
+        "summary": "Settles the spring bones at the current pose (zeroes their inertia).",
+        "description": "Call it right after loading, after changing outfits, after a large pose change, or after restoring a save, to keep the hair from flailing."
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getMaterialCount": {
+      "hash": "2b7280c2c75d",
+      "ja": {
+        "summary": "-> int"
+      },
+      "tr": {
+        "summary": "-> int"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getMaterialName": {
+      "hash": "500620072781",
+      "ja": {
+        "summary": "-> string (glTF material.name)"
+      },
+      "tr": {
+        "summary": "-> string (glTF material.name)"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.materialListJson": {
+      "hash": "fe1601bd16ea",
+      "ja": {
+        "summary": "-> [{name,visible,meshes},…] の JSON 文字列"
+      },
+      "tr": {
+        "summary": "-> JSON string of [{name,visible,meshes},…]"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.setMaterialVisible": {
+      "hash": "6ffac16e7c0c",
+      "ja": {
+        "summary": "material の表示/非表示を設定 -> 適用数",
+        "description": "name は完全一致を優先し、無ければ部分一致した全 material に適用する。戻り値は適用数。\nVRoid の服の部品 (上着/リボン等) の出し入れに使う。"
+      },
+      "tr": {
+        "summary": "Shows or hides materials -> number of materials affected",
+        "description": "name prefers an exact match; if there is none, the operation applies to every material that partially matches. The return value is the number of materials affected.\nUse it to show or hide VRoid clothing parts (jackets, ribbons, etc.)."
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getMaterialVisible": {
+      "hash": "580d0b6572a0",
+      "ja": {
+        "summary": "-> bool"
+      },
+      "tr": {
+        "summary": "-> bool"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.setMaterialColor": {
+      "hash": "848b60543afb",
+      "ja": {
+        "summary": "乗算色 (1,1,1 = 元の色) -> 適用数",
+        "description": "name は完全一致を優先し、無ければ部分一致した全 material に適用する。戻り値は適用数。\n実効色 = 元の色 × setMaterialColor の色 × setTint の色 (MToon の lit/shade/emissive/rim/\nmatcap と輪郭線の色に掛かる)。VRoid の服の部品の色替えに使う。"
+      },
+      "tr": {
+        "summary": "Multiply color (1,1,1 = original color) -> number of materials affected",
+        "description": "name prefers an exact match; if there is none, the operation applies to every material that partially matches. The return value is the number of materials affected.\nEffective color = original color × setMaterialColor color × setTint color (applied to MToon's lit/shade/emissive/rim/\nmatcap and outline colors). Use it to recolor VRoid clothing parts."
+      }
+    },
+    "krkrthreepp:Threepp.VRM.setTint": {
+      "hash": "2e6e551fd848",
+      "ja": {
+        "summary": "全 material への乗算色 (1,1,1 = 元の色)",
+        "description": "setMaterialColor の色にさらに掛かる。全体の暗さの調整に使う。"
+      },
+      "tr": {
+        "summary": "Multiply color for all materials (1,1,1 = original color)",
+        "description": "Multiplied on top of the setMaterialColor color. Use it to adjust the overall darkness."
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getMetaName": {
+      "hash": "476e1be7d701",
+      "ja": {
+        "summary": "-> string"
+      },
+      "tr": {
+        "summary": "-> string"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getMetaVersion": {
+      "hash": "476e1be7d701",
+      "ja": {
+        "summary": "-> string"
+      },
+      "tr": {
+        "summary": "-> string"
+      }
+    },
+    "krkrthreepp:Threepp.VRM.getMetaLicenseUrl": {
+      "hash": "476e1be7d701",
+      "ja": {
+        "summary": "-> string"
+      },
+      "tr": {
+        "summary": "-> string"
+      }
+    }
+  }
+}

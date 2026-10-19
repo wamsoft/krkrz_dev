@@ -1,0 +1,41 @@
+{
+  "class": "Threepp.Light",
+  "entries": {
+    "krkrthreepp:Threepp.Light": {
+      "hash": "e5de08b43cc8",
+      "ja": {
+        "summary": "ライト基底クラス"
+      },
+      "tr": {
+        "summary": "Light base class"
+      }
+    },
+    "krkrthreepp:Threepp.Light.type": {
+      "hash": "82e42e322732",
+      "ja": {
+        "summary": "ライトの種類（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Light type (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Light.color": {
+      "hash": "a2b7ca0b7570",
+      "ja": {
+        "summary": "光の色 (Color、読み取り専用)"
+      },
+      "tr": {
+        "summary": "Light color (Color, read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Light.intensity": {
+      "hash": "68d65a7b4126",
+      "ja": {
+        "summary": "光の強度"
+      },
+      "tr": {
+        "summary": "Light intensity"
+      }
+    }
+  }
+}

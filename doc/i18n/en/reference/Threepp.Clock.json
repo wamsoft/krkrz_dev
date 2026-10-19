@@ -1,0 +1,92 @@
+{
+  "class": "Threepp.Clock",
+  "entries": {
+    "krkrthreepp:Threepp.Clock": {
+      "hash": "cb81c805a891",
+      "ja": {
+        "summary": "タイマークラス"
+      },
+      "tr": {
+        "summary": "Timer class"
+      }
+    },
+    "krkrthreepp:Threepp.Clock.Clock": {
+      "hash": "6005b68d819f",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "autoStart": "自動開始するか"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "autoStart": "Whether to start automatically."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Clock.autoStart": {
+      "hash": "31b2c79f8209",
+      "ja": {
+        "summary": "自動開始するか"
+      },
+      "tr": {
+        "summary": "Whether to start automatically"
+      }
+    },
+    "krkrthreepp:Threepp.Clock.running": {
+      "hash": "d90e46032896",
+      "ja": {
+        "summary": "動作中か（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Whether the clock is running (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Clock.elapsedTime": {
+      "hash": "2b94665ed62f",
+      "ja": {
+        "summary": "経過時間（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Elapsed time (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Clock.start": {
+      "hash": "98328f090192",
+      "ja": {
+        "summary": "開始"
+      },
+      "tr": {
+        "summary": "Starts the clock"
+      }
+    },
+    "krkrthreepp:Threepp.Clock.stop": {
+      "hash": "ca2f8314946d",
+      "ja": {
+        "summary": "停止"
+      },
+      "tr": {
+        "summary": "Stops the clock"
+      }
+    },
+    "krkrthreepp:Threepp.Clock.getElapsedTime": {
+      "hash": "de1fd748063a",
+      "ja": {
+        "summary": "経過時間を取得"
+      },
+      "tr": {
+        "summary": "Gets the elapsed time"
+      }
+    },
+    "krkrthreepp:Threepp.Clock.getDelta": {
+      "hash": "188f85a55854",
+      "ja": {
+        "summary": "前回からの経過時間を取得"
+      },
+      "tr": {
+        "summary": "Gets the time elapsed since the last call"
+      }
+    }
+  }
+}

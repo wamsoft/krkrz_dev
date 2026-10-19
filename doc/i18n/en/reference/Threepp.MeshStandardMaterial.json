@@ -1,0 +1,97 @@
+{
+  "class": "Threepp.MeshStandardMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.MeshStandardMaterial": {
+      "hash": "1e58ffea3746",
+      "ja": {
+        "summary": "Standard PBR マテリアル",
+        "description": "物理ベースレンダリング（PBR）のマテリアルです。リアルな質感を表現できます。"
+      },
+      "tr": {
+        "summary": "Standard PBR material",
+        "description": "A physically based rendering (PBR) material that can represent realistic surfaces."
+      }
+    },
+    "krkrthreepp:Threepp.MeshStandardMaterial.MeshStandardMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.MeshStandardMaterial.type": {
+      "hash": "d6a33cb09ac3",
+      "ja": {
+        "summary": "\"MeshStandardMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"MeshStandardMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshStandardMaterial.color": {
+      "hash": "7df053f299de",
+      "ja": {
+        "summary": "色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshStandardMaterial.emissive": {
+      "hash": "46338bd53dc5",
+      "ja": {
+        "summary": "発光色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Emissive color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshStandardMaterial.roughness": {
+      "hash": "5f999cba921d",
+      "ja": {
+        "summary": "粗さ (0.0-1.0)"
+      },
+      "tr": {
+        "summary": "Roughness (0.0-1.0)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshStandardMaterial.metalness": {
+      "hash": "d1aa74a5a6cb",
+      "ja": {
+        "summary": "金属度 (0.0-1.0)"
+      },
+      "tr": {
+        "summary": "Metalness (0.0-1.0)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshStandardMaterial.wireframe": {
+      "hash": "27e1aa449133",
+      "ja": {
+        "summary": "ワイヤーフレーム表示"
+      },
+      "tr": {
+        "summary": "Renders as wireframe"
+      }
+    },
+    "krkrthreepp:Threepp.MeshStandardMaterial.wireframeLinewidth": {
+      "hash": "c1d0eb798128",
+      "ja": {
+        "summary": "ワイヤーフレームの線幅"
+      },
+      "tr": {
+        "summary": "Wireframe line width"
+      }
+    },
+    "krkrthreepp:Threepp.MeshStandardMaterial.flatShading": {
+      "hash": "52340f07423e",
+      "ja": {
+        "summary": "フラットシェーディング"
+      },
+      "tr": {
+        "summary": "Flat shading"
+      }
+    }
+  }
+}

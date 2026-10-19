@@ -1,0 +1,114 @@
+{
+  "class": "Threepp.Spherical",
+  "entries": {
+    "krkrthreepp:Threepp.Spherical": {
+      "hash": "ce6208ecc917",
+      "ja": {
+        "summary": "球面座標クラス"
+      },
+      "tr": {
+        "summary": "Spherical coordinates class"
+      }
+    },
+    "krkrthreepp:Threepp.Spherical.Spherical": {
+      "hash": "131cd5222e24",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "radius": "半径",
+          "phi": "極角 (ラジアン)",
+          "theta": "方位角 (ラジアン)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "radius": "Radius.",
+          "phi": "Polar angle (radians).",
+          "theta": "Azimuthal angle (radians)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Spherical.radius": {
+      "hash": "07f9be395c65",
+      "ja": {
+        "summary": "半径"
+      },
+      "tr": {
+        "summary": "Radius"
+      }
+    },
+    "krkrthreepp:Threepp.Spherical.phi": {
+      "hash": "09a017708f0d",
+      "ja": {
+        "summary": "極角"
+      },
+      "tr": {
+        "summary": "Polar angle"
+      }
+    },
+    "krkrthreepp:Threepp.Spherical.theta": {
+      "hash": "8e7e891656e3",
+      "ja": {
+        "summary": "方位角"
+      },
+      "tr": {
+        "summary": "Azimuthal angle"
+      }
+    },
+    "krkrthreepp:Threepp.Spherical.set": {
+      "hash": "6a1d88aceb4a",
+      "ja": {
+        "summary": "値を設定"
+      },
+      "tr": {
+        "summary": "Sets the values"
+      }
+    },
+    "krkrthreepp:Threepp.Spherical.clone": {
+      "hash": "85fb5d83b57e",
+      "ja": {
+        "summary": "クローン"
+      },
+      "tr": {
+        "summary": "Clones the object"
+      }
+    },
+    "krkrthreepp:Threepp.Spherical.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another object"
+      }
+    },
+    "krkrthreepp:Threepp.Spherical.makeSafe": {
+      "hash": "ae851d41accf",
+      "ja": {
+        "summary": "安全な値に補正"
+      },
+      "tr": {
+        "summary": "Clamps the values to a safe range"
+      }
+    },
+    "krkrthreepp:Threepp.Spherical.setFromVector3": {
+      "hash": "e02e7b1cea9d",
+      "ja": {
+        "summary": "Vector3から設定"
+      },
+      "tr": {
+        "summary": "Sets the values from a Vector3"
+      }
+    },
+    "krkrthreepp:Threepp.Spherical.setFromCartesianCoords": {
+      "hash": "6f8d732fa6d3",
+      "ja": {
+        "summary": "直交座標から設定"
+      },
+      "tr": {
+        "summary": "Sets the values from Cartesian coordinates"
+      }
+    }
+  }
+}

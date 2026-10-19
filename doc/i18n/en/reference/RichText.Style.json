@@ -1,0 +1,169 @@
+{
+  "class": "RichText.Style",
+  "entries": {
+    "krkr_richtext:RichText.Style": {
+      "hash": "29a652254673",
+      "ja": {
+        "summary": "テキストスタイルクラス",
+        "description": "テキストの論理的なスタイル（フォント、サイズ、ウェイト等）を定義します。\n描画外観（色、縁取り等）は Appearance クラスで設定します。"
+      },
+      "tr": {
+        "summary": "Text style class",
+        "description": "Defines the logical style of text (font, size, weight, etc.).\nThe drawing appearance (color, outline, etc.) is set with the Appearance class."
+      }
+    },
+    "krkr_richtext:RichText.Style.Style": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkr_richtext:RichText.Style.setFonts": {
+      "hash": "7034c21cbbcc",
+      "ja": {
+        "summary": "フォントコレクションの設定",
+        "description": "配列の順序がフォールバック優先度になります。\n最初のフォントで描画できない文字は次のフォントで描画されます。\n\n配列の各要素は registerFont で指定した登録名のほか、\n登録名で見つからなければフォントファイル内の family 名\n（例: \"Noto Sans JP\"）や \"family Style\" 連結名\n（例: \"Noto Sans JP Bold\"）でも参照できます。\n使用例:\nstyle.setFonts([\"メインフォント\", \"絵文字フォント\", \"フォールバック\"]);",
+        "params": {
+          "names": "フォント名の配列（優先度順）"
+        }
+      },
+      "tr": {
+        "summary": "Sets the font collection",
+        "description": "The order of the array is the fallback priority.\nCharacters that the first font cannot draw are drawn with the next font.\n\nEach element can be a name registered with registerFont; if no registered name matches,\nit can also refer to the family name inside the font file\n(e.g. \"Noto Sans JP\") or the combined \"family Style\" name\n(e.g. \"Noto Sans JP Bold\").\nExample:\nstyle.setFonts([\"メインフォント\", \"絵文字フォント\", \"フォールバック\"]);",
+        "params": {
+          "names": "Array of font names (in priority order)"
+        }
+      }
+    },
+    "krkr_richtext:RichText.Style.setLocale": {
+      "hash": "3579c1f6c243",
+      "ja": {
+        "summary": "ロケールの設定",
+        "description": "禁則処理などの行分割ルールに影響します。\n使用例:\nstyle.setLocale(\"ja_JP\");",
+        "params": {
+          "locale": "ロケール文字列"
+        }
+      },
+      "tr": {
+        "summary": "Sets the locale",
+        "description": "Affects line-breaking rules such as kinsoku (Japanese line-breaking rules).\nExample:\nstyle.setLocale(\"ja_JP\");",
+        "params": {
+          "locale": "Locale string"
+        }
+      }
+    },
+    "krkr_richtext:RichText.Style.clone": {
+      "hash": "a350ee5aec6f",
+      "ja": {
+        "summary": "スタイルの複製",
+        "returns": "複製された Style オブジェクト"
+      },
+      "tr": {
+        "summary": "Duplicates the style",
+        "returns": "The duplicated Style object"
+      }
+    },
+    "krkr_richtext:RichText.Style.fontSize": {
+      "hash": "ed131c8b0102",
+      "ja": {
+        "summary": "フォントサイズ（ピクセル単位）",
+        "description": "デフォルト: 16"
+      },
+      "tr": {
+        "summary": "Font size (in pixels)",
+        "description": "Default: 16"
+      }
+    },
+    "krkr_richtext:RichText.Style.fontWeight": {
+      "hash": "6a51a4e68bfb",
+      "ja": {
+        "summary": "フォントウェイト（太さ）",
+        "description": "100〜900 の値。400 = 通常、700 = 太字\nデフォルト: 400"
+      },
+      "tr": {
+        "summary": "Font weight",
+        "description": "A value from 100 to 900. 400 = regular, 700 = bold\nDefault: 400"
+      }
+    },
+    "krkr_richtext:RichText.Style.italic": {
+      "hash": "fb9261988f08",
+      "ja": {
+        "summary": "イタリック",
+        "description": "デフォルト: false"
+      },
+      "tr": {
+        "summary": "Italic",
+        "description": "Default: false"
+      }
+    },
+    "krkr_richtext:RichText.Style.letterSpacing": {
+      "hash": "b389429f3189",
+      "ja": {
+        "summary": "字間（em単位）",
+        "description": "0.1 = フォントサイズの10%の追加スペース\nデフォルト: 0"
+      },
+      "tr": {
+        "summary": "Letter spacing (in em)",
+        "description": "0.1 = extra space of 10% of the font size\nDefault: 0"
+      }
+    },
+    "krkr_richtext:RichText.Style.wordSpacing": {
+      "hash": "a91d471af764",
+      "ja": {
+        "summary": "語間（em単位）",
+        "description": "デフォルト: 0"
+      },
+      "tr": {
+        "summary": "Word spacing (in em)",
+        "description": "Default: 0"
+      }
+    },
+    "krkr_richtext:RichText.Style.scaleX": {
+      "hash": "e5e187a2db2d",
+      "ja": {
+        "summary": "水平スケール",
+        "description": "1.0 = 通常、0.5 = 半分の幅\nデフォルト: 1.0"
+      },
+      "tr": {
+        "summary": "Horizontal scale",
+        "description": "1.0 = normal, 0.5 = half width\nDefault: 1.0"
+      }
+    },
+    "krkr_richtext:RichText.Style.skewX": {
+      "hash": "92ae082cd79f",
+      "ja": {
+        "summary": "斜体スキュー値",
+        "description": "0 = 通常、負の値で右に傾斜\nデフォルト: 0"
+      },
+      "tr": {
+        "summary": "Oblique skew value",
+        "description": "0 = normal; negative values slant to the right\nDefault: 0"
+      }
+    },
+    "krkr_richtext:RichText.Style.fontWidth": {
+      "hash": "98a1c7f0c914",
+      "ja": {
+        "summary": "フォント幅（バリアブルフォントの wdth 軸、パーセント）",
+        "description": "100 = 通常幅。50 = 半分の幅、200 = 2倍の幅。\nバリアブルフォントの wdth 軸に対応しているフォントでのみ有効。\nデフォルト: 100"
+      },
+      "tr": {
+        "summary": "Font width (the wdth axis of variable fonts, in percent)",
+        "description": "100 = normal width, 50 = half width, 200 = double width.\nEffective only with variable fonts that support the wdth axis.\nDefault: 100"
+      }
+    },
+    "krkr_richtext:RichText.Style.bidi": {
+      "hash": "feab6dd9b38f",
+      "ja": {
+        "summary": "双方向テキスト制御",
+        "description": "RichText.BIDI_LTR / BIDI_RTL / BIDI_DEFAULT_LTR / BIDI_DEFAULT_RTL\nデフォルト: BIDI_DEFAULT_LTR"
+      },
+      "tr": {
+        "summary": "Bidirectional text control",
+        "description": "RichText.BIDI_LTR / BIDI_RTL / BIDI_DEFAULT_LTR / BIDI_DEFAULT_RTL\nDefault: BIDI_DEFAULT_LTR"
+      }
+    }
+  }
+}

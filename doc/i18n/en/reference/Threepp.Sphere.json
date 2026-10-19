@@ -1,0 +1,148 @@
+{
+  "class": "Threepp.Sphere",
+  "entries": {
+    "krkrthreepp:Threepp.Sphere": {
+      "hash": "11278b8707fc",
+      "ja": {
+        "summary": "球クラス"
+      },
+      "tr": {
+        "summary": "Sphere class"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.Sphere": {
+      "hash": "5775e8f41c11",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "center": "中心座標 (Vector3)",
+          "radius": "半径"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "center": "Center (Vector3).",
+          "radius": "Radius."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.set": {
+      "hash": "6a1d88aceb4a",
+      "ja": {
+        "summary": "値を設定"
+      },
+      "tr": {
+        "summary": "Sets the values"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.clone": {
+      "hash": "85fb5d83b57e",
+      "ja": {
+        "summary": "クローン"
+      },
+      "tr": {
+        "summary": "Clones the sphere"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another sphere"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.isEmpty": {
+      "hash": "34a58d6d1801",
+      "ja": {
+        "summary": "空かどうか"
+      },
+      "tr": {
+        "summary": "Whether the sphere is empty"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.makeEmpty": {
+      "hash": "eed6a7f45d0b",
+      "ja": {
+        "summary": "空にする"
+      },
+      "tr": {
+        "summary": "Makes the sphere empty"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.containsPoint": {
+      "hash": "5f9389247350",
+      "ja": {
+        "summary": "点を含むか"
+      },
+      "tr": {
+        "summary": "Whether the sphere contains a point"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.distanceToPoint": {
+      "hash": "f70c67301822",
+      "ja": {
+        "summary": "点との距離"
+      },
+      "tr": {
+        "summary": "Distance to a point"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.intersectsSphere": {
+      "hash": "393f00bfc6a1",
+      "ja": {
+        "summary": "球と交差するか"
+      },
+      "tr": {
+        "summary": "Whether the sphere intersects another sphere"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.intersectsBox": {
+      "hash": "f36d014500a1",
+      "ja": {
+        "summary": "ボックスと交差するか"
+      },
+      "tr": {
+        "summary": "Whether the sphere intersects a box"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.intersectsPlane": {
+      "hash": "2e714ade0a7e",
+      "ja": {
+        "summary": "平面と交差するか"
+      },
+      "tr": {
+        "summary": "Whether the sphere intersects a plane"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.expandByPoint": {
+      "hash": "57487c01e606",
+      "ja": {
+        "summary": "点で拡張"
+      },
+      "tr": {
+        "summary": "Expands the sphere to include a point"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.translate": {
+      "hash": "89ec109eb2ec",
+      "ja": {
+        "summary": "平行移動"
+      },
+      "tr": {
+        "summary": "Translates the sphere"
+      }
+    },
+    "krkrthreepp:Threepp.Sphere.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

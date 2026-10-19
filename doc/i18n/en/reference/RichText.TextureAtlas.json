@@ -1,0 +1,121 @@
+{
+  "class": "RichText.TextureAtlas",
+  "entries": {
+    "krkr_richtext:RichText.TextureAtlas": {
+      "hash": "83454101c259",
+      "ja": {
+        "summary": "テクスチャアトラスクラス",
+        "description": "グリフを事前レンダリングしてレイヤー（テクスチャ）に格納し、\nコピー矩形配列で表示順に転送するためのクラスです。\n同一グリフは重複排除され、効率的なテクスチャ利用が可能です。\n\nコンストラクタにレイヤーを渡すと、そのレイヤーをテクスチャとして使用します。\n\n使用フロー:\n1. レイヤーを渡してアトラスを作成\n2. addLayout / addParagraphLayout / addStyledLayout でグリフを追加\n3. commit() でテクスチャに書き込み\n4. getCopyRects() でコピー矩形配列を取得\n5. コピー矩形に基づいてアトラスレイヤーから表示先にコピー\n\n使用例:\nvar atlasLayer = new Layer(window, window.primaryLayer);\natlasLayer.setImageSize(1024, 1024);\nvar atlas = new RichText.TextureAtlas(atlasLayer);\n\nvar sl = new RichText.StyledLayout();\nsl.layout(text, 400, 300, RichText.HALIGN_LEFT, RichText.VALIGN_TOP, style, app);\natlas.addStyledLayout(sl);\natlas.commit();\n\nvar rects = atlas.getCopyRects(sl, 10, 10);\nfor (var i = 0; i < rects.count; i++) {\nvar r = rects[i];\n// r.srcX, r.srcY, r.srcWidth, r.srcHeight: アトラスレイヤー内のソース矩形\n// r.dstX, r.dstY: 表示先の座標\n// r.displayIndex: 表示順序\ntargetLayer.copyRect(r.dstX, r.dstY, atlasLayer,\nr.srcX, r.srcY, r.srcWidth, r.srcHeight);\n}"
+      },
+      "tr": {
+        "summary": "Texture atlas class",
+        "description": "Pre-renders glyphs into a layer (texture) and transfers them in display order\nusing an array of copy rectangles.\nIdentical glyphs are deduplicated, making efficient use of the texture.\n\nThe layer passed to the constructor is used as the texture.\n\nWorkflow:\n1. Create the atlas with a layer\n2. Add glyphs with addLayout / addParagraphLayout / addStyledLayout\n3. Write them to the texture with commit()\n4. Get the array of copy rectangles with getCopyRects()\n5. Copy from the atlas layer to the destination according to the copy rectangles\n\nExample:\nvar atlasLayer = new Layer(window, window.primaryLayer);\natlasLayer.setImageSize(1024, 1024);\nvar atlas = new RichText.TextureAtlas(atlasLayer);\n\nvar sl = new RichText.StyledLayout();\nsl.layout(text, 400, 300, RichText.HALIGN_LEFT, RichText.VALIGN_TOP, style, app);\natlas.addStyledLayout(sl);\natlas.commit();\n\nvar rects = atlas.getCopyRects(sl, 10, 10);\nfor (var i = 0; i < rects.count; i++) {\nvar r = rects[i];\n// r.srcX, r.srcY, r.srcWidth, r.srcHeight: アトラスレイヤー内のソース矩形\n// r.dstX, r.dstY: 表示先の座標\n// r.displayIndex: 表示順序\ntargetLayer.copyRect(r.dstX, r.dstY, atlasLayer,\nr.srcX, r.srcY, r.srcWidth, r.srcHeight);\n}"
+      }
+    },
+    "krkr_richtext:RichText.TextureAtlas.TextureAtlas": {
+      "hash": "520396a419cb",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "layer": "テクスチャとして使用するレイヤー"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "layer": "Layer to use as the texture"
+        }
+      }
+    },
+    "krkr_richtext:RichText.TextureAtlas.clear": {
+      "hash": "b2459df6117d",
+      "ja": {
+        "summary": "アトラスをクリア（全グリフを削除）"
+      },
+      "tr": {
+        "summary": "Clears the atlas (removes all glyphs)"
+      }
+    },
+    "krkr_richtext:RichText.TextureAtlas.addLayout": {
+      "hash": "72772ace4d32",
+      "ja": {
+        "summary": "TextLayout のグリフをアトラスに追加",
+        "returns": "成功時 true",
+        "params": {
+          "layout": "RichText.Layout オブジェクト",
+          "appearance": "RichText.Appearance オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Adds the glyphs of a TextLayout to the atlas",
+        "returns": "true on success",
+        "params": {
+          "layout": "RichText.Layout object",
+          "appearance": "RichText.Appearance object"
+        }
+      }
+    },
+    "krkr_richtext:RichText.TextureAtlas.addParagraphLayout": {
+      "hash": "f37be90acfce",
+      "ja": {
+        "summary": "ParagraphLayout のグリフをアトラスに追加",
+        "returns": "成功時 true",
+        "params": {
+          "paraLayout": "RichText.ParagraphLayout オブジェクト",
+          "style": "RichText.Style オブジェクト",
+          "appearance": "RichText.Appearance オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Adds the glyphs of a ParagraphLayout to the atlas",
+        "returns": "true on success",
+        "params": {
+          "paraLayout": "RichText.ParagraphLayout object",
+          "style": "RichText.Style object",
+          "appearance": "RichText.Appearance object"
+        }
+      }
+    },
+    "krkr_richtext:RichText.TextureAtlas.addStyledLayout": {
+      "hash": "63ac989a12d0",
+      "ja": {
+        "summary": "StyledLayout のグリフをアトラスに追加",
+        "returns": "成功時 true",
+        "params": {
+          "styledLayout": "RichText.StyledLayout オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Adds the glyphs of a StyledLayout to the atlas",
+        "returns": "true on success",
+        "params": {
+          "styledLayout": "RichText.StyledLayout object"
+        }
+      }
+    },
+    "krkr_richtext:RichText.TextureAtlas.commit": {
+      "hash": "d03d42390005",
+      "ja": {
+        "summary": "アトラスをテクスチャ（レイヤー）に書き込み",
+        "description": "addLayout / addParagraphLayout / addStyledLayout で追加した\nグリフをレイヤーにレンダリングします。"
+      },
+      "tr": {
+        "summary": "Writes the atlas to the texture (layer)",
+        "description": "Renders the glyphs added with addLayout / addParagraphLayout / addStyledLayout\ninto the layer."
+      }
+    },
+    "krkr_richtext:RichText.TextureAtlas.getCopyRects": {
+      "hash": "c677dd4f2876",
+      "ja": {
+        "summary": "表示用コピー矩形配列を取得",
+        "description": "3つのオーバーロードがあります:\n\n1) getCopyRects(layout, x, y, appearance, maxChars=-1)\n- layout: RichText.Layout\n- x, y: 描画位置\n- appearance: RichText.Appearance\n- maxChars: 最大文字数（-1で全て）\n\n2) getCopyRects(paraLayout, x, y, width, height, hAlign, vAlign, style, appearance, maxChars=-1)\n- paraLayout: RichText.ParagraphLayout\n- x, y, width, height: 描画領域\n- hAlign, vAlign: アライン\n- style: RichText.Style\n- appearance: RichText.Appearance\n- maxChars: 最大文字数（-1で全て）\n\n3) getCopyRects(styledLayout, x, y, maxChars=-1)\n- styledLayout: RichText.StyledLayout\n- x, y: 描画位置\n- maxChars: 最大文字数（-1で全て）",
+        "returns": "コピー矩形の配列。各要素は辞書:\n%[srcX, srcY, srcWidth, srcHeight, dstX, dstY, displayIndex, charIndex, delay, linkIndex]\ncharIndex: 元テキストでの文字位置\ndelay: 表示タイミング（ms、未設定時は含まれない）\nlinkIndex: リンク番号（未設定時は含まれない）"
+      },
+      "tr": {
+        "summary": "Gets the array of copy rectangles for display",
+        "description": "There are three overloads:\n\n1) getCopyRects(layout, x, y, appearance, maxChars=-1)\n- layout: RichText.Layout\n- x, y: drawing position\n- appearance: RichText.Appearance\n- maxChars: maximum number of characters (-1 for all)\n\n2) getCopyRects(paraLayout, x, y, width, height, hAlign, vAlign, style, appearance, maxChars=-1)\n- paraLayout: RichText.ParagraphLayout\n- x, y, width, height: drawing area\n- hAlign, vAlign: alignment\n- style: RichText.Style\n- appearance: RichText.Appearance\n- maxChars: maximum number of characters (-1 for all)\n\n3) getCopyRects(styledLayout, x, y, maxChars=-1)\n- styledLayout: RichText.StyledLayout\n- x, y: drawing position\n- maxChars: maximum number of characters (-1 for all)",
+        "returns": "Array of copy rectangles. Each element is a dictionary:\n%[srcX, srcY, srcWidth, srcHeight, dstX, dstY, displayIndex, charIndex, delay, linkIndex]\ncharIndex: character position in the source text\ndelay: display timing (ms; omitted if not set)\nlinkIndex: link number (omitted if not set)"
+      }
+    }
+  }
+}

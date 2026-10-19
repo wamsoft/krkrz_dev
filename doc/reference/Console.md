@@ -2,12 +2,14 @@
 
 Debug.console拡張
 
+※ 起動後１度は visible=true してウィンドウを生成しないと失敗する
+
 ## メンバー一覧
 
 ### メソッド
 
-- [restoreMaxmimize](#restoremaxmimize)
-- [maxmimize](#maxmimize)
+- [restoreMaximize](#restoremaximize)
+- [maximize](#maximize)
 - [getRect](#getrect)
 - [setPos](#setpos)
 - [getPlacement](#getplacement)
@@ -16,7 +18,7 @@ Debug.console拡張
 
 ---
 
-### restoreMaxmimize
+### restoreMaximize
 
 メソッド
 
@@ -26,7 +28,7 @@ Debug.console拡張
 
 ---
 
-### maxmimize
+### maximize
 
 メソッド
 
@@ -103,6 +105,6 @@ WindowPlacementの設定
 
 **解説**
 
-※ 起動後１度はvisible=trueしてウィンドウを生成しないと失敗する 優先順位の変更
+優先順位の変更
 
 ---

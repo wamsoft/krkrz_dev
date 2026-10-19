@@ -1,0 +1,61 @@
+{
+  "class": "Threepp.MeshNormalMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.MeshNormalMaterial": {
+      "hash": "b944c75ac74b",
+      "ja": {
+        "summary": "法線マテリアル",
+        "description": "法線を色として表示するマテリアルです。デバッグに便利です。"
+      },
+      "tr": {
+        "summary": "Normal material",
+        "description": "A material that renders normals as colors. Useful for debugging."
+      }
+    },
+    "krkrthreepp:Threepp.MeshNormalMaterial.MeshNormalMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.MeshNormalMaterial.type": {
+      "hash": "6b4f6f4bb102",
+      "ja": {
+        "summary": "\"MeshNormalMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"MeshNormalMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshNormalMaterial.wireframe": {
+      "hash": "27e1aa449133",
+      "ja": {
+        "summary": "ワイヤーフレーム表示"
+      },
+      "tr": {
+        "summary": "Renders as wireframe"
+      }
+    },
+    "krkrthreepp:Threepp.MeshNormalMaterial.wireframeLinewidth": {
+      "hash": "c1d0eb798128",
+      "ja": {
+        "summary": "ワイヤーフレームの線幅"
+      },
+      "tr": {
+        "summary": "Wireframe line width"
+      }
+    },
+    "krkrthreepp:Threepp.MeshNormalMaterial.flatShading": {
+      "hash": "52340f07423e",
+      "ja": {
+        "summary": "フラットシェーディング"
+      },
+      "tr": {
+        "summary": "Flat shading"
+      }
+    }
+  }
+}

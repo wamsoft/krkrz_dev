@@ -1,0 +1,46 @@
+{
+  "class": "Threepp.CapsuleGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.CapsuleGeometry": {
+      "hash": "7f1df7750f1c",
+      "ja": {
+        "summary": "カプセルジオメトリ",
+        "description": "カプセル形状（両端が半球の円柱）を生成します。"
+      },
+      "tr": {
+        "summary": "Capsule geometry",
+        "description": "Generates a capsule shape (a cylinder capped with hemispheres at both ends)."
+      }
+    },
+    "krkrthreepp:Threepp.CapsuleGeometry.CapsuleGeometry": {
+      "hash": "7d24e086888f",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "radius": "半径",
+          "length": "円柱部分の長さ",
+          "capSegments": "キャップのセグメント数",
+          "radialSegments": "周方向のセグメント数"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "radius": "Radius.",
+          "length": "Length of the cylindrical middle section.",
+          "capSegments": "Number of segments in each cap.",
+          "radialSegments": "Number of segments around the circumference."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.CapsuleGeometry.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    }
+  }
+}

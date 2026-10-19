@@ -1,0 +1,90 @@
+{
+  "class": "ResourceWriter",
+  "entries": {
+    "resourceRW:ResourceWriter.open": {
+      "hash": "8f7fbc74b491",
+      "ja": {
+        "summary": "操作対象のファイルをオープン",
+        "params": {
+          "file": "ファイル名(exeまたはdll)",
+          "clean": "既存のリソースを全てクリアするかどうか\n基本的にオープンされていないファイルのみ操作可能です\n＞自分自身のkrkr.exeやPlugins.linkでリンク済みのプラグインは操作できません"
+        }
+      },
+      "tr": {
+        "summary": "Opens the target file",
+        "params": {
+          "file": "File name (exe or dll).",
+          "clean": "Whether to clear all existing resources.\nIn general, only files that are not currently open can be modified.\nThe running krkr.exe itself and plugins already linked with Plugins.link cannot be modified."
+        }
+      }
+    },
+    "resourceRW:ResourceWriter.close": {
+      "hash": "f957739a4e5a",
+      "ja": {
+        "summary": "操作対象のファイルをクローズ＆実書き出し",
+        "params": {
+          "write": "書き出す場合はtrue\nwrite=falseの場合，writeFrom～やclearの処理がすべてキャンセルされ，書き出しは行われません\nwrite=trueでも一度もwriteFrom～/clearを呼ばなかった場合も書き出しは行われません"
+        }
+      },
+      "tr": {
+        "summary": "Closes the target file and writes the changes",
+        "params": {
+          "write": "true to write the changes.\nWith write=false, all writeFrom* and clear operations are discarded and nothing is written.\nEven with write=true, nothing is written if writeFrom* / clear was never called."
+        }
+      }
+    },
+    "resourceRW:ResourceWriter.setLang": {
+      "hash": "4a69873a837b",
+      "ja": {
+        "summary": "書き出しの言語を指定",
+        "description": "パラメータ内容は ResourceReader.setLang と同じです"
+      },
+      "tr": {
+        "summary": "Sets the language to write",
+        "description": "The arguments are the same as ResourceReader.setLang."
+      }
+    },
+    "resourceRW:ResourceWriter.clear": {
+      "hash": "b9c5f4eacf2b",
+      "ja": {
+        "summary": "対象のリソースを削除",
+        "params": {
+          "type": "リソースタイプ（文字列か数値，もしくは rt*定数を指定）",
+          "name": "リソース名（文字列か数値）\n※この関数を呼んでもclose(true)するまでは書き出しは保留されています"
+        }
+      },
+      "tr": {
+        "summary": "Deletes the target resource",
+        "params": {
+          "type": "Resource type (a string, a number, or an rt* constant).",
+          "name": "Resource name (a string or a number).\nNote: the change is not written until close(true) is called."
+        }
+      }
+    },
+    "resourceRW:ResourceWriter.writeFromText": {
+      "hash": "0810d2bca929",
+      "ja": {
+        "summary": "リソースの書き出し",
+        "params": {
+          "type": "リソースタイプ（文字列か数値，もしくは rt*定数を指定）",
+          "name": "リソース名（文字列か数値）",
+          "text": "(writeFromTextのみ)対象のテキスト",
+          "utf8": "(writeFromTextのみ)UTF-8エンコードで書き出す場合はtrue（falseの場合はUnicode）",
+          "file": "(writeFromFileのみ)対象のファイル名",
+          "oct": "(writeFromOctetのみ)対象のoctet\n※この関数を呼んでもclose(true)するまでは書き出しは保留されています"
+        }
+      },
+      "tr": {
+        "summary": "Writes a resource",
+        "params": {
+          "type": "Resource type (a string, a number, or an rt* constant).",
+          "name": "Resource name (a string or a number).",
+          "text": "(writeFromText only) Text to write.",
+          "utf8": "(writeFromText only) true to write UTF-8 encoded text (false writes Unicode).",
+          "file": "(writeFromFile only) Source file name.",
+          "oct": "(writeFromOctet only) Source octet.\nNote: the change is not written until close(true) is called."
+        }
+      }
+    }
+  }
+}

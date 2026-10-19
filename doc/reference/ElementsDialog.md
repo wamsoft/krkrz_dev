@@ -8,9 +8,9 @@
 
     Elements ベースの UI 機構はまだ形が固まっていません。2026-09-04 にはクラス名自体を `Dialog` から改名しました ( 互換エイリアス無し )。
 
-ElementsDialog クラスは、Elements ベースの汎用ダイアログを TJS から駆動するための
+ElementsDialog クラスは、Elements ベースの汎用ダイアログを TJS から駆動するためのクラスです。
 
-クラスです ( SDL3 / WINVER 両ビルド対応 )。
+SDL3 / WINVER の両ビルドで使えます。
 
 JSON / JSONC ( コメントと末尾カンマを許容 ) 形式のレイアウト定義を渡して、
 ボタン・チェックボックス・トグル・テキスト入力等を含むダイアログを表示
@@ -128,6 +128,7 @@ WINVER (Windows ネイティブ / D3D11) ビルドでも ElementsDialog は利�
 - [beginKeyCapture](#beginkeycapture)
 - [endKeyCapture](#endkeycapture)
 - [registerImage](#registerimage)
+- [registerLayerImage](#registerlayerimage)
 - [unregisterImage](#unregisterimage)
 - [clearImages](#clearimages)
 - [setSharedVar](#setsharedvar)
@@ -1283,6 +1284,44 @@ image ウィジェット等からは `"mem://<name>"` で参照します。セ�
 image ウィジェットがあれば、再登録した時点で再デコードされ即時反映されます
 ( 画面の開き直しは不要。パネルにも反映されます )。登録前に build した
 ウィジェットは空表示のままなので、初回は画面を開く前に登録してください。
+
+---
+
+### registerLayerImage
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `name` | `&nbsp;` | ストア上の名前 ( `mem://<name>` で参照 )。 |
+| `layer` | `&nbsp;` | 画素を取り出す Layer。Layer 以外を渡すと例外になります。 |
+| `left` | `0` | 取り出す範囲の左端 ( 省略時 0 )。 |
+| `top` | `0` | 取り出す範囲の上端 ( 省略時 0 )。 |
+| `width` | `&nbsp;` | 取り出す範囲の幅 ( 省略時は画像の右端まで )。範囲は画像の内側に丸めます。 |
+| `height` | `&nbsp;` | 取り出す範囲の高さ ( 省略時は画像の下端まで )。 |
+
+**戻り値**
+
+登録できたかどうか。画像が無い / 範囲が空のときは偽。
+
+**解説**
+
+Layer の画素を実行時画像として登録する
+
+layer の画像 ( メイン画像 ) の画素を、エンコードもファイルも介さずに name で実行時画像
+ストアへ登録します。TJS で描いた絵 ( TextRender でメッセージ窓と同じ書体で描いた文字など )
+を、一覧の送りのたびに渡すような用途向けです。参照のしかた ( `"mem://<name>"` )、
+再登録で表示中の image がその場で差し替わること、[unregisterImage](#unregisterimage)
+で消せることは [registerImage](#registerimage) と同じです。1 つの name に入るのは
+ファイルの画像か Layer の画素のどちらか一方で、登録し直すと種類ごと置き換わります。
+
+アルファの扱いはレイヤの種類で決まります。`ltAddAlpha` は乗算済みとしてそのまま、
+`ltOpaque` はアルファを無視して不透明、それ以外は乗算していないアルファとして登録時に
+乗算します。
+
+**関連:** [ElementsDialog.registerImage](ElementsDialog.md#registerimage)
 
 ---
 

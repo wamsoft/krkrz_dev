@@ -1,0 +1,194 @@
+{
+  "class": "GLCompositor",
+  "entries": {
+    "GLCompositor": {
+      "hash": "ee50c08794f8",
+      "ja": {
+        "description": "OGLDrawDevice を使わない状況 (画面の描画デバイスが D3D11 や\nSDL_Renderer 等) でも、裏で OpenGL ES によるオフスクリーン合成を行い、その結果を\nLayer へ書き戻すためのクラスです。\n\n旧 krkrgles プラグインの GLESAdaptor 相当の機能を、本体内蔵かつ Canvas / Offscreen の\n既存 GL 描画コードを共有する形で提供します。描画デバイスに依存せず、ウィンドウから\nGL コンテキストを取得して自前でカレント化します (画面への present は行わず、\nオフスクリーン FBO への描画のみ)。OGL 描画デバイスが動作中の場合はそのコンテキストを\n共有します。\n\ncapture() のコールバックは「incontextof このコンポジタ」で実行され、\nコールバック内の this はこの GLCompositor になります。そのため this.canvas\n(内部 Canvas) の フル API (drawTexture / beginEffect / endEffect / クリップ等) や\nthis.drawLayer / this.copyLayer をそのまま利用できます (GLESAdaptor 互換)。\n\nCanvas を SDL_GPU で動かすビルド ([GPUDrawDevice](GPUDrawDevice.md) のあるビルド) では、同じ名前・同じ API の\nGPU 版になります。描画は共有の GPU デバイスの上で行い、GL のコンテキストは無いので\nmakeCurrent は何もせず、GLGetProcAddress は 0 を返します (GLES 系プラグインの描画先には使えません)。"
+      },
+      "tr": {
+        "description": "A class that performs offscreen compositing with OpenGL ES behind the scenes and writes the result back to a Layer,\neven when OGLDrawDevice is not in use (when the screen's draw device is D3D11,\nSDL_Renderer, or the like).\n\nIt provides the functionality of GLESAdaptor from the former krkrgles plugin, built into the engine and sharing\nthe existing GL drawing code of Canvas / Offscreen. It does not depend on the draw device: it obtains\na GL context from the window and makes it current itself (it does not present to the screen;\nit only draws into an offscreen FBO). When the OGL draw device is running, it shares\nthat context.\n\nThe capture() callback runs \"incontextof this compositor\", so\nthis inside the callback is this GLCompositor. You can therefore use the full API of this.canvas\n(the internal Canvas), such as drawTexture / beginEffect / endEffect / clipping, as well as\nthis.drawLayer / this.copyLayer, directly (compatible with GLESAdaptor).\n\nIn builds where Canvas runs on SDL_GPU (builds with [GPUDrawDevice](GPUDrawDevice.md)), it becomes a GPU version with the same\nname and the same API. Drawing happens on the shared GPU device; since there is no GL context,\nmakeCurrent does nothing and GLGetProcAddress returns 0 (it cannot be used as a drawing target for GLES-based plugins)."
+      }
+    },
+    "GLCompositor.GLCompositor": {
+      "hash": "a96652aaada7",
+      "ja": {
+        "summary": "GLCompositor を生成。",
+        "description": "指定ウィンドウの GL コンテキストで初期化します。",
+        "params": {
+          "window": "対象の Window オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Creates a GLCompositor.",
+        "description": "Initializes it with the GL context of the specified window.",
+        "params": {
+          "window": "The target Window object."
+        }
+      }
+    },
+    "GLCompositor.capture": {
+      "hash": "3a063156976e",
+      "ja": {
+        "summary": "オフスクリーン合成を実行し、結果を layer へ書き戻す。",
+        "description": "layer のサイズのオフスクリーン FBO を color でクリアしたのち、\ncallback(w, h, param) を「incontextof このコンポジタ」で呼び出して描画させ、\nその結果を layer のメインイメージへ読み戻します。callback 内では this が\nこの GLCompositor になるので、this.canvas を使って drawTexture / beginEffect /\nクリップ等の描画が行え、this.drawLayer / this.copyLayer も直接利用できます\n(GLESAdaptor 互換。canvas は引数ではなく this.canvas で参照します)。",
+        "params": {
+          "layer": "描画結果の書き戻し先 Layer",
+          "callback": "描画コールバック function(w:int, h:int, param) (this=GLCompositor)",
+          "param": "callback へ渡す任意の値",
+          "color": "クリア色 (ARGB)"
+        }
+      },
+      "tr": {
+        "summary": "Performs offscreen compositing and writes the result back to layer.",
+        "description": "Clears an offscreen FBO the size of layer with color, then\ncalls callback(w, h, param) \"incontextof this compositor\" to let it draw, and\nreads the result back into the main image of layer. Inside callback, this is\nthis GLCompositor, so you can draw with this.canvas (drawTexture / beginEffect /\nclipping, and so on) and use this.drawLayer / this.copyLayer directly\n(compatible with GLESAdaptor; the canvas is referenced as this.canvas, not passed as an argument).",
+        "params": {
+          "layer": "The Layer to write the drawing result back to.",
+          "callback": "Drawing callback function(w:int, h:int, param) (this=GLCompositor).",
+          "param": "An arbitrary value passed to callback.",
+          "color": "Clear color (ARGB)."
+        }
+      }
+    },
+    "GLCompositor.drawLayer": {
+      "hash": "00baffcbf272",
+      "ja": {
+        "summary": "layer をアフィン変換 + 不透明度で現在の描画先へ描く。",
+        "description": "capture() のコールバック内から呼び出します。変換行列は\n2x2 部 (a,b,c,d) + 平行移動 (tx,ty) で指定します。",
+        "params": {
+          "layer": "描画元 Layer",
+          "a": "変換行列 m11",
+          "b": "変換行列 m12",
+          "c": "変換行列 m21",
+          "d": "変換行列 m22",
+          "tx": "平行移動 x",
+          "ty": "平行移動 y",
+          "opacity": "= 255 不透明度 (0〜255)"
+        }
+      },
+      "tr": {
+        "summary": "Draws layer to the current target with an affine transform and opacity.",
+        "description": "Call this from inside the capture() callback. The transform is\nspecified as a 2x2 part (a,b,c,d) plus a translation (tx,ty).",
+        "params": {
+          "layer": "Source Layer.",
+          "a": "Transform matrix m11.",
+          "b": "Transform matrix m12.",
+          "c": "Transform matrix m21.",
+          "d": "Transform matrix m22.",
+          "tx": "Translation x.",
+          "ty": "Translation y.",
+          "opacity": "= 255 Opacity (0 to 255)."
+        }
+      }
+    },
+    "GLCompositor.copyLayer": {
+      "hash": "b2245f3f87d1",
+      "ja": {
+        "summary": "layer を (left, top) にそのまま描く。",
+        "description": "drawLayer の単純平行移動版です。capture() のコールバック内から\n呼び出します。",
+        "params": {
+          "layer": "描画元 Layer",
+          "left": "配置 x",
+          "top": "配置 y"
+        }
+      },
+      "tr": {
+        "summary": "Draws layer as-is at (left, top).",
+        "description": "A simple-translation version of drawLayer. Call this from inside the capture()\ncallback.",
+        "params": {
+          "layer": "Source Layer.",
+          "left": "Position x.",
+          "top": "Position y."
+        }
+      }
+    },
+    "GLCompositor.setScreenSize": {
+      "hash": "5af0035a722c",
+      "ja": {
+        "summary": "オフスクリーン合成の既定サイズを設定。",
+        "params": {
+          "width": "幅",
+          "height": "高さ"
+        }
+      },
+      "tr": {
+        "summary": "Sets the default size for offscreen compositing.",
+        "params": {
+          "width": "Width.",
+          "height": "Height."
+        }
+      }
+    },
+    "GLCompositor.makeCurrent": {
+      "hash": "bb06a7bf3dfc",
+      "ja": {
+        "summary": "この GLCompositor の GL コンテキストをカレントにする。"
+      },
+      "tr": {
+        "summary": "Makes this GLCompositor's GL context current."
+      }
+    },
+    "GLCompositor.canvas": {
+      "hash": "8414bb5df4f1",
+      "ja": {
+        "summary": "内部 Canvas。",
+        "description": "drawTexture / beginEffect / endEffect / クリップ等、Canvas の\nフル API を利用できます。"
+      },
+      "tr": {
+        "summary": "The internal Canvas.",
+        "description": "You can use the full Canvas API, such as drawTexture / beginEffect / endEffect /\nclipping."
+      }
+    },
+    "GLCompositor.blendMode": {
+      "hash": "d985e89cd4df",
+      "ja": {
+        "summary": "描画の合成モード指定。",
+        "description": "内部 Canvas の blendMode に対応します。"
+      },
+      "tr": {
+        "summary": "Blend mode for drawing.",
+        "description": "Corresponds to the blendMode of the internal Canvas."
+      }
+    },
+    "GLCompositor.unpremultiply": {
+      "hash": "7ff1c71e0d37",
+      "ja": {
+        "summary": "capture の読み戻しで un-premultiply するか (既定 false)。",
+        "description": "true にすると capture() の読み戻し時に premultiplied-alpha を\nstraight-alpha へ戻して (RGB = RGB×255÷A) Layer へ書き込みます。MSAA を効かせた\n3D (VRM 立ち絵等) の半透明縁が premultiplied のまま読み戻ると、通常アルファ合成\n(ltAlpha) で縁に白フリンジが出るのを防ぎます。旧 GLESAdaptor.unpremultiply 相当。"
+      },
+      "tr": {
+        "summary": "Whether capture un-premultiplies on readback (default false).",
+        "description": "If true, capture() converts premultiplied alpha back to\nstraight alpha (RGB = RGB x 255 / A) on readback before writing to the Layer. This prevents white fringes\nat the edges with normal alpha blending (ltAlpha) when the semi-transparent edges of MSAA-rendered\n3D content (such as VRM character art) are read back still premultiplied. Equivalent to the former GLESAdaptor.unpremultiply."
+      }
+    },
+    "GLCompositor.screenWidth": {
+      "hash": "7b3fc8b473c1",
+      "ja": {
+        "summary": "オフスクリーン合成の既定幅。"
+      },
+      "tr": {
+        "summary": "Default width for offscreen compositing."
+      }
+    },
+    "GLCompositor.screenHeight": {
+      "hash": "5e236aa59989",
+      "ja": {
+        "summary": "オフスクリーン合成の既定高さ。"
+      },
+      "tr": {
+        "summary": "Default height for offscreen compositing."
+      }
+    },
+    "GLCompositor.GLGetProcAddress": {
+      "hash": "9fb24371caed",
+      "ja": {
+        "summary": "GL エントリポイント解決関数へのポインタ (整数)。",
+        "description": "GLES 系プラグイン (EffekseerDevice 等) の oglbase として利用します。\n例: new EffekseerDevice(compositor)。"
+      },
+      "tr": {
+        "summary": "Pointer to the GL entry-point resolver function (integer).",
+        "description": "Used as oglbase by GLES-based plugins (EffekseerDevice and so on).\nExample: new EffekseerDevice(compositor)."
+      }
+    }
+  }
+}

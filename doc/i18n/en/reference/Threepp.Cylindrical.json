@@ -1,0 +1,105 @@
+{
+  "class": "Threepp.Cylindrical",
+  "entries": {
+    "krkrthreepp:Threepp.Cylindrical": {
+      "hash": "24889c7303bb",
+      "ja": {
+        "summary": "円柱座標クラス"
+      },
+      "tr": {
+        "summary": "Cylindrical coordinates class"
+      }
+    },
+    "krkrthreepp:Threepp.Cylindrical.Cylindrical": {
+      "hash": "9bf43acd97da",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "radius": "半径",
+          "theta": "角度 (ラジアン)",
+          "y": "高さ"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "radius": "Radius.",
+          "theta": "Angle (radians).",
+          "y": "Height."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Cylindrical.radius": {
+      "hash": "07f9be395c65",
+      "ja": {
+        "summary": "半径"
+      },
+      "tr": {
+        "summary": "Radius"
+      }
+    },
+    "krkrthreepp:Threepp.Cylindrical.theta": {
+      "hash": "32ef3ec707c0",
+      "ja": {
+        "summary": "角度"
+      },
+      "tr": {
+        "summary": "Angle"
+      }
+    },
+    "krkrthreepp:Threepp.Cylindrical.y": {
+      "hash": "defc99abbbf9",
+      "ja": {
+        "summary": "高さ"
+      },
+      "tr": {
+        "summary": "Height"
+      }
+    },
+    "krkrthreepp:Threepp.Cylindrical.set": {
+      "hash": "6a1d88aceb4a",
+      "ja": {
+        "summary": "値を設定"
+      },
+      "tr": {
+        "summary": "Sets the values"
+      }
+    },
+    "krkrthreepp:Threepp.Cylindrical.clone": {
+      "hash": "85fb5d83b57e",
+      "ja": {
+        "summary": "クローン"
+      },
+      "tr": {
+        "summary": "Clones the object"
+      }
+    },
+    "krkrthreepp:Threepp.Cylindrical.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another object"
+      }
+    },
+    "krkrthreepp:Threepp.Cylindrical.setFromVector3": {
+      "hash": "e02e7b1cea9d",
+      "ja": {
+        "summary": "Vector3から設定"
+      },
+      "tr": {
+        "summary": "Sets the values from a Vector3"
+      }
+    },
+    "krkrthreepp:Threepp.Cylindrical.setFromCartesianCoords": {
+      "hash": "6f8d732fa6d3",
+      "ja": {
+        "summary": "直交座標から設定"
+      },
+      "tr": {
+        "summary": "Sets the values from Cartesian coordinates"
+      }
+    }
+  }
+}

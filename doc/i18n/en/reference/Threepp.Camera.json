@@ -1,0 +1,59 @@
+{
+  "class": "Threepp.Camera",
+  "entries": {
+    "krkrthreepp:Threepp.Camera": {
+      "hash": "ebd050047557",
+      "ja": {
+        "summary": "カメラ基底クラス"
+      },
+      "tr": {
+        "summary": "Camera base class"
+      }
+    },
+    "krkrthreepp:Threepp.Camera.type": {
+      "hash": "e88136cfef7d",
+      "ja": {
+        "summary": "カメラの種類（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Camera type (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Camera.zoom": {
+      "hash": "3ab8215c0320",
+      "ja": {
+        "summary": "ズーム"
+      },
+      "tr": {
+        "summary": "Zoom"
+      }
+    },
+    "krkrthreepp:Threepp.Camera.nearPlane": {
+      "hash": "079f9b91c814",
+      "ja": {
+        "summary": "ニアクリップ面"
+      },
+      "tr": {
+        "summary": "Near clipping plane"
+      }
+    },
+    "krkrthreepp:Threepp.Camera.farPlane": {
+      "hash": "bb59427ac77b",
+      "ja": {
+        "summary": "ファークリップ面"
+      },
+      "tr": {
+        "summary": "Far clipping plane"
+      }
+    },
+    "krkrthreepp:Threepp.Camera.updateProjectionMatrix": {
+      "hash": "020852d948fa",
+      "ja": {
+        "summary": "投影行列を更新"
+      },
+      "tr": {
+        "summary": "Updates the projection matrix"
+      }
+    }
+  }
+}

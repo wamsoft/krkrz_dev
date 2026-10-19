@@ -1,0 +1,715 @@
+{
+  "class": "WaveSoundBuffer",
+  "entries": {
+    "WaveSoundBuffer": {
+      "hash": "e88830eaf0f3",
+      "ja": {
+        "summary": "WaveSoundBuffer クラスは、PCMの再生を管理するクラスです。",
+        "description": "WaveSoundBuffer クラスでは、[ループチューナ](../guide/LoopTuner.md) で作成した .sli ファイルを読み込み、処理することができます。詳しくはループチューナの説明をご覧ください。"
+      },
+      "tr": {
+        "summary": "The WaveSoundBuffer class manages PCM playback.",
+        "description": "The WaveSoundBuffer class can load and process .sli files created with the [Loop Tuner](../guide/LoopTuner.md). See the Loop Tuner documentation for details."
+      }
+    },
+    "WaveSoundBuffer.WaveSoundBuffer": {
+      "hash": "0dda6626e1d4",
+      "ja": {
+        "summary": "WaveSoundBuffer オブジェクトの構築",
+        "description": "WaveSoundBuffer クラスのオブジェクトを構築します。\n\nイベントが発生すると owner で指定したオブジェクトの action メソッドを呼び出します。owner に null を指定すると action メソッドは呼ばれません。通常は [Window](Window.md) クラスのオブジェクトを owner に指定します。",
+        "params": {
+          "owner": "イベントの発生先を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Constructs a WaveSoundBuffer object",
+        "description": "Constructs an object of the WaveSoundBuffer class.\n\nWhen an event occurs, the action method of the object specified as owner is called. If owner is null, the action method is not called. Normally an object of the [Window](Window.md) class is specified as owner.",
+        "params": {
+          "owner": "The object that receives events."
+        }
+      }
+    },
+    "WaveSoundBuffer.onStatusChanged": {
+      "hash": "0345d96d5133",
+      "ja": {
+        "summary": "ステータスが変更された",
+        "description": "再生のステータス ( 状態 ) が変わった時に発生します。",
+        "params": {
+          "status": "新しいステータスです。\n\n[WaveSoundBuffer.status](WaveSoundBuffer.md#status) プロパティを参照してください。"
+        }
+      },
+      "tr": {
+        "summary": "The status changed",
+        "description": "Occurs when the playback status (state) changes.",
+        "params": {
+          "status": "The new status.\n\nSee the [WaveSoundBuffer.status](WaveSoundBuffer.md#status) property."
+        }
+      }
+    },
+    "WaveSoundBuffer.onFadeCompleted": {
+      "hash": "62c90964f2dd",
+      "ja": {
+        "summary": "フェードが終了した",
+        "description": "[WaveSoundBuffer.fade](WaveSoundBuffer.md#fade) メソッドで開始したフェードが終了したときに発生します。"
+      },
+      "tr": {
+        "summary": "The fade finished",
+        "description": "Occurs when a fade started with the [WaveSoundBuffer.fade](WaveSoundBuffer.md#fade) method finishes."
+      }
+    },
+    "WaveSoundBuffer.open": {
+      "hash": "b837f3f7eaa4",
+      "ja": {
+        "summary": "メディアを開く",
+        "description": "指定されたメディアを開きます。このメソッドは再生を開始しません。\n\n指定されたストレージ名に .sli を付加したファイル名があれば、サウンドループ情報として読み込みます。",
+        "params": {
+          "storage": "再生したいストレージを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Opens media",
+        "description": "Opens the specified media. This method does not start playback.\n\nIf a file named after the specified storage with .sli appended exists, it is loaded as sound loop information.",
+        "params": {
+          "storage": "The storage to play."
+        }
+      }
+    },
+    "WaveSoundBuffer.play": {
+      "hash": "4b387bb66b5b",
+      "ja": {
+        "summary": "メディアを再生する",
+        "description": "メディアの再生を開始します。"
+      },
+      "tr": {
+        "summary": "Plays the media",
+        "description": "Starts playing the media."
+      }
+    },
+    "WaveSoundBuffer.stop": {
+      "hash": "c7f54d981ac0",
+      "ja": {
+        "summary": "メディアを停止する",
+        "description": "メディアを停止します。"
+      },
+      "tr": {
+        "summary": "Stops the media",
+        "description": "Stops the media."
+      }
+    },
+    "WaveSoundBuffer.fade": {
+      "hash": "bb236adec0d9",
+      "ja": {
+        "summary": "フェードを開始する",
+        "description": "フェード ( 連続的な音量の変化 ) を開始します。",
+        "params": {
+          "to": "到達させる音量を指定します。\n\n音量の指定については [WaveSoundBuffer.volume](WaveSoundBuffer.md#volume) プロパティを参照して\nください。",
+          "time": "フェードにかける時間を ms 単位で指定します。",
+          "delay": "フェード開始までの待ち時間を ms 単位で指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Starts a fade",
+        "description": "Starts a fade (a continuous change in volume).",
+        "params": {
+          "to": "The target volume.\n\nSee the [WaveSoundBuffer.volume](WaveSoundBuffer.md#volume) property for how to specify the\nvolume.",
+          "time": "Duration of the fade, in ms.",
+          "delay": "Delay before the fade starts, in ms."
+        }
+      }
+    },
+    "WaveSoundBuffer.stopFade": {
+      "hash": "60e9f4acf223",
+      "ja": {
+        "summary": "フェードを停止する",
+        "description": "[WaveSoundBuffer.fade](WaveSoundBuffer.md#fade) メソッドで開始したフェードを強制的に停止します。\n\n音量は停止させた時点のままになります。"
+      },
+      "tr": {
+        "summary": "Stops the fade",
+        "description": "Forcibly stops a fade started with the [WaveSoundBuffer.fade](WaveSoundBuffer.md#fade) method.\n\nThe volume stays at the value it had when the fade was stopped."
+      }
+    },
+    "WaveSoundBuffer.position": {
+      "hash": "6b52dc89990d",
+      "ja": {
+        "summary": "再生位置",
+        "description": "再生位置を ms 単位で表します。値を設定するとその位置に移動します。"
+      },
+      "tr": {
+        "summary": "Playback position",
+        "description": "The playback position in ms. Setting a value moves to that position."
+      }
+    },
+    "WaveSoundBuffer.paused": {
+      "hash": "6ed7f62b0850",
+      "ja": {
+        "summary": "一時停止状態かどうか",
+        "description": "一時停止状態かどうかを表します。値を設定することもできます。\n\n真の場合は一時停止状態です。"
+      },
+      "tr": {
+        "summary": "Whether playback is paused",
+        "description": "Indicates whether playback is paused. You can also set this value.\n\nTrue means paused."
+      }
+    },
+    "WaveSoundBuffer.totalTime": {
+      "hash": "6713a3f0b207",
+      "ja": {
+        "summary": "メディアの再生時間",
+        "description": "メディアの総再生時間を ms 単位で表します。"
+      },
+      "tr": {
+        "summary": "Media duration",
+        "description": "The total playback time of the media, in ms."
+      }
+    },
+    "WaveSoundBuffer.looping": {
+      "hash": "4319b918d4e5",
+      "ja": {
+        "summary": "ループ再生を行うかどうか",
+        "description": "ループ再生を行うかどうかを表します。値を設定することもできます。\n\n真を指定するとループ再生がされます。\n\n偽を指定しても、再生しているメディアにループ情報があれば、ループ情報が利用されます。"
+      },
+      "tr": {
+        "summary": "Whether to loop playback",
+        "description": "Indicates whether playback loops. You can also set this value.\n\nIf true, playback loops.\n\nEven if false, loop information is used if the media being played contains it."
+      }
+    },
+    "WaveSoundBuffer.volume": {
+      "hash": "156e11648150",
+      "ja": {
+        "summary": "音量",
+        "description": "再生する音量を表します。値を設定することもできます。\n\n0 ～ 100000 の数値で指定し、 0 が完全ミュート、100000 が 100% の音量となります。"
+      },
+      "tr": {
+        "summary": "Volume",
+        "description": "The playback volume. You can also set this value.\n\nSpecify a number from 0 to 100000, where 0 is fully muted and 100000 is 100% volume."
+      }
+    },
+    "WaveSoundBuffer.volume2": {
+      "hash": "e12bdaf60ce7",
+      "ja": {
+        "summary": "第２音量",
+        "description": "再生する音量を表します。値を設定することができます。\n\n[WaveSoundBuffer.volume](WaveSoundBuffer.md#volume) プロパティと違うのは、このプロパティは\n[WaveSoundBuffer.fade](WaveSoundBuffer.md#fade) メソッドでも変化しないということです。\n\n最終的な音量は、volume プロパティとこのプロパティの積で決定されます。volume プロパティが\n100000 ( 100% ) で volume2 プロパティも 100000 ( 100% ) ならば 100% × 100% = 100% で\n100% の音量で再生されます。volume プロパティが 50000 ( 50% ) で volume2 プロパティが 75000 ( 75% ) ならば\n50% × 75% = 37.5% で 37.5 % の音量で再生されます。"
+      },
+      "tr": {
+        "summary": "Secondary volume",
+        "description": "The playback volume. You can set this value.\n\nUnlike the [WaveSoundBuffer.volume](WaveSoundBuffer.md#volume) property, this property is not changed by the\n[WaveSoundBuffer.fade](WaveSoundBuffer.md#fade) method.\n\nThe final volume is the product of the volume property and this property. If the volume property is\n100000 (100%) and the volume2 property is also 100000 (100%), playback is at 100% x 100% = 100%\nvolume. If the volume property is 50000 (50%) and the volume2 property is 75000 (75%),\nplayback is at 50% x 75% = 37.5% volume."
+      }
+    },
+    "WaveSoundBuffer.status": {
+      "hash": "c42bee45e9bf",
+      "ja": {
+        "summary": "ステータス",
+        "description": "現在の状態を表します。\n\n状態は文字列で表され、以下の値をとります。\n\n`\"**unload**\"   : ` メディアが開かれてない\n\n`\"**play**\"     : ` メディアは再生中である\n\n`\"**stop**\"     : ` メディアは停止中である"
+      },
+      "tr": {
+        "summary": "Status",
+        "description": "The current state.\n\nThe state is a string and takes one of the following values.\n\n`\"**unload**\"   : ` no media is open\n\n`\"**play**\"     : ` the media is playing\n\n`\"**stop**\"     : ` the media is stopped"
+      }
+    },
+    "WaveSoundBuffer.bits": {
+      "hash": "c2298a7aea82",
+      "ja": {
+        "summary": "量子化ビット数",
+        "description": "現在再生中のサウンドの量子化ビット数を表します。\nCD と同じ量子化ビット数の場合は 16 になります。\nメディアが開かれていない状態では正常な値を返さない可能性があります。"
+      },
+      "tr": {
+        "summary": "Bits per sample",
+        "description": "The bits per sample of the sound currently playing.\nFor the same bit depth as a CD, this is 16.\nIt may not return a valid value when no media is open."
+      }
+    },
+    "WaveSoundBuffer.channels": {
+      "hash": "716cd1443fa1",
+      "ja": {
+        "summary": "チャンネル数",
+        "description": "現在再生中のサウンドのチャンネル数を表します。\nモノラルの場合は 1、ステレオの場合は 2 になります。\nメディアが開かれていない状態では正常な値を返さない可能性があります。"
+      },
+      "tr": {
+        "summary": "Number of channels",
+        "description": "The number of channels of the sound currently playing.\n1 for mono, 2 for stereo.\nIt may not return a valid value when no media is open."
+      }
+    },
+    "WaveSoundBuffer.filters": {
+      "hash": "3b39447ca1f6",
+      "ja": {
+        "summary": "フィルタ配列",
+        "description": "インサーションフィルタオブジェクトを保持している配列(Arrayクラスのインスタンス)です。\nこの配列にフィルタオブジェクトを登録することにより、再生中にリアルタイムで音声に対して様々な効果をかけることができます。\nフィルタ配列への変更が反映されるのは、WaveSoundBuffer.openメソッドが実行された時だけです。\nそれまでは、この配列への変更を行っても反映はされません。\n例:\n```\nvar buf = new WaveSoundBuffer(window);\n(略)\nbuf.filters.clear();\n// フィルタ配列をクリア\nbuf.filters.add(new WaveSoundBuffer.PhaseVocoder());\n// PhaseVocoderフィルタを追加\nbuf.filters[0].time = 0.5;\n// 倍速再生\n```"
+      },
+      "tr": {
+        "summary": "Filter array",
+        "description": "An array (an instance of the Array class) holding insertion filter objects.\nBy registering filter objects in this array, you can apply various effects to the sound in real time during playback.\nChanges to the filter array take effect only when the WaveSoundBuffer.open method is executed.\nUntil then, changes to this array have no effect.\nExample:\n```\nvar buf = new WaveSoundBuffer(window);\n(略)\nbuf.filters.clear();\n// clear the filter array\nbuf.filters.add(new WaveSoundBuffer.PhaseVocoder());\n// add a PhaseVocoder filter\nbuf.filters[0].time = 0.5;\n// double-speed playback\n```"
+      }
+    },
+    "WaveSoundBuffer.flags": {
+      "hash": "0964113273d9",
+      "ja": {
+        "summary": "フラグ",
+        "description": "フラグを表すオブジェクトを得ることができます。\nこのオブジェクトには 0 ～ 15 のプロパティがあり、それぞれ各フラグの値を表しています。\nプロパティには間接メンバ選択演算子 ('[ ]' 演算子) を用いてアクセスすることができます。\nこれらのプロパティには値を設定することもできます。\n値は 0 ～ 9999 の範囲であり、これを下回ったり、上回ることはできません。\nこのオブジェクトの count プロパティは常に 16 を返します。\nこのオブジェクトには reset メソッドがあり、このメソッドを実行すると、全てのフラグが 0 にリセットされます。\nメディアを開いていない場合は、このオブジェクトのプロパティに値を設定しても無視されます。\nこのオブジェクトは一見配列オブジェクトにも見えますが、いわゆるTJSの配列オブジェクト('Array' クラスのオブジェクト) ではありません。\nフラグは WaveSoundBuffer.open メソッドで全て 0 にリセットされます。\n例:\n\n```\nvar buf = new WaveSoundBuffer(window);\n(略)\nbuf.flags.reset();\n// 全てのフラグを 0 にリセット\nvar cnt = buf.flags.count;\n// cnt には 16 が入る\nbuf.flags[4] = 34;\n// 4番のフラグに34を代入\n```"
+      },
+      "tr": {
+        "summary": "Flags",
+        "description": "Gets an object representing the flags.\nThis object has properties 0 to 15, each representing the value of a flag.\nThe properties can be accessed with the indirect member selection operator (the '[ ]' operator).\nYou can also set values on these properties.\nValues range from 0 to 9999 and cannot go below or above that range.\nThe count property of this object always returns 16.\nThis object has a reset method; calling it resets all flags to 0.\nIf no media is open, setting values on the properties of this object is ignored.\nThis object may look like an array object, but it is not a TJS array object (an object of the 'Array' class).\nAll flags are reset to 0 by the WaveSoundBuffer.open method.\nExample:\n\n```\nvar buf = new WaveSoundBuffer(window);\n(略)\nbuf.flags.reset();\n// reset all flags to 0\nvar cnt = buf.flags.count;\n// cnt is 16\nbuf.flags[4] = 34;\n// assign 34 to flag 4\n```"
+      }
+    },
+    "WaveSoundBuffer.frequency": {
+      "hash": "f85b64912cc2",
+      "ja": {
+        "summary": "サンプリング周波数",
+        "description": "現在再生中のサウンドのサンプリング周波数を表します。\n値を設定することもできます。\nCD と同じサンプリング周波数の場合は 44100 になります。\nメディアが開かれていない状態では正常な値を返さない可能性があります。\n値を設定すると、その周波数で再生します。"
+      },
+      "tr": {
+        "summary": "Sampling frequency",
+        "description": "The sampling frequency of the sound currently playing.\nYou can also set this value.\nFor the same sampling frequency as a CD, this is 44100.\nIt may not return a valid value when no media is open.\nSetting a value plays the sound at that frequency."
+      }
+    },
+    "WaveSoundBuffer.globalFocusMode": {
+      "hash": "f7078c65db45",
+      "ja": {
+        "summary": "フォーカスモード",
+        "description": "フォーカスモードを表します。\n値を設定することもできます。\nフォーカスモードは、アプリケーションが最小化したときや非アクティブになったときにミュートするモードです。\n\n+ sgfmNeverMuteを指定すると、アプリケーションがどのような状態でもミュートはしません。\n+ sgfmMuteOnMinimizeを指定すると、アプリケーションが最小化時にミュートします。\n+ sgfmMuteOnDeactivateを指定すると、アプリケーションが非アクティブ化したときにミュートします。\n\nこのプロパティは WaveSoundBuffer クラス上にしか存在しません (WaveSoundBufferから作られたオブジェクト上にこのプロパティはありません)。\n使用する際は WaveSoundBuffer.globalFocusMode としてください。"
+      },
+      "tr": {
+        "summary": "Focus mode",
+        "description": "The focus mode.\nYou can also set this value.\nThe focus mode controls muting when the application is minimized or becomes inactive.\n\n+ sgfmNeverMute never mutes, whatever the state of the application.\n+ sgfmMuteOnMinimize mutes when the application is minimized.\n+ sgfmMuteOnDeactivate mutes when the application becomes inactive.\n\nThis property exists only on the WaveSoundBuffer class itself (objects created from WaveSoundBuffer do not have it).\nUse it as WaveSoundBuffer.globalFocusMode."
+      }
+    },
+    "WaveSoundBuffer.globalVolume": {
+      "hash": "02cb3701ddbc",
+      "ja": {
+        "summary": "大域音量",
+        "description": "大域音量 (マスターボリューム)を表します。\n値を設定することもできます。\nこの音量は、すべての WaveSoundBuffer に影響します。\n0 ～ 100000 の数値で指定し、 0 が完全ミュート、100000 が 100% の音量となります。\nデフォルトの値は 100000 です。\nこのプロパティは WaveSoundBuffer クラス上にしか存在しません (WaveSoundBufferから作られたオブジェクト上にこのプロパティはありません)。\n使用する際は WaveSoundBuffer.globalVolume としてください。"
+      },
+      "tr": {
+        "summary": "Global volume",
+        "description": "The global volume (master volume).\nYou can also set this value.\nThis volume affects all WaveSoundBuffers.\nSpecify a number from 0 to 100000, where 0 is fully muted and 100000 is 100% volume.\nThe default is 100000.\nThis property exists only on the WaveSoundBuffer class itself (objects created from WaveSoundBuffer do not have it).\nUse it as WaveSoundBuffer.globalVolume."
+      }
+    },
+    "WaveSoundBuffer.labels": {
+      "hash": "7d9523679a04",
+      "ja": {
+        "summary": "ラベル",
+        "description": "ラベルを表すオブジェクトを得ることができます。\nこのオブジェクトは辞書配列で、それぞれ、ループ情報中のラベルの名前をメンバ名とした要素が入っています。\nそれぞれの要素も辞書配列で、name メンバはラベルの名前を表し、position メンバはミリ秒単位でのラベルの位置を表し、samplePosition はサンプル数単位でのラベルの位置を表しています。\nこの辞書配列は読み出し専用であると考えてください。\n値を代入したり、新しいメンバを作成しても反映されることはありません。\n例:\n\n```\nvar buf = new WaveSoundBuffer(window);\n(略)\ndebug.message(buf.labels['start'].position);\n// 'start' というラベル名の位置をミリ秒単位で\ndebug.message(buf.labels['start'].samplePosition);\n// 'start' というラベル名の位置をサンプル数単位で\n```"
+      },
+      "tr": {
+        "summary": "Labels",
+        "description": "Gets an object representing the labels.\nThis object is a dictionary whose members are named after the labels in the loop information.\nEach element is also a dictionary: the name member is the label name, the position member is the label position in milliseconds, and samplePosition is the label position in samples.\nTreat this dictionary as read-only.\nAssigning values or creating new members has no effect.\nExample:\n\n```\nvar buf = new WaveSoundBuffer(window);\n(略)\ndebug.message(buf.labels['start'].position);\n// position of the label named 'start', in milliseconds\ndebug.message(buf.labels['start'].samplePosition);\n// position of the label named 'start', in samples\n```"
+      }
+    },
+    "WaveSoundBuffer.pan": {
+      "hash": "a78c42d89a8e",
+      "ja": {
+        "summary": "パン",
+        "description": "パン (音像位置) を表します。\n値を設定することもできます。\n音の聞こえる左右の位置を指定することができます。\n-100000 ～ 0 ～ 100000 の数値で指定し、 -100000 が 完全に左、0 が中央、100000 が完全に右になります。"
+      },
+      "tr": {
+        "summary": "Pan",
+        "description": "The pan (stereo position).\nYou can also set this value.\nSpecifies the left/right position from which the sound is heard.\nSpecify a number from -100000 through 0 to 100000, where -100000 is fully left, 0 is center, and 100000 is fully right."
+      }
+    },
+    "WaveSoundBuffer.posX": {
+      "hash": "c09dc90cb696",
+      "ja": {
+        "summary": "3D 音源位置 ( X 座標 )",
+        "description": "3D サウンド再生時の音源位置の X 座標を取得 / 設定します。\n`WaveSoundBuffer.setPos` で 3 軸まとめて設定することもできます。"
+      },
+      "tr": {
+        "summary": "3D source position (X coordinate)",
+        "description": "Gets or sets the X coordinate of the sound source position for 3D sound playback.\nYou can also set all three axes at once with `WaveSoundBuffer.setPos`."
+      }
+    },
+    "WaveSoundBuffer.posY": {
+      "hash": "58b7a432e4f3",
+      "ja": {
+        "summary": "3D 音源位置 ( Y 座標 )",
+        "description": "3D サウンド再生時の音源位置の Y 座標を取得 / 設定します。"
+      },
+      "tr": {
+        "summary": "3D source position (Y coordinate)",
+        "description": "Gets or sets the Y coordinate of the sound source position for 3D sound playback."
+      }
+    },
+    "WaveSoundBuffer.posZ": {
+      "hash": "36a7b30e19f7",
+      "ja": {
+        "summary": "3D 音源位置 ( Z 座標 )",
+        "description": "3D サウンド再生時の音源位置の Z 座標を取得 / 設定します。"
+      },
+      "tr": {
+        "summary": "3D source position (Z coordinate)",
+        "description": "Gets or sets the Z coordinate of the sound source position for 3D sound playback."
+      }
+    },
+    "WaveSoundBuffer.samplePosition": {
+      "hash": "5ccfd372032e",
+      "ja": {
+        "summary": "再生位置",
+        "description": "再生位置をサンプル数単位で表します。\n値を設定するとその位置に移動します。"
+      },
+      "tr": {
+        "summary": "Playback position",
+        "description": "The playback position in samples.\nSetting a value moves to that position."
+      }
+    },
+    "WaveSoundBuffer.useVisBuffer": {
+      "hash": "6671b5de12d4",
+      "ja": {
+        "summary": "視覚化用バッファを使用するかどうか",
+        "description": "視覚化用バッファを使用するかどうか表します。\n値を設定することもできます。\n真を指定すると視覚化用バッファが利用可能になり、WaveSoundBuffer.getVisBuffer メソッドが利用可能になります。\nデフォルトでは偽になっています。\n真を指定すると偽を指定したときよりも多くのメモリと CPU 時間を消費するようになるので注意してください。"
+      },
+      "tr": {
+        "summary": "Whether to use the visualization buffer",
+        "description": "Indicates whether the visualization buffer is used.\nYou can also set this value.\nIf true, the visualization buffer becomes available and the WaveSoundBuffer.getVisBuffer method can be used.\nThe default is false.\nNote that true consumes more memory and CPU time than false."
+      }
+    },
+    "WaveSoundBuffer.freeDirectSound": {
+      "hash": "0e032de2dfff",
+      "ja": {
+        "summary": "DirectSound の解放 ( 互換用・何もしません )",
+        "description": "旧 DirectSound 実装向けに用意されていたメソッドです。\n現在の吉里吉里Z の音声出力は miniaudio ( WASAPI 共有モード ) を使用しており\nDirectSound は使用しないため、このメソッドは呼び出しても何も行いません。\n過去のスクリプトとの互換性のためにのみ残されています。\nこのメソッドは WaveSoundBuffer クラス上にしか存在しません (WaveSoundBufferから作られたオブジェクト上にこのメソッドはありません)。\n使用する際は WaveSoundBuffer.freeDirectSound(); としてください。"
+      },
+      "tr": {
+        "summary": "Releases DirectSound (for compatibility; does nothing)",
+        "description": "A method provided for the former DirectSound implementation.\nKirikiri Z's sound output now uses miniaudio (WASAPI shared mode)\nand does not use DirectSound, so calling this method does nothing.\nIt is kept only for compatibility with older scripts.\nThis method exists only on the WaveSoundBuffer class itself (objects created from WaveSoundBuffer do not have it).\nUse it as WaveSoundBuffer.freeDirectSound();."
+      }
+    },
+    "WaveSoundBuffer.getVisBuffer": {
+      "hash": "428df36fb7e9",
+      "ja": {
+        "summary": "視覚化用データの取得",
+        "description": "視覚化用に PCM データを取得します。\n現在の再生位置から PCM データを読み込み、buffer 引数で指定した配列に書き込みます。\nただし、バッファの状態や再生形式によっては正常にデータを読み込めない可能性もあります。\nこのメソッドは C や C++ 等で書かれたプラグインから利用されることを想定してますので、たとえばbuffer 引数に TJS の配列を指定する、などのようなことはできません。\nこのメソッドを使用するには  WaveSoundBuffer.useVisBuffer プロパティを真に指定する必要があります。",
+        "returns": "取得できたサンプル数が戻ります。",
+        "params": {
+          "buffer": "出力データを書き込むバッファを指定します。\nバッファは 16bit 符号付き整数の配列で、numsamples 引数および channels 引数で指定したサンプルが書き込まれるのに十分な個数 ( numsamples * channels 以上 )である必要があります。\nchannels に 1 以外を指定した場合は、各チャネルのサンプルはインターリーブされて( ステレオならば 右 左 右 左 ・・・・の順に ) 格納されます。\n配列の先頭要素へのポインタを指定する必要がありますが、整数型にキャストして渡してください。",
+          "numsamples": "取得するサンプル数を指定します。",
+          "channel": "取得するチャンネル数を指定します。\n1 を指定すると、モノラルの場合はそのまま、そうでない場合は 1チャンネルにダウンミックスされたデータを得ることができます。\n1 以外の数値を指定する場合は、再生中のサウンドと同じチャンネル数を指定する必要があります。\nこのばあいは、そのままのデータを得ることができます。",
+          "ahead": "先読みするサンプル数を指定します。\n現在の再生位置から、この引数で指定したサンプル数だけ先にあるサンプルから取得することができます。\n0 を指定するか、この引数を省略すると、現在の再生位置からの取得になります。"
+        }
+      },
+      "tr": {
+        "summary": "Gets data for visualization",
+        "description": "Gets PCM data for visualization.\nReads PCM data from the current playback position and writes it into the array specified by the buffer argument.\nDepending on the buffer state and playback format, however, the data may not be read correctly.\nThis method is intended for use from plugins written in C, C++, and the like, so you cannot, for example, pass a TJS array as the buffer argument.\nTo use this method, the WaveSoundBuffer.useVisBuffer property must be set to true.",
+        "returns": "The number of samples obtained.",
+        "params": {
+          "buffer": "The buffer to write the output data to.\nThe buffer is an array of 16-bit signed integers and must be large enough to hold the samples specified by the numsamples and channels arguments (at least numsamples * channels elements).\nIf channels is other than 1, the samples of each channel are stored interleaved (for stereo, in the order right, left, right, left, ...).\nYou must pass a pointer to the first element of the array, cast to an integer type.",
+          "numsamples": "The number of samples to get.",
+          "channel": "The number of channels to get.\nSpecifying 1 gives the data as-is for mono, or downmixed to one channel otherwise.\nIf you specify a number other than 1, it must equal the number of channels of the sound being played.\nIn that case, you get the data as-is.",
+          "ahead": "The number of samples to read ahead.\nYou can get samples starting this many samples ahead of the current playback position.\nSpecifying 0 or omitting this argument gets samples from the current playback position."
+        }
+      }
+    },
+    "WaveSoundBuffer.getSoundLevel": {
+      "hash": "4dadf455af40",
+      "ja": {
+        "summary": "音量レベルの取得 ( リップシンク用 )",
+        "description": "現在の再生位置付近の音量を取得します。`getVisBuffer` のように生の\nPCM を取り出して TJS 側で計算する必要はなく、エンジンが C++ 側で計算して返します。\n使用するには `WaveSoundBuffer.useVisBuffer` を真にする必要があります ( 未設定の\n場合は自動的に有効化され、その回は 0 が返ります )。",
+        "returns": "`%[ rms:実効値, peak:ピーク値 ]` の辞書を返します。いずれも 0.0〜1.0 で、\n`rms` は口の開き量にそのまま使えます。",
+        "params": {
+          "ahead": "先読みするサンプル数を指定します ( 既定 0 = 現在の再生位置 )。\n描画のレイテンシに合わせて口パクを前後させたい場合に使います。",
+          "windowSamples": "音量を計算する窓のサンプル数を指定します ( 既定 0 = エンジン既定 )。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the sound level (for lip sync)",
+        "description": "Gets the volume near the current playback position. Unlike `getVisBuffer`, there is no need to\nextract raw PCM and compute on the TJS side; the engine computes it in C++ and returns it.\nTo use it, `WaveSoundBuffer.useVisBuffer` must be true (if it is not set,\nit is enabled automatically and 0 is returned for that call).",
+        "returns": "A dictionary of the form `%[ rms:RMS value, peak:peak value ]`. Both are 0.0 to 1.0, and\n`rms` can be used directly as the mouth opening amount.",
+        "params": {
+          "ahead": "The number of samples to read ahead (default 0 = current playback position).\nUse it to shift the mouth movement earlier or later to match drawing latency.",
+          "windowSamples": "The number of samples in the window used to compute the volume (default 0 = engine default)."
+        }
+      }
+    },
+    "WaveSoundBuffer.getSoundSpectrum": {
+      "hash": "07a0f03f81e8",
+      "ja": {
+        "summary": "スペクトルの取得 ( リップシンク用 )",
+        "description": "現在の再生位置付近のスペクトルを FFT で解析し、対数配置の\nバンドエネルギーとして返します。母音判定やイコライザ表示などに利用できます。\n`WaveSoundBuffer.useVisBuffer` を真にする必要があります。",
+        "returns": "各バンドのエネルギーを格納した配列 ( 要素数 numbands ) を返します。\nバンドは対数配置 ( 低域から高域 ) です。",
+        "params": {
+          "numbands": "取得するバンド数を指定します ( 1〜256 )。",
+          "ahead": "先読みするサンプル数を指定します ( 既定 0 )。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the spectrum (for lip sync)",
+        "description": "Analyzes the spectrum near the current playback position with an FFT and returns it as\nlogarithmically spaced band energies. Useful for vowel detection, equalizer displays, and so on.\n`WaveSoundBuffer.useVisBuffer` must be true.",
+        "returns": "An array (numbands elements) containing the energy of each band.\nThe bands are logarithmically spaced (from low to high frequencies).",
+        "params": {
+          "numbands": "The number of bands to get (1 to 256).",
+          "ahead": "The number of samples to read ahead (default 0)."
+        }
+      }
+    },
+    "WaveSoundBuffer.getVowel": {
+      "hash": "bf6873812a7c",
+      "ja": {
+        "summary": "母音推定の取得 ( リップシンク用 )",
+        "description": "現在の再生位置付近のスペクトルを解析し、日本語 5 母音 ( あいうえお )\nらしさをフォルマント帯域のエネルギー比から推定して返します。口の形\n( viseme ) のブレンド重みとして利用できます。あくまで簡易推定である点に\n注意してください。\n`WaveSoundBuffer.useVisBuffer` を真にする必要があります。",
+        "returns": "`%[ a:, i:, u:, e:, o:, voiced: ]` の辞書を返します。a〜o は各母音の\n推定重み ( 合計がおよそ 1.0 )、`voiced` は有声 ( 母音帯域にエネルギーあり ) なら 1、\n無音なら 0 です。",
+        "params": {
+          "ahead": "先読みするサンプル数を指定します ( 既定 0 )。"
+        }
+      },
+      "tr": {
+        "summary": "Gets a vowel estimate (for lip sync)",
+        "description": "Analyzes the spectrum near the current playback position and estimates how closely it matches each of the five Japanese vowels (a, i, u, e, o)\nfrom the energy ratios of the formant bands. The result can be used as blend weights for mouth shapes\n(visemes). Note that this is only a simple estimate.\n`WaveSoundBuffer.useVisBuffer` must be true.",
+        "returns": "A dictionary of the form `%[ a:, i:, u:, e:, o:, voiced: ]`. a to o are the estimated weights of each vowel\n(summing to roughly 1.0); `voiced` is 1 if voiced (there is energy in the vowel bands)\nand 0 if silent.",
+        "params": {
+          "ahead": "The number of samples to read ahead (default 0)."
+        }
+      }
+    },
+    "WaveSoundBuffer.onLabel": {
+      "hash": "adcc0d82581e",
+      "ja": {
+        "summary": "ラベルを通過した",
+        "description": "再生位置がラベルを通過した際に発生します。",
+        "params": {
+          "name": "通過したラベル名です。"
+        }
+      },
+      "tr": {
+        "summary": "A label was passed",
+        "description": "Occurs when the playback position passes a label.",
+        "params": {
+          "name": "The name of the label that was passed."
+        }
+      }
+    },
+    "WaveSoundBuffer.setPos": {
+      "hash": "bc8610d331ef",
+      "ja": {
+        "summary": "3D 音源位置のまとめ設定",
+        "description": "3D サウンド再生時の音源位置 ( X / Y / Z ) を一括で設定します。",
+        "params": {
+          "x": "X 座標を指定します。",
+          "y": "Y 座標を指定します。",
+          "z": "Z 座標を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the 3D source position at once",
+        "description": "Sets the sound source position (X / Y / Z) for 3D sound playback in one call.",
+        "params": {
+          "x": "X coordinate.",
+          "y": "Y coordinate.",
+          "z": "Z coordinate."
+        }
+      }
+    },
+    "WaveSoundBuffer.use3D": {
+      "hash": "5069eecd8efc",
+      "ja": {
+        "summary": "3D 定位 ( スペーシャライザ ) の有効/無効",
+        "description": "この WaveSoundBuffer に対して miniaudio ベースの 3D 定位 ( 距離減衰・パンニング・\nドップラー・指向性コーン ) を有効にするかどうかを表します。有効時は\n[set3DPosition](#set3dposition) 等で音源位置を与えます。"
+      },
+      "tr": {
+        "summary": "Enables or disables 3D positioning (spatializer)",
+        "description": "Indicates whether miniaudio-based 3D positioning (distance attenuation, panning,\nDoppler, directional cone) is enabled for this WaveSoundBuffer. When enabled,\nspecify the source position with [set3DPosition](#set3dposition) and related methods."
+      }
+    },
+    "WaveSoundBuffer.set3DPosition": {
+      "hash": "3a82e0575022",
+      "ja": {
+        "summary": "3D 音源位置を設定する",
+        "description": "3D 定位の音源位置を設定します ( [use3D](#use3d) が有効なときに作用 )。",
+        "params": {
+          "x": "X 座標。",
+          "y": "Y 座標。",
+          "z": "Z 座標。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the 3D source position",
+        "description": "Sets the source position for 3D positioning (takes effect when [use3D](#use3d) is enabled).",
+        "params": {
+          "x": "X coordinate.",
+          "y": "Y coordinate.",
+          "z": "Z coordinate."
+        }
+      }
+    },
+    "WaveSoundBuffer.set3DVelocity": {
+      "hash": "6eaf91bc3847",
+      "ja": {
+        "summary": "3D 音源の速度ベクトルを設定する",
+        "description": "ドップラー計算に使う音源の速度ベクトルを設定します。",
+        "params": {
+          "vx": "X 方向の速度。",
+          "vy": "Y 方向の速度。",
+          "vz": "Z 方向の速度。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the velocity vector of the 3D source",
+        "description": "Sets the velocity vector of the source used for Doppler calculations.",
+        "params": {
+          "vx": "Velocity along X.",
+          "vy": "Velocity along Y.",
+          "vz": "Velocity along Z."
+        }
+      }
+    },
+    "WaveSoundBuffer.set3DConeDirection": {
+      "hash": "389b99967a2a",
+      "ja": {
+        "summary": "指向性コーンの向きを設定する",
+        "description": "指向性コーン ( [set3DCone](#set3dcone) ) の向きベクトルを設定します。",
+        "params": {
+          "dx": "向きの X 成分。",
+          "dy": "向きの Y 成分。",
+          "dz": "向きの Z 成分。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the direction of the directional cone",
+        "description": "Sets the direction vector of the directional cone ([set3DCone](#set3dcone)).",
+        "params": {
+          "dx": "X component of the direction.",
+          "dy": "Y component of the direction.",
+          "dz": "Z component of the direction."
+        }
+      }
+    },
+    "WaveSoundBuffer.set3DCone": {
+      "hash": "69bd583a6aad",
+      "ja": {
+        "summary": "指向性コーンを設定する",
+        "description": "音源の指向性コーンを設定します。角度はラジアンで、コーン外側では outerGain の\nゲインまで減衰します。全方位 ( 無指向 ) にしたい場合は inner = outer = 2*PI とします。",
+        "params": {
+          "innerAngleRad": "内側コーンの全角 ( ラジアン )。この内側では減衰しません。",
+          "outerAngleRad": "外側コーンの全角 ( ラジアン )。",
+          "outerGain": "外側での減衰ゲイン ( 0.0 〜 1.0 )。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the directional cone",
+        "description": "Sets the directional cone of the source. Angles are in radians; outside the cone the sound is attenuated\ndown to the outerGain gain. For omnidirectional output, set inner = outer = 2*PI.",
+        "params": {
+          "innerAngleRad": "Full angle of the inner cone (radians). No attenuation inside it.",
+          "outerAngleRad": "Full angle of the outer cone (radians).",
+          "outerGain": "Attenuation gain outside the cone (0.0 to 1.0)."
+        }
+      }
+    },
+    "WaveSoundBuffer.minDistance": {
+      "hash": "38607072c6af",
+      "ja": {
+        "summary": "最小距離",
+        "description": "この距離以内では距離減衰しません ( 音量最大 )。"
+      },
+      "tr": {
+        "summary": "Minimum distance",
+        "description": "No distance attenuation is applied within this distance (maximum volume)."
+      }
+    },
+    "WaveSoundBuffer.maxDistance": {
+      "hash": "4b17826696c0",
+      "ja": {
+        "summary": "最大距離",
+        "description": "この距離を超えると距離減衰が頭打ちになります。"
+      },
+      "tr": {
+        "summary": "Maximum distance",
+        "description": "Beyond this distance, distance attenuation stops increasing."
+      }
+    },
+    "WaveSoundBuffer.rolloffFactor": {
+      "hash": "02dc50bc902b",
+      "ja": {
+        "summary": "距離減衰の強さ",
+        "description": "距離減衰の強さ ( ロールオフ係数 ) です。大きいほど急激に減衰します。"
+      },
+      "tr": {
+        "summary": "Strength of distance attenuation",
+        "description": "The strength of distance attenuation (rolloff factor). Larger values attenuate more sharply."
+      }
+    },
+    "WaveSoundBuffer.dopplerFactor": {
+      "hash": "6c1b6706b1d5",
+      "ja": {
+        "summary": "ドップラー効果の強度",
+        "description": "ドップラー効果の強度です ( 0 で無効、1 で標準 )。"
+      },
+      "tr": {
+        "summary": "Strength of the Doppler effect",
+        "description": "The strength of the Doppler effect (0 disables it, 1 is standard)."
+      }
+    },
+    "WaveSoundBuffer.attenuationModel": {
+      "hash": "8471edf37924",
+      "ja": {
+        "summary": "距離減衰モデル",
+        "description": "距離減衰モデルを表す整数です。0 = なし、1 = 逆二乗 ( inverse )、2 = 線形 ( linear )、\n3 = 指数 ( exponential ) に対応します。"
+      },
+      "tr": {
+        "summary": "Distance attenuation model",
+        "description": "An integer representing the distance attenuation model: 0 = none, 1 = inverse, 2 = linear,\n3 = exponential."
+      }
+    },
+    "WaveSoundBuffer.setGainQueryCallback": {
+      "hash": "eae45327105b",
+      "ja": {
+        "summary": "曲別ゲイン取得コールバックの設定 ( クラスメソッド )",
+        "description": "ogg ( Vorbis ) / opus ファイルのデコード時に、ファイルごとに適用する\n**追加ゲイン ( dB )** を返すコールバック関数を登録します。これはクラス\nメソッドで、登録は全 WaveSoundBuffer で共有されます。旧 wuvorbis /\nwuopus プラグインの同名 API を本体内蔵デコーダへ統合したものです。\nコールバックはファイルを開くとき ( open 時、スクリプトスレッド ) に 1 回\n呼ばれ、戻り値の dB がデコード出力に適用されます。曲ごとに音量を揃える\n( ラウドネス正規化 ) 用途などに使います。\n\n例 :\n\n`WaveSoundBuffer.setGainQueryCallback(function(url) {`\n\n`  return url.indexOf(\"loud_\") != -1 ? -6.0 : 0.0; // 特定曲だけ -6dB`\n\n`});`\n\nゲインには他に、起動時コマンドラインオプションによる全体ゲインや\nReplayGain タグ対応もあります ( [コマンドライン](../guide/CommandLine.md)\nの「サウンドのゲイン」参照 )。\n\n**コーデックによる差異 / 推奨**\n\nopus は仕様上ヘッダに出力ゲイン ( R128 ) を持ち、デコーダ内部で正確・\n低コストに適用されます ( CLI / コールバックのゲインもこれに加算 )。一方\nVorbis はフォーマットにゲイン概念が無いため、本体は出力 PCM を float 域で\nスケールして適用します ( 実用上の性能差はほぼありません )。**ゲインや\nラウドネスを積極的に扱う場合は opus の利用を推奨します。**",
+        "params": {
+          "callback": "URL ( ストレージ名 ) を 1 引数で受け取り、適用する追加\nゲインを dB で返す関数を指定します。null を指定すると解除します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the per-track gain query callback (class method)",
+        "description": "Registers a callback function that returns an **additional gain (dB)** to apply to each file\nwhen decoding ogg (Vorbis) / opus files. This is a class\nmethod, and the registration is shared by all WaveSoundBuffers. It integrates the API of the same name from the former wuvorbis /\nwuopus plugins into the engine's built-in decoders.\nThe callback is called once when a file is opened (at open time, on the script thread),\nand the returned dB value is applied to the decoded output. Use it, for example, to even out volume across tracks\n(loudness normalization).\n\nExample:\n\n`WaveSoundBuffer.setGainQueryCallback(function(url) {`\n\n`  return url.indexOf(\"loud_\") != -1 ? -6.0 : 0.0; // 特定曲だけ -6dB`\n\n`});`\n\nOther gain sources include an overall gain set by a command-line option at startup and\nReplayGain tag support (see \"Sound gain\" in [command line](../guide/CommandLine.md)).\n\n**Differences between codecs / recommendation**\n\nBy specification, opus carries an output gain (R128) in its header, which the decoder applies internally, accurately and\ncheaply (the CLI / callback gain is added to it). Vorbis, on the other hand,\nhas no concept of gain in the format, so the engine scales the output PCM in the float domain\nto apply it (there is practically no performance difference). **If you work actively with gain or\nloudness, using opus is recommended.**",
+        "params": {
+          "callback": "A function that takes the URL (storage name) as its single argument and returns the additional\ngain to apply, in dB. Specify null to unregister."
+        }
+      }
+    },
+    "getSample:WaveSoundBuffer": {
+      "hash": "dddaf5692ec0",
+      "ja": {
+        "summary": "擬似コードによるマニュアル"
+      },
+      "tr": {
+        "summary": "Manual in pseudo-code"
+      }
+    },
+    "getSample:WaveSoundBuffer.getSample": {
+      "hash": "9792aa045888",
+      "ja": {
+        "summary": "サンプル値の取得（旧方式）",
+        "description": "現在の再生位置から指定数のサンプルを取得してその平均値を返します。\n値が負のサンプル値は無視されます。",
+        "returns": "平均値\n※ 予めuseVisBuffer=trueにしておくこと",
+        "params": {
+          "n": "取得するサンプルの数。省略すると 100"
+        }
+      },
+      "tr": {
+        "summary": "Gets a sample value (old method)",
+        "description": "Gets the specified number of samples from the current playback position and returns their average.\nNegative sample values are ignored.",
+        "returns": "The average value.\nNote: set useVisBuffer=true beforehand.",
+        "params": {
+          "n": "The number of samples to get. Defaults to 100 if omitted."
+        }
+      }
+    },
+    "getSample:WaveSoundBuffer.sampleValue": {
+      "hash": "d66449a5f329",
+      "ja": {
+        "summary": "サンプル値の取得（新方式）",
+        "description": "getVisBuffer(buf, sampleCount, 1, sampleAhead)でサンプルを取得し，\n(value/32768)^2の最大値を取得します。(0～1の実数で返ります)\n※このプロパティを読み出すと暗黙でuseVisBuffer=trueに設定されます"
+      },
+      "tr": {
+        "summary": "Gets a sample value (new method)",
+        "description": "Gets samples with getVisBuffer(buf, sampleCount, 1, sampleAhead) and\nreturns the maximum of (value/32768)^2 (as a real number from 0 to 1).\nNote: reading this property implicitly sets useVisBuffer=true."
+      }
+    },
+    "getSample:WaveSoundBuffer.sampleCount": {
+      "hash": "d2183f936c5b",
+      "ja": {
+        "summary": "新方式のバッファ取得用パラメータプロパティ（sampleValueを参照）",
+        "description": "デフォルトはsetDefaultCounts/setDefaultAheadsで決定されます\n※このプロパティを読み書きする暗黙でuseVisBuffer=trueに設定されます"
+      },
+      "tr": {
+        "summary": "Parameter property for buffer retrieval in the new method (see sampleValue)",
+        "description": "The default is determined by setDefaultCounts/setDefaultAheads.\nNote: reading or writing this property implicitly sets useVisBuffer=true."
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "class": "Dictionary",
+  "entries": {
+    "saveStruct:Dictionary.saveStruct2": {
+      "hash": "49e393d29196",
+      "ja": {
+        "summary": "データを saveStruct に準じる形式で保存する",
+        "params": {
+          "filename": "格納先ファイル",
+          "utf8": "出力エンコーディング指定。true なら UTF-8、falseなら現在のコードページ",
+          "newline": "改行コード 0:CRLF 1:LF",
+          "option": "整形オプション sso* の組み合わせ（後述）もしくは直接数値指定"
+        }
+      },
+      "tr": {
+        "summary": "Saves data in a format compatible with saveStruct",
+        "params": {
+          "filename": "Destination file.",
+          "utf8": "Output encoding. true for UTF-8, false for the current code page.",
+          "newline": "Newline code. 0: CRLF, 1: LF.",
+          "option": "Formatting options: a combination of sso* flags (see below), or a numeric value."
+        }
+      }
+    },
+    "saveStruct:Dictionary.toStructString": {
+      "hash": "2d976e8debbb",
+      "ja": {
+        "returns": "saveStruct に準じた形の文字列を返す",
+        "params": {
+          "newline": "改行コード 0:CRLF 1:LF",
+          "option": "整形オプション sso* の組み合わせ（後述）もしくは直接数値指定"
+        }
+      },
+      "tr": {
+        "returns": "A string in a format compatible with saveStruct.",
+        "params": {
+          "newline": "Newline code. 0: CRLF, 1: LF.",
+          "option": "Formatting options: a combination of sso* flags (see below), or a numeric value."
+        }
+      }
+    }
+  }
+}

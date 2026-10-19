@@ -1,0 +1,34 @@
+{
+  "class": "Threepp.VRMAnimation",
+  "entries": {
+    "krkrthreepp:Threepp.VRMAnimation": {
+      "hash": "fc44559d5bc6",
+      "ja": {
+        "summary": "VRM アニメーション (.vrma / VRMC_vrm_animation)",
+        "description": "モデル非依存のボーン回転 + hips 移動(ルートモーション)トラック。\n表情(expression)/視線(lookAt)トラックは含まれる場合のみ反映(顔トラック付き VRMA)。"
+      },
+      "tr": {
+        "summary": "VRM animation (.vrma / VRMC_vrm_animation)",
+        "description": "Model-independent bone rotation + hips translation (root motion) tracks.\nExpression and look-at tracks are applied only when present (VRMA with face tracks)."
+      }
+    },
+    "krkrthreepp:Threepp.VRMAnimation.getDuration": {
+      "hash": "82ff4cf83610",
+      "ja": {
+        "summary": "長さ(秒) -> float"
+      },
+      "tr": {
+        "summary": "Duration (seconds) -> float"
+      }
+    },
+    "krkrthreepp:Threepp.VRMAnimation.getBoneTrackCount": {
+      "hash": "5ef04a97917a",
+      "ja": {
+        "summary": "ボーントラック数 -> int"
+      },
+      "tr": {
+        "summary": "Number of bone tracks -> int"
+      }
+    }
+  }
+}

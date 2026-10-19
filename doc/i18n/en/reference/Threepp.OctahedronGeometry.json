@@ -1,0 +1,40 @@
+{
+  "class": "Threepp.OctahedronGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.OctahedronGeometry": {
+      "hash": "ac8e06672a20",
+      "ja": {
+        "summary": "正八面体ジオメトリ"
+      },
+      "tr": {
+        "summary": "Octahedron geometry"
+      }
+    },
+    "krkrthreepp:Threepp.OctahedronGeometry.OctahedronGeometry": {
+      "hash": "ae2c409789d8",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "radius": "半径",
+          "detail": "分割レベル"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "radius": "Radius.",
+          "detail": "Subdivision level."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.OctahedronGeometry.type": {
+      "hash": "23360e157b11",
+      "ja": {
+        "summary": "\"OctahedronGeometry\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"OctahedronGeometry\" (read-only)"
+      }
+    }
+  }
+}

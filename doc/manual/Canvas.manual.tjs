@@ -264,8 +264,7 @@ class Canvas {
 	 * [3D グラフィックシステム](../guide/Graphic3DSystem.md) を参照。
 	 *
 	 * opacity (0〜255) を指定すると、合成時に捕捉内容の α へ掛ける (gles プラグインの
-	 * GLESAdaptor.endEffect と同じ)。現状 OpenGL 描画の Canvas で有効で、GPU 描画の
-	 * Canvas では無視される。
+	 * GLESAdaptor.endEffect と同じ)。OpenGL 描画・GPU 描画の Canvas とも同じ結果になる。
 	 * @param commands 加工コマンド ( Dictionary ) の配列。省略すると素通し合成。
 	 * @param opacity 合成時の不透明度 (0〜255)。
 	 * @see Canvas.beginEffect

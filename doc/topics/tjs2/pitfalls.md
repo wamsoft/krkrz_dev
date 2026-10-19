@@ -154,7 +154,7 @@ if (obj.name !== void) { ... }                          // 正しい
 ### JSON の組み立てにプラグインを前提にしない
 
 `Scripts.toJSONString` / `evalJSON` は json プラグインの拡張です。 コア機能だけで
-完結させたい場合は手組みするか、`Dialog.dictToJson` ( Elements 有効時 ) を使います。
+完結させたい場合は手組みするか、[`ElementsDialog.dictToJson`](../../reference/ElementsDialog.md#dicttojson) ( Elements 有効時 ) を使います。
 
 ---
 

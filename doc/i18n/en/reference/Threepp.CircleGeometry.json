@@ -1,0 +1,44 @@
+{
+  "class": "Threepp.CircleGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.CircleGeometry": {
+      "hash": "cb11e35cf174",
+      "ja": {
+        "summary": "円（ディスク）ジオメトリ"
+      },
+      "tr": {
+        "summary": "Circle (disc) geometry"
+      }
+    },
+    "krkrthreepp:Threepp.CircleGeometry.CircleGeometry": {
+      "hash": "4ab53ad96156",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "radius": "半径",
+          "segments": "分割数",
+          "thetaStart": "開始角度",
+          "thetaLength": "角度範囲"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "radius": "Radius.",
+          "segments": "Number of segments.",
+          "thetaStart": "Start angle.",
+          "thetaLength": "Central angle of the sector."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.CircleGeometry.type": {
+      "hash": "03b20ee8c97b",
+      "ja": {
+        "summary": "\"CircleGeometry\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"CircleGeometry\" (read-only)"
+      }
+    }
+  }
+}

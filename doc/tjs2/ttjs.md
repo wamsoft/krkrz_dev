@@ -249,7 +249,7 @@ tjs_int lineofs = 0
 
 式を評価します。
 
-引数については ExecScript を参照してください。
+引数については [ExecScript](#execscript) を参照してください。
 
 
 

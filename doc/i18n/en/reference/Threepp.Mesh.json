@@ -1,0 +1,57 @@
+{
+  "class": "Threepp.Mesh",
+  "entries": {
+    "krkrthreepp:Threepp.Mesh": {
+      "hash": "5c0a1f9a1fea",
+      "ja": {
+        "summary": "メッシュクラス",
+        "description": "ジオメトリとマテリアルを組み合わせて3Dオブジェクトを作成します。"
+      },
+      "tr": {
+        "summary": "Mesh class",
+        "description": "Creates a 3D object by combining a geometry and a material."
+      }
+    },
+    "krkrthreepp:Threepp.Mesh.Mesh": {
+      "hash": "cb452e2a62d3",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "geometry": "ジオメトリ (BufferGeometry)",
+          "material": "マテリアル (Material)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "geometry": "Geometry (BufferGeometry).",
+          "material": "Material (Material)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Mesh.type": {
+      "hash": "74364509ae4e",
+      "ja": {
+        "summary": "\"Mesh\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"Mesh\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Mesh.setGeometry": {
+      "hash": "829b1bacddbc",
+      "ja": {
+        "summary": "ジオメトリを設定",
+        "params": {
+          "geometry": "新しいジオメトリ"
+        }
+      },
+      "tr": {
+        "summary": "Sets the geometry",
+        "params": {
+          "geometry": "New geometry."
+        }
+      }
+    }
+  }
+}

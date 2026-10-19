@@ -1,0 +1,233 @@
+{
+  "class": "Threepp.Color",
+  "entries": {
+    "krkrthreepp:Threepp.Color": {
+      "hash": "4014fd5c8857",
+      "ja": {
+        "summary": "色クラス",
+        "description": "RGB色を表現します。配列 [r, g, b] や辞書 %[r:, g:, b:]、整数(0xRRGGBB)からも変換可能です。"
+      },
+      "tr": {
+        "summary": "Color class",
+        "description": "Represents an RGB color. It can also be converted from an array [r, g, b], a dictionary %[r:, g:, b:] or an integer (0xRRGGBB)."
+      }
+    },
+    "krkrthreepp:Threepp.Color.Color": {
+      "hash": "e1381b2e67a1",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "r": "赤成分 (0.0-1.0) または hex値 (0xRRGGBB)",
+          "g": "緑成分 (0.0-1.0)",
+          "b": "青成分 (0.0-1.0)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "r": "Red component (0.0-1.0), or a hex value (0xRRGGBB).",
+          "g": "Green component (0.0-1.0).",
+          "b": "Blue component (0.0-1.0)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Color.r": {
+      "hash": "6d7fb54f8194",
+      "ja": {
+        "summary": "赤成分 (0.0-1.0)"
+      },
+      "tr": {
+        "summary": "Red component (0.0-1.0)"
+      }
+    },
+    "krkrthreepp:Threepp.Color.g": {
+      "hash": "be6ff2eece68",
+      "ja": {
+        "summary": "緑成分 (0.0-1.0)"
+      },
+      "tr": {
+        "summary": "Green component (0.0-1.0)"
+      }
+    },
+    "krkrthreepp:Threepp.Color.b": {
+      "hash": "4bdc1666c4e5",
+      "ja": {
+        "summary": "青成分 (0.0-1.0)"
+      },
+      "tr": {
+        "summary": "Blue component (0.0-1.0)"
+      }
+    },
+    "krkrthreepp:Threepp.Color.setScalar": {
+      "hash": "b1b2d95d0c16",
+      "ja": {
+        "summary": "すべての成分を同じ値に設定"
+      },
+      "tr": {
+        "summary": "Sets all components to the same value"
+      }
+    },
+    "krkrthreepp:Threepp.Color.setRGB": {
+      "hash": "400fd3e215ad",
+      "ja": {
+        "summary": "RGB値を設定"
+      },
+      "tr": {
+        "summary": "Sets the RGB values"
+      }
+    },
+    "krkrthreepp:Threepp.Color.setHSL": {
+      "hash": "b217a6e2c778",
+      "ja": {
+        "summary": "HSL値から設定"
+      },
+      "tr": {
+        "summary": "Sets the color from HSL values"
+      }
+    },
+    "krkrthreepp:Threepp.Color.setHex": {
+      "hash": "76f8d75ee6d2",
+      "ja": {
+        "summary": "16進数から設定"
+      },
+      "tr": {
+        "summary": "Sets the color from a hexadecimal value"
+      }
+    },
+    "krkrthreepp:Threepp.Color.copy": {
+      "hash": "cca4d32840fa",
+      "ja": {
+        "summary": "別の色からコピー"
+      },
+      "tr": {
+        "summary": "Copies another color"
+      }
+    },
+    "krkrthreepp:Threepp.Color.add": {
+      "hash": "90533dc53baf",
+      "ja": {
+        "summary": "色を加算"
+      },
+      "tr": {
+        "summary": "Adds a color"
+      }
+    },
+    "krkrthreepp:Threepp.Color.addColors": {
+      "hash": "3e1262e04641",
+      "ja": {
+        "summary": "2つの色の和を設定"
+      },
+      "tr": {
+        "summary": "Sets this color to the sum of two colors"
+      }
+    },
+    "krkrthreepp:Threepp.Color.addScalar": {
+      "hash": "8ad520e5e808",
+      "ja": {
+        "summary": "スカラーを加算"
+      },
+      "tr": {
+        "summary": "Adds a scalar"
+      }
+    },
+    "krkrthreepp:Threepp.Color.sub": {
+      "hash": "eb58a4816c95",
+      "ja": {
+        "summary": "色を減算"
+      },
+      "tr": {
+        "summary": "Subtracts a color"
+      }
+    },
+    "krkrthreepp:Threepp.Color.multiply": {
+      "hash": "0913c876bf50",
+      "ja": {
+        "summary": "色を乗算"
+      },
+      "tr": {
+        "summary": "Multiplies by a color"
+      }
+    },
+    "krkrthreepp:Threepp.Color.multiplyScalar": {
+      "hash": "107fd79be5c9",
+      "ja": {
+        "summary": "スカラー乗算"
+      },
+      "tr": {
+        "summary": "Multiplies by a scalar"
+      }
+    },
+    "krkrthreepp:Threepp.Color.lerp": {
+      "hash": "b528f239b5c4",
+      "ja": {
+        "summary": "線形補間"
+      },
+      "tr": {
+        "summary": "Linear interpolation"
+      }
+    },
+    "krkrthreepp:Threepp.Color.lerpColors": {
+      "hash": "b36c6a8275bb",
+      "ja": {
+        "summary": "2つの色間の線形補間"
+      },
+      "tr": {
+        "summary": "Linear interpolation between two colors"
+      }
+    },
+    "krkrthreepp:Threepp.Color.lerpHSL": {
+      "hash": "91f901d7ea6b",
+      "ja": {
+        "summary": "HSL空間での線形補間"
+      },
+      "tr": {
+        "summary": "Linear interpolation in HSL space"
+      }
+    },
+    "krkrthreepp:Threepp.Color.randomize": {
+      "hash": "29841c000afa",
+      "ja": {
+        "summary": "ランダムな色を生成"
+      },
+      "tr": {
+        "summary": "Generates a random color"
+      }
+    },
+    "krkrthreepp:Threepp.Color.getHex": {
+      "hash": "89498a85dc4d",
+      "ja": {
+        "summary": "16進数値を取得"
+      },
+      "tr": {
+        "summary": "Gets the hexadecimal value"
+      }
+    },
+    "krkrthreepp:Threepp.Color.getHexString": {
+      "hash": "632a95c0ace7",
+      "ja": {
+        "summary": "16進数文字列を取得"
+      },
+      "tr": {
+        "summary": "Gets the hexadecimal string"
+      }
+    },
+    "krkrthreepp:Threepp.Color.getStyle": {
+      "hash": "eb3f2313fc9a",
+      "ja": {
+        "summary": "CSS形式の文字列を取得"
+      },
+      "tr": {
+        "summary": "Gets a CSS-style string"
+      }
+    },
+    "krkrthreepp:Threepp.Color.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

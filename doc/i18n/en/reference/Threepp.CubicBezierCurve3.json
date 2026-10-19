@@ -1,0 +1,91 @@
+{
+  "class": "Threepp.CubicBezierCurve3",
+  "entries": {
+    "krkrthreepp:Threepp.CubicBezierCurve3": {
+      "hash": "02e3698ef918",
+      "ja": {
+        "summary": "3D三次ベジェカーブ",
+        "description": "3D空間での三次ベジェ曲線です。"
+      },
+      "tr": {
+        "summary": "3D cubic Bezier curve",
+        "description": "A cubic Bezier curve in 3D space."
+      }
+    },
+    "krkrthreepp:Threepp.CubicBezierCurve3.CubicBezierCurve3": {
+      "hash": "b51c19e516eb",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "v0": "始点",
+          "v1": "制御点1",
+          "v2": "制御点2",
+          "v3": "終点"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "v0": "Start point.",
+          "v1": "First control point.",
+          "v2": "Second control point.",
+          "v3": "End point."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.CubicBezierCurve3.v0": {
+      "hash": "c793333c3c1d",
+      "ja": {
+        "summary": "始点（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Start point (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.CubicBezierCurve3.v1": {
+      "hash": "d01e86a512d1",
+      "ja": {
+        "summary": "制御点1（読み取り専用）"
+      },
+      "tr": {
+        "summary": "First control point (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.CubicBezierCurve3.v2": {
+      "hash": "8fe1bebdeba3",
+      "ja": {
+        "summary": "制御点2（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Second control point (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.CubicBezierCurve3.v3": {
+      "hash": "7e184ac2b862",
+      "ja": {
+        "summary": "終点（読み取り専用）"
+      },
+      "tr": {
+        "summary": "End point (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.CubicBezierCurve3.getLength": {
+      "hash": "8d98a47bcea4",
+      "ja": {
+        "summary": "曲線の長さを取得"
+      },
+      "tr": {
+        "summary": "Gets the length of the curve"
+      }
+    },
+    "krkrthreepp:Threepp.CubicBezierCurve3.getPoint": {
+      "hash": "1be3886a14b6",
+      "ja": {
+        "summary": "パラメータ t (0-1) の点を取得"
+      },
+      "tr": {
+        "summary": "Gets the point at parameter t (0-1)"
+      }
+    }
+  }
+}

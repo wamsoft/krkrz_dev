@@ -1,0 +1,84 @@
+{
+  "class": "GdiPlus",
+  "entries": {
+    "layerExDraw:GdiPlus": {
+      "hash": "dddaf5692ec0",
+      "ja": {
+        "summary": "擬似コードによるマニュアル"
+      },
+      "tr": {
+        "summary": "Manual in pseudo-code"
+      }
+    },
+    "layerExDraw:GdiPlus.LinearGradientModeHorizontal": {
+      "hash": "ff245af2fb3e",
+      "ja": {
+        "summary": "LinearGradientMode 定義"
+      },
+      "tr": {
+        "summary": "LinearGradientMode definitions"
+      }
+    },
+    "layerExDraw:GdiPlus.SmoothingModeInvalid": {
+      "hash": "a8c6bcb454fb",
+      "ja": {
+        "summary": "SmoothingMode 指定"
+      },
+      "tr": {
+        "summary": "SmoothingMode values"
+      }
+    },
+    "layerExDraw:GdiPlus.TextRenderingHintSystemDefault": {
+      "hash": "4ba78be1ea6c",
+      "ja": {
+        "summary": "TextRenderingHint 指定"
+      },
+      "tr": {
+        "summary": "TextRenderingHint values"
+      }
+    },
+    "layerExDraw:GdiPlus.addPrivateFont": {
+      "hash": "63891ae7d2e3",
+      "ja": {
+        "summary": "プライベートフォントの追加(static)",
+        "description": "アプリケーション固有のフォントを追加します。\n吉里吉里アーカイブ中にあるフォントも登録できます。",
+        "params": {
+          "fontFileName": "フォントファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Adds a private font (static)",
+        "description": "Adds an application-specific font.\nFonts inside Kirikiri archives can also be registered.",
+        "params": {
+          "fontFileName": "Font file name"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.getFontList": {
+      "hash": "026c76c2e6a0",
+      "ja": {
+        "summary": "フォント一覧の取得",
+        "params": {
+          "privateOnly": "true ならプライベートフォントのみ取得"
+        }
+      },
+      "tr": {
+        "summary": "Gets the list of fonts",
+        "params": {
+          "privateOnly": "If true, only private fonts are returned"
+        }
+      }
+    },
+    "layerExVector:GdiPlus": {
+      "hash": "7d5cf61d4036",
+      "ja": {
+        "summary": "擬似コードによるマニュアル",
+        "description": "thorvg ベースのベクタ描画プラグイン\nGDI+ ベースの LayerExDraw を thorvg で再実装したものです。\n一部の GDI+ 固有機能は削除されています。"
+      },
+      "tr": {
+        "summary": "Manual in pseudo-code",
+        "description": "A vector drawing plugin based on ThorVG.\nIt reimplements the GDI+-based LayerExDraw with ThorVG.\nSome GDI+-specific features have been removed."
+      }
+    }
+  }
+}

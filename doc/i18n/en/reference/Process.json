@@ -1,0 +1,137 @@
+{
+  "class": "Process",
+  "entries": {
+    "process:Process": {
+      "hash": "c0a27dec2741",
+      "ja": {
+        "summary": "擬似コードによるマニュアル",
+        "description": "外部アプリを起動してその終了を待つ機構を提供します。"
+      },
+      "tr": {
+        "summary": "Manual written as pseudo-code",
+        "description": "Provides a mechanism for launching an external application and waiting for it to exit."
+      }
+    },
+    "process:Process.status": {
+      "hash": "3f67c0b9f3d0",
+      "ja": {
+        "summary": "現在の状態",
+        "description": "0:未実行\n1:実行中"
+      },
+      "tr": {
+        "summary": "Current state",
+        "description": "0: not running\n1: running"
+      }
+    },
+    "process:Process.execute": {
+      "hash": "96397376beba",
+      "ja": {
+        "summary": "バックグラウンドでの外部プログラムの実行",
+        "description": "処理がおわったら onExecuted イベントが発生します。",
+        "returns": "起動成功時は true",
+        "params": {
+          "target": "プログラム",
+          "param": "引数",
+          "folder": "実行時フォルダ(未指定時はカレントフォルダ)"
+        }
+      },
+      "tr": {
+        "summary": "Runs an external program in the background",
+        "description": "The onExecuted event is raised when it finishes.",
+        "returns": "true if the program was launched.",
+        "params": {
+          "target": "Program.",
+          "param": "Arguments.",
+          "folder": "Working folder (the current folder if omitted)."
+        }
+      }
+    },
+    "process:Process.commandExecute": {
+      "hash": "f506eb345e3a",
+      "ja": {
+        "summary": "コンソール出力取得つきコマンドラインプログラムの実行",
+        "description": "コンソールの行単位出力で onOutput イベントが発生します。\n処理がおわったら onExecuted イベントが発生します。",
+        "returns": "起動成功時は true",
+        "params": {
+          "target": "プログラム",
+          "param": "引数",
+          "folder": "実行時フォルダ(未指定時はカレントフォルダ)"
+        }
+      },
+      "tr": {
+        "summary": "Runs a command-line program and captures its console output",
+        "description": "The onOutput event is raised for each line of console output.\nThe onExecuted event is raised when it finishes.",
+        "returns": "true if the program was launched.",
+        "params": {
+          "target": "Program.",
+          "param": "Arguments.",
+          "folder": "Working folder (the current folder if omitted)."
+        }
+      }
+    },
+    "process:Process.terminate": {
+      "hash": "9b2f15518aaf",
+      "ja": {
+        "summary": "実行中の外部プログラムの強制終了",
+        "params": {
+          "endCode": "終了コード"
+        }
+      },
+      "tr": {
+        "summary": "Forcibly terminates the running external program",
+        "params": {
+          "endCode": "Exit code."
+        }
+      }
+    },
+    "process:Process.sendSignal": {
+      "hash": "8e30fcb6739f",
+      "ja": {
+        "summary": "Ctrl+Cイベントの送信(experimental:すべての環境で動作するとは限りません)",
+        "returns": "成功したらtrue",
+        "params": {
+          "isBreak": "Ctrl+CではなくCtrl+Breakを送る"
+        }
+      },
+      "tr": {
+        "summary": "Sends a Ctrl+C event (experimental: may not work in every environment)",
+        "returns": "true on success.",
+        "params": {
+          "isBreak": "Sends Ctrl+Break instead of Ctrl+C."
+        }
+      }
+    },
+    "process:Process.onExecuted": {
+      "hash": "c56cf852c35f",
+      "ja": {
+        "summary": "イベント:シェル実行終了",
+        "params": {
+          "endCode": "終了コード"
+        }
+      },
+      "tr": {
+        "summary": "Event: the program has finished",
+        "params": {
+          "endCode": "Exit code."
+        }
+      }
+    },
+    "process:Process.onOutput": {
+      "hash": "b160eef7afe6",
+      "ja": {
+        "summary": "イベント:コンソール出力",
+        "params": {
+          "line": "行番号",
+          "text": "出力テキスト（１行単位）"
+        }
+      },
+      "tr": {
+        "summary": "Event: console output",
+        "params": {
+          "line": "Line number.",
+          "text": "Output text (one line at a time)."
+        }
+      }
+    }
+  }
+}

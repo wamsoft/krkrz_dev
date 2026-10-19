@@ -1,0 +1,53 @@
+{
+  "class": "Threepp.PlaneHelper",
+  "entries": {
+    "krkrthreepp:Threepp.PlaneHelper": {
+      "hash": "374fe687a9a5",
+      "ja": {
+        "summary": "平面ヘルパー",
+        "description": "平面を可視化します。"
+      },
+      "tr": {
+        "summary": "Plane helper",
+        "description": "Visualizes a plane."
+      }
+    },
+    "krkrthreepp:Threepp.PlaneHelper.PlaneHelper": {
+      "hash": "ce24afb5a34f",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "plane": "可視化する平面",
+          "size": "ヘルパーのサイズ",
+          "color": "ヘルパーの色"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "plane": "Plane to visualize.",
+          "size": "Size of the helper.",
+          "color": "Color of the helper."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.PlaneHelper.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.PlaneHelper.size": {
+      "hash": "b072fff02188",
+      "ja": {
+        "summary": "サイズ"
+      },
+      "tr": {
+        "summary": "Size"
+      }
+    }
+  }
+}

@@ -1,0 +1,426 @@
+{
+  "class": "BinaryStream",
+  "entries": {
+    "binaryStream:BinaryStream.BinaryStream": {
+      "hash": "09529dfce2a4",
+      "ja": {
+        "summary": "コンストラクタ／デストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor / destructor"
+      }
+    },
+    "binaryStream:BinaryStream.open": {
+      "hash": "0a73f039976a",
+      "ja": {
+        "summary": "ストレージを開く",
+        "params": {
+          "storage": "対象ストレージ",
+          "mode": "モード指定(bsRead, bsWrite, bsAppend, bsUpdate)"
+        }
+      },
+      "tr": {
+        "summary": "Opens a storage",
+        "params": {
+          "storage": "Target storage.",
+          "mode": "Mode (bsRead, bsWrite, bsAppend, bsUpdate)."
+        }
+      }
+    },
+    "binaryStream:BinaryStream.close": {
+      "hash": "72b07b91bde4",
+      "ja": {
+        "summary": "オープン中のストレージを閉じる"
+      },
+      "tr": {
+        "summary": "Closes the open storage"
+      }
+    },
+    "binaryStream:BinaryStream.read": {
+      "hash": "bba7cc622561",
+      "ja": {
+        "summary": "指定バイト読み込む",
+        "returns": "読み込んだデータ（octet形式） 終端などで読めなかった場合はvoid（length=0のoctetではないので注意）",
+        "params": {
+          "size": "読み込むサイズ（バイト）"
+        }
+      },
+      "tr": {
+        "summary": "Reads the given number of bytes",
+        "returns": "The data read (as an octet). void if nothing could be read, for example at the end (note: not a zero-length octet).",
+        "params": {
+          "size": "Number of bytes to read."
+        }
+      }
+    },
+    "binaryStream:BinaryStream.write": {
+      "hash": "825cc2e78262",
+      "ja": {
+        "summary": "データを書き込む",
+        "description": "dataが文字列の場合は wchar で書き込まれます（コード変換はサポートされません）",
+        "returns": "書き込んだバイト数",
+        "params": {
+          "data": "書き込むデータ（octet形式または文字列）"
+        }
+      },
+      "tr": {
+        "summary": "Writes data",
+        "description": "If data is a string, it is written as wchar (no encoding conversion is supported).",
+        "returns": "Number of bytes written.",
+        "params": {
+          "data": "Data to write (an octet or a string)."
+        }
+      }
+    },
+    "binaryStream:BinaryStream.readI8": {
+      "hash": "5863f4bf91e7",
+      "ja": {
+        "summary": "{1,2,4,8}バイトを数値として読み込む",
+        "description": "※数値は8byte以外はunsigned読み込みになります（符号拡張されません）\n※voidを返すのは1byteも読めなかった場合のみとなります\n1byte以上指定byte未満しか読めなかった場合は足りない部分を0で埋めた値が返されるので注意",
+        "returns": "読み込んだ数値 / 終端などで読めなかった場合はvoid"
+      },
+      "tr": {
+        "summary": "Reads {1,2,4,8} bytes as a number",
+        "description": "Note: except for 8 bytes, numbers are read as unsigned (no sign extension).\nNote: void is returned only if not even 1 byte could be read.\nIf at least 1 byte but fewer than the requested bytes could be read, the missing part is filled with 0.",
+        "returns": "The number read, or void if nothing could be read (for example at the end)."
+      }
+    },
+    "binaryStream:BinaryStream.readI16LE": {
+      "hash": "62287fb8deb7",
+      "ja": {
+        "summary": "2byte 読み込み (Little Endian)"
+      },
+      "tr": {
+        "summary": "Reads 2 bytes (little endian)"
+      }
+    },
+    "binaryStream:BinaryStream.readI32LE": {
+      "hash": "d9fc5d6d4233",
+      "ja": {
+        "summary": "4byte 読み込み (Little Endian)"
+      },
+      "tr": {
+        "summary": "Reads 4 bytes (little endian)"
+      }
+    },
+    "binaryStream:BinaryStream.readI64LE": {
+      "hash": "20d027d45168",
+      "ja": {
+        "summary": "8byte 読み込み (Little Endian)"
+      },
+      "tr": {
+        "summary": "Reads 8 bytes (little endian)"
+      }
+    },
+    "binaryStream:BinaryStream.readI16BE": {
+      "hash": "d4ce7e45a763",
+      "ja": {
+        "summary": "2byte 読み込み (Big Endian)"
+      },
+      "tr": {
+        "summary": "Reads 2 bytes (big endian)"
+      }
+    },
+    "binaryStream:BinaryStream.readI32BE": {
+      "hash": "ba1f809d7246",
+      "ja": {
+        "summary": "4byte 読み込み (Big Endian)"
+      },
+      "tr": {
+        "summary": "Reads 4 bytes (big endian)"
+      }
+    },
+    "binaryStream:BinaryStream.readI64BE": {
+      "hash": "ec0b46d7866f",
+      "ja": {
+        "summary": "8byte 読み込み (Big Endian)"
+      },
+      "tr": {
+        "summary": "Reads 8 bytes (big endian)"
+      }
+    },
+    "binaryStream:BinaryStream.writeI8": {
+      "hash": "d6e94da3e478",
+      "ja": {
+        "summary": "{1,2,4,8}バイトで数値を書き込む",
+        "returns": "書き込んだバイト数",
+        "params": {
+          "num": "書き込む数値"
+        }
+      },
+      "tr": {
+        "summary": "Writes a number as {1,2,4,8} bytes",
+        "returns": "Number of bytes written.",
+        "params": {
+          "num": "Number to write."
+        }
+      }
+    },
+    "binaryStream:BinaryStream.writeI16LE": {
+      "hash": "716673ce8e6e",
+      "ja": {
+        "summary": "2byte 書き込み (Little Endian)"
+      },
+      "tr": {
+        "summary": "Writes 2 bytes (little endian)"
+      }
+    },
+    "binaryStream:BinaryStream.writeI32LE": {
+      "hash": "569929ed6721",
+      "ja": {
+        "summary": "4byte 書き込み (Little Endian)"
+      },
+      "tr": {
+        "summary": "Writes 4 bytes (little endian)"
+      }
+    },
+    "binaryStream:BinaryStream.writeI64LE": {
+      "hash": "b9ecab7f031f",
+      "ja": {
+        "summary": "8byte 書き込み (Little Endian)"
+      },
+      "tr": {
+        "summary": "Writes 8 bytes (little endian)"
+      }
+    },
+    "binaryStream:BinaryStream.writeI16BE": {
+      "hash": "7ce94e5a2f98",
+      "ja": {
+        "summary": "2byte 書き込み (Big Endian)"
+      },
+      "tr": {
+        "summary": "Writes 2 bytes (big endian)"
+      }
+    },
+    "binaryStream:BinaryStream.writeI32BE": {
+      "hash": "007265a9b88d",
+      "ja": {
+        "summary": "4byte 書き込み (Big Endian)"
+      },
+      "tr": {
+        "summary": "Writes 4 bytes (big endian)"
+      }
+    },
+    "binaryStream:BinaryStream.writeI64BE": {
+      "hash": "f18a20c13c71",
+      "ja": {
+        "summary": "8byte 書き込み (Big Endian)"
+      },
+      "tr": {
+        "summary": "Writes 8 bytes (big endian)"
+      }
+    },
+    "binaryStream:BinaryStream.copy": {
+      "hash": "60ac556c7480",
+      "ja": {
+        "summary": "別のストレージからデータをコピー",
+        "description": "対象ストレージのoffsetからlength分の内容が，現在のストリームのポジションから書き込まれます\nフィルタの詳細は setFilter() の説明を参照してください",
+        "returns": "書き込んだバイト数",
+        "params": {
+          "storage": "コピー元のストレージ（現在開いているストレージと同じ場合は例外）",
+          "elm": "動作指定用の辞書（in/out）内容は下記：（省略時は単純コピー，[out]なし）\noffset  :[in] コピー元ストレージの読み込み開始オフセット（省略時先頭）\nlength  :[in] コピー元ストレージの最大読み込みサイズ（省略時ファイルサイズ）\n\nfilter  :[in] フィルタ処理を行う関数名（省略時はフィルタ処理なし）\nfparam  :[in] フィルタに渡すパラメータ値(int)\n\nnocopy  :[in] trueを指定すると出力を書き込まない（省略時はfalse，hashのみ取得したい場合などに指定）\nmd5     :[in] trueを指定すると出力のMD5ダイジェストを返す\n\nhash    :[out]読み込んだファイルのハッシュ値（Adler32）\nread    :[out]読み込んだバイト数\ndigest  :[out]書き込んだデータのMD5ダイジェスト（octet） ※md5がtrueの場合にのみ有効"
+        }
+      },
+      "tr": {
+        "summary": "Copies data from another storage",
+        "description": "length bytes starting at offset in the source storage are written at the current stream position.\nSee setFilter() for details on filters.",
+        "returns": "Number of bytes written.",
+        "params": {
+          "storage": "Source storage (an exception is thrown if it is the storage currently open).",
+          "elm": "Dictionary of options (in/out) with the following members (if omitted, a plain copy with no [out]):\noffset  :[in] Offset in the source storage to start reading from (defaults to the beginning)\nlength  :[in] Maximum number of bytes to read from the source storage (defaults to the file size)\n\nfilter  :[in] Name of the filter function (no filtering if omitted)\nfparam  :[in] Parameter value passed to the filter (int)\n\nnocopy  :[in] If true, no output is written (defaults to false; use it when you only want the hash, for example)\nmd5     :[in] If true, returns the MD5 digest of the output\n\nhash    :[out] Hash of the data read (Adler32)\nread    :[out] Number of bytes read\ndigest  :[out] MD5 digest of the data written (octet); only valid when md5 is true"
+        }
+      }
+    },
+    "binaryStream:BinaryStream.compress": {
+      "hash": "e2213e1f5830",
+      "ja": {
+        "summary": "別のストレージからデータを圧縮しつつコピー",
+        "description": "対象ストレージを zlib/deflate で圧縮しつつ，現在のストリームのポジションから書き込みます\nフィルタ関数は圧縮前のバイナリに対して適用されます",
+        "returns": "書き込んだバイト数",
+        "params": {
+          "storage": "コピー元のストレージ（現在開いているストレージと同じ場合は例外）",
+          "elm": "動作指定用の辞書（in/out）内容は copy() と同じものに加えて下記：\ncomp_lv :[in] zlibによる圧縮レベル（1～9）省略時，またはelmそのものの指定がない場合は 9"
+        }
+      },
+      "tr": {
+        "summary": "Copies data from another storage while compressing it",
+        "description": "Compresses the source storage with zlib/deflate and writes it at the current stream position.\nThe filter function is applied to the data before compression.",
+        "returns": "Number of bytes written.",
+        "params": {
+          "storage": "Source storage (an exception is thrown if it is the storage currently open).",
+          "elm": "Dictionary of options (in/out): the same members as copy(), plus:\ncomp_lv :[in] zlib compression level (1 to 9). 9 if omitted or if elm itself is not given."
+        }
+      }
+    },
+    "binaryStream:BinaryStream.decompress": {
+      "hash": "83aa4ebcae6e",
+      "ja": {
+        "summary": "別のストレージからデータを展開しつつコピー",
+        "description": "対象ストレージを zlib/inflate で展開しつつ，現在のストリームのポジションから書き込みます\n展開に失敗すると例外が発生します\nフィルタ関数は展開後のバイナリに対して適用されます\nhash[out] は展開後／フィルタ後のバイナリに対して計算されます",
+        "returns": "書き込んだバイト数",
+        "params": {
+          "storage": "コピー元のストレージ（現在開いているストレージと同じ場合は例外）",
+          "elm": "動作指定用の辞書（in/out）内容は copy() と同じ"
+        }
+      },
+      "tr": {
+        "summary": "Copies data from another storage while decompressing it",
+        "description": "Decompresses the source storage with zlib/inflate and writes it at the current stream position.\nAn exception is thrown if decompression fails.\nThe filter function is applied to the decompressed data.\nhash [out] is computed over the decompressed and filtered data.",
+        "returns": "Number of bytes written.",
+        "params": {
+          "storage": "Source storage (an exception is thrown if it is the storage currently open).",
+          "elm": "Dictionary of options (in/out): the same as copy()."
+        }
+      }
+    },
+    "binaryStream:BinaryStream.setProgressCallback": {
+      "hash": "9fce0e4f59bc",
+      "ja": {
+        "summary": "プログレスコールバックを設定する",
+        "description": "copy/compress/decompress の処理中からコールバックする関数を設定します。\nコールバックは（現在の実装では） 1MiB 読む毎時および最後まで読んだ時に呼び返されます。\nコールバックから true を返すと処理がキャンセルできます。\n※コールバックの間隔は変更される場合があります\n\nTJS的には処理が固まってしまうのは仕様ですが，別途 windowExProgress プラグインなどを\n使用することで，ユーザーからのキャンセルを受け付けられるようになります。",
+        "params": {
+          "callback": "コールバック関数 function(storage, read_size) { return true_if_cancel; }\nvoidの場合は解除"
+        }
+      },
+      "tr": {
+        "summary": "Sets a progress callback",
+        "description": "Sets a function that is called back during copy/compress/decompress.\nIn the current implementation, the callback is called every 1 MiB read and when the end is reached.\nReturning true from the callback cancels the operation.\nNote: the callback interval may change.\n\nFrom TJS's point of view the script blocks during the operation, by design, but using something like\nthe windowExProgress plugin lets the user cancel it.",
+        "params": {
+          "callback": "Callback function: function(storage, read_size) { return true_if_cancel; }\nvoid removes it."
+        }
+      }
+    },
+    "binaryStream:BinaryStream.setFilter": {
+      "hash": "3b92c0a21537",
+      "ja": {
+        "summary": "フィルタDLLを設定する",
+        "description": "copy/compress/decompressのデータに対して外部DLLを使用したフィルタを設定します\nelm.filter に関数名を指定た場合に，このDLL中の下記の形式でエクスポートされた関数をフィルタとして使用します\nvoid (__stdcall *FilterProc)(uint32 hash, uint64 offset, void *buffer, uint32 length);",
+        "params": {
+          "dll": "対象のDLLファイル（voidの場合は設定解除）"
+        }
+      },
+      "tr": {
+        "summary": "Sets a filter DLL",
+        "description": "Sets a filter, implemented in an external DLL, applied to the data of copy/compress/decompress.\nWhen a function name is given in elm.filter, the function exported from this DLL in the following form is used as the filter:\nvoid (__stdcall *FilterProc)(uint32 hash, uint64 offset, void *buffer, uint32 length);",
+        "params": {
+          "dll": "Target DLL file (void removes the setting)."
+        }
+      }
+    },
+    "binaryStream:BinaryStream.seek": {
+      "hash": "323ff038583a",
+      "ja": {
+        "summary": "ストリームのポジションを変更する",
+        "returns": "移動後の位置",
+        "params": {
+          "pos": "位置",
+          "whence": "基準位置(bsSeekSet, bsSeekCur, bsSeekEnd)"
+        }
+      },
+      "tr": {
+        "summary": "Changes the stream position",
+        "returns": "The position after moving.",
+        "params": {
+          "pos": "Position.",
+          "whence": "Reference point (bsSeekSet, bsSeekCur, bsSeekEnd)."
+        }
+      }
+    },
+    "binaryStream:BinaryStream.tell": {
+      "hash": "2fc0410b142c",
+      "ja": {
+        "summary": "ストリームの現在のポジションを取得する",
+        "returns": "位置"
+      },
+      "tr": {
+        "summary": "Gets the current stream position",
+        "returns": "Position."
+      }
+    },
+    "binaryStream:BinaryStream.storage": {
+      "hash": "8851df75a05b",
+      "ja": {
+        "summary": "現在開いているストレージ",
+        "description": "開いていない場合はvoid"
+      },
+      "tr": {
+        "summary": "Storage currently open",
+        "description": "void if nothing is open."
+      }
+    },
+    "binaryStream:BinaryStream.mode": {
+      "hash": "5b4dd83702d8",
+      "ja": {
+        "summary": "現在のモード",
+        "description": "開いていない場合は-1"
+      },
+      "tr": {
+        "summary": "Current mode",
+        "description": "-1 if nothing is open."
+      }
+    },
+    "binaryStream:BinaryStream.bsRead": {
+      "hash": "6d0e3f71ec36",
+      "ja": {
+        "summary": "読み込み"
+      },
+      "tr": {
+        "summary": "Read"
+      }
+    },
+    "binaryStream:BinaryStream.bsWrite": {
+      "hash": "02d021053fb3",
+      "ja": {
+        "summary": "書き込み"
+      },
+      "tr": {
+        "summary": "Write"
+      }
+    },
+    "binaryStream:BinaryStream.bsAppend": {
+      "hash": "f3d2c062fa3f",
+      "ja": {
+        "summary": "追記"
+      },
+      "tr": {
+        "summary": "Append"
+      }
+    },
+    "binaryStream:BinaryStream.bsUpdate": {
+      "hash": "c662a08be3f1",
+      "ja": {
+        "summary": "更新"
+      },
+      "tr": {
+        "summary": "Update"
+      }
+    },
+    "binaryStream:BinaryStream.bsSeekSet": {
+      "hash": "e044934d883a",
+      "ja": {
+        "summary": "先頭から"
+      },
+      "tr": {
+        "summary": "From the beginning"
+      }
+    },
+    "binaryStream:BinaryStream.bsSeekCur": {
+      "hash": "bbe747ce60b3",
+      "ja": {
+        "summary": "現在位置から"
+      },
+      "tr": {
+        "summary": "From the current position"
+      }
+    },
+    "binaryStream:BinaryStream.bsSeekEnd": {
+      "hash": "31ced1cc7ebd",
+      "ja": {
+        "summary": "末尾から"
+      },
+      "tr": {
+        "summary": "From the end"
+      }
+    }
+  }
+}

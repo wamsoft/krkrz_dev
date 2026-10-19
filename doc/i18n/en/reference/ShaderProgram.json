@@ -1,0 +1,35 @@
+{
+  "class": "ShaderProgram",
+  "entries": {
+    "ShaderProgram": {
+      "hash": "407f57aaf765",
+      "ja": {
+        "description": "Vertex/Fragmentシェーダーをコンパイル/リンクしたものを格納するクラスです。\nコンストラクタでコンパイル/リンクは実行され、エラーがあると例外が出るのでログを見て修正する。\nシェーダーの入力に使われるパラメータは、メンバに追加されるので、メンバ経由で値の設定が可能です。\nシェーダーからの変数名取得は、リフレクションを使用し取得しています。\nTextureなどの指定は決められた予約語としてあらかじめ定めておき、その名前で作ります。\n頂点情報となる Attribute 属性値はメンバ経由の設定は drawMesh で VertexBuffer/VertexBinder を使用した場合のみ可能です。\nShaderProgram に元々あるメンバ関数やプロパティは必然的にシェーダー内で入力変数名としては使えません(そのため現状は最小限のメンバしか追加していない)。\n\nシェーダー内で定義された入力名として追加されたプロパティに値を設定しておくと、描画時にその値が設定されます。\n追加されたプロパティは値の設定のみ可能で、取得は出来ません。\n値は保持され続けるので、同じシェーダーを使う場合、描画前に指定したい値に変更しておく必要があります。\nプロパティの型は、シェーダースクリプトから取得されます。\nvec4などはArrayクラスにreal型の配列として受け渡します。\n\n予約語は、描画実行時に内部的に自動的に設定されるので、明示的に値を設定する必要はありません(drawMesh除く)。\nex. s_tex0 には、1個目の texture id が渡されます。\n自動的に設定される値は描画命令に依存します。\n\nシェーダーがスクリプトから指定出来て、自由に入れ替えられるのなら、従来のようにLayerに機能拡張するためにプラグインを書かなくても、TJS2 スクリプトのみで、従来の CPU 処理するよりも高速に演出の追加が可能になると予測できます。\nLayer 相当の機能は現状ないが、Layer/Sprite などを TJS2 スクリプトで実現するために必要な周辺機能を充実させれば、その辺りスクリプトで書けて、従来よりネイティブ(C++)プラグインの出番を少なくできます。\nシェーダー + それを扱う Sprite 等を実現する TJS2 スクリプトをセットで配布すれば、それで演出強化できます。\n\nシェーダースクリプトをファイル入力する場合は、UTF-8で記述してください。\n\n\nシェーダー内で使用できない(内部定義されている)変数名\n\n+ ShaderProgram\n+ finalize\n\n自動的に設定される値の名称\n\n+ テクスチャ : s_tex0, s_tex1, s_tex2, s_tex3...\n+ 頂点座標 : a_pos(vec2)\n+ テクスチャ座標 : a_texCoord(vec2)\n+ 行列 : a_modelMat4(mat4)\n\n\nGLSLの構造体と配列には初期段階では未対応です。"
+      },
+      "tr": {
+        "description": "Holds a compiled and linked pair of vertex and fragment shaders.\nCompilation and linking happen in the constructor; if there is an error, an exception is thrown, so check the log and fix the shader.\nThe parameters used as shader inputs are added as members, so you can set their values through those members.\nVariable names are obtained from the shader through reflection.\nInputs such as textures use predefined reserved names, and the shader is written using those names.\nAttribute values (vertex data) can be set through members only when drawMesh is used with VertexBuffer/VertexBinder.\nThe member functions and properties that ShaderProgram already has naturally cannot be used as input variable names in a shader (which is why only a minimal set of members has been added so far).\n\nIf you set a value on a property added for an input name defined in the shader, that value is applied when drawing.\nAdded properties can only be set, not read.\nValues persist, so when reusing the same shader you need to change them to the desired values before drawing.\nProperty types are obtained from the shader source.\nTypes such as vec4 are passed as an Array of real values.\n\nReserved names are set automatically and internally at draw time, so you do not need to set them explicitly (except with drawMesh).\nFor example, s_tex0 receives the first texture ID.\nWhich values are set automatically depends on the drawing command.\n\nIf shaders can be specified from script and swapped freely, effects that previously required writing a plugin to extend Layer can be added with TJS2 script alone, and they are expected to run faster than conventional CPU processing.\nThere is currently no Layer-equivalent functionality, but by enriching the supporting features needed to implement things like Layer/Sprite in TJS2 script, those parts can be written in script, reducing the need for native (C++) plugins.\nDistributing a shader together with the TJS2 script that implements a Sprite (or similar) using it is enough to enhance effects.\n\nWhen loading shader source from a file, write it in UTF-8.\n\n\nVariable names that cannot be used in shaders (defined internally)\n\n+ ShaderProgram\n+ finalize\n\nNames of values that are set automatically\n\n+ Textures: s_tex0, s_tex1, s_tex2, s_tex3...\n+ Vertex position: a_pos(vec2)\n+ Texture coordinates: a_texCoord(vec2)\n+ Matrix: a_modelMat4(mat4)\n\n\nGLSL structs and arrays are not supported in this initial stage."
+      }
+    },
+    "ShaderProgram.ShaderProgram": {
+      "hash": "d015143ba010",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "vertex": "頂点シェーダーを指定します。\nfileがtrueの時はファイル名、falseの時は直接文字列を指定します。",
+          "fragment": "フラグメントシェーダーを指定します。\nfileがtrueの時はファイル名、falseの時は直接文字列を指定します。",
+          "vsfile": "vertexで指定された文字列がファイルか直接スクリプト指定かを選択します。",
+          "fsfile": "fragmentで指定された文字列がファイルか直接スクリプト指定かを選択します。"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "vertex": "The vertex shader.\nWhen file is true, specify a file name; when false, specify the source string directly.",
+          "fragment": "The fragment shader.\nWhen file is true, specify a file name; when false, specify the source string directly.",
+          "vsfile": "Selects whether the string given in vertex is a file name or the shader source itself.",
+          "fsfile": "Selects whether the string given in fragment is a file name or the shader source itself."
+        }
+      }
+    }
+  }
+}

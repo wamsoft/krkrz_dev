@@ -1,0 +1,53 @@
+{
+  "class": "Threepp.DirectionalLightHelper",
+  "entries": {
+    "krkrthreepp:Threepp.DirectionalLightHelper": {
+      "hash": "eb1c573b631c",
+      "ja": {
+        "summary": "ディレクショナルライトヘルパー",
+        "description": "平行光源の方向を可視化します。"
+      },
+      "tr": {
+        "summary": "Directional light helper",
+        "description": "Visualizes the direction of a directional light."
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLightHelper.DirectionalLightHelper": {
+      "hash": "597e5c632fc0",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "light": "可視化するライト",
+          "size": "ヘルパーのサイズ",
+          "color": "ヘルパーの色（省略時はライトの色）"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "light": "Light to visualize.",
+          "size": "Size of the helper.",
+          "color": "Color of the helper (defaults to the light's color)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLightHelper.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.DirectionalLightHelper.update": {
+      "hash": "0c9639963fd8",
+      "ja": {
+        "summary": "ヘルパーを更新"
+      },
+      "tr": {
+        "summary": "Updates the helper"
+      }
+    }
+  }
+}

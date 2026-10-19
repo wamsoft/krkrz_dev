@@ -15,7 +15,7 @@
 ### メソッド
 
 - [start](#start)
-- [start](#start)
+- [stop](#stop)
 - [onRequest](#onrequest)
 
 ### 定数
@@ -83,7 +83,7 @@
 
 ---
 
-### start
+### stop
 
 メソッド
 
@@ -160,6 +160,10 @@ binary:返すバイナリ（ArrayまたはOctet）
 
 値: `CP_20932`
 
+**解説**
+
+51932
+
 ---
 
 ### cpJIS
@@ -167,9 +171,5 @@ binary:返すバイナリ（ArrayまたはOctet）
 定数
 
 値: `CP_50220`
-
-**解説**
-
-51932
 
 ---

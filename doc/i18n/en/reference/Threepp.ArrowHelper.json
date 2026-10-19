@@ -1,0 +1,64 @@
+{
+  "class": "Threepp.ArrowHelper",
+  "entries": {
+    "krkrthreepp:Threepp.ArrowHelper": {
+      "hash": "cbb0f62f454d",
+      "ja": {
+        "summary": "矢印ヘルパー",
+        "description": "方向を示す矢印を表示します。"
+      },
+      "tr": {
+        "summary": "Arrow helper",
+        "description": "Displays an arrow that visualizes a direction."
+      }
+    },
+    "krkrthreepp:Threepp.ArrowHelper.ArrowHelper": {
+      "hash": "962af0f37ff1",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "dir": "方向ベクトル [x, y, z]",
+          "origin": "原点 [x, y, z]",
+          "length": "長さ",
+          "color": "色 (0xRRGGBB)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "dir": "Direction vector [x, y, z].",
+          "origin": "Origin point [x, y, z].",
+          "length": "Length.",
+          "color": "Color (0xRRGGBB)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.ArrowHelper.setDirection": {
+      "hash": "a1bdcb21815d",
+      "ja": {
+        "summary": "方向を設定"
+      },
+      "tr": {
+        "summary": "Sets the direction"
+      }
+    },
+    "krkrthreepp:Threepp.ArrowHelper.setLength": {
+      "hash": "206581a5fa78",
+      "ja": {
+        "summary": "長さを設定"
+      },
+      "tr": {
+        "summary": "Sets the length"
+      }
+    },
+    "krkrthreepp:Threepp.ArrowHelper.setColor": {
+      "hash": "3b4f8d1c54dc",
+      "ja": {
+        "summary": "色を設定"
+      },
+      "tr": {
+        "summary": "Sets the color"
+      }
+    }
+  }
+}

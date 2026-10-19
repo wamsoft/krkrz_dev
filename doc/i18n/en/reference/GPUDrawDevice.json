@@ -1,0 +1,170 @@
+{
+  "class": "GPUDrawDevice",
+  "entries": {
+    "GPUDrawDevice": {
+      "hash": "c580280efe65",
+      "ja": {
+        "summary": "GPUDrawDevice クラスは、このインスタンスを [Window.drawDevice](Window.md#drawdevice) に登録して使用するための DrawDevice で、SDL3 の GPU API ( SDL_GPU ) を用いて [Canvas](Canvas.md) 系クラスを動かします。**開発中の機能** で、Canvas を SDL_GPU で動かすビルド ( CMake オプション `KRKRZ_CANVAS_GPU=ON`、SDL3 ビルドのみ・OpenGL 版とは排他 ) にだけ含まれます。",
+        "description": "このビルドでは起動時の既定 DrawDevice がこのクラスになります ( `-drawdevice=gpu`。`-drawdevice=sdl` で [SDLDrawDevice](SDLDrawDevice.md) に戻せます。 [コマンドラインオプション](../guide/CommandLine.md) )。SDL_GPU のドライバは自動選択で、`-gpudriver` で明示できます ( Windows の既定は `vulkan`。`-gpudriver=direct3d12` で D3D12 でも動きます。その場合スクリプトのシェーダーは DXIL のパックが必要です )。\n\nOpenGL 版の無いビルドでは、このクラスは `Window.OGLDrawDevice` の名前でも登録されます。[OGLDrawDevice](OGLDrawDevice.md) を使う既存のスクリプト ( 派生クラスの `super.OGLDrawDevice()` を含む ) は、そのままこのクラスで動きます。\n\nこのデバイスがアクティブな間、[Canvas](Canvas.md) / [Texture](Texture.md) / [ShaderProgram](ShaderProgram.md) / [Offscreen](Offscreen.md) / [Matrix32](Matrix32.md) / [VertexBuffer](VertexBuffer.md) / [VertexBinder](VertexBinder.md) が SDL_GPU の上で機能します。OpenGL ES 版との主な違いは次のとおりです。\n\n- シェーダーは実行時にコンパイルせず、事前に変換したパック ( `canvas_shaders.kzgs` ) から引きます。パックに無いシェーダーを使うと例外になります ( `-gpushadercollect` で書き出して変換します。`-gpushaderpack` でパックを指定できます )\n- drawText は未対応です ( マスク・ステンシルによるクリッピング ( beginMaskClip / beginStencilClip )・ポストエフェクト ( beginEffect / endEffect )・TextureLayerTreeOwner・[GLCompositor](GLCompositor.md) は使えます。オーバーレイ動画は [SDLDrawDevice](SDLDrawDevice.md) と同じ経路で Canvas の上に出ます )\n- [Texture.nativeHandle](Texture.md#nativehandle) は GL のテクスチャ番号ではなく、SDL_GPU のテクスチャになります\n- [matrix](OGLDrawDevice.md#matrix) / [glVideoPresenterHost](OGLDrawDevice.md#glvideopresenterhost) プロパティはありません\n\n画面への出し方は [SDLDrawDevice](SDLDrawDevice.md) と同じで、SDL_Renderer を Canvas と同じ GPU デバイスの上で動かし、Canvas が描いた画面をプライマリレイヤーの画像と同じ矩形へ出します。Canvas の座標系はプライマリレイヤーと同じ大きさです。"
+      },
+      "tr": {
+        "summary": "GPUDrawDevice is a DrawDevice that you register in [Window.drawDevice](Window.md#drawdevice); it runs the [Canvas](Canvas.md) family of classes on the SDL3 GPU API (SDL_GPU). It is an **in-development feature** included only in builds where Canvas runs on SDL_GPU (CMake option `KRKRZ_CANVAS_GPU=ON`; SDL3 build only, mutually exclusive with the OpenGL version).",
+        "description": "In such builds this class is the default DrawDevice at startup (`-drawdevice=gpu`; `-drawdevice=sdl` switches back to [SDLDrawDevice](SDLDrawDevice.md); see [command-line options](../guide/CommandLine.md)). The SDL_GPU driver is chosen automatically and can be set explicitly with `-gpudriver` (the Windows default is `vulkan`; `-gpudriver=direct3d12` also works with D3D12, in which case script shaders need a DXIL pack).\n\nIn builds without the OpenGL version, this class is also registered under the name `Window.OGLDrawDevice`. Existing scripts that use [OGLDrawDevice](OGLDrawDevice.md) (including `super.OGLDrawDevice()` in derived classes) work with this class as-is.\n\nWhile this device is active, [Canvas](Canvas.md) / [Texture](Texture.md) / [ShaderProgram](ShaderProgram.md) / [Offscreen](Offscreen.md) / [Matrix32](Matrix32.md) / [VertexBuffer](VertexBuffer.md) / [VertexBinder](VertexBinder.md) work on top of SDL_GPU. The main differences from the OpenGL ES version are:\n\n- Shaders are not compiled at run time; they are looked up in a pre-converted pack (`canvas_shaders.kzgs`). Using a shader that is not in the pack throws an exception (dump them with `-gpushadercollect` and convert them; `-gpushaderpack` specifies the pack)\n- drawText is not supported (clipping with masks and stencils (beginMaskClip / beginStencilClip), post effects (beginEffect / endEffect), TextureLayerTreeOwner, and [GLCompositor](GLCompositor.md) are available; overlay movies appear above the Canvas through the same path as [SDLDrawDevice](SDLDrawDevice.md))\n- [Texture.nativeHandle](Texture.md#nativehandle) is an SDL_GPU texture rather than a GL texture number\n- There are no [matrix](OGLDrawDevice.md#matrix) / [glVideoPresenterHost](OGLDrawDevice.md#glvideopresenterhost) properties\n\nPresentation to the screen works as in [SDLDrawDevice](SDLDrawDevice.md): SDL_Renderer runs on the same GPU device as Canvas, and the screen drawn by Canvas is output to the same rectangle as the primary layer image. The Canvas coordinate system has the same size as the primary layer."
+      }
+    },
+    "GPUDrawDevice.GPUDrawDevice": {
+      "hash": "f509d8c58963",
+      "ja": {
+        "summary": "GPUDrawDevice オブジェクトの構築",
+        "description": "GPUDrawDevice クラスのオブジェクトを構築します。\n\nこのクラスが起動時の既定の場合、Window.drawDevice には最初からこのクラスのインスタンスが登録されているので、新たに登録する必要はありません。Canvas を使うには [createCanvas](#createcanvas) を呼びます。"
+      },
+      "tr": {
+        "summary": "Constructs a GPUDrawDevice object",
+        "description": "Constructs an object of the GPUDrawDevice class.\n\nWhen this class is the startup default, an instance of it is already registered in Window.drawDevice, so you do not need to register one yourself. To use Canvas, call [createCanvas](#createcanvas)."
+      }
+    },
+    "GPUDrawDevice.recreate": {
+      "hash": "51542322b8e5",
+      "ja": {
+        "summary": "内部デバイス再生成",
+        "description": "[OGLDrawDevice](OGLDrawDevice.md) との互換のためにあります。このクラスでは何もしません。"
+      },
+      "tr": {
+        "summary": "Recreates the internal device",
+        "description": "Provided for compatibility with [OGLDrawDevice](OGLDrawDevice.md). Does nothing in this class."
+      }
+    },
+    "GPUDrawDevice.createCanvas": {
+      "hash": "689022946ccb",
+      "ja": {
+        "summary": "Canvas オブジェクトを生成",
+        "description": "このデバイスに紐づく [Canvas](Canvas.md) オブジェクトの生成を要求します。\n生成された Canvas は [canvas](#canvas) プロパティから取得できます。\n\nGPU デバイスがまだ準備できていない場合は、準備ができたとき ( [onInit](#oninit) の直前 ) に生成されます。"
+      },
+      "tr": {
+        "summary": "Creates a Canvas object",
+        "description": "Requests creation of a [Canvas](Canvas.md) object bound to this device.\nThe created Canvas is available from the [canvas](#canvas) property.\n\nIf the GPU device is not ready yet, the Canvas is created once it is ready (just before [onInit](#oninit))."
+      }
+    },
+    "GPUDrawDevice.resumeOnDraw": {
+      "hash": "189214a5f6af",
+      "ja": {
+        "summary": "自動停止した onDraw の発火を再開",
+        "description": "onDraw ハンドラが毎フレーム例外を投げ続けて連続例外の上限\n( コマンドラインオプション `-eventexceptionlimit`、既定 10 ) に達すると、\nonDraw の発火は自動停止します ( 画面の表示自体は継続 )。\nこのメソッドを呼ぶと発火を再開します。"
+      },
+      "tr": {
+        "summary": "Resumes firing onDraw after it was stopped automatically",
+        "description": "If the onDraw handler keeps throwing exceptions every frame and reaches the limit for consecutive exceptions\n(command-line option `-eventexceptionlimit`, default 10),\nonDraw stops firing automatically (the screen display itself continues).\nCalling this method resumes firing."
+      }
+    },
+    "GPUDrawDevice.interface": {
+      "hash": "1cd82fca475d",
+      "ja": {
+        "summary": "インターフェースオブジェクトを取得",
+        "description": "プラグインなどで DrawDevice オブジェクトを利用するためにあります。"
+      },
+      "tr": {
+        "summary": "Gets the interface object",
+        "description": "Provided so that plugins and the like can use the DrawDevice object."
+      }
+    },
+    "GPUDrawDevice.window": {
+      "hash": "57fb16b31728",
+      "ja": {
+        "summary": "関連付けられた Window オブジェクトを取得",
+        "description": "この DrawDevice をセットしている Window オブジェクトを返します。"
+      },
+      "tr": {
+        "summary": "Gets the associated Window object",
+        "description": "Returns the Window object this DrawDevice is set on."
+      }
+    },
+    "GPUDrawDevice.canvas": {
+      "hash": "d2b8253061f5",
+      "ja": {
+        "summary": "描画用 Canvas オブジェクトを取得",
+        "description": "このデバイスが管理している [Canvas](Canvas.md) オブジェクトを返します。\nonDraw 内などからアクセスして描画コマンドを発行します。"
+      },
+      "tr": {
+        "summary": "Gets the Canvas object used for drawing",
+        "description": "Returns the [Canvas](Canvas.md) object managed by this device.\nAccess it from onDraw and the like to issue drawing commands."
+      }
+    },
+    "GPUDrawDevice.texture": {
+      "hash": "d281d9a26919",
+      "ja": {
+        "summary": "プライマリレイヤーのテクスチャを取得",
+        "description": "プライマリレイヤーの画像を保持している [Texture](Texture.md) オブジェクトを返します。\nonDraw 内で Canvas に描くことで、レイヤーの画面を Canvas の描画に取り込めます。"
+      },
+      "tr": {
+        "summary": "Gets the primary layer texture",
+        "description": "Returns the [Texture](Texture.md) object that holds the primary layer image.\nDrawing it to the Canvas in onDraw lets you bring the layer screen into the Canvas drawing."
+      }
+    },
+    "GPUDrawDevice.sdlVideoPresenterHost": {
+      "hash": "93c2f42408dd",
+      "ja": {
+        "summary": "オーバーレイ動画 presenter 登録口 (ポインタ値)",
+        "description": "オーバーレイ動画側がこのデバイスへ pull 型で合成するために読み取る presenter host\nへのポインタ値です ( [SDLDrawDevice.sdlVideoPresenterHost](SDLDrawDevice.md#sdlvideopresenterhost) と同じ規約 )。\n通常はエンジン内部/プラグインが使用します。"
+      },
+      "tr": {
+        "summary": "Registration point for the overlay movie presenter (pointer value)",
+        "description": "A pointer value to the presenter host that the overlay movie reads in order to composite into this device in a pull model\n(the same convention as [SDLDrawDevice.sdlVideoPresenterHost](SDLDrawDevice.md#sdlvideopresenterhost)).\nNormally used by the engine internals or plugins."
+      }
+    },
+    "GPUDrawDevice.dialogRendererHost": {
+      "hash": "e39de868ef72",
+      "ja": {
+        "summary": "Elements ダイアログ renderer host (ポインタ値)",
+        "description": "Elements のオーバーレイ描画アダプタを取得するための host へのポインタ値です。\n通常はエンジン内部/プラグインが使用します。"
+      },
+      "tr": {
+        "summary": "Elements dialog renderer host (pointer value)",
+        "description": "A pointer value to the host used to obtain the Elements overlay drawing adapter.\nNormally used by the engine internals or plugins."
+      }
+    },
+    "GPUDrawDevice.viewportBackgroundHost": {
+      "hash": "ad41cb951f93",
+      "ja": {
+        "summary": "ビューポート余白塗り登録口 (ポインタ値)",
+        "description": "ゲーム画面が描画領域全体を覆わないときの余白 ( [Window.viewportBgColor](Window.md#viewportbgcolor) /\n[Window.setViewportWallpaper](Window.md#setviewportwallpaper) ) を受け取る\n`iTVPViewportBackgroundHost` へのポインタ値です。 通常はエンジン内部/プラグインが使用します。"
+      },
+      "tr": {
+        "summary": "Registration point for filling the viewport margins (pointer value)",
+        "description": "A pointer value to the `iTVPViewportBackgroundHost` that receives the margin settings used when the game screen does not cover the whole\ndrawing area ([Window.viewportBgColor](Window.md#viewportbgcolor) /\n[Window.setViewportWallpaper](Window.md#setviewportwallpaper)). Normally used by the engine internals or plugins."
+      }
+    },
+    "GPUDrawDevice.onInit": {
+      "hash": "ced7ed5b1beb",
+      "ja": {
+        "summary": "GPU デバイス準備時に呼び出されるイベント",
+        "description": "このデバイスの描画先 ( SDL_Renderer ) が GPU デバイスの上に作られ、Canvas を使える状態になったあとに発火します ( 即時ではなく、次のイベント配送で呼ばれます。onInit の中で例外が起きてもエラーの表示が固まらないようにするためです )。\n\nシェーダ・テクスチャ等の初期リソース確保はここで行います。GPU デバイスが使えない環境では発火せず、Canvas も使えません ( ログに `GPU device is not available` が出ます )。"
+      },
+      "tr": {
+        "summary": "Event called when the GPU device is ready",
+        "description": "Fires after this device's drawing target (SDL_Renderer) has been created on the GPU device and Canvas is ready to use (not immediately, but on the next event dispatch, so that an exception inside onInit does not freeze the error display).\n\nAllocate initial resources such as shaders and textures here. In environments where the GPU device is unavailable, it does not fire and Canvas cannot be used (`GPU device is not available` appears in the log)."
+      }
+    },
+    "GPUDrawDevice.onDone": {
+      "hash": "8ddf2fe6b2d0",
+      "ja": {
+        "summary": "描画先の破棄前に呼び出されるイベント",
+        "description": "このデバイスの描画先が破棄される直前に発火します。\n\nonInit で確保したリソースの解放はここで行います。"
+      },
+      "tr": {
+        "summary": "Event called before the drawing target is destroyed",
+        "description": "Fires just before this device's drawing target is destroyed.\n\nRelease the resources allocated in onInit here."
+      }
+    },
+    "GPUDrawDevice.onDraw": {
+      "hash": "2b1967b85df9",
+      "ja": {
+        "summary": "画面描画時に呼び出されるイベント",
+        "description": "Canvas がある間、描画サイクルごとに発火します。内部で Canvas の BeginDrawing 〜 EndDrawing で挟まれた状態で呼ばれるため、ハンドラ内で [canvas](#canvas) プロパティ経由で描画コマンドを発行できます。\n\nオーバーレイ動画を再生している間は発火しません。"
+      },
+      "tr": {
+        "summary": "Event called when the screen is drawn",
+        "description": "Fires on every drawing cycle while a Canvas exists. It is called internally between the Canvas's BeginDrawing and EndDrawing, so you can issue drawing commands through the [canvas](#canvas) property inside the handler.\n\nIt does not fire while an overlay movie is playing."
+      }
+    }
+  }
+}

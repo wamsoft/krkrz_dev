@@ -118,10 +118,10 @@ class Scripts {
 	 * クラス名を取得
 	 *
 	 * オブジェクトからクラス名を取得します。
-	 * @param obect クラス名を取得するオブジェクト。
+	 * @param object クラス名を取得するオブジェクト。
 	 * @return クラス名の配列
 	 */
-	function getClassNames(obect);
+	function getClassNames(object);
 
 	/**
 	 * スクリプトを読み込む時に使用するテキストエンコーディングを指定

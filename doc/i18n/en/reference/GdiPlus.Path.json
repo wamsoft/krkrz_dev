@@ -1,0 +1,537 @@
+{
+  "class": "GdiPlus.Path",
+  "entries": {
+    "layerExDraw:GdiPlus.Path.Path": {
+      "hash": "43a51d4d3d94",
+      "ja": {
+        "summary": "パス情報クラス"
+      },
+      "tr": {
+        "summary": "Path class"
+      }
+    },
+    "layerExDraw:GdiPlus.Path.startFigure": {
+      "hash": "714849fe7fff",
+      "ja": {
+        "summary": "現在の図形を閉じずに次の図形を開始します"
+      },
+      "tr": {
+        "summary": "Starts the next figure without closing the current one"
+      }
+    },
+    "layerExDraw:GdiPlus.Path.closeFigure": {
+      "hash": "798f8951d9bb",
+      "ja": {
+        "summary": "現在の図形を閉じます"
+      },
+      "tr": {
+        "summary": "Closes the current figure"
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawArc": {
+      "hash": "71bcdf4df741",
+      "ja": {
+        "summary": "円弧の描画",
+        "params": {
+          "x": "左上座標",
+          "y": "左上座標",
+          "width": "横幅",
+          "height": "縦幅",
+          "startAngle": "時計方向円弧開始位置",
+          "sweepAngle": "描画角度"
+        }
+      },
+      "tr": {
+        "summary": "Draws an arc",
+        "params": {
+          "x": "Top-left coordinate",
+          "y": "Top-left coordinate",
+          "width": "Width",
+          "height": "Height",
+          "startAngle": "Start angle of the arc, measured clockwise",
+          "sweepAngle": "Sweep angle"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawPie": {
+      "hash": "2b4092ce7bac",
+      "ja": {
+        "summary": "扇形 (パイ) の描画",
+        "params": {
+          "x": "左上座標",
+          "y": "左上座標",
+          "width": "横幅",
+          "height": "縦幅",
+          "startAngle": "時計方向円弧開始位置",
+          "sweepAngle": "描画角度"
+        }
+      },
+      "tr": {
+        "summary": "Draws a pie (sector)",
+        "params": {
+          "x": "Top-left coordinate",
+          "y": "Top-left coordinate",
+          "width": "Width",
+          "height": "Height",
+          "startAngle": "Start angle of the arc, measured clockwise",
+          "sweepAngle": "Sweep angle"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawBezier": {
+      "hash": "ec0f52924a5c",
+      "ja": {
+        "summary": "ベジェ曲線の描画"
+      },
+      "tr": {
+        "summary": "Draws a Bezier curve"
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawBeziers": {
+      "hash": "c9992d456163",
+      "ja": {
+        "summary": "連続ベジェ曲線の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws connected Bezier curves",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawClosedCurve": {
+      "hash": "cd1d64f2dce0",
+      "ja": {
+        "summary": "Closed cardinal spline の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws a closed cardinal spline",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawClosedCurve2": {
+      "hash": "a81fb9c8813a",
+      "ja": {
+        "summary": "Closed cardinal spline の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]",
+          "tension": "テンション"
+        }
+      },
+      "tr": {
+        "summary": "Draws a closed cardinal spline",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]",
+          "tension": "Tension"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawCurve": {
+      "hash": "9cf38dcf48d1",
+      "ja": {
+        "summary": "cardinal spline の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws a cardinal spline",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawCurve2": {
+      "hash": "10c163cd36e9",
+      "ja": {
+        "summary": "cardinal spline の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]",
+          "tension": "テンション"
+        }
+      },
+      "tr": {
+        "summary": "Draws a cardinal spline",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]",
+          "tension": "Tension"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawCurve3": {
+      "hash": "10c163cd36e9",
+      "ja": {
+        "summary": "cardinal spline の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]",
+          "tension": "テンション"
+        }
+      },
+      "tr": {
+        "summary": "Draws a cardinal spline",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]",
+          "tension": "Tension"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawEllipse": {
+      "hash": "d281e067eda1",
+      "ja": {
+        "summary": "楕円の描画"
+      },
+      "tr": {
+        "summary": "Draws an ellipse"
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawLine": {
+      "hash": "681be37f5276",
+      "ja": {
+        "summary": "線分の描画",
+        "params": {
+          "x1": "始点X座標",
+          "y1": "始点Y座標",
+          "x2": "終点X座標",
+          "y2": "終点Y座標"
+        }
+      },
+      "tr": {
+        "summary": "Draws a line segment",
+        "params": {
+          "x1": "Start point X coordinate",
+          "y1": "Start point Y coordinate",
+          "x2": "End point X coordinate",
+          "y2": "End point Y coordinate"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawLines": {
+      "hash": "cd6d9e303c33",
+      "ja": {
+        "summary": "連続線分の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws connected line segments",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawPolygon": {
+      "hash": "b1a7357cbbb6",
+      "ja": {
+        "summary": "多角形の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws a polygon",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]"
+        }
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawRectangle": {
+      "hash": "20a582cbf1c5",
+      "ja": {
+        "summary": "矩形の描画"
+      },
+      "tr": {
+        "summary": "Draws a rectangle"
+      }
+    },
+    "layerExDraw:GdiPlus.Path.drawRectangles": {
+      "hash": "73d41336a34d",
+      "ja": {
+        "summary": "複数矩形の描画",
+        "params": {
+          "rects": "矩形の配列 [ [x1, y1, width1, height1], [x2, y2, width2, height2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws multiple rectangles",
+        "params": {
+          "rects": "Array of rectangles [ [x1, y1, width1, height1], [x2, y2, width2, height2] .... ]"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.Path": {
+      "hash": "43a51d4d3d94",
+      "ja": {
+        "summary": "パス情報クラス"
+      },
+      "tr": {
+        "summary": "Path class"
+      }
+    },
+    "layerExVector:GdiPlus.Path.startFigure": {
+      "hash": "714849fe7fff",
+      "ja": {
+        "summary": "現在の図形を閉じずに次の図形を開始します"
+      },
+      "tr": {
+        "summary": "Starts the next figure without closing the current one"
+      }
+    },
+    "layerExVector:GdiPlus.Path.closeFigure": {
+      "hash": "798f8951d9bb",
+      "ja": {
+        "summary": "現在の図形を閉じます"
+      },
+      "tr": {
+        "summary": "Closes the current figure"
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawArc": {
+      "hash": "71bcdf4df741",
+      "ja": {
+        "summary": "円弧の描画",
+        "params": {
+          "x": "左上座標",
+          "y": "左上座標",
+          "width": "横幅",
+          "height": "縦幅",
+          "startAngle": "時計方向円弧開始位置",
+          "sweepAngle": "描画角度"
+        }
+      },
+      "tr": {
+        "summary": "Draws an arc",
+        "params": {
+          "x": "Top-left coordinate",
+          "y": "Top-left coordinate",
+          "width": "Width",
+          "height": "Height",
+          "startAngle": "Start angle of the arc, measured clockwise",
+          "sweepAngle": "Sweep angle"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawPie": {
+      "hash": "2b4092ce7bac",
+      "ja": {
+        "summary": "扇形 (パイ) の描画",
+        "params": {
+          "x": "左上座標",
+          "y": "左上座標",
+          "width": "横幅",
+          "height": "縦幅",
+          "startAngle": "時計方向円弧開始位置",
+          "sweepAngle": "描画角度"
+        }
+      },
+      "tr": {
+        "summary": "Draws a pie (sector)",
+        "params": {
+          "x": "Top-left coordinate",
+          "y": "Top-left coordinate",
+          "width": "Width",
+          "height": "Height",
+          "startAngle": "Start angle of the arc, measured clockwise",
+          "sweepAngle": "Sweep angle"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawBezier": {
+      "hash": "ec0f52924a5c",
+      "ja": {
+        "summary": "ベジェ曲線の描画"
+      },
+      "tr": {
+        "summary": "Draws a Bezier curve"
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawBeziers": {
+      "hash": "c9992d456163",
+      "ja": {
+        "summary": "連続ベジェ曲線の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws connected Bezier curves",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawClosedCurve": {
+      "hash": "cd1d64f2dce0",
+      "ja": {
+        "summary": "Closed cardinal spline の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws a closed cardinal spline",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawClosedCurve2": {
+      "hash": "a81fb9c8813a",
+      "ja": {
+        "summary": "Closed cardinal spline の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]",
+          "tension": "テンション"
+        }
+      },
+      "tr": {
+        "summary": "Draws a closed cardinal spline",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]",
+          "tension": "Tension"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawCurve": {
+      "hash": "9cf38dcf48d1",
+      "ja": {
+        "summary": "cardinal spline の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws a cardinal spline",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawCurve2": {
+      "hash": "10c163cd36e9",
+      "ja": {
+        "summary": "cardinal spline の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]",
+          "tension": "テンション"
+        }
+      },
+      "tr": {
+        "summary": "Draws a cardinal spline",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]",
+          "tension": "Tension"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawCurve3": {
+      "hash": "10c163cd36e9",
+      "ja": {
+        "summary": "cardinal spline の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]",
+          "tension": "テンション"
+        }
+      },
+      "tr": {
+        "summary": "Draws a cardinal spline",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]",
+          "tension": "Tension"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawEllipse": {
+      "hash": "d281e067eda1",
+      "ja": {
+        "summary": "楕円の描画"
+      },
+      "tr": {
+        "summary": "Draws an ellipse"
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawLine": {
+      "hash": "681be37f5276",
+      "ja": {
+        "summary": "線分の描画",
+        "params": {
+          "x1": "始点X座標",
+          "y1": "始点Y座標",
+          "x2": "終点X座標",
+          "y2": "終点Y座標"
+        }
+      },
+      "tr": {
+        "summary": "Draws a line segment",
+        "params": {
+          "x1": "Start point X coordinate",
+          "y1": "Start point Y coordinate",
+          "x2": "End point X coordinate",
+          "y2": "End point Y coordinate"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawLines": {
+      "hash": "cd6d9e303c33",
+      "ja": {
+        "summary": "連続線分の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws connected line segments",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawPolygon": {
+      "hash": "b1a7357cbbb6",
+      "ja": {
+        "summary": "多角形の描画",
+        "params": {
+          "points": "点の配列 [ [x1, y1], [x2, y2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws a polygon",
+        "params": {
+          "points": "Array of points [ [x1, y1], [x2, y2] .... ]"
+        }
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawRectangle": {
+      "hash": "20a582cbf1c5",
+      "ja": {
+        "summary": "矩形の描画"
+      },
+      "tr": {
+        "summary": "Draws a rectangle"
+      }
+    },
+    "layerExVector:GdiPlus.Path.drawRectangles": {
+      "hash": "73d41336a34d",
+      "ja": {
+        "summary": "複数矩形の描画",
+        "params": {
+          "rects": "矩形の配列 [ [x1, y1, width1, height1], [x2, y2, width2, height2] .... ]"
+        }
+      },
+      "tr": {
+        "summary": "Draws multiple rectangles",
+        "params": {
+          "rects": "Array of rectangles [ [x1, y1, width1, height1], [x2, y2, width2, height2] .... ]"
+        }
+      }
+    }
+  }
+}

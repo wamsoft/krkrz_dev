@@ -1,0 +1,52 @@
+{
+  "class": "Threepp.LineBasicMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.LineBasicMaterial": {
+      "hash": "72ff9aa3f5fc",
+      "ja": {
+        "summary": "線用基本マテリアル",
+        "description": "Line, LineSegments用のシンプルなマテリアルです。"
+      },
+      "tr": {
+        "summary": "Basic material for lines",
+        "description": "A simple material for Line and LineSegments."
+      }
+    },
+    "krkrthreepp:Threepp.LineBasicMaterial.LineBasicMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.LineBasicMaterial.type": {
+      "hash": "60b952f675b8",
+      "ja": {
+        "summary": "\"LineBasicMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"LineBasicMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.LineBasicMaterial.color": {
+      "hash": "7df053f299de",
+      "ja": {
+        "summary": "色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.LineBasicMaterial.linewidth": {
+      "hash": "9e49adb61cf6",
+      "ja": {
+        "summary": "線幅"
+      },
+      "tr": {
+        "summary": "Line width"
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "class": "Threepp.TextureLoader",
+  "entries": {
+    "krkrthreepp:Threepp.TextureLoader": {
+      "hash": "afb057d60d9d",
+      "ja": {
+        "summary": "テクスチャローダー",
+        "description": "ファイルからテクスチャを読み込みます。"
+      },
+      "tr": {
+        "summary": "Texture loader",
+        "description": "Loads textures from files."
+      }
+    },
+    "krkrthreepp:Threepp.TextureLoader.TextureLoader": {
+      "hash": "91a2e7ccdbb7",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "useCache": "キャッシュを使用するか"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "useCache": "Whether to use the cache."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.TextureLoader.load": {
+      "hash": "8021aab017f9",
+      "ja": {
+        "summary": "テクスチャを読み込む",
+        "returns": "Texture",
+        "params": {
+          "path": "ファイルパス",
+          "flipY": "Y軸を反転するか"
+        }
+      },
+      "tr": {
+        "summary": "Loads a texture",
+        "returns": "Texture",
+        "params": {
+          "path": "File path.",
+          "flipY": "Whether to flip along the Y axis."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.TextureLoader.clearCache": {
+      "hash": "92814e855d14",
+      "ja": {
+        "summary": "キャッシュをクリア"
+      },
+      "tr": {
+        "summary": "Clears the cache"
+      }
+    }
+  }
+}

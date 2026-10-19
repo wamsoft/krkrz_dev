@@ -1,0 +1,49 @@
+{
+  "class": "Live2DDevice",
+  "entries": {
+    "krkrlive2d:Live2DDevice.Live2DDevice": {
+      "hash": "f958522b12c7",
+      "ja": {
+        "params": {
+          "oglbase": "GetProcAddress を保持してるオブジェクト\n以下のいずれかを指定できる:\n- krkrgles プラグインが提供する OpenGL コンテキストオブジェクト\n- 新しい吉里吉里Z の OGLDrawDevice (本体組み込みの OpenGL 描画デバイス)\n現在の OGLコンテキストに対して初期化されます"
+        }
+      },
+      "tr": {
+        "params": {
+          "oglbase": "Object that holds GetProcAddress.\nOne of the following can be specified:\n- The OpenGL context object provided by the krkrgles plugin\n- The OGLDrawDevice of newer Kirikiri Z versions (the engine's built-in OpenGL draw device)\nThe device is initialized for the current OpenGL context."
+        }
+      }
+    },
+    "krkrlive2d:Live2DDevice.onBeginScene": {
+      "hash": "640da825c1c9",
+      "ja": {
+        "summary": "全体の描画開始時に1度だけ呼び出す",
+        "description": "※生成時のコンテキストで呼び出すこと"
+      },
+      "tr": {
+        "summary": "Call once at the start of drawing the whole scene",
+        "description": "Note: call this in the context the device was created in."
+      }
+    },
+    "krkrlive2d:Live2DDevice.onEndScene": {
+      "hash": "36c0b0f63af4",
+      "ja": {
+        "summary": "全体の描画完了時に1度だけ呼び出す"
+      },
+      "tr": {
+        "summary": "Call once when drawing the whole scene is finished"
+      }
+    },
+    "krkrlive2d:Live2DDevice.prepareShaders": {
+      "hash": "eeb316439dbb",
+      "ja": {
+        "summary": "シェーダの事前コンパイルを実行する",
+        "description": "未呼び出しの場合は初回描画時にまとめてコンパイルされ\n数秒程度の待ち時間が発生するため、起動時などに呼んでおくことを推奨\n※生成時のコンテキストで呼び出すこと"
+      },
+      "tr": {
+        "summary": "Precompiles the shaders",
+        "description": "If not called, the shaders are compiled all at once on the first draw,\ncausing a wait of a few seconds, so calling it at startup or similar is recommended.\nNote: call this in the context the device was created in."
+      }
+    }
+  }
+}

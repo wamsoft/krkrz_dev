@@ -960,3 +960,94 @@ README の「**排他グループの分離**」のとおり、 **各グループ
 ホスト案件は知らずに「同じ場所に N 個置いて使わない方を `at_var` で画面外へ
 park する」回避をしていた (動いてはいるので急がないが、 新規の画面は `native`
 を使う)。
+
+---
+
+## 11. パネルをパッドだけで操作できない (マウスの無い機種) — ✅ 対応済み (2026-10-15)
+
+> **2026-10-15 対応** (案 A+B+C+D+E。 elements `8c0fa897` / src/core `a86ee740`)。
+> A = demolib の `withPadNav` (a11y は外す) / B = 十字・パッドボタンは処理したときだけ消費
+> (離しは押下に揃える) / C = 十字で入力欄に入っただけでは画面のキーボードを出さず決定で出す
+> (`last_input_is_key_nav` + `ConfirmScreenKeyboard`) / D = ElementsDialog.md「パッドだけで操作する
+> 画面」・ガイド・skill elements / E = `tTVPDialogInputForwardedScope` で 2 重配送を解消。
+> SDL / WINVER で確認。 F (機種で既定を変える) は入れていない。 残り: フォーカスが無くても A は
+> パネル既定の決定割り当てが受け取る (ゲームへは届かない) こと、 コンソール実機での確認。
+>
+> 11-5 の小物も 2026-10-15 に対応 (elements `8df09caf` / src/core `cf10b113`):
+> - TAB がフォーカス無しから最後の要素に入る → layer (子を逆順に扱う `reverse_index`) を挟む
+>   画面で、 子を辿る順と子へ入る端を同じフラグで決めていたため。 入る端は Tab の向きだけで決める
+> - 入力欄フォーカス中の `focused` が空 → `input_box` がフォーカス追跡に登録されていなかった
+> - ついでに、 `data/elements_audit` を単独起動すると `Layer.drawText` の文字が全部記号になる件
+>   (既定書体 `Font.face = ""` が Elements のアイコンフォントで描かれていた) も修正
+
+報告: 2026-10-12、Xbox devkit でコアデモ「デバッグ支援」のパネルのボタンをパッドで
+押せなかった。2026-10-15 に Windows SDL 版で調査 (`-navlog` + REPL の `Agent` 注入。
+コンソールに近い条件は `ElementsDialog.virtualKeyboard = "always"` で再現)。
+
+### 分かったこと
+
+**11-1. 主因: 方向キーでのフォーカス移動が画面 JSON で有効になっていない**
+
+- elements の 2D フォーカスナビ (`view::arrow_focus_navigation`) は**既定で無効**の
+  opt-in で、画面 JSON の `"input": { "arrow_focus_nav": true }` (または
+  `input_defaults.jsonc`) で有効にする。パッドの十字も内部で方向キーに変換されて
+  同じ判定を通るので、これが無いと**十字・方向キーとも何もしない**。
+- demolib のパネル (`DemoPanel`、`showJson(json, true, false)`) はどれも指定していない
+  (コアデモの `data/` に `input_defaults.jsonc` も無い)。
+- 試しに同じパネルへ `arrow_focus_nav` を足すと、フォーカス無しから十字↓で先頭の要素に入り、
+  以後は十字で移動、A で押せた。**フォーカス無しからの入り方の仕組みは elements に元からある**
+  (`"arrow_focus_enter"`: 既定 `first` = 先頭、`directional` = 押した方向の端)。
+- TAB ではフォーカスが付く (TAB は `arrow_focus_nav` と無関係に巡回する)。
+
+**11-2. ナビが無効な画面では十字が「パネルにもゲームにも効かない」**
+
+`on_pad_button` は十字を軸の状態へ入れて**常に処理済みを返す** (`view.cpp` の
+`feed_dpad_axis(...); return true;`)。そのためフォーカスを取る非モーダルのパネルが
+出ている間、`arrow_focus_nav` が無いと十字はパネルで何も起こさないまま消費され、
+ゲーム側 (`Window.onKeyDown` の `VK_PAD*`) にも届かない。キーボードの方向キーは
+未処理として素通しされるので、キーボードとパッドで挙動が食い違っている。
+
+**11-3. キーボードの無い機種では、入力欄を「通過」しただけで仮想キーボードが開く**
+
+`UpdateFocusDrivenTextInput()` は入力欄にフォーカスが乗った時点で内蔵の仮想キーボードを
+出す。十字でフォーカスを動かして入力欄を通るだけでキーボードが開き、ナビが止まる
+(デバッグ支援のパネルは先頭が入力欄なので、最初の十字↓で即座に開く)。マウス / タッチで
+入力欄を押したときは今の挙動でよいが、十字で通過したときは開かずに A (決定) で開くのが
+コンソールの UI の通例。
+
+**11-4. パネルを出したまま方向キーを使うシーンとの取り合い**
+
+`a11y` シーンはパネルを出しつつ方向キーでゲーム側の選択肢を動かしている。パネルが
+フォーカスを取ったまま `arrow_focus_nav` を有効にすると、移動先がある限り方向キーは
+パネルが使い、ゲームへは端で外れたときしか届かない。
+
+**11-5. ついでに見つかった小さいもの**
+
+- 未処理のキーがダイアログ側へ 2 回配られている。`tTJSNI_BaseWindow::OnKeyDown` が
+  `ForwardKeyDown` を呼び、未処理なら `DrawDevice->OnKeyDown` に進み、そこでも
+  `TVP_DIALOG_INTERCEPT(ForwardKeyDown)` を通る (`-navlog` に `key down` が 2 行出る。
+  KeyUp も同じ)。未処理のキーなので今は実害が見えないが、状態を持つ処理を足すと効いてくる
+- フォーカス無しから TAB を押すと最後の要素 (ログ消去) に入った (要確認。先頭が期待値のはず)
+- 入力欄にフォーカスがある間、`Agent.dialogs()[i].focused` が空文字列になる
+
+**11-6. `ElementsPanel` (レイヤに載るパネル)**
+
+`keyDown` / `keyUp` は `VK_PAD*` もパッドとして渡す (`RouteVk` を共用)。なので
+**スクリプトが `Window.onKeyDown` 等からパネルへ流し、画面 JSON に `arrow_focus_nav` を
+入れれば** overlay と同じくパッドで操作できる。パネルが 1 枚なら調停の仕組みは要らない。
+複数のパネルのどれがキーを取るかの調停は、要る場面が出てから (ElementsDialog.md
+「持っていないもの」のまま)。
+
+### 対処案
+
+| | 案 | 対象 | 規模 |
+|---|---|---|---|
+| A | demolib のパネルに `arrow_focus_nav` を入れる (`shellShowPanel` で `"input"` が無ければ足す)。a11y シーンは方向キーをゲームに渡したいので個別に外す | demolib | 小 |
+| B | 十字の消費を実態に合わせる: 軸のモードが `disabled`、または `arrow_focus_nav` が無効でフォーカス中の要素も値を受けないなら、`on_pad_button` は未処理を返してゲームへ素通しする (11-2) | elements | 小〜中 |
+| C | 仮想キーボードは、十字 / キーでフォーカスが乗っただけでは開かず、決定 (A / Enter) で開く。マウス / タッチで押したときは今どおり即座に開く (11-3) | engine (+ elements から nav_source を受ける) | 中 |
+| D | パッドで操作する画面の作り方を ElementsDialog.md / skill elements に書く (`arrow_focus_nav` を入れる、入力欄の置き場所、`ElementsPanel` へのキーの流し方) | doc | 小 |
+| E | キーの 2 重配送を直す (11-5) | engine | 小 |
+| F | 機種にマウスが無いときは engine が `arrow_focus_nav` を既定で有効にする | engine | 小 (ただし既存の画面の挙動が変わる) |
+
+推奨: **A + B + C + D**、E はついでに。F は «既存の画面が方向キーを奪う» 変化が全案件に
+及ぶので、入れるなら `input_defaults.jsonc` と同じ «プロジェクトが選ぶ» 層に置く。

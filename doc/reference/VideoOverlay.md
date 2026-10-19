@@ -376,9 +376,9 @@ IMFMediaEngine) を用い、映像は描画デバイス (BasicDrawDevice) の Di
 
 **解説**
 
-セグメントループの開始フレーム
+セグメントループの終了フレーム
 
-セグメントループの始端フレームです。
+セグメントループの終端フレームです。
 
 **関連:** [VideoOverlay.setSegmentLoop](VideoOverlay.md#setsegmentloop)
 

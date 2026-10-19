@@ -1,0 +1,362 @@
+{
+  "class": "Rect",
+  "entries": {
+    "Rect": {
+      "hash": "500d7a12c230",
+      "ja": {
+        "summary": "Rect クラスは、矩形情報を保持するクラスです。"
+      },
+      "tr": {
+        "summary": "The Rect class holds a rectangle."
+      }
+    },
+    "Rect.Rect": {
+      "hash": "45b7cc32d7a8",
+      "ja": {
+        "summary": "Rect オブジェクトの構築",
+        "description": "Rect クラスのオブジェクトを構築します。"
+      },
+      "tr": {
+        "summary": "Constructs a Rect object",
+        "description": "Constructs an object of the Rect class."
+      }
+    },
+    "Rect.Rect@2": {
+      "hash": "c78d1bff7312",
+      "ja": {
+        "summary": "Rect オブジェクトの構築",
+        "description": "Rect クラスのオブジェクトを指定の大きさで構築します。",
+        "params": {
+          "left": "左端を指定します。",
+          "top": "上端を指定します。",
+          "right": "右端を指定します。",
+          "bottom": "下端を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Constructs a Rect object",
+        "description": "Constructs an object of the Rect class with the given size.",
+        "params": {
+          "left": "Left edge.",
+          "top": "Top edge.",
+          "right": "Right edge.",
+          "bottom": "Bottom edge."
+        }
+      }
+    },
+    "Rect.Rect@3": {
+      "hash": "ac61620bd40e",
+      "ja": {
+        "summary": "Rect オブジェクトの構築",
+        "description": "Rect クラスのオブジェクトを Rect オブジェクトから構築します。",
+        "params": {
+          "src": "Rect オブジェトを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Constructs a Rect object",
+        "description": "Constructs an object of the Rect class from another Rect object.",
+        "params": {
+          "src": "Rect object to copy from."
+        }
+      }
+    },
+    "Rect.setSize": {
+      "hash": "8b14d870478d",
+      "ja": {
+        "summary": "矩形サイズの設定",
+        "description": "矩形サイズを指定します。",
+        "params": {
+          "width": "矩形の横幅を指定します。\n\nこの値は [Rect.width](Rect.md#width) プロパティでも取得や設定ができます。",
+          "height": "矩形の縦幅を指定します。\n\nこの値は [Rect.height](Rect.md#height) プロパティでも取得や設定ができます。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the rectangle size",
+        "description": "Sets the size of the rectangle.",
+        "params": {
+          "width": "Width of the rectangle.\n\nThis value can also be read and set with the [Rect.width](Rect.md#width) property.",
+          "height": "Height of the rectangle.\n\nThis value can also be read and set with the [Rect.height](Rect.md#height) property."
+        }
+      }
+    },
+    "Rect.setOffset": {
+      "hash": "34d9fd87b810",
+      "ja": {
+        "summary": "矩形位置の設定",
+        "description": "矩形位置の設定を行います。",
+        "params": {
+          "x": "矩形の X 座標値を指定します。\n\nこの値は [Rect.left](Rect.md#left) プロパティでも取得や設定ができます。",
+          "y": "矩形の Y 座標値を指定します。\n\nこの値は [Rect.top](Rect.md#top) プロパティでも取得や設定ができます。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the rectangle position",
+        "description": "Sets the position of the rectangle.",
+        "params": {
+          "x": "X coordinate of the rectangle.\n\nThis value can also be read and set with the [Rect.left](Rect.md#left) property.",
+          "y": "Y coordinate of the rectangle.\n\nThis value can also be read and set with the [Rect.top](Rect.md#top) property."
+        }
+      }
+    },
+    "Rect.addOffset": {
+      "hash": "c5bbb94eee9f",
+      "ja": {
+        "summary": "矩形位置の設定",
+        "description": "矩形位置を移動します。\n\n指定された x, y 値分矩形が移動します。",
+        "params": {
+          "x": "矩形の横移動量を指定します。",
+          "y": "矩形の縦移動量を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Moves the rectangle",
+        "description": "Moves the rectangle.\n\nThe rectangle is moved by the given x and y amounts.",
+        "params": {
+          "x": "Horizontal amount to move.",
+          "y": "Vertical amount to move."
+        }
+      }
+    },
+    "Rect.clear": {
+      "hash": "0eb579c27704",
+      "ja": {
+        "summary": "矩形情報をクリアします",
+        "description": "矩形の各位置情報をゼロクリアします。"
+      },
+      "tr": {
+        "summary": "Clears the rectangle",
+        "description": "Sets every edge of the rectangle to zero."
+      }
+    },
+    "Rect.set": {
+      "hash": "55af9f8be016",
+      "ja": {
+        "summary": "矩形座標の設定",
+        "description": "指定の大きさに矩形を設定します。",
+        "params": {
+          "left": "左端を指定します。",
+          "top": "上端を指定します。",
+          "right": "右端を指定します。",
+          "bottom": "下端を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the rectangle coordinates",
+        "description": "Sets the rectangle to the given edges.",
+        "params": {
+          "left": "Left edge.",
+          "top": "Top edge.",
+          "right": "Right edge.",
+          "bottom": "Bottom edge."
+        }
+      }
+    },
+    "Rect.isEmpty": {
+      "hash": "abdb3a2c3227",
+      "ja": {
+        "summary": "矩形内部があるかどうか",
+        "description": "矩形が幅と高さを持っているかどうか確認します。\n\nどちらか一方でも0以下の場合 true が返ります。",
+        "returns": "領域の有無"
+      },
+      "tr": {
+        "summary": "Whether the rectangle is empty",
+        "description": "Checks whether the rectangle has a width and a height.\n\nReturns true if either of them is 0 or less.",
+        "returns": "Whether the area is empty"
+      }
+    },
+    "Rect.clip": {
+      "hash": "5ed73067e01d",
+      "ja": {
+        "summary": "矩形のクリッピング",
+        "description": "矩形のクリッピングを指定の矩形で行います。\n\n矩形が空にならない場合のみクリッピングは行われます。\n\n空になってしまう場合は false が返り、クリッピングは行われません。",
+        "returns": "クリッピング実施有無",
+        "params": {
+          "r": "クリッピングする矩形オブジェクトを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Clips the rectangle",
+        "description": "Clips the rectangle with the given rectangle.\n\nClipping is done only if the result is not empty.\n\nIf the result would be empty, false is returned and the rectangle is left unchanged.",
+        "returns": "Whether clipping was done",
+        "params": {
+          "r": "Rectangle object to clip with."
+        }
+      }
+    },
+    "Rect.union": {
+      "hash": "baefb798e7c0",
+      "ja": {
+        "summary": "矩形の合成",
+        "description": "指定の矩形オブジェクトで矩形を拡張します。\n\n指定の矩形オブジェクトの 4辺値で矩形サイズが広がる方向で大きい値が対象矩形の値となります。\n\n対象矩形が空でない場合のみ実行され、空の場合は行われず、false を返します。",
+        "returns": "合成実施有無",
+        "params": {
+          "r": "合成する矩形オブジェクトを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Unites rectangles",
+        "description": "Extends the rectangle with the given rectangle object.\n\nThe rectangle becomes the smallest one that contains both rectangles.\n\nThis is done only if the target rectangle is not empty; if it is empty, nothing is done and false is returned.",
+        "returns": "Whether the union was done",
+        "params": {
+          "r": "Rectangle object to unite with."
+        }
+      }
+    },
+    "Rect.intersects": {
+      "hash": "27e8b6eac695",
+      "ja": {
+        "summary": "矩形の交差判定",
+        "description": "指定の矩形オブジェクトと交差するか判定します。\n\n交差する場合 true が返ります。",
+        "returns": "交差有無",
+        "params": {
+          "r": "交差判定する矩形オブジェクトを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Tests intersection",
+        "description": "Tests whether the rectangle intersects the given rectangle object.\n\nReturns true if they intersect.",
+        "returns": "Whether they intersect",
+        "params": {
+          "r": "Rectangle object to test."
+        }
+      }
+    },
+    "Rect.included": {
+      "hash": "fdc21abb895d",
+      "ja": {
+        "summary": "矩形内包判定",
+        "description": "指定の矩形オブジェクトを内包するか判定します。\n\n内包する場合 true が返ります。\n\n1辺でも外に出ていると内包していないと判定されます。",
+        "returns": "内包有無",
+        "params": {
+          "r": "内包判定する矩形オブジェクトを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Tests containment",
+        "description": "Tests whether the given rectangle object is inside this rectangle.\n\nReturns true if it is.\n\nIf even one edge is outside, it is not considered contained.",
+        "returns": "Whether it is contained",
+        "params": {
+          "r": "Rectangle object to test."
+        }
+      }
+    },
+    "Rect.includedPos": {
+      "hash": "06b55cc025e9",
+      "ja": {
+        "summary": "矩形内包判定",
+        "description": "指定の位置を内包するか判定します。\n\n内包する場合 true が返ります。\n\nright, bottom は含まない範囲で判定されます。",
+        "returns": "内包有無",
+        "params": {
+          "x": "判定するX軸座標値を指定します。",
+          "y": "判定するY軸座標値を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Tests containment of a point",
+        "description": "Tests whether the given position is inside the rectangle.\n\nReturns true if it is.\n\nright and bottom themselves are not included in the range.",
+        "returns": "Whether it is contained",
+        "params": {
+          "x": "X coordinate to test.",
+          "y": "Y coordinate to test."
+        }
+      }
+    },
+    "Rect.equal": {
+      "hash": "e67cc8819f6f",
+      "ja": {
+        "summary": "同一判定",
+        "description": "矩形が同じかどうか判定します。\n\n同じ場合 true が返ります。\n\n比較は4辺の値で行われます。",
+        "returns": "同じかどうか",
+        "params": {
+          "r": "判定する矩形オブジェクトを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Tests equality",
+        "description": "Tests whether the rectangles are equal.\n\nReturns true if they are.\n\nThe four edge values are compared.",
+        "returns": "Whether they are equal",
+        "params": {
+          "r": "Rectangle object to compare with."
+        }
+      }
+    },
+    "Rect.width": {
+      "hash": "474f973cffa1",
+      "ja": {
+        "summary": "矩形横幅",
+        "description": "矩形の横幅を指定します。\n\n値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Rectangle width",
+        "description": "Width of the rectangle.\n\nThe value can also be set."
+      }
+    },
+    "Rect.height": {
+      "hash": "b104e368f01f",
+      "ja": {
+        "summary": "矩形縦幅",
+        "description": "矩形の縦幅を指定します。\n\n値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Rectangle height",
+        "description": "Height of the rectangle.\n\nThe value can also be set."
+      }
+    },
+    "Rect.left": {
+      "hash": "07ae9c85c8d9",
+      "ja": {
+        "summary": "矩形左端",
+        "description": "矩形の左端を指定します。\n\n値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Left edge",
+        "description": "Left edge of the rectangle.\n\nThe value can also be set."
+      }
+    },
+    "Rect.top": {
+      "hash": "3a9f9e989015",
+      "ja": {
+        "summary": "矩形上端",
+        "description": "矩形の上端を指定します。\n\n値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Top edge",
+        "description": "Top edge of the rectangle.\n\nThe value can also be set."
+      }
+    },
+    "Rect.right": {
+      "hash": "9abf409c0058",
+      "ja": {
+        "summary": "矩形右端",
+        "description": "矩形の右端を指定します。\n\n値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Right edge",
+        "description": "Right edge of the rectangle.\n\nThe value can also be set."
+      }
+    },
+    "Rect.bottom": {
+      "hash": "0cdbafab0a99",
+      "ja": {
+        "summary": "矩形下端",
+        "description": "矩形の下端を指定します。\n\n値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Bottom edge",
+        "description": "Bottom edge of the rectangle.\n\nThe value can also be set."
+      }
+    },
+    "Rect.nativeArray": {
+      "hash": "22eeeb4f1a01",
+      "ja": {
+        "summary": "矩形バッファポインタ",
+        "description": "矩形の座標配列へのポインタを表します。\n\nこのプロパティは、プラグインなどのために座標配列バッファへの直接のアクセスの手段を提供する\nためにあります。\n\n整数型で返されますが、プラグインなどでは適切な型 ( int[4] 等 ) にキャストして使って\nください。"
+      },
+      "tr": {
+        "summary": "Pointer to the rectangle buffer",
+        "description": "A pointer to the coordinate array of the rectangle.\n\nThis property exists to give plugins and similar code direct access to the coordinate\narray buffer.\n\nIt is returned as an integer; in a plugin, cast it to a suitable type (such as int[4])\nbefore use."
+      }
+    }
+  }
+}

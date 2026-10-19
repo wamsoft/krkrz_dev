@@ -1,0 +1,172 @@
+{
+  "class": "EffekseerEffect",
+  "entries": {
+    "krkreffekseer:EffekseerEffect": {
+      "hash": "8824ab5e06ab",
+      "ja": {
+        "summary": "エフェクト素材",
+        "description": "読み込み済みのエフェクトを保持する。複数の EffekseerPlayer から共有できるので、\n同じエフェクトを多数同時再生する場合はこちらを使い回すとよい。"
+      },
+      "tr": {
+        "summary": "Effect asset",
+        "description": "Holds a loaded effect. It can be shared by multiple EffekseerPlayer objects, so\nreuse it when playing the same effect many times simultaneously."
+      }
+    },
+    "krkreffekseer:EffekseerEffect.EffekseerEffect": {
+      "hash": "05ad90beed89",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "device": "EffekseerDevice インスタンス"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "device": "EffekseerDevice instance"
+        }
+      }
+    },
+    "krkreffekseer:EffekseerEffect.device": {
+      "hash": "592334de1581",
+      "ja": {
+        "summary": "読み出し専用"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "krkreffekseer:EffekseerEffect.load": {
+      "hash": "39c02035bf2e",
+      "ja": {
+        "summary": "エフェクトファイルを読み込む",
+        "params": {
+          "filename": "ストレージ名 (.efkzip / .efkefc / .efk)",
+          "magnification": "読み込み時の拡大率 (省略時 1.0)",
+          "entry": ".efkzip 内のエフェクトファイル名 (省略可)\n\n・.efkzip … エフェクト本体とテクスチャ/モデル一式を固めた ZIP。\nEffekseer のエフェクトは資材が複数ファイルに分かれるため、通常はこの形式を使う\n(Live2D の .l2d と同じ考え方)。資材は ZIP 内の相対パスで解決される。\nentry 省略時は ZIP 内の最初の .efkefc (無ければ .efk) を使う。\n・.efkefc / .efk … 単体ファイル指定。資材は filename と同じディレクトリを基準に\n解決され、見つからない場合はファイル名だけで自動検索パスも探す\n(XP3 へパックしてディレクトリ構造が畳まれた場合の対策)。\n\n失敗した場合は例外が発生する。"
+        }
+      },
+      "tr": {
+        "summary": "Loads an effect file",
+        "params": {
+          "filename": "Storage name (.efkzip / .efkefc / .efk)",
+          "magnification": "Magnification at load time (1.0 if omitted)",
+          "entry": "Effect file name inside the .efkzip (optional)\n\n- .efkzip … a ZIP bundling the effect together with its textures/models.\nEffekseer effects split their assets across multiple files, so this format is normally used\n(the same idea as Live2D's .l2d). Assets are resolved by their relative paths inside the ZIP.\nIf entry is omitted, the first .efkefc in the ZIP (or .efk if none) is used.\n- .efkefc / .efk … a single file. Assets are resolved relative to the directory of filename;\nif not found there, the file name alone is also looked up in the auto search path\n(to cope with directory structures flattened when packed into an XP3).\n\nAn exception is thrown on failure."
+        }
+      }
+    },
+    "krkreffekseer:EffekseerEffect.clear": {
+      "hash": "e95412471a62",
+      "ja": {
+        "summary": "内容消去"
+      },
+      "tr": {
+        "summary": "Clears the contents"
+      }
+    },
+    "krkreffekseer:EffekseerEffect.unloadResources": {
+      "hash": "43ee15154753",
+      "ja": {
+        "summary": "資材(テクスチャ/モデル等)の破棄・再読込"
+      },
+      "tr": {
+        "summary": "Releases / reloads assets (textures, models, etc.)"
+      }
+    },
+    "krkreffekseer:EffekseerEffect.meta": {
+      "hash": "e8bdbdfb6d01",
+      "ja": {
+        "summary": ".efkzip に同梱された付属情報 (effect.json)。無ければ void",
+        "description": "エフェクトのバイナリには「動的パラメータの名前」が残らない。入るのは\n既定値とコンパイル済みのコードだけで、本来は番号でしか触れない。そこで\n名前と番号の対応などを JSON で持たせておく約束にしてある。\n.efkzip を読んだ時点で自動的に解釈されるので、読み込み側の手続きは要らない。\n\n意味づけが決まっているのは次の 2 つだけで、残りはそのまま渡される:\ndynamicInputs … [ %[ name:\"emitter.x\", index:0 ], ... ]\nsetDynamicInputByName() の対応表として自動で取り込まれる\nmotions       … [ %[ name:\"...\", file:\"motion/....json\", ... ], ... ]\n\nvar meta = effect.meta;\nif (meta !== void && meta.motions !== void)\nvar path = effect.readMeta(meta.motions[0].file);"
+      },
+      "tr": {
+        "summary": "Supplementary information (effect.json) bundled in the .efkzip; void if absent",
+        "description": "The effect binary does not retain the names of dynamic parameters. It contains only\ndefault values and compiled code, so normally they can be accessed only by index. The convention,\ntherefore, is to provide the name-to-index mapping and similar data as JSON.\nIt is parsed automatically when the .efkzip is loaded, so no extra steps are needed on the loading side.\n\nOnly the following two keys have defined meanings; everything else is passed through as is:\ndynamicInputs … [ %[ name:\"emitter.x\", index:0 ], ... ]\nautomatically imported as the mapping table for setDynamicInputByName()\nmotions       … [ %[ name:\"...\", file:\"motion/....json\", ... ], ... ]\n\nvar meta = effect.meta;\nif (meta !== void && meta.motions !== void)\nvar path = effect.readMeta(meta.motions[0].file);"
+      }
+    },
+    "krkreffekseer:EffekseerEffect.readMeta": {
+      "hash": "021a50361d64",
+      "ja": {
+        "summary": ".efkzip 内の JSON ファイルを辞書 / 配列として読む",
+        "returns": "解釈できなければ void",
+        "params": {
+          "name": "ZIP 内のパス"
+        }
+      },
+      "tr": {
+        "summary": "Reads a JSON file inside the .efkzip as a dictionary / array",
+        "returns": "void if it cannot be parsed",
+        "params": {
+          "name": "Path inside the ZIP"
+        }
+      }
+    },
+    "krkreffekseer:EffekseerEffect.setDynamicInputNames": {
+      "hash": "ce9040d1da51",
+      "ja": {
+        "summary": "動的パラメータの名前と入力番号の対応を差し替える",
+        "description": ".efkzip なら effect.json から自動で入るので普通は呼ばなくてよい。\n.efk / .efkefc を直接読んだ場合や、名前を付け替えたい場合に使う。\n\neffect.setDynamicInputNames(%[ \"emitter.x\" => 0, \"emitter.y\" => 1 ]);\neffect.setDynamicInputNames([\"emitter.x\", \"emitter.y\"]);  // 並び順が番号\neffect.setDynamicInputNames([ %[ name:\"emitter.x\", index:0 ] ]);\n\nvoid を渡すと登録を消す。"
+      },
+      "tr": {
+        "summary": "Replaces the mapping between dynamic parameter names and input indices",
+        "description": "For .efkzip files the mapping comes from effect.json automatically, so you normally do not need this.\nUse it when loading .efk / .efkefc directly, or when you want to rename entries.\n\neffect.setDynamicInputNames(%[ \"emitter.x\" => 0, \"emitter.y\" => 1 ]);\neffect.setDynamicInputNames([\"emitter.x\", \"emitter.y\"]);  // 並び順が番号\neffect.setDynamicInputNames([ %[ name:\"emitter.x\", index:0 ] ]);\n\nPassing void clears the registration."
+      }
+    },
+    "krkreffekseer:EffekseerEffect.findDynamicInput": {
+      "hash": "12c1ff62eb10",
+      "ja": {
+        "summary": "登録した対応から入力番号を引く",
+        "returns": "見つからなければ -1"
+      },
+      "tr": {
+        "summary": "Looks up an input index from the registered mapping",
+        "returns": "-1 if not found"
+      }
+    },
+    "krkreffekseer:EffekseerEffect.loaded": {
+      "hash": "8a4fe5c1d3ad",
+      "ja": {
+        "summary": "読み出し専用: 読み込み済みか"
+      },
+      "tr": {
+        "summary": "Read-only: whether an effect is loaded"
+      }
+    },
+    "krkreffekseer:EffekseerEffect.filename": {
+      "hash": "e79de6e133a5",
+      "ja": {
+        "summary": "読み出し専用: 正規化済みストレージ名"
+      },
+      "tr": {
+        "summary": "Read-only: normalized storage name"
+      }
+    },
+    "krkreffekseer:EffekseerEffect.magnification": {
+      "hash": "2fff962d271a",
+      "ja": {
+        "summary": "読み出し専用: 読み込み時拡大率"
+      },
+      "tr": {
+        "summary": "Read-only: magnification at load time"
+      }
+    },
+    "krkreffekseer:EffekseerEffect.termMin": {
+      "hash": "7d0a92068340",
+      "ja": {
+        "summary": "読み出し専用: 想定再生長の最小(フレーム)"
+      },
+      "tr": {
+        "summary": "Read-only: minimum expected playback length (frames)"
+      }
+    },
+    "krkreffekseer:EffekseerEffect.termMax": {
+      "hash": "a1996df4f4eb",
+      "ja": {
+        "summary": "読み出し専用: 想定再生長の最大(フレーム)"
+      },
+      "tr": {
+        "summary": "Read-only: maximum expected playback length (frames)"
+      }
+    }
+  }
+}

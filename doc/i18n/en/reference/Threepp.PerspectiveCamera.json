@@ -1,0 +1,174 @@
+{
+  "class": "Threepp.PerspectiveCamera",
+  "entries": {
+    "krkrthreepp:Threepp.PerspectiveCamera": {
+      "hash": "e575ecb4972c",
+      "ja": {
+        "summary": "透視投影カメラ",
+        "description": "人間の目のような透視投影を行うカメラです。"
+      },
+      "tr": {
+        "summary": "Perspective camera",
+        "description": "A camera that uses perspective projection, mimicking the way the human eye sees."
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.PerspectiveCamera": {
+      "hash": "5543f13f5c75",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "fov": "視野角（度）",
+          "aspect": "アスペクト比",
+          "near": "ニアクリップ面",
+          "far": "ファークリップ面"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "fov": "Field of view (degrees).",
+          "aspect": "Aspect ratio.",
+          "near": "Near clipping plane.",
+          "far": "Far clipping plane."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.type": {
+      "hash": "57094fc4a4b1",
+      "ja": {
+        "summary": "\"PerspectiveCamera\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"PerspectiveCamera\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.fov": {
+      "hash": "161e4e14484d",
+      "ja": {
+        "summary": "視野角（度）"
+      },
+      "tr": {
+        "summary": "Field of view (degrees)"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.aspect": {
+      "hash": "f0e682d0ed96",
+      "ja": {
+        "summary": "アスペクト比"
+      },
+      "tr": {
+        "summary": "Aspect ratio"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.focus": {
+      "hash": "abfa177ab8fc",
+      "ja": {
+        "summary": "フォーカス距離"
+      },
+      "tr": {
+        "summary": "Focus distance"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.filmGauge": {
+      "hash": "094ad7635422",
+      "ja": {
+        "summary": "フィルムゲージ（mm）"
+      },
+      "tr": {
+        "summary": "Film gauge (mm)"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.filmOffset": {
+      "hash": "2884f1692c15",
+      "ja": {
+        "summary": "フィルムオフセット"
+      },
+      "tr": {
+        "summary": "Film offset"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.setFocalLength": {
+      "hash": "f4ec1bdb28f0",
+      "ja": {
+        "summary": "焦点距離を設定"
+      },
+      "tr": {
+        "summary": "Sets the focal length"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.getFocalLength": {
+      "hash": "2c085d73256b",
+      "ja": {
+        "summary": "焦点距離を取得"
+      },
+      "tr": {
+        "summary": "Gets the focal length"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.getEffectiveFOV": {
+      "hash": "a61050c54b8d",
+      "ja": {
+        "summary": "実効視野角を取得"
+      },
+      "tr": {
+        "summary": "Gets the effective field of view"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.getFilmWidth": {
+      "hash": "fe2188c87a5f",
+      "ja": {
+        "summary": "フィルム幅を取得"
+      },
+      "tr": {
+        "summary": "Gets the film width"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.getFilmHeight": {
+      "hash": "71ae49341da2",
+      "ja": {
+        "summary": "フィルム高さを取得"
+      },
+      "tr": {
+        "summary": "Gets the film height"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.setViewOffset": {
+      "hash": "cd6ebeb26035",
+      "ja": {
+        "summary": "ビューオフセットを設定"
+      },
+      "tr": {
+        "summary": "Sets the view offset"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.clearViewOffset": {
+      "hash": "e0031904ce1f",
+      "ja": {
+        "summary": "ビューオフセットをクリア"
+      },
+      "tr": {
+        "summary": "Clears the view offset"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.updateProjectionMatrix": {
+      "hash": "020852d948fa",
+      "ja": {
+        "summary": "投影行列を更新"
+      },
+      "tr": {
+        "summary": "Updates the projection matrix"
+      }
+    },
+    "krkrthreepp:Threepp.PerspectiveCamera.applyScreenAffine": {
+      "hash": "4b3c43dc2aab",
+      "ja": {
+        "summary": "投影行列に画面上の 2D アフィンを後掛けする (updateProjectionMatrix の後に呼ぶ。Camera 共通)。",
+        "description": "NDC で x' = a*x + b*y + tx, y' = c*x + d*y + ty。カメラの全画角を画面の任意の平行四辺形へ\n写せるので、2D 側の拡大・回転・位置を「描いた後の拡大」ではなく描画そのものに反映できる。"
+      },
+      "tr": {
+        "summary": "Post-multiplies the projection matrix by a 2D on-screen affine transform (call after updateProjectionMatrix; common to all cameras).",
+        "description": "In NDC: x' = a*x + b*y + tx, y' = c*x + d*y + ty. Because the camera's entire view can be mapped to any parallelogram on the screen, 2D-side scaling, rotation and positioning are applied to the rendering itself rather than as scaling after drawing."
+      }
+    }
+  }
+}

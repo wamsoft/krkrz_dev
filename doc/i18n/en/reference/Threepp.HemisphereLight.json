@@ -1,0 +1,53 @@
+{
+  "class": "Threepp.HemisphereLight",
+  "entries": {
+    "krkrthreepp:Threepp.HemisphereLight": {
+      "hash": "ace43399329d",
+      "ja": {
+        "summary": "半球ライト",
+        "description": "空と地面からの環境光をシミュレートします。"
+      },
+      "tr": {
+        "summary": "Hemisphere light",
+        "description": "Simulates ambient light from the sky and the ground."
+      }
+    },
+    "krkrthreepp:Threepp.HemisphereLight.HemisphereLight": {
+      "hash": "caad6fbda4e9",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "skyColor": "空の色 (0xRRGGBB)",
+          "groundColor": "地面の色 (0xRRGGBB)",
+          "intensity": "光の強度"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "skyColor": "Sky color (0xRRGGBB).",
+          "groundColor": "Ground color (0xRRGGBB).",
+          "intensity": "Light intensity."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.HemisphereLight.type": {
+      "hash": "8f1a330756e6",
+      "ja": {
+        "summary": "\"HemisphereLight\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"HemisphereLight\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.HemisphereLight.groundColor": {
+      "hash": "287de7528e49",
+      "ja": {
+        "summary": "地面の色（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Ground color (read-only)"
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "class": "WIN32Dialog.Header",
+  "entries": {
+    "win32dialog:WIN32Dialog.Header": {
+      "hash": "b50eb0eb322f",
+      "ja": {
+        "description": "ダイアログテンプレートデータ保持クラス"
+      },
+      "tr": {
+        "description": "Holds dialog template data"
+      }
+    },
+    "win32dialog:WIN32Dialog.Header.store": {
+      "hash": "4b7fc49ba7eb",
+      "ja": {
+        "summary": "内容を設定する",
+        "params": {
+          "elm": "辞書配列\nelm = %[ helpID, exStyle, style, x, y, cx, cy, menu, windowClass, title, pointSize, weight, italic, charset, typeFace ];\n詳細は DLGTEMPLATEEX の定義を参照のこと"
+        }
+      },
+      "tr": {
+        "summary": "Sets the contents",
+        "params": {
+          "elm": "Dictionary\nelm = %[ helpID, exStyle, style, x, y, cx, cy, menu, windowClass, title, pointSize, weight, italic, charset, typeFace ];\nSee the definition of DLGTEMPLATEEX for details."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.Header.dlgItems": {
+      "hash": "be46212de783",
+      "ja": {
+        "summary": "ダイアログアイテムの個数"
+      },
+      "tr": {
+        "summary": "Number of dialog items"
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "class": "Threepp.WireframeGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.WireframeGeometry": {
+      "hash": "4c65b5604244",
+      "ja": {
+        "summary": "ワイヤーフレームジオメトリ",
+        "description": "元のジオメトリからワイヤーフレームを生成します。"
+      },
+      "tr": {
+        "summary": "Wireframe geometry",
+        "description": "Generates a wireframe from a source geometry."
+      }
+    },
+    "krkrthreepp:Threepp.WireframeGeometry.WireframeGeometry": {
+      "hash": "b309cb1c671b",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "geometry": "元のジオメトリ"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "geometry": "Source geometry."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.WireframeGeometry.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    }
+  }
+}

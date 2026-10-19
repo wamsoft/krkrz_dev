@@ -4,6 +4,39 @@
 //  横断デモ (複数プラグイン)。単体起動は startup.tjs、束ね起動は data/ ランチャ。
 // ======================================================================
 
+// 「アウトライン文字 — layerExVector」は drawString の見本文なので訳さない
+I18n.add(%[
+    "vector_demo.title"        => %[ ja : "ベクタ描画 + 画像効果", en : "Vector drawing + image effects" ],
+    "vector_demo.shell"        => %[ ja : "vector_demo — ベクタ描画 + 画像効果",
+                                     en : "vector_demo — Vector drawing + image effects" ],
+    "vector_demo.fx.none"      => %[ ja : "なし", en : "None" ],
+    "vector_demo.fx.blur"      => %[ ja : "ブラー", en : "Blur" ],
+    "vector_demo.fx.light"     => %[ ja : "明度+", en : "Brightness+" ],
+    "vector_demo.fx.colorize"  => %[ ja : "カラー化", en : "Colorize" ],
+    "vector_demo.fx.noise"     => %[ ja : "ノイズ", en : "Noise" ],
+    "vector_demo.noplugin1"    => %[ ja : "layerExVector.dll が見つかりません",
+                                     en : "layerExVector.dll not found" ],
+    "vector_demo.noplugin2"    => %[ ja : "プラグインを exe の隣か plugin64/ に置いてください",
+                                     en : "Put the plugin next to the exe or in plugin64/" ],
+    "vector_demo.info"         => %[ ja : "パネルで 線幅/回転/グラデ色相/画像効果 を変更   R: 再描画",
+                                     en : "Change pen width / rotation / gradient hue / effect in the panel   R: redraw" ],
+    "vector_demo.l.prim"       => %[ ja : "プリミティブ (drawRectangle / Ellipse / Polygon / Arc / Pie)",
+                                     en : "Primitives (drawRectangle / Ellipse / Polygon / Arc / Pie)" ],
+    "vector_demo.l.grad"       => %[ ja : "グラデーション (線形 / 放射) と多重ペン", en : "Gradients (linear / radial) and multiple pens" ],
+    "vector_demo.l.path"       => %[ ja : "パス (drawPath / drawLines)",
+                                     en : "Paths (drawPath / drawLines)" ],
+    "vector_demo.l.rot"        => %[ ja : "回転 %d°", en : "Rotate %d°" ],
+    "vector_demo.l.text"       => %[ ja : "アウトライン文字 (drawString)", en : "Outline text (drawString)" ],
+    "vector_demo.l.nofont"     => %[ ja : "アウトライン文字: フォント未同梱 (font/ に .ttf を置くと表示)",
+                                     en : "Outline text: no font (put a .ttf in font/)" ],
+    "vector_demo.panel.title"  => %[ ja : "ベクタ描画設定", en : "Vector drawing settings" ],
+    "vector_demo.panel.pen"    => %[ ja : "線幅", en : "Pen width" ],
+    "vector_demo.panel.rot"    => %[ ja : "回転", en : "Rotation" ],
+    "vector_demo.panel.hue"    => %[ ja : "グラデ色相", en : "Gradient hue" ],
+    "vector_demo.panel.fx"     => %[ ja : "画像効果", en : "Effect" ],
+    "vector_demo.panel.redraw" => %[ ja : "再描画", en : "Redraw" ]
+]);
+
 class VectorScene extends DemoScene
 {
     var vec, fx, font;
@@ -13,18 +46,18 @@ class VectorScene extends DemoScene
     var W = 900, H = 640;
     var pendingDraw = false;
 
-    function VectorScene() { super.DemoScene("ベクタ描画 + 画像効果"); }
+    function VectorScene() { super.DemoScene(I18n.entry("vector_demo.title")); }
 
     function create()
     {
         hasVector = tryPlugin("layerExVector.dll");
         hasImage  = tryPlugin("layerExImage.dll");
         effects = [
-            %[ name:"なし",     apply:function(lay) { } ],
-            %[ name:"ブラー",   apply:function(lay) { lay.gaussianBlur(4.0); } ],
-            %[ name:"明度+",    apply:function(lay) { lay.light(40, 30); } ],
-            %[ name:"カラー化", apply:function(lay) { lay.colorize(150, 200, 0.6); } ],
-            %[ name:"ノイズ",   apply:function(lay) { lay.noise(40); } ]
+            %[ name:I18n.t("vector_demo.fx.none"), apply:function(lay) { } ],
+            %[ name:I18n.t("vector_demo.fx.blur"), apply:function(lay) { lay.gaussianBlur(4.0); } ],
+            %[ name:I18n.t("vector_demo.fx.light"), apply:function(lay) { lay.light(40, 30); } ],
+            %[ name:I18n.t("vector_demo.fx.colorize"), apply:function(lay) { lay.colorize(150, 200, 0.6); } ],
+            %[ name:I18n.t("vector_demo.fx.noise"), apply:function(lay) { lay.noise(40); } ]
         ];
         // 資材 (フォント) 検索パス。単体起動は project=vector_demo/ なので "font/"。
         // 束ね起動 (data/ ランチャ) では launcher 側が "vector_demo/font/" を登録する。
@@ -38,11 +71,11 @@ class VectorScene extends DemoScene
         if (hasVector) { tryLoadFont(); redraw(); }
         else {
             stage.font.height = 28;
-            stage.drawText(40, 40, "layerExVector.dll が見つかりません", 0xd0a0a0, 255);
-            stage.drawText(40, 80, "プラグインを exe の隣か plugin64/ に置いてください", 0x9aa4b8, 255);
+            stage.drawText(40, 40, I18n.t("vector_demo.noplugin1"), 0xd0a0a0, 255);
+            stage.drawText(40, 80, I18n.t("vector_demo.noplugin2"), 0x9aa4b8, 255);
             stage.update();
         }
-        setInfo("パネルで 線幅/回転/グラデ色相/画像効果 を変更   R: 再描画");
+        setInfo(I18n.t("vector_demo.info"));
         showPanelDict(panelDict());
     }
 
@@ -111,7 +144,7 @@ class VectorScene extends DemoScene
         var e = new GdiPlus.Appearance();
         e.addBrush(0x8030b0a0); e.addPen(0xff207868, penWidth);
         vec.drawPie(e, 640, y, 90, 90, 30, 220);
-        label("プリミティブ (drawRectangle / Ellipse / Polygon / Arc / Pie)", 24, y - 22);
+        label(I18n.t("vector_demo.l.prim"), 24, y - 22);
     }
 
     function drawGradients(y)
@@ -128,7 +161,7 @@ class VectorScene extends DemoScene
         var m = new GdiPlus.Appearance();
         m.addPen(0xffe05050, penWidth + 4); m.addPen(0xffffffff, penWidth); m.addBrush(0x30000000);
         vec.drawRectangle(m, 460, y, 150, 100);
-        label("グラデーション (線形 / 放射) と多重ペン", 24, y - 22);
+        label(I18n.t("vector_demo.l.grad"), 24, y - 22);
     }
 
     function drawPaths(y)
@@ -149,7 +182,7 @@ class VectorScene extends DemoScene
         var aw = new GdiPlus.Appearance();
         aw.addPen(0xff3070c0, penWidth);
         vec.drawLines(aw, wave);
-        label("パス (drawPath / drawLines)", 24, y - 22);
+        label(I18n.t("vector_demo.l.path"), 24, y - 22);
     }
 
     function drawTransformShowcase(y)
@@ -166,7 +199,7 @@ class VectorScene extends DemoScene
         var a = new GdiPlus.Appearance();
         a.addBrush(0x8050c070); a.addPen(0xff207040, penWidth);
         vec.drawPath(a, path);
-        label("回転 " + ("%d".sprintf(deg \ 1)) + "°", 740, y - 22);
+        label(I18n.t("vector_demo.l.rot", deg \ 1), 740, y - 22);
     }
 
     function drawTextSection(y)
@@ -178,9 +211,9 @@ class VectorScene extends DemoScene
             var o = new GdiPlus.Appearance();
             o.addPen(0xffc03030, 2);
             vec.drawString(font, o, 24, y + 40, "OUTLINE ABCDEF 0123");
-            label("アウトライン文字 (drawString)", 24, y - 22);
+            label(I18n.t("vector_demo.l.text"), 24, y - 22);
         } else {
-            label("アウトライン文字: フォント未同梱 (font/ に .ttf を置くと表示)", 24, y - 22);
+            label(I18n.t("vector_demo.l.nofont"), 24, y - 22);
         }
     }
 
@@ -204,25 +237,25 @@ class VectorScene extends DemoScene
         var effOpts = [];
         for (var i = 0; i < effects.count; i++) effOpts.add(effects[i].name);
         return %[
-            size : [320, 320], background : [28, 30, 40, 236], locale : "ja-JP",
+            size : [320, 320], background : [28, 30, 40, 236],
             align : "top_right", margin : 14,
             content : %[ type : "margin", padding : 14, child : %[ type : "vtile", children : [
                 %[ type : "vsize", height : 0, child : %[ type : "hspacer", width : 288 ] ],
-                %[ type : "align_center", child : %[ type : "label", text : "ベクタ描画設定", size_scale : 1.2 ] ],
+                %[ type : "align_center", child : %[ type : "label", text : I18n.t("vector_demo.panel.title"), size_scale : 1.2 ] ],
                 %[ type : "vspacer", height : 10 ],
-                %[ type : "labeled_row", label : "線幅", label_width : 90,
+                %[ type : "labeled_row", label : I18n.t("vector_demo.panel.pen"), label_width : 90,
                    child : %[ type : "slider_with_range", id : "pen", min : 1, max : 12, initial : penWidth ] ],
                 %[ type : "vspacer", height : 8 ],
-                %[ type : "labeled_row", label : "回転", label_width : 90,
+                %[ type : "labeled_row", label : I18n.t("vector_demo.panel.rot"), label_width : 90,
                    child : %[ type : "slider", id : "rot", initial : rotation ] ],
                 %[ type : "vspacer", height : 8 ],
-                %[ type : "labeled_row", label : "グラデ色相", label_width : 90,
+                %[ type : "labeled_row", label : I18n.t("vector_demo.panel.hue"), label_width : 90,
                    child : %[ type : "slider", id : "hue", initial : gradHue ] ],
                 %[ type : "vspacer", height : 8 ],
-                %[ type : "labeled_row", label : "画像効果", label_width : 90,
+                %[ type : "labeled_row", label : I18n.t("vector_demo.panel.fx"), label_width : 90,
                    child : %[ type : "cycle_picker", id : "fx", options : effOpts, initial : effectIndex ] ],
                 %[ type : "vspacer", height : 12 ],
-                %[ type : "button", id : "redraw", text : "再描画" ]
+                %[ type : "button", id : "redraw", text : I18n.t("vector_demo.panel.redraw") ]
             ] ] ]
         ];
     }

@@ -1,0 +1,136 @@
+{
+  "class": "Threepp.PointLight",
+  "entries": {
+    "krkrthreepp:Threepp.PointLight": {
+      "hash": "d12197814f37",
+      "ja": {
+        "summary": "点光源",
+        "description": "一点から全方向に照射される光源です。\n\n影の設定は DirectionalLight と同様です。ただし setShadowOrthoBounds は平行光源専用で、点光源では効果がありません。"
+      },
+      "tr": {
+        "summary": "Point light",
+        "description": "A light emitted from a single point in all directions.\n\nShadows are set up in the same way as for DirectionalLight. However, setShadowOrthoBounds is for directional lights only and has no effect on point lights."
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.PointLight": {
+      "hash": "3547081be466",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "color": "光の色 (0xRRGGBB)",
+          "intensity": "光の強度",
+          "distance": "光が届く距離（0で無限）",
+          "decay": "減衰率"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "color": "Light color (0xRRGGBB).",
+          "intensity": "Light intensity.",
+          "distance": "Maximum range of the light (0 for unlimited).",
+          "decay": "Decay rate."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.type": {
+      "hash": "6b440173293f",
+      "ja": {
+        "summary": "\"PointLight\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"PointLight\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.distance": {
+      "hash": "99b6c534339a",
+      "ja": {
+        "summary": "光が届く距離"
+      },
+      "tr": {
+        "summary": "Maximum range of the light"
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.decay": {
+      "hash": "588dea002b2d",
+      "ja": {
+        "summary": "減衰率"
+      },
+      "tr": {
+        "summary": "Decay rate"
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.getPower": {
+      "hash": "d634fd525ff7",
+      "ja": {
+        "summary": "光のパワーを取得"
+      },
+      "tr": {
+        "summary": "Gets the light power"
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.setPower": {
+      "hash": "66ef0c5a6a42",
+      "ja": {
+        "summary": "光のパワーを設定"
+      },
+      "tr": {
+        "summary": "Sets the light power"
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.setShadowMapSize": {
+      "hash": "b82110712d1d",
+      "ja": {
+        "summary": "シャドウマップ解像度 (既定 2048x2048)"
+      },
+      "tr": {
+        "summary": "Shadow map resolution (default 2048x2048)"
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.setShadowBias": {
+      "hash": "eeb49b75ef3d",
+      "ja": {
+        "summary": "影のアクネ対策バイアス (例 -0.0005)"
+      },
+      "tr": {
+        "summary": "Shadow bias to reduce shadow acne (e.g. -0.0005)"
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.setShadowNormalBias": {
+      "hash": "3fb6131d7c96",
+      "ja": {
+        "summary": "法線方向バイアス"
+      },
+      "tr": {
+        "summary": "Bias along the normal"
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.setShadowRadius": {
+      "hash": "608bd86dc8e5",
+      "ja": {
+        "summary": "ソフトシャドウ半径 (PCF)"
+      },
+      "tr": {
+        "summary": "Soft shadow radius (PCF)"
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.setShadowNearFar": {
+      "hash": "f7803d0ec7c7",
+      "ja": {
+        "summary": "影用カメラの near/far"
+      },
+      "tr": {
+        "summary": "near/far of the shadow camera"
+      }
+    },
+    "krkrthreepp:Threepp.PointLight.dispose": {
+      "hash": "4b8ce80d5ddf",
+      "ja": {
+        "summary": "リソースを解放"
+      },
+      "tr": {
+        "summary": "Releases resources"
+      }
+    }
+  }
+}

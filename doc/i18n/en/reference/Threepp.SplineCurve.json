@@ -1,0 +1,49 @@
+{
+  "class": "Threepp.SplineCurve",
+  "entries": {
+    "krkrthreepp:Threepp.SplineCurve": {
+      "hash": "e79ebdca5f1c",
+      "ja": {
+        "summary": "2Dスプラインカーブ",
+        "description": "複数の点を通過するスムーズな曲線です。"
+      },
+      "tr": {
+        "summary": "2D spline curve",
+        "description": "A smooth curve that passes through multiple points."
+      }
+    },
+    "krkrthreepp:Threepp.SplineCurve.SplineCurve": {
+      "hash": "75e51d08e3cb",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "points": "点の配列 (Vector2の配列または [x,y] の配列)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "points": "Array of points (an array of Vector2 or of [x,y])."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.SplineCurve.getLength": {
+      "hash": "8d98a47bcea4",
+      "ja": {
+        "summary": "曲線の長さを取得"
+      },
+      "tr": {
+        "summary": "Gets the length of the curve"
+      }
+    },
+    "krkrthreepp:Threepp.SplineCurve.getPoint": {
+      "hash": "1be3886a14b6",
+      "ja": {
+        "summary": "パラメータ t (0-1) の点を取得"
+      },
+      "tr": {
+        "summary": "Gets the point at parameter t (0-1)"
+      }
+    }
+  }
+}

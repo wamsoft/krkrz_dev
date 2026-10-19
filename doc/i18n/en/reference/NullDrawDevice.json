@@ -1,0 +1,49 @@
+{
+  "class": "NullDrawDevice",
+  "entries": {
+    "NullDrawDevice": {
+      "hash": "29f365f89eb1",
+      "ja": {
+        "summary": "NullDrawDevice クラスは、このインスタンスを [Window.drawDevice](Window.md#drawdevice) に登録して使用するための DrawDevice で、何も描画しないダミー実装を提供します。",
+        "description": "ヘッドレス実行や、自前の描画パスを完全に外側で制御したいときに使用します。"
+      },
+      "tr": {
+        "summary": "NullDrawDevice is a DrawDevice that you register in [Window.drawDevice](Window.md#drawdevice); it is a dummy implementation that draws nothing.",
+        "description": "Use it for headless execution, or when you want to control the entire drawing path yourself from outside."
+      }
+    },
+    "NullDrawDevice.NullDrawDevice": {
+      "hash": "d2a1d7d6af50",
+      "ja": {
+        "summary": "NullDrawDevice オブジェクトの構築",
+        "description": "NullDrawDevice クラスのオブジェクトを構築します。"
+      },
+      "tr": {
+        "summary": "Constructs a NullDrawDevice object",
+        "description": "Constructs an object of the NullDrawDevice class."
+      }
+    },
+    "NullDrawDevice.recreate": {
+      "hash": "3f91f345d68a",
+      "ja": {
+        "summary": "内部デバイス再生成",
+        "description": "内部デバイスの再生成を行います。\n\n通常使用することはありません。"
+      },
+      "tr": {
+        "summary": "Recreates the internal device",
+        "description": "Recreates the internal device.\n\nYou normally do not need to call this."
+      }
+    },
+    "NullDrawDevice.interface": {
+      "hash": "1cd82fca475d",
+      "ja": {
+        "summary": "インターフェースオブジェクトを取得",
+        "description": "プラグインなどで DrawDevice オブジェクトを利用するためにあります。"
+      },
+      "tr": {
+        "summary": "Gets the interface object",
+        "description": "Provided so that plugins and the like can use the DrawDevice object."
+      }
+    }
+  }
+}

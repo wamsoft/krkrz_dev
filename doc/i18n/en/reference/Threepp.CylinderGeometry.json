@@ -1,0 +1,52 @@
+{
+  "class": "Threepp.CylinderGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.CylinderGeometry": {
+      "hash": "4ae1e467f01f",
+      "ja": {
+        "summary": "円柱ジオメトリ"
+      },
+      "tr": {
+        "summary": "Cylinder geometry"
+      }
+    },
+    "krkrthreepp:Threepp.CylinderGeometry.CylinderGeometry": {
+      "hash": "53d94f164798",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "radiusTop": "上面の半径",
+          "radiusBottom": "下面の半径",
+          "height": "高さ",
+          "radialSegments": "周方向の分割数",
+          "heightSegments": "高さ方向の分割数",
+          "openEnded": "上下面を開けるか",
+          "thetaStart": "周方向の開始角度",
+          "thetaLength": "周方向の角度範囲"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "radiusTop": "Radius at the top.",
+          "radiusBottom": "Radius at the bottom.",
+          "height": "Height.",
+          "radialSegments": "Number of segments around the circumference.",
+          "heightSegments": "Number of segments along the height.",
+          "openEnded": "Whether the ends are left open.",
+          "thetaStart": "Start angle around the circumference.",
+          "thetaLength": "Central angle of the circular sector."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.CylinderGeometry.type": {
+      "hash": "29b90893e065",
+      "ja": {
+        "summary": "\"CylinderGeometry\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"CylinderGeometry\" (read-only)"
+      }
+    }
+  }
+}

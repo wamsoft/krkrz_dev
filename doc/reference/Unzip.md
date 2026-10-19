@@ -59,7 +59,7 @@ ZIPアーカイブを展開用にオープンします
 <dt>crypted <dd>暗号化されているか
 <dt>deflated <dd>圧縮されているか
 <dt>deflateLevel <dd>圧縮レベル
-<dt>crc <dd>ファイルのCRD
+<dt>crc <dd>ファイルのCRC
 </dl>
 
 **解説**

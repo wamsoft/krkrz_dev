@@ -1,0 +1,158 @@
+{
+  "class": "Threepp.SpotLight",
+  "entries": {
+    "krkrthreepp:Threepp.SpotLight": {
+      "hash": "189ae304840a",
+      "ja": {
+        "summary": "スポットライト",
+        "description": "一点から円錐状に照射される光源です。\n\n影の設定は DirectionalLight と同様です。スポットライトの影は透視カメラで焼きます (角度は angle に依存)。"
+      },
+      "tr": {
+        "summary": "Spotlight",
+        "description": "A light emitted from a single point in a cone.\n\nShadows are set up in the same way as for DirectionalLight. Spotlight shadows are rendered with a perspective camera (its angle depends on angle)."
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.SpotLight": {
+      "hash": "ed965b501ade",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "color": "光の色 (0xRRGGBB)",
+          "intensity": "光の強度",
+          "distance": "光が届く距離",
+          "angle": "照射角度（ラジアン）",
+          "penumbra": "ペナンブラ（ぼかし）",
+          "decay": "減衰率"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "color": "Light color (0xRRGGBB).",
+          "intensity": "Light intensity.",
+          "distance": "Maximum range of the light.",
+          "angle": "Cone angle (radians).",
+          "penumbra": "Penumbra (edge softness).",
+          "decay": "Decay rate."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.type": {
+      "hash": "eee7cc825749",
+      "ja": {
+        "summary": "\"SpotLight\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"SpotLight\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.distance": {
+      "hash": "99b6c534339a",
+      "ja": {
+        "summary": "光が届く距離"
+      },
+      "tr": {
+        "summary": "Maximum range of the light"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.angle": {
+      "hash": "972d49a4bd34",
+      "ja": {
+        "summary": "照射角度"
+      },
+      "tr": {
+        "summary": "Cone angle"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.penumbra": {
+      "hash": "9904df30cbc9",
+      "ja": {
+        "summary": "ペナンブラ"
+      },
+      "tr": {
+        "summary": "Penumbra"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.decay": {
+      "hash": "588dea002b2d",
+      "ja": {
+        "summary": "減衰率"
+      },
+      "tr": {
+        "summary": "Decay rate"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.getPower": {
+      "hash": "d634fd525ff7",
+      "ja": {
+        "summary": "光のパワーを取得"
+      },
+      "tr": {
+        "summary": "Gets the light power"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.setPower": {
+      "hash": "66ef0c5a6a42",
+      "ja": {
+        "summary": "光のパワーを設定"
+      },
+      "tr": {
+        "summary": "Sets the light power"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.setShadowMapSize": {
+      "hash": "b82110712d1d",
+      "ja": {
+        "summary": "シャドウマップ解像度 (既定 2048x2048)"
+      },
+      "tr": {
+        "summary": "Shadow map resolution (default 2048x2048)"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.setShadowBias": {
+      "hash": "eeb49b75ef3d",
+      "ja": {
+        "summary": "影のアクネ対策バイアス (例 -0.0005)"
+      },
+      "tr": {
+        "summary": "Shadow bias to reduce shadow acne (e.g. -0.0005)"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.setShadowNormalBias": {
+      "hash": "3fb6131d7c96",
+      "ja": {
+        "summary": "法線方向バイアス"
+      },
+      "tr": {
+        "summary": "Bias along the normal"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.setShadowRadius": {
+      "hash": "608bd86dc8e5",
+      "ja": {
+        "summary": "ソフトシャドウ半径 (PCF)"
+      },
+      "tr": {
+        "summary": "Soft shadow radius (PCF)"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.setShadowNearFar": {
+      "hash": "f7803d0ec7c7",
+      "ja": {
+        "summary": "影用カメラの near/far"
+      },
+      "tr": {
+        "summary": "near/far of the shadow camera"
+      }
+    },
+    "krkrthreepp:Threepp.SpotLight.dispose": {
+      "hash": "4b8ce80d5ddf",
+      "ja": {
+        "summary": "リソースを解放"
+      },
+      "tr": {
+        "summary": "Releases resources"
+      }
+    }
+  }
+}

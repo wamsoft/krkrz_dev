@@ -1,0 +1,84 @@
+{
+  "class": "Clipboard",
+  "entries": {
+    "Clipboard": {
+      "hash": "169cc1c25b3f",
+      "ja": {
+        "summary": "Clipboard クラスは OSの**クリップボード**にアクセスする機能を提供するクラスです。このクラスからオブジェクトを作成することはできません。",
+        "description": "Windows ネイティブ ( WINVER ) ビルドと SDL3 ビルドの双方で利用できます\n( SDL3 ビルドは 2026-08-16 に対応。それ以前は何もしない空実装でした )。\nクリップボードを持たないプラットフォーム向けのビルドでは、書き込みは無視され\n読み出しは常に void 、[hasFormat](#hasformat) は常に偽になります。\n\nビットマップ ( [setAsBitmap](#setasbitmap) / [getAsBitmap](#getasbitmap) ) は\n現在 Windows ネイティブ ( WINVER ) ビルドのみの対応で、\nそれ以外のビルドでは常に偽を返して何もしません。"
+      },
+      "tr": {
+        "summary": "The Clipboard class provides access to the OS **clipboard**. You cannot create objects of this class.",
+        "description": "Available in both the native Windows (WINVER) build and the SDL3 build\n(the SDL3 build gained support on 2026-08-16; before that it was an empty implementation that did nothing).\nIn builds for platforms without a clipboard, writes are ignored,\nreads always return void, and [hasFormat](#hasformat) always returns false.\n\nBitmaps ([setAsBitmap](#setasbitmap) / [getAsBitmap](#getasbitmap)) are\ncurrently supported only in the native Windows (WINVER) build;\nin other builds they always return false and do nothing."
+      }
+    },
+    "Clipboard.hasFormat": {
+      "hash": "a4dee2e5ee6c",
+      "ja": {
+        "summary": "指定されたフォーマットがクリップボード内に存在するか",
+        "description": "指定された**フォーマット**がクリップボード内に存在するかどうかを調べることができます。\n\nOS の提供するクリップボードは、同時に複数のフォーマットを持つことができるため、その中に特定のフォーマットがあるかどうかをこのメソッドで調べることができます。",
+        "returns": "指定されたフォーマットがクリップボード内に存在すれば真、存在しなければ偽",
+        "params": {
+          "format": "存在を確認したいフォーマットを指定します。\n\n`cbfText` ( テキスト形式 ) と `cbfBitmap` ( ビットマップ形式 ) が指定できます。"
+        }
+      },
+      "tr": {
+        "summary": "Checks whether the clipboard contains the specified format",
+        "description": "Checks whether the clipboard contains data in the specified **format**.\n\nThe OS clipboard can hold several formats at once, so use this method to check whether a particular format is among them.",
+        "returns": "true if the clipboard contains the specified format, false otherwise",
+        "params": {
+          "format": "Format to check for.\n\nYou can specify `cbfText` (text) or `cbfBitmap` (bitmap)."
+        }
+      }
+    },
+    "Clipboard.setAsBitmap": {
+      "hash": "f6d9391a3074",
+      "ja": {
+        "summary": "レイヤの画像をクリップボードへ書き込む",
+        "description": "指定されたレイヤのメイン画像を、ビットマップ形式でクリップボードへ格納します。\n\n他のアプリケーションへ渡す都合上、α値は 255 ( 不透明 ) に潰されます。",
+        "returns": "クリップボードへ書き込めた場合は真、そうでない場合は偽",
+        "params": {
+          "layer": "書き込む画像を持つ [Layer](Layer.md) オブジェクトを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Writes a layer's image to the clipboard",
+        "description": "Stores the main image of the specified layer on the clipboard as a bitmap.\n\nBecause the data is handed to other applications, alpha values are flattened to 255 (opaque).",
+        "returns": "true if the image was written to the clipboard, false otherwise",
+        "params": {
+          "layer": "[Layer](Layer.md) object holding the image to write."
+        }
+      }
+    },
+    "Clipboard.getAsBitmap": {
+      "hash": "aa86dba4ec5b",
+      "ja": {
+        "summary": "クリップボードの画像をレイヤへ読み込む",
+        "description": "クリップボードにあるビットマップ形式のデータを、指定されたレイヤへ読み込みます。\n\nレイヤの**画像サイズ**はクリップボード内の画像に合わせて変更されます\n( レイヤの表示サイズは変わらないので、必要なら [Layer.setSizeToImageSize](Layer.md#setsizetoimagesize) を呼んでください )。",
+        "returns": "クリップボードから読み込めた場合は真、ビットマップ形式のデータがない場合などは偽",
+        "params": {
+          "layer": "画像の読み込み先となる [Layer](Layer.md) オブジェクトを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Reads the clipboard image into a layer",
+        "description": "Reads bitmap data on the clipboard into the specified layer.\n\nThe layer's **image size** is changed to match the image on the clipboard\n(the layer's display size does not change, so call [Layer.setSizeToImageSize](Layer.md#setsizetoimagesize) if needed).",
+        "returns": "true if the image was read from the clipboard; false if, for example, there is no bitmap data",
+        "params": {
+          "layer": "[Layer](Layer.md) object to read the image into."
+        }
+      }
+    },
+    "Clipboard.asText": {
+      "hash": "d77ad5f6e4bc",
+      "ja": {
+        "summary": "テキスト形式",
+        "description": "クリップボードに現在あるテキスト形式のデータを表します。値を書き込むこともできます。\n\n値を読み出すと、現在クリップボードにあるテキスト形式のデータを得ることができます。クリップボードにテキスト形式のデータがない場合は、void が得られます。\n\n値を書き込むと、クリップボードにテキスト形式のデータを格納することができます。"
+      },
+      "tr": {
+        "summary": "Text format",
+        "description": "Represents the text data currently on the clipboard. This property can also be written.\n\nReading it returns the text data currently on the clipboard. If the clipboard has no text data, void is returned.\n\nWriting it stores text data on the clipboard."
+      }
+    }
+  }
+}

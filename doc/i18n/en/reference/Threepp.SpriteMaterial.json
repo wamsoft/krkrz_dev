@@ -1,0 +1,61 @@
+{
+  "class": "Threepp.SpriteMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.SpriteMaterial": {
+      "hash": "1a311b0f0c83",
+      "ja": {
+        "summary": "スプライト用マテリアル",
+        "description": "Sprite用のマテリアルです。"
+      },
+      "tr": {
+        "summary": "Material for sprites",
+        "description": "A material for Sprite."
+      }
+    },
+    "krkrthreepp:Threepp.SpriteMaterial.SpriteMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.SpriteMaterial.type": {
+      "hash": "c55bf6fd066c",
+      "ja": {
+        "summary": "\"SpriteMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"SpriteMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.SpriteMaterial.color": {
+      "hash": "7df053f299de",
+      "ja": {
+        "summary": "色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.SpriteMaterial.rotation": {
+      "hash": "505a718f4498",
+      "ja": {
+        "summary": "回転（ラジアン）"
+      },
+      "tr": {
+        "summary": "Rotation (radians)"
+      }
+    },
+    "krkrthreepp:Threepp.SpriteMaterial.sizeAttenuation": {
+      "hash": "d2cfd58f4de0",
+      "ja": {
+        "summary": "距離による減衰を行うか"
+      },
+      "tr": {
+        "summary": "Whether size is attenuated by distance"
+      }
+    }
+  }
+}

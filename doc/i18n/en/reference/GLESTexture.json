@@ -1,0 +1,29 @@
+{
+  "class": "GLESTexture",
+  "entries": {
+    "krkrgles:GLESTexture": {
+      "hash": "b884fb0b26be",
+      "ja": {
+        "summary": "事前生成テクスチャオブジェクト",
+        "description": "レイヤの内容から生成"
+      },
+      "tr": {
+        "summary": "Pre-created texture object",
+        "description": "Created from the contents of a layer."
+      }
+    },
+    "krkrgles:GLESTexture.load": {
+      "hash": "cd88b198330f",
+      "ja": {
+        "params": {
+          "layer": "れいや"
+        }
+      },
+      "tr": {
+        "params": {
+          "layer": "Layer"
+        }
+      }
+    }
+  }
+}

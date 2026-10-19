@@ -28,4 +28,4 @@ if (demolibPath === void) { System.inform("demolib が見つかりません"); S
 Scripts.execStorage(demolibPath + "demo_common.tjs");
 Scripts.execStorage("scene.tjs");
 
-runDemoShell([new TransitionScene()], "トランジション デモ (Elements UI)");
+runDemoShell([new TransitionScene()], I18n.entry("transition_demo.shell"));

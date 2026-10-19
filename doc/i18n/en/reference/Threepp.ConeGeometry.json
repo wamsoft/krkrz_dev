@@ -1,0 +1,50 @@
+{
+  "class": "Threepp.ConeGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.ConeGeometry": {
+      "hash": "886493227ba2",
+      "ja": {
+        "summary": "円錐ジオメトリ"
+      },
+      "tr": {
+        "summary": "Cone geometry"
+      }
+    },
+    "krkrthreepp:Threepp.ConeGeometry.ConeGeometry": {
+      "hash": "fe8496148267",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "radius": "底面の半径",
+          "height": "高さ",
+          "radialSegments": "周方向の分割数",
+          "heightSegments": "高さ方向の分割数",
+          "openEnded": "底面を開けるか",
+          "thetaStart": "周方向の開始角度",
+          "thetaLength": "周方向の角度範囲"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "radius": "Radius of the base.",
+          "height": "Height.",
+          "radialSegments": "Number of segments around the circumference.",
+          "heightSegments": "Number of segments along the height.",
+          "openEnded": "Whether the base is left open.",
+          "thetaStart": "Start angle around the circumference.",
+          "thetaLength": "Central angle of the circular sector."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.ConeGeometry.type": {
+      "hash": "29ca66f8efb7",
+      "ja": {
+        "summary": "\"ConeGeometry\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"ConeGeometry\" (read-only)"
+      }
+    }
+  }
+}

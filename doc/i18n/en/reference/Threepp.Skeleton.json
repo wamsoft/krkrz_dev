@@ -1,0 +1,103 @@
+{
+  "class": "Threepp.Skeleton",
+  "entries": {
+    "krkrthreepp:Threepp.Skeleton": {
+      "hash": "a43007e9102a",
+      "ja": {
+        "summary": "スケルトン",
+        "description": "ボーンの集合を管理します。"
+      },
+      "tr": {
+        "summary": "Skeleton",
+        "description": "Manages a set of bones."
+      }
+    },
+    "krkrthreepp:Threepp.Skeleton.Skeleton": {
+      "hash": "39f756ec4dbd",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "bones": "ボーンの配列"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "bones": "Array of bones."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Skeleton.uuid": {
+      "hash": "3c14c218d174",
+      "ja": {
+        "summary": "UUID（読み取り専用）"
+      },
+      "tr": {
+        "summary": "UUID (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Skeleton.frame": {
+      "hash": "329aafe1c0ba",
+      "ja": {
+        "summary": "フレーム"
+      },
+      "tr": {
+        "summary": "Frame"
+      }
+    },
+    "krkrthreepp:Threepp.Skeleton.init": {
+      "hash": "880ce67f125b",
+      "ja": {
+        "summary": "初期化"
+      },
+      "tr": {
+        "summary": "Initializes the skeleton"
+      }
+    },
+    "krkrthreepp:Threepp.Skeleton.calculateInverses": {
+      "hash": "af64d174a9ad",
+      "ja": {
+        "summary": "逆行列を計算"
+      },
+      "tr": {
+        "summary": "Computes the inverse matrices"
+      }
+    },
+    "krkrthreepp:Threepp.Skeleton.pose": {
+      "hash": "9de8c7e203b7",
+      "ja": {
+        "summary": "ポーズを設定"
+      },
+      "tr": {
+        "summary": "Sets the pose"
+      }
+    },
+    "krkrthreepp:Threepp.Skeleton.update": {
+      "hash": "c662a08be3f1",
+      "ja": {
+        "summary": "更新"
+      },
+      "tr": {
+        "summary": "Updates the skeleton"
+      }
+    },
+    "krkrthreepp:Threepp.Skeleton.computeBoneTexture": {
+      "hash": "cae76394d4d9",
+      "ja": {
+        "summary": "ボーンテクスチャを計算"
+      },
+      "tr": {
+        "summary": "Computes the bone texture"
+      }
+    },
+    "krkrthreepp:Threepp.Skeleton.dispose": {
+      "hash": "4b8ce80d5ddf",
+      "ja": {
+        "summary": "リソースを解放"
+      },
+      "tr": {
+        "summary": "Releases resources"
+      }
+    }
+  }
+}

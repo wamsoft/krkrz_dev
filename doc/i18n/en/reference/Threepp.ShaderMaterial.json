@@ -1,0 +1,97 @@
+{
+  "class": "Threepp.ShaderMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.ShaderMaterial": {
+      "hash": "842deb6fed05",
+      "ja": {
+        "summary": "シェーダーマテリアル",
+        "description": "カスタムGLSLシェーダーを使用するマテリアルです。"
+      },
+      "tr": {
+        "summary": "Shader material",
+        "description": "A material that uses custom GLSL shaders."
+      }
+    },
+    "krkrthreepp:Threepp.ShaderMaterial.ShaderMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.ShaderMaterial.type": {
+      "hash": "2a6c6903864c",
+      "ja": {
+        "summary": "\"ShaderMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"ShaderMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.ShaderMaterial.vertexShader": {
+      "hash": "9f649b6b17e2",
+      "ja": {
+        "summary": "頂点シェーダーコード"
+      },
+      "tr": {
+        "summary": "Vertex shader code"
+      }
+    },
+    "krkrthreepp:Threepp.ShaderMaterial.fragmentShader": {
+      "hash": "1bd21ef81cfb",
+      "ja": {
+        "summary": "フラグメントシェーダーコード"
+      },
+      "tr": {
+        "summary": "Fragment shader code"
+      }
+    },
+    "krkrthreepp:Threepp.ShaderMaterial.uniformsNeedUpdate": {
+      "hash": "36b4a1d1f662",
+      "ja": {
+        "summary": "uniformの更新が必要か"
+      },
+      "tr": {
+        "summary": "Whether the uniforms need to be updated"
+      }
+    },
+    "krkrthreepp:Threepp.ShaderMaterial.wireframe": {
+      "hash": "27e1aa449133",
+      "ja": {
+        "summary": "ワイヤーフレーム表示"
+      },
+      "tr": {
+        "summary": "Renders as wireframe"
+      }
+    },
+    "krkrthreepp:Threepp.ShaderMaterial.wireframeLinewidth": {
+      "hash": "c1d0eb798128",
+      "ja": {
+        "summary": "ワイヤーフレームの線幅"
+      },
+      "tr": {
+        "summary": "Wireframe line width"
+      }
+    },
+    "krkrthreepp:Threepp.ShaderMaterial.lights": {
+      "hash": "72f8aabbe1b3",
+      "ja": {
+        "summary": "ライティングを使用するか"
+      },
+      "tr": {
+        "summary": "Whether to use lighting"
+      }
+    },
+    "krkrthreepp:Threepp.ShaderMaterial.clipping": {
+      "hash": "a08d12cc63bd",
+      "ja": {
+        "summary": "クリッピングを使用するか"
+      },
+      "tr": {
+        "summary": "Whether to use clipping"
+      }
+    }
+  }
+}

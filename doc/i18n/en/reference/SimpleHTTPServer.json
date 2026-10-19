@@ -1,0 +1,86 @@
+{
+  "class": "SimpleHTTPServer",
+  "entries": {
+    "httpserv:SimpleHTTPServer.SimpleHTTPServer": {
+      "hash": "5c52a4da8d0f",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "port": "使用するポート番号（0で自動割り当て）",
+          "timeout": "onRequestコールバックのタイムアウト時間(sec)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "port": "Port number to use (0 assigns one automatically).",
+          "timeout": "Timeout for the onRequest callback, in seconds."
+        }
+      }
+    },
+    "httpserv:SimpleHTTPServer.codepage": {
+      "hash": "60b60d96fdd8",
+      "ja": {
+        "summary": "セッション毎のコードページ変更ができないので途中変更は推奨されない"
+      },
+      "tr": {
+        "summary": "The code page cannot be changed per session, so changing it while running is not recommended"
+      }
+    },
+    "httpserv:SimpleHTTPServer.start": {
+      "hash": "a71ab544bd42",
+      "ja": {
+        "summary": "サービス開始",
+        "returns": "ポート番号"
+      },
+      "tr": {
+        "summary": "Starts the service",
+        "returns": "Port number."
+      }
+    },
+    "httpserv:SimpleHTTPServer.stop": {
+      "hash": "50347396cd1f",
+      "ja": {
+        "summary": "サービス停止"
+      },
+      "tr": {
+        "summary": "Stops the service"
+      }
+    },
+    "httpserv:SimpleHTTPServer.onRequest": {
+      "hash": "58c45e85f8ea",
+      "ja": {
+        "summary": "リクエスト処理（イベント）",
+        "returns": "response = %[\nstatus:ステータスコード（省略可能，エラーが無ければ自動で200）\ncontent_type: Content-Type名\nerror_type:エラーの種類（text/file/binaryが無い場合に有効）\nerror_desc:エラーの説明（text/file/binaryが無い場合に有効）\nredirect: リダイレクトする場合のURI（省略可能）\n\n以下は排他（どれかひとつ，上から優先）\ntext:返すテキスト（codepageで自動エンコードされる）\nfile:返すファイル\nbinary:返すバイナリ（ArrayまたはOctet）\n];",
+        "params": {
+          "request": "= %[\nmethod:  メソッドの種類（GET/POST/...）\npath:    リクエストパス\nrequest: 生リクエスト（%xx未デコード，?以降も含む）\nheader:  %[ リクエストヘッダ（ブラウザの情報等） ]\nform:    %[ フォームデータ ]\n];"
+        }
+      },
+      "tr": {
+        "summary": "Request handling (event)",
+        "returns": "response = %[\nstatus: status code (optional; 200 automatically if there is no error)\ncontent_type: Content-Type name\nerror_type: error type (used when there is no text/file/binary)\nerror_desc: error description (used when there is no text/file/binary)\nredirect: URI to redirect to (optional)\n\nThe following are mutually exclusive (only one; earlier ones take precedence):\ntext: text to return (encoded automatically using codepage)\nfile: file to return\nbinary: binary to return (Array or Octet)\n];",
+        "params": {
+          "request": "= %[\nmethod:  method (GET/POST/...)\npath:    request path\nrequest: raw request (%xx not decoded, including anything after ?)\nheader:  %[ request headers (browser information, etc.) ]\nform:    %[ form data ]\n];"
+        }
+      }
+    },
+    "httpserv:SimpleHTTPServer.cpACP": {
+      "hash": "ca1e087feb68",
+      "ja": {
+        "summary": "コードページ（static value）"
+      },
+      "tr": {
+        "summary": "Code page (static value)"
+      }
+    },
+    "httpserv:SimpleHTTPServer.cpEUC": {
+      "hash": "cb6fe4b1e049",
+      "ja": {
+        "summary": "51932"
+      },
+      "tr": {
+        "summary": "51932"
+      }
+    }
+  }
+}

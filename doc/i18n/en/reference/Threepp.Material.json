@@ -1,0 +1,149 @@
+{
+  "class": "Threepp.Material",
+  "entries": {
+    "krkrthreepp:Threepp.Material": {
+      "hash": "42e006300485",
+      "ja": {
+        "summary": "マテリアル基底クラス"
+      },
+      "tr": {
+        "summary": "Material base class"
+      }
+    },
+    "krkrthreepp:Threepp.Material.type": {
+      "hash": "32b718b38981",
+      "ja": {
+        "summary": "マテリアルの種類（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Material type (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Material.id": {
+      "hash": "510d24ceeef6",
+      "ja": {
+        "summary": "ID（読み取り専用）"
+      },
+      "tr": {
+        "summary": "ID (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Material.name": {
+      "hash": "77bc2b04522a",
+      "ja": {
+        "summary": "名前"
+      },
+      "tr": {
+        "summary": "Name"
+      }
+    },
+    "krkrthreepp:Threepp.Material.fog": {
+      "hash": "11a6102df5e1",
+      "ja": {
+        "summary": "フォグの影響を受けるか"
+      },
+      "tr": {
+        "summary": "Whether the material is affected by fog"
+      }
+    },
+    "krkrthreepp:Threepp.Material.opacity": {
+      "hash": "418e9c9fabbd",
+      "ja": {
+        "summary": "不透明度 (0.0-1.0)"
+      },
+      "tr": {
+        "summary": "Opacity (0.0-1.0)"
+      }
+    },
+    "krkrthreepp:Threepp.Material.transparent": {
+      "hash": "7d43849b405c",
+      "ja": {
+        "summary": "透明か"
+      },
+      "tr": {
+        "summary": "Whether the material is transparent"
+      }
+    },
+    "krkrthreepp:Threepp.Material.depthTest": {
+      "hash": "ab17b1e87844",
+      "ja": {
+        "summary": "深度テストを行うか"
+      },
+      "tr": {
+        "summary": "Whether to perform the depth test"
+      }
+    },
+    "krkrthreepp:Threepp.Material.depthWrite": {
+      "hash": "5d7aaddd2f8b",
+      "ja": {
+        "summary": "深度バッファに書き込むか"
+      },
+      "tr": {
+        "summary": "Whether to write to the depth buffer"
+      }
+    },
+    "krkrthreepp:Threepp.Material.colorWrite": {
+      "hash": "d6bf1c52d71c",
+      "ja": {
+        "summary": "カラーバッファに書き込むか"
+      },
+      "tr": {
+        "summary": "Whether to write to the color buffer"
+      }
+    },
+    "krkrthreepp:Threepp.Material.visible": {
+      "hash": "6f4cc1ad5734",
+      "ja": {
+        "summary": "可視か"
+      },
+      "tr": {
+        "summary": "Whether the material is visible"
+      }
+    },
+    "krkrthreepp:Threepp.Material.side": {
+      "hash": "fdf9886a0dde",
+      "ja": {
+        "summary": "描画面 (Side_Front, Side_Back, Side_Double)"
+      },
+      "tr": {
+        "summary": "Which faces are rendered (Side_Front, Side_Back, Side_Double)"
+      }
+    },
+    "krkrthreepp:Threepp.Material.blending": {
+      "hash": "615d787210f8",
+      "ja": {
+        "summary": "ブレンドモード"
+      },
+      "tr": {
+        "summary": "Blend mode"
+      }
+    },
+    "krkrthreepp:Threepp.Material.alphaTest": {
+      "hash": "f06c38003804",
+      "ja": {
+        "summary": "アルファテスト閾値"
+      },
+      "tr": {
+        "summary": "Alpha test threshold"
+      }
+    },
+    "krkrthreepp:Threepp.Material.dispose": {
+      "hash": "4b8ce80d5ddf",
+      "ja": {
+        "summary": "リソースを解放"
+      },
+      "tr": {
+        "summary": "Releases resources"
+      }
+    },
+    "krkrthreepp:Threepp.Material.needsUpdate": {
+      "hash": "3a260d4b3653",
+      "ja": {
+        "summary": "更新が必要"
+      },
+      "tr": {
+        "summary": "Needs update"
+      }
+    }
+  }
+}

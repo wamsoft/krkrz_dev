@@ -1,0 +1,131 @@
+{
+  "class": "GdiPlus.RectF",
+  "entries": {
+    "layerExDraw:GdiPlus.RectF": {
+      "hash": "38c55b4b13ca",
+      "ja": {
+        "summary": "矩形情報を取り扱うクラス"
+      },
+      "tr": {
+        "summary": "Class that handles rectangle information"
+      }
+    },
+    "layerExDraw:GdiPlus.RectF.left": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "layerExDraw:GdiPlus.RectF.top": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "layerExDraw:GdiPlus.RectF.right": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "layerExDraw:GdiPlus.RectF.bottom": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "layerExDraw:GdiPlus.RectF.location": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "layerExDraw:GdiPlus.RectF.bounds": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "layerExVector:GdiPlus.RectF": {
+      "hash": "38c55b4b13ca",
+      "ja": {
+        "summary": "矩形情報を取り扱うクラス"
+      },
+      "tr": {
+        "summary": "Class that handles rectangle information"
+      }
+    },
+    "layerExVector:GdiPlus.RectF.left": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "layerExVector:GdiPlus.RectF.top": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "layerExVector:GdiPlus.RectF.right": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "layerExVector:GdiPlus.RectF.bottom": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "layerExVector:GdiPlus.RectF.location": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    },
+    "layerExVector:GdiPlus.RectF.bounds": {
+      "hash": "d9ed1badbdb6",
+      "ja": {
+        "summary": "read only"
+      },
+      "tr": {
+        "summary": "Read-only"
+      }
+    }
+  }
+}

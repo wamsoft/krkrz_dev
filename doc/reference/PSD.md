@@ -515,17 +515,17 @@ pixel_data_irrelevant
 
 **戻り値**
 
-ガイド情報辞書 %[ last_applied_id,  // Photoshp上で最後に適用状態だったid
-comps:[id,                // カンプID
+カンプ情報辞書 %[ last_applied_id,  // Photoshop上で最後に適用状態だったカンプID
+comps:[ %[ id,                // カンプID
 record_visibility, // 表示/非表示を記録しているか
 record_position,   // 位置を記録しているか
 record_appearance, // 外観(レイヤーエフェクト)を記録しているか
 name,              // カンプ名
 comment,           // コメント
-],... ]
+],... ] ]
 カンプ情報がない場合は void を返す
 
-・record_xxx フラグが立っていな場合は最後に適用したカンプ(last_applied_id ではなく
+・record_xxx フラグが立っていない場合は最後に適用したカンプ(last_applied_id ではなく
 プログラムで最後に適用したカンプ)の状態を引き継ぎます
 ・カンプIDに対応した各レイヤーごとの表示状態情報は、レイヤー情報の layer_comp
 プロパティにカンプIDをキーとした辞書に格納してあります。
@@ -591,9 +591,9 @@ channels: [ %[ source:, dest: ],... ]
 
 **解説**
 
-レイヤのブレンド範囲を取得する。source/dest は 32bit の生値で、
+レイヤのブレンド範囲を取得する。
 
-上下 16bit に黒側/白側の範囲が詰まっている(詳細は PSD 仕様書を参照)。
+source/dest は 32bit の生値で、上下 16bit に黒側/白側の範囲が詰まっている(詳細は PSD 仕様書を参照)。
 
 ---
 
@@ -741,9 +741,7 @@ data: // ディスクリプタ辞書
 
 **解説**
 
-塗りつぶしレイヤの内容('SoCo'単色/'GdFl'グラデーション/'PtFl'パターン)を
-
-取得する
+塗りつぶしレイヤの内容('SoCo'単色/'GdFl'グラデーション/'PtFl'パターン)を取得する
 
 ---
 
@@ -1027,7 +1025,7 @@ moveLayerRange と組み合わせてフォルダごと動かすのに使う。
 
 レイヤ一覧上の [from, from+count) の範囲をまとめて to の位置へ動かす
 
-(低水準。フォルダごと動かすなら groupSpan の戻り値を渡す)。
+低水準の操作。フォルダごと動かすなら groupSpan の戻り値を渡す。
 
 ---
 
@@ -1247,7 +1245,7 @@ lfx2 ブロックを持たないレイヤの場合は例外。
 
 任意の追加レイヤ情報キーに対する setLayerEffects の一般版
 
-(塗りつぶしレイヤの 'SoCo'/'GdFl'/'PtFl' 等)。
+塗りつぶしレイヤの 'SoCo'/'GdFl'/'PtFl' 等に使う。
 該当キーを持たないレイヤの場合は例外。
 
 ---
@@ -1379,9 +1377,9 @@ width/height は更新される。8bit RGB 文書のみ。
 
 **解説**
 
-レイヤのマスク画素を Layer オブジェクトの内容(B 成分をグレーとして使用)で
+レイヤのマスク画素を Layer オブジェクトの内容(B 成分をグレーとして使用)で差し替える。
 
-差し替える。マスク矩形も (top,left,imageWidth,imageHeight) に設定する。
+マスク矩形も (top,left,imageWidth,imageHeight) に設定する。
 マスクが無ければ新規作成する。8bit 文書のみ。
 
 ---
@@ -1470,9 +1468,9 @@ Layer のサイズは canvas サイズ(width×height)と一致している必要
 
 **解説**
 
-テキストレイヤの runIndex 番目のラン(getLayerInfo().text.runs に対応)の
+テキストレイヤの runIndex 番目のラン(getLayerInfo().text.runs に対応)のスタイルを編集する。
 
-スタイルを編集する。style 辞書のうち指定されたキーだけ上書きする。
+style 辞書のうち指定されたキーだけ上書きする。
 %[ font:      // フォント名。文書のフォントセットに無ければ追加される
 // (getLayerFonts() が返す PostScript 風の名前。表示名では
 //  ないことに注意。手元に無い名前は Photoshop 側で代替される)
@@ -1620,10 +1618,10 @@ getLayerInfo().text.transform と同じ値。テキストレイヤ以外は例�
 
 **解説**
 
-テキストレイヤを平行移動する。アフィン変換の tx/ty とレイヤ矩形
+テキストレイヤを平行移動する。
 
-(マスク矩形があればそれも)を同じだけずらすので、PSD 内蔵のラスタも
-一緒に動く。テキストレイヤ以外の場合は例外。
+アフィン変換の tx/ty とレイヤ矩形(マスク矩形があればそれも)を同じだけずらすので、
+PSD 内蔵のラスタも一緒に動く。テキストレイヤ以外の場合は例外。
 
 ---
 
@@ -1680,9 +1678,9 @@ getLayerInfo().text.transform と同じ値。テキストレイヤ以外は例�
 
 **解説**
 
-static method
-
 ストレージとして保持されてるキャッシュをクリアする
+
+static メソッド。
 
 ---
 
@@ -1848,9 +1846,9 @@ path ]
 
 **解説**
 
-static method
-
 パスを折れ線にする。
+
+static メソッド。
 
 ---
 
@@ -1871,9 +1869,9 @@ static method
 
 **解説**
 
-static method
-
 パスの塗りをラスタライズする (被覆率を B=G=R=値, A=255 で)。
+
+static メソッド。
 
 ---
 
@@ -1893,9 +1891,9 @@ static method
 
 **解説**
 
-static method
-
 パスの線をラスタライズする (被覆率を B=G=R=値, A=255 で)。
+
+static メソッド。
 
 ---
 
@@ -1911,9 +1909,9 @@ static method
 
 **解説**
 
-static method
-
 描画系 (getComposite / renderLayer / ラスタライズ) の並列処理のスレッド数。
+
+static メソッド。
 大きな画像は行ごとに複数のスレッドへ分けて処理する (結果はスレッド数によらない)。
 主な描画モードの合成は、AVX2 の CPU なら 8 画素ずつの SIMD 版で処理する。
 

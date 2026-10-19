@@ -125,9 +125,9 @@ VRM human bone 名 -> Threepp.Bone (無ければ void)
 
 **解説**
 
-毎フレーム更新。humanoid リグ転写 + 制約(node_constraint) + 表情 + 視線 +
+毎フレーム更新
 
-揺れ物(springBone) をまとめて反映する。
+humanoid リグ転写 + 制約(node_constraint) + 表情 + 視線 + 揺れ物(springBone) をまとめて反映する。
 
 ---
 
@@ -144,7 +144,7 @@ VRM human bone 名 -> Threepp.Bone (無ければ void)
 
 **解説**
 
---- 表情 (Expression) ---
+表情ウェイト設定 (name: "happy"/"blink"/"aa" 等, weight 0..1)
 
 ---
 
@@ -213,7 +213,9 @@ i 番目の表情名 -> string (範囲外は "")
 
 **解説**
 
---- 生モーフ (ブレンドシェイプ直接指定。表情の後に override 適用) ---
+名前で個別モーフを設定 (VRoid: "Fcl_*" 等)
+
+ブレンドシェイプを直接指定する。表情の後に override として適用される。
 
 ---
 
@@ -277,7 +279,7 @@ i 番目のモーフ名 -> string
 
 **解説**
 
---- 視線 (LookAt) ---
+注視点(ワールド座標)を設定
 
 ---
 
@@ -316,8 +318,6 @@ i 番目のモーフ名 -> string
 
 VRM アニメーションを時刻 time(秒) で適用する。適用後 update(dt) で raw ボーンへ転写。
 
---- アニメーション ---
-
 ---
 
 ### applyAnimationBlend
@@ -353,7 +353,7 @@ VRM アニメーションを時刻 time(秒) で適用する。適用後 update(
 
 ポーズを適用。arr は [ボーン名, qx, qy, qz, qw, …] の平坦配列。
 
---- ポーズ (正規化リグのローカル回転) ---
+回転は正規化リグのローカル回転。
 
 ---
 
@@ -446,8 +446,6 @@ springBone コライダー半径の一律スケール (既定 1.0=忠実)。
 VRoid 系はコライダーが体にタイトで胴体側面が手薄なため、髪が服に埋まる場合は
 1.2〜1.4 程度にすると改善する (opt-in・標準外)。
 
---- 揺れ物 (SpringBone) ---
-
 ---
 
 ### getColliderScale
@@ -478,7 +476,7 @@ VRoid 系はコライダーが体にタイトで胴体側面が手薄なため�
 
 **解説**
 
---- マテリアル (glTF の material 単位) --- name は完全一致を優先し、無ければ部分一致した全 material に適用する。戻り値は適用数。 VRoid の服の部品 (上着/リボン等) の出し入れや色替え、全体の暗さに使う。 実効色 = 元の色 × setMaterialColor の色 × setTint の色 (MToon の lit/shade/emissive/rim/ matcap と輪郭線の色に掛かる)。
+-> int
 
 ---
 
@@ -521,7 +519,10 @@ VRoid 系はコライダーが体にタイトで胴体側面が手薄なため�
 
 **解説**
 
--> 適用数
+material の表示/非表示を設定 -> 適用数
+
+name は完全一致を優先し、無ければ部分一致した全 material に適用する。戻り値は適用数。
+VRoid の服の部品 (上着/リボン等) の出し入れに使う。
 
 ---
 
@@ -558,6 +559,10 @@ VRoid 系はコライダーが体にタイトで胴体側面が手薄なため�
 
 乗算色 (1,1,1 = 元の色) -> 適用数
 
+name は完全一致を優先し、無ければ部分一致した全 material に適用する。戻り値は適用数。
+実効色 = 元の色 × setMaterialColor の色 × setTint の色 (MToon の lit/shade/emissive/rim/
+matcap と輪郭線の色に掛かる)。VRoid の服の部品の色替えに使う。
+
 ---
 
 ### setTint
@@ -576,6 +581,8 @@ VRoid 系はコライダーが体にタイトで胴体側面が手薄なため�
 
 全 material への乗算色 (1,1,1 = 元の色)
 
+setMaterialColor の色にさらに掛かる。全体の暗さの調整に使う。
+
 ---
 
 ### getMetaName
@@ -584,7 +591,7 @@ VRoid 系はコライダーが体にタイトで胴体側面が手薄なため�
 
 **解説**
 
---- メタ情報 ---
+-> string
 
 ---
 

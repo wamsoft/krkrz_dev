@@ -1,0 +1,42 @@
+{
+  "class": "Threepp.AmbientLight",
+  "entries": {
+    "krkrthreepp:Threepp.AmbientLight": {
+      "hash": "a3e657afe70d",
+      "ja": {
+        "summary": "環境光",
+        "description": "シーン全体を均一に照らす光源です。"
+      },
+      "tr": {
+        "summary": "Ambient light",
+        "description": "A light that illuminates all objects in the scene equally."
+      }
+    },
+    "krkrthreepp:Threepp.AmbientLight.AmbientLight": {
+      "hash": "c91078f1e598",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "color": "光の色 (0xRRGGBB)",
+          "intensity": "光の強度"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "color": "Light color (0xRRGGBB).",
+          "intensity": "Light intensity."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.AmbientLight.type": {
+      "hash": "5cd90e43f6a8",
+      "ja": {
+        "summary": "\"AmbientLight\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"AmbientLight\" (read-only)"
+      }
+    }
+  }
+}

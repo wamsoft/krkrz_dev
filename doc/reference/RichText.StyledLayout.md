@@ -7,6 +7,8 @@
 文字送りアニメーションを効率的に実現できます。
 
 使用例:
+
+```tjs
 var sl = new RichText.StyledLayout();
 sl.layout(
 "<style:bold>太字</style>と通常テキスト",
@@ -16,6 +18,7 @@ RichText.HALIGN_LEFT, RichText.VALIGN_TOP,
 %[ "default": normalApp, "bold": boldApp ]
 );
 layer.drawStyledLayout(sl, 10, 10);
+```
 
 ## メンバー一覧
 
@@ -171,7 +174,7 @@ RichText.HALIGN_LEFT, RichText.VALIGN_TOP,
 
 タイミング情報を解決する
 
-layout() で生成されたタイミング情報（<start>, <delay>, <wait>, <sync>, <keywait> タグ）
+layout() で生成されたタイミング情報（`<start>`, `<delay>`, `<wait>`, `<sync>`, `<keywait>` タグ）
 を解決し、各文字の表示開始時間を計算します。
 
 明示的に呼ばなくても、getResolvedTimings / getKeyWaits / totalRenderDelay /
@@ -228,7 +231,7 @@ layer.drawStyledLayout(sl, x, y, count);
 - pos: 文字位置（charIndex）
 - time: その時点での経過時間（ms）
 
-<keywait/> タグの位置と、そこまでの累積表示時間を返します。
+`<keywait/>` タグの位置と、そこまでの累積表示時間を返します。
 
 ---
 

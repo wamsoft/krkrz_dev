@@ -1,0 +1,115 @@
+{
+  "class": "Threepp.AnimationAction",
+  "entries": {
+    "krkrthreepp:Threepp.AnimationAction": {
+      "hash": "03c50e27e6ac",
+      "ja": {
+        "summary": "再生中の1アニメーション (ModelAnimator.clipAction/play が返す)",
+        "description": "mixer が内部所有する。ModelAnimator が生きている間有効。\nチェーンメソッドは戻り値なし(void)として公開。"
+      },
+      "tr": {
+        "summary": "A single playing animation (returned by ModelAnimator.clipAction/play)",
+        "description": "Owned internally by the mixer; valid while the ModelAnimator is alive.\nChainable methods are exposed as returning nothing (void)."
+      }
+    },
+    "krkrthreepp:Threepp.AnimationAction.play": {
+      "hash": "247eaea753d5",
+      "ja": {
+        "summary": "再生開始"
+      },
+      "tr": {
+        "summary": "Starts playback"
+      }
+    },
+    "krkrthreepp:Threepp.AnimationAction.stop": {
+      "hash": "ca2f8314946d",
+      "ja": {
+        "summary": "停止"
+      },
+      "tr": {
+        "summary": "Stops playback"
+      }
+    },
+    "krkrthreepp:Threepp.AnimationAction.reset": {
+      "hash": "486135dd1ea9",
+      "ja": {
+        "summary": "先頭へ巻き戻し"
+      },
+      "tr": {
+        "summary": "Rewinds to the beginning"
+      }
+    },
+    "krkrthreepp:Threepp.AnimationAction.isRunning": {
+      "hash": "580d0b6572a0",
+      "ja": {
+        "summary": "-> bool"
+      },
+      "tr": {
+        "summary": "-> bool"
+      }
+    },
+    "krkrthreepp:Threepp.AnimationAction.setLoop": {
+      "hash": "3137967c0fe9",
+      "ja": {
+        "summary": "mode: Loop_* 定数, reps: 繰り返し回数(-1で無限)"
+      },
+      "tr": {
+        "summary": "mode: a Loop_* constant, reps: number of repetitions (-1 for infinite)"
+      }
+    },
+    "krkrthreepp:Threepp.AnimationAction.setEffectiveWeight": {
+      "hash": "61d0e89d6300",
+      "ja": {
+        "summary": "ブレンド重み (0..1)。複数アニメ合成時に使用"
+      },
+      "tr": {
+        "summary": "Blend weight (0..1), used when blending multiple animations"
+      }
+    },
+    "krkrthreepp:Threepp.AnimationAction.setEffectiveTimeScale": {
+      "hash": "d211fbc6f9b0",
+      "ja": {
+        "summary": "このアクションの再生速度"
+      },
+      "tr": {
+        "summary": "Playback speed of this action"
+      }
+    },
+    "krkrthreepp:Threepp.AnimationAction.fadeIn": {
+      "hash": "234a2d32a467",
+      "ja": {
+        "summary": "sec 秒でフェードイン"
+      },
+      "tr": {
+        "summary": "Fades in over sec seconds"
+      }
+    },
+    "krkrthreepp:Threepp.AnimationAction.fadeOut": {
+      "hash": "d63d2ba8ed7b",
+      "ja": {
+        "summary": "sec 秒でフェードアウト"
+      },
+      "tr": {
+        "summary": "Fades out over sec seconds"
+      }
+    },
+    "krkrthreepp:Threepp.AnimationAction.crossFadeTo": {
+      "hash": "788fe8f299d6",
+      "ja": {
+        "summary": "別 AnimationAction へ dur 秒でクロスフェード"
+      },
+      "tr": {
+        "summary": "Cross-fades to another AnimationAction over dur seconds"
+      }
+    },
+    "krkrthreepp:Threepp.AnimationAction.setDuration": {
+      "hash": "e495332096e7",
+      "ja": {
+        "summary": "クリップの実効長を上書き"
+      },
+      "tr": {
+        "summary": "Overrides the effective duration of the clip"
+      }
+    }
+  }
+}

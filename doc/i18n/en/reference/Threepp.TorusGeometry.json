@@ -1,0 +1,46 @@
+{
+  "class": "Threepp.TorusGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.TorusGeometry": {
+      "hash": "e4c823cfe74c",
+      "ja": {
+        "summary": "トーラス（ドーナツ形状）ジオメトリ"
+      },
+      "tr": {
+        "summary": "Torus (donut-shaped) geometry"
+      }
+    },
+    "krkrthreepp:Threepp.TorusGeometry.TorusGeometry": {
+      "hash": "b9ab82549978",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "radius": "トーラスの半径",
+          "tube": "チューブの半径",
+          "radialSegments": "周方向の分割数",
+          "tubularSegments": "チューブ方向の分割数",
+          "arc": "角度範囲"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "radius": "Radius of the torus.",
+          "tube": "Radius of the tube.",
+          "radialSegments": "Number of radial segments.",
+          "tubularSegments": "Number of tubular segments.",
+          "arc": "Central angle."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.TorusGeometry.type": {
+      "hash": "e0d5eb0e3f41",
+      "ja": {
+        "summary": "\"TorusGeometry\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"TorusGeometry\" (read-only)"
+      }
+    }
+  }
+}

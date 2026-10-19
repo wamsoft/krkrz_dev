@@ -2,7 +2,7 @@
 
 VertexBinderはVertexBufferとシェーダーに入力する頂点情報を関連付けるためのクラスです。
 ShaderProgramのプロパティにはこのクラスのインスタンスを設定します。
-ShaderProgramに設定されたVertexBinderは、Canvs.drawMeshで呼び出された時シェーダーへ頂点情報として渡されます。
+ShaderProgramに設定されたVertexBinderは、Canvas.drawMeshで呼び出された時シェーダーへ頂点情報として渡されます。
 
 ## メンバー一覧
 

@@ -104,9 +104,9 @@ APIのラッパ程度の機能しかないので非常に使いにくいです�
 
 **解説**
 
-ダイアログサイズの取得
+ダイアログの左端位置
 
-読み取り専用。サイズの変更はできないので注意
+読み取り専用。位置の変更は setPos、サイズの変更は setSize を使用する
 
 ---
 
@@ -114,17 +114,29 @@ APIのラッパ程度の機能しかないので非常に使いにくいです�
 
 プロパティ \ アクセス: `r`
 
+**解説**
+
+ダイアログの上端位置 (読み取り専用)
+
 ---
 
 ### width
 
 プロパティ \ アクセス: `r`
 
+**解説**
+
+ダイアログの幅 (読み取り専用)
+
 ---
 
 ### height
 
 プロパティ \ アクセス: `r`
+
+**解説**
+
+ダイアログの高さ (読み取り専用)
 
 ---
 
@@ -963,7 +975,7 @@ DWL_MSGRESULTの値を設定する
 | `window` | `&nbsp;` | [optional] オーナーwindow (void=オーナーなし,null=Application) |
 | `dsapp` | `(typeof window!="Object")` | [optional] プログレス表示中はアプリケーションウィンドウを無効にするか |
 | `breathe` | `(typeof window=="Object")` | [optional] progressValueのsetterでbreatheするかどうか |
-| `activate` | `true` |  |
+| `activate` | `true` | [optional] 表示時にアクティブ化するかどうか |
 
 **戻り値**
 

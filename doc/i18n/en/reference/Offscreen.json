@@ -1,0 +1,192 @@
+{
+  "class": "Offscreen",
+  "entries": {
+    "Offscreen": {
+      "hash": "e9dd3ce9046a",
+      "ja": {
+        "description": "オフスクリーン。\nいわゆるレンダーターゲット。テクスチャとしても利用可能です。\n内部的に FBO, Renderbuffer, Texture が生成されます。\nレンダーターゲットとして設定しないのであれば、わざわざこのクラスを使用する必要性はありません。\nTextureクラスを使用した方がメモリ効率が良いです。"
+      },
+      "tr": {
+        "description": "An offscreen surface.\nThis is what is usually called a render target. It can also be used as a texture.\nInternally, an FBO, a renderbuffer, and a texture are created.\nIf you do not use it as a render target, there is no need to use this class.\nThe Texture class is more memory-efficient."
+      }
+    },
+    "Offscreen.Offscreen": {
+      "hash": "62c168183983",
+      "ja": {
+        "summary": "オフスクリーンを生成。",
+        "description": "破棄はinvalidate時に行われるので、不要になったら明示的なinvalidate推奨します。",
+        "params": {
+          "width": "オフスクリーン幅",
+          "height": "オフスクリーン高さ"
+        }
+      },
+      "tr": {
+        "summary": "Creates an offscreen surface.",
+        "description": "Resources are released on invalidate, so explicitly invalidating the object once it is no longer needed is recommended.",
+        "params": {
+          "width": "Offscreen width.",
+          "height": "Offscreen height."
+        }
+      }
+    },
+    "Offscreen.copyRect": {
+      "hash": "733d218e57b1",
+      "ja": {
+        "summary": "矩形コピー",
+        "params": {
+          "dleft": "コピー先左端",
+          "dtop": "コピー先上端",
+          "src": "Bitmapクラスのオブジェクト",
+          "srcRect": "srcのコピー元矩形"
+        }
+      },
+      "tr": {
+        "summary": "Copies a rectangle",
+        "params": {
+          "dleft": "Left edge of the destination.",
+          "dtop": "Top edge of the destination.",
+          "src": "A Bitmap object.",
+          "srcRect": "Source rectangle in src."
+        }
+      }
+    },
+    "Offscreen.copyRect@2": {
+      "hash": "82a3f6da87d5",
+      "ja": {
+        "summary": "矩形コピー",
+        "params": {
+          "dleft": "コピー先左端",
+          "dtop": "コピー先上端",
+          "src": "Bitmapクラスのオブジェクト",
+          "sleft": "コピー元左端位置",
+          "stop": "コピー元上端位置",
+          "swidth": "コピー元幅",
+          "sheight": "コピー元高さ"
+        }
+      },
+      "tr": {
+        "summary": "Copies a rectangle",
+        "params": {
+          "dleft": "Left edge of the destination.",
+          "dtop": "Top edge of the destination.",
+          "src": "A Bitmap object.",
+          "sleft": "Left position of the source.",
+          "stop": "Top position of the source.",
+          "swidth": "Source width.",
+          "sheight": "Source height."
+        }
+      }
+    },
+    "Offscreen.copyTo": {
+      "hash": "6fc1bebaf2c5",
+      "ja": {
+        "summary": "Bitmapにコピー",
+        "params": {
+          "destBitmap": "格納先ビットマップ",
+          "dleft": "コピー先左端",
+          "dtop": "コピー先上端",
+          "sleft": "コピー元左端",
+          "stop": "コピー元上端",
+          "width": "サイズ横幅",
+          "height": "サイズ縦幅"
+        }
+      },
+      "tr": {
+        "summary": "Copies to a Bitmap",
+        "params": {
+          "destBitmap": "Destination bitmap.",
+          "dleft": "Left edge of the destination.",
+          "dtop": "Top edge of the destination.",
+          "sleft": "Left edge of the source.",
+          "stop": "Top edge of the source.",
+          "width": "Width.",
+          "height": "Height."
+        }
+      }
+    },
+    "Offscreen.copyTo@2": {
+      "hash": "1550de2cb6e9",
+      "ja": {
+        "summary": "Bitmapにコピー",
+        "description": "BitmapはOffscreenのサイズに合わせて拡大縮小されます。",
+        "params": {
+          "destBitmap": "格納先ビットマップ"
+        }
+      },
+      "tr": {
+        "summary": "Copies to a Bitmap",
+        "description": "The Bitmap is resized to match the size of the Offscreen.",
+        "params": {
+          "destBitmap": "Destination bitmap."
+        }
+      }
+    },
+    "Offscreen.copyTo@3": {
+      "hash": "033511cd7bc3",
+      "ja": {
+        "summary": "Bitmapにコピー",
+        "params": {
+          "destBitmap": "格納先ビットマップ",
+          "dleft": "コピー先左端",
+          "dtop": "コピー先上端",
+          "srcRect": "コピー元矩形"
+        }
+      },
+      "tr": {
+        "summary": "Copies to a Bitmap",
+        "params": {
+          "destBitmap": "Destination bitmap.",
+          "dleft": "Left edge of the destination.",
+          "dtop": "Top edge of the destination.",
+          "srcRect": "Source rectangle."
+        }
+      }
+    },
+    "Offscreen.exchangeTexture": {
+      "hash": "7f0b7afb833d",
+      "ja": {
+        "summary": "フレームバッファに設定されているテクスチャとTextureクラスが指すテクスチャを入れ替える。",
+        "description": "交換するテクスチャのサイズは合わせておかないと例外となる。\nカラーフォーマットもRGBAとする必要がある。\nレンダリング途中での入れ替えも行わない方がいいかもしれない(要確認)。\nクロスフェードなどで両方に描画する必要がない場合、以前の画像をTextureとして取り出し、新しいTextureに差し替えることでオーバーヘッドを減らせる。",
+        "params": {
+          "texture": "交換するTextureクラスのインスタンス。"
+        }
+      },
+      "tr": {
+        "summary": "Swaps the texture attached to the framebuffer with the texture referenced by a Texture object.",
+        "description": "The textures being swapped must have the same size, or an exception is thrown.\nThe color format must also be RGBA.\nIt may be best not to swap in the middle of rendering (to be confirmed).\nWhen you do not need to draw to both, as in a crossfade, you can reduce overhead by taking out the previous image as a Texture and swapping in a new Texture.",
+        "params": {
+          "texture": "The Texture instance to swap with."
+        }
+      }
+    },
+    "Offscreen.width": {
+      "hash": "cdaf870e39aa",
+      "ja": {
+        "summary": "幅、生成時に指定されたもの[r]"
+      },
+      "tr": {
+        "summary": "Width, as specified at creation [r]"
+      }
+    },
+    "Offscreen.height": {
+      "hash": "b61cbba9121f",
+      "ja": {
+        "summary": "高さ、生成時に指定されたもの[r]"
+      },
+      "tr": {
+        "summary": "Height, as specified at creation [r]"
+      }
+    },
+    "Offscreen.nativeHandle": {
+      "hash": "21f1cec5a3f8",
+      "ja": {
+        "summary": "環境依存のハンドル[r]",
+        "description": "OpenGL ES下ではtexture idとなる。"
+      },
+      "tr": {
+        "summary": "Platform-dependent handle [r]",
+        "description": "Under OpenGL ES this is the texture ID."
+      }
+    }
+  }
+}

@@ -61,7 +61,7 @@ Dictionary クラスのオブジェクトは、作成された状態ではメン
 
 saveStruct はファイルへ構造化されたデータの出力を行います。
 
-の同メソッド参照してください。
+[Array クラス](array.md#savestruct) の同メソッドを参照してください。
 
 ## assign
 

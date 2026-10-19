@@ -1,0 +1,245 @@
+{
+  "class": "WebServer",
+  "entries": {
+    "WebServer": {
+      "hash": "891b1dde7889",
+      "ja": {
+        "summary": "WebServer クラスは吉里吉里Z に組み込まれた HTTP + SSE サーバを制御するためのクラスです。このクラスからオブジェクトを作成することはできません。System と同様に `WebServer.start(...)` のように直接呼び出して使用します。",
+        "description": "このサーバはコマンドラインオプションの `-replweb` によって使用されるもので、TJS からエンドポイントを登録することで、ブラウザ UI や外部からの制御を組むことができます。このクラスは `KRKRZ_REPL_WEB` を有効にしたビルドでのみ利用できます。\n\n登録するハンドラは `handler(req)` の形式で、`req` は以下のキーを持つ辞書です。ハンドラは必ずメインスレッドで実行されます。\n\n- `method` ... HTTP メソッド ( \"GET\" / \"POST\" 等 )\n- `path`   ... リクエストパス\n- `query`  ... クエリ文字列\n- `body`   ... リクエストボディ ( 文字列 )\n- `bytes`  ... リクエストボディ ( オクテット。body が空でない場合のみ存在 )\n\nハンドラの戻り値によってレスポンスが決まります。\n\n- 文字列   ... 200 application/json として返します\n- オクテット ... 200 application/octet-stream として返します\n- 整数     ... そのステータスコードで空ボディを返します\n- void     ... 204 を返します\n- 辞書 `%[status, mime, body]` ... 指定した通りに返します\n- TJS 例外が発生した場合は 500 を返します\n\nまた、以下のルートはサーバ側に組み込まれています ( TJS のメンバではありません )。\n\n- `GET /`              ... ビューワー本体 ( Console / Watch / Pad のタブ UI )\n- `GET /events`        ... REPL コンソール用の SSE ストリーム\n- `POST /cmd`          ... REPL へのコマンド送信\n- `GET /sub/<channel>` ... 任意チャンネルの SSE 購読\n- `GET`/`POST /watch`  ... 監視式の取得 / 操作\n- `GET`/`POST /state`  ... コントローラ ( `System.eventDisabled` / 終了要求 )\n- `POST /pad/exec` , `GET`/`POST /pad/file` ... Pad ( スクリプトエディタ )\n- `GET /panels`      ... 登録されたパネルの一覧 ( 組み込み UI がタブを組むのに使う )\n- `POST /bye`          ... ページを閉じる合図\n\n!!! warning \"組み込みルートは register より先に判定されます\"\n    上のパスは [WebServer.register](WebServer.md#register) や\n    [serveStatic](WebServer.md#servestatic) で**上書きできません**。\n    自前のエンドポイントには別の接頭辞を使ってください\n    ( 例: `/api/` `/ui/` )。\n\n!!! warning \"日本語などマルチバイトの値は body で受ける\"\n    `query` は percent-encoding されたままの文字列です。これを戻す\n    `System.urldecode` は Windows ネイティブビルド限定なので、\n    **SDL3 ビルドではクエリで非 ASCII を受け取れません**。\n    文字列の受け渡しは `body` ( UTF-8 ) を使い、`query` は数値や識別子など\n    ASCII の指定にとどめるのが安全です。\n\n最小構成の実装例はコアデモ `webui` にあります ( 静的配信 + 動的\nエンドポイント + ゲームからの push を 1 画面にまとめたもの )。"
+      },
+      "tr": {
+        "summary": "The WebServer class controls the HTTP + SSE server built into Kirikiri Z. You cannot create objects from this class; like System, call its members directly, as in `WebServer.start(...)`.",
+        "description": "This server is the one used by the `-replweb` command-line option. By registering endpoints from TJS, you can build a browser UI or control the engine externally. This class is only available in builds with `KRKRZ_REPL_WEB` enabled.\n\nA registered handler has the form `handler(req)`, where `req` is a dictionary with the following keys. Handlers always run on the main thread.\n\n- `method` ... HTTP method ( \"GET\" / \"POST\", etc. )\n- `path`   ... request path\n- `query`  ... query string\n- `body`   ... request body ( string )\n- `bytes`  ... request body ( octet; present only when body is not empty )\n\nThe handler's return value determines the response.\n\n- string   ... returned as 200 application/json\n- octet    ... returned as 200 application/octet-stream\n- integer  ... returns that status code with an empty body\n- void     ... returns 204\n- dictionary `%[status, mime, body]` ... returned exactly as specified\n- if a TJS exception is thrown, 500 is returned\n\nThe following routes are built into the server ( they are not TJS members ).\n\n- `GET /`              ... the viewer itself ( tabbed UI with Console / Watch / Pad )\n- `GET /events`        ... SSE stream for the REPL console\n- `POST /cmd`          ... sends a command to the REPL\n- `GET /sub/<channel>` ... SSE subscription to an arbitrary channel\n- `GET`/`POST /watch`  ... get / manipulate watch expressions\n- `GET`/`POST /state`  ... controller ( `System.eventDisabled` / exit request )\n- `POST /pad/exec` , `GET`/`POST /pad/file` ... Pad ( script editor )\n- `GET /panels`      ... list of registered panels ( used by the built-in UI to build its tabs )\n- `POST /bye`          ... signal that the page is closing\n\n!!! warning \"Built-in routes are matched before register\"\n    The paths above **cannot be overridden** with [WebServer.register](WebServer.md#register) or\n    [serveStatic](WebServer.md#servestatic).\n    Use a different prefix for your own endpoints\n    ( e.g. `/api/` `/ui/` ).\n\n!!! warning \"Receive multibyte values such as Japanese text in body\"\n    `query` is passed as the still percent-encoded string. `System.urldecode`,\n    which decodes it, is limited to the native Windows build, so\n    **SDL3 builds cannot receive non-ASCII values through the query**.\n    It is safest to pass strings in `body` ( UTF-8 ) and keep `query` to\n    ASCII values such as numbers and identifiers.\n\nA minimal implementation example is in the core demo `webui` ( static serving, dynamic\nendpoints, and push from the game combined on one screen )."
+      }
+    },
+    "WebServer.register": {
+      "hash": "31e8a8870b9f",
+      "ja": {
+        "summary": "動的ハンドラの登録",
+        "description": "指定した prefix に対して動的ハンドラを登録します。マッチングは最長一致で\n行われます。同一の prefix に登録した場合は上書きされます。",
+        "params": {
+          "prefix": "ハンドラを割り当てるパスの接頭辞を指定します。",
+          "handler": "`handler(req)` 形式のハンドラ関数を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Registers a dynamic handler",
+        "description": "Registers a dynamic handler for the given prefix. Matching uses the longest\nprefix. Registering the same prefix again overwrites the previous handler.",
+        "params": {
+          "prefix": "Path prefix to assign the handler to.",
+          "handler": "Handler function of the form `handler(req)`."
+        }
+      }
+    },
+    "WebServer.registerPanel": {
+      "hash": "fcd04308f462",
+      "ja": {
+        "summary": "組み込み UI へパネル ( タブ ) を追加する",
+        "description": "`-replweb` の組み込みブラウザ UI ( Console / Watch / Pad ) の右へ、\n**ゲーム独自のパネルをタブとして 1 枚足します**。自前のページを\n[serveStatic](WebServer.md#servestatic) で配信しておき、そのパスを\n`path` に渡します。\n\n中身は **iframe で読み込まれます**。組み込みページへスクリプトを差し込む\n方式にしていないのは、ゲーム側を組み込み UI の内部 DOM へ依存させないためです\n( こちらの UI を変えるたびにゲーム側が壊れる、を避ける )。パネルは同一\nオリジンなので、`fetch` や `EventSource` でサーバを自由に叩けます\n( 組み込みの `/cmd` `/watch` `/pad/exec` や、自分で\n[register](WebServer.md#register) したエンドポイント )。\n\n同じ `id` で呼び直すと上書きされます。登録・解除は**開いているページへ\n即座に反映**されます ( タブが増減する )。パネルの中身は**そのタブを初めて\n開いたときに読み込まれる**ので、重いツールを登録しても起動は遅くなりません。\n\n```tjs\nWebServer.serveStatic(\"/tool/\", \"web/\");\nWebServer.registerPanel(\"mytool\", \"ツール\", \"/tool/tool.html\");\n```",
+        "params": {
+          "id": "パネルの識別子。上書き・解除のキーになります。",
+          "label": "タブに表示する名前。",
+          "path": "パネルの中身の URL パス。**`/` で始まるサーバ上のパス**を\n指定します ( ローカルのファイルパスではありません )。不正な場合は\n登録されず、理由がログへ出ます。"
+        }
+      },
+      "tr": {
+        "summary": "Adds a panel ( tab ) to the built-in UI",
+        "description": "Adds **one panel of your own as a tab** to the right of the built-in `-replweb`\nbrowser UI ( Console / Watch / Pad ). Serve your own page with\n[serveStatic](WebServer.md#servestatic) and pass its path as\n`path`.\n\nThe content is **loaded in an iframe**. Scripts are not injected into the built-in page\nso that your project does not depend on the built-in UI's internal DOM\n( which would break your project whenever the built-in UI changes ). The panel is on the same\norigin, so it can freely call the server with `fetch` or `EventSource`\n( the built-in `/cmd` `/watch` `/pad/exec`, or endpoints you\n[register](WebServer.md#register) yourself ).\n\nCalling again with the same `id` overwrites the panel. Registration and removal are\n**reflected immediately in open pages** ( tabs appear or disappear ). A panel's content is\n**loaded the first time its tab is opened**, so registering a heavy tool does not slow down startup.\n\n```tjs\nWebServer.serveStatic(\"/tool/\", \"web/\");\nWebServer.registerPanel(\"mytool\", \"Tool\", \"/tool/tool.html\");\n```",
+        "params": {
+          "id": "Panel identifier. Used as the key for overwriting and removal.",
+          "label": "Name shown on the tab.",
+          "path": "URL path of the panel content. Specify **a server path starting with `/`**\n( not a local file path ). If it is invalid, the panel is not\nregistered and the reason is written to the log."
+        }
+      }
+    },
+    "WebServer.unregisterPanel": {
+      "hash": "5314d667ebf7",
+      "ja": {
+        "summary": "組み込み UI からパネルを外す",
+        "description": "[registerPanel](WebServer.md#registerpanel) で追加したタブを削除します。\n開いているページからも即座に消えます。",
+        "returns": "パネルが見つかって削除できた場合は 1、見つからなかった場合は 0 が返ります。",
+        "params": {
+          "id": "削除するパネルの識別子。"
+        }
+      },
+      "tr": {
+        "summary": "Removes a panel from the built-in UI",
+        "description": "Removes a tab added with [registerPanel](WebServer.md#registerpanel).\nIt also disappears immediately from open pages.",
+        "returns": "1 if the panel was found and removed, 0 if it was not found.",
+        "params": {
+          "id": "Identifier of the panel to remove."
+        }
+      }
+    },
+    "WebServer.unregister": {
+      "hash": "1933a1ed28c7",
+      "ja": {
+        "summary": "動的ハンドラの削除",
+        "description": "[WebServer.register](WebServer.md#register) で登録したハンドラを削除します。",
+        "returns": "ハンドラが見つかって削除できた場合は 1、見つからなかった場合は 0 が返ります。",
+        "params": {
+          "prefix": "削除するハンドラの接頭辞を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Removes a dynamic handler",
+        "description": "Removes a handler registered with [WebServer.register](WebServer.md#register).",
+        "returns": "1 if the handler was found and removed, 0 if it was not found.",
+        "params": {
+          "prefix": "Prefix of the handler to remove."
+        }
+      }
+    },
+    "WebServer.serveStatic": {
+      "hash": "0f653b0a095b",
+      "ja": {
+        "summary": "静的配信のマウント",
+        "description": "prefix 以下への GET リクエストを、storageDir に相対パスを連結した\nストレージから配信します。相対パスに `..` が含まれる場合は 403 を返します。",
+        "params": {
+          "prefix": "配信対象とするパスの接頭辞を指定します。",
+          "storageDir": "配信元となるストレージのディレクトリを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Mounts static file serving",
+        "description": "Serves GET requests under prefix from storage, using storageDir joined with the relative path.\nReturns 403 if the relative path contains `..`.",
+        "params": {
+          "prefix": "Path prefix to serve.",
+          "storageDir": "Storage directory to serve from."
+        }
+      }
+    },
+    "WebServer.unserveStatic": {
+      "hash": "8740c5a20e6d",
+      "ja": {
+        "summary": "静的配信のアンマウント",
+        "description": "[WebServer.serveStatic](WebServer.md#servestatic) で登録した静的配信の\nマウントを削除します。",
+        "returns": "マウントが見つかって削除できた場合は 1、見つからなかった場合は 0 が返ります。",
+        "params": {
+          "prefix": "削除する静的配信の接頭辞を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Unmounts static file serving",
+        "description": "Removes a static serving mount registered with [WebServer.serveStatic](WebServer.md#servestatic).",
+        "returns": "1 if the mount was found and removed, 0 if it was not found.",
+        "params": {
+          "prefix": "Prefix of the static serving mount to remove."
+        }
+      }
+    },
+    "WebServer.broadcast": {
+      "hash": "e18f45095fa1",
+      "ja": {
+        "summary": "SSE 購読者への配信",
+        "description": "`/sub/<channel>` を購読しているすべての SSE クライアントへ text を push します。\ntext には複数行を含めることができます。",
+        "params": {
+          "channel": "配信先のチャンネル名を指定します。",
+          "text": "配信するテキストを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Pushes to SSE subscribers",
+        "description": "Pushes text to every SSE client subscribed to `/sub/<channel>`.\ntext may contain multiple lines.",
+        "params": {
+          "channel": "Name of the destination channel.",
+          "text": "Text to push."
+        }
+      }
+    },
+    "WebServer.start": {
+      "hash": "5d8ba6c75f5b",
+      "ja": {
+        "summary": "サーバの起動",
+        "description": "127.0.0.1 でサーバを起動します。",
+        "returns": "起動後の稼働状態が返ります。",
+        "params": {
+          "port": "待受ポート番号を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Starts the server",
+        "description": "Starts the server on 127.0.0.1.",
+        "returns": "Whether the server is running after the call.",
+        "params": {
+          "port": "Port number to listen on."
+        }
+      }
+    },
+    "WebServer.startAt": {
+      "hash": "9e4b1e4cee5d",
+      "ja": {
+        "summary": "ホストを指定したサーバの起動",
+        "description": "明示したホストでサーバを起動します。\"0.0.0.0\" を指定するとすべての\nネットワークインターフェースで待ち受けます。",
+        "returns": "起動後の稼働状態が返ります。",
+        "params": {
+          "host": "待受ホストを指定します。",
+          "port": "待受ポート番号を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Starts the server on a given host",
+        "description": "Starts the server on the given host. Specifying \"0.0.0.0\" listens on all\nnetwork interfaces.",
+        "returns": "Whether the server is running after the call.",
+        "params": {
+          "host": "Host to listen on.",
+          "port": "Port number to listen on."
+        }
+      }
+    },
+    "WebServer.stop": {
+      "hash": "cac817e2753d",
+      "ja": {
+        "summary": "サーバの停止",
+        "description": "サーバを停止します。接続中のクライアントを閉じ、accept スレッドを終了します。"
+      },
+      "tr": {
+        "summary": "Stops the server",
+        "description": "Stops the server. Closes connected clients and ends the accept thread."
+      }
+    },
+    "WebServer.openBrowser": {
+      "hash": "60adbe614bda",
+      "ja": {
+        "summary": "ブラウザで開く",
+        "description": "ブラウザで指定した url を開きます。",
+        "returns": "成否が返ります。",
+        "params": {
+          "url": "開く URL を指定します。省略した場合は稼働中のサーバの URL を\n使用します。",
+          "appMode": "真を指定すると、まず Edge → Chrome の順に `--app=` による\nアプリモードでの起動を試み、いずれも無い場合は OS の既定ブラウザで開きます。"
+        }
+      },
+      "tr": {
+        "summary": "Opens a browser",
+        "description": "Opens the given url in a browser.",
+        "returns": "Whether it succeeded.",
+        "params": {
+          "url": "URL to open. If omitted, the URL of the running server is\nused.",
+          "appMode": "If true, first tries launching Edge, then Chrome, in app mode with `--app=`;\nif neither is available, opens the OS default browser."
+        }
+      }
+    },
+    "WebServer.active": {
+      "hash": "20d1dda2cddb",
+      "ja": {
+        "summary": "サーバが稼働中かどうか",
+        "description": "サーバが稼働中の場合に真を返します。読み出し専用。"
+      },
+      "tr": {
+        "summary": "Whether the server is running",
+        "description": "True while the server is running. Read-only."
+      }
+    },
+    "WebServer.url": {
+      "hash": "78722b9db5e5",
+      "ja": {
+        "summary": "待受 URL",
+        "description": "サーバの待受 URL ( `http://host:port/` 形式 ) を表します。稼働していない\n場合は空文字列になります。読み出し専用。"
+      },
+      "tr": {
+        "summary": "Listening URL",
+        "description": "The server's listening URL ( in the form `http://host:port/` ). Empty string when\nthe server is not running. Read-only."
+      }
+    }
+  }
+}

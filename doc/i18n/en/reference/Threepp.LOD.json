@@ -1,0 +1,70 @@
+{
+  "class": "Threepp.LOD",
+  "entries": {
+    "krkrthreepp:Threepp.LOD": {
+      "hash": "b2ee3eb40ca6",
+      "ja": {
+        "summary": "LOD (Level of Detail)",
+        "description": "距離に応じて異なる詳細度のオブジェクトを切り替えます。"
+      },
+      "tr": {
+        "summary": "LOD (Level of Detail)",
+        "description": "Switches between objects with different levels of detail depending on distance."
+      }
+    },
+    "krkrthreepp:Threepp.LOD.LOD": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.LOD.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.LOD.autoUpdate": {
+      "hash": "823a53cc3f18",
+      "ja": {
+        "summary": "自動更新フラグ"
+      },
+      "tr": {
+        "summary": "Auto-update flag"
+      }
+    },
+    "krkrthreepp:Threepp.LOD.addLevel": {
+      "hash": "178f1bcf8553",
+      "ja": {
+        "summary": "レベルを追加"
+      },
+      "tr": {
+        "summary": "Adds a level"
+      }
+    },
+    "krkrthreepp:Threepp.LOD.getCurrentLevel": {
+      "hash": "72e0e98dcb0e",
+      "ja": {
+        "summary": "現在のレベルを取得"
+      },
+      "tr": {
+        "summary": "Gets the current level"
+      }
+    },
+    "krkrthreepp:Threepp.LOD.update": {
+      "hash": "73a9479a297b",
+      "ja": {
+        "summary": "カメラに基づいて更新"
+      },
+      "tr": {
+        "summary": "Updates based on the camera"
+      }
+    }
+  }
+}

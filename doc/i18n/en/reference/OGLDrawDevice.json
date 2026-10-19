@@ -1,0 +1,181 @@
+{
+  "class": "OGLDrawDevice",
+  "entries": {
+    "OGLDrawDevice": {
+      "hash": "521ff01320af",
+      "ja": {
+        "summary": "OGLDrawDevice クラスは、このインスタンスを [Window.drawDevice](Window.md#drawdevice) に登録して使用するための DrawDevice で、OpenGL ES (glad / ANGLE / EGL) を用いた描画機能を提供します。",
+        "description": "起動時の既定 DrawDevice ではなく、TJS スクリプトで明示的に Window.drawDevice にセットしたタイミングで内部の OpenGL コンテキストが生成され、以降のすべての描画が GL パスを通るようになります。起動オプション `-drawdevice=ogl` で起動時からこのデバイスを選ぶこともできます ( [コマンドラインオプション](../guide/CommandLine.md) )。\n\n利用には OpenGL ES が使える環境が必要です。WINVER ビルドは常に EGL ( ANGLE の `libEGL.dll` / `libGLESv2.dll` ) 経由なので DLL の同梱が必須です。SDL3 ビルドでは OS の OpenGL ドライバの ES プロファイルが優先され、使えない場合に同じ ANGLE DLL へフォールバックします ( `-forceegl` で EGL 強制も可能 )。また SDL3 ビルドを `-drawdevice=sdl` で起動した場合は、実行中にこのデバイスへ切り替えることはできません。\n\nCanvas を SDL3 の GPU API ( SDL_GPU ) で動かすビルド ( 開発中 ) では、このクラスの代わりに [GPUDrawDevice](GPUDrawDevice.md) が `OGLDrawDevice` の名前でも登録されます。\n\nこのデバイスがアクティブな間のみ、TJS 公開クラス [Canvas](Canvas.md) / [Texture](Texture.md) / [ShaderProgram](ShaderProgram.md) / [Offscreen](Offscreen.md) / [Matrix32](Matrix32.md) / [VertexBuffer](VertexBuffer.md) / [VertexBinder](VertexBinder.md) が機能します。"
+      },
+      "tr": {
+        "summary": "OGLDrawDevice is a DrawDevice that you register in [Window.drawDevice](Window.md#drawdevice); it provides drawing with OpenGL ES (glad / ANGLE / EGL).",
+        "description": "It is not the default DrawDevice at startup. The internal OpenGL context is created when a TJS script explicitly sets it in Window.drawDevice, and from then on all drawing goes through the GL path. You can also select this device from startup with the command-line option `-drawdevice=ogl` ([command-line options](../guide/CommandLine.md)).\n\nIt requires an environment where OpenGL ES is available. The WINVER build always goes through EGL (ANGLE's `libEGL.dll` / `libGLESv2.dll`), so these DLLs must be shipped with it. The SDL3 build prefers the ES profile of the OS OpenGL driver and falls back to the same ANGLE DLLs when it is unavailable (`-forceegl` forces EGL). If the SDL3 build is started with `-drawdevice=sdl`, you cannot switch to this device at run time.\n\nIn builds where Canvas runs on the SDL3 GPU API (SDL_GPU) (under development), [GPUDrawDevice](GPUDrawDevice.md) is also registered under the name `OGLDrawDevice` in place of this class.\n\nThe TJS classes [Canvas](Canvas.md) / [Texture](Texture.md) / [ShaderProgram](ShaderProgram.md) / [Offscreen](Offscreen.md) / [Matrix32](Matrix32.md) / [VertexBuffer](VertexBuffer.md) / [VertexBinder](VertexBinder.md) work only while this device is active."
+      }
+    },
+    "OGLDrawDevice.OGLDrawDevice": {
+      "hash": "47a98f354839",
+      "ja": {
+        "summary": "OGLDrawDevice オブジェクトの構築",
+        "description": "OGLDrawDevice クラスのオブジェクトを構築します。\n\n構築直後はまだ OpenGL コンテキストは生成されません。Window.drawDevice にセットしたときに初期化されます。"
+      },
+      "tr": {
+        "summary": "Constructs an OGLDrawDevice object",
+        "description": "Constructs an object of the OGLDrawDevice class.\n\nThe OpenGL context is not created right after construction. It is initialized when the device is set in Window.drawDevice."
+      }
+    },
+    "OGLDrawDevice.recreate": {
+      "hash": "3f91f345d68a",
+      "ja": {
+        "summary": "内部デバイス再生成",
+        "description": "内部デバイスの再生成を行います。\n\n通常使用することはありません。"
+      },
+      "tr": {
+        "summary": "Recreates the internal device",
+        "description": "Recreates the internal device.\n\nYou normally do not need to call this."
+      }
+    },
+    "OGLDrawDevice.createCanvas": {
+      "hash": "f949a8f6027c",
+      "ja": {
+        "summary": "Canvas オブジェクトを生成",
+        "description": "このデバイスに紐づく [Canvas](Canvas.md) オブジェクトの生成を要求します。\n生成された Canvas は [canvas](#canvas) プロパティから取得できます。"
+      },
+      "tr": {
+        "summary": "Creates a Canvas object",
+        "description": "Requests creation of a [Canvas](Canvas.md) object bound to this device.\nThe created Canvas is available from the [canvas](#canvas) property."
+      }
+    },
+    "OGLDrawDevice.resumeOnDraw": {
+      "hash": "8e4d96fd1775",
+      "ja": {
+        "summary": "自動停止した onDraw の発火を再開",
+        "description": "onDraw ハンドラが毎フレーム例外を投げ続けて連続例外の上限\n( コマンドラインオプション `-eventexceptionlimit`、既定 10 ) に達すると、\nonDraw の発火は自動停止します ( 画面クリア等の描画サイクル自体は継続 )。\nこのメソッドを呼ぶと発火を再開します。"
+      },
+      "tr": {
+        "summary": "Resumes firing onDraw after it was stopped automatically",
+        "description": "If the onDraw handler keeps throwing exceptions every frame and reaches the limit for consecutive exceptions\n(command-line option `-eventexceptionlimit`, default 10),\nonDraw stops firing automatically (the drawing cycle itself, such as clearing the screen, continues).\nCalling this method resumes firing."
+      }
+    },
+    "OGLDrawDevice.interface": {
+      "hash": "1cd82fca475d",
+      "ja": {
+        "summary": "インターフェースオブジェクトを取得",
+        "description": "プラグインなどで DrawDevice オブジェクトを利用するためにあります。"
+      },
+      "tr": {
+        "summary": "Gets the interface object",
+        "description": "Provided so that plugins and the like can use the DrawDevice object."
+      }
+    },
+    "OGLDrawDevice.window": {
+      "hash": "57fb16b31728",
+      "ja": {
+        "summary": "関連付けられた Window オブジェクトを取得",
+        "description": "この DrawDevice をセットしている Window オブジェクトを返します。"
+      },
+      "tr": {
+        "summary": "Gets the associated Window object",
+        "description": "Returns the Window object this DrawDevice is set on."
+      }
+    },
+    "OGLDrawDevice.canvas": {
+      "hash": "d2b8253061f5",
+      "ja": {
+        "summary": "描画用 Canvas オブジェクトを取得",
+        "description": "このデバイスが管理している [Canvas](Canvas.md) オブジェクトを返します。\nonDraw 内などからアクセスして描画コマンドを発行します。"
+      },
+      "tr": {
+        "summary": "Gets the Canvas object used for drawing",
+        "description": "Returns the [Canvas](Canvas.md) object managed by this device.\nAccess it from onDraw and the like to issue drawing commands."
+      }
+    },
+    "OGLDrawDevice.texture": {
+      "hash": "4c49e0aa2a86",
+      "ja": {
+        "summary": "テクスチャ管理オブジェクトを取得",
+        "description": "このデバイスが管理している [Texture](Texture.md) オブジェクトを返します。"
+      },
+      "tr": {
+        "summary": "Gets the texture object",
+        "description": "Returns the [Texture](Texture.md) object managed by this device."
+      }
+    },
+    "OGLDrawDevice.matrix": {
+      "hash": "652e5e0ad795",
+      "ja": {
+        "summary": "行列オブジェクトを取得",
+        "description": "このデバイスが管理している [Matrix32](Matrix32.md) オブジェクトを返します。\n描画時の座標変換に使用します。"
+      },
+      "tr": {
+        "summary": "Gets the matrix object",
+        "description": "Returns the [Matrix32](Matrix32.md) object managed by this device.\nUsed for coordinate transformation when drawing."
+      }
+    },
+    "OGLDrawDevice.glVideoPresenterHost": {
+      "hash": "12e20ffddaa7",
+      "ja": {
+        "summary": "オーバーレイ動画 presenter 登録口 (ポインタ値)",
+        "description": "オーバーレイ動画側がこの GL デバイスへ pull 型で合成するために読み取る presenter host\nへのポインタ値です (WINVER の [videoPresenterHost](Window.BasicDrawDevice.md#videopresenterhost) /\nSDL の [sdlVideoPresenterHost](SDLDrawDevice.md#sdlvideopresenterhost) と同じ規約)。\n通常はエンジン内部/プラグインが使用します。"
+      },
+      "tr": {
+        "summary": "Registration point for the overlay movie presenter (pointer value)",
+        "description": "A pointer value to the presenter host that the overlay movie reads in order to composite into this GL device in a pull model\n(the same convention as [videoPresenterHost](Window.BasicDrawDevice.md#videopresenterhost) in WINVER /\n[sdlVideoPresenterHost](SDLDrawDevice.md#sdlvideopresenterhost) in SDL).\nNormally used by the engine internals or plugins."
+      }
+    },
+    "OGLDrawDevice.dialogRendererHost": {
+      "hash": "e39de868ef72",
+      "ja": {
+        "summary": "Elements ダイアログ renderer host (ポインタ値)",
+        "description": "Elements のオーバーレイ描画アダプタを取得するための host へのポインタ値です。\n通常はエンジン内部/プラグインが使用します。"
+      },
+      "tr": {
+        "summary": "Elements dialog renderer host (pointer value)",
+        "description": "A pointer value to the host used to obtain the Elements overlay drawing adapter.\nNormally used by the engine internals or plugins."
+      }
+    },
+    "OGLDrawDevice.viewportBackgroundHost": {
+      "hash": "53cff7f8bf7c",
+      "ja": {
+        "summary": "ビューポート余白塗り登録口 (ポインタ値)",
+        "description": "ゲーム画面が描画領域全体を覆わないときの余白 ( [Window.viewportBgColor](Window.md#viewportbgcolor) /\n[Window.setViewportWallpaper](Window.md#setviewportwallpaper) ) を受け取る\n`iTVPViewportBackgroundHost` へのポインタ値です。 Window はこのプロパティが非 0 の\nときだけ余白設定を反映します ( プロパティを持たない描画デバイスでは余白の塗り分けは\n効かず、そのデバイス既定の塗りつぶしのままになります )。 通常はエンジン内部/プラグインが\n使用します。"
+      },
+      "tr": {
+        "summary": "Registration point for filling the viewport margins (pointer value)",
+        "description": "A pointer value to the `iTVPViewportBackgroundHost` that receives the margin settings used when the game screen does not cover the whole\ndrawing area ([Window.viewportBgColor](Window.md#viewportbgcolor) /\n[Window.setViewportWallpaper](Window.md#setviewportwallpaper)). Window applies the margin settings only when this property\nis nonzero (with a draw device that lacks this property, the margins cannot be filled separately\nand keep that device's default fill). Normally used by the engine internals or plugins."
+      }
+    },
+    "OGLDrawDevice.onInit": {
+      "hash": "188b9f6afae2",
+      "ja": {
+        "summary": "GL コンテキスト初期化時に呼び出されるイベント",
+        "description": "このデバイスが Window.drawDevice にセットされ、内部の OpenGL ES コンテキストの生成と初期化が完了した直後に発火します。\n\nシェーダ・テクスチャ等の初期リソース確保はここで行います。"
+      },
+      "tr": {
+        "summary": "Event called when the GL context is initialized",
+        "description": "Fires right after this device is set in Window.drawDevice and the internal OpenGL ES context has been created and initialized.\n\nAllocate initial resources such as shaders and textures here."
+      }
+    },
+    "OGLDrawDevice.onDone": {
+      "hash": "ed8f3e585232",
+      "ja": {
+        "summary": "GL コンテキスト破棄前に呼び出されるイベント",
+        "description": "このデバイスが切り離される、もしくはコンテキストが破棄される直前に発火します。\n\nonInit で確保したリソースの解放はここで行います。"
+      },
+      "tr": {
+        "summary": "Event called before the GL context is destroyed",
+        "description": "Fires just before this device is detached or the context is destroyed.\n\nRelease the resources allocated in onInit here."
+      }
+    },
+    "OGLDrawDevice.onDraw": {
+      "hash": "001256b6989b",
+      "ja": {
+        "summary": "画面描画時に呼び出されるイベント",
+        "description": "描画サイクルごとに発火します。Canvas が割り当てられている場合、内部で BeginDrawing 〜 EndDrawing で挟まれた状態で呼ばれるため、ハンドラ内で [canvas](#canvas) プロパティ経由で描画コマンドを発行できます。"
+      },
+      "tr": {
+        "summary": "Event called when the screen is drawn",
+        "description": "Fires on every drawing cycle. When a Canvas is assigned, it is called internally between BeginDrawing and EndDrawing, so you can issue drawing commands through the [canvas](#canvas) property inside the handler."
+      }
+    }
+  }
+}

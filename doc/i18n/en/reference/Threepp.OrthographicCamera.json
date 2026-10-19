@@ -1,0 +1,113 @@
+{
+  "class": "Threepp.OrthographicCamera",
+  "entries": {
+    "krkrthreepp:Threepp.OrthographicCamera": {
+      "hash": "cc78cb582f88",
+      "ja": {
+        "summary": "正射影カメラ",
+        "description": "2Dシーンやアイソメトリックビューに適したカメラです。"
+      },
+      "tr": {
+        "summary": "Orthographic camera",
+        "description": "A camera suited to 2D scenes and isometric views."
+      }
+    },
+    "krkrthreepp:Threepp.OrthographicCamera.OrthographicCamera": {
+      "hash": "9cd01eb69b89",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "left": "左端",
+          "right": "右端",
+          "top": "上端",
+          "bottom": "下端",
+          "near": "ニアクリップ面",
+          "far": "ファークリップ面"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "left": "Left plane.",
+          "right": "Right plane.",
+          "top": "Top plane.",
+          "bottom": "Bottom plane.",
+          "near": "Near clipping plane.",
+          "far": "Far clipping plane."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.OrthographicCamera.type": {
+      "hash": "0bbbc6223aa3",
+      "ja": {
+        "summary": "\"OrthographicCamera\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"OrthographicCamera\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.OrthographicCamera.left": {
+      "hash": "0b383273f2a2",
+      "ja": {
+        "summary": "左端"
+      },
+      "tr": {
+        "summary": "Left plane"
+      }
+    },
+    "krkrthreepp:Threepp.OrthographicCamera.right": {
+      "hash": "20f037716ebd",
+      "ja": {
+        "summary": "右端"
+      },
+      "tr": {
+        "summary": "Right plane"
+      }
+    },
+    "krkrthreepp:Threepp.OrthographicCamera.top": {
+      "hash": "c217a8a61f81",
+      "ja": {
+        "summary": "上端"
+      },
+      "tr": {
+        "summary": "Top plane"
+      }
+    },
+    "krkrthreepp:Threepp.OrthographicCamera.bottom": {
+      "hash": "9e310ad362aa",
+      "ja": {
+        "summary": "下端"
+      },
+      "tr": {
+        "summary": "Bottom plane"
+      }
+    },
+    "krkrthreepp:Threepp.OrthographicCamera.setViewOffset": {
+      "hash": "cd6ebeb26035",
+      "ja": {
+        "summary": "ビューオフセットを設定"
+      },
+      "tr": {
+        "summary": "Sets the view offset"
+      }
+    },
+    "krkrthreepp:Threepp.OrthographicCamera.clearViewOffset": {
+      "hash": "e0031904ce1f",
+      "ja": {
+        "summary": "ビューオフセットをクリア"
+      },
+      "tr": {
+        "summary": "Clears the view offset"
+      }
+    },
+    "krkrthreepp:Threepp.OrthographicCamera.updateProjectionMatrix": {
+      "hash": "020852d948fa",
+      "ja": {
+        "summary": "投影行列を更新"
+      },
+      "tr": {
+        "summary": "Updates the projection matrix"
+      }
+    }
+  }
+}

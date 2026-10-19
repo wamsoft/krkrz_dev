@@ -46,6 +46,8 @@ System クラスは 吉里吉里本体や、吉里吉里が実行されている
 - [touchDevice](#touchdevice)
 - [platformTag](#platformtag)
 - [systemLanguage](#systemlanguage)
+- [uiLanguage](#uilanguage)
+- [uiLanguageCandidates](#uilanguagecandidates)
 - [padButtonMapping](#padbuttonmapping)
 - [padStyle](#padstyle)
 - [buildVariantName](#buildvariantname)
@@ -995,6 +997,72 @@ if(code == "") code = "ja";   // 取得できない環境はゲーム既定へ
 
 ---
 
+### uiLanguage
+
+プロパティ \ アクセス: `r`
+
+**型**: `String`
+
+**解説**
+
+実効表示言語
+
+エンジン自身のメッセージ ( エラー文言等 ) とオプション解説の言語選択に
+使われている言語タグを返します。読み取り専用です。
+
+起動オプション `-language` ( `config.cf` でも可 ) が指定されていればその値、
+無ければ [System.systemLanguage](#systemlanguage) と同じ OS の言語です。
+どちらも得られない環境では空文字列を返します。
+
+[System.systemLanguage](#systemlanguage) は OS の設定をそのまま返すので
+`-language` を反映しません。ゲーム側の多言語化でエンジンのメッセージと
+言語を揃えたいときはこちらを使ってください。言語コードへの丸めが必要なら
+[System.uiLanguageCandidates](#uilanguagecandidates) を使えます。
+
+**関連:** [System.uiLanguageCandidates](System.md#uilanguagecandidates) / [System.systemLanguage](System.md#systemlanguage)
+
+---
+
+### uiLanguageCandidates
+
+プロパティ \ アクセス: `r`
+
+**型**: `Array`
+
+**解説**
+
+実効表示言語の候補 (優先順)
+
+[System.uiLanguage](#uilanguage) を、エンジンのメッセージ資材と同じ規則で
+言語コードへ丸めた配列です。先頭が実際に使う言語で、以降はその言語の文字列が
+無いときに試す代替言語の順です。末尾は常に `"ja"` です。読み取り専用で、
+取得するたびに新しい配列を返します。
+
+言語コードは `"ja"` / `"en"` / `"chs"` ( 簡体字中国語 ) / `"cht"` ( 繁体字中国語 )
+のいずれかです。例:
+
+| uiLanguage | uiLanguageCandidates |
+|---|---|
+| `ja-JP` | `["ja"]` |
+| `en-US` / `fr-FR` など | `["en", "ja"]` |
+| `zh-CN` | `["chs", "en", "ja"]` |
+| `zh-TW` / `zh-Hant-HK` | `["cht", "chs", "en", "ja"]` |
+
+```tjs
+// 文字列表 %[ ja : "…", en : "…" ] から現在の言語で引く
+function pickText(entry)
+{
+var langs = System.uiLanguageCandidates;
+for (var i = 0; i < langs.count; i++)
+if (entry[langs[i]] !== void) return entry[langs[i]];
+return "";
+}
+```
+
+**関連:** [System.uiLanguage](System.md#uilanguage)
+
+---
+
 ### padButtonMapping
 
 プロパティ \ アクセス: `r/w`
@@ -1607,7 +1675,7 @@ void が返ります。
 `-name`
 
 の形式で吉里吉里に渡されている必要があります。前者の場合は値として `value` が
-返り、前者の場合は値として `'yes'` が返ります。
+返り、後者の場合は値として `'yes'` が返ります。
 
 **関連:** [System.setArgument](System.md#setargument)
 
@@ -3400,6 +3468,7 @@ intersect: 指定範囲と交わる領域(指定しなかった場合は monitor
 
 モニタの情報一覧を取得
 
+範囲枠 (x, y, w, h) を指定すると交わるモニタのみを返す。全省略で全てのモニタを返す。
 全てのモニタを列挙する
 
 ---
@@ -3711,7 +3780,7 @@ TVPBreathe, TVPGetBreathing のラッパ
 
 **解説**
 
-findWindoeEx のラッパ
+Win32 API FindWindowEx のラッパ
 
 ---
 

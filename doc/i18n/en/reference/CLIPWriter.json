@@ -1,0 +1,260 @@
+{
+  "class": "CLIPWriter",
+  "entries": {
+    "clipfile:CLIPWriter": {
+      "hash": "608227f9701c",
+      "ja": {
+        "summary": "CLIP ファイルの編集 / 書き出しクラス。",
+        "description": "読み側(CLIP)とは別クラスです。編集元をメモリへ全部読む(mmap しない)ので\n同じパスへ書き戻せます。\n\n**書いたファイルは validate() を通してから CSP で開いてください。**\n「こちらのリーダでは読めるのに CSP が受け付けない」種類の間違い(格納型・\nミップ段数・チェックサム・サムネイルの世代番号・CanvasPreview)は\nclipparse 側が面倒を見ていますが、参照整合性の崩れは validate() でしか\n検出できません。引っかかる状態のファイルは CSP で落ちたり全面透明になります。\n\n使用例:\nvar w = new CLIPWriter();\nw.load(\"in.clip\");\nw.setLayerAttr(5, %[ opacity: 128, composite: CLIPWriter.composite_multiply ]);\nw.save(\"out.clip\");\nvar problems = CLIPWriter.validate(\"out.clip\");\nif (problems.count) Debug.message(problems.join(\"\\n\"));"
+      },
+      "tr": {
+        "summary": "Class for editing and writing CLIP files",
+        "description": "A separate class from the reader (CLIP). It reads the whole source file into memory (no mmap),\nso it can write back to the same path.\n\n**Run written files through validate() before opening them in CSP.**\nclipparse takes care of the kinds of mistakes that \"our reader accepts but CSP rejects\"\n(storage types, mip level counts, checksums, thumbnail generation numbers, CanvasPreview),\nbut broken referential integrity can only be detected by validate(). Files in such a state\ncrash CSP or show up fully transparent.\n\nExample:\nvar w = new CLIPWriter();\nw.load(\"in.clip\");\nw.setLayerAttr(5, %[ opacity: 128, composite: CLIPWriter.composite_multiply ]);\nw.save(\"out.clip\");\nvar problems = CLIPWriter.validate(\"out.clip\");\nif (problems.count) Debug.message(problems.join(\"\\n\"));"
+      }
+    },
+    "clipfile:CLIPWriter.load": {
+      "hash": "fe72ecaab25f",
+      "ja": {
+        "summary": "編集元の CLIP ファイルを読む",
+        "returns": "成功したら true(失敗理由は error プロパティ)",
+        "params": {
+          "filename": "ファイル名(ローカルパスに落ちる必要があります。\nアーカイブ内のファイルは編集元にできず例外になります)"
+        }
+      },
+      "tr": {
+        "summary": "Reads the CLIP file to edit",
+        "returns": "true on success (the reason for failure is in the error property).",
+        "params": {
+          "filename": "File name (must resolve to a local path.\nFiles inside archives cannot be edited and throw an exception)."
+        }
+      }
+    },
+    "clipfile:CLIPWriter.save": {
+      "hash": "7d32f2848e7a",
+      "ja": {
+        "summary": "現在の状態でファイルを組み立てて書き出す。",
+        "description": "無変更で書き戻した場合は元ファイルと sha256 が一致します。",
+        "returns": "書いたバイト数。失敗で 0",
+        "params": {
+          "filename": "保存先ファイル名(ローカルパス)"
+        }
+      },
+      "tr": {
+        "summary": "Builds the file from the current state and writes it",
+        "description": "If written back without changes, the sha256 matches the original file.",
+        "returns": "Number of bytes written. 0 on failure.",
+        "params": {
+          "filename": "Destination file name (local path)."
+        }
+      }
+    },
+    "clipfile:CLIPWriter.clearData": {
+      "hash": "2db0cccbbcb8",
+      "ja": {
+        "summary": "保持しているデータを明示的に破棄する"
+      },
+      "tr": {
+        "summary": "Explicitly discards the data held"
+      }
+    },
+    "clipfile:CLIPWriter.error": {
+      "hash": "5bea50a681c2",
+      "ja": {
+        "summary": "直近の失敗理由。無ければ空文字列。",
+        "description": "**成功時にクリアされないので、戻り値が false のときだけ読むこと。**"
+      },
+      "tr": {
+        "summary": "Reason for the most recent failure. An empty string if none",
+        "description": "**It is not cleared on success, so read it only when the return value is false.**"
+      }
+    },
+    "clipfile:CLIPWriter.external_count": {
+      "hash": "b26175a38928",
+      "ja": {
+        "summary": "外部チャンク(CHNKExta)の数"
+      },
+      "tr": {
+        "summary": "Number of external chunks (CHNKExta)"
+      }
+    },
+    "clipfile:CLIPWriter.setLayerAttr": {
+      "hash": "fbaf12d83cd9",
+      "ja": {
+        "summary": "レイヤ属性を編集する。attr 辞書のうち指定されたキーだけ変更します",
+        "description": "%[ name:       // レイヤ名\nopacity:    // 不透明度 0..**256** (CLIP は 256 段。0..255 ではない)\nvisibility: // 表示状態 0/1\ncomposite:  // 合成モード(composite_* 定数)\nclipping:   // 下のレイヤでクリッピングするか\nfolder:     // フォルダ属性 (bit0=フォルダ / bit4=折り畳み)\n]",
+        "returns": "成功したら true",
+        "params": {
+          "layerId": "LayerId (CLIP.getLayerInfo().layer_id の値)",
+          "attr": "属性辞書"
+        }
+      },
+      "tr": {
+        "summary": "Edits layer attributes. Only the keys given in the attr dictionary are changed",
+        "description": "%[ name:       // layer name\nopacity:    // opacity 0..**256** (CLIP uses 256 levels, not 0..255)\nvisibility: // visibility 0/1\ncomposite:  // blend mode (composite_* constants)\nclipping:   // whether to clip to the layer below\nfolder:     // folder attributes (bit0=folder / bit4=collapsed)\n]",
+        "returns": "true on success.",
+        "params": {
+          "layerId": "LayerId (the value of CLIP.getLayerInfo().layer_id).",
+          "attr": "Attribute dictionary."
+        }
+      }
+    },
+    "clipfile:CLIPWriter.setPixels": {
+      "hash": "c6b830df79c2",
+      "ja": {
+        "summary": "レイヤの画素を Layer オブジェクトの内容で差し替える。",
+        "description": "**Layer のサイズはそのレイヤの 100% ミップの寸法と一致していなければ\nなりません。これはキャンバスサイズとは限りません** — CSP はレイヤによって\n256x256 ブロック境界に切り上げた大きさ(300x400 のキャンバスでも 512x512 等)\nで持つことがあります。必要な寸法は読み側の\n`CLIP.getLayerAttribute(レイヤ番号)` の width / height で調べられます:\n\nvar a = clip.getLayerAttribute(3);\nlay.setImageSize(a.width, a.height);\nlay.setSizeToImageSize();\n// ... lay に描く ...\nw.setPixels(clip.getLayerInfo(3).layer_id, lay);\n\n寸法が合わないと false が返り、error に\n\"pixel size does not match the 100% mipmap\" が入ります。\nRGBA プレーンのレイヤのみ対応 (getLayerAttribute().num_channels == 4)。",
+        "returns": "成功したら true",
+        "params": {
+          "layerId": "LayerId",
+          "layer": "画素供給元 Layer"
+        }
+      },
+      "tr": {
+        "summary": "Replaces a layer's pixels with the contents of a Layer object",
+        "description": "**The Layer size must match the dimensions of that layer's 100% mipmap, which is not\nnecessarily the canvas size.** CSP may store some layers rounded up to 256x256 block\nboundaries (for example 512x512 even on a 300x400 canvas). You can find the required\ndimensions from width / height of the reader's\n`CLIP.getLayerAttribute(layer index)`:\n\nvar a = clip.getLayerAttribute(3);\nlay.setImageSize(a.width, a.height);\nlay.setSizeToImageSize();\n// ... draw into lay ...\nw.setPixels(clip.getLayerInfo(3).layer_id, lay);\n\nIf the dimensions do not match, false is returned and error is set to\n\"pixel size does not match the 100% mipmap\".\nOnly RGBA plane layers are supported (getLayerAttribute().num_channels == 4).",
+        "returns": "true on success.",
+        "params": {
+          "layerId": "LayerId.",
+          "layer": "Layer that supplies the pixels."
+        }
+      }
+    },
+    "clipfile:CLIPWriter.addLayer": {
+      "hash": "d652668b5005",
+      "ja": {
+        "summary": "既存レイヤを雛形にレイヤを追加する。",
+        "description": "雛形から表現色などの属性を引き継ぐので、追加元のレイヤを選ぶことが必要です。",
+        "returns": "新しいレイヤの LayerId。失敗で 0",
+        "params": {
+          "name": "新しいレイヤ名",
+          "copyFrom": "雛形にする既存レイヤの LayerId",
+          "layer": "画素供給元 Layer(省略/void で全面透明)",
+          "after": "この LayerId の直上に挿す。負値で最上段。既定 -1",
+          "parent": "親フォルダの LayerId。0 でルート直下。既定 0"
+        }
+      },
+      "tr": {
+        "summary": "Adds a layer using an existing layer as a template",
+        "description": "Attributes such as the expression color are inherited from the template, so you need to choose the source layer.",
+        "returns": "LayerId of the new layer. 0 on failure.",
+        "params": {
+          "name": "Name of the new layer.",
+          "copyFrom": "LayerId of the existing layer to use as the template.",
+          "layer": "Layer that supplies the pixels (omitted / void makes it fully transparent).",
+          "after": "Inserts directly above this LayerId. A negative value means the top. Defaults to -1.",
+          "parent": "LayerId of the parent folder. 0 means directly under the root. Defaults to 0."
+        }
+      }
+    },
+    "clipfile:CLIPWriter.deleteLayer": {
+      "hash": "80370aa3ca2c",
+      "ja": {
+        "summary": "レイヤを削除する",
+        "returns": "成功したら true",
+        "params": {
+          "layerId": "LayerId"
+        }
+      },
+      "tr": {
+        "summary": "Deletes a layer",
+        "returns": "true on success.",
+        "params": {
+          "layerId": "LayerId."
+        }
+      }
+    },
+    "clipfile:CLIPWriter.dropThumbnail": {
+      "hash": "27161dcd438c",
+      "ja": {
+        "summary": "サムネイルの実体だけ落として世代番号を立てる(CSP が開いたときに作り直す)。",
+        "description": "画素を差し替えたのに古いサムネイルが残るのを避けたいとき用ですが、\nsetPixels / addLayer が内部で面倒を見るので通常は呼ぶ必要はありません。",
+        "returns": "成功したら true",
+        "params": {
+          "layerId": "LayerId"
+        }
+      },
+      "tr": {
+        "summary": "Drops only the thumbnail data and sets the generation number (CSP regenerates it when opening the file)",
+        "description": "Intended for avoiding a stale thumbnail after replacing pixels, but\nsetPixels / addLayer handle this internally, so you normally do not need to call it.",
+        "returns": "true on success.",
+        "params": {
+          "layerId": "LayerId."
+        }
+      }
+    },
+    "clipfile:CLIPWriter.setCanvasPreview": {
+      "hash": "77db0132ddc9",
+      "ja": {
+        "summary": "開いた直後に表示される画像(CanvasPreview)を差し替える",
+        "returns": "成功したら true",
+        "params": {
+          "layer": "画素供給元 Layer"
+        }
+      },
+      "tr": {
+        "summary": "Replaces the image shown right after opening (CanvasPreview)",
+        "returns": "true on success.",
+        "params": {
+          "layer": "Layer that supplies the pixels."
+        }
+      }
+    },
+    "clipfile:CLIPWriter.resizeCanvas": {
+      "hash": "29a6d27cda4f",
+      "ja": {
+        "summary": "キャンバスの寸法ごと作り替える(ミップ連鎖を伸縮させる)。",
+        "description": "**画素の実体は全部落ちるので、呼んだあと setPixels で入れ直してください。**",
+        "returns": "成功したら true",
+        "params": {
+          "width": "新しい幅",
+          "height": "新しい高さ",
+          "dpi": "解像度(0 で据え置き)。既定 0"
+        }
+      },
+      "tr": {
+        "summary": "Rebuilds the canvas at new dimensions (scales the mip chain)",
+        "description": "**All pixel data is dropped, so put it back with setPixels afterwards.**",
+        "returns": "true on success.",
+        "params": {
+          "width": "New width.",
+          "height": "New height.",
+          "dpi": "Resolution (0 keeps it unchanged). Defaults to 0."
+        }
+      }
+    },
+    "clipfile:CLIPWriter.setSeed": {
+      "hash": "33dd11fea3fd",
+      "ja": {
+        "summary": "外部 ID の乱数種を固定する(テストで出力の再現性が要るとき)",
+        "params": {
+          "seed": "乱数種"
+        }
+      },
+      "tr": {
+        "summary": "Fixes the random seed for external IDs (when tests need reproducible output)",
+        "params": {
+          "seed": "Random seed."
+        }
+      }
+    },
+    "clipfile:CLIPWriter.validate": {
+      "hash": "38294a11cad4",
+      "ja": {
+        "summary": "参照整合性を検査する",
+        "description": "static メソッド。**CSP で開く前に必ず通すこと。**\nミップ段数 / 閉路 / 孤児行 / 格納型 / 消えたレイヤへの参照を見ます。",
+        "returns": "問題点の文字列配列。空配列なら問題なし",
+        "params": {
+          "filename": "検査するファイル(ローカルパス)"
+        }
+      },
+      "tr": {
+        "summary": "Checks referential integrity",
+        "description": "A static method. **Always run this before opening a file in CSP.**\nChecks mip level counts, cycles, orphan rows, storage types and references to deleted layers.",
+        "returns": "An array of strings describing problems. An empty array means no problems.",
+        "params": {
+          "filename": "File to check (local path)."
+        }
+      }
+    }
+  }
+}

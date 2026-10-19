@@ -1,0 +1,50 @@
+{
+  "class": "Threepp.PolarGridHelper",
+  "entries": {
+    "krkrthreepp:Threepp.PolarGridHelper": {
+      "hash": "e03de1c27265",
+      "ja": {
+        "summary": "極座標グリッドヘルパー",
+        "description": "極座標系のグリッドを表示します。"
+      },
+      "tr": {
+        "summary": "Polar grid helper",
+        "description": "Displays a grid in polar coordinates."
+      }
+    },
+    "krkrthreepp:Threepp.PolarGridHelper.PolarGridHelper": {
+      "hash": "34e70852e6ae",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "radius": "半径",
+          "sectors": "セクター数",
+          "rings": "リング数",
+          "divisions": "分割数",
+          "color1": "メインカラー",
+          "color2": "セカンダリカラー"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "radius": "Radius.",
+          "sectors": "Number of sectors.",
+          "rings": "Number of rings.",
+          "divisions": "Number of divisions.",
+          "color1": "Main color.",
+          "color2": "Secondary color."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.PolarGridHelper.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    }
+  }
+}

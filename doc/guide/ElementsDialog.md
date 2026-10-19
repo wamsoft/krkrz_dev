@@ -263,6 +263,8 @@ foreach_dict_of(cfg, function(k, v) { ElementsDialog.setSharedVar(k, v); });
 
 単発表示系 ( [showJson](../reference/ElementsDialog.md#showjson) / showFile / showDict ) は第 3 引数 `modal` で「非モーダル + フォーカスあり」( `showJson(json, true, false)` ) を指定できます。slider や picker を含む操作パネルはこの形で出すと、パッドの十字 / A ボタンやキーボードでウィジェットを操作しつつ、パネルが使わないキーはゲームへ流れます。その上で ESC ( シーン復帰 ) や PageUp/Down ( 画面切替 ) のような「必ずホストが受けたいキー」を registerHotKey で確保するのが定石です ( 実例: `data/demolib/demo_common.tjs` の DemoShell )。
 
+パッドの十字でフォーカスを動かすには、画面 JSON に `"input": { "arrow_focus_nav": true }` が必要です ( 方向キー / 十字でのフォーカス移動は既定で無効です )。十字は「フォーカスを動かせる」か「フォーカス中の要素に届く」ときだけパネルが使い、それ以外はゲームへ流れます。パネルを出したまま十字をゲームで使う画面では、そのパネルの `arrow_focus_nav` を外します。物理キーボードの無い機種では、十字で入力欄を通過しても画面のキーボードは開かず、決定 ( A / Enter ) で開きます ( マウス / タッチで押したときはすぐ開きます )。
+
 - ホットキーはテキスト入力ウィジェットにキャレットがある間は既定で抑止されます ( `duringTextInput = true` で入力中も有効化 )
 - モーダル表示中はホットキーも無効です ( 確認ダイアログの ESC = cancel を奪いません )
 - マウスボタン ( VK_RBUTTON 等 ) も登録でき、全画面透過 HUD が右クリックを拾って閉じてしまう問題の回避にも使えます
@@ -277,6 +279,8 @@ foreach_dict_of(cfg, function(k, v) { ElementsDialog.setSharedVar(k, v); });
     { "wheel": "up",   "action": "prev_page" },   // 任意名 = ホストへ通知
     { "key": "escape", "action": "cancel" } ] }   // 組込名 = ダイアログ内で処理
 ```
+
+`"key"` にはファンクションキー `"f1"`〜`"f12"` も書けます。
 
 通知は [onAction](../reference/ElementsDialog.md#onaction) で受けますが、**`id` は `"<action>"` 固定で、付けた名前は `payload` に入ります**。
 
@@ -294,7 +298,7 @@ function onAction(id, payload) {
 
 ## ミニマルな利用例
 
-[Dialog](../reference/ElementsDialog.md) を継承したクラスで [onAction](../reference/ElementsDialog.md#onaction) を実装し、JSON レイアウトを渡して表示します。
+[ElementsDialog](../reference/ElementsDialog.md) を継承したクラスで [onAction](../reference/ElementsDialog.md#onaction) を実装し、JSON レイアウトを渡して表示します。
 
 ```tjs
 class TestDialog extends ElementsDialog {
@@ -331,7 +335,7 @@ dlg.showJson(json);             // 非モーダル
 // var r = dlg.showModalJson(json);                       // ゲーム画面オーバーレイ
 ```
 
-ボタン・入力欄などの widget を JSON でどう記述するかの一覧は、[Dialog](../reference/ElementsDialog.md) クラスリファレンスを参照してください。
+ボタン・入力欄などの widget を JSON でどう記述するかの一覧は、[ElementsDialog](../reference/ElementsDialog.md) クラスリファレンスを参照してください。
 
 ## フォントの登録
 
@@ -384,6 +388,6 @@ ElementsDialog.registerFont("MyFont-Medium", "fonts/MyFont-VF.ttf#wght=500");   
 - [ElementsDialog.registerFont](../reference/ElementsDialog.md#registerfont) / [registerFontDir](../reference/ElementsDialog.md#registerfontdir) / [defaultFontFamily](../reference/ElementsDialog.md#defaultfontfamily) — フォント登録
 - [ElementsDialog.setVar](../reference/ElementsDialog.md#setvar) / [getVar](../reference/ElementsDialog.md#getvar) / [listVars](../reference/ElementsDialog.md#listvars) / [onVar](../reference/ElementsDialog.md#onvar) / [watchVars](../reference/ElementsDialog.md#watchvars) — 画面ごとの変数ストア
 - [ElementsDialog.getSharedVars](../reference/ElementsDialog.md#getsharedvars) / [setSharedVar](../reference/ElementsDialog.md#setsharedvar) / [clearSharedVars](../reference/ElementsDialog.md#clearsharedvars) — 画面をまたぐセッション共有変数 ( セーブ / ロード用 )
-- [ElementsDialog.registerImage](../reference/ElementsDialog.md#registerimage) / [unregisterImage](../reference/ElementsDialog.md#unregisterimage) / [clearImages](../reference/ElementsDialog.md#clearimages) — 実行時画像 ( `mem://` )
+- [ElementsDialog.registerImage](../reference/ElementsDialog.md#registerimage) / [registerLayerImage](../reference/ElementsDialog.md#registerlayerimage) / [unregisterImage](../reference/ElementsDialog.md#unregisterimage) / [clearImages](../reference/ElementsDialog.md#clearimages) — 実行時画像 ( `mem://`。registerLayerImage は Layer の画素をそのまま登録 )
 - [ElementsDialog.setAtlasImage](../reference/ElementsDialog.md#setatlasimage) / [swappableAtlases](../reference/ElementsDialog.md#swappableatlases) — 差し替え可能アトラス
 - [ElementsDialog.language](../reference/ElementsDialog.md#language) / [fontLanguages](../reference/ElementsDialog.md#fontlanguages) — i18n ( 表示言語と言語連動フォント置換 )

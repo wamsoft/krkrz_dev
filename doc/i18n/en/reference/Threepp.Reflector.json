@@ -1,0 +1,40 @@
+{
+  "class": "Threepp.Reflector",
+  "entries": {
+    "krkrthreepp:Threepp.Reflector": {
+      "hash": "bb1607412e0d",
+      "ja": {
+        "summary": "反射面オブジェクト",
+        "description": "鏡面反射を持つオブジェクトです。"
+      },
+      "tr": {
+        "summary": "Reflector object",
+        "description": "An object with mirror reflection."
+      }
+    },
+    "krkrthreepp:Threepp.Reflector.Reflector": {
+      "hash": "e2d51fd862ab",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "geometry": "ジオメトリ"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "geometry": "Geometry."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Reflector.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    }
+  }
+}

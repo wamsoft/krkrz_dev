@@ -1,0 +1,34 @@
+{
+  "class": "Threepp.Group",
+  "entries": {
+    "krkrthreepp:Threepp.Group": {
+      "hash": "4ab27dbfe007",
+      "ja": {
+        "summary": "グループクラス",
+        "description": "複数のオブジェクトをグループ化するためのクラスです。"
+      },
+      "tr": {
+        "summary": "Group class",
+        "description": "A class for grouping multiple objects."
+      }
+    },
+    "krkrthreepp:Threepp.Group.Group": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.Group.type": {
+      "hash": "6e1139a64d5c",
+      "ja": {
+        "summary": "\"Group\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"Group\" (read-only)"
+      }
+    }
+  }
+}

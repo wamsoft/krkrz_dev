@@ -1,0 +1,51 @@
+{
+  "class": "Threepp.FogExp2",
+  "entries": {
+    "krkrthreepp:Threepp.FogExp2": {
+      "hash": "ff82b4391723",
+      "ja": {
+        "summary": "フォグ（指数関数）",
+        "description": "指数関数フォグを設定します。"
+      },
+      "tr": {
+        "summary": "Fog (exponential)",
+        "description": "Sets up exponential fog."
+      }
+    },
+    "krkrthreepp:Threepp.FogExp2.FogExp2": {
+      "hash": "5f4646e05be9",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "color": "フォグの色",
+          "density": "密度"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "color": "Fog color.",
+          "density": "Density."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.FogExp2.color": {
+      "hash": "74bda96d4788",
+      "ja": {
+        "summary": "フォグの色"
+      },
+      "tr": {
+        "summary": "Fog color"
+      }
+    },
+    "krkrthreepp:Threepp.FogExp2.density": {
+      "hash": "b22fa2bde101",
+      "ja": {
+        "summary": "密度"
+      },
+      "tr": {
+        "summary": "Density"
+      }
+    }
+  }
+}

@@ -648,7 +648,7 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方�
 
 ビューポート余白の背景色
 
-ビューポートで生じた余白を塗る背景色を `0xRRGGBB` 形式の整数で表します(上位 8bit は alpha)。既定は黒。
+ビューポートで生じた余白を塗る背景色を `0xAARRGGBB` 形式の整数で表します (上位 8bit が alpha。不透明にするには `0xff` を付けます)。既定は `0xff000000` (不透明の黒)。
 値を設定することもできます。壁紙([Window.setViewportWallpaper](Window.md#setviewportwallpaper))が設定されている場合は壁紙が優先されます。
 
 Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
@@ -1702,7 +1702,7 @@ postInputEvent('onKeyDown', %[key: VK_UP, shift: ssShift]);
 
 postInputEvent('onKeyUp',   %[key: VK_UP, shift: ssShift]);
 
-// 左カーソルキーを押す
+// 上カーソルキーを押す
 
 ---
 
@@ -1834,7 +1834,7 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 
 ウィンドウ内に入った瞬間から計測開始されています。
 
-[Window.resetMouseVelocity](Window.md#resetmousevelocity) を使用して計測をリセットし、任意のタイミングか計測得できるように出来ます。
+[Window.resetMouseVelocity](Window.md#resetmousevelocity) を使用して計測をリセットし、任意のタイミングから計測できるようにできます。
 
 **関連:** [Window.getTouchVelocity](Window.md#gettouchvelocity) / [Window.resetMouseVelocity](Window.md#resetmousevelocity)
 
@@ -1849,9 +1849,9 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `id` | `&nbsp;` | タッチIDを指定します。 |
-| `x` | `&nbsp;` | X軸方向のマウス座標移動速度が返ります。 |
-| `y` | `&nbsp;` | Y軸方向のマウス座標移動速度が返ります。 |
-| `speed` | `&nbsp;` | マウス座標移動速度が返ります。 |
+| `x` | `&nbsp;` | X軸方向のタッチ座標移動速度が返ります。 |
+| `y` | `&nbsp;` | Y軸方向のタッチ座標移動速度が返ります。 |
+| `speed` | `&nbsp;` | タッチ座標移動速度が返ります。 |
 
 **戻り値**
 
@@ -3411,7 +3411,7 @@ HWNDを指定してメッセージの送信を行います。
 
 擬似コードによるマニュアル
 
-外部アプリを機動してその終了を待つ機構を提供します。
+外部アプリを起動してその終了を待つ機構を提供します。
 ウインドウメッセージとして WM_APP + 1 を利用しています
 
 ### メンバー一覧
@@ -3587,7 +3587,7 @@ handler 識別ハンドラ
 
 処理中に onCheckSignatureProgress、
 終了時に onCheckSignatureDone イベントが発生します。
-exe や dll の場合は署名はファイルに内臓されます。xp3 などの場合は、
+exe や dll の場合は署名はファイルに内蔵されます。xp3 などの場合は、
 元のファイルに .sig をつけた外部ファイルを署名として処理されます。
 
 ---
@@ -3976,6 +3976,8 @@ MenuItemまたは辞書の配列を指定する
 
 クライアント領域の設定
 
+rect の x,y,w,h のうち void のものは現在の値を使用します。
+
 ---
 
 ### bringTo
@@ -4001,7 +4003,7 @@ MenuItemまたは辞書の配列を指定する
 
 **解説**
 
-/ alias method
+bringTo("bottom") の別名
 
 ---
 
@@ -4181,8 +4183,8 @@ onMovingやonResizing中に元のウィンドウ位置やサイズを参照し�
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `x` | `&nbsp;` |  |
-| `y` | `&nbsp;` |  |
+| `x` | `&nbsp;` | クライアント領域左上のスクリーン座標 X<br>※ innerSunken枠分はクライアント領域に含まれるので注意 |
+| `y` | `&nbsp;` | クライアント領域左上のスクリーン座標 Y |
 
 **解説**
 
@@ -4431,8 +4433,8 @@ WM_PAINT が発生すると画面が崩れる問題がある（後述の Overlay
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `x` | `&nbsp;` |  |
-| `y` | `&nbsp;` |  |
+| `x` | `&nbsp;` | マウス座標 X |
+| `y` | `&nbsp;` | マウス座標 Y |
 | `ht` | `&nbsp;` | 領域の種類（NCHITTEST定数） |
 
 **解説**
@@ -4485,8 +4487,12 @@ WM_PAINT が発生すると画面が崩れる問題がある（後述の Overlay
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `x` | `&nbsp;` |  |
-| `y` | `&nbsp;` |  |
+| `x` | `&nbsp;` | スクリーン座標 X |
+| `y` | `&nbsp;` | スクリーン座標 Y |
+
+**戻り値**
+
+領域の種類（NCHITTEST定数）
 
 **解説**
 

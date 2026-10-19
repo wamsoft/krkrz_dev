@@ -1,0 +1,46 @@
+{
+  "class": "Threepp.GridHelper",
+  "entries": {
+    "krkrthreepp:Threepp.GridHelper": {
+      "hash": "ae42c1f753bb",
+      "ja": {
+        "summary": "グリッドヘルパー",
+        "description": "格子状のグリッドを表示します。"
+      },
+      "tr": {
+        "summary": "Grid helper",
+        "description": "Displays a grid."
+      }
+    },
+    "krkrthreepp:Threepp.GridHelper.GridHelper": {
+      "hash": "2d9d39b0fd42",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "size": "グリッドのサイズ",
+          "divisions": "分割数",
+          "color1": "主線の色",
+          "color2": "副線の色"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "size": "Size of the grid.",
+          "divisions": "Number of divisions.",
+          "color1": "Color of the main lines.",
+          "color2": "Color of the secondary lines."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.GridHelper.type": {
+      "hash": "2d94abecc4b4",
+      "ja": {
+        "summary": "\"GridHelper\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"GridHelper\" (read-only)"
+      }
+    }
+  }
+}

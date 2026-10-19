@@ -1,0 +1,70 @@
+{
+  "class": "Threepp.MeshToonMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.MeshToonMaterial": {
+      "hash": "067fb401efa8",
+      "ja": {
+        "summary": "トゥーン（セルシェーディング）マテリアル",
+        "description": "アニメ調のレンダリングを行うマテリアルです。"
+      },
+      "tr": {
+        "summary": "Toon (cel-shading) material",
+        "description": "A material for cartoon-style (anime-like) rendering."
+      }
+    },
+    "krkrthreepp:Threepp.MeshToonMaterial.MeshToonMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.MeshToonMaterial.type": {
+      "hash": "6db78fc6022f",
+      "ja": {
+        "summary": "\"MeshToonMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"MeshToonMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshToonMaterial.color": {
+      "hash": "7df053f299de",
+      "ja": {
+        "summary": "色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshToonMaterial.emissive": {
+      "hash": "46338bd53dc5",
+      "ja": {
+        "summary": "発光色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Emissive color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshToonMaterial.wireframe": {
+      "hash": "27e1aa449133",
+      "ja": {
+        "summary": "ワイヤーフレーム表示"
+      },
+      "tr": {
+        "summary": "Renders as wireframe"
+      }
+    },
+    "krkrthreepp:Threepp.MeshToonMaterial.wireframeLinewidth": {
+      "hash": "c1d0eb798128",
+      "ja": {
+        "summary": "ワイヤーフレームの線幅"
+      },
+      "tr": {
+        "summary": "Wireframe line width"
+      }
+    }
+  }
+}

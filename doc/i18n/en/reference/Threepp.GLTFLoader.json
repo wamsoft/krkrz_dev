@@ -1,0 +1,34 @@
+{
+  "class": "Threepp.GLTFLoader",
+  "entries": {
+    "krkrthreepp:Threepp.GLTFLoader": {
+      "hash": "08e2cd094a0b",
+      "ja": {
+        "summary": "汎用 glTF/GLB ローダ",
+        "description": "VRM 拡張は解釈しない素の glTF として読む。GLB(自己完結) が確実。\nスキンメッシュはバインドポーズ(T ポーズ)で読まれる。ボーンアニメの再生には\n別途アニメ機構が要る(現状はモデル自身のアニメ再生は未対応。姿勢固定の小物/\n地形/建物や、TJS 側でトランスフォームを動かす用途向け)。"
+      },
+      "tr": {
+        "summary": "General-purpose glTF/GLB loader",
+        "description": "Loads files as plain glTF without interpreting VRM extensions. GLB (self-contained) is the most reliable.\nSkinned meshes are loaded in their bind pose (T-pose). Playing bone animations requires a separate animation mechanism (the model's own animations cannot currently be played back; this loader is meant for props, terrain and buildings with fixed poses, or for moving transforms from TJS)."
+      }
+    },
+    "krkrthreepp:Threepp.GLTFLoader.load": {
+      "hash": "e4adb128a68d",
+      "ja": {
+        "summary": "OS パスから (.gltf+外部リソースも解決可) -> GLTFModel"
+      },
+      "tr": {
+        "summary": "Loads from an OS path (.gltf with external resources can also be resolved) -> GLTFModel"
+      }
+    },
+    "krkrthreepp:Threepp.GLTFLoader.loadStorage": {
+      "hash": "1bdd0ea72976",
+      "ja": {
+        "summary": "吉里吉里ストレージ名から (GLB 推奨) -> GLTFModel"
+      },
+      "tr": {
+        "summary": "Loads from a Kirikiri storage name (GLB recommended) -> GLTFModel"
+      }
+    }
+  }
+}

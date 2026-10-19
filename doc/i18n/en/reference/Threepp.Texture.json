@@ -1,0 +1,223 @@
+{
+  "class": "Threepp.Texture",
+  "entries": {
+    "krkrthreepp:Threepp.Texture": {
+      "hash": "06e86451081d",
+      "ja": {
+        "summary": "テクスチャ基底クラス",
+        "description": "画像テクスチャを表現します。"
+      },
+      "tr": {
+        "summary": "Texture base class",
+        "description": "Represents an image texture."
+      }
+    },
+    "krkrthreepp:Threepp.Texture.Texture": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.id": {
+      "hash": "510d24ceeef6",
+      "ja": {
+        "summary": "ID（読み取り専用）"
+      },
+      "tr": {
+        "summary": "ID (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.name": {
+      "hash": "77bc2b04522a",
+      "ja": {
+        "summary": "名前"
+      },
+      "tr": {
+        "summary": "Name"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.mapping": {
+      "hash": "58a7e33f5cf1",
+      "ja": {
+        "summary": "マッピング種別"
+      },
+      "tr": {
+        "summary": "Mapping mode"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.wrapS": {
+      "hash": "ca2fa844d290",
+      "ja": {
+        "summary": "S方向のラッピング"
+      },
+      "tr": {
+        "summary": "Wrapping in the S direction"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.wrapT": {
+      "hash": "78e315cbb944",
+      "ja": {
+        "summary": "T方向のラッピング"
+      },
+      "tr": {
+        "summary": "Wrapping in the T direction"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.magFilter": {
+      "hash": "7accee46e23c",
+      "ja": {
+        "summary": "拡大フィルタ"
+      },
+      "tr": {
+        "summary": "Magnification filter"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.minFilter": {
+      "hash": "ee24867eeaae",
+      "ja": {
+        "summary": "縮小フィルタ"
+      },
+      "tr": {
+        "summary": "Minification filter"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.anisotropy": {
+      "hash": "fb1a59be5807",
+      "ja": {
+        "summary": "異方性フィルタリング"
+      },
+      "tr": {
+        "summary": "Anisotropic filtering"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.format": {
+      "hash": "faf86966625e",
+      "ja": {
+        "summary": "フォーマット"
+      },
+      "tr": {
+        "summary": "Format"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.offset": {
+      "hash": "53668641ae76",
+      "ja": {
+        "summary": "オフセット (Vector2、読み取り専用)"
+      },
+      "tr": {
+        "summary": "Offset (Vector2, read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.repeat": {
+      "hash": "e0b606d83a0f",
+      "ja": {
+        "summary": "繰り返し (Vector2、読み取り専用)"
+      },
+      "tr": {
+        "summary": "Repeat (Vector2, read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.center": {
+      "hash": "ffa36046107d",
+      "ja": {
+        "summary": "中心 (Vector2、読み取り専用)"
+      },
+      "tr": {
+        "summary": "Center (Vector2, read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.rotation": {
+      "hash": "9793742af13d",
+      "ja": {
+        "summary": "回転"
+      },
+      "tr": {
+        "summary": "Rotation"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.matrixAutoUpdate": {
+      "hash": "fed3852d71cd",
+      "ja": {
+        "summary": "行列の自動更新"
+      },
+      "tr": {
+        "summary": "Automatic matrix update"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.generateMipmaps": {
+      "hash": "b27e5bf0f257",
+      "ja": {
+        "summary": "ミップマップを生成するか"
+      },
+      "tr": {
+        "summary": "Whether to generate mipmaps"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.premultiplyAlpha": {
+      "hash": "b840b524a31e",
+      "ja": {
+        "summary": "事前アルファ乗算"
+      },
+      "tr": {
+        "summary": "Premultiplied alpha"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.unpackAlignment": {
+      "hash": "af327bdf38b1",
+      "ja": {
+        "summary": "アンパックアラインメント"
+      },
+      "tr": {
+        "summary": "Unpack alignment"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.encoding": {
+      "hash": "1c29caa60308",
+      "ja": {
+        "summary": "エンコーディング"
+      },
+      "tr": {
+        "summary": "Encoding"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.updateMatrix": {
+      "hash": "2c56a67a8d3c",
+      "ja": {
+        "summary": "行列を更新"
+      },
+      "tr": {
+        "summary": "Updates the matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.dispose": {
+      "hash": "4b8ce80d5ddf",
+      "ja": {
+        "summary": "リソースを解放"
+      },
+      "tr": {
+        "summary": "Releases resources"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.needsUpdate": {
+      "hash": "aacf9db489c3",
+      "ja": {
+        "summary": "更新フラグを立てる"
+      },
+      "tr": {
+        "summary": "Flags the texture for update"
+      }
+    },
+    "krkrthreepp:Threepp.Texture.version": {
+      "hash": "32d11e7d25e3",
+      "ja": {
+        "summary": "バージョンを取得"
+      },
+      "tr": {
+        "summary": "Gets the version"
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "class": "Threepp.RingGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.RingGeometry": {
+      "hash": "5fb253b86376",
+      "ja": {
+        "summary": "リング（環状）ジオメトリ"
+      },
+      "tr": {
+        "summary": "Ring (annulus) geometry"
+      }
+    },
+    "krkrthreepp:Threepp.RingGeometry.RingGeometry": {
+      "hash": "a5ede7e7d4e2",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "innerRadius": "内側の半径",
+          "outerRadius": "外側の半径",
+          "thetaSegments": "周方向の分割数",
+          "phiSegments": "半径方向の分割数",
+          "thetaStart": "開始角度",
+          "thetaLength": "角度範囲"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "innerRadius": "Inner radius.",
+          "outerRadius": "Outer radius.",
+          "thetaSegments": "Number of segments around the circumference.",
+          "phiSegments": "Number of segments along the radius.",
+          "thetaStart": "Start angle.",
+          "thetaLength": "Central angle of the sector."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.RingGeometry.type": {
+      "hash": "91629a2692ff",
+      "ja": {
+        "summary": "\"RingGeometry\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"RingGeometry\" (read-only)"
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "class": "Threepp.QuadraticBezierCurve",
+  "entries": {
+    "krkrthreepp:Threepp.QuadraticBezierCurve": {
+      "hash": "30b7e1670912",
+      "ja": {
+        "summary": "2D二次ベジェカーブ",
+        "description": "制御点1つを持つ二次ベジェ曲線です。"
+      },
+      "tr": {
+        "summary": "2D quadratic Bezier curve",
+        "description": "A quadratic Bezier curve with one control point."
+      }
+    },
+    "krkrthreepp:Threepp.QuadraticBezierCurve.QuadraticBezierCurve": {
+      "hash": "1c45c604d2ea",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "v0": "始点",
+          "v1": "制御点",
+          "v2": "終点"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "v0": "Start point.",
+          "v1": "Control point.",
+          "v2": "End point."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.QuadraticBezierCurve.v0": {
+      "hash": "c793333c3c1d",
+      "ja": {
+        "summary": "始点（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Start point (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.QuadraticBezierCurve.v1": {
+      "hash": "8c2eb23ee282",
+      "ja": {
+        "summary": "制御点（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Control point (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.QuadraticBezierCurve.v2": {
+      "hash": "7e184ac2b862",
+      "ja": {
+        "summary": "終点（読み取り専用）"
+      },
+      "tr": {
+        "summary": "End point (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.QuadraticBezierCurve.getLength": {
+      "hash": "8d98a47bcea4",
+      "ja": {
+        "summary": "曲線の長さを取得"
+      },
+      "tr": {
+        "summary": "Gets the length of the curve"
+      }
+    },
+    "krkrthreepp:Threepp.QuadraticBezierCurve.getPoint": {
+      "hash": "1be3886a14b6",
+      "ja": {
+        "summary": "パラメータ t (0-1) の点を取得"
+      },
+      "tr": {
+        "summary": "Gets the point at parameter t (0-1)"
+      }
+    }
+  }
+}

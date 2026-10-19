@@ -1,0 +1,801 @@
+{
+  "class": "WIN32Dialog",
+  "entries": {
+    "win32dialog:WIN32Dialog": {
+      "hash": "377e6bcec5ef",
+      "ja": {
+        "description": "Windows ネイティブダイアログを操作するためのクラスです。\nAPIのラッパ程度の機能しかないので非常に使いにくいですが，\n後述のtjsで記述された WIN32DialogEX を使うと幸せになれます。"
+      },
+      "tr": {
+        "description": "A class for working with native Windows dialogs.\nIt is little more than an API wrapper and therefore very awkward to use,\nbut WIN32DialogEX, written in TJS and described later, makes life much easier."
+      }
+    },
+    "win32dialog:WIN32Dialog.WIN32Dialog": {
+      "hash": "4cc91d5042a5",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "owner": "イベントコールバック用のオーナーを設定。nullかthisで自分自身へ送る。"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "owner": "Owner that receives event callbacks. null or this sends them to this object."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.loadResource": {
+      "hash": "4745cb7c099c",
+      "ja": {
+        "summary": "ダイアログリソースを読み込む",
+        "params": {
+          "dllfile": "dllファイル（ローカルストレージ形式）",
+          "resource": "ダイアログリソース名"
+        }
+      },
+      "tr": {
+        "summary": "Loads a dialog resource",
+        "params": {
+          "dllfile": "DLL file (in local storage format).",
+          "resource": "Dialog resource name."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.makeTemplate": {
+      "hash": "d30fff4c96a1",
+      "ja": {
+        "summary": "ダイアログテンプレートを生成する",
+        "params": {
+          "header": "ダイアログテンプレートヘッダ  （WIN32Dialog.Headerクラスのインスタンスであること）",
+          "items*": "ダイアログテンプレートアイテム（WIN32Dialog.Items クラスのインスタンスであること）"
+        }
+      },
+      "tr": {
+        "summary": "Creates a dialog template",
+        "params": {
+          "header": "Dialog template header (must be an instance of the WIN32Dialog.Header class).",
+          "items*": "Dialog template items (must be instances of the WIN32Dialog.Items class)."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.open": {
+      "hash": "76cbd757ed33",
+      "ja": {
+        "summary": "ダイアログを開く",
+        "description": "あらかじめ makeTemplate でダイアログテンプレートが生成されているか\nまたは loadResource でダイアログリソースの読み込んでいること\nmakeTemplate より loadResource のデータ優先されるので注意",
+        "params": {
+          "window": "親ウィンドウ(吉里吉里の Window クラス)，省略時またはvoid時は親なし"
+        }
+      },
+      "tr": {
+        "summary": "Opens the dialog",
+        "description": "A dialog template must have been created with makeTemplate beforehand,\nor a dialog resource loaded with loadResource.\nNote that data from loadResource takes precedence over makeTemplate.",
+        "params": {
+          "window": "Parent window (a Kirikiri Window object). No parent if omitted or void."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.close": {
+      "hash": "a1d1cf471542",
+      "ja": {
+        "summary": "ダイアログを閉じる",
+        "params": {
+          "result": "EndDialog APIに渡す結果値"
+        }
+      },
+      "tr": {
+        "summary": "Closes the dialog",
+        "params": {
+          "result": "Result value passed to the EndDialog API."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.getItem": {
+      "hash": "2c8b90214c97",
+      "ja": {
+        "summary": "GetDlgItem のラッパー",
+        "returns": "ダイアログアイテムのHWND",
+        "params": {
+          "id": "ダイアログアイテムのID"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for GetDlgItem",
+        "returns": "HWND of the dialog item.",
+        "params": {
+          "id": "ID of the dialog item."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.getItemID": {
+      "hash": "9271e98ee6be",
+      "ja": {
+        "summary": "GetDlgCtrlID のラッパー",
+        "returns": "ダイアログアイテムのID",
+        "params": {
+          "hwnd": "ダイアログアイテムのHWND"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for GetDlgCtrlID",
+        "returns": "ID of the dialog item.",
+        "params": {
+          "hwnd": "HWND of the dialog item."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.getItemClassName": {
+      "hash": "1b1d5ff6e217",
+      "ja": {
+        "summary": "GetClassName のラッパー",
+        "returns": "ダイアログアイテムのクラス名",
+        "params": {
+          "id": "ダイアログアイテムのID"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for GetClassName",
+        "returns": "Class name of the dialog item.",
+        "params": {
+          "id": "ID of the dialog item."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.setItemInt": {
+      "hash": "e93e37d95bb0",
+      "ja": {
+        "summary": "Get/SetDlgItemInt/Text のラッパー",
+        "returns": "取得結果（getの場合のみ）",
+        "params": {
+          "id": "ダイアログアイテムのID",
+          "value": "設定する値（setの場合のみ）"
+        }
+      },
+      "tr": {
+        "summary": "Wrappers for Get/SetDlgItemInt/Text",
+        "returns": "The value obtained (get only).",
+        "params": {
+          "id": "ID of the dialog item.",
+          "value": "Value to set (set only)."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.setItemEnabled": {
+      "hash": "9273fc534171",
+      "ja": {
+        "summary": "アイテムの有効・無効を設定・取得する",
+        "returns": "取得結果（getの場合のみ）",
+        "params": {
+          "id": "ダイアログアイテムのID",
+          "value": "有効・無効の設定（setの場合のみ）"
+        }
+      },
+      "tr": {
+        "summary": "Sets or gets whether an item is enabled",
+        "returns": "The value obtained (get only).",
+        "params": {
+          "id": "ID of the dialog item.",
+          "value": "Enabled / disabled (set only)."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.setItemFocus": {
+      "hash": "87b7ba1c0876",
+      "ja": {
+        "summary": "アイテムにフォーカスを設定する",
+        "params": {
+          "id": "ダイアログアイテムのID"
+        }
+      },
+      "tr": {
+        "summary": "Sets the focus to an item",
+        "params": {
+          "id": "ID of the dialog item."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.setItemPos": {
+      "hash": "fa9845fe2856",
+      "ja": {
+        "summary": "アイテムの位置・大きさを変更・取得する",
+        "params": {
+          "id": "ダイアログアイテムのID",
+          "x": "ダイアログアイテムのX座標",
+          "y": "ダイアログアイテムのY座標",
+          "w": "ダイアログアイテムの幅",
+          "h": "ダイアログアイテムの高さ"
+        }
+      },
+      "tr": {
+        "summary": "Changes or gets the position and size of an item",
+        "params": {
+          "id": "ID of the dialog item.",
+          "x": "X coordinate of the dialog item.",
+          "y": "Y coordinate of the dialog item.",
+          "w": "Width of the dialog item.",
+          "h": "Height of the dialog item."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.setItemBitmap": {
+      "hash": "87013021fb8a",
+      "ja": {
+        "summary": "アイテムにBitmapを設定する",
+        "params": {
+          "id": "ダイアログアイテムのID",
+          "bmp": "ビットマップに設定するWIN32Dialog.Bitmapのインスタンス\nWIN32DialogEXではLayerインスタンスが指定可能"
+        }
+      },
+      "tr": {
+        "summary": "Sets a bitmap on an item",
+        "params": {
+          "id": "ID of the dialog item.",
+          "bmp": "WIN32Dialog.Bitmap instance to set as the bitmap.\nWIN32DialogEX also accepts a Layer instance."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.sendItemMessage": {
+      "hash": "cb05dbbae8f3",
+      "ja": {
+        "summary": "SendDlgItemMessage のラッパー",
+        "returns": "LRESULT",
+        "params": {
+          "id": "ダイアログアイテムのID",
+          "msg": "送るメッセージ",
+          "wparam": "送るwparam",
+          "lparam": "送るlparam"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for SendDlgItemMessage",
+        "returns": "LRESULT",
+        "params": {
+          "id": "ID of the dialog item.",
+          "msg": "Message to send.",
+          "wparam": "wparam to send.",
+          "lparam": "lparam to send."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.getBaseUnits": {
+      "hash": "1ff43c020007",
+      "ja": {
+        "summary": "GetDialogBaseUnit のラッパー",
+        "returns": "結果辞書(%[ h:水平単位, v:垂直単位 ])"
+      },
+      "tr": {
+        "summary": "Wrapper for GetDialogBaseUnit",
+        "returns": "Result dictionary (%[ h: horizontal unit, v: vertical unit ])."
+      }
+    },
+    "win32dialog:WIN32Dialog.mapRect": {
+      "hash": "c3674fa434b7",
+      "ja": {
+        "summary": "MapDialogRect のラッパー",
+        "returns": "結果辞書配列(%[ left, top, right, bottom ])",
+        "params": {
+          "rect": "矩形領域辞書配列(%[ left, top, right, bottom ])"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for MapDialogRect",
+        "returns": "Result dictionary (%[ left, top, right, bottom ]).",
+        "params": {
+          "rect": "Rectangle dictionary (%[ left, top, right, bottom ])."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.invalidateRect": {
+      "hash": "e9d6ada9f103",
+      "ja": {
+        "summary": "InvalidateRect のラッパー",
+        "returns": "成功ならtrue",
+        "params": {
+          "rect": "矩形領域辞書配列(%[ left, top, right, bottom ])",
+          "erase": "消去するかどうかフラグ"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for InvalidateRect",
+        "returns": "true on success.",
+        "params": {
+          "rect": "Rectangle dictionary (%[ left, top, right, bottom ]).",
+          "erase": "Whether to erase the background."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.setPos": {
+      "hash": "dae0c76147a5",
+      "ja": {
+        "summary": "ダイアログ座標を設定",
+        "params": {
+          "x": "x座標",
+          "y": "y座標\nダイアログ表示中以外はエラーになるので注意。onInitなどにて座標を変更すること"
+        }
+      },
+      "tr": {
+        "summary": "Sets the dialog position",
+        "params": {
+          "x": "X coordinate.",
+          "y": "Y coordinate.\nNote that this raises an error unless the dialog is shown. Change the position in onInit or later."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.setSize": {
+      "hash": "928df9f30205",
+      "ja": {
+        "summary": "ダイアログの大きさを設定",
+        "params": {
+          "w": "width",
+          "h": "height\nダイアログ表示中以外はエラーになるので注意。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the dialog size",
+        "params": {
+          "w": "width",
+          "h": "height\nNote that this raises an error unless the dialog is shown."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.setActive": {
+      "hash": "317587da9c35",
+      "ja": {
+        "summary": "ダイアログをアクティブにする",
+        "description": "このメソッドを追加する前のバージョンでは setPos/setSize でアクティブ化していた問題があったので留意のこと（現在はアクティブ化しない）"
+      },
+      "tr": {
+        "summary": "Activates the dialog",
+        "description": "Note that versions before this method was added had a problem where setPos/setSize activated the dialog (they no longer do)."
+      }
+    },
+    "win32dialog:WIN32Dialog.left": {
+      "hash": "a45e57e08882",
+      "ja": {
+        "summary": "ダイアログの左端位置",
+        "description": "読み取り専用。位置の変更は setPos、サイズの変更は setSize を使用する"
+      },
+      "tr": {
+        "summary": "Left position of the dialog",
+        "description": "Read-only. Use setPos to change the position and setSize to change the size."
+      }
+    },
+    "win32dialog:WIN32Dialog.top": {
+      "hash": "8515ffa2a009",
+      "ja": {
+        "summary": "ダイアログの上端位置 (読み取り専用)"
+      },
+      "tr": {
+        "summary": "Top position of the dialog (read-only)"
+      }
+    },
+    "win32dialog:WIN32Dialog.width": {
+      "hash": "9a361084ed10",
+      "ja": {
+        "summary": "ダイアログの幅 (読み取り専用)"
+      },
+      "tr": {
+        "summary": "Width of the dialog (read-only)"
+      }
+    },
+    "win32dialog:WIN32Dialog.height": {
+      "hash": "50889c703d04",
+      "ja": {
+        "summary": "ダイアログの高さ (読み取り専用)"
+      },
+      "tr": {
+        "summary": "Height of the dialog (read-only)"
+      }
+    },
+    "win32dialog:WIN32Dialog.onInit": {
+      "hash": "75fe287e14d4",
+      "ja": {
+        "summary": "WM_INITDIALOG のコールバック",
+        "description": "コールバックはownerに対して呼ばれるので注意してください\nowner.onInitが未定義なら何もしません。",
+        "params": {
+          "msg": "DlgProc のメッセージ == WM_INITDIALOG",
+          "wparam": "DlgProc のWPARAM",
+          "lparam": "DlgProc のLPARAM"
+        }
+      },
+      "tr": {
+        "summary": "Callback for WM_INITDIALOG",
+        "description": "Note that the callback is called on owner.\nIf owner.onInit is not defined, nothing happens.",
+        "params": {
+          "msg": "DlgProc message == WM_INITDIALOG.",
+          "wparam": "DlgProc WPARAM.",
+          "lparam": "DlgProc LPARAM."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.onCommand": {
+      "hash": "64ffdb6c79bd",
+      "ja": {
+        "summary": "WM_COMMAND のコールバック",
+        "description": "コールバックはownerに対して呼ばれるので注意してください。\nowner.onCommandが未定義なら何もしません。",
+        "params": {
+          "msg": "DlgProc のメッセージ == WM_COMMAND",
+          "wparam": "DlgProc のWPARAM",
+          "lparam": "DlgProc のLPARAM"
+        }
+      },
+      "tr": {
+        "summary": "Callback for WM_COMMAND",
+        "description": "Note that the callback is called on owner.\nIf owner.onCommand is not defined, nothing happens.",
+        "params": {
+          "msg": "DlgProc message == WM_COMMAND.",
+          "wparam": "DlgProc WPARAM.",
+          "lparam": "DlgProc LPARAM."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.onHScroll": {
+      "hash": "58dc70d591fe",
+      "ja": {
+        "summary": "WM_HSCROLL のコールバック",
+        "params": {
+          "msg": "DlgProc のメッセージ == WM_HSCROLL",
+          "wparam": "DlgProc のWPARAM",
+          "lparam": "DlgProc のLPARAM"
+        }
+      },
+      "tr": {
+        "summary": "Callback for WM_HSCROLL",
+        "params": {
+          "msg": "DlgProc message == WM_HSCROLL.",
+          "wparam": "DlgProc WPARAM.",
+          "lparam": "DlgProc LPARAM."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.onVScroll": {
+      "hash": "dd78fe85a6ea",
+      "ja": {
+        "summary": "WM_VSCROLL のコールバック",
+        "params": {
+          "msg": "DlgProc のメッセージ == WM_VSCROLL",
+          "wparam": "DlgProc のWPARAM",
+          "lparam": "DlgProc のLPARAM"
+        }
+      },
+      "tr": {
+        "summary": "Callback for WM_VSCROLL",
+        "params": {
+          "msg": "DlgProc message == WM_VSCROLL.",
+          "wparam": "DlgProc WPARAM.",
+          "lparam": "DlgProc LPARAM."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.onNotify": {
+      "hash": "87cc2fc71d61",
+      "ja": {
+        "summary": "WM_NOTIFY のコールバック",
+        "params": {
+          "wparam": "DlgProc のWPARAM",
+          "notify": "HMHDRアクセス用クラス"
+        }
+      },
+      "tr": {
+        "summary": "Callback for WM_NOTIFY",
+        "params": {
+          "wparam": "DlgProc WPARAM.",
+          "notify": "Class for accessing the NMHDR."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.onKeyDown": {
+      "hash": "b5784ffc0332",
+      "ja": {
+        "summary": "WM_KEYDOWN のコールバック",
+        "params": {
+          "wparam": "DlgProc のWPARAM",
+          "lparam": "DlgProc のLPARAM"
+        }
+      },
+      "tr": {
+        "summary": "Callback for WM_KEYDOWN",
+        "params": {
+          "wparam": "DlgProc WPARAM.",
+          "lparam": "DlgProc LPARAM."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.onKeyUp": {
+      "hash": "c6dd7cf8411b",
+      "ja": {
+        "summary": "WM_KEYUP のコールバック",
+        "params": {
+          "wparam": "DlgProc のWPARAM",
+          "lparam": "DlgProc のLPARAM"
+        }
+      },
+      "tr": {
+        "summary": "Callback for WM_KEYUP",
+        "params": {
+          "wparam": "DlgProc WPARAM.",
+          "lparam": "DlgProc LPARAM."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.messageBox": {
+      "hash": "d1effc7f911f",
+      "ja": {
+        "summary": "MessageBox のラッパー",
+        "returns": "押されたボタンのID\ntype に独自フラグ MB_OWNER_CENTER を設定するとオーナーウィンドウの中央に表示しようとする\n（ただしダイアログが画面外になる場合はデスクトップの中央になる）",
+        "params": {
+          "window": "オーナーwindow（指定しない場合はnullを渡すこと）",
+          "text": "メッセージテキスト",
+          "caption": "ダイアログボックスのキャプション",
+          "type": "表示するボタンやアイコンのフラグの組み合わせ"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for MessageBox",
+        "returns": "ID of the button pressed.\nSetting the custom flag MB_OWNER_CENTER in type tries to center the box on the owner window\n(but if the dialog would go off screen, it is centered on the desktop).",
+        "params": {
+          "window": "Owner window (pass null if none).",
+          "text": "Message text.",
+          "caption": "Caption of the dialog box.",
+          "type": "Combination of flags for the buttons and icon to show."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.chooseColor": {
+      "hash": "538a947fc758",
+      "ja": {
+        "summary": "ChooseColor のラッパー",
+        "returns": "選択された色(0xRRGGBB) キャンセル時はvoid\nelm.palette が渡された場合は，その内容も更新される",
+        "params": {
+          "window": "オーナーwindow（指定しない場合はnullを渡すこと）",
+          "elm": "オプション（辞書または省略可能）\n%[ color:初期選択色, palette:[ パレット色1, ... , パレット色16 ],\ndisableCustomColor:色の作成を無効にする, openCustomColor:色作成を最初から開いた状態にする ]"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for ChooseColor",
+        "returns": "The selected color (0xRRGGBB), or void if canceled.\nIf elm.palette is given, its contents are updated as well.",
+        "params": {
+          "window": "Owner window (pass null if none).",
+          "elm": "Options (a dictionary; optional).\n%[ color: initially selected color, palette: [ palette color 1, ... , palette color 16 ],\ndisableCustomColor: disables custom colors, openCustomColor: opens the custom color section initially ]"
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.modeless": {
+      "hash": "2eeb838fc5f8",
+      "ja": {
+        "summary": "モードレスダイアログ用のフラグ",
+        "description": "trueならばモードレス状態でダイアログを開きます。\nモードレスではダイアログのstyleにWS_VISIBLEを指定しない場合は\nopen()時に自動で表示されないので注意してください。"
+      },
+      "tr": {
+        "summary": "Flag for modeless dialogs",
+        "description": "If true, the dialog is opened modeless.\nNote that in modeless mode, unless WS_VISIBLE is set in the dialog style,\nthe dialog is not shown automatically by open()."
+      }
+    },
+    "win32dialog:WIN32Dialog.HWND": {
+      "hash": "469d5494311a",
+      "ja": {
+        "summary": "ダイアログのウィンドウハンドル"
+      },
+      "tr": {
+        "summary": "Window handle of the dialog"
+      }
+    },
+    "win32dialog:WIN32Dialog.icon": {
+      "hash": "0f7b8bd3568d",
+      "ja": {
+        "summary": "ダイアログのアイコン画像",
+        "description": "WIN32Dialog.Bitmapクラスのインスタンス:その画像\nnull:実行ファイルのアイコン\nvoid:アイコンなし"
+      },
+      "tr": {
+        "summary": "Icon image of the dialog",
+        "description": "An instance of the WIN32Dialog.Bitmap class: that image\nnull: the executable's icon\nvoid: no icon"
+      }
+    },
+    "win32dialog:WIN32Dialog.isValid": {
+      "hash": "6804c326932d",
+      "ja": {
+        "summary": "ダイアログを open しているかどうか"
+      },
+      "tr": {
+        "summary": "Whether the dialog is open"
+      }
+    },
+    "win32dialog:WIN32Dialog.show": {
+      "hash": "28ef6c85fc7c",
+      "ja": {
+        "summary": "ShowWindow のラッパー",
+        "description": "主にモードレスダイアログ用です。",
+        "params": {
+          "nCmdShow": "SW_*フラグ"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for ShowWindow",
+        "description": "Mainly for modeless dialogs.",
+        "params": {
+          "nCmdShow": "SW_* flag."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.InitCommonControls": {
+      "hash": "ffc089aa4dbb",
+      "ja": {
+        "summary": "InitCommonControls, InitCommonControlsEx のラッパー",
+        "returns": "成功したか(〜Exのみ)",
+        "params": {
+          "icc": "初期化フラグ ICC_*(〜Exのみ)"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for InitCommonControls and InitCommonControlsEx",
+        "returns": "Whether it succeeded (Ex only).",
+        "params": {
+          "icc": "Initialization flags ICC_* (Ex only)."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.openPropertySheet": {
+      "hash": "e3c39e4b974f",
+      "ja": {
+        "summary": "プロパティシートを表示する（常にモーダル：モードレスは未実装）",
+        "returns": "::PropertySheetの返り値",
+        "params": {
+          "window": "オーナーwindow（指定しない場合はnullを渡すこと）",
+          "sheets": "シート情報（WIN32Dialogインスタンスの配列）",
+          "elm": "オプション（辞書または省略可能）\n%[ caption:プロパティシートタイトル, page:初期ページ番号, icon:アイコン ]"
+        }
+      },
+      "tr": {
+        "summary": "Shows a property sheet (always modal; modeless is not implemented)",
+        "returns": "Return value of ::PropertySheet.",
+        "params": {
+          "window": "Owner window (pass null if none).",
+          "sheets": "Sheet information (an array of WIN32Dialog instances).",
+          "elm": "Options (a dictionary; optional).\n%[ caption: property sheet title, page: initial page number, icon: icon ]"
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.propSheetMessage": {
+      "hash": "4cf0fb699309",
+      "ja": {
+        "summary": "PSM_* メッセージをプロパティシートウィンドウに送信する"
+      },
+      "tr": {
+        "summary": "Sends a PSM_* message to the property sheet window"
+      }
+    },
+    "win32dialog:WIN32Dialog.setMessageResult": {
+      "hash": "3ec9c0509e13",
+      "ja": {
+        "summary": "DWL_MSGRESULTの値を設定する"
+      },
+      "tr": {
+        "summary": "Sets the DWL_MSGRESULT value"
+      }
+    },
+    "win32dialog:WIN32Dialog.propsheet": {
+      "hash": "583388c244c3",
+      "ja": {
+        "summary": "プロパティシートとして表示中かどうか"
+      },
+      "tr": {
+        "summary": "Whether the dialog is shown as a property sheet"
+      }
+    },
+    "win32dialog:WIN32Dialog.openProgress": {
+      "hash": "e2676465271c",
+      "ja": {
+        "summary": "プログレスダイアログを表示する",
+        "description": "プログレスダイアログのstyleにはWS_VISIBLEを指定しないこと\n閉じるときは必ず closeProgress() を使用すること\nプログレス表示の場合，onInit以外のコールバックは来ないので注意",
+        "returns": "成功したらtrue",
+        "params": {
+          "id": "プログレスバーのダイアログアイテムID（progressValueプロパティで更新される対象）",
+          "window": "[optional] オーナーwindow (void=オーナーなし,null=Application)",
+          "dsapp": "[optional] プログレス表示中はアプリケーションウィンドウを無効にするか",
+          "breathe": "[optional] progressValueのsetterでbreatheするかどうか",
+          "activate": "[optional] 表示時にアクティブ化するかどうか"
+        }
+      },
+      "tr": {
+        "summary": "Shows a progress dialog",
+        "description": "Do not set WS_VISIBLE in the progress dialog's style.\nAlways close it with closeProgress().\nNote that while showing progress, no callbacks other than onInit are delivered.",
+        "returns": "true on success.",
+        "params": {
+          "id": "Dialog item ID of the progress bar (the target updated by the progressValue property).",
+          "window": "[optional] Owner window (void = no owner, null = Application).",
+          "dsapp": "[optional] Whether to disable the application windows while progress is shown.",
+          "breathe": "[optional] Whether the progressValue setter calls breathe.",
+          "activate": "[optional] Whether to activate the dialog when it is shown."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.closeProgress": {
+      "hash": "c2527f00b764",
+      "ja": {
+        "summary": "プログレスダイアログを閉じる"
+      },
+      "tr": {
+        "summary": "Closes the progress dialog"
+      }
+    },
+    "win32dialog:WIN32Dialog.progress": {
+      "hash": "3413cea0884d",
+      "ja": {
+        "summary": "プログレス状態かどうか"
+      },
+      "tr": {
+        "summary": "Whether a progress dialog is active"
+      }
+    },
+    "win32dialog:WIN32Dialog.progressValue": {
+      "hash": "a36fac6c94ca",
+      "ja": {
+        "summary": "プログレスバーを更新する（0-100の数値 or 負数の場合マーキー状態の速度）"
+      },
+      "tr": {
+        "summary": "Updates the progress bar (a number from 0 to 100, or a negative value for the marquee speed)"
+      }
+    },
+    "win32dialog:WIN32Dialog.progressCanceled": {
+      "hash": "e3ed6e61a941",
+      "ja": {
+        "summary": "プログレスがキャンセルされたかどうか（※対象ボタンはIDCANCEL固定）"
+      },
+      "tr": {
+        "summary": "Whether the progress was canceled (the target button is always IDCANCEL)"
+      }
+    },
+    "win32dialog:WIN32Dialog.insertTab": {
+      "hash": "6e019525de77",
+      "ja": {
+        "summary": "タブコントロールを利用する.",
+        "description": "利用手順を検討中\ninsertTab(IDC_TAB, 0, \"基本\"); // タブを追加\n// deleteTab(IDC_TAB, 0); // タブを削除\n// deleteAllTab(IDC_TAB); // タブをすべて削除\nvar dlg = new WIN32Dialog(); dlg.loadResource(\"resource.dll\", \"INNER\"); // Border=None, Style=Child にしたダイアログ\nselectTab(IDC_TAB, dlg); // 表示\ninsertTab(IDC_TAB, 1, \"拡張\");\nvar dlg2 = new WIN32Dialog(); dlg2.loadResource(\"resource.dll\", \"INNER2\");\ndlg.show(SW_HIDE);\nselectTab(IDC_TAB, dlg2); // 切り替え\n// onNotify で notify->code == TCN_SELCHANGE かつ notify->idFrom == IDC_TAB の場合にユーザーによるタブの切り替え\n// getCurSel(tab_id) でタブの番号を取得し、対応するダイアログを SW_SHOW、それ以外を SW_HIDE する\n// タブ番号と対応するダイアログは自分で管理すること\n※ dlg,dlg2 の open は selectTab されたときに行われるので、show(SW_HIDE) するときは isValid で open されているか確認のこと"
+      },
+      "tr": {
+        "summary": "Works with tab controls",
+        "description": "The usage is still under consideration.\ninsertTab(IDC_TAB, 0, \"基本\"); // add a tab\n// deleteTab(IDC_TAB, 0); // delete a tab\n// deleteAllTab(IDC_TAB); // delete all tabs\nvar dlg = new WIN32Dialog(); dlg.loadResource(\"resource.dll\", \"INNER\"); // a dialog with Border=None, Style=Child\nselectTab(IDC_TAB, dlg); // show it\ninsertTab(IDC_TAB, 1, \"拡張\");\nvar dlg2 = new WIN32Dialog(); dlg2.loadResource(\"resource.dll\", \"INNER2\");\ndlg.show(SW_HIDE);\nselectTab(IDC_TAB, dlg2); // switch\n// In onNotify, notify->code == TCN_SELCHANGE and notify->idFrom == IDC_TAB means the user switched tabs\n// Get the tab index with getCurSel(tab_id), then SW_SHOW the corresponding dialog and SW_HIDE the others\n// Keep track of which dialog corresponds to each tab index yourself\nNote: dlg and dlg2 are opened when selectTab is called, so check with isValid that a dialog is open before calling show(SW_HIDE) on it."
+      }
+    },
+    "win32dialog:WIN32Dialog.setScrollInfo": {
+      "hash": "8989e1baa9fc",
+      "ja": {
+        "summary": "ScrollInfo の設定",
+        "params": {
+          "id": "スクロールバーのダイアログアイテムID",
+          "pos": "スライダーの位置",
+          "min": "取りうる最小の値",
+          "max": "取りうる最大の値",
+          "page": "ページの値"
+        }
+      },
+      "tr": {
+        "summary": "Sets the ScrollInfo",
+        "params": {
+          "id": "Dialog item ID of the scroll bar.",
+          "pos": "Slider position.",
+          "min": "Minimum value.",
+          "max": "Maximum value.",
+          "page": "Page value."
+        }
+      }
+    },
+    "win32dialog:WIN32Dialog.getScrollInfo": {
+      "hash": "423db73c5ce6",
+      "ja": {
+        "summary": "ScrollInfo の取得",
+        "returns": "%[pos, min, max, page]",
+        "params": {
+          "id": "スクロールバーのダイアログアイテムID"
+        }
+      },
+      "tr": {
+        "summary": "Gets the ScrollInfo",
+        "returns": "%[pos, min, max, page]",
+        "params": {
+          "id": "Dialog item ID of the scroll bar."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "class": "Threepp.MeshMatcapMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.MeshMatcapMaterial": {
+      "hash": "69fc92160f2a",
+      "ja": {
+        "summary": "マットキャップマテリアル",
+        "description": "マットキャップテクスチャを使用するマテリアルです。"
+      },
+      "tr": {
+        "summary": "MatCap material",
+        "description": "A material that uses a MatCap texture."
+      }
+    },
+    "krkrthreepp:Threepp.MeshMatcapMaterial.MeshMatcapMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.MeshMatcapMaterial.type": {
+      "hash": "1997d272c6da",
+      "ja": {
+        "summary": "\"MeshMatcapMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"MeshMatcapMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshMatcapMaterial.color": {
+      "hash": "7df053f299de",
+      "ja": {
+        "summary": "色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshMatcapMaterial.flatShading": {
+      "hash": "52340f07423e",
+      "ja": {
+        "summary": "フラットシェーディング"
+      },
+      "tr": {
+        "summary": "Flat shading"
+      }
+    }
+  }
+}

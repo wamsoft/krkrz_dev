@@ -1,0 +1,134 @@
+{
+  "class": "Threepp.Euler",
+  "entries": {
+    "krkrthreepp:Threepp.Euler": {
+      "hash": "85ea16f2555e",
+      "ja": {
+        "summary": "オイラー角クラス",
+        "description": "回転を表現するオイラー角です。"
+      },
+      "tr": {
+        "summary": "Euler angles class",
+        "description": "Euler angles that represent a rotation."
+      }
+    },
+    "krkrthreepp:Threepp.Euler.Euler": {
+      "hash": "661906ca5ab1",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "x": "X軸回転（ラジアン）",
+          "y": "Y軸回転（ラジアン）",
+          "z": "Z軸回転（ラジアン）"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "x": "Rotation around the X axis (radians).",
+          "y": "Rotation around the Y axis (radians).",
+          "z": "Rotation around the Z axis (radians)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Euler.x": {
+      "hash": "8f4c479193f1",
+      "ja": {
+        "summary": "X軸回転（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Rotation around the X axis (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Euler.y": {
+      "hash": "7f2efd9417fd",
+      "ja": {
+        "summary": "Y軸回転（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Rotation around the Y axis (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Euler.z": {
+      "hash": "0a82e8ca6d20",
+      "ja": {
+        "summary": "Z軸回転（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Rotation around the Z axis (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Euler.getOrder": {
+      "hash": "562c17b54744",
+      "ja": {
+        "summary": "回転順序を取得"
+      },
+      "tr": {
+        "summary": "Gets the rotation order"
+      }
+    },
+    "krkrthreepp:Threepp.Euler.setOrder": {
+      "hash": "c2403d0b92db",
+      "ja": {
+        "summary": "回転順序を設定"
+      },
+      "tr": {
+        "summary": "Sets the rotation order"
+      }
+    },
+    "krkrthreepp:Threepp.Euler.set": {
+      "hash": "6a1d88aceb4a",
+      "ja": {
+        "summary": "値を設定"
+      },
+      "tr": {
+        "summary": "Sets the values"
+      }
+    },
+    "krkrthreepp:Threepp.Euler.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another Euler"
+      }
+    },
+    "krkrthreepp:Threepp.Euler.setFromRotationMatrix": {
+      "hash": "ac2190033b3e",
+      "ja": {
+        "summary": "回転行列から設定"
+      },
+      "tr": {
+        "summary": "Sets the angles from a rotation matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Euler.setFromQuaternion": {
+      "hash": "281d5782b1c8",
+      "ja": {
+        "summary": "クォータニオンから設定"
+      },
+      "tr": {
+        "summary": "Sets the angles from a quaternion"
+      }
+    },
+    "krkrthreepp:Threepp.Euler.setFromVector3": {
+      "hash": "e02e7b1cea9d",
+      "ja": {
+        "summary": "Vector3から設定"
+      },
+      "tr": {
+        "summary": "Sets the angles from a Vector3"
+      }
+    },
+    "krkrthreepp:Threepp.Euler.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

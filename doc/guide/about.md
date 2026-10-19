@@ -6,7 +6,7 @@
 
 本ドキュメントは、Wamsoft Ltd. Partnership がメンテナンスしている派生版 ( [wamsoft/krkrz_dev](https://github.com/wamsoft/krkrz_dev) ) を対象としています。
 
-TJS2 の文法については TJS2 ヘルプ をご覧ください。
+TJS2 の文法については [TJS2 言語リファレンス](../tjs2/index.md) をご覧ください。
 
 ここでは吉里吉里のクラスを中心に説明を行います。
 

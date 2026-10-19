@@ -1,0 +1,90 @@
+{
+  "class": "AsyncTrigger",
+  "entries": {
+    "AsyncTrigger": {
+      "hash": "d0c123bf73f3",
+      "ja": {
+        "summary": "AsyncTrigger クラスは、いったん吉里吉里に制御が戻った直後のイベント配信のタイミングにイベントを発生させるためのクラスです。この機能を**非同期トリガ** ( asynchronous trigger ) と呼びます。",
+        "description": "吉里吉里のようにイベント駆動型のプログラミングモデルをとるスクリプトにおいて、イベントハンドラ内では実行できないような処理 ( たとえばイベントの発生元のオブジェクトをそのイベントハンドラ内で無効化しようとするなど ) を、そのイベントハンドラ外で行いたい時に便利です。"
+      },
+      "tr": {
+        "summary": "The AsyncTrigger class fires an event at the next event-delivery point, right after control returns to Kirikiri. This feature is called an **asynchronous trigger**.",
+        "description": "In an event-driven programming model like Kirikiri's, this is useful when you want to do something outside an event handler that cannot be done inside it (for example, invalidating the object that raised the event from within its own handler)."
+      }
+    },
+    "AsyncTrigger.AsyncTrigger": {
+      "hash": "8e3bb5131a56",
+      "ja": {
+        "summary": "AsyncTriger オブジェクトの構築",
+        "description": "AsyncTrigger クラスのオブジェクトを構築します。",
+        "params": {
+          "owner": "イベントの発生先を指定します。",
+          "actionname": "owner で指定したイベントの発生先オブジェクトで、イベントを受け取るメソッド名を\n指定します。空文字列を指定すると owner はメソッドとみなされ、イベントの発生ごとに\nowner が直接呼ばれます。"
+        }
+      },
+      "tr": {
+        "summary": "Constructs an AsyncTrigger object",
+        "description": "Constructs an object of the AsyncTrigger class.",
+        "params": {
+          "owner": "Target that receives the event.",
+          "actionname": "Name of the method on the owner object that receives the event.\nIf you pass an empty string, owner itself is treated as a method and is called\ndirectly each time the event fires."
+        }
+      }
+    },
+    "AsyncTrigger.onFire": {
+      "hash": "87fd3fcbf791",
+      "ja": {
+        "summary": "発砲するとき",
+        "description": "[AsyncTrigger.trigger](AsyncTrigger.md#trigger) メソッドでトリガを引いた後に発生します。"
+      },
+      "tr": {
+        "summary": "When the trigger fires",
+        "description": "Occurs after the trigger has been pulled with the [AsyncTrigger.trigger](AsyncTrigger.md#trigger) method."
+      }
+    },
+    "AsyncTrigger.trigger": {
+      "hash": "b1f873c1fa78",
+      "ja": {
+        "summary": "トリガを引く",
+        "description": "イベントを発生させます。\n\nこのメソッドを呼んだ後、吉里吉里本体に制御が戻り、吉里吉里本体がたまった非同期イベントを配信する\n段階になると [AsyncTrigger.onFire](AsyncTrigger.md#onfire) イベントが発生します。"
+      },
+      "tr": {
+        "summary": "Pulls the trigger",
+        "description": "Raises the event.\n\nAfter this method is called, control returns to the Kirikiri engine, and the [AsyncTrigger.onFire](AsyncTrigger.md#onfire) event\noccurs when the engine delivers its pending asynchronous events."
+      }
+    },
+    "AsyncTrigger.cancel": {
+      "hash": "8479ecb92668",
+      "ja": {
+        "summary": "トリガのキャンセル",
+        "description": "[AsyncTrigger.trigger](AsyncTrigger.md#trigger) メソッドで引いたトリガをキャンセルします。\n\n発砲前であればいつでもキャンセルできます。"
+      },
+      "tr": {
+        "summary": "Cancels the trigger",
+        "description": "Cancels a trigger pulled with the [AsyncTrigger.trigger](AsyncTrigger.md#trigger) method.\n\nYou can cancel at any time before it fires."
+      }
+    },
+    "AsyncTrigger.cached": {
+      "hash": "0c5421ce27f9",
+      "ja": {
+        "summary": "イベントをキャッシュするかどうか",
+        "description": "イベントをキャッシュするかどうかを表します。値を設定することもできます。\n\n真を指定すると、発砲までに何度 [AsyncTrigger.trigger](AsyncTrigger.md#trigger) メソッドを呼んでも\n発砲は１回だけとなります。\n\n偽を指定すると、発砲までに呼んだ回数分、発砲されます。"
+      },
+      "tr": {
+        "summary": "Whether events are cached",
+        "description": "Indicates whether events are cached. This property can also be set.\n\nIf true, the trigger fires only once no matter how many times\n[AsyncTrigger.trigger](AsyncTrigger.md#trigger) is called before it fires.\n\nIf false, it fires as many times as it was called before firing."
+      }
+    },
+    "AsyncTrigger.mode": {
+      "hash": "5900dfaa4c7d",
+      "ja": {
+        "summary": "モード",
+        "description": "動作のモードを表します。値を設定することもできます。\n\n以下の値のいずれかを指定します。\n\n`**atmNormal**    : ` 通常のイベント配信の段階で発砲されます。\n\n`**atmExclusive** : ` 他の非同期イベントよりも優先されて発砲されます\n\n`**atmAtIdle**    : ` アイドル状態 ( 他に配信するイベントが無くなったとき ) に発砲されます。\n\n同時にトリガを引いたときに発砲される順序は atmExclusive, atmNormal, atmIdle の順になります。\n\n同じモードのトリガが複数引かれている場合は、トリガが引かれた順に発砲します。"
+      },
+      "tr": {
+        "summary": "Mode",
+        "description": "Represents the operating mode. This property can also be set.\n\nSpecify one of the following values.\n\n`**atmNormal**    : ` Fires at the normal event-delivery stage.\n\n`**atmExclusive** : ` Fires ahead of other asynchronous events.\n\n`**atmAtIdle**    : ` Fires when idle (when there are no other events to deliver).\n\nTriggers pulled at the same time fire in the order atmExclusive, atmNormal, atmIdle.\n\nWhen several triggers of the same mode have been pulled, they fire in the order they were pulled."
+      }
+    }
+  }
+}

@@ -220,6 +220,7 @@
       "registerFontDir",
       "registerHotKey",
       "registerImage",
+      "registerLayerImage",
       "renderStatsReset",
       "setAtlasImage",
       "setGameA11y",
@@ -835,6 +836,8 @@
       "texUploadUsePBO",
       "title",
       "touchDevice",
+      "uiLanguage",
+      "uiLanguageCandidates",
       "versionInformation",
       "versionString"
     ]

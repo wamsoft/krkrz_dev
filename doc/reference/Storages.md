@@ -1715,7 +1715,7 @@ dirlistと違いnameにおいてフォルダの場合の末尾"/"追加がない
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `filename` | `&nbsp;` |  |
+| `filename` | `&nbsp;` | ファイル/ディレクトリ名 |
 | `attr` | `&nbsp;` | 設定する属性(FILE_ATTRIBUTE_READONLY,FILE_ATTRIBUTE_HIDDEN,...) |
 
 **解説**
@@ -1732,7 +1732,7 @@ dirlistと違いnameにおいてフォルダの場合の末尾"/"追加がない
 
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
-| `filename` | `&nbsp;` |  |
+| `filename` | `&nbsp;` | ファイル/ディレクトリ名 |
 | `attr` | `&nbsp;` | 解除する属性(FILE_ATTRIBUTE_READONLY,FILE_ATTRIBUTE_HIDDEN,...) |
 
 **解説**
@@ -1971,9 +1971,8 @@ ctime: 作成日時 (Date オブジェクト)
 
 **解説**
 
-パスの正規化を行なわず、autoPathからの検索も行なわずに
+パスの正規化を行なわず、autoPathからの検索も行なわずにファイルの存在確認を行う
 
-ファイルの存在確認を行う
 ※本体に同名のメソッドがある環境では本体版が使われます
 (本プラグインは本体に無い旧環境でのみ補完登録します)。
 仕様は本体の [Storages.isExistentStorageNoSearchNoNormalize](Storages.md#isexistentstoragenosearchnonormalize) を参照してください。

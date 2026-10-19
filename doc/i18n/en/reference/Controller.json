@@ -1,0 +1,25 @@
+{
+  "class": "Controller",
+  "entries": {
+    "Controller": {
+      "hash": "8c425226fc97",
+      "ja": {
+        "summary": "Controller クラスは、**コントローラ**に関する管理を行うクラスです。このクラスからオブジェクトを作成することはできません ( このクラスにはアクセスできません )。このクラスのオブジェクトには `Debug.controller` でアクセスできます。"
+      },
+      "tr": {
+        "summary": "The Controller class manages the **controller**. You cannot create objects of this class (the class itself is not accessible). Access its object through `Debug.controller`."
+      }
+    },
+    "Controller.visible": {
+      "hash": "fe9447009676",
+      "ja": {
+        "summary": "表示されているかどうか",
+        "description": "コントロールが表示されているかどうかを表します。値を設定することもできます。\n\n真を指定すると表示されます。"
+      },
+      "tr": {
+        "summary": "Whether it is visible",
+        "description": "Indicates whether the controller is visible. This property can also be set.\n\nSet it to true to show the controller."
+      }
+    }
+  }
+}

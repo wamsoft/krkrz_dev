@@ -39,6 +39,10 @@ jobs:
       - name: Install mkdocs
         run: pip install -r tools/docgen/requirements.txt
 
+      # 翻訳の鮮度レポート (失敗にはしない。方針 = TODO-i18n.md C)
+      - name: Translation report (en)
+        run: python tools/docgen/check_translations.py en
+
       - name: Build site
         run: mkdocs build --strict
 

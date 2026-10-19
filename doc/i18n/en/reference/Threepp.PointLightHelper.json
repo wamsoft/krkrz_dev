@@ -1,0 +1,53 @@
+{
+  "class": "Threepp.PointLightHelper",
+  "entries": {
+    "krkrthreepp:Threepp.PointLightHelper": {
+      "hash": "3ae9d4624065",
+      "ja": {
+        "summary": "ポイントライトヘルパー",
+        "description": "点光源を可視化します。"
+      },
+      "tr": {
+        "summary": "Point light helper",
+        "description": "Visualizes a point light."
+      }
+    },
+    "krkrthreepp:Threepp.PointLightHelper.PointLightHelper": {
+      "hash": "ae8a673d40bf",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "light": "可視化するライト",
+          "sphereSize": "球のサイズ",
+          "color": "ヘルパーの色（省略時はライトの色）"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "light": "Light to visualize.",
+          "sphereSize": "Size of the sphere.",
+          "color": "Color of the helper (defaults to the light's color)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.PointLightHelper.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.PointLightHelper.update": {
+      "hash": "0c9639963fd8",
+      "ja": {
+        "summary": "ヘルパーを更新"
+      },
+      "tr": {
+        "summary": "Updates the helper"
+      }
+    }
+  }
+}

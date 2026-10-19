@@ -1,0 +1,76 @@
+{
+  "class": "Zip",
+  "entries": {
+    "minizip:Zip": {
+      "hash": "4d468258d310",
+      "ja": {
+        "summary": "ZIP 圧縮クラス"
+      },
+      "tr": {
+        "summary": "ZIP compression class"
+      }
+    },
+    "minizip:Zip.Zip": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "minizip:Zip.open": {
+      "hash": "d345749f2f9f",
+      "ja": {
+        "summary": "ZIPアーカイブを書き込み用にオープンします",
+        "params": {
+          "filename": "ファイル名",
+          "overwrite": "0:通常作成 1:上書き 2:追記"
+        }
+      },
+      "tr": {
+        "summary": "Opens a ZIP archive for writing",
+        "params": {
+          "filename": "File name.",
+          "overwrite": "0: create normally, 1: overwrite, 2: append."
+        }
+      }
+    },
+    "minizip:Zip.add": {
+      "hash": "569691c436a8",
+      "ja": {
+        "summary": "アーカイブにファイルを追加します",
+        "returns": "追加に成功したら true",
+        "params": {
+          "srcfile": "追加するファイル（吉里吉里ストレージ名）",
+          "destfile": "アーカイブ中での名前(アーカイブ内パス名）",
+          "deflateLevel": "圧縮レベル 0(無圧縮) ～ 9(最大圧縮) 省略時は 6になる",
+          "password": "暗号化パスワード指定",
+          "compressionMethod": "圧縮メソッド",
+          "clearDate": "日付指定を空にする指定。デフォルトはファイルの日付を格納"
+        }
+      },
+      "tr": {
+        "summary": "Adds a file to the archive",
+        "returns": "true if the file was added.",
+        "params": {
+          "srcfile": "File to add (Kirikiri storage name).",
+          "destfile": "Name in the archive (path within the archive).",
+          "deflateLevel": "Compression level, from 0 (no compression) to 9 (maximum compression). Defaults to 6.",
+          "password": "Encryption password.",
+          "compressionMethod": "Compression method.",
+          "clearDate": "Leaves the date empty. By default, the file's date is stored."
+        }
+      }
+    },
+    "minizip:Zip.close": {
+      "hash": "3d2196a443f6",
+      "ja": {
+        "summary": "ZIPアーカイブをクローズします"
+      },
+      "tr": {
+        "summary": "Closes the ZIP archive"
+      }
+    }
+  }
+}

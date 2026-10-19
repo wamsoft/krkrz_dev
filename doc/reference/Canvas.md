@@ -564,8 +564,7 @@ overcolor )、近傍系 ( boxBlur / gaussianBlur )。
 [3D グラフィックシステム](../guide/Graphic3DSystem.md) を参照。
 
 opacity (0〜255) を指定すると、合成時に捕捉内容の α へ掛ける (gles プラグインの
-GLESAdaptor.endEffect と同じ)。現状 OpenGL 描画の Canvas で有効で、GPU 描画の
-Canvas では無視される。
+GLESAdaptor.endEffect と同じ)。OpenGL 描画・GPU 描画の Canvas とも同じ結果になる。
 
 **関連:** [Canvas.beginEffect](Canvas.md#begineffect)
 

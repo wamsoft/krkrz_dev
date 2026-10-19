@@ -1,0 +1,57 @@
+{
+  "class": "TemporaryFiles",
+  "entries": {
+    "fstat:TemporaryFiles": {
+      "hash": "b85ffc8e3f8f",
+      "ja": {
+        "description": "テンポラリファイルを管理するクラス\nあらかじめテンポラリ化したいファイルをこれにエントリして、\nその後このオブジェクトを破棄すると、\nファイルクローズ時に自動的に消去されます"
+      },
+      "tr": {
+        "description": "Manages temporary files.\nRegister the files you want to treat as temporary with this object;\nwhen the object is destroyed,\nthe files are deleted automatically once they are closed."
+      }
+    },
+    "fstat:TemporaryFiles.TemporaryFiles": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "fstat:TemporaryFiles.entry": {
+      "hash": "9c41e215c5b0",
+      "ja": {
+        "summary": "ファイルをエントリ",
+        "returns": "登録できたら true",
+        "params": {
+          "filename": "ファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Registers a file",
+        "returns": "true if the file was registered.",
+        "params": {
+          "filename": "File name."
+        }
+      }
+    },
+    "fstat:TemporaryFiles.entryFolder": {
+      "hash": "034b7db5c672",
+      "ja": {
+        "summary": "フォルダをエントリ",
+        "returns": "登録できたら true",
+        "params": {
+          "foldername": "フォルダ名"
+        }
+      },
+      "tr": {
+        "summary": "Registers a folder",
+        "returns": "true if the folder was registered.",
+        "params": {
+          "foldername": "Folder name."
+        }
+      }
+    }
+  }
+}

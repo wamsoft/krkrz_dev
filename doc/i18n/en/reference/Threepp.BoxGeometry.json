@@ -1,0 +1,75 @@
+{
+  "class": "Threepp.BoxGeometry",
+  "entries": {
+    "krkrthreepp:Threepp.BoxGeometry": {
+      "hash": "c1b378f5778f",
+      "ja": {
+        "summary": "ボックス（立方体）ジオメトリ"
+      },
+      "tr": {
+        "summary": "Box (cuboid) geometry"
+      }
+    },
+    "krkrthreepp:Threepp.BoxGeometry.BoxGeometry": {
+      "hash": "e0943720d346",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "width": "幅",
+          "height": "高さ",
+          "depth": "奥行き",
+          "widthSegments": "幅の分割数",
+          "heightSegments": "高さの分割数",
+          "depthSegments": "奥行きの分割数"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "width": "Width.",
+          "height": "Height.",
+          "depth": "Depth.",
+          "widthSegments": "Number of segments along the width.",
+          "heightSegments": "Number of segments along the height.",
+          "depthSegments": "Number of segments along the depth."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.BoxGeometry.type": {
+      "hash": "ec4223468451",
+      "ja": {
+        "summary": "\"BoxGeometry\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"BoxGeometry\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.BoxGeometry.width": {
+      "hash": "16759eb41ae9",
+      "ja": {
+        "summary": "幅（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Width (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.BoxGeometry.height": {
+      "hash": "13b2a9cb1026",
+      "ja": {
+        "summary": "高さ（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Height (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.BoxGeometry.depth": {
+      "hash": "c8c2826315da",
+      "ja": {
+        "summary": "奥行き（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Depth (read-only)"
+      }
+    }
+  }
+}

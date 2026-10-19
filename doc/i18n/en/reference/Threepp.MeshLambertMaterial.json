@@ -1,0 +1,61 @@
+{
+  "class": "Threepp.MeshLambertMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.MeshLambertMaterial": {
+      "hash": "6c4e782b4e29",
+      "ja": {
+        "summary": "Lambert マテリアル",
+        "description": "拡散反射のみを考慮したマテリアルです。光沢のない表面に適しています。"
+      },
+      "tr": {
+        "summary": "Lambert material",
+        "description": "A material that models diffuse reflection only. Suitable for non-shiny surfaces."
+      }
+    },
+    "krkrthreepp:Threepp.MeshLambertMaterial.MeshLambertMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.MeshLambertMaterial.type": {
+      "hash": "15a1e2eaf3fc",
+      "ja": {
+        "summary": "\"MeshLambertMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"MeshLambertMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshLambertMaterial.color": {
+      "hash": "7df053f299de",
+      "ja": {
+        "summary": "色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.MeshLambertMaterial.wireframe": {
+      "hash": "27e1aa449133",
+      "ja": {
+        "summary": "ワイヤーフレーム表示"
+      },
+      "tr": {
+        "summary": "Renders as wireframe"
+      }
+    },
+    "krkrthreepp:Threepp.MeshLambertMaterial.wireframeLinewidth": {
+      "hash": "c1d0eb798128",
+      "ja": {
+        "summary": "ワイヤーフレームの線幅"
+      },
+      "tr": {
+        "summary": "Wireframe line width"
+      }
+    }
+  }
+}

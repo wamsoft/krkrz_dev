@@ -1,0 +1,193 @@
+{
+  "class": "Threepp.Ray",
+  "entries": {
+    "krkrthreepp:Threepp.Ray": {
+      "hash": "dcbde4251543",
+      "ja": {
+        "summary": "光線クラス"
+      },
+      "tr": {
+        "summary": "Ray class"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.Ray": {
+      "hash": "7316b4a8b7aa",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "origin": "原点 (Vector3)",
+          "direction": "方向 (Vector3)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "origin": "Origin (Vector3).",
+          "direction": "Direction (Vector3)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Ray.set": {
+      "hash": "6a1d88aceb4a",
+      "ja": {
+        "summary": "値を設定"
+      },
+      "tr": {
+        "summary": "Sets the values"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.clone": {
+      "hash": "85fb5d83b57e",
+      "ja": {
+        "summary": "クローン"
+      },
+      "tr": {
+        "summary": "Clones the ray"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another ray"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.at": {
+      "hash": "2a307ce685ba",
+      "ja": {
+        "summary": "光線上の点を取得"
+      },
+      "tr": {
+        "summary": "Gets a point on the ray"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.lookAt": {
+      "hash": "a1bdcb21815d",
+      "ja": {
+        "summary": "方向を設定"
+      },
+      "tr": {
+        "summary": "Sets the direction"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.recast": {
+      "hash": "a1711dcc8ee1",
+      "ja": {
+        "summary": "原点を移動"
+      },
+      "tr": {
+        "summary": "Moves the origin along the ray"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.closestPointToPoint": {
+      "hash": "e6b44079e861",
+      "ja": {
+        "summary": "最近点を取得"
+      },
+      "tr": {
+        "summary": "Gets the closest point"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.distanceToPoint": {
+      "hash": "f70c67301822",
+      "ja": {
+        "summary": "点との距離"
+      },
+      "tr": {
+        "summary": "Distance to a point"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.distanceSqToPoint": {
+      "hash": "4c8c4e2e9d05",
+      "ja": {
+        "summary": "距離の二乗"
+      },
+      "tr": {
+        "summary": "Squared distance to a point"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.distanceSqToSegment": {
+      "hash": "b44d4889d9ae",
+      "ja": {
+        "summary": "線分との距離の二乗"
+      },
+      "tr": {
+        "summary": "Squared distance to a line segment"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.intersectSphere": {
+      "hash": "6dcb12bb6ffb",
+      "ja": {
+        "summary": "球との交点"
+      },
+      "tr": {
+        "summary": "Intersection point with a sphere"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.intersectsSphere": {
+      "hash": "393f00bfc6a1",
+      "ja": {
+        "summary": "球と交差するか"
+      },
+      "tr": {
+        "summary": "Whether the ray intersects a sphere"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.intersectBox": {
+      "hash": "bb72c0a06203",
+      "ja": {
+        "summary": "ボックスとの交点"
+      },
+      "tr": {
+        "summary": "Intersection point with a box"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.intersectsBox": {
+      "hash": "f36d014500a1",
+      "ja": {
+        "summary": "ボックスと交差するか"
+      },
+      "tr": {
+        "summary": "Whether the ray intersects a box"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.intersectPlane": {
+      "hash": "72968148acf9",
+      "ja": {
+        "summary": "平面との交点"
+      },
+      "tr": {
+        "summary": "Intersection point with a plane"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.intersectsPlane": {
+      "hash": "2e714ade0a7e",
+      "ja": {
+        "summary": "平面と交差するか"
+      },
+      "tr": {
+        "summary": "Whether the ray intersects a plane"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.applyMatrix4": {
+      "hash": "74a4de2a266d",
+      "ja": {
+        "summary": "行列を適用"
+      },
+      "tr": {
+        "summary": "Applies a matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Ray.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

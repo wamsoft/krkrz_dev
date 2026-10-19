@@ -1,0 +1,330 @@
+{
+  "class": "Texture",
+  "entries": {
+    "Texture": {
+      "hash": "0836b984c3d7",
+      "ja": {
+        "description": "テクスチャクラス。\nハードウェア上のテクスチャとほぼ対応しています。\n\ninvalidateすることでテクスチャは無効化されるため、必要なくなったら明示的にinvalidate呼び出すことを推奨します。"
+      },
+      "tr": {
+        "description": "The texture class.\nIt corresponds closely to a texture on the hardware.\n\nInvalidating the object releases the texture, so calling invalidate explicitly once it is no longer needed is recommended."
+      }
+    },
+    "Texture.Texture": {
+      "hash": "d25687ba9c84",
+      "ja": {
+        "summary": "ファイル読み込み版コンストラクタ",
+        "params": {
+          "filename": "画像ファイル名",
+          "format": "カラーフォーマット(tcfRGBA / tcfAlpha / tcfAlphaChannel)\n\n`**tcfAlpha**` 選択時に色情報はグレイスケール化されます ( **輝度**を 8bit テクスチャにします )。\n\n`**tcfAlphaChannel**` を選択すると、α チャンネルをそのまま 8bit テクスチャにします。\nα だけを参照するクリッピングマスク用の画像に適していて、RGBA の 1/4 のメモリで済み、\nアップロード用 PBO も確保されません。「輝度は白一色でデータは α」という一般的なマスク資材は\ntcfAlpha では扱えないため、この指定を使います。32bpp でない画像を渡した場合は\n従来のグレイスケール扱いにフォールバックします。",
+          "is9patch": "9patch情報を読み込み、9patch描画用として使用するかどうか"
+        }
+      },
+      "tr": {
+        "summary": "Constructor that loads from a file",
+        "params": {
+          "filename": "Image file name.",
+          "format": "Color format (tcfRGBA / tcfAlpha / tcfAlphaChannel).\n\nWith `**tcfAlpha**`, color information is converted to grayscale (the **luminance** becomes an 8-bit texture).\n\nWith `**tcfAlphaChannel**`, the alpha channel is used as-is for an 8-bit texture.\nThis suits clipping-mask images that only reference alpha; it needs 1/4 of the memory of RGBA,\nand no upload PBO is allocated. Common mask assets that are \"solid white in luminance with the data in alpha\"\ncannot be handled with tcfAlpha, so use this format for them. If you pass an image that is not 32bpp,\nit falls back to the conventional grayscale handling.",
+          "is9patch": "Whether to read 9-patch information and use the texture for 9-patch drawing."
+        }
+      }
+    },
+    "Texture.Texture@2": {
+      "hash": "3eeadeb08238",
+      "ja": {
+        "summary": "Bitmapコピー版コンストラクタ",
+        "params": {
+          "bitmap": "テクスチャの元となるBitmapクラスのインスタンス",
+          "format": "カラーフォーマット(tcfRGBA / tcfAlpha / tcfAlphaChannel)\n\n値の意味はファイル読み込み版コンストラクタと同じです。\n`**tcfAlpha**` は輝度をグレイスケール化、`**tcfAlphaChannel**` は α チャンネルを\nそのまま 8bit テクスチャにします。",
+          "is9patch": "9patch情報を読み込み、9patch描画用として使用するかどうか"
+        }
+      },
+      "tr": {
+        "summary": "Constructor that copies from a Bitmap",
+        "params": {
+          "bitmap": "The Bitmap instance to create the texture from.",
+          "format": "Color format (tcfRGBA / tcfAlpha / tcfAlphaChannel).\n\nThe values mean the same as in the file-loading constructor.\n`**tcfAlpha**` converts the luminance to grayscale; `**tcfAlphaChannel**` uses the alpha channel\nas-is for an 8-bit texture.",
+          "is9patch": "Whether to read 9-patch information and use the texture for 9-patch drawing."
+        }
+      }
+    },
+    "Texture.Texture@3": {
+      "hash": "031dd201f0e7",
+      "ja": {
+        "summary": "サイズ指定版コンストラクタ",
+        "description": "テクスチャの内容は未初期化なのでごみが入っています。",
+        "params": {
+          "width": "テクスチャ幅",
+          "height": "テクスチャ高さ",
+          "format": "カラーフォーマット(tcfRGBA / tcfAlpha / tcfAlphaChannel)\n\n内容が未初期化の空テクスチャなので、`**tcfAlphaChannel**` は `**tcfAlpha**` と同じ扱いになります。"
+        }
+      },
+      "tr": {
+        "summary": "Constructor with a given size",
+        "description": "The texture contents are uninitialized and contain garbage.",
+        "params": {
+          "width": "Texture width.",
+          "height": "Texture height.",
+          "format": "Color format (tcfRGBA / tcfAlpha / tcfAlphaChannel).\n\nSince this is an empty texture with uninitialized contents, `**tcfAlphaChannel**` is treated the same as `**tcfAlpha**`."
+        }
+      }
+    },
+    "Texture.Texture@4": {
+      "hash": "f1a81e697bc1",
+      "ja": {
+        "summary": "ミップマップ生成版コンストラクタ",
+        "params": {
+          "sizelist": "ミップマップを生成するサイズを配列で幅、高さの組み合わせで指定します。",
+          "filename": "画像ファイル名",
+          "type": "縮小アルゴリズムを指定します。ImageFunction.operateStretch の type か Layer.operateStretch の type 引数と同じです。",
+          "typeopt": "３次元補間時のシャープネスです。他の補間方法では現在のところ意味を持ちません。"
+        }
+      },
+      "tr": {
+        "summary": "Constructor that generates mipmaps",
+        "params": {
+          "sizelist": "The sizes at which to generate mipmaps, as an array of width/height pairs.",
+          "filename": "Image file name.",
+          "type": "The reduction algorithm. Same as the type argument of ImageFunction.operateStretch or Layer.operateStretch.",
+          "typeopt": "Sharpness for bicubic interpolation. Currently has no meaning for other interpolation methods."
+        }
+      }
+    },
+    "Texture.copyRect": {
+      "hash": "1f9238b05010",
+      "ja": {
+        "summary": "矩形コピー(位置指定Rect版)",
+        "params": {
+          "dleft": "コピー先左端",
+          "dtop": "コピー先上端",
+          "src": "Bitmapクラスのオブジェクト",
+          "srcRect": "srcのコピー元矩形"
+        }
+      },
+      "tr": {
+        "summary": "Copies a rectangle (position and Rect)",
+        "params": {
+          "dleft": "Left edge of the destination.",
+          "dtop": "Top edge of the destination.",
+          "src": "A Bitmap object.",
+          "srcRect": "Source rectangle in src."
+        }
+      }
+    },
+    "Texture.copyRect@2": {
+      "hash": "3a0f4052700f",
+      "ja": {
+        "summary": "矩形コピー(位置指定)",
+        "params": {
+          "dleft": "コピー先左端",
+          "dtop": "コピー先上端",
+          "src": "Bitmapクラスのオブジェクト",
+          "sleft": "コピー元左端位置",
+          "stop": "コピー元上端位置",
+          "swidth": "コピー元幅",
+          "sheight": "コピー元高さ"
+        }
+      },
+      "tr": {
+        "summary": "Copies a rectangle (positions)",
+        "params": {
+          "dleft": "Left edge of the destination.",
+          "dtop": "Top edge of the destination.",
+          "src": "A Bitmap object.",
+          "sleft": "Left position of the source.",
+          "stop": "Top position of the source.",
+          "swidth": "Source width.",
+          "sheight": "Source height."
+        }
+      }
+    },
+    "Texture.copyRect@3": {
+      "hash": "3a745dff3e83",
+      "ja": {
+        "summary": "矩形コピー(全コピー)",
+        "description": "bitmap全体をコピーします。はみ出す場合はクリッピングされます。",
+        "params": {
+          "src": "Bitmapクラスのオブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Copies a rectangle (whole bitmap)",
+        "description": "Copies the whole bitmap. Anything that does not fit is clipped.",
+        "params": {
+          "src": "A Bitmap object."
+        }
+      }
+    },
+    "Texture.setDrawSize": {
+      "hash": "9aa412e6e06c",
+      "ja": {
+        "summary": "描画基準サイズの設定",
+        "description": "Canvas.drawTextureで等倍描画した時、何も指定しないとテクスチャのサイズで描画されますが、このメソッドで幅と高さを設定すると、このテクスチャインスタンスを使って描画した時設定したサイズで描画されるようになります。\n拡大縮小などもこのサイズが基準となり描画されます。\n内部画像データのサイズと普段描画するサイズが異なる場合に設定しておくと、拡大率を表示したいサイズ基準で指定できるようになります。",
+        "params": {
+          "width": "表示基準幅",
+          "height": "表示基準高さ"
+        }
+      },
+      "tr": {
+        "summary": "Sets the reference drawing size",
+        "description": "When drawn at 1x with Canvas.drawTexture, a texture is normally drawn at its own size; if you set a width and height with this method, drawing with this texture instance uses the size you set.\nScaling is also based on this size.\nSetting it when the size of the internal image data differs from the size you usually draw at lets you specify scale factors relative to the size you want to display.",
+        "params": {
+          "width": "Reference display width.",
+          "height": "Reference display height."
+        }
+      }
+    },
+    "Texture.width": {
+      "hash": "b0a626f02bb0",
+      "ja": {
+        "summary": "幅(有効範囲)",
+        "description": "pot指定されていなければ、memoryWidthと同一です。"
+      },
+      "tr": {
+        "summary": "Width (valid area)",
+        "description": "Same as memoryWidth unless pot was specified."
+      }
+    },
+    "Texture.height": {
+      "hash": "a9bb7d8b081f",
+      "ja": {
+        "summary": "高さ(有効範囲)",
+        "description": "pot指定されていなければ、memoryHeightと同一です。"
+      },
+      "tr": {
+        "summary": "Height (valid area)",
+        "description": "Same as memoryHeight unless pot was specified."
+      }
+    },
+    "Texture.memoryWidth": {
+      "hash": "507ba382cb25",
+      "ja": {
+        "summary": "実際(ハードウェア上)の幅"
+      },
+      "tr": {
+        "summary": "Actual width (on the hardware)"
+      }
+    },
+    "Texture.memoryHeight": {
+      "hash": "6489afeccfbd",
+      "ja": {
+        "summary": "実際(ハードウェア上)の高さ"
+      },
+      "tr": {
+        "summary": "Actual height (on the hardware)"
+      }
+    },
+    "Texture.isGray": {
+      "hash": "42e913e1881d",
+      "ja": {
+        "summary": "8bitカラーかどうか(内部ではアルファテクスチャ)"
+      },
+      "tr": {
+        "summary": "Whether the texture is 8-bit color (internally an alpha texture)"
+      }
+    },
+    "Texture.isPowerOfTwo": {
+      "hash": "b61dbe263c92",
+      "ja": {
+        "summary": "テクスチャサイズが2の累乗値かどうか"
+      },
+      "tr": {
+        "summary": "Whether the texture size is a power of two"
+      }
+    },
+    "Texture.nativeHandle": {
+      "hash": "b22c5756fd09",
+      "ja": {
+        "summary": "ネイティブハンドル(環境依存)",
+        "description": "OpenGL ES2/3 環境下ではテクスチャID"
+      },
+      "tr": {
+        "summary": "Native handle (platform-dependent)",
+        "description": "Under OpenGL ES 2/3 this is the texture ID."
+      }
+    },
+    "Texture.stretchType": {
+      "hash": "cbb37d44b5b1",
+      "ja": {
+        "summary": "拡大縮小時の補間方法"
+      },
+      "tr": {
+        "summary": "Interpolation method for scaling"
+      }
+    },
+    "Texture.wrapModeHorizontal": {
+      "hash": "90b7f9d86eba",
+      "ja": {
+        "summary": "水平方向ラップモード"
+      },
+      "tr": {
+        "summary": "Horizontal wrap mode"
+      }
+    },
+    "Texture.wrapModeVertical": {
+      "hash": "1571ae8caae3",
+      "ja": {
+        "summary": "垂直方向ラップモード"
+      },
+      "tr": {
+        "summary": "Vertical wrap mode"
+      }
+    },
+    "Texture.margin9Patch": {
+      "hash": "53a940e2fecb",
+      "ja": {
+        "summary": "9patchマージン",
+        "description": "is9patchを指定して読み込んだ場合Rectクラスのオブジェクトが読み取り専用でアクセスできます。\n指定されていなかったり、読み取りできなかった場合はvoidです。"
+      },
+      "tr": {
+        "summary": "9-patch margins",
+        "description": "If the texture was loaded with is9patch, a read-only Rect object is available.\nIf is9patch was not specified or the information could not be read, this is void."
+      }
+    },
+    "Texture.stNearest": {
+      "hash": "7aed004acb0b",
+      "ja": {
+        "summary": "最近傍点法。stretchTypeプロパティに設定します。"
+      },
+      "tr": {
+        "summary": "Nearest neighbor. Set in the stretchType property."
+      }
+    },
+    "Texture.stLinear": {
+      "hash": "ae84a24e1bac",
+      "ja": {
+        "summary": "線形補間。stretchTypeプロパティに設定します。"
+      },
+      "tr": {
+        "summary": "Linear interpolation. Set in the stretchType property."
+      }
+    },
+    "Texture.wmRepeat": {
+      "hash": "4aebb694d397",
+      "ja": {
+        "summary": "繰り返し。wrapModeHorizontal/wrapModeVerticalプロパティに設定します。"
+      },
+      "tr": {
+        "summary": "Repeat. Set in the wrapModeHorizontal/wrapModeVertical properties."
+      }
+    },
+    "Texture.wmClampToEdge": {
+      "hash": "3e0a6ee30198",
+      "ja": {
+        "summary": "端色引き延ばし。wrapModeHorizontal/wrapModeVerticalプロパティに設定します。2の累乗サイズでない場合はこの定数でなければなりません(default)。"
+      },
+      "tr": {
+        "summary": "Clamp to edge (stretches the edge color). Set in the wrapModeHorizontal/wrapModeVertical properties. Required when the size is not a power of two (default)."
+      }
+    },
+    "Texture.wmMirror": {
+      "hash": "1429514f2f4d",
+      "ja": {
+        "summary": "ミラー繰り返し。wrapModeHorizontal/wrapModeVerticalプロパティに設定します。"
+      },
+      "tr": {
+        "summary": "Mirrored repeat. Set in the wrapModeHorizontal/wrapModeVertical properties."
+      }
+    }
+  }
+}

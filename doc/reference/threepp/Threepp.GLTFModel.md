@@ -77,7 +77,11 @@
 
 **解説**
 
---- パーツ (メッシュ) の取り出し --- 同じモデルを何百個も並べたいとき、GLB を個数ぶん読んで Mesh を並べると draw call がそのまま個数になる。ここから取り出して InstancedMesh へ まとめると 1 個で済む。
+-> int (モデル内のメッシュ数。深さ優先の出現順)
+
+同じモデルを何百個も並べたいとき、GLB を個数ぶん読んで Mesh を並べると
+draw call がそのまま個数になる。getPartGeometry / getPartMaterial で取り出して
+InstancedMesh へまとめると 1 個で済む。
 
 ---
 

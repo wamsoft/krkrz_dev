@@ -1,0 +1,61 @@
+{
+  "class": "Threepp.VRMAnimationLoader",
+  "entries": {
+    "krkrthreepp:Threepp.VRMAnimationLoader": {
+      "hash": "de7cb300990f",
+      "ja": {
+        "summary": "VRM アニメーションローダ"
+      },
+      "tr": {
+        "summary": "VRM animation loader"
+      }
+    },
+    "krkrthreepp:Threepp.VRMAnimationLoader.load": {
+      "hash": "ce4c2600c3c5",
+      "ja": {
+        "summary": "OS パスから (デバッグ用) -> VRMAnimation"
+      },
+      "tr": {
+        "summary": "Loads from an OS path (for debugging) -> VRMAnimation"
+      }
+    },
+    "krkrthreepp:Threepp.VRMAnimationLoader.loadStorage": {
+      "hash": "df7ed5e18369",
+      "ja": {
+        "summary": "吉里吉里ストレージ名から (本番用) -> VRMAnimation"
+      },
+      "tr": {
+        "summary": "Loads from a Kirikiri storage name (for production) -> VRMAnimation"
+      }
+    },
+    "krkrthreepp:Threepp.VRMAnimationLoader.exportPoseSeq": {
+      "hash": "20f45417e5de",
+      "ja": {
+        "summary": "ポーズ列を 1 本の VRMA (.vrma = glTF-JSON + base64) へ書き出す。",
+        "description": "入力は平坦な並列配列。書き出したファイルは loadStorage で読み戻せる。",
+        "params": {
+          "boneNames": "[ボーン名,…] (nBones)",
+          "times": "[秒,…] (nKeys)",
+          "quatsFlat": "[(key,bone) 行優先の qx,qy,qz,qw,…] (nKeys*nBones*4)",
+          "hipsFlat": "hips オフセット [dx,dy,dz,…] (nKeys*3。空配列 = トラック無し)",
+          "exprNames": "表情名 [] (省略/空 = 表情トラック無し)",
+          "exprWeightsFlat": "表情 weight (expr-major 平坦, nExpr*nKeys)",
+          "path": "出力ストレージ名 (bare 名で data/ 直下)"
+        }
+      },
+      "tr": {
+        "summary": "Writes a pose sequence to a single VRMA file (.vrma = glTF-JSON + base64).",
+        "description": "The input is flat parallel arrays. The written file can be read back with loadStorage.",
+        "params": {
+          "boneNames": "[bone name,…] (nBones)",
+          "times": "[seconds,…] (nKeys)",
+          "quatsFlat": "[qx,qy,qz,qw,… in (key,bone) row-major order] (nKeys*nBones*4)",
+          "hipsFlat": "Hips offsets [dx,dy,dz,…] (nKeys*3; an empty array = no track)",
+          "exprNames": "Expression names [] (omitted/empty = no expression track)",
+          "exprWeightsFlat": "Expression weights (expr-major flat array, nExpr*nKeys)",
+          "path": "Output storage name (a bare name goes directly under data/)"
+        }
+      }
+    }
+  }
+}

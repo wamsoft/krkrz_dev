@@ -1,0 +1,523 @@
+{
+  "class": "Font",
+  "entries": {
+    "Font": {
+      "hash": "406c85f564c8",
+      "ja": {
+        "summary": "Font クラスは、**フォント**を管理するためのクラスです。"
+      },
+      "tr": {
+        "summary": "The Font class manages **fonts**."
+      }
+    },
+    "Font.getTextWidth": {
+      "hash": "f8730a8d9d93",
+      "ja": {
+        "summary": "文字列の横幅を得る",
+        "description": "このメソッドでは、現在のフォントの設定で指定の文字列を描画したときに必要な\n横幅を得ることができます。",
+        "returns": "指定された文字列の横幅がピクセル単位で戻ります",
+        "params": {
+          "text": "横幅を得たい文字列を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the width of a string",
+        "description": "Gets the width needed to draw the given string\nwith the current font settings.",
+        "returns": "Width of the given string, in pixels",
+        "params": {
+          "text": "String to measure."
+        }
+      }
+    },
+    "Font.getTextHeight": {
+      "hash": "e1496d169e58",
+      "ja": {
+        "summary": "文字列の縦幅を得る",
+        "description": "このメソッドでは、このフォントで指定の文字列を描画したときに必要な縦幅を得ることができます。",
+        "returns": "指定された文字列の縦幅がピクセル単位で戻ります",
+        "params": {
+          "text": "縦幅を得たい文字列を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the height of a string",
+        "description": "Gets the height needed to draw the given string with this font.",
+        "returns": "Height of the given string, in pixels",
+        "params": {
+          "text": "String to measure."
+        }
+      }
+    },
+    "Font.getEscWidthX": {
+      "hash": "8f57178a14ee",
+      "ja": {
+        "summary": "文字の横方向への X 座標の移動量",
+        "description": "現在のフォントの設定で指定された文字を描画したときに必要な文字描画位置の移動量を\n得ることができます。\n\nこのメソッドでは、文字の描画方向に対して横 ( 左 ) に進んだときの X 座標上での移動量を\n得ることができます。",
+        "returns": "文字の横方向への X 座標の移動量がピクセル単位で戻ります",
+        "params": {
+          "text": "文字の横方向への X 座標の移動量を得たい文字列を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "X advance of text in the horizontal direction",
+        "description": "Gets how far the drawing position advances when the given text is drawn\nwith the current font settings.\n\nThis method returns the advance along the X axis when moving sideways (to the left) relative to the text drawing direction.",
+        "returns": "X advance of the text in the horizontal direction, in pixels",
+        "params": {
+          "text": "String whose horizontal X advance you want."
+        }
+      }
+    },
+    "Font.getEscWidthY": {
+      "hash": "8ddeefc10b1f",
+      "ja": {
+        "summary": "文字の横方向への Y 座標の移動量",
+        "description": "現在のフォントの設定で指定された文字を描画したときに必要な文字描画位置の移動量を\n得ることができます。\n\nこのメソッドでは、文字の描画方向に対して横 ( 左 ) に進んだときの Y 座標上での移動量を\n得ることができます。",
+        "returns": "文字の横方向への Y 座標の移動量がピクセル単位で戻ります",
+        "params": {
+          "text": "文字の横方向への Y 座標の移動量を得たい文字列を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Y advance of text in the horizontal direction",
+        "description": "Gets how far the drawing position advances when the given text is drawn\nwith the current font settings.\n\nThis method returns the advance along the Y axis when moving sideways (to the left) relative to the text drawing direction.",
+        "returns": "Y advance of the text in the horizontal direction, in pixels",
+        "params": {
+          "text": "String whose horizontal Y advance you want."
+        }
+      }
+    },
+    "Font.getEscHeightX": {
+      "hash": "0a4c1b0f4b7e",
+      "ja": {
+        "summary": "文字の縦方向への X 座標の移動量",
+        "description": "現在のフォントの設定で指定された文字を描画したときに必要な文字描画位置の移動量を\n得ることができます。\n\nこのメソッドでは、文字の描画方向に対して縦 ( 下 ) に進んだときの X 座標上での移動量を\n得ることができます。",
+        "returns": "文字の縦方向への X 座標の移動量がピクセル単位で戻ります",
+        "params": {
+          "text": "文字の縦方向への X 座標の移動量を得たい文字列を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "X advance of text in the vertical direction",
+        "description": "Gets how far the drawing position advances when the given text is drawn\nwith the current font settings.\n\nThis method returns the advance along the X axis when moving vertically (downward) relative to the text drawing direction.",
+        "returns": "X advance of the text in the vertical direction, in pixels",
+        "params": {
+          "text": "String whose vertical X advance you want."
+        }
+      }
+    },
+    "Font.getEscHeightY": {
+      "hash": "bf2063f55621",
+      "ja": {
+        "summary": "文字の縦方向への Y 座標の移動量",
+        "description": "現在のフォントの設定で指定された文字を描画したときに必要な文字描画位置の移動量を\n得ることができます。\n\nこのメソッドでは、文字の描画方向に対して縦 ( 下 ) に進んだときの Y 座標上での移動量を\n得ることができます。",
+        "returns": "文字の縦方向への Y 座標の移動量がピクセル単位で戻ります",
+        "params": {
+          "text": "文字の縦方向への Y 座標の移動量を得たい文字列を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Y advance of text in the vertical direction",
+        "description": "Gets how far the drawing position advances when the given text is drawn\nwith the current font settings.\n\nThis method returns the advance along the Y axis when moving vertically (downward) relative to the text drawing direction.",
+        "returns": "Y advance of the text in the vertical direction, in pixels",
+        "params": {
+          "text": "String whose vertical Y advance you want."
+        }
+      }
+    },
+    "Font.getGlyphDrawRect": {
+      "hash": "73c8405530c9",
+      "ja": {
+        "summary": "文字列の実描画範囲",
+        "description": "現在のフォントの設定で指定された文字を描画したときに、グリフ画像が描かれる範囲を得ることができます。\n\n得られる範囲は 0,0 座標を基準にした Rect クラスのオブジェクトです。\n\n横向きのみ対応しています。",
+        "returns": "文字列の実描画範囲",
+        "params": {
+          "text": "範囲を得たい文字列を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Actual drawing area of a string",
+        "description": "Gets the area in which glyph images are drawn when the given text is drawn with the current font settings.\n\nThe result is a Rect object relative to coordinate 0,0.\n\nOnly horizontal text is supported.",
+        "returns": "Actual drawing area of the string",
+        "params": {
+          "text": "String whose area you want."
+        }
+      }
+    },
+    "Font.getList": {
+      "hash": "abe8aeb2f58f",
+      "ja": {
+        "summary": "フォント名の列挙",
+        "description": "フォント名を列挙し、配列として返します。",
+        "returns": "フォント名(文字列)が各要素として格納されている配列",
+        "params": {
+          "flags": "フォントをどのように列挙するかを指定します。\n\n次の値のビット論理和による組み合わせ指定します。\n\n`**fsfFixedPitch**    ` : 固定ピッチフォントのみ列挙します\n\n`**fsfSameCharSet**   ` : 同じキャラクタセットのフォントのみ列挙します\n\n`**fsfNoVertical**    ` : 縦書き用フォントを列挙しません\n\n`**fsfTrueTypeOnly**  ` : TrueType フォントのみ列挙します\n\n`**fsfIgnoreSymbol**  ` : シンボルキャラセットを除外します\n\nfsfSameCharSet を指定した場合は、現在選択されているフォントと同じキャラクタセットの\nフォントが列挙されます。"
+        }
+      },
+      "tr": {
+        "summary": "Enumerates font names",
+        "description": "Enumerates font names and returns them as an array.",
+        "returns": "Array whose elements are font names (strings)",
+        "params": {
+          "flags": "How to enumerate fonts.\n\nSpecify a bitwise OR of the following values.\n\n`**fsfFixedPitch**    ` : Enumerate only fixed-pitch fonts\n\n`**fsfSameCharSet**   ` : Enumerate only fonts with the same character set\n\n`**fsfNoVertical**    ` : Do not enumerate vertical-writing fonts\n\n`**fsfTrueTypeOnly**  ` : Enumerate only TrueType fonts\n\n`**fsfIgnoreSymbol**  ` : Exclude the symbol character set\n\nWith fsfSameCharSet, fonts with the same character set as the currently selected font\nare enumerated."
+        }
+      }
+    },
+    "Font.mapPrerenderedFont": {
+      "hash": "46255f381fe4",
+      "ja": {
+        "summary": "レンダリング済みフォントの割り当て",
+        "description": "現在選択されているフォント名に対して**レンダリング済みフォント**の割り当てを行います。\n\n以降、同じ設定のフォントに対しては指定されたレンダリング済みフォントが代わりに使われます。\n\nすべてのレイヤに対して設定が有効になります。",
+        "params": {
+          "fontstorage": "レンダリング済みフォントストレージを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Maps a prerendered font",
+        "description": "Maps a **prerendered font** to the currently selected font name.\n\nFrom then on, the specified prerendered font is used instead for fonts with the same settings.\n\nThe setting applies to all layers.",
+        "params": {
+          "fontstorage": "Prerendered font storage."
+        }
+      }
+    },
+    "Font.unmapPrerenderedFont": {
+      "hash": "545e5a213641",
+      "ja": {
+        "summary": "レンダリング済みフォントの割り当て解除",
+        "description": "現在選択されているフォント名に対する**レンダリング済みフォント**の割り当てを解除します。"
+      },
+      "tr": {
+        "summary": "Unmaps a prerendered font",
+        "description": "Removes the **prerendered font** mapping for the currently selected font name."
+      }
+    },
+    "Font.face": {
+      "hash": "92dc5b2a25bc",
+      "ja": {
+        "summary": "フォント名",
+        "description": "フォント名を表します。値を設定することもできます。\n\nカンマで区切って複数の候補を指定することができます。この場合は、実際に存在するフォントが使用され、先頭に書いたものほど優先されます。実際に存在するフォントかどうかは OS のフォントのリストを参照することにより行われます。どの候補にも合致しなかった場合は、デフォルトのフォントが使用されます (現バージョンでは \"ＭＳ Ｐゴシック\" 固定)。\n\n先頭をカンマにし、直後にフォント名を書くと、実際にそのフォントをOSが列挙しなくても、OSにそのフォントを指定しようとします (たとえば \",My Original Font\" )。これにより AddFontResource Win32 API 等で登録した列挙不可能なフォントを使用することができます。\n\nバリアブルフォントでは、フォント名に `#tag=val[,tag=val...]` を後置して\n可変軸インスタンスを指定できます ( 例 `\"MyFont#wght=700\"`、\n`\"MyFont#wght=700,wdth=75\"` )。フォールバック連鎖の各要素に個別に指定でき、\n[variations](#variations) と異なり face 単位で効きます。glyphware 経路\n( [Layer.drawShapedText](Layer.md#drawshapedtext) 系と [rasterizer](#rasterizer) = 2 )\nでのみ有効です。\n\n軸を付けずにバリアブルフォントを参照した場合は wght=400 相当\n( CSS の font-weight 既定と同じ ) に正規化されます。無指定時の既定を\n変えたい場合は [setDefaultVariations](#setdefaultvariations) を使います。"
+      },
+      "tr": {
+        "summary": "Font name",
+        "description": "The font name. This property can also be set.\n\nYou can specify multiple candidates separated by commas. In that case a font that actually exists is used, with earlier candidates taking priority. Whether a font exists is determined by consulting the OS font list. If no candidate matches, the default font is used (fixed to \"ＭＳ Ｐゴシック\" (MS PGothic) in the current version).\n\nIf you start with a comma followed by a font name, the engine tries to pass that font to the OS even if the OS does not enumerate it (e.g. \",My Original Font\"). This lets you use non-enumerable fonts registered with the Win32 AddFontResource API and the like.\n\nFor variable fonts, you can append `#tag=val[,tag=val...]` to the font name\nto specify a variable axis instance (e.g. `\"MyFont#wght=700\"`,\n`\"MyFont#wght=700,wdth=75\"`). It can be given separately for each element of the fallback chain,\nand unlike [variations](#variations) it applies per face. It is effective only on the glyphware path\n( [Layer.drawShapedText](Layer.md#drawshapedtext) and related methods, and [rasterizer](#rasterizer) = 2 ).\n\nWhen a variable font is referenced without axes, it is normalized to the equivalent of wght=400\n(the same as the CSS font-weight default). To change the default used when nothing is specified,\nuse [setDefaultVariations](#setdefaultvariations)."
+      }
+    },
+    "Font.height": {
+      "hash": "27282b3747a3",
+      "ja": {
+        "summary": "フォント高さ",
+        "description": "描画される文字の高さをピクセル単位で表します。値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Font height",
+        "description": "Height of the drawn characters, in pixels. This property can also be set."
+      }
+    },
+    "Font.bold": {
+      "hash": "5b1e1ac7b220",
+      "ja": {
+        "summary": "ボールド",
+        "description": "ボールド ( 太字 ) であるかどうかを表します。値を設定することもできます。\n\n真を指定するとボールドになります。"
+      },
+      "tr": {
+        "summary": "Bold",
+        "description": "Whether the font is bold. This property can also be set.\n\nSet true for bold."
+      }
+    },
+    "Font.italic": {
+      "hash": "672451e8f8c1",
+      "ja": {
+        "summary": "イタリック",
+        "description": "イタリック ( 斜体 ) であるかどうかを表します。値を設定することもできます。\n\n真を指定するとイタリックになります。"
+      },
+      "tr": {
+        "summary": "Italic",
+        "description": "Whether the font is italic. This property can also be set.\n\nSet true for italic."
+      }
+    },
+    "Font.strikeout": {
+      "hash": "b8ed98833813",
+      "ja": {
+        "summary": "取消線",
+        "description": "取消線を描画するかどうか表します。値を設定することもできます。\n\n真を指定すると文字の上に取消線を描画します。"
+      },
+      "tr": {
+        "summary": "Strikeout",
+        "description": "Whether to draw a strikeout line. This property can also be set.\n\nSet true to draw a strikeout line over the characters."
+      }
+    },
+    "Font.underline": {
+      "hash": "86789bfbcd7a",
+      "ja": {
+        "summary": "アンダーライン",
+        "description": "アンダーライン ( 下線または傍線 ) を描画するかどうか表します。値を設定することもできます。\n\n真を指定するとアンダーラインを描画します。"
+      },
+      "tr": {
+        "summary": "Underline",
+        "description": "Whether to draw an underline (or a side line in vertical text). This property can also be set.\n\nSet true to draw an underline."
+      }
+    },
+    "Font.angle": {
+      "hash": "f3b5d8c5b3a1",
+      "ja": {
+        "summary": "文字描画角度",
+        "description": "文字描画角度を表します。値を設定することもできます。\n\n単位は角度 ( degree ) の 10 倍の値です。0 ～ 3600 の値をとります。\n\n縦書きを行う場合はフォント名に縦書き用のフォント名を指定した上で、このプロパティ\nに 2700 を指定します。"
+      },
+      "tr": {
+        "summary": "Text drawing angle",
+        "description": "The text drawing angle. This property can also be set.\n\nThe unit is tenths of a degree. The value ranges from 0 to 3600.\n\nFor vertical text, specify a vertical-writing font name as the font name and\nset this property to 2700."
+      }
+    },
+    "Font.rasterizer": {
+      "hash": "1c1906f31be6",
+      "ja": {
+        "summary": "文字列描画方式",
+        "description": "[Layer.drawText](Layer.md#drawtext) で使用するラスタライザ ( 文字列描画方式 ) を\n表します。値を設定することもできます。\n\n値は整数のインデックスで、番号は**全ビルド共通**です:\n\n`**0**` : FreeType ラスタライザ ( 全ビルドに搭載。SDL / 汎用ビルドの既定 )\n\n`**1**` : GDI ラスタライザ ( WINVER のみ搭載。WINVER の既定 )\n\n`**2**` : glyphware ( 統一フォントエンジン。FreeType + HarfBuzz )。既定を変えず、\n選択時のみ drawText のグリフ生成が glyphware 経由になります ( 埋め込みビットマップ\nではなくアウトライン描画・カラー絵文字対応 )。\nなお drawText 経路は 1 コードポイントずつの cell-stepping で**シェイピングは行いません**\n( BiDi / 複雑スクリプトのシェイピングが必要な場合は\n[Layer.drawShapedText](Layer.md#drawshapedtext) を用います )。\n\nそのビルドに搭載されていない番号 ( 例: SDL / 汎用ビルドで 1 ) を設定した場合は\nFreeType ( 0 ) へフォールバックし、読み戻すとフォールバック後の実効値が返ります。\nこのため「設定して読み戻し、値が一致しない = そのラスタライザは未搭載」で検出\nできます。\n\nFreeType / glyphware を指定した場合、横書きにのみ対応しています。その他は未対応です。\n\nこのプロパティはスタティックです。Font.rasterizer を用いて値を設定してください。"
+      },
+      "tr": {
+        "summary": "Text rendering method",
+        "description": "The rasterizer (text rendering method) used by [Layer.drawText](Layer.md#drawtext).\nThis property can also be set.\n\nThe value is an integer index, and the numbering is **the same in all builds**:\n\n`**0**` : FreeType rasterizer (included in all builds; the default for SDL / generic builds)\n\n`**1**` : GDI rasterizer (WINVER only; the default for WINVER)\n\n`**2**` : glyphware (the unified font engine; FreeType + HarfBuzz). This does not change the default;\nonly when selected does drawText generate glyphs through glyphware (outline rendering rather than embedded bitmaps,\nwith color emoji support).\nNote that the drawText path steps one code point per cell and **does not perform shaping**\n(if you need BiDi or complex script shaping, use\n[Layer.drawShapedText](Layer.md#drawshapedtext)).\n\nIf you set a number not included in the build (e.g. 1 in an SDL / generic build),\nit falls back to FreeType (0), and reading the property back returns the effective value after fallback.\nSo you can detect support by setting the value and reading it back: if it does not match, that rasterizer is not included.\n\nWith FreeType / glyphware, only horizontal text is supported. Other directions are not supported.\n\nThis property is static. Set it via Font.rasterizer."
+      }
+    },
+    "Font.emojiMode": {
+      "hash": "80638d7c0443",
+      "ja": {
+        "summary": "絵文字の描画モード",
+        "description": "該当するコードポイントを絵文字フォントにフォールバックして描画するモードを\n表します。値を設定することもできます。\n\n`**-1** ` : グローバル既定 ( `Font.defaultEmojiMode` ) に従う ( 既定 )\n\n`** 0** ` : 絵文字フォントを使わない ( 元フォントのみ )\n\n`** 1** ` : モノクロ絵文字フォントで描画する\n\n`** 2** ` : カラー絵文字フォントで描画する\n\nこの機能は FreeType ラスタライザ ( `rasterizer` = 0 ) 使用時のみ有効です。\nGDI ラスタライザ ( WINVER 既定 ) では効果がありません。\n\n絵文字フォントは実行ファイルに標準で埋め込まれています ( モノクロ = Noto Emoji、\nカラー = Noto Color Emoji )。`emojiFaceName` / `colorEmojiFaceName` と `addFont`\nで任意の絵文字フォントに差し替えることもできます。\n\n注: ★ や ❤ など元フォントにも字形があるコードポイントは、元フォント側が優先され\nモノクロ表示になる場合があります。\n\nこれを文字単位で明示指定したい場合は、テキスト中で対象文字の直後に異体字\nセレクタを付けます。**VS16** ( U+FE0F ) を付けるとその 1 文字だけ絵文字フォントを\n優先し、**VS15** ( U+FE0E ) を付けると元フォント ( テキスト表示 ) を強制します。\n( 例: \"❤\"+U+FE0F でカラー、\"❤\"+U+FE0E でモノクロ )。セレクタ無しでの自動判定\n( Emoji_Presentation 既定 ) は行いません ( 高度な多言語処理は対象外 )。"
+      },
+      "tr": {
+        "summary": "Emoji drawing mode",
+        "description": "The mode for drawing applicable code points by falling back to an emoji font.\nThis property can also be set.\n\n`**-1** ` : Follow the global default ( `Font.defaultEmojiMode` ) (default)\n\n`** 0** ` : Do not use emoji fonts (original font only)\n\n`** 1** ` : Draw with a monochrome emoji font\n\n`** 2** ` : Draw with a color emoji font\n\nThis feature is effective only with the FreeType rasterizer ( `rasterizer` = 0 ).\nIt has no effect with the GDI rasterizer (the WINVER default).\n\nEmoji fonts are embedded in the executable by default (monochrome = Noto Emoji,\ncolor = Noto Color Emoji). You can replace them with any emoji font using `emojiFaceName` / `colorEmojiFaceName` and `addFont`.\n\nNote: code points such as ★ and ❤ that also have glyphs in the original font may be drawn from the original font\nand appear monochrome.\n\nTo control this per character, append a variation selector right after the character in the text.\nAppending **VS16** (U+FE0F) makes that one character prefer the emoji font,\nand appending **VS15** (U+FE0E) forces the original font (text presentation).\n(e.g. \"❤\"+U+FE0F for color, \"❤\"+U+FE0E for monochrome). There is no automatic selection without a selector\n(Emoji_Presentation default) (advanced multilingual processing is out of scope)."
+      }
+    },
+    "Font.weight": {
+      "hash": "8ea334b9e655",
+      "ja": {
+        "summary": "フォントウェイト ( バリアブルフォント )",
+        "description": "フォントのウェイトを表します。値を設定することもできます。100〜900 の数値、\nまたは void ( 未指定 = フォント既定 ) を指定します。\n\nバリアブルフォントで `wght` 軸を持つ face に対して可変軸として効きます\n( [variations](#variations) に `wght` を明示した場合はそちらが優先 )。\n\n効くのは glyphware 経路 — [Layer.drawShapedText](Layer.md#drawshapedtext) 系\n( 常時 ) と、[rasterizer](#rasterizer) = 2 のときの [Layer.drawText](Layer.md#drawtext)\n— のみです。旧 FreeType / GDI ラスタライザでは無視されます ( 起動後 1 回警告 )。"
+      },
+      "tr": {
+        "summary": "Font weight (variable fonts)",
+        "description": "The font weight. This property can also be set. Specify a number from 100 to 900,\nor void (unspecified = the font's default).\n\nIt acts as a variable axis on variable font faces that have a `wght` axis\n(if `wght` is given explicitly in [variations](#variations), that takes priority).\n\nIt is effective only on the glyphware path: [Layer.drawShapedText](Layer.md#drawshapedtext) and related methods\n(always), and [Layer.drawText](Layer.md#drawtext) when [rasterizer](#rasterizer) = 2.\nThe older FreeType / GDI rasterizers ignore it (with a warning once after startup)."
+      }
+    },
+    "Font.variations": {
+      "hash": "eba82f62d47f",
+      "ja": {
+        "summary": "可変軸指定 ( バリアブルフォント )",
+        "description": "バリアブルフォントの可変軸を `\"wght=700,wdth=87.5\"` 形式で指定します。\n値を設定することもできます。void または空文字列でクリアします。\n\n設定時に正規化されます: タグは小文字化、タグ昇順に並べ替え、同タグは後勝ち、\n値は量子化 ( `wght` は 1 刻み、その他の軸は 0.5 刻み — 軸アニメーションで\nキャッシュが際限なく増えないため )。不正な書式は例外になります。\n\n実際に適用されるのは「フォールバック連鎖の各 face が実際に持つ同名軸」だけです。\n利用できる軸は [getVarAxes](#getvaraxes) で調べられます。適用範囲 ( glyphware\n経路のみ ) は [weight](#weight) と同じです。"
+      },
+      "tr": {
+        "summary": "Variable axis settings (variable fonts)",
+        "description": "Specifies the variable axes of a variable font in the form `\"wght=700,wdth=87.5\"`.\nThis property can also be set. void or an empty string clears it.\n\nThe value is normalized when set: tags are lowercased and sorted in ascending order, the last of duplicate tags wins,\nand values are quantized (`wght` in steps of 1, other axes in steps of 0.5, so that axis animation does not\ngrow the cache without bound). An invalid format throws an exception.\n\nOnly axes of the same name that each face in the fallback chain actually has are applied.\nYou can find the available axes with [getVarAxes](#getvaraxes). The scope (glyphware\npath only) is the same as for [weight](#weight)."
+      }
+    },
+    "Font.defaultUseVarStyle": {
+      "hash": "a8e412fc060c",
+      "ja": {
+        "summary": "bold / italic の可変軸マッピング ( クラスプロパティ )",
+        "description": "真にすると、`bold` / `italic` 指定を可変軸で表現できる face ( `wght` /\n`slnt` / `ital` 軸を持つバリアブルフォント ) では、合成ボールド / 合成\nイタリックの代わりに軸 ( wght=700 / slnt=-10 / ital=1 ) を使い、二重適用を\n防ぐため合成スタイルを無効化します。既定は偽 ( 既存の見た目を変えないため )。\n\n軸の有無はフォールバック連鎖の先頭 ( primary ) face で判定されます。\nglyphware 経路でのみ効きます。"
+      },
+      "tr": {
+        "summary": "Variable axis mapping for bold / italic (class property)",
+        "description": "When true, for faces that can express `bold` / `italic` with variable axes (variable fonts with `wght` /\n`slnt` / `ital` axes), the axes (wght=700 / slnt=-10 / ital=1) are used instead of synthetic bold / synthetic\nitalic, and the synthetic styles are disabled to avoid applying both. The default is false (so as not to change the existing appearance).\n\nWhether the axes exist is determined from the first (primary) face in the fallback chain.\nEffective only on the glyphware path."
+      }
+    },
+    "Font.defaultEmojiMode": {
+      "hash": "990b3e3e484f",
+      "ja": {
+        "summary": "絵文字描画モードのグローバル既定",
+        "description": "`emojiMode` が -1 のフォントに適用される既定の絵文字描画モードを取得 / 設定します。\n値は `emojiMode` と同じ ( 0 = 使わない / 1 = モノクロ / 2 = カラー )。\nこのプロパティはスタティックです。"
+      },
+      "tr": {
+        "summary": "Global default emoji drawing mode",
+        "description": "Gets or sets the default emoji drawing mode applied to fonts whose `emojiMode` is -1.\nThe values are the same as for `emojiMode` (0 = not used / 1 = monochrome / 2 = color).\nThis property is static."
+      }
+    },
+    "Font.emojiFaceName": {
+      "hash": "91c5cada0f28",
+      "ja": {
+        "summary": "モノクロ絵文字フォールバックに使う face 名",
+        "description": "`emojiMode` = 1 ( モノクロ ) のときに使用する絵文字フォントの face 名を\n取得 / 設定します。既定は埋め込みの Noto Emoji ( \"Noto Emoji Regular\" )。\n`addFont` で登録した任意フォントの face 名を指定できます。\nこのプロパティはスタティックです。"
+      },
+      "tr": {
+        "summary": "Face name used for monochrome emoji fallback",
+        "description": "Gets or sets the face name of the emoji font used when `emojiMode` = 1 (monochrome).\nThe default is the embedded Noto Emoji (\"Noto Emoji Regular\").\nYou can specify the face name of any font registered with `addFont`.\nThis property is static."
+      }
+    },
+    "Font.colorEmojiFaceName": {
+      "hash": "d7373f71161b",
+      "ja": {
+        "summary": "カラー絵文字フォールバックに使う face 名",
+        "description": "`emojiMode` = 2 ( カラー ) のときに使用する絵文字フォントの face 名を\n取得 / 設定します。既定は埋め込みの Noto Color Emoji ( \"Noto Color Emoji Regular\" )。\nカラー絵文字は COLRv0 / CBDT / sbix 形式に対応します ( COLRv1 は非対応 )。\nこのプロパティはスタティックです。"
+      },
+      "tr": {
+        "summary": "Face name used for color emoji fallback",
+        "description": "Gets or sets the face name of the emoji font used when `emojiMode` = 2 (color).\nThe default is the embedded Noto Color Emoji (\"Noto Color Emoji Regular\").\nColor emoji in COLRv0 / CBDT / sbix formats are supported (COLRv1 is not).\nThis property is static."
+      }
+    },
+    "Font.defaultFaceName": {
+      "hash": "54e66bec7e29",
+      "ja": {
+        "summary": "既定フォントの face 名",
+        "description": "フォント未指定時に使用される既定フォントの face 名を取得 / 設定します。\nクラス静的プロパティとして全レイヤから共有されます。"
+      },
+      "tr": {
+        "summary": "Default font face name",
+        "description": "Gets or sets the face name of the default font used when no font is specified.\nAs a static class property, it is shared by all layers."
+      }
+    },
+    "Font.faceIsFileName": {
+      "hash": "67a60762e889",
+      "ja": {
+        "summary": "face 名をファイル名として扱うかどうか",
+        "description": "真にすると `face` プロパティに指定した名前をフォントファイル名として\n開きます ( FreeType 使用時のみ有効 )。\n\n注: このフラグを真にしたレイヤで IME を有効化した場合、IME の入力欄では\n`DEFAULT_GUI_FONT` が使用されます。"
+      },
+      "tr": {
+        "summary": "Whether to treat the face name as a file name",
+        "description": "When true, the name given in the `face` property is opened as a font file name\n(effective only with FreeType).\n\nNote: if you enable the IME on a layer with this flag set to true, the IME input field uses\n`DEFAULT_GUI_FONT`."
+      }
+    },
+    "Font.addFont": {
+      "hash": "5cd29e8a8408",
+      "ja": {
+        "summary": "フォントシステムにフォントを追加する。",
+        "returns": "ファイルに入っているフェイス名を配列で返す。",
+        "params": {
+          "storage": "フォントファイル名"
+        }
+      },
+      "tr": {
+        "summary": "Adds a font to the font system.",
+        "returns": "Array of the face names contained in the file.",
+        "params": {
+          "storage": "Font file name"
+        }
+      }
+    },
+    "Font.registerFontFile": {
+      "hash": "cf198e8a452b",
+      "ja": {
+        "summary": "フォントを登録する (遅延登録対応版)。",
+        "description": "`family` を省略すると `addFont` と同様にフォントファイルを即座に読み込み、\n収録フェイス名の配列を返します。\n\n`family` を指定すると **ファイルを開かずに名前だけを登録**します\n( `fonts.json` の 1 エントリ相当の遅延登録 )。実ファイルは\nその名前が初めて使用されたときに読み込まれます。大きなフォントを\n起動時間に影響させずに登録したい場合に使用します。",
+        "returns": "family 省略時は収録フェイス名の配列、指定時は void",
+        "params": {
+          "storage": "フォントファイル名",
+          "family": "登録するフォント名 ( 省略時は即時ロード )"
+        }
+      },
+      "tr": {
+        "summary": "Registers a font (supports deferred registration).",
+        "description": "If `family` is omitted, the font file is loaded immediately, like `addFont`,\nand an array of the contained face names is returned.\n\nIf `family` is given, **only the name is registered, without opening the file**\n(deferred registration, equivalent to one entry in `fonts.json`). The actual file\nis loaded when the name is first used. Use this to register large fonts\nwithout affecting startup time.",
+        "returns": "Array of contained face names if family is omitted; void if it is given",
+        "params": {
+          "storage": "Font file name",
+          "family": "Font name to register (if omitted, the font is loaded immediately)"
+        }
+      }
+    },
+    "Font.queryFonts": {
+      "hash": "7a40477fac97",
+      "ja": {
+        "summary": "登録済みフォントをリッチ検索する。",
+        "description": "`fonts.json` 宣言・`addFont`/`registerFontFile` による実行時登録の\nフォントから、条件に合う face をランク順 ( 一致度の高い順 ) で返します。\n検索条件はすべて省略可能で、省略した項目は制約しません。\n引数自体を省略すると全登録フォントを返します。\n\n+ `name` : フォント名 ( family / 別名 / fullName / PostScript 名 )\n+ `weight` : ウェイト ( 100〜900、400=Regular / 700=Bold )\n+ `slant` : 0=normal, 1=italic, 2=oblique\n+ `italic` : 真ならイタリック ( slant の簡易指定 )\n+ `script` : ISO-15924 スクリプトタグ ( 例 \"Jpan\" \"Hans\" \"Zsye\" )\n+ `containsText` : この文字列の全コードポイントを収録していること\n+ `monospace` : 等幅かどうか\n+ `color` : カラー絵文字フォントかどうか\n\n返る配列の各要素は `getFontInfo` と同じ形式の辞書です。",
+        "returns": "該当フォント情報 ( 辞書 ) の配列",
+        "params": {
+          "query": "検索条件の辞書 ( 省略可 )"
+        }
+      },
+      "tr": {
+        "summary": "Searches registered fonts with rich criteria.",
+        "description": "From fonts declared in `fonts.json` and fonts registered at runtime with `addFont`/`registerFontFile`,\nreturns the faces matching the criteria in ranked order (best match first).\nAll criteria are optional; omitted items impose no constraint.\nIf the argument itself is omitted, all registered fonts are returned.\n\n+ `name` : font name (family / alias / fullName / PostScript name)\n+ `weight` : weight (100 to 900; 400 = Regular / 700 = Bold)\n+ `slant` : 0 = normal, 1 = italic, 2 = oblique\n+ `italic` : true for italic (shorthand for slant)\n+ `script` : ISO 15924 script tag (e.g. \"Jpan\" \"Hans\" \"Zsye\")\n+ `containsText` : must contain all code points of this string\n+ `monospace` : whether it is monospaced\n+ `color` : whether it is a color emoji font\n\nEach element of the returned array is a dictionary in the same form as `getFontInfo` returns.",
+        "returns": "Array of matching font information (dictionaries)",
+        "params": {
+          "query": "Dictionary of search criteria (optional)"
+        }
+      }
+    },
+    "Font.getFontInfo": {
+      "hash": "9960d4075b40",
+      "ja": {
+        "summary": "フォントのメタデータを取得する。",
+        "description": "フォント名 ( 宣言名・SFNT 実名 ) またはストレージパスを解決し、\nSFNT メタデータの辞書を返します。解決できない場合は void を返します。\n\n辞書のメンバ:\n+ `key` : フォントキー ( ストレージパス等 )\n+ `faceIndex` : TTC 内の face 番号\n+ `family` / `subfamily` / `fullName` / `postScriptName` : 名前情報\n+ `weight` : 100〜900\n+ `slant` : 0=normal, 1=italic, 2=oblique\n+ `bold` / `color` / `monospace` / `scalable` : 属性 ( 0/1 )\n\nバリアブルフォントの場合は次も入ります ( 非 VF では省略 ):\n+ `axes` : 可変軸の配列 ( [getVarAxes](#getvaraxes) と同形式 )\n+ `namedInstances` : fvar named instance の配列\n`%[ name : \"SemiBold\", coords : %[ wght : 600, ... ] ]`\n\n( `queryFonts` は「フォントを開かず宣言値で判定する」性質を守るため、\n軸情報は返しません。軸は本メソッドか getVarAxes で取得してください )",
+        "returns": "メタデータ辞書 ( 解決できなければ void )",
+        "params": {
+          "nameOrPath": "フォント名またはストレージパス"
+        }
+      },
+      "tr": {
+        "summary": "Gets font metadata.",
+        "description": "Resolves a font name (declared name or actual SFNT name) or a storage path,\nand returns a dictionary of SFNT metadata. Returns void if it cannot be resolved.\n\nDictionary members:\n+ `key` : font key (storage path etc.)\n+ `faceIndex` : face number within a TTC\n+ `family` / `subfamily` / `fullName` / `postScriptName` : name information\n+ `weight` : 100 to 900\n+ `slant` : 0 = normal, 1 = italic, 2 = oblique\n+ `bold` / `color` / `monospace` / `scalable` : attributes (0/1)\n\nFor variable fonts the following are also included (omitted for non-variable fonts):\n+ `axes` : array of variable axes (same form as [getVarAxes](#getvaraxes))\n+ `namedInstances` : array of fvar named instances\n`%[ name : \"SemiBold\", coords : %[ wght : 600, ... ] ]`\n\n(`queryFonts` does not return axis information, to keep its property of judging by declared values without opening fonts.\nGet axes with this method or getVarAxes.)",
+        "returns": "Metadata dictionary (void if it cannot be resolved)",
+        "params": {
+          "nameOrPath": "Font name or storage path"
+        }
+      }
+    },
+    "Font.getVarAxes": {
+      "hash": "63cc822efa0a",
+      "ja": {
+        "summary": "バリアブルフォントの可変軸一覧を取得する。",
+        "description": "フォント名 ( 宣言名・SFNT 実名 ) またはストレージパスを解決し、fvar の\n可変軸を配列で返します。各要素は\n`%[ tag : \"wght\", name : \"Weight\", min : 300, default : 400, max : 700 ]`\nの辞書です。バリアブルフォントでなければ空配列、解決できない場合は void を\n返します。\n\n```tjs\nvar axes = Font.getVarAxes(\"MyFont\");\nfor (var i = 0; i < axes.count; i++)\nDebug.message(axes[i].tag + \": \" + axes[i].min + \"..\" + axes[i].max);\n```",
+        "returns": "可変軸の配列 ( 解決できなければ void )",
+        "params": {
+          "nameOrPath": "フォント名またはストレージパス"
+        }
+      },
+      "tr": {
+        "summary": "Gets the list of variable axes of a variable font.",
+        "description": "Resolves a font name (declared name or actual SFNT name) or a storage path, and returns the fvar\nvariable axes as an array. Each element is a dictionary like\n`%[ tag : \"wght\", name : \"Weight\", min : 300, default : 400, max : 700 ]`.\nReturns an empty array if the font is not a variable font, and void if it cannot be resolved.\n\n```tjs\nvar axes = Font.getVarAxes(\"MyFont\");\nfor (var i = 0; i < axes.count; i++)\nDebug.message(axes[i].tag + \": \" + axes[i].min + \"..\" + axes[i].max);\n```",
+        "returns": "Array of variable axes (void if it cannot be resolved)",
+        "params": {
+          "nameOrPath": "Font name or storage path"
+        }
+      }
+    },
+    "Font.setDefaultVariations": {
+      "hash": "03e317f89fc4",
+      "ja": {
+        "summary": "可変フォントの既定軸を登録する ( クラスメソッド )。",
+        "description": "軸が明示されていないときにフォント名単位で補われる既定の可変軸を登録します。\n`axes` は `\"wght=300,wdth=87.5\"` 形式です。void または空文字列で解除します。\n\n可変フォントを wght 未指定で参照した場合の既定は wght=400 相当\n( CSS の font-weight 既定と同じ規則。fvar の既定インスタンスが Regular で\nないフォントも無指定で Regular 相当に表示されます )。この登録はそれより\n強く、`#tag=val` サフィックス / [variations](#variations) /\n[weight](#weight) / fonts.json の宣言軸はさらに強く勝ちます。\n\n```tjs\nFont.setDefaultVariations(\"Noto Sans JP\", \"wght=350\");  // 無指定を少し細く\nFont.setDefaultVariations(\"Noto Sans JP\", void);        // 解除 (=400 に戻る)\n```",
+        "params": {
+          "nameOrPath": "フォント名またはストレージパス ( face 指定と同じ表記、サフィックス抜き )",
+          "axes": "既定軸 ( \"tag=val,...\" 形式 / void・空文字列で解除 )"
+        }
+      },
+      "tr": {
+        "summary": "Registers default axes for a variable font (class method).",
+        "description": "Registers default variable axes, per font name, that are filled in when no axes are specified explicitly.\n`axes` is in the form `\"wght=300,wdth=87.5\"`. void or an empty string removes the registration.\n\nWhen a variable font is referenced without wght, the default is equivalent to wght=400\n(the same rule as the CSS font-weight default; fonts whose default fvar instance is not Regular\nare also shown as Regular when nothing is specified). This registration takes precedence over that,\nand the `#tag=val` suffix / [variations](#variations) /\n[weight](#weight) / axes declared in fonts.json take precedence over this registration.\n\n```tjs\nFont.setDefaultVariations(\"Noto Sans JP\", \"wght=350\");  // 無指定を少し細く\nFont.setDefaultVariations(\"Noto Sans JP\", void);        // 解除 (=400 に戻る)\n```",
+        "params": {
+          "nameOrPath": "Font name or storage path (same notation as the face, without the suffix)",
+          "axes": "Default axes (\"tag=val,...\" form; void or an empty string removes the registration)"
+        }
+      }
+    },
+    "Font.getDefaultVariations": {
+      "hash": "15e88485ddd5",
+      "ja": {
+        "summary": "setDefaultVariations の現在の登録値を取得する ( クラスメソッド )。",
+        "returns": "登録されている既定軸文字列 ( 無ければ空文字列 )",
+        "params": {
+          "nameOrPath": "フォント名またはストレージパス"
+        }
+      },
+      "tr": {
+        "summary": "Gets the current value registered with setDefaultVariations (class method).",
+        "returns": "Registered default axes string (empty string if none)",
+        "params": {
+          "nameOrPath": "Font name or storage path"
+        }
+      }
+    },
+    "Font.Font": {
+      "hash": "943f3d66e075",
+      "ja": {
+        "summary": "コンストラクタ",
+        "description": "Layerメンバのfontは、引数にLayerを渡す特殊版。\n単体使用する場合は引数なしで生成する。"
+      },
+      "tr": {
+        "summary": "Constructor",
+        "description": "The font member of Layer is a special version created with a Layer as its argument.\nTo use a Font on its own, create it without arguments."
+      }
+    }
+  }
+}

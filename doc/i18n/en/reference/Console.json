@@ -1,0 +1,77 @@
+{
+  "class": "Console",
+  "entries": {
+    "windowEx:Console": {
+      "hash": "8bae552ef806",
+      "ja": {
+        "description": "Debug.console拡張\n\n※ 起動後１度は visible=true してウィンドウを生成しないと失敗する"
+      },
+      "tr": {
+        "description": "Debug.console extensions\n\nNote: these fail unless the console window has been created at least once after startup by setting visible=true."
+      }
+    },
+    "windowEx:Console.restoreMaximize": {
+      "hash": "bbe18b8c05c2",
+      "ja": {
+        "summary": "ウィンドウ最大化の復帰（最大化のまま終了すると次回サイズが狂う問題解決用）"
+      },
+      "tr": {
+        "summary": "Restores the window from the maximized state (works around the window size being wrong on the next launch if the program exits while maximized)"
+      }
+    },
+    "windowEx:Console.maximize": {
+      "hash": "fb87b3257eb5",
+      "ja": {
+        "summary": "ウィンドウを最大化"
+      },
+      "tr": {
+        "summary": "Maximizes the window"
+      }
+    },
+    "windowEx:Console.getRect": {
+      "hash": "3bde2155a8da",
+      "ja": {
+        "summary": "座標・サイズの取得"
+      },
+      "tr": {
+        "summary": "Gets the position and size"
+      }
+    },
+    "windowEx:Console.setPos": {
+      "hash": "ac64a3969515",
+      "ja": {
+        "summary": "座標・サイズの設定"
+      },
+      "tr": {
+        "summary": "Sets the position and size"
+      }
+    },
+    "windowEx:Console.getPlacement": {
+      "hash": "ef05f1f365d1",
+      "ja": {
+        "summary": "WindowPlacementの取得"
+      },
+      "tr": {
+        "summary": "Gets the WindowPlacement"
+      }
+    },
+    "windowEx:Console.setPlacement": {
+      "hash": "6af0dcafb6a5",
+      "ja": {
+        "summary": "WindowPlacementの設定"
+      },
+      "tr": {
+        "summary": "Sets the WindowPlacement"
+      }
+    },
+    "windowEx:Console.bringAfter": {
+      "hash": "d98d9f41a78f",
+      "ja": {
+        "summary": "優先順位の変更"
+      },
+      "tr": {
+        "summary": "Changes the z-order"
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "class": "Threepp",
+  "entries": {
+    "krkrthreepp:Threepp": {
+      "hash": "c7272b146a43",
+      "ja": {
+        "summary": "threepp プラグイン 擬似コードによるマニュアル",
+        "description": "threepp は three.js の C++ ポートです。\n3D グラフィックスのレンダリング機能を提供します。"
+      },
+      "tr": {
+        "summary": "Pseudo-code manual for the threepp plugin",
+        "description": "threepp is a C++ port of three.js.\nIt provides 3D graphics rendering."
+      }
+    },
+    "krkrthreepp:Threepp.Side_Front": {
+      "hash": "1b7c3a1f1de2",
+      "ja": {
+        "summary": "表面のみ描画"
+      },
+      "tr": {
+        "summary": "Render front faces only"
+      }
+    },
+    "krkrthreepp:Threepp.Side_Back": {
+      "hash": "c8ecdc540355",
+      "ja": {
+        "summary": "裏面のみ描画"
+      },
+      "tr": {
+        "summary": "Render back faces only"
+      }
+    },
+    "krkrthreepp:Threepp.Side_Double": {
+      "hash": "443cb59bf1a4",
+      "ja": {
+        "summary": "両面描画"
+      },
+      "tr": {
+        "summary": "Render both faces"
+      }
+    },
+    "krkrthreepp:Threepp.Loop_Once": {
+      "hash": "7435875ccd9a",
+      "ja": {
+        "summary": "1回で停止"
+      },
+      "tr": {
+        "summary": "Stop after one pass"
+      }
+    },
+    "krkrthreepp:Threepp.Loop_Repeat": {
+      "hash": "13152bbeb00a",
+      "ja": {
+        "summary": "ループ (ModelAnimator.play の既定)"
+      },
+      "tr": {
+        "summary": "Loop (the default of ModelAnimator.play)"
+      }
+    },
+    "krkrthreepp:Threepp.Loop_PingPong": {
+      "hash": "ab4f075439e5",
+      "ja": {
+        "summary": "往復"
+      },
+      "tr": {
+        "summary": "Back and forth"
+      }
+    }
+  }
+}

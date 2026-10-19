@@ -1,0 +1,157 @@
+{
+  "class": "Threepp.Line3",
+  "entries": {
+    "krkrthreepp:Threepp.Line3": {
+      "hash": "cfebc684f23c",
+      "ja": {
+        "summary": "3D 線分クラス"
+      },
+      "tr": {
+        "summary": "3D line segment class"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.Line3": {
+      "hash": "a14d7272b55b",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "start": "始点 (Vector3)",
+          "end": "終点 (Vector3)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "start": "Start point (Vector3).",
+          "end": "End point (Vector3)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Line3.start": {
+      "hash": "c793333c3c1d",
+      "ja": {
+        "summary": "始点（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Start point (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.end": {
+      "hash": "7e184ac2b862",
+      "ja": {
+        "summary": "終点（読み取り専用）"
+      },
+      "tr": {
+        "summary": "End point (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.set": {
+      "hash": "6a1d88aceb4a",
+      "ja": {
+        "summary": "値を設定"
+      },
+      "tr": {
+        "summary": "Sets the values"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.clone": {
+      "hash": "85fb5d83b57e",
+      "ja": {
+        "summary": "クローン"
+      },
+      "tr": {
+        "summary": "Clones the line"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another line"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.getCenter": {
+      "hash": "7dd560d21ba3",
+      "ja": {
+        "summary": "中心を取得"
+      },
+      "tr": {
+        "summary": "Gets the center"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.delta": {
+      "hash": "86f85af0871b",
+      "ja": {
+        "summary": "方向ベクトルを取得"
+      },
+      "tr": {
+        "summary": "Gets the direction vector"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.distanceSq": {
+      "hash": "bcca19f55d78",
+      "ja": {
+        "summary": "長さの二乗"
+      },
+      "tr": {
+        "summary": "Squared length"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.distance": {
+      "hash": "ce7ce2bb7e1f",
+      "ja": {
+        "summary": "長さ"
+      },
+      "tr": {
+        "summary": "Length"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.at": {
+      "hash": "423548a6132d",
+      "ja": {
+        "summary": "パラメータ位置の点を取得"
+      },
+      "tr": {
+        "summary": "Gets the point at a parameter position"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.closestPointToPoint": {
+      "hash": "e6b44079e861",
+      "ja": {
+        "summary": "最近点を取得"
+      },
+      "tr": {
+        "summary": "Gets the closest point"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.closestPointToPointParameter": {
+      "hash": "fb20baee4beb",
+      "ja": {
+        "summary": "最近点のパラメータ"
+      },
+      "tr": {
+        "summary": "Parameter of the closest point"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.applyMatrix4": {
+      "hash": "74a4de2a266d",
+      "ja": {
+        "summary": "行列を適用"
+      },
+      "tr": {
+        "summary": "Applies a matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Line3.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

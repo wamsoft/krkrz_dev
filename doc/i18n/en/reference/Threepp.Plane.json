@@ -1,0 +1,148 @@
+{
+  "class": "Threepp.Plane",
+  "entries": {
+    "krkrthreepp:Threepp.Plane": {
+      "hash": "a64ae17091f1",
+      "ja": {
+        "summary": "平面クラス"
+      },
+      "tr": {
+        "summary": "Plane class"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.Plane": {
+      "hash": "841ff9d040f1",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "normal": "法線 (Vector3)",
+          "constant": "定数"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "normal": "Normal (Vector3).",
+          "constant": "Constant."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Plane.set": {
+      "hash": "6a1d88aceb4a",
+      "ja": {
+        "summary": "値を設定"
+      },
+      "tr": {
+        "summary": "Sets the values"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.setComponents": {
+      "hash": "5bc836780ea5",
+      "ja": {
+        "summary": "成分で設定"
+      },
+      "tr": {
+        "summary": "Sets the plane from individual components"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.setFromNormalAndCoplanarPoint": {
+      "hash": "6116068cbf1b",
+      "ja": {
+        "summary": "法線と点から設定"
+      },
+      "tr": {
+        "summary": "Sets the plane from a normal and a point"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.clone": {
+      "hash": "85fb5d83b57e",
+      "ja": {
+        "summary": "クローン"
+      },
+      "tr": {
+        "summary": "Clones the plane"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another plane"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.normalize": {
+      "hash": "a1166a207a2c",
+      "ja": {
+        "summary": "正規化"
+      },
+      "tr": {
+        "summary": "Normalizes the plane"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.negate": {
+      "hash": "c2480516b225",
+      "ja": {
+        "summary": "反転"
+      },
+      "tr": {
+        "summary": "Negates the plane"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.distanceToPoint": {
+      "hash": "f70c67301822",
+      "ja": {
+        "summary": "点との距離"
+      },
+      "tr": {
+        "summary": "Distance to a point"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.distanceToSphere": {
+      "hash": "ff2be7e831fd",
+      "ja": {
+        "summary": "球との距離"
+      },
+      "tr": {
+        "summary": "Distance to a sphere"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.coplanarPoint": {
+      "hash": "f7e5c5e0a59b",
+      "ja": {
+        "summary": "平面上の点を取得"
+      },
+      "tr": {
+        "summary": "Gets a point on the plane"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.applyMatrix4": {
+      "hash": "74a4de2a266d",
+      "ja": {
+        "summary": "行列を適用"
+      },
+      "tr": {
+        "summary": "Applies a matrix"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.translate": {
+      "hash": "89ec109eb2ec",
+      "ja": {
+        "summary": "平行移動"
+      },
+      "tr": {
+        "summary": "Translates the plane"
+      }
+    },
+    "krkrthreepp:Threepp.Plane.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

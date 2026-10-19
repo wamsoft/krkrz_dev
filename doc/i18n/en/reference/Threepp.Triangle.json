@@ -1,0 +1,168 @@
+{
+  "class": "Threepp.Triangle",
+  "entries": {
+    "krkrthreepp:Threepp.Triangle": {
+      "hash": "a92c6b79c0d6",
+      "ja": {
+        "summary": "三角形クラス"
+      },
+      "tr": {
+        "summary": "Triangle class"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.Triangle": {
+      "hash": "e537d85b3ea5",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "a": "頂点A (Vector3)",
+          "b": "頂点B (Vector3)",
+          "c": "頂点C (Vector3)"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "a": "Vertex A (Vector3).",
+          "b": "Vertex B (Vector3).",
+          "c": "Vertex C (Vector3)."
+        }
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.a": {
+      "hash": "8d41a2c1254c",
+      "ja": {
+        "summary": "頂点A（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Vertex A (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.b": {
+      "hash": "6ff252b8a9fe",
+      "ja": {
+        "summary": "頂点B（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Vertex B (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.c": {
+      "hash": "e2676f602def",
+      "ja": {
+        "summary": "頂点C（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Vertex C (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.set": {
+      "hash": "6a1d88aceb4a",
+      "ja": {
+        "summary": "値を設定"
+      },
+      "tr": {
+        "summary": "Sets the values"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.clone": {
+      "hash": "85fb5d83b57e",
+      "ja": {
+        "summary": "クローン"
+      },
+      "tr": {
+        "summary": "Clones the triangle"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.copy": {
+      "hash": "516f384aeae7",
+      "ja": {
+        "summary": "コピー"
+      },
+      "tr": {
+        "summary": "Copies another triangle"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.getArea": {
+      "hash": "a92a5e23634d",
+      "ja": {
+        "summary": "面積"
+      },
+      "tr": {
+        "summary": "Area"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.getMidpoint": {
+      "hash": "1b49f8d63863",
+      "ja": {
+        "summary": "重心"
+      },
+      "tr": {
+        "summary": "Centroid"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.getNormal": {
+      "hash": "3775e1964e65",
+      "ja": {
+        "summary": "法線"
+      },
+      "tr": {
+        "summary": "Normal"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.getPlane": {
+      "hash": "65e0024dd4f4",
+      "ja": {
+        "summary": "三角形を含む平面"
+      },
+      "tr": {
+        "summary": "Plane containing the triangle"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.getBarycoord": {
+      "hash": "7e99321ae040",
+      "ja": {
+        "summary": "重心座標を取得"
+      },
+      "tr": {
+        "summary": "Gets barycentric coordinates"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.containsPoint": {
+      "hash": "5f9389247350",
+      "ja": {
+        "summary": "点を含むか"
+      },
+      "tr": {
+        "summary": "Whether the triangle contains a point"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.isFrontFacing": {
+      "hash": "a8b61b03c74d",
+      "ja": {
+        "summary": "前面を向いているか"
+      },
+      "tr": {
+        "summary": "Whether the triangle is front-facing"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.closestPointToPoint": {
+      "hash": "b5d1932cd39f",
+      "ja": {
+        "summary": "最近点"
+      },
+      "tr": {
+        "summary": "Closest point"
+      }
+    },
+    "krkrthreepp:Threepp.Triangle.equals": {
+      "hash": "471e7b3a033f",
+      "ja": {
+        "summary": "等価判定"
+      },
+      "tr": {
+        "summary": "Equality test"
+      }
+    }
+  }
+}

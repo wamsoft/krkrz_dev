@@ -25,4 +25,4 @@ if (demolibPath === void) { System.inform("demolib が見つかりません"); S
 Scripts.execStorage(demolibPath + "demo_common.tjs");
 Scripts.execStorage("scene.tjs");
 
-runDemoShell([new VectorScene()], "vector_demo — ベクタ描画 + 画像効果");
+runDemoShell([new VectorScene()], I18n.entry("vector_demo.shell"));

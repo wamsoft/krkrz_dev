@@ -1,0 +1,127 @@
+{
+  "class": "CSVParser",
+  "entries": {
+    "csvParser:CSVParser.CSVParser": {
+      "hash": "a6528bfef5bd",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "target": "イベントを転送するターゲット。未指定時は自分に送る",
+          "separator": "区切り文字。デフォルトは \",\"",
+          "newline": "中途で区切られた場合のデータでの改行文字。デフォルトは \"\\r\\n\""
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "target": "Target to forward events to. If omitted, events are sent to this object.",
+          "separator": "Separator character. Defaults to \",\".",
+          "newline": "Newline character used in data when a field spans lines. Defaults to \"\\r\\n\"."
+        }
+      }
+    },
+    "csvParser:CSVParser.init": {
+      "hash": "30c4e7362791",
+      "ja": {
+        "summary": "処理対象テキストの初期化",
+        "params": {
+          "text": "テキスト"
+        }
+      },
+      "tr": {
+        "summary": "Initializes the text to process",
+        "params": {
+          "text": "Text."
+        }
+      }
+    },
+    "csvParser:CSVParser.initStorage": {
+      "hash": "fa77e23fce92",
+      "ja": {
+        "summary": "処理対象テキストの初期化",
+        "params": {
+          "filename": "テキストのファイル名",
+          "readmode": "読み込みモード\ntypeof readmode == \"String\"  : Array.load相当のテキスト読み込み処理として動作\ntypeof readmode == \"Integer\" : trueの場合はUTF-8読み込みモードとして動作，それ以外はCP_ACPテキスト読み込み\n※プラグインコンパイル時に /D:CSVPARSER_DEFAULT_TEXTSTREAM=1 とすると，readmode='' の省略時デフォルトになります"
+        }
+      },
+      "tr": {
+        "summary": "Initializes the text to process",
+        "params": {
+          "filename": "File name of the text.",
+          "readmode": "Read mode.\ntypeof readmode == \"String\"  : reads the text the same way as Array.load\ntypeof readmode == \"Integer\" : true reads as UTF-8; otherwise reads as CP_ACP text\nNote: if the plugin is compiled with /D:CSVPARSER_DEFAULT_TEXTSTREAM=1, readmode='' becomes the default when omitted."
+        }
+      }
+    },
+    "csvParser:CSVParser.getNextLine": {
+      "hash": "838d1dc351c6",
+      "ja": {
+        "summary": "次の行の情報を配列として取得する",
+        "returns": "カラムデータ(Array)"
+      },
+      "tr": {
+        "summary": "Gets the next line as an array",
+        "returns": "Column data (Array)."
+      }
+    },
+    "csvParser:CSVParser.currentLineNumber": {
+      "hash": "18b225be68b6",
+      "ja": {
+        "summary": "現在の処理済み行番号を取得する"
+      },
+      "tr": {
+        "summary": "Gets the number of the line processed so far"
+      }
+    },
+    "csvParser:CSVParser.parse": {
+      "hash": "8ce37d063d27",
+      "ja": {
+        "summary": "テキストに対するパース処理を実行する。",
+        "description": "行ごとに doLine() イベントを呼び出す。",
+        "params": {
+          "text": "テキスト。省略時は現在設定中のテキストに対して処理を行なう"
+        }
+      },
+      "tr": {
+        "summary": "Parses text",
+        "description": "Calls the doLine() event for each line.",
+        "params": {
+          "text": "Text. If omitted, the currently set text is parsed."
+        }
+      }
+    },
+    "csvParser:CSVParser.parseStorage": {
+      "hash": "701b4ee2e924",
+      "ja": {
+        "summary": "テキストに対するパース処理を実行する。",
+        "params": {
+          "filename": "テキストのファイル名",
+          "readmode": "読み込みモード（詳細説明はinitStorageの項目を参照）"
+        }
+      },
+      "tr": {
+        "summary": "Parses text",
+        "params": {
+          "filename": "File name of the text.",
+          "readmode": "Read mode (see initStorage for details)."
+        }
+      }
+    },
+    "csvParser:CSVParser.doLine": {
+      "hash": "e98f1663c76d",
+      "ja": {
+        "summary": "parse/parseStorage で呼び出されるイベント",
+        "params": {
+          "columns": "カラムデータ(Array)",
+          "lineNo": "論理行番号(1～)"
+        }
+      },
+      "tr": {
+        "summary": "Event called from parse/parseStorage",
+        "params": {
+          "columns": "Column data (Array).",
+          "lineNo": "Logical line number (starting at 1)."
+        }
+      }
+    }
+  }
+}

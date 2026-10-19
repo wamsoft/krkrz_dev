@@ -1,0 +1,98 @@
+{
+  "class": "RichText.Layout",
+  "entries": {
+    "krkr_richtext:RichText.Layout": {
+      "hash": "677bf92269e9",
+      "ja": {
+        "summary": "1行テキストレイアウトクラス",
+        "description": "1行テキストのレイアウト計算結果を保持します。\nレイアウトと描画を分離することで、計測結果の再利用や\n事前レイアウト済みテキストの描画が可能です。\n\n使用例:\nvar tl = new RichText.Layout();\ntl.layout(\"Hello World\", style);\nDebug.message(\"幅: \" + tl.width + \", 高さ: \" + tl.height);\nlayer.drawTextLayout(tl, 10, 50, appearance);"
+      },
+      "tr": {
+        "summary": "Single-line text layout class",
+        "description": "Holds the layout result for a single line of text.\nSeparating layout from drawing lets you reuse measurements\nand draw pre-laid-out text.\n\nExample:\nvar tl = new RichText.Layout();\ntl.layout(\"Hello World\", style);\nDebug.message(\"幅: \" + tl.width + \", 高さ: \" + tl.height);\nlayer.drawTextLayout(tl, 10, 50, appearance);"
+      }
+    },
+    "krkr_richtext:RichText.Layout.Layout": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkr_richtext:RichText.Layout.layout": {
+      "hash": "e827fa506234",
+      "ja": {
+        "summary": "テキストのレイアウト（計測）を実行",
+        "params": {
+          "text": "テキスト",
+          "style": "RichText.Style オブジェクト"
+        }
+      },
+      "tr": {
+        "summary": "Lays out (measures) the text",
+        "params": {
+          "text": "Text",
+          "style": "RichText.Style object"
+        }
+      }
+    },
+    "krkr_richtext:RichText.Layout.clone": {
+      "hash": "ea04a8b4e388",
+      "ja": {
+        "summary": "複製",
+        "returns": "複製された Layout オブジェクト"
+      },
+      "tr": {
+        "summary": "Duplicates the layout",
+        "returns": "The duplicated Layout object"
+      }
+    },
+    "krkr_richtext:RichText.Layout.width": {
+      "hash": "a6f0a34ff6d4",
+      "ja": {
+        "summary": "テキスト幅（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Text width (read-only)"
+      }
+    },
+    "krkr_richtext:RichText.Layout.height": {
+      "hash": "67a4bc95a891",
+      "ja": {
+        "summary": "テキスト高さ（ascent + descent）（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Text height (ascent + descent) (read-only)"
+      }
+    },
+    "krkr_richtext:RichText.Layout.ascent": {
+      "hash": "31053e733cdf",
+      "ja": {
+        "summary": "アセント（ベースラインから上端まで、負の値）（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Ascent (from the baseline to the top, negative) (read-only)"
+      }
+    },
+    "krkr_richtext:RichText.Layout.descent": {
+      "hash": "5eeadf6d240a",
+      "ja": {
+        "summary": "ディセント（ベースラインから下端まで、正の値）（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Descent (from the baseline to the bottom, positive) (read-only)"
+      }
+    },
+    "krkr_richtext:RichText.Layout.charCount": {
+      "hash": "d080602e2cef",
+      "ja": {
+        "summary": "文字数（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Number of characters (read-only)"
+      }
+    }
+  }
+}

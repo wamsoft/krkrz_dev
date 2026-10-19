@@ -1,0 +1,226 @@
+{
+  "class": "AlphaMovie",
+  "entries": {
+    "AlphaMovie:AlphaMovie": {
+      "hash": "2e9df5516c30",
+      "ja": {
+        "summary": "擬似コードによるマニュアル",
+        "description": "吉里吉里Z AlphaMovie プラグイン。\n\nアルファチャンネル付き動画コンテナ .amv (Alpha Movie) を再生し、各フレームを\n対象 Layer のメイン画像バッファへ直接（アルファ込みで）上書き描画します。\n\n使用例:\nvar mov = new AlphaMovie();\nmov.open(\"video/explosion.amv\");\nmov.setPosition(100, 80);\nmov.loop = true;\n// 毎フレーム:\nvar no = mov.showNextImage(layer);\n\nshowNextImage は呼ぶ度に 1 フレーム進め、描画したフレーム番号を返します。\n末尾で loop=true なら先頭へ巻き戻します。loop=false かつ末尾なら末尾番号を\n返し続けます（setNextMovieFile 予約があれば次映像へ自動遷移）。\n各フレームはフレーム固有の矩形（left,top,width,height）だけを上書きするため、\n描かれない領域は前フレームの内容が Layer 上に保持されます。"
+      },
+      "tr": {
+        "summary": "Manual written as pseudo-code",
+        "description": "Kirikiri Z AlphaMovie plugin.\n\nPlays the .amv (Alpha Movie) container, a movie format with an alpha channel, and draws each frame\ndirectly over the main image buffer of the target Layer (including alpha).\n\nExample:\nvar mov = new AlphaMovie();\nmov.open(\"video/explosion.amv\");\nmov.setPosition(100, 80);\nmov.loop = true;\n// every frame:\nvar no = mov.showNextImage(layer);\n\nEach call to showNextImage advances one frame and returns the number of the frame it drew.\nAt the end, it rewinds to the beginning if loop=true. If loop=false, it keeps returning the last\nframe number (or moves on to the next movie automatically if one was queued with setNextMovieFile).\nEach frame overwrites only its own rectangle (left, top, width, height),\nso areas that are not drawn keep the previous frame's content on the Layer."
+      }
+    },
+    "AlphaMovie:AlphaMovie.AlphaMovie": {
+      "hash": "0cff4494fcc6",
+      "ja": {
+        "summary": "コンストラクタ（引数なし）"
+      },
+      "tr": {
+        "summary": "Constructor (no arguments)"
+      }
+    },
+    "AlphaMovie:AlphaMovie.open": {
+      "hash": "4f68a2a87ab0",
+      "ja": {
+        "summary": "amv を開く",
+        "params": {
+          "filename": "対象ストレージ（.amv）"
+        }
+      },
+      "tr": {
+        "summary": "Opens an amv file",
+        "params": {
+          "filename": "Target storage (.amv)."
+        }
+      }
+    },
+    "AlphaMovie:AlphaMovie.clear": {
+      "hash": "068a40ab993b",
+      "ja": {
+        "summary": "デコード済みキューをクリアする（本実装は同期デコードのため no-op）"
+      },
+      "tr": {
+        "summary": "Clears the queue of decoded frames (a no-op, since this implementation decodes synchronously)"
+      }
+    },
+    "AlphaMovie:AlphaMovie.showNextImage": {
+      "hash": "d3ca1c7b541f",
+      "ja": {
+        "summary": "次フレームを対象 Layer へ描画する",
+        "returns": "描画したフレーム番号（整数）",
+        "params": {
+          "layer": "描画先 Layer（hasImage であること）"
+        }
+      },
+      "tr": {
+        "summary": "Draws the next frame onto the target Layer",
+        "returns": "Number of the frame drawn (integer).",
+        "params": {
+          "layer": "Destination Layer (must have hasImage)."
+        }
+      }
+    },
+    "AlphaMovie:AlphaMovie.isPlaying": {
+      "hash": "8d1e7480c098",
+      "ja": {
+        "summary": "再生中かどうかを返す",
+        "returns": "true=再生中 / false=停止中"
+      },
+      "tr": {
+        "summary": "Returns whether the movie is playing",
+        "returns": "true: playing / false: stopped."
+      }
+    },
+    "AlphaMovie:AlphaMovie.play": {
+      "hash": "200d99976b4a",
+      "ja": {
+        "summary": "再生を開始する（先頭フレームへ巻き戻し、再生状態にする）"
+      },
+      "tr": {
+        "summary": "Starts playback (rewinds to the first frame and enters the playing state)"
+      }
+    },
+    "AlphaMovie:AlphaMovie.stop": {
+      "hash": "c0292f37ad7f",
+      "ja": {
+        "summary": "再生を停止する"
+      },
+      "tr": {
+        "summary": "Stops playback"
+      }
+    },
+    "AlphaMovie:AlphaMovie.setPosition": {
+      "hash": "0a9ca5ad46e9",
+      "ja": {
+        "summary": "表示位置（左上）を設定する",
+        "params": {
+          "x": "表示位置 X",
+          "y": "表示位置 Y"
+        }
+      },
+      "tr": {
+        "summary": "Sets the display position (top-left)",
+        "params": {
+          "x": "Display position X.",
+          "y": "Display position Y."
+        }
+      }
+    },
+    "AlphaMovie:AlphaMovie.setNextMovieFile": {
+      "hash": "050753874336",
+      "ja": {
+        "summary": "次に再生する amv を予約する（現映像の終了で自動遷移）",
+        "params": {
+          "filename": "次に再生する amv ストレージ"
+        }
+      },
+      "tr": {
+        "summary": "Queues the next amv to play (switches automatically when the current movie ends)",
+        "params": {
+          "filename": "amv storage to play next."
+        }
+      }
+    },
+    "AlphaMovie:AlphaMovie.numOfFrame": {
+      "hash": "16792e6be09e",
+      "ja": {
+        "summary": "全フレーム数（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Total number of frames (read-only)"
+      }
+    },
+    "AlphaMovie:AlphaMovie.frame": {
+      "hash": "3d45bb13a411",
+      "ja": {
+        "summary": "現在のフレーム番号。設定するとその位置へシークする"
+      },
+      "tr": {
+        "summary": "Current frame number. Setting it seeks to that position"
+      }
+    },
+    "AlphaMovie:AlphaMovie.loop": {
+      "hash": "94650f7699be",
+      "ja": {
+        "summary": "ループ再生するか"
+      },
+      "tr": {
+        "summary": "Whether to loop playback"
+      }
+    },
+    "AlphaMovie:AlphaMovie.nextLoop": {
+      "hash": "bcef3e7a7898",
+      "ja": {
+        "summary": "次映像（setNextMovieFile）のループ設定"
+      },
+      "tr": {
+        "summary": "Loop setting for the next movie (setNextMovieFile)"
+      }
+    },
+    "AlphaMovie:AlphaMovie.preloadSamples": {
+      "hash": "c503476278a7",
+      "ja": {
+        "summary": "先読みバッファ数（本実装は値の保持のみ、既定 5）"
+      },
+      "tr": {
+        "summary": "Number of read-ahead buffers (this implementation only stores the value; default 5)"
+      }
+    },
+    "AlphaMovie:AlphaMovie.left": {
+      "hash": "6a1d0d0f0855",
+      "ja": {
+        "summary": "表示位置左（= setPosition の X）"
+      },
+      "tr": {
+        "summary": "Display position, left (= X of setPosition)"
+      }
+    },
+    "AlphaMovie:AlphaMovie.top": {
+      "hash": "b1652a76b00e",
+      "ja": {
+        "summary": "表示位置上（= setPosition の Y）"
+      },
+      "tr": {
+        "summary": "Display position, top (= Y of setPosition)"
+      }
+    },
+    "AlphaMovie:AlphaMovie.screenWidth": {
+      "hash": "392864041529",
+      "ja": {
+        "summary": "映像の幅（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Width of the movie (read-only)"
+      }
+    },
+    "AlphaMovie:AlphaMovie.screenHeight": {
+      "hash": "3ceb7a6d21ed",
+      "ja": {
+        "summary": "映像の高さ（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Height of the movie (read-only)"
+      }
+    },
+    "AlphaMovie:AlphaMovie.FPSScale": {
+      "hash": "364ce6dba2c3",
+      "ja": {
+        "summary": "FPS の分子。FPS = FPSScale / FPSRate（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Numerator of the frame rate. FPS = FPSScale / FPSRate (read-only)"
+      }
+    },
+    "AlphaMovie:AlphaMovie.FPSRate": {
+      "hash": "2ed724925e21",
+      "ja": {
+        "summary": "FPS の分母。FPS = FPSScale / FPSRate（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Denominator of the frame rate. FPS = FPSScale / FPSRate (read-only)"
+      }
+    }
+  }
+}

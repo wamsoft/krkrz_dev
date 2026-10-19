@@ -1,0 +1,2485 @@
+{
+  "class": "System",
+  "entries": {
+    "System": {
+      "hash": "7cd468a7f2b1",
+      "ja": {
+        "summary": "System クラスは 吉里吉里本体や、吉里吉里が実行されている環境に関する情報を取得したり、設定したりするためのクラスです。このクラスからオブジェクトを作成することはできません。"
+      },
+      "tr": {
+        "summary": "The System class gets and sets information about the Kirikiri engine and the environment it is running in. You cannot create objects of this class."
+      }
+    },
+    "System.terminate": {
+      "hash": "84042b0307c0",
+      "ja": {
+        "summary": "吉里吉里の非同期終了",
+        "description": "吉里吉里を**終了**させます。\n\nこのメソッドを呼び出してもすぐには吉里吉里は終了しません。\n\nすべてのイベントハンドラから吉里吉里に制御が戻った際に終了します。",
+        "params": {
+          "code": "プロセスの終了コードを指定します"
+        }
+      },
+      "tr": {
+        "summary": "Exits Kirikiri asynchronously",
+        "description": "**Exits** Kirikiri.\n\nKirikiri does not exit immediately when this method is called.\n\nIt exits once control has returned to Kirikiri from all event handlers.",
+        "params": {
+          "code": "Exit code of the process"
+        }
+      }
+    },
+    "System.exit": {
+      "hash": "ae6f112dbb6d",
+      "ja": {
+        "summary": "吉里吉里の同期終了",
+        "description": "吉里吉里を**終了**させます。\n\nこのメソッドは [System.terminate](System.md#terminate) と異なり、呼び出した時点で終了します。そのため、\nこのメソッドは戻ることはありません。",
+        "params": {
+          "code": "プロセスの終了コードを指定します"
+        }
+      },
+      "tr": {
+        "summary": "Exits Kirikiri synchronously",
+        "description": "**Exits** Kirikiri.\n\nUnlike [System.terminate](System.md#terminate), this method exits at the moment it is called, so\nit never returns.",
+        "params": {
+          "code": "Exit code of the process"
+        }
+      }
+    },
+    "System.addContinuousHandler": {
+      "hash": "2e75330661a3",
+      "ja": {
+        "summary": "Continuous ハンドラの追加",
+        "description": "**Continuous ハンドラ**を登録します。\n\nContinuous ハンドラは、「できる限り頻繁に」呼び出されるイベントハンドラです。\n\n他にする処理がない場合、吉里吉里は Continuous ハンドラを呼び出し続けます。\n他にイベントなどが起きた場合はそちらが優先されます。\n\nただし、コマンドラインオプションの -contfreq で呼び出しの頻度が指定されている\n場合はそれに従います。",
+        "params": {
+          "callback": "ハンドラとなる関数を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Adds a Continuous handler",
+        "description": "Registers a **Continuous handler**.\n\nA Continuous handler is an event handler that is called \"as often as possible\".\n\nWhen there is nothing else to do, Kirikiri keeps calling Continuous handlers.\nWhen other events occur, they take priority.\n\nHowever, if the call frequency is specified with the -contfreq command-line option,\nthat setting is followed.",
+        "params": {
+          "callback": "Function to use as the handler."
+        }
+      }
+    },
+    "System.removeContinuousHandler": {
+      "hash": "c50829dfdb5f",
+      "ja": {
+        "summary": "Continuous ハンドラの削除",
+        "description": "**Continuous ハンドラ**を削除します。",
+        "params": {
+          "callback": "ハンド関数を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Removes a Continuous handler",
+        "description": "Removes a **Continuous handler**.",
+        "params": {
+          "callback": "Handler function."
+        }
+      }
+    },
+    "System.inform": {
+      "hash": "7f063eb63e8f",
+      "ja": {
+        "summary": "メッセージの表示",
+        "description": "ユーザにメッセージを示すためのウィンドウを表示します。\n\nウィンドウはモーダルで表示されます ( つまり、表示中は他のウィンドウは操作できない )。",
+        "params": {
+          "text": "表示するメッセージを指定します。",
+          "caption": "ウィンドウのキャプションとなる文字列を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Shows a message",
+        "description": "Shows a window that presents a message to the user.\n\nThe window is modal (other windows cannot be used while it is shown).",
+        "params": {
+          "text": "Message to show.",
+          "caption": "String to use as the window caption."
+        }
+      }
+    },
+    "System.confirm": {
+      "hash": "8d9bc33a7db1",
+      "ja": {
+        "summary": "確認メッセージの表示 ( Yes / No )",
+        "description": "ユーザに「はい / いいえ」を問うためのモーダルウィンドウを表示します\n( [System.inform](System.md#inform) の Yes/No 版 )。表示中は他のウィンドウは\n操作できません。\nREPL のファイルチャネル ( `-replfile` ) で駆動中はブロッキングダイアログを\n表示せず、モーダル応答チャネルでエージェントの答えを受け取ります\n( `yes` / `y` / `1` / `true` / `ok` が真 )。",
+        "returns": "ユーザが「はい」を選んだ場合は真、「いいえ」またはダイアログを閉じた\n場合は偽が返ります。",
+        "params": {
+          "text": "表示するメッセージを指定します。",
+          "caption": "ウィンドウのキャプションとなる文字列を指定します。",
+          "window": "親にするウィンドウを指定します ( 省略可 )。WINVER ビルドでのみ\n親指定が反映されます。"
+        }
+      },
+      "tr": {
+        "summary": "Shows a confirmation message (Yes / No)",
+        "description": "Shows a modal window that asks the user \"Yes / No\"\n(the Yes/No version of [System.inform](System.md#inform)). Other windows cannot be used\nwhile it is shown.\nWhen driven through the REPL file channel (`-replfile`), no blocking dialog is\nshown; instead the agent's answer is received through the modal response channel\n(`yes` / `y` / `1` / `true` / `ok` mean true).",
+        "returns": "true if the user chooses \"Yes\"; false if the user chooses \"No\" or closes the\ndialog.",
+        "params": {
+          "text": "Message to show.",
+          "caption": "String to use as the window caption.",
+          "window": "Window to use as the parent (optional). The parent is applied only in the\nWINVER build."
+        }
+      }
+    },
+    "System.inputString": {
+      "hash": "592039ac8309",
+      "ja": {
+        "summary": "文字列の入力",
+        "description": "ユーザに 1 行のテキストを入力させるモーダルダイアログを表示します\n( 吉里吉里2 互換 )。\nWINVER ビルドではネイティブの入力ダイアログを、SDL ビルドでは\nElements ベースの入力ダイアログを表示します。プラットフォームによっては OS の\nソフトウェアキーボード等に差し替えられる場合があります ( 未対応環境では void )。\nREPL 駆動中はブロッキングダイアログを出さず、REPL の応答チャネル経由で\n入力を受け取ります ( 応答口が無い場合は default を返します )。",
+        "returns": "ユーザが入力した文字列が返ります。**キャンセルした場合は void** が返ります。",
+        "params": {
+          "caption": "ダイアログのタイトルを指定します。",
+          "prompt": "入力を促す説明文を指定します ( 省略時は caption を使用 )。",
+          "default": "入力欄の初期値を指定します ( 省略可 )。"
+        }
+      },
+      "tr": {
+        "summary": "Inputs a string",
+        "description": "Shows a modal dialog that lets the user enter one line of text\n(Kirikiri 2 compatible).\nThe WINVER build shows a native input dialog, and the SDL build shows an\nElements-based input dialog. On some platforms it may be replaced by the OS\nsoftware keyboard or similar (void in unsupported environments).\nWhile driven by the REPL, no blocking dialog is shown; input is received through the REPL\nresponse channel (default is returned if there is no responder).",
+        "returns": "The string the user entered. **void if the user cancels.**",
+        "params": {
+          "caption": "Title of the dialog.",
+          "prompt": "Text prompting for input (caption is used if omitted).",
+          "default": "Initial value of the input field (optional)."
+        }
+      }
+    },
+    "System.choice": {
+      "hash": "b0752ee198bd",
+      "ja": {
+        "summary": "選択肢から 1 つ選ぶ",
+        "description": "選択肢のボタンを並べたモーダルダイアログを表示し、選ばれたボタンの番号を返します\n( 「保存 / 保存しない / キャンセル」のような 3 択など、\n[System.confirm](System.md#confirm) の 2 択で表せない問い合わせに使います )。\n```tjs\nvar r = System.choice(\"確認\", \"変更を保存しますか?\", [\"保存\", \"保存しない\", \"キャンセル\"], 2);\nif(r == 0) save(); else if(r == 2) return;\n```\nWINVER ビルドは TaskDialog、SDL3 系ビルドは Elements のダイアログ ( 使えない場合は OS の\nメッセージボックス ) で表示します。既定のボタンにフォーカスが置かれ、Esc や閉じるボタンで\n閉じた場合も既定の番号が返ります。\n\nREPL のファイルチャネル ( `-replfile` ) で駆動中はダイアログを出さず、モーダル応答チャネルに\n`{\"type\":\"choice\",\"caption\":…,\"text\":…,\"choices\":[…],\"default\":n}` を出して\nエージェントの答えを待ちます。答えは選んだ要素の文字列 ( 大文字小文字は区別しない ) か番号で、\n空や該当しない値のときは既定の番号になります。",
+        "returns": "選ばれたボタンの番号 ( choices の添字 ) が返ります。",
+        "params": {
+          "caption": "ダイアログのタイトルを指定します。",
+          "text": "本文を指定します。",
+          "choices": "ボタンの文言の配列を指定します ( 1 個以上。空の配列は例外になります )。",
+          "default": "既定のボタンの番号を指定します ( 範囲外は 0 )。"
+        }
+      },
+      "tr": {
+        "summary": "Chooses one of several options",
+        "description": "Shows a modal dialog with a row of option buttons and returns the number of the button chosen\n(use it for questions that the two choices of [System.confirm](System.md#confirm) cannot express,\nsuch as a three-way \"Save / Don't Save / Cancel\").\n```tjs\nvar r = System.choice(\"確認\", \"変更を保存しますか?\", [\"保存\", \"保存しない\", \"キャンセル\"], 2);\nif(r == 0) save(); else if(r == 2) return;\n```\nThe WINVER build uses a TaskDialog, and SDL3-family builds use an Elements dialog (or the OS\nmessage box if that is unavailable). Focus is placed on the default button, and closing with Esc or the close button\nalso returns the default number.\n\nWhen driven through the REPL file channel (`-replfile`), no dialog is shown; instead\n`{\"type\":\"choice\",\"caption\":…,\"text\":…,\"choices\":[…],\"default\":n}` is sent to the modal response channel\nand the agent's answer is awaited. The answer is either the string of the chosen element (case-insensitive) or its number;\nan empty or unmatched value results in the default number.",
+        "returns": "The number of the button chosen (the index into choices).",
+        "params": {
+          "caption": "Title of the dialog.",
+          "text": "Body text.",
+          "choices": "Array of button labels (at least one; an empty array raises an exception).",
+          "default": "Number of the default button (0 if out of range)."
+        }
+      }
+    },
+    "System.getTickCount": {
+      "hash": "c47f8d18f6e9",
+      "ja": {
+        "summary": "ティックカウントの取得",
+        "description": "**ティックカウント**は 1/1000 秒ごとにカウントアップする数値です。二つの時点でこのメソッドを\n用いてティックカウントを取得し、その差をとれば、二つの時点の時間差を知ることができます。",
+        "returns": "ティックカウント(64bitの整数)が戻ります。"
+      },
+      "tr": {
+        "summary": "Gets the tick count",
+        "description": "The **tick count** is a number that counts up every 1/1000 second. Get the tick count with this method at\ntwo points in time and take the difference to find the time elapsed between them.",
+        "returns": "The tick count (64-bit integer)."
+      }
+    },
+    "System.getKeyState": {
+      "hash": "41e1cb069229",
+      "ja": {
+        "summary": "キー状態の取得",
+        "description": "code で指定したキーコードに対応するキーが、このメソッドを呼んだ時点で押されているかどうかを\n取得します。",
+        "returns": "キーが押されていれば真、押されていなければ偽になります。",
+        "params": {
+          "code": "状態を取得する**仮想キーコード**  を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets a key state",
+        "description": "Gets whether the key corresponding to the key code given in code is pressed at the moment this method\nis called.",
+        "returns": "true if the key is pressed, false otherwise.",
+        "params": {
+          "code": "**Virtual key code** whose state to get."
+        }
+      }
+    },
+    "System.registerHotKey": {
+      "hash": "1a68b0568763",
+      "ja": {
+        "summary": "最上位ホットキーの登録",
+        "description": "イベントポンプの入口でキーを照合し、**フォーカス中のレイヤ / テキスト入力 /\n[ElementsDialog](ElementsDialog.md) ( モーダル含む ) より先に** callback を同期呼び出しします。\nAlt+Enter のフルスクリーン切替や Esc の終了確認のように「画面が何であっても\n効いてほしい」キーを 1 箇所で扱うための仕組みです。\n\n同一の key + mods への再登録は差し替えになります。登録テーブルはプロセス共有で\n( Window 単位ではありません )、エンジン終了時に解放されます。\n\n```tjs\n// Esc は終了確認。ただしモーダルダイアログ表示中は素通しする\nSystem.registerHotKey(VK_ESCAPE, 0, function(key, shift) {\nif(ElementsDialog.modalActive) return false;   // 消費せず通常の dispatch へ\naskQuit();\nreturn true;\n});\n```\n\n押しっぱなしのリピートではコールバックは再発火せず ( 消費だけされます )、\nup は key のみで照合して対応する down を消費したキーは必ず消費します\n( 修飾キーを先に離しても片割れが入力レイヤへ漏れません )。コールバックが\n例外を投げてもポンプは壊れず、ログへ残して続行します。\n\nWINVER ( Windows ネイティブ ) ビルドと SDL3 系ビルドの双方で動作します。\n\nダイアログにフォーカスを渡したまま特定のキーだけホスト側で受けたい場合は、\n用途の違う [ElementsDialog.registerHotKey](ElementsDialog.md#registerhotkey) ( ダイアログへ\n渡さず通常のゲーム入力経路へ素通しする。モーダル中は無効 ) を使います。",
+        "params": {
+          "key": "仮想キーコード ( `VK_RETURN` / `VK_ESCAPE` / `VK_F1` 等 )。",
+          "mods": "`ssShift` / `ssAlt` / `ssCtrl` の組み合わせ。照合はこの 3 ビットのみで、\nNumLock / CapsLock 等の状態は無視します。",
+          "callback": "押下時に呼ばれる関数。`callback(key, shift)` の形で呼ばれ、\n**false ( または 0 ) を返すと消費せず**通常の dispatch へ流します\n( void を含むそれ以外の戻り値は消費 )。"
+        }
+      },
+      "tr": {
+        "summary": "Registers a top-level hotkey",
+        "description": "Matches keys at the entrance of the event pump and calls callback synchronously **before the focused layer, text input or\n[ElementsDialog](ElementsDialog.md) (including modal ones)**.\nIt lets you handle in one place keys that should work \"no matter what is on screen\",\nsuch as Alt+Enter to toggle full screen or Esc to confirm quitting.\n\nRegistering the same key + mods again replaces the previous registration. The registration table is shared across the process\n(not per Window) and is released when the engine exits.\n\n```tjs\n// Esc は終了確認。ただしモーダルダイアログ表示中は素通しする\nSystem.registerHotKey(VK_ESCAPE, 0, function(key, shift) {\nif(ElementsDialog.modalActive) return false;   // 消費せず通常の dispatch へ\naskQuit();\nreturn true;\n});\n```\n\nThe callback does not fire again on key repeat while held down (the repeats are only consumed).\nA key up is matched by key alone, and the up of a key whose down was consumed is always consumed\n(even if the modifier is released first, the other half does not leak into the input layer). If the callback\nthrows an exception, the pump keeps working; the exception is logged and processing continues.\n\nWorks in both the WINVER (native Windows) build and SDL3-family builds.\n\nIf you want the host to receive only certain keys while focus stays on a dialog,\nuse [ElementsDialog.registerHotKey](ElementsDialog.md#registerhotkey), which serves a different purpose (it passes keys through to the normal game\ninput path instead of to the dialog, and is disabled while a modal is active).",
+        "params": {
+          "key": "Virtual key code (`VK_RETURN` / `VK_ESCAPE` / `VK_F1`, etc.).",
+          "mods": "A combination of `ssShift` / `ssAlt` / `ssCtrl`. Only these 3 bits are matched;\nNumLock / CapsLock and similar states are ignored.",
+          "callback": "Function called when the key is pressed. It is called as `callback(key, shift)`.\n**If it returns false (or 0), the key is not consumed** and goes on to the normal dispatch\n(any other return value, including void, consumes it)."
+        }
+      }
+    },
+    "System.unregisterHotKey": {
+      "hash": "5447792eeb38",
+      "ja": {
+        "summary": "最上位ホットキーの解除",
+        "description": "[registerHotKey](#registerhotkey) で登録したホットキーを解除します。",
+        "returns": "解除できたかどうか ( 登録が無ければ偽 )。",
+        "params": {
+          "key": "登録時に指定した仮想キーコード。",
+          "mods": "登録時に指定した修飾キーの組み合わせ。"
+        }
+      },
+      "tr": {
+        "summary": "Unregisters a top-level hotkey",
+        "description": "Unregisters a hotkey registered with [registerHotKey](#registerhotkey).",
+        "returns": "Whether it was unregistered (false if there was no registration).",
+        "params": {
+          "key": "Virtual key code specified at registration.",
+          "mods": "Modifier combination specified at registration."
+        }
+      }
+    },
+    "System.shellExecute": {
+      "hash": "f1fdc104b3cc",
+      "ja": {
+        "summary": "ファイル/プログラムの実行",
+        "description": "target で指定したファイルやソフトウェアを**実行**します。",
+        "returns": "実行に成功すれば真、失敗すれば偽が返ります。",
+        "params": {
+          "target": "実行するファイルやソフトウェアを指定します。\n\nファイルを指定された場合は、それに関連づけられたプログラムが起動します。",
+          "param": "実行するソフトウェアに渡すパラメータを指定します。\n\ntarget 引数にファイルを指定した場合はこの引数を省略するか、あるいは空文字列を\n指定してください。\n\n**プラットフォームによる差異**\n\nWindows ネイティブ版では ShellExecute を、SDL 版では SDL_OpenURL を用いて\ntarget を OS 既定のハンドラで開きます ( URL やファイルのオープンに対応 )。\nSDL 版では param ( 引数 ) は無視されます ( 引数付きのプログラム実行には非対応 )。"
+        }
+      },
+      "tr": {
+        "summary": "Runs a file or program",
+        "description": "**Runs** the file or software given in target.",
+        "returns": "true if it ran successfully, false otherwise.",
+        "params": {
+          "target": "File or software to run.\n\nIf a file is given, the program associated with it is launched.",
+          "param": "Parameters to pass to the software.\n\nIf you specify a file in the target argument, omit this argument or pass an empty\nstring.\n\n**Platform differences**\n\nThe native Windows build uses ShellExecute and the SDL build uses SDL_OpenURL to\nopen target with the OS default handler (supports opening URLs and files).\nIn the SDL build, param (arguments) is ignored (running programs with arguments is not supported)."
+        }
+      }
+    },
+    "System.readRegValue": {
+      "hash": "333500af9f6e",
+      "ja": {
+        "summary": "レジストリの読み込み",
+        "description": "key で指定した Windows レジストリを読み込みます。\n\nレジストリキーは、以下のルートキー名で始めることができます。\n\n`HKEY_CLASSES_ROOT\nHKEY_CURRENT_CONFIG\nHKEY_CURRENT_USER\n\nHKEY_LOCAL_MACHINE\nHKEY_USERS\nHKEY_PERFORMANCE_DATA\n\nHKEY_DYN_DATA\n`\nたとえば、以下のような文字列を key に指定することができます。\n\n`HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\hoeg\\installdir`\n\n数値、単一文字列のみを読み込むことができます。数値の場合は整数型、文字列の場合は文字列型\nの結果が返ります。",
+        "returns": "実行に成功すればレジストリの値、失敗すれば void が返ります。",
+        "params": {
+          "key": "読み込むレジストリキーを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Reads the registry",
+        "description": "Reads the Windows registry value given in key.\n\nThe registry key can start with one of the following root key names.\n\n`HKEY_CLASSES_ROOT\nHKEY_CURRENT_CONFIG\nHKEY_CURRENT_USER\n\nHKEY_LOCAL_MACHINE\nHKEY_USERS\nHKEY_PERFORMANCE_DATA\n\nHKEY_DYN_DATA\n`\nFor example, you can pass a string like the following as key.\n\n`HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\hoeg\\installdir`\n\nOnly numbers and single strings can be read. A number is returned as an integer, and a string\nas a string.",
+        "returns": "The registry value on success, void on failure.",
+        "params": {
+          "key": "Registry key to read."
+        }
+      }
+    },
+    "System.getArgument": {
+      "hash": "a0efde6b2821",
+      "ja": {
+        "summary": "コマンドラインオプションの取得",
+        "description": "**コマンドラインオプション**は、\n\n`-name=value`\n\nまたは\n\n`-name`\n\nの形式で吉里吉里に渡されている必要があります。前者の場合は値として `value` が\n返り、後者の場合は値として `'yes'` が返ります。",
+        "returns": "コマンドラインオプションが指定されていればその値、指定されていなければ\nvoid が返ります。",
+        "params": {
+          "name": "取得するコマンドラインオプション名を指定します。最初に '-'\n( ハイフン ) をつけてください ( 例 : `'-nosplash'` )。"
+        }
+      },
+      "tr": {
+        "summary": "Gets a command-line option",
+        "description": "**Command-line options** must be passed to Kirikiri in the form\n\n`-name=value`\n\nor\n\n`-name`\n\nIn the former case `value` is returned as the value, and in the latter case `'yes'` is returned.",
+        "returns": "The value of the command-line option if specified, otherwise\nvoid.",
+        "params": {
+          "name": "Name of the command-line option to get. Prefix it with '-'\n(hyphen) (e.g. `'-nosplash'`)."
+        }
+      }
+    },
+    "System.setArgument": {
+      "hash": "747f28c9a22b",
+      "ja": {
+        "summary": "コマンドラインオプションの設定",
+        "description": "動的に**コマンドラインオプション**を設定します。すべてのコマンドラインオプションが設定可能な訳ではありません。\n\n設定可能なコマンドラインオプションについては [コマンドラインオプション](../guide/CommandLine.md) を参照してください。ここで動的に変更可能という表記のないオプションについては変更を行わないでください。\n\nこのメソッドは、そのオプションが動的に変更可能かどうかやオプションの存在、値の有効性などをチェックしません。値の設定には十分気をつけてください。",
+        "params": {
+          "name": "設定するコマンドラインオプション名を指定します。最初に '-'\n( ハイフン ) をつけてください ( 例 : `'-contfreq'` )。",
+          "value": "設定する値を指定します。 ( 例 : `'60'` )。"
+        }
+      },
+      "tr": {
+        "summary": "Sets a command-line option",
+        "description": "Sets a **command-line option** dynamically. Not every command-line option can be set.\n\nFor the options that can be set, see [Command-line options](../guide/CommandLine.md). Do not change options that are not marked there as dynamically changeable.\n\nThis method does not check whether the option can be changed dynamically, whether it exists, or whether the value is valid. Be very careful when setting values.",
+        "params": {
+          "name": "Name of the command-line option to set. Prefix it with '-'\n(hyphen) (e.g. `'-contfreq'`).",
+          "value": "Value to set (e.g. `'60'`)."
+        }
+      }
+    },
+    "System.toActualColor": {
+      "hash": "640e10c28dba",
+      "ja": {
+        "summary": "色定数の実際の色の取得",
+        "description": "色定数を実際の色に変換し、0xRRGGBB 形式で返します。",
+        "returns": "指定された色定数が表す実際の色が 0xRRGGBB 形式で返ります。",
+        "params": {
+          "color": "色定数を指定します ( [色定数](../guide/ColorCodes.md) を参照 )。\n\n通常の 0xRRGGBB 形式の色を指定した場合はそのままの値が返ります。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the actual color of a color constant",
+        "description": "Converts a color constant to the actual color and returns it in 0xRRGGBB format.",
+        "returns": "The actual color represented by the color constant, in 0xRRGGBB format.",
+        "params": {
+          "color": "Color constant (see [Color constants](../guide/ColorCodes.md)).\n\nIf a regular 0xRRGGBB color is given, the same value is returned."
+        }
+      }
+    },
+    "System.createAppLock": {
+      "hash": "53521dc15c83",
+      "ja": {
+        "summary": "二重起動のチェック",
+        "description": "他に同じキー文字列を指定された吉里吉里が実行中ならば false、そうでなければ true が戻ります。\n\n二重起動の防止に用います。",
+        "returns": "すでに同じキー文字列が指定された吉里吉里が実行中の場合は false、そうでなければ true が戻ります。",
+        "params": {
+          "key": "チェックを行うためのキー文字列を指定します。同じキー文字列をほかの\n実行中の吉里吉里がこのメソッドに指定していた場合、false が戻ります。\n\nキー文字列には基本的には TJS の変数の命名規則と同じ文字のみが使えると\n考えてください。\n\nキー文字列は十分にユニークな物である必要があります。\n\nWINVER ビルドは名前付き Mutex、SDL3 系ビルドは一時領域のロックファイルを\nOS の排他ロックで掴む形で実現しています。どちらもプロセスが終了すれば\n( 異常終了でも ) 解放されます。"
+        }
+      },
+      "tr": {
+        "summary": "Checks for multiple instances",
+        "description": "Returns false if another instance of Kirikiri with the same key string is running, true otherwise.\n\nUse it to prevent multiple instances.",
+        "returns": "false if an instance of Kirikiri with the same key string is already running, true otherwise.",
+        "params": {
+          "key": "Key string used for the check. If another running instance of Kirikiri has passed the same\nkey string to this method, false is returned.\n\nAs a rule, use only characters allowed in TJS variable names in the key\nstring.\n\nThe key string must be sufficiently unique.\n\nThe WINVER build uses a named mutex, and SDL3-family builds hold an OS exclusive lock on a lock file\nin the temporary area. Either is released when the process exits\n(even if it terminates abnormally)."
+        }
+      }
+    },
+    "System.createUUID": {
+      "hash": "1d57b5a62501",
+      "ja": {
+        "summary": "UUID 文字列の生成",
+        "description": "UUID 文字列を生成して返します。このメソッドはランダムビット列を元に生成された\n128bitの UUID (universal unique identifier) を生成します。\n\n吉里吉里に実装されている UUID 生成アルゴリズムは、\nある程度、環境ノイズを拾ってランダムビット列を生成しますが、\n高度なセキュリティが要求されるような用途に使用することはおすすめしません。しかし、\n他の UUID とは「非常に非常に高い確率で重ならない」と考えられます。",
+        "returns": "生成された UUID 文字列が \"e8b2a2b5-5ceb-4f75-a08b-1f1bdfdca4f1\" の形式\n(ハイフンを除く各英数字は16進数の数字) で戻ります。"
+      },
+      "tr": {
+        "summary": "Generates a UUID string",
+        "description": "Generates and returns a UUID string. This method generates a 128-bit UUID (universal unique identifier)\nfrom a random bit sequence.\n\nThe UUID generation algorithm implemented in Kirikiri\ngathers some environmental noise to produce the random bits,\nbut it is not recommended for uses that require strong security. Still,\nthe result can be considered \"very, very unlikely\" to collide with any other UUID.",
+        "returns": "The generated UUID string, in the form \"e8b2a2b5-5ceb-4f75-a08b-1f1bdfdca4f1\"\n(each alphanumeric character other than the hyphens is a hexadecimal digit)."
+      }
+    },
+    "System.assignMessage": {
+      "hash": "5280c53aff83",
+      "ja": {
+        "summary": "メッセージ割り当ての変更",
+        "description": "メッセージ割り当てを変更します。\n\n吉里吉里が内蔵しているメッセージをこのメソッドで別のメッセージに変更することができます。\n\n通常、メッセージマップファイル内に記述します ( [起動](../guide/Startup.md) 参照 )。\n\n設定可能な ID と、それに現在割り当てられているメッセージの一覧を取得するには [Controller](Controller.md) から\n「メッセージマップファイルの作成」を実行してください。",
+        "returns": "ID が存在し、メッセージの割り当てが成功すれば真、そうでなければ偽が戻ります。",
+        "params": {
+          "id": "割り当てるメッセージ ID を指定します。",
+          "msg": "id で指定された ID に割り当てるメッセージを指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Changes a message assignment",
+        "description": "Changes a message assignment.\n\nThis method lets you replace a message built into Kirikiri with a different one.\n\nNormally you write these in the message map file (see [Startup](../guide/Startup.md)).\n\nTo get the list of assignable IDs and the messages currently assigned to them, run\n\"Create message map file\" from the [Controller](Controller.md).",
+        "returns": "true if the ID exists and the message was assigned, false otherwise.",
+        "params": {
+          "id": "Message ID to assign.",
+          "msg": "Message to assign to the ID given in id."
+        }
+      }
+    },
+    "System.doCompact": {
+      "hash": "027f819bae5f",
+      "ja": {
+        "summary": "メモリのコンパクト化",
+        "description": "メモリのコンパクト化を行います。コンパクト化とは、使用していないメモリや各種キャッシュ用メモリを解放して、メモリ使用量を減らす処理です。\n\n吉里吉里は自動でこれを行うので通常はあまり気にする必要はありませんが、強制的にプログラム側の処理で行いたい場合にこのメソッドを使用することができます。",
+        "params": {
+          "level": "レベルを指定します。\n\n**clIdle** を指定すると、システムがアイドル状態 (システムが比較的動作をしていない状態) に実行されるコンパクト化と同じ処理が行われます。現バージョンでは TJS2 のガベージコレクションが行われます。\n\n**clDeactivate** を指定すると、吉里吉里が非アクティブになったとき (他のアプリケーションがアクティブになったとき) に実行されるコンパクト化と同じ処理が行われます。現バージョンではレイヤの演算用の一時画像バッファ、レイヤキャッシュ、XP3 アーカイブのセグメント(ストレージの断片) キャッシュ、自動検索パスのキャッシュがクリアされます。\n\n**clMinimize** を指定すると、吉里吉里が最小化されたときに実行されるコンパクト化と同じ処理が行われます。現バージョンでは、描画文字のキャッシュ、画像キャッシュがクリアされます。\n\n**clAll** を指定すると、上記のコンパクト化の全てが実行されます。\n\nコンパクト化のレベルは、clIdle < clDeactivate < clMinimize < clAll の順に強くなります。より上位のレベルを指定すると、下位のレベルで行われるコンパクト化も行われます。たとえば、clDeactivate を実行すると、clIdle での処理も実行されます。\n\n引数を省略すると clAll が指定された物と見なされます。"
+        }
+      },
+      "tr": {
+        "summary": "Compacts memory",
+        "description": "Compacts memory. Compaction reduces memory usage by releasing unused memory and memory used by various caches.\n\nKirikiri does this automatically, so you usually do not need to worry about it, but you can use this method when you want to force it from your program.",
+        "params": {
+          "level": "Level.\n\n**clIdle** performs the same compaction as is done when the system is idle (relatively inactive). In the current version, TJS2 garbage collection is performed.\n\n**clDeactivate** performs the same compaction as is done when Kirikiri becomes inactive (when another application becomes active). In the current version, the temporary image buffers for layer operations, the layer cache, the XP3 archive segment (storage fragment) cache and the automatic search path cache are cleared.\n\n**clMinimize** performs the same compaction as is done when Kirikiri is minimized. In the current version, the rendered glyph cache and the image cache are cleared.\n\n**clAll** performs all of the compactions above.\n\nThe compaction levels get stronger in the order clIdle < clDeactivate < clMinimize < clAll. Specifying a higher level also performs the compaction done at lower levels. For example, running clDeactivate also performs the clIdle processing.\n\nIf the argument is omitted, clAll is assumed."
+        }
+      }
+    },
+    "System.touchImages": {
+      "hash": "4ef8dcd1eb0c",
+      "ja": {
+        "summary": "画像のキャッシュへの読み込み",
+        "description": "このメソッドは、指定された画像をキャッシュに入れようと試行します。ただし、このメソッドは\nキャッシュに画像を入れようと努力はしますが、実際に画像がキャッシュにはいる保証\nはありません。画像キャッシュの制限値をすぎたり、タイムアウトすると画像読み込みを中断します。\n画像は、storages引数に指定した物のうち、最初に書いた物ほどキャッシュに入る可能性が大きくなり\nます ( 優先されます )。すでに指定された画像がキャッシュに入っていた場合は、キャッシュ中での\n生存の順位を引き上げるだけの動作をします。\n\nこのメソッドは、画像読み込み中のエラーはすべて無視します。\n\n現バージョンでは、このメソッドでキャッシュに入れることのできる画像は、通常\n[Layer.loadImages](Layer.md#loadimages) で読み込み可能な画像で、かつカラーキーを指定しない画像\nです ( アルファチャンネル付き画像は問題ありません )。ユニバーサルトランジションのルール画像や、\n領域画像は読み込む動作はしますが、キャッシュとして有効なデータにはなりません ( 読み込んだ\nデータは無駄になります ) ので、指定しないようにしてください。\n\n画像がキャッシュで使用するバイト数については [System.graphicCacheLimit](System.md#graphiccachelimit) を参照\nしてください。",
+        "params": {
+          "storages": "キャッシュに入れたい画像ストレージ名を配列(Arrayクラスのオブジェクト)で渡します。\n\n先に書いた物ほど優先されます。\n\n吉里吉里は、[Layer.loadImages](Layer.md#loadimages) の第１引数に指定された\n文字列をそのままキーにしてキャッシュを管理するため、\nキャッシュを意味のある物にするには、\nここで指定する画像ストレージ名は Layer.loadImages の第１引数に指定するものと\n同一である必要があります。",
+          "limitbytes": "このメソッドの呼び出しで使用するキャッシュ容量の制限値をバイト単位で指定します。\n\n0 を指定すると、キャッシュをすべて使用します。\n\n正の数を指定すると、そのバイト数までキャッシュを使用しようとします。\n\n負の数を指定すると、現在のキャッシュの\n制限値 ( [System.graphicCacheLimit](System.md#graphiccachelimit) ) からその数値が加算された数 ( ただし\n「負の数」を加算するので実際は減算 ) が制限値として使用されます。その結果制限値が\n0 または負になってしまった場合は、このメソッドは何もせずに終了します。たとえば、\n-2*1024*1024 を指定すれば、現在のキャッシュ制限値から 2MB が引かれた数値が指定さ\nれたとみなされます。これは、キャッシュの残り容量に余裕を残したい場合に便利です。",
+          "timeout": "タイムアウト ( 時間制限 ) を ms 単位で指定します。0 を指定すると無制限と\nなります。\n\nこのメソッドはこの引数で指定された時間が経過すると、以降の画像の読み込みを中止し、\n戻ります。ただし、ある画像の読み込み中にタイムアウトになっても、その画像の読み\n込みが終了するまでは戻りません。"
+        }
+      },
+      "tr": {
+        "summary": "Loads images into the cache",
+        "description": "This method tries to put the specified images into the cache. It makes an effort to do so,\nbut there is no guarantee that the images actually end up in the cache.\nLoading stops when the image cache limit is exceeded or the timeout expires.\nImages listed earlier in the storages argument are more likely to get into the cache\n(they take priority). If a specified image is already in the cache, its survival rank\nin the cache is simply raised.\n\nThis method ignores all errors that occur while loading images.\n\nIn the current version, the images this method can put into the cache are those that can normally be loaded with\n[Layer.loadImages](Layer.md#loadimages) without a color key\n(images with an alpha channel are fine). Universal transition rule images and\nregion images are loaded, but they do not become valid cache data (the loaded\ndata is wasted), so do not specify them.\n\nFor the number of bytes images use in the cache, see [System.graphicCacheLimit](System.md#graphiccachelimit).",
+        "params": {
+          "storages": "Array (an object of the Array class) of image storage names to cache.\n\nThose listed first take priority.\n\nKirikiri manages the cache using the string passed as the first argument of\n[Layer.loadImages](Layer.md#loadimages) as is as the key,\nso for the cache to be meaningful,\nthe image storage names given here must be identical to those passed as the first argument of\nLayer.loadImages.",
+          "limitbytes": "Limit, in bytes, on the cache capacity used by this call.\n\n0 uses the whole cache.\n\nA positive number tries to use the cache up to that many bytes.\n\nA negative number adds that value to the current cache\nlimit ([System.graphicCacheLimit](System.md#graphiccachelimit)) (adding a negative number, so it is actually a subtraction)\nand uses the result as the limit. If the resulting limit is\n0 or negative, this method does nothing and returns. For example,\n-2*1024*1024 means the current cache limit minus 2MB.\nThis is handy when you want to leave some room in the cache.",
+          "timeout": "Timeout (time limit) in ms. 0 means no\nlimit.\n\nWhen the time given in this argument has elapsed, this method stops loading further images\nand returns. However, if the timeout expires while an image is being loaded, it does not return until\nthat image has finished loading."
+        }
+      }
+    },
+    "System.showVersion": {
+      "hash": "effa891328fc",
+      "ja": {
+        "summary": "aboutダイアログの表示(1.1.0以降)",
+        "description": "aboutダイアログを表示します。"
+      },
+      "tr": {
+        "summary": "Shows the about dialog (1.1.0 and later)",
+        "description": "Shows the about dialog."
+      }
+    },
+    "System.dumpHeap": {
+      "hash": "1ef5990ccb72",
+      "ja": {
+        "summary": "ヒープ情報ダンプ(1.1.0以降)",
+        "description": "ヒープの情報をコンソールに出力します。"
+      },
+      "tr": {
+        "summary": "Dumps heap information (1.1.0 and later)",
+        "description": "Writes heap information to the console."
+      }
+    },
+    "System.versionString": {
+      "hash": "c5d66119c059",
+      "ja": {
+        "summary": "バージョン文字列",
+        "description": "吉里吉里本体のバージョン文字列を得ることができます。\n\nバージョン文字列は以下のような形式です。\n\n`1.0.0.1`"
+      },
+      "tr": {
+        "summary": "Version string",
+        "description": "Gets the version string of the Kirikiri engine.\n\nThe version string has the following form.\n\n`1.0.0.1`"
+      }
+    },
+    "System.versionInformation": {
+      "hash": "7599528e2ff4",
+      "ja": {
+        "summary": "バージョン情報文字列",
+        "description": "吉里吉里本体のバージョン情報文字列を得ることができます。\n\nバージョン情報文字列は [System.versionString](System.md#versionstring) よりも長い形式で、\n\n以下のようになります。\n\n`吉里吉里[きりきり] Z 実行コア/1.0.0.0 (Compiled on Dec 16 2013 23:15:27) TJS2/2.4.28 Copyright (C) 1997-2013 W.Dee and contributors All rights reserved.`"
+      },
+      "tr": {
+        "summary": "Version information string",
+        "description": "Gets the version information string of the Kirikiri engine.\n\nThe version information string is longer than [System.versionString](System.md#versionstring)\n\nand looks like the following.\n\n`吉里吉里[きりきり] Z 実行コア/1.0.0.0 (Compiled on Dec 16 2013 23:15:27) TJS2/2.4.28 Copyright (C) 1997-2013 W.Dee and contributors All rights reserved.`"
+      }
+    },
+    "System.eventDisabled": {
+      "hash": "e6095756f35f",
+      "ja": {
+        "summary": "イベント配信が停止されているかどうか",
+        "description": "吉里吉里の**イベント配信**が停止されている場合に true になります。値を設定することもで\nきます。\n\nイベント配信が停止されると、吉里吉里上のイベントは発生しなくなるか、発生が延期されま\nす ( イベントの種類によって挙動は異なります )。"
+      },
+      "tr": {
+        "summary": "Whether event delivery is stopped",
+        "description": "true when Kirikiri's **event delivery** is stopped. This property can also be\nset.\n\nWhile event delivery is stopped, events in Kirikiri either do not occur or are deferred\n(the behavior depends on the type of event)."
+      }
+    },
+    "System.graphicCacheLimit": {
+      "hash": "d79da4a16b14",
+      "ja": {
+        "summary": "画像キャッシュ制限",
+        "description": "吉里吉里の**画像キャッシュ制限**をバイト単位で表します。値を設定することもできます。\n\n`**gcsAuto**` を指定すると、マシンに搭載されているメモリ量に応じて自動的に\n値が設定されます。\n\nルール画像や領域画像は、幅×高さ で表されるバイト数を消費します。それ以外の画像は\n幅×高さ×４ で表されるバイト数を消費します。"
+      },
+      "tr": {
+        "summary": "Image cache limit",
+        "description": "Represents Kirikiri's **image cache limit** in bytes. This property can also be set.\n\nIf you specify `**gcsAuto**`, the value is set automatically according to the amount of memory\ninstalled in the machine.\n\nRule images and region images consume width × height bytes. Other images\nconsume width × height × 4 bytes."
+      }
+    },
+    "System.platformName": {
+      "hash": "cf80a620fcb0",
+      "ja": {
+        "summary": "プラットフォーム名",
+        "description": "吉里吉里が動作しているプラットフォーム名を表します。Windows の場合は OS が 32bit 版の時 'Win32' 、64bit 版の時  'Win64' となります。\n\n1.3.0 以前の場合は、常に 'Win32' となります。"
+      },
+      "tr": {
+        "summary": "Platform name",
+        "description": "Represents the name of the platform Kirikiri is running on. On Windows it is 'Win32' when the OS is 32-bit and 'Win64' when it is 64-bit.\n\nIn 1.3.0 and earlier it is always 'Win32'."
+      }
+    },
+    "System.osName": {
+      "hash": "c285e66e3cba",
+      "ja": {
+        "summary": "OS 名",
+        "description": "吉里吉里が動作している OS の名前を表します。"
+      },
+      "tr": {
+        "summary": "OS name",
+        "description": "Represents the name of the OS Kirikiri is running on."
+      }
+    },
+    "System.exePath": {
+      "hash": "97581d6e53ba",
+      "ja": {
+        "summary": "吉里吉里本体のあるフォルダのパス",
+        "description": "吉里吉里本体が設置してあるパスを表します。パス名は統一ストレージ名で表現されます。"
+      },
+      "tr": {
+        "summary": "Path of the folder containing the Kirikiri engine",
+        "description": "Represents the path where the Kirikiri engine is located. The path is expressed as a unified storage name."
+      }
+    },
+    "System.resourcePath": {
+      "hash": "e10b40690956",
+      "ja": {
+        "summary": "エンジン組み込みリソースのあるパス",
+        "description": "`config.cf` / `messages.json` / 同梱フォント (`roboto-regular.ttf` 等) といった\nエンジン組み込みリソースが置かれている場所を、末尾に `/` の付いた統一ストレージ名で\n返します。\n\n実体はプラットフォームで異なります。\n\n| プラットフォーム | 値 | 実体 |\n|---|---|---|\n| WINVER / デスクトップ SDL3 | `resource://./` | exe 埋め込み / OS リソース |\n| ブラウザ (wasm) | `file://./resource/` | 起動時に MEMFS へ preload |\n\nブラウザビルドには `resource://` メディア自体が存在しないため、`resource://...` を\n直書きしたスクリプトは [Storages.isExistentStorage](Storages.md#isexistentstorage) の\n時点で「対応していないメディアタイプです」例外になります。同梱フォントなどを参照する\nときは必ずこのプロパティを前置してください。\n\n```tjs\n// 同梱の英字フォントを参照する\nvar path = System.resourcePath + \"roboto-regular.ttf\";\n```"
+      },
+      "tr": {
+        "summary": "Path of the engine's built-in resources",
+        "description": "Returns the location of engine built-in resources such as `config.cf` / `messages.json` / bundled fonts (`roboto-regular.ttf`, etc.)\nas a unified storage name ending with `/`.\n\nWhat it actually points to differs by platform.\n\n| Platform | Value | Actual location |\n|---|---|---|\n| WINVER / desktop SDL3 | `resource://./` | Embedded in the exe / OS resources |\n| Browser (wasm) | `file://./resource/` | Preloaded into MEMFS at startup |\n\nThe browser build has no `resource://` media at all, so a script that\nhardcodes `resource://...` raises an \"unsupported media type\" exception as soon as it reaches\n[Storages.isExistentStorage](Storages.md#isexistentstorage). Always prefix this property\nwhen referring to bundled fonts and the like.\n\n```tjs\n// 同梱の英字フォントを参照する\nvar path = System.resourcePath + \"roboto-regular.ttf\";\n```"
+      }
+    },
+    "System.captureScreen": {
+      "hash": "2267408d4fc9",
+      "ja": {
+        "summary": "実画面を PNG 保存する",
+        "description": "次フレームの present 直前に、オーバーレイ込みの実画面を読み戻して path へ PNG 保存する\n要求を立てます (実際の保存は DrawDevice の描画時)。x,y,w,h で保存範囲を指定でき、\nw/h を 0 にすると画面全体になります。SDL の `Agent.captureScreen` と同等で、Agent 非対応の\nWINVER でも使えるよう REPL 有効時に用意される、テスト/検証用の機能です。戻り値は保存先パス。",
+        "params": {
+          "path": "保存先の統一ストレージパス (.png)",
+          "x": "= 0 保存範囲の左端",
+          "y": "= 0 保存範囲の上端",
+          "w": "= 0 保存範囲の幅 (0 で画面全体)",
+          "h": "= 0 保存範囲の高さ (0 で画面全体)"
+        }
+      },
+      "tr": {
+        "summary": "Saves the actual screen as PNG",
+        "description": "Requests that, just before the next frame is presented, the actual screen including overlays be read back and saved to path as PNG\n(the actual save happens when the DrawDevice draws). You can specify the area to save with x, y, w, h;\nsetting w/h to 0 means the whole screen. It is equivalent to SDL's `Agent.captureScreen` and is a testing/verification feature\nprovided when the REPL is enabled, so that it can also be used in the WINVER build, which lacks Agent. The return value is the destination path.",
+        "params": {
+          "path": "Destination unified storage path (.png)",
+          "x": "= 0 Left edge of the area to save",
+          "y": "= 0 Top edge of the area to save",
+          "w": "= 0 Width of the area to save (0 for the whole screen)",
+          "h": "= 0 Height of the area to save (0 for the whole screen)"
+        }
+      }
+    },
+    "System.replWebURL": {
+      "hash": "8c01da6a5475",
+      "ja": {
+        "summary": "ブラウザ REPL ビューワーの URL",
+        "description": "`-replweb` で開いているブラウザ REPL ビューワーの URL を表します。未起動なら空文字列です。"
+      },
+      "tr": {
+        "summary": "URL of the browser REPL viewer",
+        "description": "Represents the URL of the browser REPL viewer opened with `-replweb`. An empty string if it is not running."
+      }
+    },
+    "System.personalPath": {
+      "hash": "b51e0b2fe094",
+      "ja": {
+        "summary": "マイドキュメントのパス",
+        "description": "ユーザの文書フォルダ ( OS 標準の「ドキュメント」フォルダそのもの ) のパスを\n統一ストレージ名 ( 末尾 `/` 付き ) で表します。アプリ固有のサブフォルダではないので、\n書き込む場合はスクリプト側でサブフォルダを作ってください。\n\n| OS | 返すフォルダ |\n|---|---|\n| Windows | 「ドキュメント」 ( OneDrive などへのリダイレクト先も解決。無ければ RoamingAppData ) |\n| macOS | `~/Documents/` |\n| iOS / iPadOS | アプリのサンドボックス内の `Documents/` |\n| Linux | XDG のドキュメントフォルダ ( 未設定なら `$HOME` ) |\n| Android | アプリ専用の外部ストレージ ( 無ければ内部ストレージ ) |\n| Web ( wasm ) | 専用フォルダ無し → [System.exePath](System.md#exepath) |\n\nフォルダを決められない場合は [System.exePath](System.md#exepath) と同じフォルダを返します\n( スクリプト側は exePath と等しければ「別置き場なし」として扱えます )。\n\n!!! note \"2026-10 以前の SDL3 / 汎用ビルド\"\n    Windows 以外では常に exePath を返していました。"
+      },
+      "tr": {
+        "summary": "Path of the user's Documents folder",
+        "description": "Represents the path of the user's documents folder (the OS standard \"Documents\" folder itself)\nas a unified storage name (ending with `/`). It is not an application-specific subfolder,\nso create a subfolder in your script before writing to it.\n\n| OS | Folder returned |\n|---|---|\n| Windows | \"Documents\" (redirections such as OneDrive are resolved; RoamingAppData if unavailable) |\n| macOS | `~/Documents/` |\n| iOS / iPadOS | `Documents/` in the app sandbox |\n| Linux | XDG documents folder (`$HOME` if not set) |\n| Android | App-specific external storage (internal storage if unavailable) |\n| Web (wasm) | No dedicated folder → [System.exePath](System.md#exepath) |\n\nIf the folder cannot be determined, the same folder as [System.exePath](System.md#exepath) is returned\n(a script can treat a value equal to exePath as \"no separate location\").\n\n!!! note \"SDL3 / generic builds before 2026-10\"\n    On platforms other than Windows, exePath was always returned."
+      }
+    },
+    "System.appDataPath": {
+      "hash": "d59ba559f216",
+      "ja": {
+        "summary": "ユーザのアプリケーションデータフォルダのパス",
+        "description": "アプリケーションデータを置く OS 標準フォルダ ( アプリ固有のサブフォルダではなく、\nその基点 ) のパスを統一ストレージ名 ( 末尾 `/` 付き ) で表します。このフォルダは\n通常、隠しフォルダになっています。書き込む場合はスクリプト側で組織名・アプリ名などの\nサブフォルダを作ってください。\n\n| OS | 返すフォルダ |\n|---|---|\n| Windows | RoamingAppData ( 通常 `C:\\Users\\<ユーザ名>\\AppData\\Roaming` ) |\n| macOS | `~/Library/Application Support/` |\n| iOS / iPadOS | アプリのサンドボックス内の `Library/Application Support/` ( 無ければ作成 ) |\n| Linux | `$XDG_DATA_HOME` ( 未設定なら `~/.local/share/` ) |\n| Android | アプリの内部ストレージ |\n| Web ( wasm ) | 専用フォルダ無し → [System.exePath](System.md#exepath) |\n\nフォルダを決められない場合は [System.exePath](System.md#exepath) と同じフォルダを返します。\n\n!!! note \"2026-10 以前の SDL3 / 汎用ビルド\"\n    Windows 以外では常に exePath を返していました。また 2026-08-25 より前の\n    SDL3 / 汎用ビルドにはこのプロパティ自体が無いため、古いエンジンも対象にする\n    スクリプトでは `typeof System.appDataPath` で存在を確認してください。\n    セーブデータなどの保存先には [System.dataPath](System.md#datapath) を使うのが安全です。"
+      },
+      "tr": {
+        "summary": "Path of the user's application data folder",
+        "description": "Represents the path of the OS standard folder for application data (its base, not an application-specific subfolder)\nas a unified storage name (ending with `/`). This folder is\nusually hidden. Before writing, create subfolders such as an organization name and application name\nin your script.\n\n| OS | Folder returned |\n|---|---|\n| Windows | RoamingAppData (usually `C:\\Users\\<ユーザ名>\\AppData\\Roaming`) |\n| macOS | `~/Library/Application Support/` |\n| iOS / iPadOS | `Library/Application Support/` in the app sandbox (created if missing) |\n| Linux | `$XDG_DATA_HOME` (`~/.local/share/` if not set) |\n| Android | App internal storage |\n| Web (wasm) | No dedicated folder → [System.exePath](System.md#exepath) |\n\nIf the folder cannot be determined, the same folder as [System.exePath](System.md#exepath) is returned.\n\n!!! note \"SDL3 / generic builds before 2026-10\"\n    On platforms other than Windows, exePath was always returned. SDL3 / generic builds before\n    2026-08-25 do not have this property at all, so scripts that also target older engines\n    should check for it with `typeof System.appDataPath`.\n    For save data and similar, using [System.dataPath](System.md#datapath) is the safe choice."
+      }
+    },
+    "System.dataPath": {
+      "hash": "5814fa1f6263",
+      "ja": {
+        "summary": "データ保存場所のパス",
+        "description": "コマンドラインオプションの -datapath で指定したディレクトリを表します。\n\n標準では、ログなどがすべてここに出力されます。\n\nユーザスクリプトがデータを保存する場合は、ここに保存することを推奨します。\n\n-datapath を指定しない場合の既定は、Windows では実行ファイルの隣の\n`savedata`、**Linux 版では `~/.local/share/<orgname>/<appname>/`** です\n( 2026-10 から。以前は Linux も実行ファイルの隣 )。組織名・アプリケーション名は\n-orgname / -appname ( 配布物では `<exe名>.cf` に書く ) で決まります。\nLinux 版の値もローカルパスなので `Storages.getLocalName()` が使えます。\n\n**全ビルドに存在し、アプリ固有の保存場所を指す**ため、保存先の取得は\nこのプロパティを使うのが安全です ( [System.appDataPath](System.md#appdatapath) /\n[System.personalPath](System.md#personalpath) は OS 標準フォルダそのもので、\n古い SDL3 / 汎用ビルドでは exePath を返すか、プロパティ自体がありません )。"
+      },
+      "tr": {
+        "summary": "Path of the data folder",
+        "description": "Represents the directory specified with the -datapath command-line option.\n\nBy default, logs and the like are all written here.\n\nUser scripts are recommended to save their data here as well.\n\nWhen -datapath is not specified, the default is `savedata` next to the executable on Windows,\nand **`~/.local/share/<orgname>/<appname>/` in the Linux build**\n(since 2026-10; previously Linux also used the folder next to the executable). The organization and application names\nare determined by -orgname / -appname (written in `<exe name>.cf` in distributed builds).\nThe Linux value is also a local path, so `Storages.getLocalName()` can be used.\n\n**It exists in every build and points to an application-specific location**, so using\nthis property is the safe way to get a save location ([System.appDataPath](System.md#appdatapath) /\n[System.personalPath](System.md#personalpath) are the OS standard folders themselves, and in\nolder SDL3 / generic builds they return exePath or do not exist at all)."
+      }
+    },
+    "System.exeName": {
+      "hash": "953d2847b83f",
+      "ja": {
+        "summary": "吉里吉里本体のパス",
+        "description": "吉里吉里本体へのパス名を表します。パス名は統一ストレージ名で表現されます。"
+      },
+      "tr": {
+        "summary": "Path of the Kirikiri engine",
+        "description": "Represents the path name of the Kirikiri engine. The path is expressed as a unified storage name."
+      }
+    },
+    "System.title": {
+      "hash": "28940fa48d06",
+      "ja": {
+        "summary": "タイトル",
+        "description": "メインウィンドウのタイトルを文字列で表します。値を設定することもできます。"
+      },
+      "tr": {
+        "summary": "Title",
+        "description": "Represents the title of the main window as a string. This property can also be set."
+      }
+    },
+    "System.screenWidth": {
+      "hash": "dd290ca3d70f",
+      "ja": {
+        "summary": "画面幅",
+        "description": "画面サイズ ( 画面解像度 ) の横サイズをピクセル単位で表します。\n\n値はメインウィンドウのあるディスプレイを対象としたものです。\n\nメインウィンドウがない場合はプライマリーディスプレイが対象となります\n( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、\nメインウィンドウができるまでの間はそのディスプレイが対象となります )。"
+      },
+      "tr": {
+        "summary": "Screen width",
+        "description": "Represents the horizontal screen size (screen resolution) in pixels.\n\nThe value refers to the display on which the main window is located.\n\nIf there is no main window, the primary display is used\n(if a startup display is specified with [-display](../guide/CommandLine.md),\nthat display is used until the main window is created)."
+      }
+    },
+    "System.screenHeight": {
+      "hash": "24b31ac7e43e",
+      "ja": {
+        "summary": "画面高さ",
+        "description": "画面サイズ ( 画面解像度 ) の縦サイズをピクセル単位で表します。\n\n値はメインウィンドウのあるディスプレイを対象としたものです。\n\nメインウィンドウがない場合はプライマリーディスプレイが対象となります\n( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、\nメインウィンドウができるまでの間はそのディスプレイが対象となります )。"
+      },
+      "tr": {
+        "summary": "Screen height",
+        "description": "Represents the vertical screen size (screen resolution) in pixels.\n\nThe value refers to the display on which the main window is located.\n\nIf there is no main window, the primary display is used\n(if a startup display is specified with [-display](../guide/CommandLine.md),\nthat display is used until the main window is created)."
+      }
+    },
+    "System.desktopLeft": {
+      "hash": "ef6a7ae88b98",
+      "ja": {
+        "summary": "デスクトップ左端位置",
+        "description": "デスクトップ ( ウィンドウを表示可能な領域 ) の左端位置をピクセル単位で表します。\n\n!!! warning \"Windows ネイティブ ( WINVER ) ビルド限定\"\n    `desktopLeft` / `desktopTop` / `desktopWidth` / `desktopHeight` は\n    SDL3 / 汎用ビルドには存在しません。画面解像度だけであれば全ビルドに\n    ある [System.screenWidth](System.md#screenwidth) /\n    [System.screenHeight](System.md#screenheight) を使用してください。\n\n値はメインウィンドウのあるディスプレイを対象としたものです。\n\nメインウィンドウがない場合はプライマリーディスプレイが対象となります\n( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、\nメインウィンドウができるまでの間はそのディスプレイが対象となります )。"
+      },
+      "tr": {
+        "summary": "Desktop left edge",
+        "description": "Represents the left edge of the desktop (the area where windows can be shown) in pixels.\n\n!!! warning \"Native Windows (WINVER) build only\"\n    `desktopLeft` / `desktopTop` / `desktopWidth` / `desktopHeight` do not\n    exist in SDL3 / generic builds. If you only need the screen resolution, use\n    [System.screenWidth](System.md#screenwidth) /\n    [System.screenHeight](System.md#screenheight), which exist in every build.\n\nThe value refers to the display on which the main window is located.\n\nIf there is no main window, the primary display is used\n(if a startup display is specified with [-display](../guide/CommandLine.md),\nthat display is used until the main window is created)."
+      }
+    },
+    "System.desktopTop": {
+      "hash": "91185f5b7b03",
+      "ja": {
+        "summary": "デスクトップ上端位置",
+        "description": "デスクトップ ( ウィンドウを表示可能な領域 ) の上端位置をピクセル単位で表します。\n\n値はメインウィンドウのあるディスプレイを対象としたものです。\n\nメインウィンドウがない場合はプライマリーディスプレイが対象となります\n( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、\nメインウィンドウができるまでの間はそのディスプレイが対象となります )。"
+      },
+      "tr": {
+        "summary": "Desktop top edge",
+        "description": "Represents the top edge of the desktop (the area where windows can be shown) in pixels.\n\nThe value refers to the display on which the main window is located.\n\nIf there is no main window, the primary display is used\n(if a startup display is specified with [-display](../guide/CommandLine.md),\nthat display is used until the main window is created)."
+      }
+    },
+    "System.desktopWidth": {
+      "hash": "ac4a167b480d",
+      "ja": {
+        "summary": "デスクトップ幅",
+        "description": "デスクトップ ( ウィンドウを表示可能な領域 ) の幅をピクセル単位で表します。\n\n値はメインウィンドウのあるディスプレイを対象としたものです。\n\nメインウィンドウがない場合はプライマリーディスプレイが対象となります\n( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、\nメインウィンドウができるまでの間はそのディスプレイが対象となります )。"
+      },
+      "tr": {
+        "summary": "Desktop width",
+        "description": "Represents the width of the desktop (the area where windows can be shown) in pixels.\n\nThe value refers to the display on which the main window is located.\n\nIf there is no main window, the primary display is used\n(if a startup display is specified with [-display](../guide/CommandLine.md),\nthat display is used until the main window is created)."
+      }
+    },
+    "System.desktopHeight": {
+      "hash": "1f4e92ee90ed",
+      "ja": {
+        "summary": "デスクトップ高さ",
+        "description": "デスクトップ ( ウィンドウを表示可能な領域 ) の高さをピクセル単位で表します。\n\n値はメインウィンドウのあるディスプレイを対象としたものです。\n\nメインウィンドウがない場合はプライマリーディスプレイが対象となります\n( [-display](../guide/CommandLine.md) で起動ディスプレイを指定している場合は、\nメインウィンドウができるまでの間はそのディスプレイが対象となります )。"
+      },
+      "tr": {
+        "summary": "Desktop height",
+        "description": "Represents the height of the desktop (the area where windows can be shown) in pixels.\n\nThe value refers to the display on which the main window is located.\n\nIf there is no main window, the primary display is used\n(if a startup display is specified with [-display](../guide/CommandLine.md),\nthat display is used until the main window is created)."
+      }
+    },
+    "System.exitOnWindowClose": {
+      "hash": "bdb669eec820",
+      "ja": {
+        "summary": "メインウィンドウが閉じたときに終了するかどうか",
+        "description": "メインウィンドウ(一番最初に作成したWindowクラスのインスタンス)が閉じたときに終了するかどうかを表します。値を設定することもできます。デフォルトは真です。\n\nメインウィンドウが閉じ、ほかのデバッグ関連ウィンドウも表示していない場合は吉里吉里は終了すること無くシステムに残り、制御不能に陥る可能性がありますので注意してください(タスクマネージャからプロセスを終了させるしか無くなる可能性があります)。"
+      },
+      "tr": {
+        "summary": "Whether to exit when the main window closes",
+        "description": "Indicates whether to exit when the main window (the first instance of the Window class created) closes. This property can also be set. The default is true.\n\nNote that if the main window closes and no debugging windows are shown either, Kirikiri may remain in the system without exiting and become uncontrollable (you may have no choice but to end the process from Task Manager)."
+      }
+    },
+    "System.exceptionHandler": {
+      "hash": "808dbd10a35a",
+      "ja": {
+        "summary": "捕捉されなかった例外のためのハンドラ関数",
+        "description": "捕捉されなかった例外 (どこにも捕捉されずに吉里吉里本体に渡された例外) を処理する関数を表します。\n\nnull を指定すると、デフォルトの動作になります。\n\nデフォルトの動作とは、\n\n- 非同期イベントの配信を停止する ([System.eventDisabled](System.md#eventdisabled) を 真 に設定)\n- ログをファイルに出力開始する ([Debug.logAsError](Debug.md#logaserror) を呼ぶ)\n- エラーを通知するダイアログボックスを表示し、スクリプトエディタでその箇所を示す\n\nです。\n\nハンドラ関数は引数を一つ取り、それが例外オブジェクトになります。\n\nハンドラ関数が指定されないか、あるいはハンドラ関数が null であるか、あるいはハンドラ関数が偽を返すと、デフォルトの動作が行われます。\n\nハンドラ関数が真を返すと上記のデフォルトの動作は行われません。\n\nハンドラ関数を実行中に非同期イベントが発生する可能性を考慮してください。吉里吉里本体が非同期イベントを処理できてしまうと、例外ハンドラを実行中に再び予期せぬ例外が発生する可能性があります。これを避けるため、通常、ハンドラ関数内でなにかを待つような処理をする場合 (吉里吉里が非同期イベントを処理する機会がある場合 )、非同期イベントの発生を停止させます。\n\nSystem.exceptionHandler = function (e)\n\n{\n\n// どこにも捕捉されない例外がシステム側で捕捉された場合、この関数が\n\n// 呼ばれる。e は例外オブジェクト。\n\nif(e instanceof \"ConductorException\")\n\n{\n\n// コンダクタの投げた例外の場合\n\nDebug.logAsError(); // ログのファイルへの書き出し動作の開始など\n\nvar event_disabled = System.eventDisabled;\n\nSystem.eventDisabled = true;\n\n// エラーの理由を表示させている間にイベントが発生すると\n\n// やっかいなのでいったんイベント発生を停止させる\n\nSystem.inform(e.message);\n\nSystem.eventDisabled = event_disabled;\n\n// イベントを発生するかどうかを元の状態に\n\nreturn true; // true を返すと本体側で例外の処理は行わなくなる\n\n}\n\nelse\n\n{\n\nreturn false; // false を返すと通常の例外処理\n\n}\n\n};"
+      },
+      "tr": {
+        "summary": "Handler function for uncaught exceptions",
+        "description": "Represents the function that handles uncaught exceptions (exceptions that were not caught anywhere and reached the Kirikiri engine).\n\nSpecifying null restores the default behavior.\n\nThe default behavior is to:\n\n- stop delivery of asynchronous events (set [System.eventDisabled](System.md#eventdisabled) to true)\n- start writing the log to a file (call [Debug.logAsError](Debug.md#logaserror))\n- show a dialog box reporting the error and point to the location in the script editor\n\nThe handler function takes one argument, the exception object.\n\nIf no handler function is specified, if it is null, or if it returns false, the default behavior is performed.\n\nIf the handler function returns true, the default behavior above is not performed.\n\nKeep in mind that asynchronous events may occur while the handler function is running. If the Kirikiri engine gets a chance to process asynchronous events, another unexpected exception may occur while the exception handler is running. To avoid this, if the handler function does anything that waits (giving Kirikiri a chance to process asynchronous events), you normally stop asynchronous events first.\n\nSystem.exceptionHandler = function (e)\n\n{\n\n// どこにも捕捉されない例外がシステム側で捕捉された場合、この関数が\n\n// 呼ばれる。e は例外オブジェクト。\n\nif(e instanceof \"ConductorException\")\n\n{\n\n// コンダクタの投げた例外の場合\n\nDebug.logAsError(); // ログのファイルへの書き出し動作の開始など\n\nvar event_disabled = System.eventDisabled;\n\nSystem.eventDisabled = true;\n\n// エラーの理由を表示させている間にイベントが発生すると\n\n// やっかいなのでいったんイベント発生を停止させる\n\nSystem.inform(e.message);\n\nSystem.eventDisabled = event_disabled;\n\n// イベントを発生するかどうかを元の状態に\n\nreturn true; // true を返すと本体側で例外の処理は行わなくなる\n\n}\n\nelse\n\n{\n\nreturn false; // false を返すと通常の例外処理\n\n}\n\n};"
+      }
+    },
+    "System.onActivate": {
+      "hash": "e1b218af5c47",
+      "ja": {
+        "summary": "アプリケーションがアクティブになったとき",
+        "description": "アプリケーションがアクティブになったときに呼び出されるイベント関数を表します。\n\nnull を指定すると関数は呼び出されません。\n\n通常のイベントハンドラと異なり、このイベントを受け取りたい場合は、呼び出したい関数をこのプロパティに設定してください。\n\n[Window.onActivate](Window.md#onactivate) は、同じアプリケーション内のそれぞれのウィンドウがアクティブになったときに発生しますが、このイベントは、メインウィンドウがアクティブになった場合に発生します。\n\nこのイベントは、メインウィンドウが既にアクティブの場合にも発生する可能性があるので注意してください (完全に onActivate → onDeactivate → onActivate → …… の順に発生する保証がない )。"
+      },
+      "tr": {
+        "summary": "When the application becomes active",
+        "description": "Represents the event function called when the application becomes active.\n\nIf null, no function is called.\n\nUnlike regular event handlers, to receive this event you set the function to be called to this property.\n\n[Window.onActivate](Window.md#onactivate) occurs when each window in the same application becomes active, whereas this event occurs when the main window becomes active.\n\nNote that this event may occur even when the main window is already active (it is not guaranteed to occur strictly in the order onActivate → onDeactivate → onActivate → …)."
+      }
+    },
+    "System.onDeactivate": {
+      "hash": "c45004436dc9",
+      "ja": {
+        "summary": "アプリケーションが非アクティブになったとき",
+        "description": "アプリケーションが非アクティブになったときに呼び出されるイベント関数を表します。\n\nnull を指定すると関数は呼び出されません。\n\n通常のイベントハンドラと異なり、このイベントを受け取りたい場合は、呼び出したい関数をこのプロパティに設定してください。\n\n[Window.onDeactivate](Window.md#ondeactivate) は、同じアプリケーション内のそれぞれのウィンドウが非アクティブになったときに発生しますが、このイベントは、メインウィンドウが非アクティブになった場合に発生します。\n\nこのイベントは、メインウィンドウが既に非アクティブの場合にも発生する可能性があるので注意してください (完全に onActivate → onDeactivate → onActivate → …… の順に発生する保証がない )。"
+      },
+      "tr": {
+        "summary": "When the application becomes inactive",
+        "description": "Represents the event function called when the application becomes inactive.\n\nIf null, no function is called.\n\nUnlike regular event handlers, to receive this event you set the function to be called to this property.\n\n[Window.onDeactivate](Window.md#ondeactivate) occurs when each window in the same application becomes inactive, whereas this event occurs when the main window becomes inactive.\n\nNote that this event may occur even when the main window is already inactive (it is not guaranteed to occur strictly in the order onActivate → onDeactivate → onActivate → …)."
+      }
+    },
+    "System.onJoypadChange": {
+      "hash": "5773d2c91e66",
+      "ja": {
+        "summary": "ジョイパッド構成変更時に呼び出されるイベント",
+        "description": "ジョイパッドの接続・切断などで構成が変化したときに呼び出されるイベント関数を表します。\n\nnull を指定すると関数は呼び出されません。\n\n通常のイベントハンドラと異なり、このイベントを受け取りたい場合は、呼び出したい関数をこのプロパティに設定してください。",
+        "params": {
+          "no": "変化したジョイパッドの番号",
+          "name": "ジョイパッドの名称"
+        }
+      },
+      "tr": {
+        "summary": "Event called when the joypad configuration changes",
+        "description": "Represents the event function called when the joypad configuration changes, for example when a joypad is connected or disconnected.\n\nIf null, no function is called.\n\nUnlike regular event handlers, to receive this event you set the function to be called to this property.",
+        "params": {
+          "no": "Number of the joypad that changed",
+          "name": "Name of the joypad"
+        }
+      }
+    },
+    "System.drawThreadNum": {
+      "hash": "986830f2a7cc",
+      "ja": {
+        "summary": "描画に使用するスレッドの数",
+        "description": "吉里吉里のレイヤシステムが描画時に使用する**スレッド数**を表します。値を設定することもできます。\n\n`**dtnAuto**` を指定すると、OSの認識するプロセッサ数と同数のスレッドが自動的に割り当てられます。\n\n描画スレッドを複数設定することで、マルチコア環境での描画パフォーマンスを向上させられる可能性がありますが、逆にパフォーマンスが低下する場合もあります。\n\n描画面積が大きい処理、Affine系の高負荷な処理、演算の重いレイヤ合成処理などに適用することで、良好な結果を得られる可能性があります。\n\nマルチスレッドを使用するように設定しても、描画処理の負荷が軽くマルチスレッド化の効果が得られないとシステムが判断した場合は、マルチスレッドで実行されない場合があります。"
+      },
+      "tr": {
+        "summary": "Number of threads used for drawing",
+        "description": "Represents the **number of threads** Kirikiri's layer system uses for drawing. This property can also be set.\n\nIf you specify `**dtnAuto**`, as many threads as the number of processors recognized by the OS are assigned automatically.\n\nUsing several drawing threads may improve drawing performance on multi-core systems, but it can also reduce performance.\n\nYou may get good results by applying it to drawing over large areas, heavy Affine operations, computationally heavy layer compositing and the like.\n\nEven when multithreading is enabled, drawing may not run multithreaded if the system judges that the drawing load is too light to benefit from it."
+      }
+    },
+    "System.savedGamesPath": {
+      "hash": "55fd7ecd6a28",
+      "ja": {
+        "summary": "保存したゲームのパス(1.1.0以降)",
+        "description": "保存したゲームのパスを表します。\n\nこれは、通常、以下の通りになります。\n\nC:\\Users\\<ユーザ名>\\Saved Games"
+      },
+      "tr": {
+        "summary": "Path of Saved Games (1.1.0 and later)",
+        "description": "Represents the path of the Saved Games folder.\n\nIt is usually the following.\n\nC:\\Users\\<ユーザ名>\\Saved Games"
+      }
+    },
+    "System.exeBits": {
+      "hash": "7bd7948fb01d",
+      "ja": {
+        "summary": "吉里吉里本体が 32bit 版か 64bit 版か(1.3.0以降)",
+        "description": "実行バイナリが 32bit 版か 64bit 版かを整数の 32 か 64 で表します。"
+      },
+      "tr": {
+        "summary": "Whether the Kirikiri engine is 32-bit or 64-bit (1.3.0 and later)",
+        "description": "Indicates whether the executable is 32-bit or 64-bit, as the integer 32 or 64."
+      }
+    },
+    "System.osBits": {
+      "hash": "2d60613e1562",
+      "ja": {
+        "summary": "OS が 32bit 版か 64bit 版か(1.3.0以降)",
+        "description": "OS が 32bit 版か 64bit 版かを整数の 32 か 64 で表します。"
+      },
+      "tr": {
+        "summary": "Whether the OS is 32-bit or 64-bit (1.3.0 and later)",
+        "description": "Indicates whether the OS is 32-bit or 64-bit, as the integer 32 or 64."
+      }
+    },
+    "System.exitOnNoWindowStartup": {
+      "hash": "c16f0f764ac9",
+      "ja": {
+        "summary": "ウィンドウ無し起動時の自動終了",
+        "description": "真の場合、ウィンドウを 1 つも作成せずに起動が完了したときにエンジンを\n自動的に終了させます。デバッグ用途やバッチ処理時の制御に用います。"
+      },
+      "tr": {
+        "summary": "Exit automatically when started without a window",
+        "description": "If true, the engine exits automatically when startup completes without any window\nhaving been created. Used for debugging and for controlling batch processing."
+      }
+    },
+    "System.isGeneric": {
+      "hash": "2135375d2fe1",
+      "ja": {
+        "summary": "汎用ビルドかどうかの判定",
+        "description": "SDL3 ベースのクロスプラットフォームビルド ( generic / SDL ) では真、\nWin32 ネイティブビルド ( WINVER ) では偽が返ります。\n読み出し専用。"
+      },
+      "tr": {
+        "summary": "Whether this is a generic build",
+        "description": "true in SDL3-based cross-platform builds (generic / SDL),\nfalse in the native Win32 build (WINVER).\nRead-only."
+      }
+    },
+    "System.isWindows": {
+      "hash": "b916048cfeba",
+      "ja": {
+        "summary": "システムがWindowsかどうか判定[r]"
+      },
+      "tr": {
+        "summary": "Whether the system is Windows [r]"
+      }
+    },
+    "System.licenseText": {
+      "hash": "de1f2d244f0a",
+      "ja": {
+        "summary": "ライセンス文字列",
+        "description": "吉里吉里Z 本体に組み込まれたライセンス表示用の文字列を返します。\n「吉里吉里設定」ダイアログ等で表示するために使用します。\n本体条項に続けて、同梱コンポーネントのライセンス一覧\n( getLicenseList と同じ内容 ) が付きます。個々の全文が要るときは\ngetLicenseText を使ってください。\n読み出し専用。"
+      },
+      "tr": {
+        "summary": "License text",
+        "description": "Returns the license text built into the Kirikiri Z engine.\nUsed for display in places such as the Kirikiri settings dialog.\nThe engine's own terms are followed by the list of licenses of bundled components\n(the same content as getLicenseList). When you need the full text of each, use\ngetLicenseText.\nRead-only."
+      }
+    },
+    "System.openGLESVersion": {
+      "hash": "f727667c0284",
+      "ja": {
+        "summary": "OpenGL ES のバージョン",
+        "description": "実際の値を100倍した数、つまり2.0なら200、3.0なら300が返ります。"
+      },
+      "tr": {
+        "summary": "OpenGL ES version",
+        "description": "Returns the actual version multiplied by 100: 200 for 2.0, 300 for 3.0."
+      }
+    },
+    "System.processorNum": {
+      "hash": "4a58e806ada9",
+      "ja": {
+        "summary": "論理プロセッサ数",
+        "description": "OS から認識されている論理プロセッサ数を返します。\n描画スレッド数の自動決定などに利用されます。読み出し専用。"
+      },
+      "tr": {
+        "summary": "Number of logical processors",
+        "description": "Returns the number of logical processors recognized by the OS.\nUsed, for example, to determine the number of drawing threads automatically. Read-only."
+      }
+    },
+    "System.renderStats": {
+      "hash": "92d857766dd1",
+      "ja": {
+        "summary": "画面転送コストの計測値",
+        "description": "合成済みの画面バッファを GPU テクスチャへ転送するのにかかった時間を\n返します。読み出し専用。返る辞書のキーは次の通りです。\n\n| キー | 意味 |\n|---|---|\n| `texUploadUs` | 転送呼び出しの累計時間 (マイクロ秒) |\n| `texUploads` | 転送回数 (ダーティ矩形単位) |\n| `texUploadBytes` | 転送した累計バイト数 |\n| `frames` | 合成フレームを描いた回数 (転送の有無に依らず) |\n\nすべて累積値なので、**2 回読んで差分を取り、経過実時間との比**で\n「1 秒あたり転送に何ミリ秒使ったか」を見ます。\n`System.renderStatsReset()` で 0 に戻せます。\n\n画面に変化が無いフレームでは転送そのものを行わないため、静止中は\n`texUploads` が増えません ( `frames` は増えます )。逆に静止しているのに\n`texUploadBytes` が毎フレーム画面サイズぶん増えていく場合は、どこかが\n全面更新を出しています。\n\n転送はドライバの都合でブロックすることがあり (転送先テクスチャを\nGPU がまだ参照している場合など)、その待ちもこの時間に含まれます。\n描画デバイスによって転送方法が違う (OpenGL = glTexSubImage2D /\nSDLDrawDevice = SDL_UpdateTexture / Windows ネイティブ =\nUpdateSubresource) ので、実機で詰まっていないかの一次指標として使います。\n\nビルドオプションは不要で常に計測されます (1 フレームに数回の\nカウンタ加算のみ)。オーバーレイダイアログ側の内訳は\n`ElementsDialog.renderStats` を参照してください。\n\n!!! tip \"数値の読み方\"\n    転送率 ( 転送時間 / 経過実時間 ) が高くても **fps が出ていれば、\n    待ちの大半は vsync 同期ぶん**です ( ドライバが転送呼び出しの中で\n    次フレームを待つ )。本当に転送が足を引っ張っている場合は fps が\n    落ちます。この判定基準や経路ごとの違い、計測の進め方は\n    コアデモ `perf_stats` と、エンジン付属文書\n    `src/core/doc/ScreenTransfer.md` にまとめてあります。"
+      },
+      "tr": {
+        "summary": "Screen transfer cost measurements",
+        "description": "Returns the time spent transferring the composited screen buffer to the GPU texture.\nRead-only. The returned dictionary has the following keys.\n\n| Key | Meaning |\n|---|---|\n| `texUploadUs` | Cumulative time of transfer calls (microseconds) |\n| `texUploads` | Number of transfers (per dirty rectangle) |\n| `texUploadBytes` | Cumulative bytes transferred |\n| `frames` | Number of composited frames drawn (whether or not a transfer occurred) |\n\nAll values are cumulative, so **read twice, take the difference and divide by the elapsed real time** to see\n\"how many milliseconds per second were spent on transfers\".\n`System.renderStatsReset()` resets them to 0.\n\nFrames with no change on screen skip the transfer entirely, so while the screen is static\n`texUploads` does not increase (`frames` does). Conversely, if the screen is static but\n`texUploadBytes` grows by the screen size every frame, something is\nissuing full-screen updates.\n\nTransfers may block for driver reasons (for example, when the GPU is still referencing\nthe destination texture), and that wait is included in this time as well.\nThe transfer method differs by draw device (OpenGL = glTexSubImage2D /\nSDLDrawDevice = SDL_UpdateTexture / native Windows =\nUpdateSubresource), so use this as a first indicator of whether transfers are a bottleneck on the target hardware.\n\nNo build option is needed; it is always measured (just a few\ncounter increments per frame). For the breakdown on the overlay dialog side, see\n`ElementsDialog.renderStats`.\n\n!!! tip \"Reading the numbers\"\n    Even if the transfer ratio (transfer time / elapsed real time) is high, **if the fps holds up,\n    most of the wait is vsync synchronization** (the driver waits for the\n    next frame inside the transfer call). If transfers are really holding things back, the fps\n    drops. These criteria, the differences between paths and how to proceed with measurement are\n    covered in the core demo `perf_stats` and in the engine document\n    `src/core/doc/ScreenTransfer.md`."
+      }
+    },
+    "System.renderStatsReset": {
+      "hash": "385d930e46b8",
+      "ja": {
+        "summary": "画面転送コストの計測値をリセットする",
+        "description": "`System.renderStats` の累積カウンタを 0 に戻します。\n計測区間の開始点として呼びます。"
+      },
+      "tr": {
+        "summary": "Resets the screen transfer cost measurements",
+        "description": "Resets the cumulative counters of `System.renderStats` to 0.\nCall it at the start of a measurement interval."
+      }
+    },
+    "System.texUploadUsePBO": {
+      "hash": "e9f280a42603",
+      "ja": {
+        "summary": "テクスチャ転送に PBO を使うかの強制指定",
+        "description": "画面バッファを GPU テクスチャへ転送する経路を、計測・比較のために\n強制します。設定できる値は次の通りです。\n\n| 値 | 意味 |\n|---|---|\n| `void` (既定) | 用途ごとの既定に従う (本画面 = 転送サイズで自動判定 / オーバーレイ = 直接転送) |\n| `true` | 常に PBO 経由で転送する |\n| `false` | 常に `glTexSubImage2D` で直接転送する |\n\n既定では転送バイト数が 256KB 以上なら PBO、それ未満なら直接転送を\n選びます。小さい矩形を多数更新する画面では PBO の固定コストが効いて\n不利になるためです。また ANGLE 実装 (Windows の GLES → D3D11\nエミュレーション) ではサイズによらず常に直接転送になります。\n\nA/B 比較には `System.renderStatsReset()` と `System.renderStats` を\n併用します。環境変数 `KRKRZ_GLTEXUP=pbo|direct` でも同じ指定が\nできますが、環境変数を渡せない環境ではこちらを使います。\n\nOpenGL 描画を有効にしたビルドでのみ存在します (既定で有効)。"
+      },
+      "tr": {
+        "summary": "Forces whether texture transfers use PBOs",
+        "description": "Forces the path used to transfer the screen buffer to the GPU texture, for measurement and comparison.\nThe following values can be set.\n\n| Value | Meaning |\n|---|---|\n| `void` (default) | Follow the default for each use (main screen = chosen automatically by transfer size / overlay = direct transfer) |\n| `true` | Always transfer via a PBO |\n| `false` | Always transfer directly with `glTexSubImage2D` |\n\nBy default, a PBO is used when the transfer is 256KB or larger, and a direct transfer otherwise.\nThis is because on screens that update many small rectangles, the fixed cost of PBOs makes them\nslower. With the ANGLE implementation (GLES → D3D11 emulation on Windows),\ndirect transfer is always used regardless of size.\n\nFor A/B comparisons, use `System.renderStatsReset()` together with `System.renderStats`.\nThe environment variable `KRKRZ_GLTEXUP=pbo|direct` does the same,\nbut use this property in environments where you cannot pass environment variables.\n\nExists only in builds with OpenGL drawing enabled (enabled by default)."
+      }
+    },
+    "System.touchDevice": {
+      "hash": "6e4dacebdf45",
+      "ja": {
+        "summary": "タッチデバイスの利用可否",
+        "description": "実行環境にタッチ入力デバイスが存在する場合に真を返します。\n読み出し専用。"
+      },
+      "tr": {
+        "summary": "Whether a touch device is available",
+        "description": "Returns true if the environment has a touch input device.\nRead-only."
+      }
+    },
+    "System.platformTag": {
+      "hash": "b66273caf132",
+      "ja": {
+        "summary": "プラットフォームタグ",
+        "description": "実行中のプラットフォームを表す短い識別子です ( `\"windows\"` / `\"android\"` /\n`\"macos\"` / `\"linux\"` / `\"web\"` など )。読み出し専用。\n\n[System.platformName](System.md#platformname) は OS から得た生の文字列で\n空白や表記ゆれを含むため、ファイル名や条件分岐には使いにくいのに対し、\nこちらは**小文字・空白無しに正規化**されているので、そのまま機種分岐に使えます。\n\n複数のタグが該当する環境 ( 世代違いのコンソールなど ) では、**最も具体的なもの**が\n返ります。\n\n!!! info \"機種別のエンジン設定 `config_<tag>.cf`\"\n    リソース内の設定ファイルは、共通の `config.cf` に加えて\n    `config_<タグ>.cf` を置くと機種別に上書きできます。\n    読み込みは「具体的なタグ → 一般的なタグ → 共通 `config.cf`」の順で、\n    先に読まれたものが優先されます。存在しないファイルは単に読み飛ばされます。"
+      },
+      "tr": {
+        "summary": "Platform tag",
+        "description": "A short identifier for the running platform (`\"windows\"` / `\"android\"` /\n`\"macos\"` / `\"linux\"` / `\"web\"`, etc.). Read-only.\n\n[System.platformName](System.md#platformname) is the raw string from the OS and\ncontains spaces and inconsistent spellings, which makes it awkward for file names and conditionals. This one,\nin contrast, is **normalized to lowercase with no spaces**, so you can use it directly to branch by platform.\n\nIn environments where several tags apply (such as different generations of a console), **the most specific one**\nis returned.\n\n!!! info \"Per-platform engine configuration `config_<tag>.cf`\"\n    In addition to the common `config.cf`, you can place\n    `config_<tag>.cf` among the resources to override settings per platform.\n    They are read in the order \"specific tag → general tag → common `config.cf`\",\n    and whichever is read first takes priority. Missing files are simply skipped."
+      }
+    },
+    "System.systemLanguage": {
+      "hash": "e89facb76f92",
+      "ja": {
+        "summary": "本体の表示言語",
+        "description": "OS ( 家庭用ゲーム機ならハード ) に設定されている表示言語を\n[BCP-47](https://www.rfc-editor.org/info/bcp47) の言語タグで返します。\n読み出し専用。`\"ja-JP\"` / `\"en-US\"` / `\"zh-Hant\"` / `\"zh-Hans\"` のような\n値になります。\n\nゲームの**既定**言語をハードの設定に合わせるための口です。言語の選択と\n保存はゲーム側の責務で、このプロパティは「本体が何語設定か」だけを返します。\n地域まで要らない場合は `-` より前を見てください。\n\n```tjs\nvar lang = System.systemLanguage;\nvar code = lang.indexOf(\"-\") >= 0 ? lang.substring(0, lang.indexOf(\"-\")) : lang;\nif(code == \"\") code = \"ja\";   // 取得できない環境はゲーム既定へ\n```\n\n!!! warning \"取得できない環境では空文字列\"\n    言語を取得する手段が無い環境では空文字列を返します。\n    呼び出し側でゲームの既定言語へフォールバックしてください。\n\n取得元は環境ごとに異なります ( Windows ネイティブ版 =\n`GetUserDefaultLocaleName` / SDL3 版 = `SDL_GetPreferredLocales` の先頭。\n家庭用ゲーム機は各ハードの API )。SDL3 版では地域が取れない場合、\n`\"ja\"` のように言語のみが返ります。\n\nエンジン自身のメッセージ ( エラー文言等 ) とオプション解説の言語選択\n( ja / en / chs / cht ) もこの値に追従します。起動オプション `-language` で\n明示指定して上書きできます ( [コマンドラインオプション](../guide/CommandLine.md) )。"
+      },
+      "tr": {
+        "summary": "System display language",
+        "description": "Returns the display language set in the OS (or in the hardware, on game consoles) as a\n[BCP-47](https://www.rfc-editor.org/info/bcp47) language tag.\nRead-only. Values look like `\"ja-JP\"` / `\"en-US\"` / `\"zh-Hant\"` / `\"zh-Hans\"`.\n\nThis lets you match the game's **default** language to the hardware setting. Choosing and\nsaving the language is the game's responsibility; this property only returns \"which language the system is set to\".\nIf you do not need the region, look at the part before `-`.\n\n```tjs\nvar lang = System.systemLanguage;\nvar code = lang.indexOf(\"-\") >= 0 ? lang.substring(0, lang.indexOf(\"-\")) : lang;\nif(code == \"\") code = \"ja\";   // 取得できない環境はゲーム既定へ\n```\n\n!!! warning \"Empty string where it cannot be obtained\"\n    In environments with no way to obtain the language, an empty string is returned.\n    Fall back to the game's default language on the caller's side.\n\nThe source differs by environment (native Windows build =\n`GetUserDefaultLocaleName` / SDL3 build = the first entry of `SDL_GetPreferredLocales`;\ngame consoles use each hardware's API). In the SDL3 build, if the region cannot be obtained,\nonly the language is returned, as in `\"ja\"`.\n\nThe language of the engine's own messages (error text, etc.) and option descriptions\n(ja / en / chs / cht) also follows this value. You can override it explicitly with the `-language`\ncommand-line option ([Command-line options](../guide/CommandLine.md))."
+      }
+    },
+    "System.uiLanguage": {
+      "hash": "de8b13814060",
+      "ja": {
+        "summary": "実効表示言語",
+        "description": "エンジン自身のメッセージ ( エラー文言等 ) とオプション解説の言語選択に\n使われている言語タグを返します。読み取り専用です。\n\n起動オプション `-language` ( `config.cf` でも可 ) が指定されていればその値、\n無ければ [System.systemLanguage](#systemlanguage) と同じ OS の言語です。\nどちらも得られない環境では空文字列を返します。\n\n[System.systemLanguage](#systemlanguage) は OS の設定をそのまま返すので\n`-language` を反映しません。ゲーム側の多言語化でエンジンのメッセージと\n言語を揃えたいときはこちらを使ってください。言語コードへの丸めが必要なら\n[System.uiLanguageCandidates](#uilanguagecandidates) を使えます。"
+      },
+      "tr": {
+        "summary": "Effective display language",
+        "description": "Returns the language tag used to choose the language of the engine's own messages (error text, etc.)\nand option descriptions. Read-only.\n\nIf the `-language` command-line option (also settable in `config.cf`) is specified, its value is returned;\notherwise it is the OS language, the same as [System.systemLanguage](#systemlanguage).\nIn environments where neither can be obtained, an empty string is returned.\n\n[System.systemLanguage](#systemlanguage) returns the OS setting as is, so\nit does not reflect `-language`. Use this one when you want your game's localization to match\nthe language of the engine's messages. If you need it rounded to a language code, use\n[System.uiLanguageCandidates](#uilanguagecandidates)."
+      }
+    },
+    "System.uiLanguageCandidates": {
+      "hash": "17285481d6ea",
+      "ja": {
+        "summary": "実効表示言語の候補 (優先順)",
+        "description": "[System.uiLanguage](#uilanguage) を、エンジンのメッセージ資材と同じ規則で\n言語コードへ丸めた配列です。先頭が実際に使う言語で、以降はその言語の文字列が\n無いときに試す代替言語の順です。末尾は常に `\"ja\"` です。読み取り専用で、\n取得するたびに新しい配列を返します。\n\n言語コードは `\"ja\"` / `\"en\"` / `\"chs\"` ( 簡体字中国語 ) / `\"cht\"` ( 繁体字中国語 )\nのいずれかです。例:\n\n| uiLanguage | uiLanguageCandidates |\n|---|---|\n| `ja-JP` | `[\"ja\"]` |\n| `en-US` / `fr-FR` など | `[\"en\", \"ja\"]` |\n| `zh-CN` | `[\"chs\", \"en\", \"ja\"]` |\n| `zh-TW` / `zh-Hant-HK` | `[\"cht\", \"chs\", \"en\", \"ja\"]` |\n\n```tjs\n// 文字列表 %[ ja : \"…\", en : \"…\" ] から現在の言語で引く\nfunction pickText(entry)\n{\nvar langs = System.uiLanguageCandidates;\nfor (var i = 0; i < langs.count; i++)\nif (entry[langs[i]] !== void) return entry[langs[i]];\nreturn \"\";\n}\n```"
+      },
+      "tr": {
+        "summary": "Effective display language candidates (in priority order)",
+        "description": "An array of [System.uiLanguage](#uilanguage) rounded to language codes using the same rules as the engine's\nmessage resources. The first element is the language actually used, followed by fallback languages to try\nwhen a string is missing in that language. The last element is always `\"ja\"`. Read-only;\na new array is returned each time it is read.\n\nThe language code is one of `\"ja\"` / `\"en\"` / `\"chs\"` (Simplified Chinese) / `\"cht\"` (Traditional Chinese).\nExamples:\n\n| uiLanguage | uiLanguageCandidates |\n|---|---|\n| `ja-JP` | `[\"ja\"]` |\n| `en-US` / `fr-FR`, etc. | `[\"en\", \"ja\"]` |\n| `zh-CN` | `[\"chs\", \"en\", \"ja\"]` |\n| `zh-TW` / `zh-Hant-HK` | `[\"cht\", \"chs\", \"en\", \"ja\"]` |\n\n```tjs\n// 文字列表 %[ ja : \"…\", en : \"…\" ] から現在の言語で引く\nfunction pickText(entry)\n{\nvar langs = System.uiLanguageCandidates;\nfor (var i = 0; i < langs.count; i++)\nif (entry[langs[i]] !== void) return entry[langs[i]];\nreturn \"\";\n}\n```"
+      }
+    },
+    "System.padButtonMapping": {
+      "hash": "17926ba756fb",
+      "ja": {
+        "summary": "パッドのボタン割り当て方式",
+        "description": "ゲームパッドの物理ボタンを `VK_PAD1`〜`VK_PAD4` へどう割り当てるかを表す\n文字列です。値を設定することもできます。\n\n- `\"label\"` ( 既定 ) … **ボタンの刻印**で割り当てます。`VK_PAD1` = 刻印 A\n( PlayStation では ✕ )、`VK_PAD2` = B ( ○ )、`VK_PAD3` = X ( □ )、\n`VK_PAD4` = Y ( △ )。任天堂系のように A/B・X/Y の**位置が入れ替わっている**\nコントローラでも、画面表示と実際に押すボタンが一致します。\n- `\"position\"` … 従来どおり**位置**で割り当てます ( 下 = `VK_PAD1`、\n右 = `VK_PAD2`、左 = `VK_PAD3`、上 = `VK_PAD4` )。\n\n刻印が判定できないコントローラでは自動的に位置基準へフォールバックします。\nPlayStation / Xbox 系はどちらの方式でも結果が同じです。\n\n起動オプション `-padbuttons=label|position` ( `config.cf` でも可 ) でも\n指定できます。`\"label\"` / `\"position\"` 以外を代入すると例外になります。\n\n!!! warning \"SDL3 / 汎用ビルド限定\"\n    このプロパティは SDL3 / 汎用ビルドにのみ存在します。Windows ネイティブ\n    ( WINVER ) ビルドのパッド入力は XInput ベースで、ボタンの刻印が\n    Xbox 系に固定されているため位置と刻印が食い違いません。"
+      },
+      "tr": {
+        "summary": "Pad button mapping scheme",
+        "description": "A string that indicates how the physical buttons of a gamepad are mapped to `VK_PAD1`–`VK_PAD4`.\nThis property can also be set.\n\n- `\"label\"` (default) … Maps by **button label**. `VK_PAD1` = label A\n(✕ on PlayStation), `VK_PAD2` = B (○), `VK_PAD3` = X (□),\n`VK_PAD4` = Y (△). Even on controllers where A/B and X/Y are **in swapped positions**,\nas on Nintendo-style controllers, what the screen shows matches the button actually pressed.\n- `\"position\"` … Maps by **position**, as before (bottom = `VK_PAD1`,\nright = `VK_PAD2`, left = `VK_PAD3`, top = `VK_PAD4`).\n\nFor controllers whose labels cannot be determined, it falls back to position-based mapping automatically.\nPlayStation and Xbox-style controllers give the same result with either scheme.\n\nIt can also be specified with the `-padbuttons=label|position` command-line option (also settable in `config.cf`).\nAssigning anything other than `\"label\"` / `\"position\"` raises an exception.\n\n!!! warning \"SDL3 / generic builds only\"\n    This property exists only in SDL3 / generic builds. Pad input in the native Windows\n    (WINVER) build is based on XInput, and its button labels are fixed to the\n    Xbox style, so positions and labels never disagree."
+      }
+    },
+    "System.padStyle": {
+      "hash": "9e33ba8898a0",
+      "ja": {
+        "summary": "接続パッドのボタン表記の系統 ( 読み取り専用 )",
+        "description": "「最後に操作したパッド」のボタン表記の系統を表す文字列です。\n`\"xbox\"` / `\"ps\"` / `\"switch\"` のいずれかで、判定できない場合は\n空文字列になります。\n\n画面に表示するボタン絵 ( 操作ガイドなど ) をどの系統にするかの判断に\n使えます。[ElementsDialog.setPadTheme](ElementsDialog.md#setpadtheme) に `\"auto\"` を\n指定した場合の自動選択も、このプロパティと同じ判定を参照します。"
+      },
+      "tr": {
+        "summary": "Button label style of the connected pad (read-only)",
+        "description": "A string indicating the button label style of the \"last used pad\".\nIt is one of `\"xbox\"` / `\"ps\"` / `\"switch\"`, or an empty string if it cannot\nbe determined.\n\nUse it to decide which style of button images to show on screen (in control guides, etc.).\nWhen `\"auto\"` is passed to [ElementsDialog.setPadTheme](ElementsDialog.md#setpadtheme),\nthe automatic selection uses the same detection as this property."
+      }
+    },
+    "System.addFont": {
+      "hash": "545ed3913e88",
+      "ja": {
+        "summary": "フォントの追加",
+        "description": "ストレージ内のフォントファイルをエンジンに追加します。\n追加されたフォントはレイヤやフォント描画 API から face 名で参照可能になります。",
+        "returns": "追加されたフォントが提供する face 名の配列が返ります。",
+        "params": {
+          "storage": "追加するフォントファイルのストレージ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Adds a font",
+        "description": "Adds a font file in a storage to the engine.\nThe added font can then be referred to by face name from layers and font drawing APIs.",
+        "returns": "An array of the face names provided by the added font.",
+        "params": {
+          "storage": "Storage name of the font file to add."
+        }
+      }
+    },
+    "System.clearGraphicCache": {
+      "hash": "5c1cb1d640c9",
+      "ja": {
+        "summary": "グラフィックキャッシュの破棄",
+        "description": "`Layer.loadImages` 等が使用する内部のグラフィックキャッシュを破棄します。\nメモリ使用量の急な削減や、画像差し替え後の再読込を強制したい場合に呼び出します。"
+      },
+      "tr": {
+        "summary": "Discards the graphic cache",
+        "description": "Discards the internal graphic cache used by `Layer.loadImages` and others.\nCall it when you want to cut memory usage quickly or force images to be reloaded after replacing them."
+      }
+    },
+    "System.getJoypadType": {
+      "hash": "0b5080403af9",
+      "ja": {
+        "summary": "接続されているジョイパッドの種別 ( 機種名 ) 取得",
+        "description": "指定番号のジョイパッドの種別を機種名の「文字列」で返します\n( 数値の種別 ID ではありません )。文字列は環境依存で、SDL ビルドでは\nSDL が認識した機種名 ( 例: \"Xbox Series X Controller\" )、WINVER ビルドでは\nXInput 由来の汎用名 ( \"XInput Controller\" ) になります。",
+        "returns": "ジョイパッドの機種名を表す文字列が返ります。指定番号のパッドが\n無い場合は空文字列が返ります。",
+        "params": {
+          "no": "パッド番号を指定します ( 既定値 0 )。**0 は「最後に操作した\nパッド」を指す特別番号**で、1 以上は接続順の実パッド ( 1 番目, 2 番目, … )\nを指します。パッド関連 API とキーイベント ( VK_PAD* ) はいずれもこの\n番号体系に従い、キーイベントは常に 0 番 ( = 最後に操作したパッド ) を\n発生源とします。接続台数は `System.getJoypadCount()` で取得できます。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the type (model name) of a connected joypad",
+        "description": "Returns the type of the joypad with the specified number as a model name \"string\"\n(not a numeric type ID). The string is environment-dependent: in the SDL build it is the\nmodel name recognized by SDL (e.g. \"Xbox Series X Controller\"), and in the WINVER build it is a\ngeneric name derived from XInput (\"XInput Controller\").",
+        "returns": "A string representing the joypad's model name. If there is no pad with the specified number,\nan empty string is returned.",
+        "params": {
+          "no": "Pad number (default 0). **0 is a special number meaning \"the last used\npad\"**; 1 and above refer to actual pads in connection order (1st, 2nd, …).\nThe pad-related APIs and key events (VK_PAD*) all follow this\nnumbering, and key events always come from pad 0 (= the last used pad).\nThe number of connected pads can be obtained with `System.getJoypadCount()`."
+        }
+      }
+    },
+    "System.nullpo": {
+      "hash": "e263006dd1aa",
+      "ja": {
+        "summary": "nullポインターアクセスを発生させます",
+        "description": "呼ばないでください。"
+      },
+      "tr": {
+        "summary": "Causes a null pointer access",
+        "description": "Do not call this."
+      }
+    },
+    "System.system": {
+      "hash": "4b4c31610d83",
+      "ja": {
+        "summary": "シェルコマンドの実行",
+        "description": "OS の `system(3)` 相当でシェルコマンドを同期実行します。Win32 ビルド専用。\n実行直後に `TVP_COMPACT_LEVEL_MAX` レベルのコンパクトイベントが発行され、\nすべてのキャッシュが破棄されます。",
+        "returns": "`_wsystem()` の戻り値がそのまま返ります。",
+        "params": {
+          "command": "実行するコマンド文字列を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Runs a shell command",
+        "description": "Runs a shell command synchronously, equivalent to the OS `system(3)`. Win32 build only.\nImmediately afterward, a compact event at the `TVP_COMPACT_LEVEL_MAX` level is issued and\nall caches are discarded.",
+        "returns": "The return value of `_wsystem()` as is.",
+        "params": {
+          "command": "Command string to run."
+        }
+      }
+    },
+    "System.buildVariantName": {
+      "hash": "253f85c8dac3",
+      "ja": {
+        "summary": "ビルドバリアント名",
+        "description": "実行中のエンジンビルドの**バリアント名**を返します。\n\n- `WIN` ... Win32 ネイティブビルド ( WINVER )\n- `SDL` ... SDL3 ベースの汎用ビルド ( generic / SDL )\n- `LIB` ... 静的ライブラリ形式 ( libkrkrz )\n\n読み出し専用。`System.isGeneric` よりも具体的なバリアント識別が必要な\n場合に使います。"
+      },
+      "tr": {
+        "summary": "Build variant name",
+        "description": "Returns the **variant name** of the running engine build.\n\n- `WIN` ... native Win32 build (WINVER)\n- `SDL` ... SDL3-based generic build (generic / SDL)\n- `LIB` ... static library form (libkrkrz)\n\nRead-only. Use it when you need a more specific variant identification than\n`System.isGeneric`."
+      }
+    },
+    "System.getSystemAllocatorInfo": {
+      "hash": "f70ccf86081d",
+      "ja": {
+        "summary": "プラットフォームアロケータ情報の取得",
+        "description": "プロセスやシステムのメモリ状態を一度に取得します。値が取得できなかった\n項目はキー自体が辞書に存在しないため、`\"xxx\" in dict` で判定可能です。\n\n返される辞書のキー (環境により一部欠落):\n\n- `totalFreeSize`        : ヒープ全体の空き容量 ( バイト )\n- `allocatableSize`      : 確保可能な最大連続領域 ( バイト )\n- `usedSize`             : 現在の使用量 ( バイト )\n- `peakUsedSize`         : 起動以来の使用量ピーク ( バイト )\n- `totalSize`            : ヒープの総容量 ( バイト )\n- `processRss`           : プロセス RSS ( バイト )\n- `processPeakRss`       : プロセス peak RSS ( バイト )\n- `processVsize`         : プロセス仮想サイズ ( バイト )\n- `systemTotalPhysical`  : システム物理メモリ総量 ( バイト )\n- `systemAvailPhysical`  : システム利用可能物理メモリ ( バイト )",
+        "returns": "上記キーを含む辞書が返ります。"
+      },
+      "tr": {
+        "summary": "Gets platform allocator information",
+        "description": "Gets the memory state of the process and system in one call. Items whose values could not be\nobtained have no key in the dictionary at all, so you can check them with `\"xxx\" in dict`.\n\nKeys of the returned dictionary (some may be missing depending on the environment):\n\n- `totalFreeSize`        : free space in the whole heap (bytes)\n- `allocatableSize`      : largest contiguous allocatable region (bytes)\n- `usedSize`             : current usage (bytes)\n- `peakUsedSize`         : peak usage since startup (bytes)\n- `totalSize`            : total heap capacity (bytes)\n- `processRss`           : process RSS (bytes)\n- `processPeakRss`       : process peak RSS (bytes)\n- `processVsize`         : process virtual size (bytes)\n- `systemTotalPhysical`  : total system physical memory (bytes)\n- `systemAvailPhysical`  : available system physical memory (bytes)",
+        "returns": "A dictionary containing the keys above."
+      }
+    },
+    "System.resetMemoryPeak": {
+      "hash": "5ce580c8a5a6",
+      "ja": {
+        "summary": "メモリピーク計測のリセット",
+        "description": "File / Bitmap / Sound アロケータの **peak_used** を current_used に揃え\n直し、Krkrz グローバルアロケータのピーク値もリセットします。\n`MemoryOverlay` の `(peak X.XX)` 表示を「ここから先の最大」にしたい\nときに使います。REPL `.mempeakclear` と同等。"
+      },
+      "tr": {
+        "summary": "Resets memory peak measurement",
+        "description": "Resets **peak_used** of the File / Bitmap / Sound allocators to current_used,\nand also resets the peak value of the Krkrz global allocator.\nUse it when you want the `(peak X.XX)` display in `MemoryOverlay` to show \"the maximum from here on\".\nEquivalent to `.mempeakclear` in the REPL."
+      }
+    },
+    "System.beginAllocTag": {
+      "hash": "5d40a375306b",
+      "ja": {
+        "summary": "メモリアロケータタグスコープの開始",
+        "description": "thread-local なタグスタックに `name` を push します。以降この\nスレッドから走るエンジン側 ( Krkrz ) のメモリ確保は、このタグに\n振り分けて計測されます。`System.endAllocTag()` で対応する pop を\n行う必要があります。\n\n利用例:\n\n```\nSystem.beginAllocTag(\"User\");\nloadChapter(3);\nSystem.endAllocTag();\n```\n\n既知のタグ名 ( `TVPAllocTag` 列挙名: `TJS2` / `User` / `GraphicsLoader`\n等 ) と一致しない名前は **User** として扱われます。",
+        "params": {
+          "name": "タグ名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Begins a memory allocator tag scope",
+        "description": "Pushes `name` onto a thread-local tag stack. Subsequent engine-side (Krkrz) memory allocations\nfrom this thread are measured under this tag.\nYou must call `System.endAllocTag()` to do the matching pop.\n\nExample:\n\n```\nSystem.beginAllocTag(\"User\");\nloadChapter(3);\nSystem.endAllocTag();\n```\n\nNames that do not match a known tag name (`TVPAllocTag` enumerator names: `TJS2` / `User` / `GraphicsLoader`,\netc.) are treated as **User**.",
+        "params": {
+          "name": "Tag name."
+        }
+      }
+    },
+    "System.endAllocTag": {
+      "hash": "1c3d2a64cbda",
+      "ja": {
+        "summary": "メモリアロケータタグスコープの終了",
+        "description": "[System.beginAllocTag](System.md#beginalloctag) で push したタグを\n取り出します。"
+      },
+      "tr": {
+        "summary": "Ends a memory allocator tag scope",
+        "description": "Pops the tag pushed with [System.beginAllocTag](System.md#beginalloctag)."
+      }
+    },
+    "System.setMemoryOverlay": {
+      "hash": "f5f1d1de262e",
+      "ja": {
+        "summary": "メモリ状態オーバレイの設定",
+        "description": "画面右上にエンジンのメモリ状態をリアルタイム表示するオーバレイの\n表示有無を切り替えます。フラグ自体は全ビルドで切り替わりますが、\n**描画するのは OGL 系 DrawDevice ( `OGLDrawDevice` / `SDLOGLDrawDevice` )\nと SDL の `SDLDrawDevice`** です。Windows ネイティブ ( WINVER ) ビルドの\n既定 `BasicDrawDevice` (D3D11) には描画フックが無いため表示されませんが、\nWINVER でも `Window.drawDevice` を OGL 系へ切り替えれば表示されます。",
+        "returns": "設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。",
+        "params": {
+          "enable": "真で表示、偽で非表示。引数を省略 ( または void ) すると\n現在の状態をトグルします。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the memory status overlay",
+        "description": "Toggles the overlay that shows the engine's memory status in real time at the top right of the screen.\nThe flag itself toggles in every build, but\n**only OGL-family draw devices (`OGLDrawDevice` / `SDLOGLDrawDevice`)\nand SDL's `SDLDrawDevice` draw it**. The default `BasicDrawDevice` (D3D11) of the native Windows (WINVER) build\nhas no drawing hook, so the overlay is not shown there, but\nit is shown in WINVER too if you switch `Window.drawDevice` to an OGL-family device.",
+        "returns": "The resulting state as true (1) or false (0).",
+        "params": {
+          "enable": "true to show, false to hide. If omitted (or void),\nthe current state is toggled."
+        }
+      }
+    },
+    "System.setPadOverlay": {
+      "hash": "84f1066c09de",
+      "ja": {
+        "summary": "ゲームパッド状態オーバレイの設定",
+        "description": "画面左上にゲームパッド 16 ボタンと 6 軸のアナログ値のオーバレイを\n表示するかを切り替えます。フラグ自体は全ビルドで切り替わりますが、\n**描画するのは OGL 系 DrawDevice ( `OGLDrawDevice` / `SDLOGLDrawDevice` )\nと SDL の `SDLDrawDevice`** です。Windows ネイティブ ( WINVER ) ビルドの\n既定 `BasicDrawDevice` (D3D11) には描画フックが無いため表示されませんが、\nWINVER でも `Window.drawDevice` を OGL 系へ切り替えれば表示されます\n( パッドの状態取得は全ビルド共通の論理層を使うため、WINVER でも\nXInput のパッド名・ボタン・軸が表示されます )。",
+        "returns": "設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。",
+        "params": {
+          "enable": "真で表示、偽で非表示。引数を省略 ( または void ) すると\n現在の状態をトグルします。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the gamepad status overlay",
+        "description": "Toggles the overlay that shows the gamepad's 16 buttons and the analog values of its 6 axes at the top left of the screen.\nThe flag itself toggles in every build, but\n**only OGL-family draw devices (`OGLDrawDevice` / `SDLOGLDrawDevice`)\nand SDL's `SDLDrawDevice` draw it**. The default `BasicDrawDevice` (D3D11) of the native Windows (WINVER) build\nhas no drawing hook, so the overlay is not shown there, but\nit is shown in WINVER too if you switch `Window.drawDevice` to an OGL-family device\n(pad state is obtained through a logical layer shared by all builds, so WINVER also\nshows the XInput pad name, buttons and axes).",
+        "returns": "The resulting state as true (1) or false (0).",
+        "params": {
+          "enable": "true to show, false to hide. If omitted (or void),\nthe current state is toggled."
+        }
+      }
+    },
+    "System.setDrawStatsLog": {
+      "hash": "fbe175600b10",
+      "ja": {
+        "summary": "描画統計ログ出力の設定",
+        "description": "`KRKRZ_DRAW_STATS=ON` ビルドかつ MemoryOverlay 表示中、500ms ごとに\n`DrawThreadPool` 利用統計をログに書き出すモードを切り替えます。\n実機 ( Switch 等 ) でリアルタイム表示が速く流れて読めない場合に\n利用します。OFF ビルドや MemoryOverlay 非表示時に呼んでも実害は\nありませんが、ログは出力されません。",
+        "returns": "設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。",
+        "params": {
+          "enable": "真でログ出力、偽で停止。引数を省略 ( または void ) すると\n現在の状態をトグルします。"
+        }
+      },
+      "tr": {
+        "summary": "Sets drawing statistics logging",
+        "description": "In builds with `KRKRZ_DRAW_STATS=ON`, while MemoryOverlay is shown, toggles a mode that writes\n`DrawThreadPool` usage statistics to the log every 500 ms.\nUse it on target hardware (game consoles, etc.) when the real-time display scrolls too fast to read.\nCalling it in OFF builds or while MemoryOverlay is hidden does no harm,\nbut nothing is logged.",
+        "returns": "The resulting state as true (1) or false (0).",
+        "params": {
+          "enable": "true to log, false to stop. If omitted (or void),\nthe current state is toggled."
+        }
+      }
+    },
+    "System.getTextureMemory": {
+      "hash": "f7eaf1271254",
+      "ja": {
+        "summary": "GL テクスチャメモリ使用量の取得",
+        "description": "GL 系 DrawDevice が確保しているテクスチャ類のメモリ使用量を辞書で返します。\nアロケータやプロセスの使用量 ( REPL の `.mem` 等 ) が扱う CPU 側のメモリには\nGL ドライバが確保するテクスチャは含まれないため、こちらで別途計測します。\n\n返される辞書のメンバは次の通りです ( 単位はバイト )。\n\n| メンバ | 内容 |\n|---|---|\n| `texture` | [Texture](Texture.md) ( GL テクスチャ ) 実体の合計 |\n| `pbo` | アップロード用 PBO の合計。**更新されるテクスチャだけが持ちます** ( 遅延確保 ) |\n| `total` | `texture` + `pbo` |\n| `peak` | 合計の最大値 |\n| `textureCount` | 生存しているテクスチャ数 |\n| `pboCount` | 生存している PBO 数 |\n\n`peak` は [Offscreen](Offscreen.md) が使う FBO のぶんも含んだ合計の最大値なので、\nFBO を使っている場合は `total` より大きい値になります ( `total` は FBO を含みません )。\n\n**SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。\nWINVER ビルドには現在ありません。",
+        "returns": "使用量の辞書配列",
+        "params": {
+          "tag": "文字列を渡すと、その名前付きで使用量を 1 行ログにも出力します。\n\nシーンの境界などに目印を打ちたいときに使います。省略時はログを出力しません。"
+        }
+      },
+      "tr": {
+        "summary": "Gets GL texture memory usage",
+        "description": "Returns the memory usage of textures and the like allocated by GL-family draw devices, as a dictionary.\nThe CPU-side memory covered by allocator and process usage (`.mem` in the REPL, etc.) does not include\ntextures allocated by the GL driver, so they are measured separately here.\n\nThe returned dictionary has the following members (in bytes).\n\n| Member | Contents |\n|---|---|\n| `texture` | Total of [Texture](Texture.md) (GL texture) objects |\n| `pbo` | Total of upload PBOs. **Only textures that get updated have one** (allocated lazily) |\n| `total` | `texture` + `pbo` |\n| `peak` | Maximum of the total |\n| `textureCount` | Number of live textures |\n| `pboCount` | Number of live PBOs |\n\n`peak` is the maximum of a total that also includes the FBOs used by [Offscreen](Offscreen.md),\nso when FBOs are in use it is larger than `total` (`total` does not include FBOs).\n\n**Exists only in SDL3 / LIB builds with OpenGL drawing enabled.**\nThe WINVER build does not currently have it.",
+        "returns": "Dictionary of usage values",
+        "params": {
+          "tag": "If you pass a string, the usage is also written to the log as one line labeled with that name.\n\nUse it to mark points such as scene boundaries. If omitted, nothing is logged."
+        }
+      }
+    },
+    "System.setTextureMemoryLog": {
+      "hash": "78994634a9e1",
+      "ja": {
+        "summary": "GL テクスチャメモリログ出力の設定",
+        "description": "GL テクスチャメモリの合計が 8MiB 増減するたびに、使用量をログへ書き出す\nモードを切り替えます。既定は無効です。\n\n**SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。",
+        "returns": "設定後の状態が真 ( 1 ) または偽 ( 0 ) で返ります。",
+        "params": {
+          "enable": "真でログ出力、偽で停止。引数を省略 ( または void ) すると\n現在の状態をトグルします。"
+        }
+      },
+      "tr": {
+        "summary": "Sets GL texture memory logging",
+        "description": "Toggles a mode that writes usage to the log each time the GL texture memory total increases or decreases by 8MiB.\nDisabled by default.\n\n**Exists only in SDL3 / LIB builds with OpenGL drawing enabled.**",
+        "returns": "The resulting state as true (1) or false (0).",
+        "params": {
+          "enable": "true to log, false to stop. If omitted (or void),\nthe current state is toggled."
+        }
+      }
+    },
+    "System.resetTextureMemoryPeak": {
+      "hash": "677c631651eb",
+      "ja": {
+        "summary": "GL テクスチャメモリのピーク値のリセット",
+        "description": "[System.getTextureMemory](System.md#gettexturememory) が返す `peak` を現在値へ\nリセットします。「ここから先の最大値」を測りたいときに使います。\n\n**SDL3 / LIB ビルドかつ OpenGL 描画を有効にしたビルドでのみ存在します**。"
+      },
+      "tr": {
+        "summary": "Resets the GL texture memory peak",
+        "description": "Resets the `peak` returned by [System.getTextureMemory](System.md#gettexturememory) to the current value.\nUse it when you want to measure \"the maximum from here on\".\n\n**Exists only in SDL3 / LIB builds with OpenGL drawing enabled.**"
+      }
+    },
+    "System.getJoypadCount": {
+      "hash": "9ee7a6caec34",
+      "ja": {
+        "summary": "接続中のゲームパッド数の取得",
+        "description": "現在接続が認識されているゲームパッドの数を返します。",
+        "returns": "ゲームパッド数 ( 整数 )。"
+      },
+      "tr": {
+        "summary": "Gets the number of connected gamepads",
+        "description": "Returns the number of gamepads currently recognized as connected.",
+        "returns": "Number of gamepads (integer)."
+      }
+    },
+    "System.hasJoypad": {
+      "hash": "c5fb8c59921d",
+      "ja": {
+        "summary": "ゲームパッドの接続確認",
+        "description": "指定番号のゲームパッドが接続されているかを返します。",
+        "returns": "接続されていれば真、そうでなければ偽。",
+        "params": {
+          "no": "ゲームパッド番号を指定します ( 既定値 0 )。"
+        }
+      },
+      "tr": {
+        "summary": "Checks whether a gamepad is connected",
+        "description": "Returns whether the gamepad with the specified number is connected.",
+        "returns": "true if connected, false otherwise.",
+        "params": {
+          "no": "Gamepad number (default 0)."
+        }
+      }
+    },
+    "System.getPadAxis": {
+      "hash": "cdad514b3d62",
+      "ja": {
+        "summary": "ゲームパッドの軸アナログ値の取得",
+        "description": "指定パッドの指定軸のアナログ値を返します。軸 ID には\n`System.padAxisLeftX` 等の定数を使用してください。\n\n戻り値の範囲:\n\n- スティック軸 ( LeftX / LeftY / RightX / RightY ) ... -1.0 〜 +1.0\n- トリガ軸 ( LeftTrigger / RightTrigger ) ... 0.0 〜 +1.0\n\n未接続、無効な軸 ID 等の場合は 0.0 が返ります。",
+        "returns": "軸のアナログ値が実数で返ります。",
+        "params": {
+          "no": "パッド番号を指定します ( 0 = 最後に操作したパッド、1 以上 = 接続順の実パッド )。",
+          "axisId": "軸 ID を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets a gamepad axis analog value",
+        "description": "Returns the analog value of the specified axis of the specified pad. Use constants such as\n`System.padAxisLeftX` for the axis ID.\n\nRange of the return value:\n\n- Stick axes (LeftX / LeftY / RightX / RightY) ... -1.0 to +1.0\n- Trigger axes (LeftTrigger / RightTrigger) ... 0.0 to +1.0\n\n0.0 is returned if the pad is not connected, the axis ID is invalid, and so on.",
+        "returns": "The axis analog value as a real number.",
+        "params": {
+          "no": "Pad number (0 = the last used pad, 1 and above = actual pads in connection order).",
+          "axisId": "Axis ID."
+        }
+      }
+    },
+    "System.rumblePad": {
+      "hash": "5c39585659c6",
+      "ja": {
+        "summary": "ゲームパッドの振動開始",
+        "description": "指定パッドのランブルモータを駆動します。",
+        "returns": "開始に成功すれば真、失敗すれば偽。",
+        "params": {
+          "no": "パッド番号を指定します ( 0 = 最後に操作したパッド )。",
+          "low": "低周波モータの強度 ( 0〜255 )。",
+          "high": "高周波モータの強度 ( 0〜255 )。",
+          "duration": "駆動時間をミリ秒で指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Starts gamepad vibration",
+        "description": "Drives the rumble motors of the specified pad.",
+        "returns": "true if started successfully, false otherwise.",
+        "params": {
+          "no": "Pad number (0 = the last used pad).",
+          "low": "Strength of the low-frequency motor (0–255).",
+          "high": "Strength of the high-frequency motor (0–255).",
+          "duration": "Duration in milliseconds."
+        }
+      }
+    },
+    "System.stopRumblePad": {
+      "hash": "7093092cd71c",
+      "ja": {
+        "summary": "ゲームパッドの振動停止",
+        "description": "[System.rumblePad](System.md#rumblepad) で開始した振動を停止します。",
+        "returns": "停止に成功すれば真、失敗すれば偽。",
+        "params": {
+          "no": "パッド番号を指定します ( 既定値 0 )。"
+        }
+      },
+      "tr": {
+        "summary": "Stops gamepad vibration",
+        "description": "Stops vibration started with [System.rumblePad](System.md#rumblepad).",
+        "returns": "true if stopped successfully, false otherwise.",
+        "params": {
+          "no": "Pad number (default 0)."
+        }
+      }
+    },
+    "System.getLicenseList": {
+      "hash": "51556b620ca5",
+      "ja": {
+        "summary": "ライセンス一覧の取得",
+        "description": "エンジンとプラグインが内蔵する第三者コンポーネントのライセンス情報と、\nプロジェクトの `licenses/` フォルダに置かれたライセンスファイル\n( `licenses/*.txt` または `.md` ) をまとめた一覧を返します。\nゲーム内のライセンス表示画面 ( フォント選択画面など ) を\nスクリプト側で自由に組むための情報源です。\n\n各要素は辞書で、以下のメンバを持ちます:\n+ `name` : 表示名 ( `getLicenseText` に渡す )\n+ `group` : 分類 ( \"engine\" / \"font\" / \"font-engine\" / \"audio\" / \"video\" /\n\"ui\" / \"platform\" / \"plugin:～\" / \"data\" 等 )\n+ `source` : 出所 ( \"builtin\" = 本体内蔵 / \"plugin\" = プラグイン登録 /\n\"storage\" = プロジェクトの licenses/ フォルダ )\n\n同名のライセンスが複数の出所にある場合は 1 件にまとめられます\n( プラグイン登録 > 本体内蔵 > storage の優先 )。",
+        "returns": "ライセンス情報 ( 辞書 ) の配列"
+      },
+      "tr": {
+        "summary": "Gets the license list",
+        "description": "Returns a list combining the license information of third-party components built into the engine and plugins with\nthe license files placed in the project's `licenses/` folder\n(`licenses/*.txt` or `.md`).\nIt is the information source for building an in-game license screen (such as a font selection screen)\nfreely in script.\n\nEach element is a dictionary with the following members:\n+ `name` : display name (pass it to `getLicenseText`)\n+ `group` : category (\"engine\" / \"font\" / \"font-engine\" / \"audio\" / \"video\" /\n\"ui\" / \"platform\" / \"plugin:...\" / \"data\", etc.)\n+ `source` : origin (\"builtin\" = built into the engine / \"plugin\" = registered by a plugin /\n\"storage\" = the project's licenses/ folder)\n\nIf a license with the same name comes from several origins, they are merged into one entry\n(priority: plugin registration > built into the engine > storage).",
+        "returns": "Array of license information (dictionaries)"
+      }
+    },
+    "System.getLicenseText": {
+      "hash": "0b2e66bb8bdd",
+      "ja": {
+        "summary": "ライセンス文の取得",
+        "description": "[System.getLicenseList](System.md#getlicenselist) の `name` を指定して\nライセンス文全体を文字列で取得します。見つからない場合は void を返します。\n\nプロジェクトの `licenses/` フォルダに置いたファイル ( 追加フォントの\nライセンス文など ) も同じ名前解決で取得できます\n( `licenses/<name>.txt` → 無ければ `.md` )。",
+        "returns": "ライセンス文 ( 見つからなければ void )",
+        "params": {
+          "name": "ライセンス名"
+        }
+      },
+      "tr": {
+        "summary": "Gets license text",
+        "description": "Gets the full license text as a string, given a `name` from [System.getLicenseList](System.md#getlicenselist).\nReturns void if not found.\n\nFiles placed in the project's `licenses/` folder (such as the license text of an added font)\ncan be retrieved with the same name resolution\n(`licenses/<name>.txt`, or `.md` if that does not exist).",
+        "returns": "License text (void if not found)",
+        "params": {
+          "name": "License name"
+        }
+      }
+    },
+    "System.padAxisLeftX": {
+      "hash": "38e3bdcca64a",
+      "ja": {
+        "summary": "パッド軸 ID: 左スティック X 軸",
+        "description": "[System.getPadAxis](System.md#getpadaxis) の axisId 引数に指定する定数。\n読み出し専用。"
+      },
+      "tr": {
+        "summary": "Pad axis ID: left stick X axis",
+        "description": "Constant to pass as the axisId argument of [System.getPadAxis](System.md#getpadaxis).\nRead-only."
+      }
+    },
+    "System.padAxisLeftY": {
+      "hash": "d29dde602226",
+      "ja": {
+        "summary": "パッド軸 ID: 左スティック Y 軸"
+      },
+      "tr": {
+        "summary": "Pad axis ID: left stick Y axis"
+      }
+    },
+    "System.padAxisRightX": {
+      "hash": "46d10cdec1b2",
+      "ja": {
+        "summary": "パッド軸 ID: 右スティック X 軸"
+      },
+      "tr": {
+        "summary": "Pad axis ID: right stick X axis"
+      }
+    },
+    "System.padAxisRightY": {
+      "hash": "d67f6cac93a3",
+      "ja": {
+        "summary": "パッド軸 ID: 右スティック Y 軸"
+      },
+      "tr": {
+        "summary": "Pad axis ID: right stick Y axis"
+      }
+    },
+    "System.padAxisLeftTrigger": {
+      "hash": "dab76355c49a",
+      "ja": {
+        "summary": "パッド軸 ID: L トリガ"
+      },
+      "tr": {
+        "summary": "Pad axis ID: L trigger"
+      }
+    },
+    "System.padAxisRightTrigger": {
+      "hash": "0190023e6f3d",
+      "ja": {
+        "summary": "パッド軸 ID: R トリガ"
+      },
+      "tr": {
+        "summary": "Pad axis ID: R trigger"
+      }
+    },
+    "System.padEnabled": {
+      "hash": "cb4c954780a2",
+      "ja": {
+        "summary": "ゲームパッド機能の有効/無効",
+        "description": "偽を代入するとゲームパッド機能を完全に無効化します ( 状態取得・キーイベント\n生成をいずれも行わなくなります )。真で再度有効化します。実行時にいつでも\n切り替えられます。\n\n他のデバイスが誤ってゲームパッドとして認識され誤動作するようなケースへの\n対処 ( 設定画面での無効化オプションなど ) に利用できます。コマンドライン\nオプション `-joypad=no` でも起動時から無効化できますが、このプロパティで\n明示的に設定した場合はそちらが優先されます。"
+      },
+      "tr": {
+        "summary": "Enables or disables gamepad support",
+        "description": "Assigning false disables gamepad support completely (neither state retrieval nor key event\ngeneration is performed). Assigning true enables it again. It can be toggled at any time\nat runtime.\n\nUse it to deal with cases where another device is mistakenly recognized as a gamepad and misbehaves\n(for example, as a disable option on a settings screen). The\n`-joypad=no` command-line option also disables it from startup, but a value set explicitly with this property\ntakes priority."
+      }
+    },
+    "System.readEnvValue": {
+      "hash": "ca871f84d48a",
+      "ja": {
+        "summary": "環境変数の取得",
+        "description": "WINVER / SDL3 系ビルドの双方で利用できます。",
+        "returns": "環境変数の値が返ります。設定されていない場合は void が返ります。",
+        "params": {
+          "name": "環境変数名を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets an environment variable",
+        "description": "Available in both WINVER and SDL3-family builds.",
+        "returns": "The value of the environment variable. void if it is not set.",
+        "params": {
+          "name": "Environment variable name."
+        }
+      }
+    },
+    "System.writeEnvValue": {
+      "hash": "4adafc355473",
+      "ja": {
+        "summary": "環境変数の設定",
+        "description": "設定はこのプロセス ( と、ここから起動する子プロセス ) にだけ効きます。",
+        "returns": "設定前の値が返ります。設定されていなかった場合は void が返ります。",
+        "params": {
+          "name": "環境変数名を指定します。",
+          "value": "設定する値を指定します。空文字列を指定するとその環境変数を消します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets an environment variable",
+        "description": "The setting affects only this process (and child processes launched from it).",
+        "returns": "The value before setting. void if it was not set.",
+        "params": {
+          "name": "Environment variable name.",
+          "value": "Value to set. An empty string removes the environment variable."
+        }
+      }
+    },
+    "System.expandEnvString": {
+      "hash": "29244bfe4591",
+      "ja": {
+        "summary": "環境変数の展開",
+        "description": "文字列中の `%NAME%` を環境変数の値に置き換えます。\n対応する環境変数が無い `%NAME%` はそのまま残り、`%%` は `%` 1 個になります\n( Win32 の ExpandEnvironmentStrings と同じ規則 )。",
+        "returns": "展開後の文字列が返ります。",
+        "params": {
+          "text": "展開する文字列を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Expands environment variables",
+        "description": "Replaces `%NAME%` in a string with the value of the environment variable.\nA `%NAME%` with no matching environment variable is left as is, and `%%` becomes a single `%`\n(the same rules as Win32 ExpandEnvironmentStrings).",
+        "returns": "The expanded string.",
+        "params": {
+          "text": "String to expand."
+        }
+      }
+    },
+    "System.urlencode": {
+      "hash": "a56513f094a5",
+      "ja": {
+        "summary": "URL エンコード",
+        "description": "RFC 3986 の非予約文字 ( 英数字と `-` `_` `.` `~` ) 以外を `%XX` に変換します。\n空白も `%20` になります ( `+` にはなりません )。\n```tjs\nSystem.urlencode(\"a b&c=d\");   // \"a%20b%26c%3Dd\"\nSystem.urlencode(\"あ\");         // \"%E3%81%82\"\n```",
+        "returns": "変換後の文字列が返ります。",
+        "params": {
+          "str": "変換する文字列を指定します。",
+          "utf8": "真 ( 既定 ) なら UTF-8 のバイト列として、偽ならシステムの\nマルチバイト文字列として変換します。"
+        }
+      },
+      "tr": {
+        "summary": "URL-encodes a string",
+        "description": "Converts everything other than RFC 3986 unreserved characters (alphanumerics and `-` `_` `.` `~`) to `%XX`.\nSpaces also become `%20` (not `+`).\n```tjs\nSystem.urlencode(\"a b&c=d\");   // \"a%20b%26c%3Dd\"\nSystem.urlencode(\"あ\");         // \"%E3%81%82\"\n```",
+        "returns": "The converted string.",
+        "params": {
+          "str": "String to convert.",
+          "utf8": "If true (default), converts as a UTF-8 byte sequence; if false, as a system\nmultibyte string."
+        }
+      }
+    },
+    "System.urldecode": {
+      "hash": "dd2e2ac2dd59",
+      "ja": {
+        "summary": "URL デコード",
+        "description": "`%XX` を元のバイトに戻して文字列にします。`+` は空白に戻しません。",
+        "returns": "変換後の文字列が返ります。",
+        "params": {
+          "str": "変換する文字列を指定します。不正な `%XX` を含む場合は例外になります。",
+          "utf8": "真 ( 既定 ) なら UTF-8 として、偽ならシステムのマルチバイト文字列として\n解釈します。"
+        }
+      },
+      "tr": {
+        "summary": "URL-decodes a string",
+        "description": "Converts `%XX` back to the original bytes and returns a string. `+` is not converted back to a space.",
+        "returns": "The converted string.",
+        "params": {
+          "str": "String to convert. An exception is raised if it contains an invalid `%XX`.",
+          "utf8": "If true (default), interprets as UTF-8; if false, as a system multibyte string."
+        }
+      }
+    },
+    "System.getAboutString": {
+      "hash": "bfe3e5eb887b",
+      "ja": {
+        "summary": "バージョン情報文字列の取得",
+        "description": "起動オプション `-about` で表示されるのと同じ、エンジンと同梱ライブラリの\nバージョン情報のテキストを返します。",
+        "returns": "バージョン情報の文字列が返ります。"
+      },
+      "tr": {
+        "summary": "Gets the version information string",
+        "description": "Returns the version information text of the engine and bundled libraries, the same as shown by the\n`-about` command-line option.",
+        "returns": "The version information string."
+      }
+    },
+    "System.breathe": {
+      "hash": "b26f63ed9bfe",
+      "ja": {
+        "summary": "メッセージの処理",
+        "description": "長い処理の途中で呼ぶと、OS のメッセージだけを処理してウィンドウが無反応に\n見えないようにします。処理している間は TJS のイベントは配送されません。"
+      },
+      "tr": {
+        "summary": "Processes messages",
+        "description": "Call it in the middle of a long operation to process only OS messages so the window does not appear\nunresponsive. TJS events are not delivered while it runs."
+      }
+    },
+    "System.getMonitorInfo": {
+      "hash": "1532b22dd60f",
+      "ja": {
+        "summary": "モニタ情報の取得",
+        "description": "モニタの情報を次の形の辞書で返します。矩形は画面座標です。\n```tjs\n%[ name:\"\\\\.\\DISPLAY1\", primary:1,\nmonitor:%[ x:0, y:0, w:3840, h:2160 ],   // モニタ全体\nwork:   %[ x:0, y:0, w:3840, h:2064 ] ]  // タスクバー等を除いた作業領域\n```\n引数の数で対象が変わります。\n\n| 引数 | 対象 |\n|---|---|\n| なし | プライマリモニタ |\n| `(nearest, window)` | そのウィンドウのあるモニタ |\n| `(nearest, x, y)` | その点のあるモニタ |\n| `(nearest, x, y, w, h)` | その矩形と重なるモニタ |\n\n`nearest` が真なら最も近いモニタを、偽なら重なるモニタが無いとき void を返します。\n\nWINVER / SDL3 系ビルドの双方で利用できます。モニタの概念が無い環境\n( 常にフルスクリーンの機種等 ) では void が返ります。",
+        "returns": "モニタ情報の辞書が返ります。",
+        "params": {
+          "nearest": "対象に重なるモニタが無いとき、最も近いモニタを返すなら真を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets monitor information",
+        "description": "Returns monitor information as a dictionary of the following form. Rectangles are in screen coordinates.\n```tjs\n%[ name:\"\\\\.\\DISPLAY1\", primary:1,\nmonitor:%[ x:0, y:0, w:3840, h:2160 ],   // モニタ全体\nwork:   %[ x:0, y:0, w:3840, h:2064 ] ]  // タスクバー等を除いた作業領域\n```\nThe target depends on the number of arguments.\n\n| Arguments | Target |\n|---|---|\n| None | Primary monitor |\n| `(nearest, window)` | The monitor containing that window |\n| `(nearest, x, y)` | The monitor containing that point |\n| `(nearest, x, y, w, h)` | The monitor overlapping that rectangle |\n\nIf `nearest` is true, the nearest monitor is returned; if false, void is returned when no monitor overlaps.\n\nAvailable in both WINVER and SDL3-family builds. In environments without the concept of a monitor\n(such as platforms that are always full screen), void is returned.",
+        "returns": "A dictionary of monitor information.",
+        "params": {
+          "nearest": "true to return the nearest monitor when no monitor overlaps the target."
+        }
+      }
+    },
+    "System.getDisplayMonitors": {
+      "hash": "c89d60483491",
+      "ja": {
+        "summary": "モニタ一覧の取得",
+        "description": "全モニタの情報 ( 形は [System.getMonitorInfo](System.md#getmonitorinfo) と同じ ) を\n配列で返します。矩形を指定すると、その矩形と重なるモニタだけを返し、\n重なった部分を各要素の `intersect` ( `%[ x, y, w, h ]` ) に入れます。\n\nSDL3 系ビルドのモニタの並びはその時点のものです。抜き差しで変わるので、\n添字を保存して使わないでください。",
+        "returns": "モニタ情報の配列が返ります。モニタの概念が無い環境では空の配列になります。",
+        "params": {
+          "x": "矩形の左端を指定します ( 省略可 )。",
+          "y": "矩形の上端を指定します ( 省略可 )。",
+          "w": "矩形の幅を指定します ( 省略可 )。",
+          "h": "矩形の高さを指定します ( 省略可 )。"
+        }
+      },
+      "tr": {
+        "summary": "Gets the list of monitors",
+        "description": "Returns an array of information for all monitors (same form as [System.getMonitorInfo](System.md#getmonitorinfo)).\nIf you specify a rectangle, only monitors overlapping it are returned, and the overlapping part\nis stored in each element's `intersect` (`%[ x, y, w, h ]`).\n\nIn SDL3-family builds, the order of monitors reflects the current moment. It changes when monitors are plugged or unplugged,\nso do not store and reuse indexes.",
+        "returns": "An array of monitor information. An empty array in environments without the concept of a monitor.",
+        "params": {
+          "x": "Left edge of the rectangle (optional).",
+          "y": "Top edge of the rectangle (optional).",
+          "w": "Width of the rectangle (optional).",
+          "h": "Height of the rectangle (optional)."
+        }
+      }
+    },
+    "System.getSystemMetrics": {
+      "hash": "30d37126d11a",
+      "ja": {
+        "summary": "システムメトリクスの取得",
+        "description": "Win32 の GetSystemMetrics の値を名前で取得します。名前は `SM_` を除いた部分\n( `\"CXSIZEFRAME\"` / `\"CYCAPTION\"` / `\"CMONITORS\"` 等。大文字小文字は問いません ) です。\n\nWINVER ビルド専用です。SDL3 系ビルドにはこのメソッドはありません。",
+        "returns": "値が返ります。知らない名前の場合は void が返ります。",
+        "params": {
+          "name": "メトリクスの名前を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets system metrics",
+        "description": "Gets a Win32 GetSystemMetrics value by name. The name is the part without `SM_`\n(`\"CXSIZEFRAME\"` / `\"CYCAPTION\"` / `\"CMONITORS\"`, etc.; case-insensitive).\n\nWINVER build only. SDL3-family builds do not have this method.",
+        "returns": "The value. void for an unknown name.",
+        "params": {
+          "name": "Name of the metric."
+        }
+      }
+    },
+    "System.replActive": {
+      "hash": "0d23f270460f",
+      "ja": {
+        "summary": "REPL で駆動されているか",
+        "description": "REPL ( `-repl` / `-replfile` / `-replweb` ) が有効なら真です。読み取り専用。\nエージェントに駆動されている間だけ処理を変える ( 確認ダイアログの代わりに\n[System.choice](System.md#choice) のモーダル応答チャネルを使う等 ) 判定に使います。\nREPL を含まないビルド ( MASTER 等 ) では常に偽です。\n\nWINVER ビルドでは REPL が起動スクリプトの後に有効になるため、`startup.tjs` の実行中は\nまだ偽です。起動直後に判定したい場合は `System.getArgument(\"-replfile\")` 等を併用してください。"
+      },
+      "tr": {
+        "summary": "Whether driven by the REPL",
+        "description": "true if the REPL (`-repl` / `-replfile` / `-replweb`) is enabled. Read-only.\nUse it to change behavior only while driven by an agent (for example, using the modal response channel of\n[System.choice](System.md#choice) instead of a confirmation dialog).\nIn builds without the REPL (MASTER, etc.) it is always false.\n\nIn the WINVER build the REPL becomes active after the startup script, so it is still false while `startup.tjs`\nis running. To check right at startup, also use `System.getArgument(\"-replfile\")` or similar."
+      }
+    },
+    "process:System.commandExecute": {
+      "hash": "ba279303a269",
+      "ja": {
+        "summary": "コンソール出力取得つきコマンドラインプログラムの実行",
+        "description": "バックグラウンド処理はありません。実行対象のプログラムが終了するまで吉里吉里が停止します。",
+        "returns": "%[\nstatus:   ok/error/timeoutのいずれかの文字列,\nstdout:   コンソール出力文字列配列(改行で分離)\nexitcode: 終了コード(status==\"ok\"時のみ),\nmessage:  エラーメッセージ(status!=\"ok\"時のみ)\n];",
+        "params": {
+          "target": "プログラム",
+          "param": "引数",
+          "timeout": "タイムアウト時間(ms)"
+        }
+      },
+      "tr": {
+        "summary": "Runs a command-line program and captures its console output",
+        "description": "There is no background processing. Kirikiri stops until the program being run exits.",
+        "returns": "%[\nstatus:   one of the strings ok/error/timeout,\nstdout:   array of console output strings (split by line)\nexitcode: exit code (only when status==\"ok\"),\nmessage:  error message (only when status!=\"ok\")\n];",
+        "params": {
+          "target": "Program",
+          "param": "Arguments",
+          "timeout": "Timeout (ms)"
+        }
+      }
+    },
+    "shellExecute:System.commandExecute": {
+      "hash": "ba279303a269",
+      "ja": {
+        "summary": "コンソール出力取得つきコマンドラインプログラムの実行",
+        "description": "バックグラウンド処理はありません。実行対象のプログラムが終了するまで吉里吉里が停止します。",
+        "returns": "%[\nstatus:   ok/error/timeoutのいずれかの文字列,\nstdout:   コンソール出力文字列配列(改行で分離)\nexitcode: 終了コード(status==\"ok\"時のみ),\nmessage:  エラーメッセージ(status!=\"ok\"時のみ)\n];",
+        "params": {
+          "target": "プログラム",
+          "param": "引数",
+          "timeout": "タイムアウト時間(ms)"
+        }
+      },
+      "tr": {
+        "summary": "Runs a command-line program and captures its console output",
+        "description": "There is no background processing. Kirikiri stops until the program being run exits.",
+        "returns": "%[\nstatus:   one of the strings ok/error/timeout,\nstdout:   array of console output strings (split by line)\nexitcode: exit code (only when status==\"ok\"),\nmessage:  error message (only when status!=\"ok\")\n];",
+        "params": {
+          "target": "Program",
+          "param": "Arguments",
+          "timeout": "Timeout (ms)"
+        }
+      }
+    },
+    "stdio:System": {
+      "hash": "e604bffb976d",
+      "ja": {
+        "summary": "System クラスへの標準入出力拡張"
+      },
+      "tr": {
+        "summary": "Standard I/O extensions to the System class"
+      }
+    },
+    "stdio:System.stdioState": {
+      "hash": "ed48df2c4eb3",
+      "ja": {
+        "summary": "標準入出力との接続状態を返す",
+        "returns": "接続状態\n標準入力:0x01 標準出力:0x02 標準エラー出力:0x04 の論理和"
+      },
+      "tr": {
+        "summary": "Returns the connection state of standard I/O",
+        "returns": "Connection state\nBitwise OR of standard input:0x01, standard output:0x02, standard error:0x04"
+      }
+    },
+    "stdio:System.attachConsole": {
+      "hash": "2cb9d2b8748e",
+      "ja": {
+        "summary": "標準入出力を既存のコンソールと接続する",
+        "returns": "成功したかどうか",
+        "params": {
+          "bind": "0:未接続の部分だけ接続 それ以外:指定した部分を強制接続\n標準入力:0x01 標準出力:0x02 標準エラー出力:0x04 の論理和"
+        }
+      },
+      "tr": {
+        "summary": "Connects standard I/O to an existing console",
+        "returns": "Whether it succeeded",
+        "params": {
+          "bind": "0: connect only the unconnected parts; otherwise: force-connect the specified parts\nBitwise OR of standard input:0x01, standard output:0x02, standard error:0x04"
+        }
+      }
+    },
+    "stdio:System.allocConsole": {
+      "hash": "f5b4eec498c1",
+      "ja": {
+        "summary": "標準入出力をコンソールを作成して接続する",
+        "returns": "成功したかどうか",
+        "params": {
+          "bind": "0:未接続の部分だけ接続 それ以外:指定した部分を強制接続\n標準入力:0x01 標準出力:0x02 標準エラー出力:0x04 の論理和"
+        }
+      },
+      "tr": {
+        "summary": "Creates a console and connects standard I/O to it",
+        "returns": "Whether it succeeded",
+        "params": {
+          "bind": "0: connect only the unconnected parts; otherwise: force-connect the specified parts\nBitwise OR of standard input:0x01, standard output:0x02, standard error:0x04"
+        }
+      }
+    },
+    "stdio:System.freeConsole": {
+      "hash": "703ad31d4dbb",
+      "ja": {
+        "summary": "コンソールから切り離す",
+        "returns": "成功したかどうか"
+      },
+      "tr": {
+        "summary": "Detaches from the console",
+        "returns": "Whether it succeeded"
+      }
+    },
+    "stdio:System.stdin": {
+      "hash": "12ebf442eb29",
+      "ja": {
+        "summary": "標準入力からテキストを入力する。入力はブロッキングします。",
+        "returns": "入力されたテキスト"
+      },
+      "tr": {
+        "summary": "Reads text from standard input. Input is blocking.",
+        "returns": "The text read"
+      }
+    },
+    "stdio:System.stdout": {
+      "hash": "6a080f0aa6a5",
+      "ja": {
+        "summary": "標準出力に文字列を出力",
+        "params": {
+          "string": "出力するメッセージ"
+        }
+      },
+      "tr": {
+        "summary": "Writes a string to standard output",
+        "params": {
+          "string": "Message to write"
+        }
+      }
+    },
+    "stdio:System.stderr": {
+      "hash": "9b460d45b94a",
+      "ja": {
+        "summary": "標準エラー出力に文字列を出力",
+        "params": {
+          "string": "出力するメッセージ"
+        }
+      },
+      "tr": {
+        "summary": "Writes a string to standard error",
+        "params": {
+          "string": "Message to write"
+        }
+      }
+    },
+    "stdio:System.flush": {
+      "hash": "867164df7c9c",
+      "ja": {
+        "summary": "標準出力をフラッシュする"
+      },
+      "tr": {
+        "summary": "Flushes standard output"
+      }
+    },
+    "systemEx:System": {
+      "hash": "dddaf5692ec0",
+      "ja": {
+        "summary": "擬似コードによるマニュアル"
+      },
+      "tr": {
+        "summary": "Manual written as pseudo-code"
+      }
+    },
+    "systemEx:System.writeRegValue": {
+      "hash": "2f30b9208de9",
+      "ja": {
+        "summary": "レジストリにデータを書き込みます",
+        "params": {
+          "key": "書き込み先のキー(readRegValue と同様に HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\hoeg\\installdir と指定する)",
+          "value": "書き込む値(文字列又は整数値)"
+        }
+      },
+      "tr": {
+        "summary": "Writes data to the registry",
+        "params": {
+          "key": "Destination key (specified as with readRegValue, e.g. HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\hoeg\\installdir)",
+          "value": "Value to write (string or integer)"
+        }
+      }
+    },
+    "systemEx:System.readEnvValue": {
+      "hash": "a0575a7d1cee",
+      "ja": {
+        "summary": "環境変数を取得",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [System.readEnvValue](System.md#readenvvalue) を参照してください。",
+        "returns": "環境変数値（未定義の場合はvoid）",
+        "params": {
+          "name": "環境変数名"
+        }
+      },
+      "tr": {
+        "summary": "Gets an environment variable",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [System.readEnvValue](System.md#readenvvalue) for the specification.",
+        "returns": "The environment variable value (void if undefined)",
+        "params": {
+          "name": "Environment variable name"
+        }
+      }
+    },
+    "systemEx:System.writeEnvValue": {
+      "hash": "b7f9b6a631c9",
+      "ja": {
+        "summary": "環境変数を設定",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [System.writeEnvValue](System.md#writeenvvalue) を参照してください。",
+        "returns": "元の環境変数値（未定義の場合はvoid）",
+        "params": {
+          "name": "環境変数名",
+          "value": "設定する値"
+        }
+      },
+      "tr": {
+        "summary": "Sets an environment variable",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [System.writeEnvValue](System.md#writeenvvalue) for the specification.",
+        "returns": "The previous environment variable value (void if undefined)",
+        "params": {
+          "name": "Environment variable name",
+          "value": "Value to set"
+        }
+      }
+    },
+    "systemEx:System.expandEnvString": {
+      "hash": "8345bfb0d2b1",
+      "ja": {
+        "summary": "文字列内の「%～%」を環境変数で展開",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [System.expandEnvString](System.md#expandenvstring) を参照してください。",
+        "returns": "展開後文字列",
+        "params": {
+          "text": "展開する文字列"
+        }
+      },
+      "tr": {
+        "summary": "Expands \"%...%\" in a string with environment variables",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [System.expandEnvString](System.md#expandenvstring) for the specification.",
+        "returns": "The expanded string",
+        "params": {
+          "text": "String to expand"
+        }
+      }
+    },
+    "systemEx:System.urlencode": {
+      "hash": "8f190626a8f3",
+      "ja": {
+        "summary": "URLEncode処理を行う",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [System.urlencode](System.md#urlencode) を参照してください。",
+        "returns": "URLEncodeされた文字列",
+        "params": {
+          "str": "元文字列",
+          "utf8": "UTF8で出力する場合はtrue"
+        }
+      },
+      "tr": {
+        "summary": "Performs URL encoding",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [System.urlencode](System.md#urlencode) for the specification.",
+        "returns": "The URL-encoded string",
+        "params": {
+          "str": "Source string",
+          "utf8": "true to output as UTF-8"
+        }
+      }
+    },
+    "systemEx:System.urldecode": {
+      "hash": "9574a4e8e7f1",
+      "ja": {
+        "summary": "URLDecode処理を行う",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [System.urldecode](System.md#urldecode) を参照してください。",
+        "returns": "URLDecodeされた文字列",
+        "params": {
+          "str": "元文字列",
+          "utf8": "UTF8として処理する場合はtrue"
+        }
+      },
+      "tr": {
+        "summary": "Performs URL decoding",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [System.urldecode](System.md#urldecode) for the specification.",
+        "returns": "The URL-decoded string",
+        "params": {
+          "str": "Source string",
+          "utf8": "true to process as UTF-8"
+        }
+      }
+    },
+    "systemEx:System.getAboutString": {
+      "hash": "366e5bf85ac5",
+      "ja": {
+        "summary": "Ctrl+F12で表示される環境情報テキストを取得する",
+        "description": "※本体に同名のメソッドがある環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。\n仕様は本体の [System.getAboutString](System.md#getaboutstring) を参照してください。",
+        "returns": "テキスト(TVPGetAboutString)"
+      },
+      "tr": {
+        "summary": "Gets the environment information text shown with Ctrl+F12",
+        "description": "Note: in environments where the engine has a method of the same name, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).\nSee the engine's [System.getAboutString](System.md#getaboutstring) for the specification.",
+        "returns": "Text (TVPGetAboutString)"
+      }
+    },
+    "systemEx:System.confirm": {
+      "hash": "2177b9e99cc1",
+      "ja": {
+        "summary": "確認用メッセージ窓を表示します。ウインドウはモーダルで表示されます。",
+        "description": "※本体に System.confirm が実装されている環境では本体版が使われます\n(本プラグインは本体に無い旧環境でのみ補完登録します)。",
+        "returns": "YESがおされたら true",
+        "params": {
+          "text": "表示するメッセージ",
+          "caption": "ウインドウのキャプション文字列",
+          "window": "指定があった場合はそのウインドウを親として表示します"
+        }
+      },
+      "tr": {
+        "summary": "Shows a confirmation message window. The window is modal.",
+        "description": "Note: in environments where the engine implements System.confirm, the engine version is used\n(this plugin registers it only as a fallback in older environments where the engine lacks it).",
+        "returns": "true if YES was pressed",
+        "params": {
+          "text": "Message to show",
+          "caption": "Window caption string",
+          "window": "If specified, the window is shown with it as the parent"
+        }
+      }
+    },
+    "systemEx:System.waitForAppLock": {
+      "hash": "30f75dcd139a",
+      "ja": {
+        "summary": "他プロセスのSystem.createAppLockで作成されたMutexがリリースされるのを待ち所有権を取得する",
+        "returns": "true:正常終了(AppLockは存在しないもしくはタイムアウト時間内に消えた),  false:タイムアウトした, (void:エラー)\n\n※この関数の後に再度同じキーでcreateAppLockを呼ぶ必要はありません（すでに所有権があるため失敗する）",
+        "params": {
+          "key": "AppLockのキー文字列",
+          "timeout": "タイムアウト待ち時間(ms)"
+        }
+      },
+      "tr": {
+        "summary": "Waits for the mutex created by System.createAppLock in another process to be released, and takes ownership",
+        "returns": "true: success (the AppLock did not exist or disappeared within the timeout), false: timed out, (void: error)\n\nNote: you do not need to call createAppLock again with the same key after this function (it would fail because you already own it)",
+        "params": {
+          "key": "AppLock key string",
+          "timeout": "Timeout (ms)"
+        }
+      }
+    },
+    "systemEx:System.setDpiAwareness": {
+      "hash": "6e1c1bd3ceaa",
+      "ja": {
+        "summary": "DPI Awarenessを設定する",
+        "description": "Windows10 Redstone1 (ver 1607) 以降にて有効",
+        "returns": "前の値(※設定できなかった場合は0)",
+        "params": {
+          "context": ": コンテキスト値（-1～-5）\nDPI_AWARENESS_CONTEXT_UNAWARE              : -1\nDPI_AWARENESS_CONTEXT_SYSTEM_AWARE         : -2\nDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE    : -3\nDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 : -4 (Creators Update or later)\nDPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED    : -5 (October 2018 update or later)"
+        }
+      },
+      "tr": {
+        "summary": "Sets DPI awareness",
+        "description": "Effective on Windows 10 Redstone 1 (version 1607) and later",
+        "returns": "The previous value (0 if it could not be set)",
+        "params": {
+          "context": ": context value (-1 to -5)\nDPI_AWARENESS_CONTEXT_UNAWARE              : -1\nDPI_AWARENESS_CONTEXT_SYSTEM_AWARE         : -2\nDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE    : -3\nDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 : -4 (Creators Update or later)\nDPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED    : -5 (October 2018 update or later)"
+        }
+      }
+    },
+    "systemEx:System.getOSVersion": {
+      "hash": "025d25c13cb3",
+      "ja": {
+        "summary": "OSのバージョン情報詳細を取得",
+        "description": "RtlGetVersion API および RTL_OSVERSIONINFOW 構造体を参照のこと",
+        "returns": "void or %[ major, minor, build, platform, spmajor, spminor, servevicepack, suite, type ];"
+      },
+      "tr": {
+        "summary": "Gets detailed OS version information",
+        "description": "See the RtlGetVersion API and the RTL_OSVERSIONINFOW structure.",
+        "returns": "void or %[ major, minor, build, platform, spmajor, spminor, servevicepack, suite, type ];"
+      }
+    },
+    "systemEx:System.getKnownFolderPath": {
+      "hash": "645b199b13cf",
+      "ja": {
+        "summary": "SHGetKnownFolderPath ラッパー",
+        "description": "FOLDERIDが文字列の場合は FOLDERID_{} の {} 部分の文字列を指定。GUIDは <% 00000000 0000 0000 0000 0000000000000 %> の 16byte octet を指定\nこの関数独自の特殊指定として folderid に \"Captures\" が指定可能（GameBarのキャプチャフォルダ[Video\\Captures] : GUID {EDC0FE71-98D8-4F4A-B920-C8DC133CB165} 指定と同等の動作）",
+        "returns": "結果のローカルパス文字 or \"\"(不明) or void(失敗)",
+        "params": {
+          "folderid": "取得したいFOLDERID (String or GUID-octet)",
+          "flags": "KF_FLAG_* 値（KF_FLAG_CREATE = 0x00008000 等）"
+        }
+      },
+      "tr": {
+        "summary": "SHGetKnownFolderPath wrapper",
+        "description": "If the FOLDERID is a string, specify the {} part of FOLDERID_{}. For a GUID, specify a 16-byte octet such as <% 00000000 0000 0000 0000 0000000000000 %>.\nAs a special value unique to this function, \"Captures\" can be specified as folderid (the Game Bar capture folder [Video\\Captures]; behaves the same as specifying GUID {EDC0FE71-98D8-4F4A-B920-C8DC133CB165})",
+        "returns": "The resulting local path string, \"\" (unknown), or void (failure)",
+        "params": {
+          "folderid": "FOLDERID to get (String or GUID octet)",
+          "flags": "KF_FLAG_* value (KF_FLAG_CREATE = 0x00008000, etc.)"
+        }
+      }
+    },
+    "systemEx:System.processApplicationMessages": {
+      "hash": "f1e6b277c465",
+      "ja": {
+        "summary": "メッセージの処理 ( 本体の TVPProcessApplicationMessages() 呼び出し )",
+        "description": "System.breathe() と違い吉里吉里のイベントも処理されます。\n基本的に processApplicationMessages はアプリが終了するまで返らないので注意。\n\nイベントハンドラ内で例外が発生した場合、このメソッドからは伝播しません。\nプラグイン側は本体呼び出しをそのまま通すだけで、例外は本体のイベント配送側が\n捕捉し、通常の未処理スクリプト例外として処理されます ( 例外ダイアログ / ログ\n出力、System.exceptionHandler が設定されていればそちらへ通知 )。"
+      },
+      "tr": {
+        "summary": "Processes messages (calls the engine's TVPProcessApplicationMessages())",
+        "description": "Unlike System.breathe(), Kirikiri events are also processed.\nNote that processApplicationMessages basically does not return until the application exits.\n\nIf an exception occurs in an event handler, it is not propagated from this method.\nThe plugin simply passes the call through to the engine; the exception is caught by the engine's event delivery\nand handled as a normal unhandled script exception (exception dialog / log\noutput, or notification to System.exceptionHandler if it is set)."
+      }
+    },
+    "systemEx:System.handleApplicationMessage": {
+      "hash": "652352bbe087",
+      "ja": {
+        "summary": "メッセージを 1 件処理する ( 本体の TVPHandleApplicationMessage() 呼び出し )",
+        "description": "例外の扱いは processApplicationMessages と同じです。"
+      },
+      "tr": {
+        "summary": "Processes one message (calls the engine's TVPHandleApplicationMessage())",
+        "description": "Exceptions are handled the same way as in processApplicationMessages."
+      }
+    },
+    "systemEx:System.setDefaultDllDirectories": {
+      "hash": "c6326cf712a4",
+      "ja": {
+        "summary": "::SetDefaultDllDirectoriesラッパー",
+        "returns": "成功したらtrue",
+        "params": {
+          "flags": "lls*フラグ組み合わせ"
+        }
+      },
+      "tr": {
+        "summary": "::SetDefaultDllDirectories wrapper",
+        "returns": "true on success",
+        "params": {
+          "flags": "Combination of lls* flags"
+        }
+      }
+    },
+    "systemEx:System.addDllDirectory": {
+      "hash": "cabafb66fce5",
+      "ja": {
+        "summary": "::AddDllDirectoryラッパー",
+        "returns": "removeDllDirectoryに渡す用の固有値（0だった場合は失敗）\nsetDefaultDllDirectoriesでllsUserDirsフラグを立てておくこと",
+        "params": {
+          "path": "追加するローカルパス（※Storages.getLocalNameしておくこと）"
+        }
+      },
+      "tr": {
+        "summary": "::AddDllDirectory wrapper",
+        "returns": "A unique value to pass to removeDllDirectory (0 means failure)\nSet the llsUserDirs flag with setDefaultDllDirectories beforehand",
+        "params": {
+          "path": "Local path to add (convert it with Storages.getLocalName first)"
+        }
+      }
+    },
+    "systemEx:System.removeDllDirectory": {
+      "hash": "50dbc945f17d",
+      "ja": {
+        "summary": "::RemoveDllDirectoryラッパー",
+        "returns": "成功したらtrue",
+        "params": {
+          "cookie": "削除するaddDllPath固有値"
+        }
+      },
+      "tr": {
+        "summary": "::RemoveDllDirectory wrapper",
+        "returns": "true on success",
+        "params": {
+          "cookie": "Unique value from addDllPath to remove"
+        }
+      }
+    },
+    "tftSave:System": {
+      "hash": "63cdf7838390",
+      "ja": {
+        "summary": "システム拡張"
+      },
+      "tr": {
+        "summary": "System extensions"
+      }
+    },
+    "tftSave:System.savePreRenderedFont": {
+      "hash": "ca51ff5dfb55",
+      "ja": {
+        "summary": "レンダリング済みフォントデータをファイルに保存する",
+        "params": {
+          "storage": "保存するファイル名",
+          "characters": "保存する文字（キャラクタコード）の入った配列",
+          "callback": "情報とイメージを取得するコールバック\nキャラクタコードを引数に取り，レイヤ(PreRenderedFontImage)を返す関数であること\nfunction(ch) { return layer; }"
+        }
+      },
+      "tr": {
+        "summary": "Saves pre-rendered font data to a file",
+        "params": {
+          "storage": "File name to save to",
+          "characters": "Array of characters (character codes) to save",
+          "callback": "Callback that provides the information and image\nIt must be a function that takes a character code and returns a layer (PreRenderedFontImage)\nfunction(ch) { return layer; }"
+        }
+      }
+    },
+    "tftSave:System.loadPreRenderedFont": {
+      "hash": "2f0dd1adc731",
+      "ja": {
+        "summary": "レンダリング済みフォントデータをファイルから読み込む",
+        "params": {
+          "storage": "読み込みファイル名",
+          "characters": "一覧の文字を受け取るための配列",
+          "callback": "将来的に画像イメージを受け取るコールバックが実装される予定(現状では必ずvoidを渡すこと）"
+        }
+      },
+      "tr": {
+        "summary": "Loads pre-rendered font data from a file",
+        "params": {
+          "storage": "File name to load",
+          "characters": "Array that receives the list of characters",
+          "callback": "A callback that receives images is planned for the future (currently you must always pass void)"
+        }
+      }
+    },
+    "tftSave:System.modifyPreRenderedFont": {
+      "hash": "bfec4af574ec",
+      "ja": {
+        "summary": "レンダリング済みフォントデータのグリフ情報を更新する(変更できるのはorigin_x|y, inc_x|y, incのみ/blackboxは固定)",
+        "params": {
+          "storage": "読み込みファイル名",
+          "callback": "情報取得・更新用コールバック\nfunction(ch, info = %[ blackbox_x|y, origin_x|y, inc_x|y, inc ]) { return true_if_modofied; }"
+        }
+      },
+      "tr": {
+        "summary": "Updates glyph information in pre-rendered font data (only origin_x|y, inc_x|y and inc can be changed; blackbox is fixed)",
+        "params": {
+          "storage": "File name to load",
+          "callback": "Callback for getting and updating information\nfunction(ch, info = %[ blackbox_x|y, origin_x|y, inc_x|y, inc ]) { return true_if_modofied; }"
+        }
+      }
+    },
+    "windowEx:System": {
+      "hash": "c346a5679237",
+      "ja": {
+        "description": "System拡張\n\n※本体の System にも getMonitorInfo / getDisplayMonitors / breathe /\nreadEnvValue / expandEnvString (WINVER / SDL3 系) と getSystemMetrics (WINVER) が\n入っています。本プラグインを読み込むと、これらはプラグイン版で上書きされます。"
+      },
+      "tr": {
+        "description": "System extensions\n\nNote: the engine's System also has getMonitorInfo / getDisplayMonitors / breathe /\nreadEnvValue / expandEnvString (WINVER / SDL3 family) and getSystemMetrics (WINVER).\nLoading this plugin replaces them with the plugin versions."
+      }
+    },
+    "windowEx:System.getDisplayMonitors": {
+      "hash": "fff95eb2b2b8",
+      "ja": {
+        "summary": "モニタの情報一覧を取得",
+        "description": "範囲枠 (x, y, w, h) を指定すると交わるモニタのみを返す。全省略で全てのモニタを返す。\n全てのモニタを列挙する",
+        "returns": "[ %[ name, primary, monitor:%[ x, y, w, h ], work:%[ x,y,w,h ], intersect:%[ x,y,w,h ] ], ... ];\nname:      モニタの名前('\\\\.\\DISPLAY?' 等)\nprimary:   プライマリモニタかどうか\nmonitor:   モニタの範囲辞書\nwork:      モニタのワークエリア範囲(ウィンドウを最大化したときなどの表示範囲)\nintersect: 指定範囲と交わる領域(指定しなかった場合は monitor と同じ)",
+        "params": {
+          "x": "範囲枠の左端",
+          "y": "範囲枠の上端",
+          "w": "範囲枠の幅",
+          "h": "範囲枠の高さ"
+        }
+      },
+      "tr": {
+        "summary": "Gets the list of monitor information",
+        "description": "If a range (x, y, w, h) is specified, only monitors that intersect it are returned. If all are omitted, all monitors are returned.\nEnumerates all monitors.",
+        "returns": "[ %[ name, primary, monitor:%[ x, y, w, h ], work:%[ x,y,w,h ], intersect:%[ x,y,w,h ] ], ... ];\nname:      monitor name ('\\\\.\\DISPLAY?', etc.)\nprimary:   whether it is the primary monitor\nmonitor:   dictionary of the monitor's area\nwork:      the monitor's work area (the visible area when a window is maximized, etc.)\nintersect: area intersecting the specified range (same as monitor if no range is specified)",
+        "params": {
+          "x": "Left edge of the range",
+          "y": "Top edge of the range",
+          "w": "Width of the range",
+          "h": "Height of the range"
+        }
+      }
+    },
+    "windowEx:System.getDisplayMonitors@2": {
+      "hash": "56e91d51e9dc",
+      "ja": {
+        "summary": "指定範囲に交わるモニタのみ列挙する"
+      },
+      "tr": {
+        "summary": "Enumerates only monitors intersecting the specified range"
+      }
+    },
+    "windowEx:System.getMonitorInfo": {
+      "hash": "210aeab6d5bc",
+      "ja": {
+        "summary": "モニタ情報を取得",
+        "description": "プライマリモニタを返す",
+        "returns": "%[ name, primary, monitor:%[ x, y, w, h ], work:%[ x, y, w, h ] ];\nモニタの情報。辞書内容は getDisplayMonitors と同じ (ただし intersect 情報は無い)。\nnear=false 時でモニタが無い場合は void を返す。",
+        "params": {
+          "near": "trueなら対象モニタが無かった場合に最も近いモニタの情報を返す",
+          "x": "座標指定のX / 範囲指定の左端",
+          "y": "座標指定のY / 範囲指定の上端",
+          "w": "範囲指定の幅 (x,y,w,h で範囲指定)",
+          "h": "範囲指定の高さ",
+          "window": "ウィンドウ指定（Window オブジェクトを渡す）"
+        }
+      },
+      "tr": {
+        "summary": "Gets monitor information",
+        "description": "Returns the primary monitor.",
+        "returns": "%[ name, primary, monitor:%[ x, y, w, h ], work:%[ x, y, w, h ] ];\nMonitor information. The dictionary contents are the same as getDisplayMonitors (but without intersect).\nWhen near=false and there is no monitor, void is returned.",
+        "params": {
+          "near": "If true, returns the information of the nearest monitor when there is no target monitor",
+          "x": "X of the coordinates / left edge of the range",
+          "y": "Y of the coordinates / top edge of the range",
+          "w": "Width of the range (x,y,w,h specify a range)",
+          "h": "Height of the range",
+          "window": "Window (pass a Window object)"
+        }
+      }
+    },
+    "windowEx:System.getMonitorInfo@2": {
+      "hash": "7cabbe49a383",
+      "ja": {
+        "summary": "指定座標の位置のモニタを返す"
+      },
+      "tr": {
+        "summary": "Returns the monitor at the specified coordinates"
+      }
+    },
+    "windowEx:System.getMonitorInfo@3": {
+      "hash": "79e147104e31",
+      "ja": {
+        "summary": "指定座標の範囲にもっとも多く交わるモニタを返す"
+      },
+      "tr": {
+        "summary": "Returns the monitor that most overlaps the specified range"
+      }
+    },
+    "windowEx:System.getMonitorInfo@4": {
+      "hash": "7b350d08c814",
+      "ja": {
+        "summary": "指定ウィンドウの範囲にもっとも多く交わるモニタを返す"
+      },
+      "tr": {
+        "summary": "Returns the monitor that most overlaps the specified window"
+      }
+    },
+    "windowEx:System.setDpiAwareness": {
+      "hash": "4d3e9b74cf25",
+      "ja": {
+        "summary": "SetThreadDpiAwarenessContext を呼び出す"
+      },
+      "tr": {
+        "summary": "Calls SetThreadDpiAwarenessContext"
+      }
+    },
+    "windowEx:System.setCursorPos": {
+      "hash": "6f9c6e21b233",
+      "ja": {
+        "summary": "マウスカーソルのスクリーン座標を設定・取得",
+        "returns": "get時：%[ x, y ] または void(取得失敗時)",
+        "params": {
+          "set時：": "x, y スクリーン座標"
+        }
+      },
+      "tr": {
+        "summary": "Sets or gets the screen coordinates of the mouse cursor",
+        "returns": "When getting: %[ x, y ], or void if it could not be obtained",
+        "params": {
+          "set時：": "When setting: x, y screen coordinates"
+        }
+      }
+    },
+    "windowEx:System.setClipCursor": {
+      "hash": "0b80ef33c59c",
+      "ja": {
+        "summary": "カーソル位置クリップ処理"
+      },
+      "tr": {
+        "summary": "Clips the cursor position"
+      }
+    },
+    "windowEx:System.getSystemMetrics": {
+      "hash": "c769d6d89c70",
+      "ja": {
+        "summary": "システムメトリクス情報を取得",
+        "description": "詳細は GetSystemMetrics() API のマニュアルを参照\nSW_ARRANGE は ARW_* の定義がないので直接数値指定で比較すること",
+        "returns": "メトリクス値（indexにより内容が異なる）",
+        "params": {
+          "index": "SM_* の「*」部分の文字列（ただし大文字小文字は無関係）"
+        }
+      },
+      "tr": {
+        "summary": "Gets system metrics information",
+        "description": "See the GetSystemMetrics() API documentation for details.\nSW_ARRANGE has no ARW_* definitions, so compare against numeric values directly.",
+        "returns": "Metric value (meaning depends on index)",
+        "params": {
+          "index": "The \"*\" part of SM_* as a string (case-insensitive)"
+        }
+      }
+    },
+    "windowEx:System.getDoubleClickTime": {
+      "hash": "41f6510d3d7a",
+      "ja": {
+        "summary": "システムのダブルクリック許容時間を取得",
+        "description": "詳細は GetDoubleClickTime() API のマニュアルを参照\nダブルクリックの許容移動範囲はgetSystemMetricsのCXDOUBLECLK/CYDOUBLECLKで取得可能\nLayer.onDoubleClickを使わずにソフトウェアで擬似的にダブルクリック判定を行う場合に使用（時間決め打ちでも問題ないけど一応…）",
+        "returns": "時間(ms) 既定値は500ms"
+      },
+      "tr": {
+        "summary": "Gets the system double-click time",
+        "description": "See the GetDoubleClickTime() API documentation for details.\nThe allowed movement range for a double click can be obtained with CXDOUBLECLK/CYDOUBLECLK of getSystemMetrics.\nUse this when detecting double clicks in software without Layer.onDoubleClick (a fixed time would also work, but just in case...).",
+        "returns": "Time (ms). The default is 500 ms"
+      }
+    },
+    "windowEx:System.readEnvValue": {
+      "hash": "8da52345e2cd",
+      "ja": {
+        "summary": "環境変数を取得",
+        "returns": "環境変数値（未定義の場合はvoid）",
+        "params": {
+          "name": "環境変数名"
+        }
+      },
+      "tr": {
+        "summary": "Gets an environment variable",
+        "returns": "The environment variable value (void if undefined)",
+        "params": {
+          "name": "Environment variable name"
+        }
+      }
+    },
+    "windowEx:System.expandEnvString": {
+      "hash": "db7fb3241394",
+      "ja": {
+        "summary": "文字列内の「%～%」を環境変数で展開",
+        "returns": "展開後文字列",
+        "params": {
+          "text": "展開する文字列"
+        }
+      },
+      "tr": {
+        "summary": "Expands \"%...%\" in a string with environment variables",
+        "returns": "The expanded string",
+        "params": {
+          "text": "String to expand"
+        }
+      }
+    },
+    "windowEx:System.setApplicationIcon": {
+      "hash": "ae145cfe68f0",
+      "ja": {
+        "summary": "タスクバーやALT+TABなどで表示されるアプリケーションアイコンを変更する",
+        "description": "※ アーカイブ内のファイル指定は不可，exeやDLLを指定した場合は一番最初のアイコンが設定される",
+        "params": {
+          "file": "アイコンファイルまたはvoid (voidか\"\"で初期状態にリセット）"
+        }
+      },
+      "tr": {
+        "summary": "Changes the application icon shown in the taskbar, Alt+Tab and so on",
+        "description": "Note: files inside archives cannot be specified. If an exe or DLL is specified, its first icon is used.",
+        "params": {
+          "file": "Icon file or void (void or \"\" resets to the initial state)"
+        }
+      }
+    },
+    "windowEx:System.setIconicPreview": {
+      "hash": "03ed17743d59",
+      "ja": {
+        "summary": "Vista以降のタスクバーやAlt+TABでのサムネイル表示を強制的にアプリケーションアイコン表示にする",
+        "description": "※ アプリケーションウィンドウに DWMWA_FORCE_ICONIC_REPRESENTATION が設定される",
+        "returns": "成功したかどうか（XP以前では常に失敗）",
+        "params": {
+          "iconic": "trueならサムネイルの代わりにアイコンを表示する／falseなら設定解除"
+        }
+      },
+      "tr": {
+        "summary": "Forces the thumbnail in the taskbar and Alt+Tab (Vista and later) to show the application icon",
+        "description": "Note: DWMWA_FORCE_ICONIC_REPRESENTATION is set on the application window.",
+        "returns": "Whether it succeeded (always fails on XP and earlier)",
+        "params": {
+          "iconic": "true to show the icon instead of a thumbnail; false to clear the setting"
+        }
+      }
+    },
+    "windowEx:System.breathe": {
+      "hash": "2c42d075fc5a",
+      "ja": {
+        "summary": "TVPBreathe, TVPGetBreathing のラッパ"
+      },
+      "tr": {
+        "summary": "Wrapper for TVPBreathe and TVPGetBreathing"
+      }
+    },
+    "windowEx:System.findWindowEx": {
+      "hash": "70845bc436a0",
+      "ja": {
+        "summary": "Win32 API FindWindowEx のラッパ",
+        "returns": "成功した場合はHWND数値",
+        "params": {
+          "winname": "ウインドウ名",
+          "clsname": "クラス名",
+          "parwin": "親ウインドウ（Windowクラス指定かHWND数値）",
+          "childafter": "検索開始位置ウインドウ（〃）"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for the Win32 API FindWindowEx",
+        "returns": "The HWND as a number on success",
+        "params": {
+          "winname": "Window name",
+          "clsname": "Class name",
+          "parwin": "Parent window (a Window object or an HWND number)",
+          "childafter": "Window to start searching after (same as above)"
+        }
+      }
+    },
+    "windowEx:System.classLongPtr": {
+      "hash": "f4dcfa668027",
+      "ja": {
+        "summary": "{Get,Set}ClassLongPtr のラッパ",
+        "returns": "成功した場合は現在（もしくは直前）のLONG_PTR数値／失敗時はvoid",
+        "params": {
+          "win": "対象ウインドウ（Windowクラス指定かHWND数値）",
+          "key": "対象インデックス 現状の実装では {cursor,icon,iconsm,brbackground} の文字列いずれか",
+          "setvalue_or_getasvoid": "取得する場合はvoid, 数値指定の場合はset （ただし key=brbackground の場合は {black,white,gray,ltgray,dkgray} のStockブラシを指定可）"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for {Get,Set}ClassLongPtr",
+        "returns": "On success, the current (or previous) LONG_PTR value; void on failure",
+        "params": {
+          "win": "Target window (a Window object or an HWND number)",
+          "key": "Target index. The current implementation accepts one of the strings {cursor,icon,iconsm,brbackground}",
+          "setvalue_or_getasvoid": "void to get; a number to set (for key=brbackground, a stock brush from {black,white,gray,ltgray,dkgray} can also be specified)"
+        }
+      }
+    },
+    "windowEx:System.loadCursor": {
+      "hash": "5610897863f5",
+      "ja": {
+        "summary": "LoadCursorのラッパ",
+        "returns": "HCURSOR数値",
+        "params": {
+          "idc_or_res": "数値>=0の場合はMAKEINTRESOURCE, 数値<0の場合はcrXXXX，文字列の場合はリソース名",
+          "hmodule": "リソース対象のHMODULE値"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for LoadCursor",
+        "returns": "HCURSOR value",
+        "params": {
+          "idc_or_res": "A number >= 0 is treated as MAKEINTRESOURCE, a number < 0 as crXXXX, and a string as a resource name",
+          "hmodule": "HMODULE value of the resource's module"
+        }
+      }
+    },
+    "windowEx:System.mapVirtualKey": {
+      "hash": "a528f55a589c",
+      "ja": {
+        "summary": "MapVirtualKeyのラッパ",
+        "returns": "keycode",
+        "params": {
+          "code": "仮想キーコードもしくはスキャンコード",
+          "maptype": "MAPVK_*値"
+        }
+      },
+      "tr": {
+        "summary": "Wrapper for MapVirtualKey",
+        "returns": "keycode",
+        "params": {
+          "code": "Virtual key code or scan code",
+          "maptype": "MAPVK_* value"
+        }
+      }
+    }
+  }
+}

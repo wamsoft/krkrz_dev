@@ -1,0 +1,110 @@
+{
+  "class": "WIN32OLE",
+  "entries": {
+    "win32ole:WIN32OLE": {
+      "hash": "fb71557656c0",
+      "ja": {
+        "description": "OLE を操作できるオブジェクトを生成します。\nOLE が IDispatch で持つメソッドを直接呼び出すことができます。"
+      },
+      "tr": {
+        "description": "Creates an object for controlling OLE.\nMethods that the OLE object exposes through IDispatch can be called directly."
+      }
+    },
+    "win32ole:WIN32OLE.WIN32OLE": {
+      "hash": "1735b71ad745",
+      "ja": {
+        "summary": "コンストラクタ",
+        "params": {
+          "progIdOrCLSID": "識別名 または CLSIDを文字列で指定"
+        }
+      },
+      "tr": {
+        "summary": "Constructor",
+        "params": {
+          "progIdOrCLSID": "ProgID or CLSID, as a string."
+        }
+      }
+    },
+    "win32ole:WIN32OLE.invoke": {
+      "hash": "0ea65f4feccb",
+      "ja": {
+        "summary": "メソッドの実行",
+        "params": {
+          "name": "メソッド名",
+          "...": "以下パラメータ"
+        }
+      },
+      "tr": {
+        "summary": "Invokes a method",
+        "params": {
+          "name": "Method name.",
+          "...": "Arguments to pass."
+        }
+      }
+    },
+    "win32ole:WIN32OLE.set": {
+      "hash": "588b08744441",
+      "ja": {
+        "summary": "プロパティの設定",
+        "params": {
+          "name": "プロパティ名"
+        }
+      },
+      "tr": {
+        "summary": "Sets a property",
+        "params": {
+          "name": "Property name."
+        }
+      }
+    },
+    "win32ole:WIN32OLE.get": {
+      "hash": "5a1b0462077e",
+      "ja": {
+        "summary": "プロパティの取得",
+        "returns": "設定値",
+        "params": {
+          "name": "プロパティ名"
+        }
+      },
+      "tr": {
+        "summary": "Gets a property",
+        "returns": "The property value.",
+        "params": {
+          "name": "Property name."
+        }
+      }
+    },
+    "win32ole:WIN32OLE.getConstant": {
+      "hash": "e5e482879f54",
+      "ja": {
+        "summary": "定数の取得",
+        "params": {
+          "obj": "指定したオブジェクトのプロパティとして定数を取得します。\n省略した場合は自分のオブジェクト内部に取得します。"
+        }
+      },
+      "tr": {
+        "summary": "Gets constants",
+        "params": {
+          "obj": "Stores the constants as properties of the given object.\nIf omitted, they are stored in this object."
+        }
+      }
+    },
+    "win32ole:WIN32OLE.addEvent": {
+      "hash": "44b2f0253db8",
+      "ja": {
+        "summary": "イベント受信オブジェクトの登録",
+        "params": {
+          "eventName": "イベント種別名 (例: \"DWebBrowser2Events2\" )",
+          "receiver": "イベントをうけるオブジェクト\nオブジェクトが持つイベント名と同じ名前のメソッドが呼び出されます。\n該当するメソッドが無い場合はなにも処理されません。"
+        }
+      },
+      "tr": {
+        "summary": "Registers an event receiver object",
+        "params": {
+          "eventName": "Event interface name (e.g. \"DWebBrowser2Events2\").",
+          "receiver": "Object that receives the events.\nThe method whose name matches the event name is called.\nIf there is no such method, nothing happens."
+        }
+      }
+    }
+  }
+}

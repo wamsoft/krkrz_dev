@@ -1,0 +1,34 @@
+{
+  "class": "Threepp.Bone",
+  "entries": {
+    "krkrthreepp:Threepp.Bone": {
+      "hash": "ccd284c80790",
+      "ja": {
+        "summary": "ボーン",
+        "description": "スケルトンアニメーション用のボーンです。"
+      },
+      "tr": {
+        "summary": "Bone",
+        "description": "A bone used for skeletal animation."
+      }
+    },
+    "krkrthreepp:Threepp.Bone.Bone": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.Bone.type": {
+      "hash": "426dab41c3ed",
+      "ja": {
+        "summary": "型名（読み取り専用）"
+      },
+      "tr": {
+        "summary": "Type name (read-only)"
+      }
+    }
+  }
+}

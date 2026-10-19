@@ -1,0 +1,61 @@
+{
+  "class": "Threepp.PointsMaterial",
+  "entries": {
+    "krkrthreepp:Threepp.PointsMaterial": {
+      "hash": "6bf0b75e09dc",
+      "ja": {
+        "summary": "点群用マテリアル",
+        "description": "Points用のマテリアルです。"
+      },
+      "tr": {
+        "summary": "Material for points",
+        "description": "A material for Points."
+      }
+    },
+    "krkrthreepp:Threepp.PointsMaterial.PointsMaterial": {
+      "hash": "b51e2be63271",
+      "ja": {
+        "summary": "コンストラクタ"
+      },
+      "tr": {
+        "summary": "Constructor"
+      }
+    },
+    "krkrthreepp:Threepp.PointsMaterial.type": {
+      "hash": "a97fab432a08",
+      "ja": {
+        "summary": "\"PointsMaterial\"（読み取り専用）"
+      },
+      "tr": {
+        "summary": "\"PointsMaterial\" (read-only)"
+      }
+    },
+    "krkrthreepp:Threepp.PointsMaterial.color": {
+      "hash": "7df053f299de",
+      "ja": {
+        "summary": "色 (0xRRGGBB)"
+      },
+      "tr": {
+        "summary": "Color (0xRRGGBB)"
+      }
+    },
+    "krkrthreepp:Threepp.PointsMaterial.size": {
+      "hash": "408019ffe803",
+      "ja": {
+        "summary": "点のサイズ"
+      },
+      "tr": {
+        "summary": "Point size"
+      }
+    },
+    "krkrthreepp:Threepp.PointsMaterial.sizeAttenuation": {
+      "hash": "d2cfd58f4de0",
+      "ja": {
+        "summary": "距離による減衰を行うか"
+      },
+      "tr": {
+        "summary": "Whether point size is attenuated by distance"
+      }
+    }
+  }
+}

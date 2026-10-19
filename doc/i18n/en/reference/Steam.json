@@ -1,0 +1,302 @@
+{
+  "class": "Steam",
+  "entries": {
+    "steam:Steam": {
+      "hash": "2d80be06b57b",
+      "ja": {
+        "summary": "Steam クラス(static)"
+      },
+      "tr": {
+        "summary": "Steam class (static)"
+      }
+    },
+    "steam:Steam.requestInitialize": {
+      "hash": "9e202c159e63",
+      "ja": {
+        "summary": "実績情報再取得要求 ※起動時に呼び出されるので普通は呼ぶ必要なし",
+        "returns": "呼び出し成功"
+      },
+      "tr": {
+        "summary": "Requests the achievement information again (called at startup, so normally not needed)",
+        "returns": "Whether the call succeeded."
+      }
+    },
+    "steam:Steam.initialized": {
+      "hash": "836f11f6ba5a",
+      "ja": {
+        "summary": "実績情報初期化済み"
+      },
+      "tr": {
+        "summary": "Whether the achievement information has been initialized"
+      }
+    },
+    "steam:Steam.achievementsCount": {
+      "hash": "c47987fad0dc",
+      "ja": {
+        "summary": "実績個数"
+      },
+      "tr": {
+        "summary": "Number of achievements"
+      }
+    },
+    "steam:Steam.clearAchievement": {
+      "hash": "19df6b779c51",
+      "ja": {
+        "summary": "実績を解除する",
+        "params": {
+          "n": "番号または識別名"
+        }
+      },
+      "tr": {
+        "summary": "Clears an achievement",
+        "params": {
+          "n": "Index or identifier"
+        }
+      }
+    },
+    "steam:Steam.getLanguage": {
+      "hash": "38c9442a7533",
+      "ja": {
+        "summary": "static method",
+        "returns": "現在の Steam の言語を取得"
+      },
+      "tr": {
+        "summary": "static method",
+        "returns": "The current Steam language."
+      }
+    },
+    "steam:Steam.steamID": {
+      "hash": "90c74b57904f",
+      "ja": {
+        "summary": "SteamID (64bit) の文字列。取れないときは空文字列"
+      },
+      "tr": {
+        "summary": "SteamID (64-bit) as a string. An empty string if unavailable"
+      }
+    },
+    "steam:Steam.accountID": {
+      "hash": "d8a2d8f1531d",
+      "ja": {
+        "summary": "アカウント ID (32bit の整数)。Steam の userdata フォルダ名と同じ値。 取れないときは 0"
+      },
+      "tr": {
+        "summary": "Account ID (32-bit integer), the same value as the Steam userdata folder name. 0 if unavailable"
+      }
+    },
+    "steam:Steam.loggedOn": {
+      "hash": "2858c7a75c43",
+      "ja": {
+        "summary": "Steam にログイン済みかどうか"
+      },
+      "tr": {
+        "summary": "Whether the user is logged on to Steam"
+      }
+    },
+    "steam:Steam.personaName": {
+      "hash": "d8c167407ca2",
+      "ja": {
+        "summary": "表示名 (ペルソナ名)。取れないときは空文字列"
+      },
+      "tr": {
+        "summary": "Display name (persona name). An empty string if unavailable"
+      }
+    },
+    "steam:Steam.appID": {
+      "hash": "3f317f2b4b64",
+      "ja": {
+        "summary": "動作中の AppID。取れないときは 0"
+      },
+      "tr": {
+        "summary": "AppID of the running app. 0 if unavailable"
+      }
+    },
+    "steam:Steam.RestartAppIfNecessary": {
+      "hash": "f0de95ae588d",
+      "ja": {
+        "summary": "Steam クライアント経由で起動し直す必要があるかを調べる",
+        "returns": "true なら Steam が起動し直すので、すぐアプリを終了すること\n\n※このメソッドだけは Steam の初期化を起こさずに呼べる\n(初期化は最初に他の Steam.* を参照した時点で行われる)",
+        "params": {
+          "appid": "自分の AppID"
+        }
+      },
+      "tr": {
+        "summary": "Checks whether the app needs to be relaunched through the Steam client",
+        "returns": "If true, Steam relaunches the app, so exit immediately.\n\nNote: this is the only method that can be called without initializing Steam\n(initialization happens the first time any other Steam.* member is accessed).",
+        "params": {
+          "appid": "Your own AppID."
+        }
+      }
+    },
+    "steam:Steam.cloudEnabled": {
+      "hash": "121d07e79002",
+      "ja": {
+        "summary": "Steamクラウドの有効/無効設定"
+      },
+      "tr": {
+        "summary": "Whether Steam Cloud is enabled"
+      }
+    },
+    "steam:Steam.getCloudQuota": {
+      "hash": "c80292023c70",
+      "ja": {
+        "summary": "Steamクラウドの容量情報の取得",
+        "returns": "%[total:トータルサイズ, available:使用可能容量]"
+      },
+      "tr": {
+        "summary": "Gets the Steam Cloud quota",
+        "returns": "%[total: total size, available: available space]"
+      }
+    },
+    "steam:Steam.cloudFileCount": {
+      "hash": "658144c22dff",
+      "ja": {
+        "summary": "Steamクラウドのファイル数"
+      },
+      "tr": {
+        "summary": "Number of files in Steam Cloud"
+      }
+    },
+    "steam:Steam.getCloudFileInfo": {
+      "hash": "e6292e381826",
+      "ja": {
+        "summary": "個別のSteamクラウドファイルの名前とサイズの情報を取得",
+        "returns": "%[filename:名前, size:サイズ, time:タイムスタンプ]",
+        "params": {
+          "n": "ファイル番号"
+        }
+      },
+      "tr": {
+        "summary": "Gets the name and size of an individual Steam Cloud file",
+        "returns": "%[filename: name, size: size, time: timestamp]",
+        "params": {
+          "n": "File index."
+        }
+      }
+    },
+    "steam:Steam.deleteCloudFile": {
+      "hash": "019271fd2134",
+      "ja": {
+        "summary": "Steamクラウドのファイルを削除する",
+        "returns": "成功したら true"
+      },
+      "tr": {
+        "summary": "Deletes a Steam Cloud file",
+        "returns": "true on success."
+      }
+    },
+    "steam:Steam.copyCloudFile": {
+      "hash": "1eb1eae575d0",
+      "ja": {
+        "summary": "Steamクラウドのファイルを複製する",
+        "returns": "成功したら true"
+      },
+      "tr": {
+        "summary": "Copies a Steam Cloud file",
+        "returns": "true on success."
+      }
+    },
+    "steam:Steam.triggerScreenshot": {
+      "hash": "dd47b7d8057a",
+      "ja": {
+        "summary": "スクリーンショット処理をアプリ側から起動させる"
+      },
+      "tr": {
+        "summary": "Triggers a screenshot from the app"
+      }
+    },
+    "steam:Steam.hookScreenshots": {
+      "hash": "38a260b439b2",
+      "ja": {
+        "params": {
+          "callback": "コールバック関数（voidの場合は登録解除）\n※コールバック関数内からwriteScreenshotを呼びます"
+        }
+      },
+      "tr": {
+        "params": {
+          "callback": "Callback function (void unregisters it).\nCall writeScreenshot from inside the callback."
+        }
+      }
+    },
+    "steam:Steam.writeScreenshot": {
+      "hash": "7377c93a973a",
+      "ja": {
+        "summary": "スクリーンショットの登録",
+        "params": {
+          "layer": "画像",
+          "location": "\"場所文字列\" (空文字の場合は登録しない）"
+        }
+      },
+      "tr": {
+        "summary": "Registers a screenshot",
+        "params": {
+          "layer": "Image.",
+          "location": "Location string (not registered if empty)."
+        }
+      }
+    },
+    "steam:Steam.isBroadcasting": {
+      "hash": "d0cb6d28aa87",
+      "ja": {
+        "returns": "配信中なら真"
+      },
+      "tr": {
+        "returns": "true while broadcasting."
+      }
+    },
+    "steam:Steam.hookBroadcasting": {
+      "hash": "5c94cb5f8f4a",
+      "ja": {
+        "summary": "配信状態変更時のコールバック",
+        "params": {
+          "callback": "コールバック(function (is_start) {})"
+        }
+      },
+      "tr": {
+        "summary": "Callback for broadcast state changes",
+        "params": {
+          "callback": "Callback (function (is_start) {})."
+        }
+      }
+    },
+    "steam:Steam.isIsSubscribedApp": {
+      "hash": "6364671e8ab2",
+      "ja": {
+        "summary": "only use this member if you need to check ownership of another game related to yours, a demo for example"
+      },
+      "tr": {
+        "summary": "only use this member if you need to check ownership of another game related to yours, a demo for example"
+      }
+    },
+    "steam:Steam.isDlcInstalled": {
+      "hash": "fe85f77acd43",
+      "ja": {
+        "summary": "Takes AppID of DLC and checks if the user owns the DLC & if the DLC is installed"
+      },
+      "tr": {
+        "summary": "Takes AppID of DLC and checks if the user owns the DLC & if the DLC is installed"
+      }
+    },
+    "steam:Steam.getDLCCount": {
+      "hash": "0a221021ceef",
+      "ja": {
+        "returns": "DLCの個数を返す"
+      },
+      "tr": {
+        "returns": "Number of DLCs."
+      }
+    },
+    "steam:Steam.getDLCData": {
+      "hash": "39d0dabafe6d",
+      "ja": {
+        "params": {
+          "no": "DLCの番号"
+        }
+      },
+      "tr": {
+        "params": {
+          "no": "DLC index."
+        }
+      }
+    }
+  }
+}

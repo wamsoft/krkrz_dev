@@ -75,6 +75,19 @@ Steam から起動すると `LD_LIBRARY_PATH` の先頭に Steam ランタイム
 `--disable-new-dtags` を使ってください ( RUNPATH を持つと実行ファイル側の
 DT_RPATH も効かなくなります )。
 
+### プラグインのシンボル公開 ( 2026-10〜 )
+
+`krkrz_plugin()` で作る共有プラグインは、Windows 以外では既定でシンボルを公開しません
+( `-fvisibility=hidden` 相当 )。外から見えるのは `DLL_EXPORT` を付けた `V2Link` /
+`V2Unlink` だけです。ncbind や simplebinder の雛形は最初から付いているので、そのままで
+動きます。入口を自分で書くプラグインは `DLL_EXPORT` を付けてください。
+
+以前はすべて公開されていたため、Linux ではプラグインどうしで同じ名前の inline な静的メンバ
+( ncbind の自動登録の一覧など ) が 1 つにまとめられ、ncbind を使うプラグインを 2 本読むと
+2 本目の読み込みで止まっていました ( macOS でも同様 )。独自の CMake でプラグインを作る場合も
+同じ設定 ( `C_VISIBILITY_PRESET` / `CXX_VISIBILITY_PRESET hidden` と
+`VISIBILITY_INLINES_HIDDEN` ) にしてください。
+
 ## セーブデータの場所 ( 2026-10〜 )
 
 !!! warning "重要 (2026-10 の変更)"

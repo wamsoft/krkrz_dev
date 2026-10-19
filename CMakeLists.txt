@@ -262,6 +262,13 @@ set(VCPKG_MANIFEST_DIR "${CMAKE_BINARY_DIR}" CACHE PATH
 
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 
+# macOS: src/core の sdl3/environ/macwindow.mm (Objective-C++)。 enable_language は
+# その言語を使うターゲットに共通する最上位で呼ぶ必要があり、 add_subdirectory 先の
+# src/core だけで有効にすると Generate が CMAKE_OBJCXX_COMPILE_OBJECT 未設定で失敗する
+if(APPLE AND NOT CMAKE_SYSTEM_NAME STREQUAL "iOS")
+	enable_language(OBJCXX)
+endif()
+
 # ----------------------------------------------------
 # 共通外部依存 (ICU / HarfBuzz)
 #

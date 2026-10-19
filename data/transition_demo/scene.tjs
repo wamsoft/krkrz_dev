@@ -21,6 +21,99 @@ class TransBaseLayer extends Layer
     }
 }
 
+// パラメータ名・選択肢・説明も表から引く (パネル JSON は言語切替のたびに作り直される)
+I18n.add(%[
+    "transition_demo.title"          => %[ ja : "トランジション (extrans / extNagano)",
+                                           en : "Transitions (extrans / extNagano)" ],
+    "transition_demo.shell"          => %[ ja : "トランジション デモ (Elements UI)", en : "Transition demo (Elements UI)" ],
+    "transition_demo.info"           => %[ ja : "パネルの「種類」で選択 → [▶ 実行]   R:実行  ←→:種類切替  SPACE:再表示",
+                                           en : "Pick a \"Type\" in the panel → [▶ Run]   R:run  ←→:type  SPACE:show panel" ],
+    "transition_demo.screenA"        => %[ ja : "画面 A", en : "Screen A" ],
+    "transition_demo.screenB"        => %[ ja : "画面 B", en : "Screen B" ],
+    "transition_demo.target"         => %[ ja : "${title} — トランジション対象", en : "${title} — transition target" ],
+    "transition_demo.panel.title"    => %[ ja : "トランジション デモ", en : "Transition demo" ],
+    "transition_demo.panel.type"     => %[ ja : "種類", en : "Type" ],
+    "transition_demo.panel.params"   => %[ ja : "パラメータ", en : "Parameters" ],
+    "transition_demo.panel.run"      => %[ ja : "▶ 実行", en : "▶ Run" ],
+    "transition_demo.panel.close"    => %[ ja : "閉じる", en : "Close" ],
+    "transition_demo.panel.keys"     => %[ ja : "R:実行  ←→:種類切替  SPACE:再表示  ESC:メニュー",
+                                           en : "R:run  ←→:type  SPACE:show panel  ESC:menu" ],
+    "transition_demo.group.std"      => %[ ja : "標準", en : "Standard" ],
+    "transition_demo.p.time"         => %[ ja : "所要時間ms", en : "Time ms" ],
+    "transition_demo.p.vague"        => %[ ja : "あいまいさ", en : "Vagueness" ],
+    "transition_demo.p.dir"          => %[ ja : "方向", en : "Direction" ],
+    "transition_demo.p.stay"         => %[ ja : "残留", en : "Stay" ],
+    "transition_demo.p.maxh"         => %[ ja : "波の高さ", en : "Wave height" ],
+    "transition_demo.p.maxomega"     => %[ ja : "波の密度", en : "Wave density" ],
+    "transition_demo.p.wavetype"     => %[ ja : "波タイプ", en : "Wave type" ],
+    "transition_demo.p.maxsize"      => %[ ja : "最大モザイク", en : "Max mosaic" ],
+    "transition_demo.p.factor"       => %[ ja : "拡大率", en : "Zoom factor" ],
+    "transition_demo.p.twist"        => %[ ja : "ひねり", en : "Twist" ],
+    "transition_demo.p.accel"        => %[ ja : "加速", en : "Accel" ],
+    "transition_demo.p.rwidth"       => %[ ja : "波の幅", en : "Wave width" ],
+    "transition_demo.p.roundness"    => %[ ja : "丸み", en : "Roundness" ],
+    "transition_demo.p.speed"        => %[ ja : "速度", en : "Speed" ],
+    "transition_demo.p.maxdrift"     => %[ ja : "最大ドリフト", en : "Max drift" ],
+    "transition_demo.p.colorspace"   => %[ ja : "色空間", en : "Color space" ],
+    "transition_demo.p.speed1"       => %[ ja : "速度1(元画面)", en : "Speed 1 (from)" ],
+    "transition_demo.p.accel1"       => %[ ja : "加速度1(元画面)", en : "Accel 1 (from)" ],
+    "transition_demo.p.speed2"       => %[ ja : "速度2(先画面)", en : "Speed 2 (to)" ],
+    "transition_demo.p.accel2"       => %[ ja : "加速度2(先画面)", en : "Accel 2 (to)" ],
+    "transition_demo.p.bound1"       => %[ ja : "境界1", en : "Bound 1" ],
+    "transition_demo.p.bound2"       => %[ ja : "境界2", en : "Bound 2" ],
+    "transition_demo.p.exponent"     => %[ ja : "指数", en : "Exponent" ],
+    "transition_demo.p.blur1"        => %[ ja : "ぼかし開始", en : "Blur start" ],
+    "transition_demo.p.blur2"        => %[ ja : "ぼかし終了", en : "Blur end" ],
+    "transition_demo.p.zoom1"        => %[ ja : "ズーム元", en : "Zoom from" ],
+    "transition_demo.p.zoom2"        => %[ ja : "ズーム先", en : "Zoom to" ],
+    "transition_demo.p.delayR"       => %[ ja : "R遅延", en : "R delay" ],
+    "transition_demo.p.delayG"       => %[ ja : "G遅延", en : "G delay" ],
+    "transition_demo.p.delayB"       => %[ ja : "B遅延", en : "B delay" ],
+    "transition_demo.p.type1"        => %[ ja : "開始タイプ", en : "Start type" ],
+    "transition_demo.p.type2"        => %[ ja : "終了タイプ", en : "End type" ],
+    "transition_demo.p.size"         => %[ ja : "サイズ", en : "Size" ],
+    "transition_demo.p.dirkey"       => %[ ja : "方向(テンキー)", en : "Direction (numpad)" ],
+    "transition_demo.p.count"        => %[ ja : "波の数", en : "Wave count" ],
+    "transition_demo.p.wavecount"    => %[ ja : "波の重ね数", en : "Wave layers" ],
+    "transition_demo.p.delaylast"    => %[ ja : "最後の遅延", en : "Last delay" ],
+    "transition_demo.o.left"         => %[ ja : "左", en : "Left" ],
+    "transition_demo.o.up"           => %[ ja : "上", en : "Up" ],
+    "transition_demo.o.right"        => %[ ja : "右", en : "Right" ],
+    "transition_demo.o.down"         => %[ ja : "下", en : "Down" ],
+    "transition_demo.o.none"         => %[ ja : "なし", en : "None" ],
+    "transition_demo.o.staydst"      => %[ ja : "移動先を残す", en : "Keep target" ],
+    "transition_demo.o.staysrc"      => %[ ja : "移動元を残す", en : "Keep source" ],
+    "transition_demo.o.bothnarrow"   => %[ ja : "両端細", en : "Narrow ends" ],
+    "transition_demo.o.firstnarrow"  => %[ ja : "最初細", en : "Narrow start" ],
+    "transition_demo.o.lastnarrow"   => %[ ja : "最後細", en : "Narrow end" ],
+    "transition_demo.o.random"       => %[ ja : "ランダム", en : "Random" ],
+    "transition_demo.o.fwd"          => %[ ja : "表→裏", en : "Front→back" ],
+    "transition_demo.o.back"         => %[ ja : "裏→表", en : "Back→front" ],
+    "transition_demo.o.w2b"          => %[ ja : "白→黒", en : "White→black" ],
+    "transition_demo.o.b2w"          => %[ ja : "黒→白", en : "Black→white" ],
+    "transition_demo.d.crossfade"    => %[ ja : "単純クロスフェード", en : "Simple crossfade" ],
+    "transition_demo.d.universal"    => %[ ja : "ルール画像による万能トランジション", en : "Universal transition with a rule image" ],
+    "transition_demo.d.scroll"       => %[ ja : "スクロール移動で切替", en : "Switch by scrolling" ],
+    "transition_demo.d.wave"         => %[ ja : "波打ちながら切替", en : "Switch with a wave" ],
+    "transition_demo.d.mosaic"       => %[ ja : "モザイクをかけて切替", en : "Switch through a mosaic" ],
+    "transition_demo.d.turn"         => %[ ja : "回転しながら切替", en : "Switch while turning" ],
+    "transition_demo.d.rotatezoom"   => %[ ja : "回転拡大で切替", en : "Switch by rotate + zoom" ],
+    "transition_demo.d.rotatevanish" => %[ ja : "回転しながら消える", en : "Vanish while rotating" ],
+    "transition_demo.d.rotateswap"   => %[ ja : "回転して入れ替わる", en : "Swap by rotating" ],
+    "transition_demo.d.ripple"       => %[ ja : "波紋を広げて切替", en : "Switch with a spreading ripple" ],
+    "transition_demo.d.3duniversal"  => %[ ja : "立体的な万能トランジション", en : "3D universal transition" ],
+    "transition_demo.d.blurfade"     => %[ ja : "ぼかしながらフェード", en : "Fade while blurring" ],
+    "transition_demo.d.scanline"     => %[ ja : "走査線状に切替", en : "Switch by scanlines" ],
+    "transition_demo.d.zoomfade"     => %[ ja : "ズームしながらフェード", en : "Fade while zooming" ],
+    "transition_demo.d.rgbfade"      => %[ ja : "RGB を時間差でフェード", en : "Fade R/G/B with delays" ],
+    "transition_demo.d.spin"         => %[ ja : "渦を巻いて切替", en : "Switch with a swirl" ],
+    "transition_demo.d.flutter"      => %[ ja : "ひらひらと切替", en : "Switch with a flutter" ],
+    "transition_demo.d.book"         => %[ ja : "本をめくるように切替", en : "Switch like turning a page" ],
+    "transition_demo.d.imagewipe"    => %[ ja : "ルール画像(アルファ)でワイプ", en : "Wipe by rule image (alpha)" ],
+    "transition_demo.d.honeyturn"    => %[ ja : "ハニカム状に回転", en : "Honeycomb turn" ],
+    "transition_demo.d.multiripple"  => %[ ja : "複数の波紋で切替", en : "Switch with multiple ripples" ]
+]);
+
 class TransitionScene extends DemoScene
 {
     var base1, base2;        // 画面 A / 画面 B (トランジション対象)
@@ -29,7 +122,7 @@ class TransitionScene extends DemoScene
     var pendingSelectIndex;
     var W = 1280, H = 720;
 
-    function TransitionScene() { super.DemoScene("トランジション (extrans / extNagano)"); }
+    function TransitionScene() { super.DemoScene(I18n.entry("transition_demo.title")); }
 
     // --- パラメータ定義ヘルパ ---
     function P_int(key, label, mn, mx, dv) {
@@ -41,72 +134,72 @@ class TransitionScene extends DemoScene
     function P_cho(key, label, options, dv) {
         return %[ key:key, label:label, kind:"choice", options:options, def:dv ];
     }
-    function P_time(dv) { return P_int("time", "所要時間ms", 100, 5000, dv); }
+    function P_time(dv) { return P_int("time", I18n.t("transition_demo.p.time"), 100, 5000, dv); }
 
     function buildDefs()
     {
         var std = [
-            %[ group:"標準", method:"crossfade", title:"[標準] crossfade", desc:"単純クロスフェード", rule:false,
+            %[ group:"標準", method:"crossfade", title:"[" + I18n.t("transition_demo.group.std") + "] crossfade", desc:I18n.t("transition_demo.d.crossfade"), rule:false,
                params:[ P_time(1500) ] ],
-            %[ group:"標準", method:"universal", title:"[標準] universal", desc:"ルール画像による万能トランジション", rule:"rule.png",
-               params:[ P_time(1500), P_int("vague","あいまいさ",1,256,64) ] ],
-            %[ group:"標準", method:"scroll", title:"[標準] scroll", desc:"スクロール移動で切替", rule:false,
+            %[ group:"標準", method:"universal", title:"[" + I18n.t("transition_demo.group.std") + "] universal", desc:I18n.t("transition_demo.d.universal"), rule:"rule.png",
+               params:[ P_time(1500), P_int("vague",I18n.t("transition_demo.p.vague"),1,256,64) ] ],
+            %[ group:"標準", method:"scroll", title:"[" + I18n.t("transition_demo.group.std") + "] scroll", desc:I18n.t("transition_demo.d.scroll"), rule:false,
                params:[ P_time(1200),
-                        P_cho("from","方向",[%[t:"左",v:0],%[t:"上",v:1],%[t:"右",v:2],%[t:"下",v:3]],0),
-                        P_cho("stay","残留",[%[t:"なし",v:0],%[t:"移動先を残す",v:1],%[t:"移動元を残す",v:2]],0) ] ]
+                        P_cho("from",I18n.t("transition_demo.p.dir"),[%[t:I18n.t("transition_demo.o.left"),v:0],%[t:I18n.t("transition_demo.o.up"),v:1],%[t:I18n.t("transition_demo.o.right"),v:2],%[t:I18n.t("transition_demo.o.down"),v:3]],0),
+                        P_cho("stay",I18n.t("transition_demo.p.stay"),[%[t:I18n.t("transition_demo.o.none"),v:0],%[t:I18n.t("transition_demo.o.staydst"),v:1],%[t:I18n.t("transition_demo.o.staysrc"),v:2]],0) ] ]
         ];
         var extrans = [
-            %[ group:"extrans", method:"wave", title:"[extrans] wave", desc:"波打ちながら切替", rule:false,
-               params:[ P_time(1200), P_int("maxh","波の高さ",0,200,50), P_flt("maxomega","波の密度",0.05,1.0,0.2),
-                        P_cho("wavetype","波タイプ",[%[t:"両端細",v:0],%[t:"最初細",v:1],%[t:"最後細",v:2]],0) ] ],
-            %[ group:"extrans", method:"mosaic", title:"[extrans] mosaic", desc:"モザイクをかけて切替", rule:false,
-               params:[ P_time(1000), P_int("maxsize","最大モザイク",1,100,30) ] ],
-            %[ group:"extrans", method:"turn", title:"[extrans] turn", desc:"回転しながら切替", rule:false,
+            %[ group:"extrans", method:"wave", title:"[extrans] wave", desc:I18n.t("transition_demo.d.wave"), rule:false,
+               params:[ P_time(1200), P_int("maxh",I18n.t("transition_demo.p.maxh"),0,200,50), P_flt("maxomega",I18n.t("transition_demo.p.maxomega"),0.05,1.0,0.2),
+                        P_cho("wavetype",I18n.t("transition_demo.p.wavetype"),[%[t:I18n.t("transition_demo.o.bothnarrow"),v:0],%[t:I18n.t("transition_demo.o.firstnarrow"),v:1],%[t:I18n.t("transition_demo.o.lastnarrow"),v:2]],0) ] ],
+            %[ group:"extrans", method:"mosaic", title:"[extrans] mosaic", desc:I18n.t("transition_demo.d.mosaic"), rule:false,
+               params:[ P_time(1000), P_int("maxsize",I18n.t("transition_demo.p.maxsize"),1,100,30) ] ],
+            %[ group:"extrans", method:"turn", title:"[extrans] turn", desc:I18n.t("transition_demo.d.turn"), rule:false,
                params:[ P_time(1500) ] ],
-            %[ group:"extrans", method:"rotatezoom", title:"[extrans] rotatezoom", desc:"回転拡大で切替", rule:false,
-               params:[ P_time(1500), P_flt("factor","拡大率",0.0,3.0,1.0), P_flt("twist","ひねり",-5.0,5.0,2.0),
-                        P_flt("accel","加速",-3.0,3.0,0.0) ] ],
-            %[ group:"extrans", method:"rotatevanish", title:"[extrans] rotatevanish", desc:"回転しながら消える", rule:false,
-               params:[ P_time(1500), P_flt("twist","ひねり",-5.0,5.0,2.0), P_flt("accel","加速",0.0,4.0,2.0) ] ],
-            %[ group:"extrans", method:"rotateswap", title:"[extrans] rotateswap", desc:"回転して入れ替わる", rule:false,
-               params:[ P_time(1500), P_flt("twist","ひねり",-3.0,3.0,1.0) ] ],
-            %[ group:"extrans", method:"ripple", title:"[extrans] ripple", desc:"波紋を広げて切替", rule:false,
+            %[ group:"extrans", method:"rotatezoom", title:"[extrans] rotatezoom", desc:I18n.t("transition_demo.d.rotatezoom"), rule:false,
+               params:[ P_time(1500), P_flt("factor",I18n.t("transition_demo.p.factor"),0.0,3.0,1.0), P_flt("twist",I18n.t("transition_demo.p.twist"),-5.0,5.0,2.0),
+                        P_flt("accel",I18n.t("transition_demo.p.accel"),-3.0,3.0,0.0) ] ],
+            %[ group:"extrans", method:"rotatevanish", title:"[extrans] rotatevanish", desc:I18n.t("transition_demo.d.rotatevanish"), rule:false,
+               params:[ P_time(1500), P_flt("twist",I18n.t("transition_demo.p.twist"),-5.0,5.0,2.0), P_flt("accel",I18n.t("transition_demo.p.accel"),0.0,4.0,2.0) ] ],
+            %[ group:"extrans", method:"rotateswap", title:"[extrans] rotateswap", desc:I18n.t("transition_demo.d.rotateswap"), rule:false,
+               params:[ P_time(1500), P_flt("twist",I18n.t("transition_demo.p.twist"),-3.0,3.0,1.0) ] ],
+            %[ group:"extrans", method:"ripple", title:"[extrans] ripple", desc:I18n.t("transition_demo.d.ripple"), rule:false,
                params:[ P_time(1500),
-                        P_cho("rwidth","波の幅",[%[t:"16",v:16],%[t:"32",v:32],%[t:"64",v:64],%[t:"128",v:128]],3),
-                        P_flt("roundness","丸み",0.2,3.0,1.0), P_flt("speed","速度",1.0,15.0,6.0),
-                        P_int("maxdrift","最大ドリフト",1,100,24) ] ]
+                        P_cho("rwidth",I18n.t("transition_demo.p.rwidth"),[%[t:"16",v:16],%[t:"32",v:32],%[t:"64",v:64],%[t:"128",v:128]],3),
+                        P_flt("roundness",I18n.t("transition_demo.p.roundness"),0.2,3.0,1.0), P_flt("speed",I18n.t("transition_demo.p.speed"),1.0,15.0,6.0),
+                        P_int("maxdrift",I18n.t("transition_demo.p.maxdrift"),1,100,24) ] ]
         ];
         var nagano = [
-            %[ group:"extNagano", method:"3duniversal", title:"[extNagano] 3duniversal", desc:"立体的な万能トランジション", rule:"rule4.png",
+            %[ group:"extNagano", method:"3duniversal", title:"[extNagano] 3duniversal", desc:I18n.t("transition_demo.d.3duniversal"), rule:"rule4.png",
                params:[ P_time(1500),
-                        P_cho("type","色空間",[%[t:"RGB",v:"RGB"],%[t:"HSB",v:"HSB"]],0),
-                        P_flt("speed1","速度1(元画面)",-200,200,50), P_flt("accel1","加速度1(元画面)",-2.0,2.0,0.5),
-                        P_flt("speed2","速度2(先画面)",-200,200,0), P_flt("accel2","加速度2(先画面)",-2.0,2.0,0.0),
-                        P_int("bound1","境界1",0,127,0), P_int("bound2","境界2",0,127,0) ] ],
-            %[ group:"extNagano", method:"blurfade", title:"[extNagano] blurfade", desc:"ぼかしながらフェード", rule:false,
-               params:[ P_time(1200), P_flt("exponent","指数",0.2,3.0,1.0), P_int("blur1","ぼかし開始",0,64,8),
-                        P_int("blur2","ぼかし終了",0,64,8) ] ],
-            %[ group:"extNagano", method:"scanline", title:"[extNagano] scanline", desc:"走査線状に切替", rule:false,
+                        P_cho("type",I18n.t("transition_demo.p.colorspace"),[%[t:"RGB",v:"RGB"],%[t:"HSB",v:"HSB"]],0),
+                        P_flt("speed1",I18n.t("transition_demo.p.speed1"),-200,200,50), P_flt("accel1",I18n.t("transition_demo.p.accel1"),-2.0,2.0,0.5),
+                        P_flt("speed2",I18n.t("transition_demo.p.speed2"),-200,200,0), P_flt("accel2",I18n.t("transition_demo.p.accel2"),-2.0,2.0,0.0),
+                        P_int("bound1",I18n.t("transition_demo.p.bound1"),0,127,0), P_int("bound2",I18n.t("transition_demo.p.bound2"),0,127,0) ] ],
+            %[ group:"extNagano", method:"blurfade", title:"[extNagano] blurfade", desc:I18n.t("transition_demo.d.blurfade"), rule:false,
+               params:[ P_time(1200), P_flt("exponent",I18n.t("transition_demo.p.exponent"),0.2,3.0,1.0), P_int("blur1",I18n.t("transition_demo.p.blur1"),0,64,8),
+                        P_int("blur2",I18n.t("transition_demo.p.blur2"),0,64,8) ] ],
+            %[ group:"extNagano", method:"scanline", title:"[extNagano] scanline", desc:I18n.t("transition_demo.d.scanline"), rule:false,
                params:[ P_time(800) ] ],
-            %[ group:"extNagano", method:"zoomfade", title:"[extNagano] zoomfade", desc:"ズームしながらフェード", rule:false,
-               params:[ P_time(1200), P_flt("zoom1","ズーム元",0.0,5.0,0.0), P_flt("zoom2","ズーム先",0.0,5.0,2.0) ] ],
-            %[ group:"extNagano", method:"rgbfade", title:"[extNagano] rgbfade", desc:"RGB を時間差でフェード", rule:false,
-               params:[ P_time(1200), P_int("delayR","R遅延",0,255,0), P_int("delayG","G遅延",0,255,80),
-                        P_int("delayB","B遅延",0,255,160) ] ],
-            %[ group:"extNagano", method:"spin", title:"[extNagano] spin", desc:"渦を巻いて切替", rule:false,
-               params:[ P_time(1200), P_int("type1","開始タイプ",-1,11,0), P_int("type2","終了タイプ",-1,11,0) ] ],
-            %[ group:"extNagano", method:"flutter", title:"[extNagano] flutter", desc:"ひらひらと切替", rule:false,
+            %[ group:"extNagano", method:"zoomfade", title:"[extNagano] zoomfade", desc:I18n.t("transition_demo.d.zoomfade"), rule:false,
+               params:[ P_time(1200), P_flt("zoom1",I18n.t("transition_demo.p.zoom1"),0.0,5.0,0.0), P_flt("zoom2",I18n.t("transition_demo.p.zoom2"),0.0,5.0,2.0) ] ],
+            %[ group:"extNagano", method:"rgbfade", title:"[extNagano] rgbfade", desc:I18n.t("transition_demo.d.rgbfade"), rule:false,
+               params:[ P_time(1200), P_int("delayR",I18n.t("transition_demo.p.delayR"),0,255,0), P_int("delayG",I18n.t("transition_demo.p.delayG"),0,255,80),
+                        P_int("delayB",I18n.t("transition_demo.p.delayB"),0,255,160) ] ],
+            %[ group:"extNagano", method:"spin", title:"[extNagano] spin", desc:I18n.t("transition_demo.d.spin"), rule:false,
+               params:[ P_time(1200), P_int("type1",I18n.t("transition_demo.p.type1"),-1,11,0), P_int("type2",I18n.t("transition_demo.p.type2"),-1,11,0) ] ],
+            %[ group:"extNagano", method:"flutter", title:"[extNagano] flutter", desc:I18n.t("transition_demo.d.flutter"), rule:false,
                params:[ P_time(1500) ] ],
-            %[ group:"extNagano", method:"book", title:"[extNagano] book", desc:"本をめくるように切替", rule:false,
-               params:[ P_time(1500), P_cho("dir","方向",[%[t:"ランダム",v:-1],%[t:"表→裏",v:0],%[t:"裏→表",v:1]],1) ] ],
-            %[ group:"extNagano", method:"imagewipe", title:"[extNagano] imagewipe", desc:"ルール画像(アルファ)でワイプ", rule:"rule5.png",
-               params:[ P_time(1000), P_cho("dir","方向",[%[t:"白→黒",v:0],%[t:"黒→白",v:1]],0) ] ],
-            %[ group:"extNagano", method:"honeyturn", title:"[extNagano] honeyturn", desc:"ハニカム状に回転", rule:false,
-               params:[ P_time(1500), P_int("size","サイズ",8,256,64), P_int("dir","方向(テンキー)",1,9,6) ] ],
-            %[ group:"extNagano", method:"multiripple", title:"[extNagano] multiripple", desc:"複数の波紋で切替", rule:false,
-               params:[ P_time(5000), P_int("count","波の数",1,50,30), P_int("wavecount","波の重ね数",1,8,2),
-                        P_int("rwidth","波の幅",4,256,20), P_int("maxdrift","最大ドリフト",1,100,32),
-                        P_flt("roundness","丸み",0.2,3.0,1.0), P_flt("delaylast","最後の遅延",0.0,3.0,1.5) ] ]
+            %[ group:"extNagano", method:"book", title:"[extNagano] book", desc:I18n.t("transition_demo.d.book"), rule:false,
+               params:[ P_time(1500), P_cho("dir",I18n.t("transition_demo.p.dir"),[%[t:I18n.t("transition_demo.o.random"),v:-1],%[t:I18n.t("transition_demo.o.fwd"),v:0],%[t:I18n.t("transition_demo.o.back"),v:1]],1) ] ],
+            %[ group:"extNagano", method:"imagewipe", title:"[extNagano] imagewipe", desc:I18n.t("transition_demo.d.imagewipe"), rule:"rule5.png",
+               params:[ P_time(1000), P_cho("dir",I18n.t("transition_demo.p.dir"),[%[t:I18n.t("transition_demo.o.w2b"),v:0],%[t:I18n.t("transition_demo.o.b2w"),v:1]],0) ] ],
+            %[ group:"extNagano", method:"honeyturn", title:"[extNagano] honeyturn", desc:I18n.t("transition_demo.d.honeyturn"), rule:false,
+               params:[ P_time(1500), P_int("size",I18n.t("transition_demo.p.size"),8,256,64), P_int("dir",I18n.t("transition_demo.p.dirkey"),1,9,6) ] ],
+            %[ group:"extNagano", method:"multiripple", title:"[extNagano] multiripple", desc:I18n.t("transition_demo.d.multiripple"), rule:false,
+               params:[ P_time(5000), P_int("count",I18n.t("transition_demo.p.count"),1,50,30), P_int("wavecount",I18n.t("transition_demo.p.wavecount"),1,8,2),
+                        P_int("rwidth",I18n.t("transition_demo.p.rwidth"),4,256,20), P_int("maxdrift",I18n.t("transition_demo.p.maxdrift"),1,100,32),
+                        P_flt("roundness",I18n.t("transition_demo.p.roundness"),0.2,3.0,1.0), P_flt("delaylast",I18n.t("transition_demo.p.delaylast"),0.0,3.0,1.5) ] ]
         ];
 
         availDefs = [];
@@ -129,11 +222,11 @@ class TransitionScene extends DemoScene
         base2 = new TransBaseLayer(window, stage, this);
         base2.setSize(W, H); window.add(base2);
 
-        drawTScene(base1, 0xff10305f, 0xff2f86c8, "A", "画面 A");
-        drawTScene(base2, 0xff5f2410, 0xffd8892f, "B", "画面 B");
+        drawTScene(base1, 0xff10305f, 0xff2f86c8, "A", I18n.t("transition_demo.screenA"));
+        drawTScene(base2, 0xff5f2410, 0xffd8892f, "B", I18n.t("transition_demo.screenB"));
 
         selectByIndex(0);
-        setInfo("パネルの「種類」で選択 → [▶ 実行]   R:実行  ←→:種類切替  SPACE:再表示");
+        setInfo(I18n.t("transition_demo.info"));
         showPanelJson(buildPanelJson());
     }
 
@@ -154,7 +247,7 @@ class TransitionScene extends DemoScene
         var tw = lay.font.getTextWidth(letter);
         lay.drawText((w-tw)\2, (h-340)\2 - 20, letter, 0xffffff, 220, true, 0, 0x000000, 0, 3, 3);
         lay.font.height = 46;
-        lay.drawText(40, 36, title + " — トランジション対象", 0xffffff, 255, true, 0, 0x000000, 0, 2, 2);
+        lay.drawText(40, 36, I18n.t("transition_demo.target", %[ title : title ]), 0xffffff, 255, true, 0, 0x000000, 0, 2, 2);
     }
 
     // --- 種類選択 ---
@@ -235,12 +328,23 @@ class TransitionScene extends DemoScene
     function onTransitionCompleted() { base1 <-> base2; }
 
     // --- パネル JSON ---
+    // JSON 文字列リテラル化 (" と \ をエスケープ)
+    function jsonStr(v)
+    {
+        var t = "" + v, out = "";
+        for (var i = 0; i < t.length; i++) {
+            var c = t[i];
+            if (c == "\\" || c == "\"") out += "\\";
+            out += c;
+        }
+        return "\"" + out + "\"";
+    }
     function buildPanelJson()
     {
         var titles = "";
         for (var i = 0; i < availDefs.count; i++) {
             if (i > 0) titles += ",";
-            titles += "\"" + availDefs[i].title + "\"";
+            titles += jsonStr(availDefs[i].title);
         }
         var rows = "";
         var ps = currentDef.params;
@@ -249,39 +353,39 @@ class TransitionScene extends DemoScene
             rows += paramRowJson(ps[i]);
         }
         return
-        "{\"background\":[30,32,42,236],\"locale\":\"ja-JP\"," +
+        "{\"background\":[30,32,42,236],\"locale\":\"" + I18n.locale + "\"," +
          "\"align\":\"top_right\",\"margin\":18," +
          "\"content\":{\"type\":\"margin\",\"padding\":16,\"child\":{\"type\":\"vtile\",\"children\":[" +
            "{\"type\":\"vsize\",\"height\":0,\"child\":{\"type\":\"hspacer\",\"width\":524}}," +
-           "{\"type\":\"align_center\",\"child\":{\"type\":\"label\",\"text\":\"トランジション デモ\",\"size_scale\":1.9}}," +
+           "{\"type\":\"align_center\",\"child\":{\"type\":\"label\",\"text\":\"" + I18n.t("transition_demo.panel.title") + "\",\"size_scale\":1.9}}," +
            "{\"type\":\"vspacer\",\"height\":8}," +
-           "{\"type\":\"labeled_row\",\"label\":\"種類\",\"label_width\":80,\"child\":" +
+           "{\"type\":\"labeled_row\",\"label\":\"" + I18n.t("transition_demo.panel.type") + "\",\"label_width\":80,\"child\":" +
              "{\"type\":\"framed_cycle_picker\",\"id\":\"trans\",\"options\":[" + titles + "],\"initial\":" + currentIndex + "}}," +
            "{\"type\":\"vspacer\",\"height\":4}," +
-           "{\"type\":\"align_left\",\"child\":{\"type\":\"label\",\"text\":\"" + currentDef.desc + "\",\"color\":[150,200,255,255]}}," +
+           "{\"type\":\"align_left\",\"child\":{\"type\":\"label\",\"text\":" + jsonStr(currentDef.desc) + ",\"color\":[150,200,255,255]}}," +
            "{\"type\":\"vspacer\",\"height\":6}," +
-           "{\"type\":\"group\",\"title\":\"パラメータ\",\"child\":{\"type\":\"margin\",\"padding\":[10,40,10,10]," +
+           "{\"type\":\"group\",\"title\":\"" + I18n.t("transition_demo.panel.params") + "\",\"child\":{\"type\":\"margin\",\"padding\":[10,40,10,10]," +
              "\"child\":{\"type\":\"vtile\",\"children\":[" + rows + "]}}}," +
            "{\"type\":\"vspacer\",\"height\":12}," +
            "{\"type\":\"htile\",\"children\":[" +
-             "{\"type\":\"hsize\",\"width\":150,\"child\":{\"type\":\"button\",\"id\":\"run\",\"text\":\"▶ 実行\"}}," +
+             "{\"type\":\"hsize\",\"width\":150,\"child\":{\"type\":\"button\",\"id\":\"run\",\"text\":\"" + I18n.t("transition_demo.panel.run") + "\"}}," +
              "{\"type\":\"hspacer\",\"width\":12}," +
-             "{\"type\":\"hsize\",\"width\":120,\"child\":{\"type\":\"button\",\"id\":\"close\",\"text\":\"閉じる\"}}" +
+             "{\"type\":\"hsize\",\"width\":120,\"child\":{\"type\":\"button\",\"id\":\"close\",\"text\":\"" + I18n.t("transition_demo.panel.close") + "\"}}" +
            "]}," +
            "{\"type\":\"vspacer\",\"height\":8}," +
            "{\"type\":\"align_left\",\"child\":{\"type\":\"label\"," +
-             "\"text\":\"R:実行  ←→:種類切替  SPACE:再表示  ESC:メニュー\",\"color\":[160,160,170,255]}}" +
+             "\"text\":\"" + I18n.t("transition_demo.panel.keys") + "\",\"color\":[160,160,170,255]}}" +
          "]}}}";
     }
 
     function paramRowJson(p)
     {
-        var head = "{\"type\":\"labeled_row\",\"label\":\"" + p.label + "\",\"label_width\":200,\"child\":";
+        var head = "{\"type\":\"labeled_row\",\"label\":" + jsonStr(p.label) + ",\"label_width\":200,\"child\":";
         if (p.kind == "choice") {
             var opts = "";
             for (var i = 0; i < p.options.count; i++) {
                 if (i > 0) opts += ",";
-                opts += "\"" + p.options[i].t + "\"";
+                opts += jsonStr(p.options[i].t);
             }
             return head + "{\"type\":\"cycle_picker\",\"id\":\"" + p.key + "\",\"options\":[" + opts +
                    "],\"initial\":" + p.def + "}}";

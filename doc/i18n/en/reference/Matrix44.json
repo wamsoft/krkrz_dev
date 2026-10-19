@@ -1,0 +1,592 @@
+{
+  "class": "Matrix44",
+  "entries": {
+    "Matrix44": {
+      "hash": "6c1d63a2072d",
+      "ja": {
+        "description": "4x4行列です。\nOpenGLのため列優先行列であることに注意してください(列優先の方が演算量的に有利です)。\nDirectXなどから見ると転置されているように感じます(シェーダのHLSLでは列優先で同じです)。"
+      },
+      "tr": {
+        "description": "A 4x4 matrix.\nNote that it is column-major, for OpenGL (column-major is also cheaper to compute).\nCompared with DirectX and similar APIs it may look transposed (HLSL shaders are column-major too, so they match)."
+      }
+    },
+    "Matrix44.set": {
+      "hash": "ce2ab97be4fa",
+      "ja": {
+        "summary": "マトリックス設定",
+        "params": {
+          "m11": "[1][1]位置の値です。",
+          "m12": "[1][2]位置の値です。",
+          "m13": "[1][3]位置の値です。",
+          "m14": "[1][4]位置の値です。",
+          "m21": "[2][1]位置の値です。",
+          "m22": "[2][2]位置の値です。",
+          "m23": "[2][3]位置の値です。",
+          "m24": "[2][4]位置の値です。",
+          "m31": "[3][1]位置の値です。",
+          "m32": "[3][2]位置の値です。",
+          "m33": "[3][3]位置の値です。",
+          "m34": "[3][4]位置の値です。",
+          "m41": "[4][1]位置の値です。",
+          "m42": "[4][2]位置の値です。",
+          "m43": "[4][3]位置の値です。",
+          "m44": "[4][4]位置の値です。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the matrix",
+        "params": {
+          "m11": "Value at [1][1].",
+          "m12": "Value at [1][2].",
+          "m13": "Value at [1][3].",
+          "m14": "Value at [1][4].",
+          "m21": "Value at [2][1].",
+          "m22": "Value at [2][2].",
+          "m23": "Value at [2][3].",
+          "m24": "Value at [2][4].",
+          "m31": "Value at [3][1].",
+          "m32": "Value at [3][2].",
+          "m33": "Value at [3][3].",
+          "m34": "Value at [3][4].",
+          "m41": "Value at [4][1].",
+          "m42": "Value at [4][2].",
+          "m43": "Value at [4][3].",
+          "m44": "Value at [4][4]."
+        }
+      }
+    },
+    "Matrix44.set@2": {
+      "hash": "759145566a23",
+      "ja": {
+        "summary": "マトリックス設定",
+        "description": "1次元配列からコピー",
+        "params": {
+          "array": "16要素の配列を指定します。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the matrix",
+        "description": "Copies from a one-dimensional array.",
+        "params": {
+          "array": "An array of 16 elements."
+        }
+      }
+    },
+    "Matrix44.set@3": {
+      "hash": "2f4cf1283a46",
+      "ja": {
+        "summary": "マトリックス設定",
+        "description": "matrixからコピー"
+      },
+      "tr": {
+        "summary": "Sets the matrix",
+        "description": "Copies from matrix."
+      }
+    },
+    "Matrix44.reset": {
+      "hash": "547d91e3e7d7",
+      "ja": {
+        "summary": "単位行列化"
+      },
+      "tr": {
+        "summary": "Resets to the identity matrix"
+      }
+    },
+    "Matrix44.setTranslate": {
+      "hash": "2589f0f8e703",
+      "ja": {
+        "summary": "移動量設定",
+        "description": "行列のXYZ移動位置に値を設定します。\n設定のみで現在の行列との演算などは行われません。",
+        "params": {
+          "x": "設定するX座標値",
+          "y": "設定するY座標値",
+          "z": "設定するZ座標値"
+        }
+      },
+      "tr": {
+        "summary": "Sets the translation",
+        "description": "Sets the XYZ translation components of the matrix.\nThe values are only set; no operation with the current matrix is performed.",
+        "params": {
+          "x": "X coordinate to set.",
+          "y": "Y coordinate to set.",
+          "z": "Z coordinate to set."
+        }
+      }
+    },
+    "Matrix44.setScale": {
+      "hash": "df001007099e",
+      "ja": {
+        "summary": "拡大率設定",
+        "description": "行列のXYZ拡大位置に値を設定します。\n設定のみで現在の行列との演算などは行われません。",
+        "params": {
+          "x": "設定するX軸拡大率",
+          "y": "設定するY軸拡大率",
+          "z": "設定するZ軸拡大率"
+        }
+      },
+      "tr": {
+        "summary": "Sets the scale",
+        "description": "Sets the XYZ scale components of the matrix.\nThe values are only set; no operation with the current matrix is performed.",
+        "params": {
+          "x": "Scale factor along the X axis.",
+          "y": "Scale factor along the Y axis.",
+          "z": "Scale factor along the Z axis."
+        }
+      }
+    },
+    "Matrix44.setRotateZ": {
+      "hash": "39b4bb9e4e65",
+      "ja": {
+        "summary": "回転量設定",
+        "description": "Z軸回転を設定します。\n設定のみで現在の行列との演算などは行われません。",
+        "params": {
+          "degree": "回転角度"
+        }
+      },
+      "tr": {
+        "summary": "Sets the rotation",
+        "description": "Sets a rotation around the Z axis.\nThe values are only set; no operation with the current matrix is performed.",
+        "params": {
+          "degree": "Rotation angle."
+        }
+      }
+    },
+    "Matrix44.setRotate": {
+      "hash": "fee18df88622",
+      "ja": {
+        "summary": "回転量設定",
+        "description": "設定のみで現在の行列との演算などは行われません。\n回転軸は正規化推奨",
+        "params": {
+          "degree": "回転角度",
+          "x": "回転軸X",
+          "y": "回転軸Y",
+          "z": "回転軸Z"
+        }
+      },
+      "tr": {
+        "summary": "Sets the rotation",
+        "description": "The values are only set; no operation with the current matrix is performed.\nNormalizing the rotation axis is recommended.",
+        "params": {
+          "degree": "Rotation angle.",
+          "x": "X component of the rotation axis.",
+          "y": "Y component of the rotation axis.",
+          "z": "Z component of the rotation axis."
+        }
+      }
+    },
+    "Matrix44.add": {
+      "hash": "36fc4f645495",
+      "ja": {
+        "summary": "自身に行列を加算します",
+        "params": {
+          "matrix": "加算する行列"
+        }
+      },
+      "tr": {
+        "summary": "Adds a matrix to this matrix",
+        "params": {
+          "matrix": "The matrix to add."
+        }
+      }
+    },
+    "Matrix44.sub": {
+      "hash": "fc771e1856bc",
+      "ja": {
+        "summary": "自身から行列を減算します",
+        "params": {
+          "matrix": "減算する行列"
+        }
+      },
+      "tr": {
+        "summary": "Subtracts a matrix from this matrix",
+        "params": {
+          "matrix": "The matrix to subtract."
+        }
+      }
+    },
+    "Matrix44.mul": {
+      "hash": "72f64cf60f93",
+      "ja": {
+        "summary": "自身に行列を乗算します",
+        "params": {
+          "matrix": "乗算する行列"
+        }
+      },
+      "tr": {
+        "summary": "Multiplies this matrix by a matrix",
+        "params": {
+          "matrix": "The matrix to multiply by."
+        }
+      }
+    },
+    "Matrix44.div": {
+      "hash": "e6e9446bc3cc",
+      "ja": {
+        "summary": "自身から行列を除算します",
+        "params": {
+          "matrix": "除算する行列"
+        }
+      },
+      "tr": {
+        "summary": "Divides this matrix by a matrix",
+        "params": {
+          "matrix": "The matrix to divide by."
+        }
+      }
+    },
+    "Matrix44.translate": {
+      "hash": "646ffd927cf5",
+      "ja": {
+        "summary": "行列を移動します",
+        "params": {
+          "x": "移動するX座標値",
+          "y": "移動するY座標値",
+          "z": "移動するZ座標値"
+        }
+      },
+      "tr": {
+        "summary": "Translates the matrix",
+        "params": {
+          "x": "Amount to move along X.",
+          "y": "Amount to move along Y.",
+          "z": "Amount to move along Z."
+        }
+      }
+    },
+    "Matrix44.rotate": {
+      "hash": "58ded455254e",
+      "ja": {
+        "summary": "行列を回転します",
+        "params": {
+          "degree": "回転角度",
+          "x": "回転軸X",
+          "y": "回転軸Y",
+          "z": "回転軸Z"
+        }
+      },
+      "tr": {
+        "summary": "Rotates the matrix",
+        "params": {
+          "degree": "Rotation angle.",
+          "x": "X component of the rotation axis.",
+          "y": "Y component of the rotation axis.",
+          "z": "Z component of the rotation axis."
+        }
+      }
+    },
+    "Matrix44.scale": {
+      "hash": "6154f30cfd3c",
+      "ja": {
+        "summary": "行列を拡大縮小します",
+        "params": {
+          "x": "X軸拡大率",
+          "y": "Y軸拡大率",
+          "z": "Z軸拡大率"
+        }
+      },
+      "tr": {
+        "summary": "Scales the matrix",
+        "params": {
+          "x": "Scale factor along the X axis.",
+          "y": "Scale factor along the Y axis.",
+          "z": "Scale factor along the Z axis."
+        }
+      }
+    },
+    "Matrix44.ortho": {
+      "hash": "d72b59537c16",
+      "ja": {
+        "summary": "平行投影変換行列を設定",
+        "params": {
+          "left": "左端",
+          "right": "右端",
+          "bottom": "下端",
+          "top": "上端",
+          "znear": "全面",
+          "zfar": "背面"
+        }
+      },
+      "tr": {
+        "summary": "Sets an orthographic projection matrix",
+        "params": {
+          "left": "Left edge.",
+          "right": "Right edge.",
+          "bottom": "Bottom edge.",
+          "top": "Top edge.",
+          "znear": "Near plane.",
+          "zfar": "Far plane."
+        }
+      }
+    },
+    "Matrix44.ortho@2": {
+      "hash": "008f40833070",
+      "ja": {
+        "summary": "平行投影変換行列を設定",
+        "params": {
+          "left": "左端",
+          "right": "右端",
+          "bottom": "下端",
+          "top": "上端"
+        }
+      },
+      "tr": {
+        "summary": "Sets an orthographic projection matrix",
+        "params": {
+          "left": "Left edge.",
+          "right": "Right edge.",
+          "bottom": "Bottom edge.",
+          "top": "Top edge."
+        }
+      }
+    },
+    "Matrix44.frustum": {
+      "hash": "9fd7256ce663",
+      "ja": {
+        "summary": "透視投影変換行列を設定",
+        "params": {
+          "left": "左端",
+          "right": "右端",
+          "bottom": "下端",
+          "top": "上端",
+          "znear": "全面",
+          "zfar": "背面"
+        }
+      },
+      "tr": {
+        "summary": "Sets a perspective projection matrix",
+        "params": {
+          "left": "Left edge.",
+          "right": "Right edge.",
+          "bottom": "Bottom edge.",
+          "top": "Top edge.",
+          "znear": "Near plane.",
+          "zfar": "Far plane."
+        }
+      }
+    },
+    "Matrix44.perspective": {
+      "hash": "9b37403b19b2",
+      "ja": {
+        "summary": "射影変換行列を設定",
+        "params": {
+          "fovy": "視野角",
+          "aspect": "アスペクト比",
+          "znear": "全面",
+          "zfar": "背面"
+        }
+      },
+      "tr": {
+        "summary": "Sets a projection matrix",
+        "params": {
+          "fovy": "Field of view.",
+          "aspect": "Aspect ratio.",
+          "znear": "Near plane.",
+          "zfar": "Far plane."
+        }
+      }
+    },
+    "Matrix44.perspectiveFov": {
+      "hash": "313c82e7242c",
+      "ja": {
+        "summary": "射影変換行列を設定",
+        "params": {
+          "fovy": "視野角",
+          "width": "幅",
+          "height": "高さ",
+          "znear": "全面",
+          "zfar": "背面"
+        }
+      },
+      "tr": {
+        "summary": "Sets a projection matrix",
+        "params": {
+          "fovy": "Field of view.",
+          "width": "Width.",
+          "height": "Height.",
+          "znear": "Near plane.",
+          "zfar": "Far plane."
+        }
+      }
+    },
+    "Matrix44.project": {
+      "hash": "0f86093e0d0e",
+      "ja": {
+        "summary": "各種行列を用いた座標変換",
+        "description": "クラスメソッドです。",
+        "params": {
+          "model": "モデル行列",
+          "proj": "プロジェクション行列",
+          "viewport": "ビューポート",
+          "x": "X座標値(in/out)",
+          "y": "Y座標値(in/out)",
+          "z": "Z座標値(in/out)"
+        }
+      },
+      "tr": {
+        "summary": "Transforms coordinates using the given matrices",
+        "description": "This is a class method.",
+        "params": {
+          "model": "Model matrix.",
+          "proj": "Projection matrix.",
+          "viewport": "Viewport.",
+          "x": "X coordinate (in/out).",
+          "y": "Y coordinate (in/out).",
+          "z": "Z coordinate (in/out)."
+        }
+      }
+    },
+    "Matrix44.array": {
+      "hash": "5c3c638c25d4",
+      "ja": {
+        "summary": "1次元配列で受け取る[r]"
+      },
+      "tr": {
+        "summary": "Gets the matrix as a one-dimensional array [r]"
+      }
+    },
+    "Matrix44.m11": {
+      "hash": "809c302f4823",
+      "ja": {
+        "summary": "m11 [1][1]位置の値"
+      },
+      "tr": {
+        "summary": "m11: value at [1][1]"
+      }
+    },
+    "Matrix44.m12": {
+      "hash": "0c77def612d2",
+      "ja": {
+        "summary": "m12 [1][2]位置の値"
+      },
+      "tr": {
+        "summary": "m12: value at [1][2]"
+      }
+    },
+    "Matrix44.m13": {
+      "hash": "8100bafc731d",
+      "ja": {
+        "summary": "m13 [1][3]位置の値"
+      },
+      "tr": {
+        "summary": "m13: value at [1][3]"
+      }
+    },
+    "Matrix44.m14": {
+      "hash": "843726488c67",
+      "ja": {
+        "summary": "m14 [1][4]位置の値"
+      },
+      "tr": {
+        "summary": "m14: value at [1][4]"
+      }
+    },
+    "Matrix44.m21": {
+      "hash": "0566725823ba",
+      "ja": {
+        "summary": "m21 [2][1]位置の値"
+      },
+      "tr": {
+        "summary": "m21: value at [2][1]"
+      }
+    },
+    "Matrix44.m22": {
+      "hash": "f77015599482",
+      "ja": {
+        "summary": "m22 [2][2]位置の値"
+      },
+      "tr": {
+        "summary": "m22: value at [2][2]"
+      }
+    },
+    "Matrix44.m23": {
+      "hash": "44d415a66733",
+      "ja": {
+        "summary": "m23 [2][3]位置の値"
+      },
+      "tr": {
+        "summary": "m23: value at [2][3]"
+      }
+    },
+    "Matrix44.m24": {
+      "hash": "b64d0bd8f14b",
+      "ja": {
+        "summary": "m24 [2][4]位置の値"
+      },
+      "tr": {
+        "summary": "m24: value at [2][4]"
+      }
+    },
+    "Matrix44.m31": {
+      "hash": "4e1bdd1c0586",
+      "ja": {
+        "summary": "m31 [3][1]位置の値"
+      },
+      "tr": {
+        "summary": "m31: value at [3][1]"
+      }
+    },
+    "Matrix44.m32": {
+      "hash": "029e169d0929",
+      "ja": {
+        "summary": "m32 [3][2]位置の値"
+      },
+      "tr": {
+        "summary": "m32: value at [3][2]"
+      }
+    },
+    "Matrix44.m33": {
+      "hash": "210c620eade0",
+      "ja": {
+        "summary": "m33 [3][3]位置の値"
+      },
+      "tr": {
+        "summary": "m33: value at [3][3]"
+      }
+    },
+    "Matrix44.m34": {
+      "hash": "ad3691962c36",
+      "ja": {
+        "summary": "m34 [3][4]位置の値"
+      },
+      "tr": {
+        "summary": "m34: value at [3][4]"
+      }
+    },
+    "Matrix44.m41": {
+      "hash": "b189560c86b6",
+      "ja": {
+        "summary": "m41 [4][1]位置の値"
+      },
+      "tr": {
+        "summary": "m41: value at [4][1]"
+      }
+    },
+    "Matrix44.m42": {
+      "hash": "24da947557bc",
+      "ja": {
+        "summary": "m42 [4][2]位置の値"
+      },
+      "tr": {
+        "summary": "m42: value at [4][2]"
+      }
+    },
+    "Matrix44.m43": {
+      "hash": "08b836d8e2cd",
+      "ja": {
+        "summary": "m43 [4][3]位置の値"
+      },
+      "tr": {
+        "summary": "m43: value at [4][3]"
+      }
+    },
+    "Matrix44.m44": {
+      "hash": "53a9b730bca8",
+      "ja": {
+        "summary": "m44 [4][4]位置の値"
+      },
+      "tr": {
+        "summary": "m44: value at [4][4]"
+      }
+    }
+  }
+}

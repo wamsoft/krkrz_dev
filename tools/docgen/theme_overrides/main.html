@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{#- 他言語版で、訳が無く日本語原文をそのまま出しているページに注記を出す
+    (mkdocs-static-i18n の fallback_to_default)。訳ページは Foo.<lang>.md。
+    言語を増やすときは notes に 1 項目足す。方針 = TODO-i18n.md C -#}
+{% block content %}
+  {%- set notes = {
+    "en": ["Not yet translated", "This page has not been translated into English yet. The Japanese original is shown below."]
+  } -%}
+  {%- set lang = config.theme.language -%}
+  {%- if page and page.file and lang in notes and page.file.locale != lang -%}
+    <div class="admonition note">
+      <p class="admonition-title">{{ notes[lang][0] }}</p>
+      <p>{{ notes[lang][1] }}</p>
+    </div>
+  {%- endif -%}
+  {{ super() }}
+{% endblock %}

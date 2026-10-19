@@ -1,0 +1,29 @@
+{
+  "class": "WIN32Dialog.Items",
+  "entries": {
+    "win32dialog:WIN32Dialog.Items": {
+      "hash": "1a5701b44b09",
+      "ja": {
+        "description": "ダイアログテンプレートアイテムデータ保持クラス"
+      },
+      "tr": {
+        "description": "Holds dialog template item data"
+      }
+    },
+    "win32dialog:WIN32Dialog.Items.store": {
+      "hash": "6c678c3b8444",
+      "ja": {
+        "summary": "内容を設定する",
+        "params": {
+          "elm": "辞書配列\nelm = %[ helpID, exStyle, style, x, y, cx, cy, id, windowClass, title ];\n詳細は DLGITEMTEMPLATEEX の定義を参照のこと\nextraCount と付属データは未実装につき定義できません。"
+        }
+      },
+      "tr": {
+        "summary": "Sets the contents",
+        "params": {
+          "elm": "Dictionary\nelm = %[ helpID, exStyle, style, x, y, cx, cy, id, windowClass, title ];\nSee the definition of DLGITEMTEMPLATEEX for details.\nextraCount and extra data are not implemented and cannot be specified."
+        }
+      }
+    }
+  }
+}
