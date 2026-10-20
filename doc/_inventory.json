@@ -1123,6 +1123,7 @@
       "setZoom",
       "showModal",
       "showRestore",
+      "snapshotScreenCover",
       "update"
     ],
     "properties": [

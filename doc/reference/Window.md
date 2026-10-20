@@ -98,6 +98,7 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [getMouseVelocity](#getmousevelocity)
 - [getTouchVelocity](#gettouchvelocity)
 - [resetMouseVelocity](#resetmousevelocity)
+- [snapshotScreenCover](#snapshotscreencover)
 - [fadeScreenCover](#fadescreencover)
 - [beginMove](#beginmove)
 - [requestUpdate](#requestupdate)
@@ -673,8 +674,8 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方�
 オーバーレイ) より奥です。レイヤではないので、レイヤやダイアログの重なり順に関係なく画面全体を覆えます。
 どの DrawDevice (basic / sdl / sdlogl / ogl) でも同じに見えます。
 
-読むと `%[ color, opacity, blockInput, fading ]` の辞書が返ります。`opacity` はその時点の不透明度
-(フェード中なら途中の値)、`fading` はフェード中なら 1 です。
+読むと `%[ color, opacity, blockInput, fading, snapshot ]` の辞書が返ります。`opacity` はその時点の不透明度
+(フェード中なら途中の値)、`fading` はフェード中なら 1、`snapshot` は静止画で覆っているなら 1 です。
 
 辞書を設定すると、書いた項目だけが**すぐに**変わります (フェード中に `opacity` を書くとフェードを
 打ち切ります)。
@@ -683,6 +684,7 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方�
 |---|---|---|
 | `color` | `0x000000` | 色 (`0xRRGGBB`) |
 | `opacity` | `0` | 不透明度 (0 = 見えない 〜 255 = 完全に覆う) |
+| `snapshot` | — | `true` を書くと、色ではなく今の画面の静止画で覆います ([Window.snapshotScreenCover](Window.md#snapshotscreencover) と同じ。`opacity` を書かなければ 255) |
 | `blockInput` | `false` | `true` にすると、覆っている間 (不透明度が 0 でないか、フェード中) はマウス・キー・タッチの入力をレイヤ・Elements・Window のイベントへ渡しません。ボタンやキーを離す入力 (onMouseUp / onKeyUp など) は、押したままにならないよう通します |
 
 ```tjs
@@ -693,7 +695,7 @@ window.fadeScreenCover(0, 500);                             // 0.5 秒で明け�
 画面のキャプチャ ([System.captureScreen](System.md#capturescreen)) には見えているとおり入ります。
 レイヤから取る画像 (セーブのサムネイルなど) には入りません。
 
-**関連:** [Window.fadeScreenCover](Window.md#fadescreencover) / [Window.onScreenCoverDone](Window.md#onscreencoverdone)
+**関連:** [Window.fadeScreenCover](Window.md#fadescreencover) / [Window.snapshotScreenCover](Window.md#snapshotscreencover) / [Window.onScreenCoverDone](Window.md#onscreencoverdone)
 
 ---
 
@@ -1926,6 +1928,45 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 リセットすることで任意のタイミングから速度計測を開始することが出来ます。
 
 **関連:** [Window.getMouseVelocity](Window.md#getmousevelocity)
+
+---
+
+### snapshotScreenCover
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `opacity` | `255` | 覆う不透明度 (0〜255) です。省略すると 255 です。 |
+
+**戻り値**
+
+静止画で覆えたら true です。
+
+**解説**
+
+今の画面の静止画でスクリーンカバーをかける
+
+呼んだ時点の画面 (レイヤと Elements のダイアログ。スクリーンカバー自身とデバッグ用の表示は含みません) を
+静止画にし、それで画面全体を覆います (不透明度 `opacity`、すぐに)。続けて下で画面を切り替え、
+[Window.fadeScreenCover](Window.md#fadescreencover) で 0 へフェードすると、新しい画面へのクロスフェードに
+なります (Elements の画面も含めてフェードします)。
+
+```tjs
+window.snapshotScreenCover();      // 今の画面で覆う (255)
+// …下で画面を切り替える (レイヤを出す、Elements の画面を出す / 閉じる)…
+window.fadeScreenCover(0, 500);    // 0.5 秒で新しい画面へクロスフェード
+```
+
+- 静止画は呼んだその場で撮るので、同じ処理の中で続けて画面を変えても、変える前の画面が写ります
+- 不透明度が 0 になる (フェードし終える / `screenCover` で 0 を書く) と静止画は捨てます。色を書く・
+`fadeScreenCover` に色を渡すと単色の覆いに戻ります
+- `blockInput` は単色のときと同じに効きます
+- 静止画を撮れない DrawDevice (プラグインの DrawDevice など) では何もせず false を返します
+
+**関連:** [Window.screenCover](Window.md#screencover) / [Window.fadeScreenCover](Window.md#fadescreencover)
 
 ---
 

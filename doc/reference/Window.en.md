@@ -98,6 +98,7 @@ The Window class manages a **window**.
 - [getMouseVelocity](#getmousevelocity)
 - [getTouchVelocity](#gettouchvelocity)
 - [resetMouseVelocity](#resetmousevelocity)
+- [snapshotScreenCover](#snapshotscreencover)
 - [fadeScreenCover](#fadescreencover)
 - [beginMove](#beginmove)
 - [requestUpdate](#requestupdate)
@@ -673,8 +674,8 @@ It is drawn **in front of the Elements dialogs (overlay)** and behind the debugg
 overlays). It is not a layer, so it covers the whole screen regardless of the stacking order of layers and dialogs.
 It looks the same with every DrawDevice (basic / sdl / sdlogl / ogl).
 
-Reading it returns the dictionary `%[ color, opacity, blockInput, fading ]`. `opacity` is the opacity at that moment
-(the intermediate value during a fade), and `fading` is 1 during a fade.
+Reading it returns the dictionary `%[ color, opacity, blockInput, fading, snapshot ]`. `opacity` is the opacity at that moment
+(the intermediate value during a fade), `fading` is 1 during a fade, and `snapshot` is 1 while covering with a still image.
 
 Setting a dictionary changes **immediately** only the items written (writing `opacity` during a fade cuts the
 fade short).
@@ -683,6 +684,7 @@ fade short).
 |---|---|---|
 | `color` | `0x000000` | The color (`0xRRGGBB`) |
 | `opacity` | `0` | The opacity (0 = invisible to 255 = fully covered) |
+| `snapshot` | — | Writing `true` covers with a still image of the current screen instead of a color (the same as [Window.snapshotScreenCover](Window.md#snapshotscreencover); 255 unless `opacity` is written) |
 | `blockInput` | `false` | When `true`, mouse, key and touch input is not passed to layers, Elements or the Window's events while the cover is shown (the opacity is not 0, or a fade is in progress). Input that releases a button or key (onMouseUp / onKeyUp and so on) still passes, so nothing stays pressed |
 
 ```tjs
@@ -693,7 +695,7 @@ window.fadeScreenCover(0, 500);                             // fade in over 0.5 
 It appears in screen captures ([System.captureScreen](System.md#capturescreen)) just as it is seen.
 It does not appear in images taken from layers (such as save thumbnails).
 
-**See also:** [Window.fadeScreenCover](Window.md#fadescreencover) / [Window.onScreenCoverDone](Window.md#onscreencoverdone)
+**See also:** [Window.fadeScreenCover](Window.md#fadescreencover) / [Window.snapshotScreenCover](Window.md#snapshotscreencover) / [Window.onScreenCoverDone](Window.md#onscreencoverdone)
 
 ---
 
@@ -1918,6 +1920,46 @@ Resets the measurement of mouse movement speed.
 Resetting lets you start measuring speed from any point in time.
 
 **See also:** [Window.getMouseVelocity](Window.md#getmousevelocity)
+
+---
+
+### snapshotScreenCover
+
+Method
+
+**Arguments**
+
+| Arguments | Default | Description |
+| --- | --- | --- |
+| `opacity` | `255` | The opacity (0 to 255) to cover with. 255 when omitted. |
+
+**Return value**
+
+true if the screen was covered with the still image.
+
+**Description**
+
+Covers the screen with a still image of the current screen
+
+Turns the screen at the moment of the call (layers and Elements dialogs; not the screen cover itself or the
+debugging displays) into a still image and covers the whole screen with it (opacity `opacity`, immediately). If you
+then switch the screen underneath and fade to 0 with [Window.fadeScreenCover](Window.md#fadescreencover), the result
+is a crossfade to the new screen (the Elements screens fade too).
+
+```tjs
+window.snapshotScreenCover();      // cover with the current screen (255)
+// …switch the screen underneath (show layers, show / close Elements screens)…
+window.fadeScreenCover(0, 500);    // crossfade to the new screen over 0.5 seconds
+```
+
+- The still image is taken right at the call, so even if the same code goes on to change the screen, the screen
+  before the change is what appears
+- When the opacity reaches 0 (the fade ends / 0 is written to `screenCover`), the still image is discarded. Writing a
+  color, or passing a color to `fadeScreenCover`, returns to a single-color cover
+- `blockInput` works the same as with a color
+- On DrawDevices that cannot take a still image (such as DrawDevices from plugins), it does nothing and returns false
+
+**See also:** [Window.screenCover](Window.md#screencover) / [Window.fadeScreenCover](Window.md#fadescreencover)
 
 ---
 
