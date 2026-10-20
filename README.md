@@ -1,199 +1,156 @@
-# 吉里吉里Z 統合リポジトリ 開発用
+# krkrz_dev — 吉里吉里Z 統合開発リポジトリ
 
-本体のソースコード、プラグインのソースコード、各種TJS2スクリプト、
-ドキュメント等開発関係のもの全てが入ったリポジトリ。
-各種ファイルはサブモジュールで参照されています。
+日本語 | [English](README_en.md)
 
-## 他プラットフォーム向けの外枠リポジトリ (ブラウザ / Android / iOS / Linux / GDK)
+吉里吉里Z (Kirikiri Z) の開発用の統合リポジトリです。エンジン本体・プラグイン・TJS2 スクリプト
+ライブラリ・標準ツールを git の submodule として束ね、1 つの CMake ビルドにまとめています。
+Windows / Linux / macOS のデスクトップ版はこのリポジトリでビルドします。
 
-Win32 や各種デスクトップ向けのビルドは本リポジトリ (umbrella) で完結するが、
-**ブラウザ (wasm) / Android / iOS / Linux 配布パッケージ / Microsoft GDK (PC・Xbox)** はそれぞれ別の「外枠」リポジトリでビルドする。
-いずれも本リポジトリをエンジンソースとして参照し (環境変数 `KRKRZ_BASE` に
-本リポジトリの親フォルダを指定)、エンジン本体・プラグインには手を入れず、
-各プラットフォーム固有のビルド定義・パッケージングだけを持つ。本リポジトリと
-同じ場所に clone しておく (`KRKRZ_BASE/krkrz_dev` と `KRKRZ_BASE/krkrz_web` /
-`KRKRZ_BASE/krkrz_android` / `KRKRZ_BASE/krkrz_ios` / `KRKRZ_BASE/krkrz_linux` /
-`KRKRZ_BASE/krkrz_gdk` が並ぶ構成)。
+- **ドキュメント**: [公開サイト](https://wamsoft.github.io/krkrz_dev/) (日本語 / English)。
+  ソースはこのリポジトリの `doc/` です
+- **ブランチ**: `develop` が開発の主軸、`master` がリリース用です (エンジン `src/core` の参照先も
+  ブランチで違います。master は公開エンジン [krkrz](https://github.com/wamsoft/krkrz))
+- ブラウザ / Android / iOS / Linux の配布パッケージ / Microsoft GDK 向けは、このリポジトリを
+  エンジンのソースとして参照する別の「外枠」リポジトリでビルドします ([下記](#外枠リポジトリ))
 
-- **krkrz_web** — ブラウザ (Emscripten / wasm32, SDL3 ベース) 版。
-  https://github.com/wamsoft/krkrz_web
-  共有バイナリ (案件非依存) を一度ビルドし、案件のデータ・リソース・起動設定は
-  「配信サイドカー」として差し替える方式。案件データはバラファイルを `web://` で
-  オンデマンド fetch (+ OPFS キャッシュ) する。案件構成は `web-config.json`
-  (`assetPack.sources` で複数ソースをマージ) で定義し、
-  `make PROJECT_DIR=<案件> run` でステージング + ローカル起動する。
-  SharedArrayBuffer/pthread + JSPI 対応ブラウザ (Chrome / Edge) が必要。
+## リポジトリの構成
 
-- **krkrz_android** — Android 版 (Gradle + NDK/CMake, SDL3 ベース)。
-  https://github.com/wamsoft/krkrz_android
-  案件構成は `app-config.json` (`assetPack.sources` で資材をマージ、`padPacks`
-  で Play Asset Delivery の分割配信) で定義し、`PROJECT_DIR` を指定してビルドする。
+| フォルダ | 中身 |
+|---|---|
+| `src/core` | エンジン本体 (submodule)。ビルドの詳細・内部構造は [src/core/README.md](src/core/README.md) |
+| `src/plugins/*` | プラグイン (それぞれ submodule)。一覧は公開サイトの [プラグイン](https://wamsoft.github.io/krkrz_dev/guide/Plugins/) |
+| `src/tools/krkrz_tools` | 標準ツール (submodule、[krkrz_tools](https://github.com/wamsoft/krkrz_tools)) |
+| `script/*` | TJS2 スクリプトライブラリ (KAG3 / Krkr2Compat / サンプル / テスト。それぞれ submodule) |
+| `data/` | プラグイン / 機能のサンプル集と、統合デモギャラリー (直下の `startup.tjs`)。エンジンのコア機能のデモは `src/core/data/` |
+| `doc/` | 公開サイトのソース (mkdocs)。生成の仕組みは [tools/docgen/README.md](tools/docgen/README.md) |
+| `tools/` | ドキュメント生成・Claude Code 用スキルなどの補助ツール |
 
-- **krkrz_ios** — iOS / iPadOS 版 (CMake の Xcode ジェネレータ + vcpkg, SDL3 ベース)。
-  https://github.com/wamsoft/krkrz_ios
-  案件構成は `ios-config.json` で定義する (`cmake` / `assetPack` は krkrz_android の
-  `app-config.json` と同じ書式・同じ動作なので、案件フォルダで資材を共有できる)。
-  `PROJECT_DIR` を指定してビルドし、資材はアプリバンドル直下に同梱する。
-  iOS は dlopen 不可のため全プラグインを static で組み込む。描画は `graphics` で
-  `metal` (SDL_Renderer) / `gles` (OpenGL ES, ogl / sdlogl DrawDevice) を選ぶ。
-  `KRKRZ_BASE` 未指定時は krkrz_ios の親フォルダ (= 隣に clone した krkrz_dev) を参照する。
+各 submodule はそれぞれ独立したリポジトリです。中身を直すときのコミットは、その submodule の
+リポジトリへ行います。未対応の課題の一覧は [TODO.md](TODO.md) にあります。
 
-- **krkrz_linux** — Linux 版の配布パッケージ (steamdev deckbuild の sniper SDK コンテナでビルド)。
-  https://github.com/wamsoft/krkrz_linux
-  案件構成は `linux-config.json` で定義する (`cmake` / `assetPack` は krkrz_android と
-  同じ書式)。出力は「そのまま動くフォルダ」と tar.gz で、Steam のデポや itch.io / GOG に
-  そのまま使える。`orgName` / `appName` を `<exe名>.cf` に書き込み、セーブデータの場所
-  (`~/.local/share/<orgname>/<appname>/`) を案件ごとに決める。
+## 外枠リポジトリ
 
-- **krkrz_gdk** — Microsoft GDK 版 (PC = `Gaming.Desktop.x64` / Xbox Series X|S / Xbox One, SDL3 ベース)。
-  https://github.com/wamsoft/krkrz_gdk
-  案件構成は `gdk-config.json` で定義する (`cmake` / `assetPack` は krkrz_android と同じ書式)。
-  プラグインは全て static。`MicrosoftGame.config` の生成・MakePkg による msixvc 化・devkit への
-  配置と起動まで `tools/krkrz_gdk.py` で行う。Xbox は描画が SDL_GPU (D3D12) で、Canvas の
-  シェーダーは GXDK の dxc で事前コンパイルして同梱する。GDK / GXDK は各自で導入する
-  (Xbox 向けは開発者契約が要る)。
+| リポジトリ | 対象 | 設定ファイル |
+|---|---|---|
+| [krkrz_web](https://github.com/wamsoft/krkrz_web) | ブラウザ (Emscripten / wasm32) | `web-config.json` |
+| [krkrz_android](https://github.com/wamsoft/krkrz_android) | Android (Gradle + NDK) | `app-config.json` |
+| [krkrz_ios](https://github.com/wamsoft/krkrz_ios) | iOS / iPadOS (CMake の Xcode ジェネレータ) | `ios-config.json` |
+| [krkrz_linux](https://github.com/wamsoft/krkrz_linux) | Linux の配布パッケージ (Steam Linux Runtime の SDK コンテナでビルド) | `linux-config.json` |
+| [krkrz_gdk](https://github.com/wamsoft/krkrz_gdk) | Microsoft GDK (PC / Xbox) | `gdk-config.json` |
 
-各リポジトリ固有の詳細はそれぞれの README を参照。
+- どれもこのリポジトリと同じフォルダに clone し、環境変数 `KRKRZ_BASE` にその親フォルダを指定します
+  (`KRKRZ_BASE/krkrz_dev` と `KRKRZ_BASE/krkrz_android` などが並ぶ形)
+- エンジン本体とプラグインには手を入れず、機種ごとのビルド定義とパッケージングだけを持ちます
+- タイトルの設定と資材は別のフォルダ (プロジェクトフォルダ) に置けます。設定のうち `cmake`
+  (プラグイン構成) と `assetPack` (資材の取り込み) は共通の書式で、1 つのプロジェクトフォルダに各機種の
+  設定を並べて同じデータを使い回せます。書式は公開サイトの
+  [外枠リポジトリの共通設定](https://wamsoft.github.io/krkrz_dev/topics/core/platform_config/) を参照してください
 
-## ビルド手順
+各機種の詳細はそれぞれの README にあります。
 
-Windows 版のビルド環境は **Visual Studio 2022 (v17.14) およびその同梱 cmake**
-を基準としています。他のバージョン・他のツールチェーンではテストされていません。
+## 必要なもの
 
-Win32 版を作成する場合は、Visual Studio のコマンドラインの x86 版を
-起動してそのコンソールから作業するようにしてください。x86 用の設定に
-なってないと vcpkg が誤動作します
+- **Windows**: Visual Studio 2022 (v17.14) と、それに同梱の CMake / Ninja。これ以外の版・ツールチェーンは
+  確かめていません
+- **Linux**: 確認の基準は [steamdev](https://github.com/wamsoft/steamdev) の `deckbuild/` で作る Docker の
+  ビルド環境 (Steam Linux Runtime 3.0 "sniper" SDK、Debian 11 / glibc 2.31) です ([下記](#linux-でのビルド))
+- **macOS**: プリセット `x64-osx` / `arm64-osx` でビルドします (手順の文書は整備中です)
+- [vcpkg](https://github.com/microsoft/vcpkg) — 環境変数 `VCPKG_ROOT` に導入先を指定します
 
-cygwin や msys2 などを導入して make が利用可能な場合は、定義済み Makefile が利用できます
+  ```
+  export VCPKG_ROOT=d:/vcpkg
+  ```
 
-### 前準備
+- make を使う場合は、cygwin や msys2 などの make が使える環境 (下記の Makefile を使えます)
 
-vcpkg を導入して外部ライブラリ参照を準備します
-
-https://github.com/microsoft/vcpkg
-https://learn.microsoft.com/vcpkg/get_started/get-started
-
-環境変数 VCPKG_ROOT に vcpkg 導入先フォルダを設定してください
-
-例:
-```
-export VCPKG_ROOT=d:/vcpkg
-```
-
-### ソース取得
+## ソースの取得
 
 ```
 git clone --recursive https://github.com/wamsoft/krkrz_dev.git
 ```
 
-サブモジュールもすべて再帰的に取得してください
+submodule もすべて再帰的に取得してください。あとから取得する場合は
+`git submodule update --init --recursive` です。
 
-### cmake によるビルド
+## ビルド
 
-cmake による構築になります。
-
-環境別定義は、CMakePresets.json にあらかじめ定義されているので、
-それを利用してビルドできます。
-
-※build/プリセット名 がビルドフォルダ設定されています
+CMake のプリセット (`src/core/CMakePresets.json`) を使います。ビルドフォルダは `build/<プリセット名>` です。
+プリセットの一覧と主なビルドオプションは [src/core/README.md](src/core/README.md) にあります。
 
 ```
-# ビルドの準備
-cmake --preset=x64-windows
-
-# ビルド
-cmake --build build/x64-windows
-
-# ビルドタイプ指定してビルド
-cmake --build build/x64-windows --config Debug
-
-# インストール処理
-cmake --install build/x64-windows --config Release --prefix bin
+cmake --preset=x64-windows                                      # ビルドの準備
+cmake --build build/x64-windows --config Release                # ビルド
+cmake --install build/x64-windows --config Release --prefix bin # インストール
 ```
 
-| 種類         | 名前         | 説明                                      |
-|--------------|--------------|-------------------------------------------|
-| 環境変数     | PRESET       | cmake のプリセット名を指定                |
-|              | BUILD_TYPE   | ビルド対象の config 指定<br>Debug/RelWithDebInfo/Release |
-| ビルドルール | prebuild     | cmake の構築呼び出し                      |
-|              | build        | cmake のビルド呼び出し                    |
-|              | install      | cmake のインストール呼び出し              |
-
-win32版（SJIS対応）で作成する
+Makefile からも同じことができます。
 
 ```
+make prebuild     # cmake --preset
+make              # cmake --build
+make install      # bin/<プリセット>/<ビルドタイプ> へインストール
+make run          # (Windows) ビルドしてデモを起動
+```
+
+| 種類 | 名前 | 説明 |
+|---|---|---|
+| 環境変数 | `PRESET` | CMake のプリセット名 (未指定なら OS から自動で選ぶ) |
+| | `BUILD_TYPE` | `Debug` / `RelWithDebInfo` / `Release` (既定 `Release`) |
+| | `CMAKEOPT` | CMake に渡す追加のオプション |
+
+```
+# 32bit (SJIS 対応) 版
 export PRESET=x86-windows
 export CMAKEOPT="-DKRKRZ_USE_SJIS=ON"
-make prebuild
-make
-make install
+make prebuild && make && make install
 ```
 
-win64版で作成する
+32bit 版を作るときは、Visual Studio の x86 用コマンドプロンプトから作業してください。x86 用の設定に
+なっていないと vcpkg が誤動作します。
 
-```
-export PRESET=x64-windows
-make prebuild
-make
-make install
-```
+### OpenGL 用 ANGLE DLL の配置 (Windows)
 
-### 標準ツール (krkrz_tools)
+エンジンの OpenGL (GLES) の機能を Windows で使うには、ANGLE の `libEGL.dll` / `libGLESv2.dll` が要ります
+(WINVER 版では必須。SDL3 版では OpenGL ドライバの ES プロファイルが使えない環境のための予備)。
+リポジトリには含まれないので、リポジトリ直下の `plugin/` (32bit) / `plugin64/` (64bit) に置いてください。
+`make run` がビルド出力へコピーします。入手先は [mmozeiko/build-angle](https://github.com/mmozeiko/build-angle)
+の Releases が手軽です。注意点は [src/core/README.md](src/core/README.md) の「OpenGL ES の実行環境」にあります。
 
-`src/tools/krkrz_tools` ([krkrz_tools](https://github.com/wamsoft/krkrz_tools)、submodule) の
-ツール (破損チェック・署名・xp3・音声 / 画像コンバータ・ループチューナ) も一緒にビルドし、
-`make install` で `<インストール先>/tools/` に置きます。
+### Linux でのビルド
 
-- ツールは exe 1 本で配れるよう静的リンク (`x64-windows-static` など) で作るため、本体とは別の
-  ビルドとして作ります (`build/<preset>/krkrz_tools`、常に Release。`cmake/KrkrzTools.cmake`)
-- 初回は、ツール用の vcpkg ライブラリ (静的版) のビルドに時間がかかります
-- 既定はデスクトップ (Windows / Linux / macOS) で有効。`CMAKEOPT='-DKRKRZ_BUILD_TOOLS=OFF'` でビルドしません
-
-### OpenGL 用 ANGLE DLL の配置
-
-エンジンの OpenGL (GLES) 機能を Windows で使うには ANGLE の
-`libEGL.dll` / `libGLESv2.dll` が必要です (WINVER ビルドは必須。SDL3 ビルドは
-OpenGL ドライバの ES プロファイルが使えない環境向けのフォールバック)。
-これらはリポジトリに含まれないため、リポジトリルートの `plugin/` (32bit) /
-`plugin64/` (64bit) フォルダへ手動で配置してください。`make run` がビルド出力へ
-自動コピーします。
-
-入手先は [mmozeiko/build-angle](https://github.com/mmozeiko/build-angle) の
-Releases (毎日ビルド、x64 / arm64) が手軽です。詳細と注意点 (PATH 上の別 ANGLE を
-拾う問題等) は `src/core/README.md` の「OpenGL ES の実行環境」を参照してください。
-
-### Linux ビルド (検証環境)
-
-Linux 版のビルド確認基準は、[steamdev](https://github.com/wamsoft/steamdev)
-リポジトリの `deckbuild/` で構築する Docker ビルド環境です。中身は Valve 公式の
-**Steam Linux Runtime 3.0 "sniper" SDK** (Debian 11 / glibc 2.31) で、ここで
-ビルドしたバイナリは SteamOS ネイティブ / Steam Linux Runtime コンテナ /
-glibc 2.31 以降の一般ディストリビューションで動きます。
+steamdev の `deckbuild/` で作る Docker のビルド環境 (Valve の Steam Linux Runtime 3.0 "sniper" SDK) で
+ビルドします。ここでビルドしたものは SteamOS・Steam Linux Runtime のコンテナ・glibc 2.31 以降の
+一般的なディストリビューションで動きます。
 
 ```bash
-# WSL2 の docker で。初回のみイメージ作成
+# WSL2 の docker で。最初の 1 回だけイメージを作る
 <steamdev>/deckbuild/deckbuild.sh image
 
-# umbrella をビルド (configure + build + install → bin/x64-linux/Release/)
+# ビルド (configure + build + install → bin/x64-linux/Release/)
 <steamdev>/deckbuild/deckbuild.sh -s /mnt/d/work/kirikiri/krkrz_dev all
 ```
 
-リポジトリルートの `deckproject.toml` は steamdev CLI 用のプロジェクト定義で、
-ビルドから Steam Deck への転送・起動までを一括で回せます
-(`steamdev -d <deck> project -p . ship linux`)。
+リポジトリ直下の `deckproject.toml` は steamdev の CLI 用のプロジェクト定義で、ビルドから Steam Deck への
+転送・起動までを一度に行えます (`steamdev -d <deck> project -p . ship linux`)。互換性の考え方とバイナリの
+合格基準 (要求する glibc のシンボルが 2.31 以下など) は [src/core/doc/LinuxBuild.md](src/core/doc/LinuxBuild.md)
+にあります。
 
-互換性の考え方・バイナリの合格基準 (要求 glibc シンボル ≤ 2.31 等) の詳細は
-[src/core/doc/LinuxBuild.md](src/core/doc/LinuxBuild.md) を参照してください。
+## 標準ツール (krkrz_tools)
 
-### プラグイン作成
+`src/tools/krkrz_tools` のツール (破損チェック・署名・xp3・音声 / 画像のコンバータ・ループチューナ・
+リリーサ) も一緒にビルドし、`make install` で `<インストール先>/tools/` に置きます。
 
-TVP_PLUGIN_FOLDERS から、TVP_PLUGINS で定義された名称の
-プラグインがあわせてビルドされます。それぞれリストです
+- ツールは exe 1 本で配れるよう静的リンク (`x64-windows-static` など) で作るので、本体とは別のビルドです
+  (`build/<preset>/krkrz_tools`、常に Release。`cmake/KrkrzTools.cmake`)
+- 最初は、ツール用の vcpkg のライブラリ (静的版) のビルドに時間がかかります
+- デスクトップ (Windows / Linux / macOS) では既定で有効です。`CMAKEOPT='-DKRKRZ_BUILD_TOOLS=OFF'` で外せます
 
-TVP_PLUGINS_STATIC が定義されている場合は、それに含まれる
-プラグインは実行ファイル中に静的にビルトインされます
+各ツールの使い方は [krkrz_tools の README](src/tools/krkrz_tools/README.md) にあります。
 
-CMake のリストとして定義するので ;　区切りで必要なものを列挙します
+## プラグインの選び方
+
+ビルドするプラグインはトップの `CMakeLists.txt` の `TVP_PLUGINS` (フォルダ名のリスト) で決まります。
+`TVP_PLUGINS_STATIC` に書いたものは実行ファイルに静的リンクされます。CMake のリストなので `;` で区切ります。
 
 ```
 CMAKEOPT='-DKRKRZ_USE_SJIS=ON -DTVP_PLUGINS_STATIC="json;csvParser"' make prebuild
@@ -201,143 +158,40 @@ make
 make install
 ```
 
-### vcpkg マニフェストの統合
-
-このリポジトリ直下に `vcpkg.json` は **置きません**。代わりに、トップの
-`CMakeLists.txt` が `project()` 呼び出し前に複数の `vcpkg.json` を
-マージして `${CMAKE_BINARY_DIR}/vcpkg.json` を生成し、`VCPKG_MANIFEST_DIR`
-をビルドフォルダに向けることで vcpkg manifest install にそれを読ませます。
-仕組み (`krkrz_merge_vcpkg_manifest`) は `src/core/cmake/MergeVcpkgManifest.cmake`
-にあり、umbrella と `src/core` 単独ビルドの両方が同じものを共有します。
-
-マージ対象は次の通り:
-
-- **BASE**: `src/core/vcpkg.json` — エンジン本体の共通依存と
-  `builtin-baseline` / `vcpkg-configuration` を提供
-- **SUBDIRS**:
-  - `src/core/external/movie-player/vcpkg.json` (動画再生)
-  - `TVP_PLUGINS` × `TVP_PLUGIN_FOLDERS` で解決した各プラグインフォルダ
-    直下の `vcpkg.json`
-
-依存は `name` 単位で重複排除されます (BASE 側を優先)。
-`builtin-baseline` / `overrides` / `vcpkg-configuration` は BASE のみ採用。
-
-**プラグイン側の vcpkg.json**
-
-各プラグインは独自に外部ライブラリを必要とすることがあるため、
-`<plugin_folder>/<plugin_name>/vcpkg.json` を置いておけば、その依存が
-`TVP_PLUGINS` でビルド対象に入ったときだけ自動でマージされます。
-本体や他プラグインの設定を触る必要はなく、また有効化されていない
-プラグインの依存が混入することもありません。
-
-例: `src/plugins/minizip/vcpkg.json` (minizip プラグインを有効にしたときだけ
-`minizip-ng` が引かれる)
+プラグインが外部のライブラリを使う場合は、そのプラグインのフォルダに `vcpkg.json` を置きます。
+そのプラグインがビルドの対象に入ったときだけ、依存が自動でマージされます (リポジトリ直下に
+`vcpkg.json` は置かず、CMake が本体と各プラグインの `vcpkg.json` をまとめてビルドフォルダに作ります)。
+マージの規則と除外の指定は [src/core/cmake/MergeVcpkgManifest.cmake](src/core/cmake/MergeVcpkgManifest.cmake)
+の先頭にあります。
 
 ```json
 {
   "name": "minizip",
   "version": "0.0.1",
-  "dependencies": [
-    "minizip-ng"
-  ]
+  "dependencies": [ "minizip-ng" ]
 }
 ```
 
-サブの `vcpkg.json` を変更すると `cmake --preset` の再走で再マージが
-走ります (`CMAKE_CONFIGURE_DEPENDS` 登録済み)。
-
-特定の依存だけ取り込みたくない場合は umbrella 側 `CMakeLists.txt` の
-`krkrz_merge_vcpkg_manifest(... EXCLUDE ...)` に追記します。指定形式:
-
-- `"<dep>"` — どこから来ても除外 (グローバル)
-- `"<basename>:<dep>"` — そのフォルダ末尾名のサブからのみ除外
-
-(現在は `movie-player:glew` / `movie-player:glfw3` をサンプル用として除外)
-
 ## Claude Code 用スキル
 
-このリポジトリには吉里吉里Z 開発向けの [Claude Code](https://claude.com/claude-code)
-スキルが同梱されています。Claude に「TJS2 の書き方」「Layer の API」「REPL でどう
-検証するか」を毎回説明しなくても済むようにするためのリファレンス群です。
+吉里吉里Z の開発向けの [Claude Code](https://claude.com/claude-code) 用スキルを同梱しています。Claude に
+「TJS2 の書き方」「Layer の API」「REPL での確かめ方」を毎回説明しなくて済むようにするためのものです。
 
 | スキル | 内容 |
 |---|---|
-| `krkrz` | 本体クラス API (Layer / Window / Bitmap / Storages / DrawDevice / OpenGL 描画 / サウンド / 主要プラグイン) |
-| `tjs2` | TJS2 言語仕様と組み込みクラス。JS との差異にフォーカス |
-| `elements` | Elements ベースのダイアログ / 画面 UI の作り方 |
-| `krkrz-repl` | `-repl` / `-replfile` によるエージェント駆動、Agent API、画面キャプチャ |
-| `krkrz-webui` | `-replweb` HTTP+SSE サーバにブラウザ UI を載せる方法論 |
+| `krkrz` | 本体のクラスの API (Layer / Window / Bitmap / Storages / DrawDevice / OpenGL の描画 / サウンド / 主なプラグイン) |
+| `tjs2` | TJS2 の言語仕様と組み込みクラス。JavaScript との違いを中心に |
+| `elements` | Elements を使ったダイアログ / 画面 UI の作り方 |
+| `krkrz-repl` | `-repl` / `-replfile` でのエージェントからの操作、Agent API、画面のキャプチャ |
+| `krkrz-webui` | `-replweb` の HTTP + SSE サーバにブラウザの UI を載せる方法 |
 
-正本は `.claude/skills/` にあります。**このリポジトリで作業している間は追加の
-セットアップなしでそのまま有効**です (Claude Code がプロジェクトスキルとして
-自動的に読み込みます)。
+正本は `.claude/skills/` にあり、**このリポジトリで作業している間はそのまま有効**です。他のリポジトリで
+使う場合のインストール (`bash tools/skills/install.sh --user` など) と更新・編集の注意は
+[tools/skills/README.md](tools/skills/README.md) にあります。
 
-### 他の場所でも使う (インストール)
+## ライセンス
 
-`krkrz` / `tjs2` の SKILL.md は詳細リファレンスを `doc/reference/`、`doc/tjs2/`
-といった**このリポジトリ相対のパス**で参照しています。そのため他のリポジトリへ
-そのままコピーしても参照が解決しません。
-
-`tools/skills/install.sh` が、参照ドキュメントをスキル内 `references/` へ同梱し、
-SKILL.md 内のパスを書き換えて、**どこに置いても壊れない自己完結形**に組み立てます。
-実行には bash が必要です (msys2 / Git Bash)。
-
-**自分用にインストールする** — 以降どのリポジトリで作業していても有効になります。
-案件のリポジトリで TJS2 を書くときにも使いたい場合はこちら。
-
-```
-bash tools/skills/install.sh --user
-```
-
-`~/.claude/skills/` へ配置されます。既存の同名スキルがある場合は確認を求めます
-(`--force` で確認なし)。**このスクリプトが触るのは上記 5 スキルだけ**で、
-そこにある他のスキルには手を出しません。
-
-**案件リポジトリにインストールする** — その案件で作業する人全員に配りたい場合。
-
-```
-bash tools/skills/install.sh --project /path/to/project
-```
-
-`<project>/.claude/skills/` へ配置されます。案件リポジトリに commit すれば、
-clone した人はセットアップなしで使えます。案件側の `.gitignore` が `.claude` を
-無視していることが多いので、その場合は本リポジトリと同様に
-
-```
-.claude/*
-!.claude/skills/
-```
-
-としてください。
-
-**配布用に書き出す** — krkrz_dev を持っていない人へ配る場合。
-
-```
-bash tools/skills/install.sh --dist /path/to/dist-repo
-```
-
-プラグイン構造 (`.claude-plugin/marketplace.json` + `plugins/krkrz-skills/`) で
-出力します。これを git リポジトリとして push すると、受け取る側は次で導入できます。
-
-```
-/plugin marketplace add <owner>/<repo>
-/plugin install krkrz-skills@krkrz-skills
-```
-
-`--dry-run` を付けると、何をどこへ書くかだけ表示して終了します。
-
-### 更新
-
-スキルやリファレンスを更新したら、インストール済みの環境では
-`install.sh` を同じオプションで再実行してください (`--force` 推奨)。
-同梱されるリファレンスは実行時点のリポジトリの内容です。
-
-### スキルを編集するとき
-
-- 編集するのは `.claude/skills/` の**正本**です。インストール先を直接直しても
-  次の `install.sh` で上書きされます。
-- リファレンスはリポジトリ相対パス (`doc/reference/<Name>.md` 等) で参照します。
-  同梱時のパス書き換えは `install.sh` の `BUNDLE` テーブルが担当するので、
-  新しい参照先ディレクトリを増やしたときはそこに 1 行足してください。
-- **案件固有の情報 (取引先名・案件リポジトリのパス・案件の設定値) は書かない**こと。
-  スキルは案件をまたいで配布されます。
+このリポジトリは構成要素を submodule で束ねたもので、ライセンスはそれぞれの構成要素で決まっています。
+エンジン本体は [src/core/LICENSE](src/core/LICENSE)、プラグインは各フォルダの LICENSE / README を
+参照してください。まとめは [LICENSE.md](LICENSE.md) にあります。配布物に載る第三者のコンポーネントの
+一覧は公開サイトの [同梱ライセンス一覧](https://wamsoft.github.io/krkrz_dev/guide/BundledLicenses/) です。

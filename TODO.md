@@ -13,6 +13,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | デモ整備 | [data/ROADMAP.md](data/ROADMAP.md) |
 | 多言語化 (デモの i18n / 公開ドキュメントの英語版) | [TODO-i18n.md](TODO-i18n.md) |
 | 標準ツールの改定 (リリーサ / 署名 / 破損チェック / ループチューナ / 画像・音声コンバータ) | [TODO-tools.md](TODO-tools.md) |
+| README の整理と英語版 (krkrz_dev / 外枠リポジトリ / 標準ツール / エンジン) | [TODO-readme.md](TODO-readme.md) |
 | 読み上げ (スクリーンリーダー対応) | [doc/specification/accessibility.md](doc/specification/accessibility.md) (Elements 側は `src/core/external/elements/docs/accessibility.md`) |
 | Window のサイズ/位置/ズーム/ビューポート仕様 | [src/core/doc/WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | Layer / Bitmap / ImageFunction の統合 | [src/core/doc/ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |

@@ -200,6 +200,8 @@ mkdocs の設定は `mkdocs.yml`（リポジトリ直下）。検索は組み込
 | `tjsdoc.py --lang <lang>` | カタログの訳を当てて `doc/reference/<Class>.<lang>.md` を生成 (訳が 1 つも無いクラスは出さない) |
 | `check_translations.py <lang>` | 手書きページ (`source_hash` 比較) と reference カタログの訳済み / 要再訳 / 未訳を集計 |
 | `check_translations.py <lang> --stamp <file>` | 訳し終えたページの `source_hash` を今の原文に合わせる |
+| `check_readme_en.py [<repo>...]` | 公開サイトの外: krkrz_dev・src/core・krkrz_tools・隣に clone した外枠リポジトリの `README_en.md` の訳済み / 要再訳 / 未訳を一覧 (先頭行の `source_hash` を `README.md` と比べる) |
+| `check_readme_en.py --stamp <repo>` | 訳し終えた `README_en.md` の `source_hash` を今の `README.md` に合わせる |
 
 reference の見出し語 (「引数」等) は `doc/i18n/<lang>/reference_labels.json`。
 
