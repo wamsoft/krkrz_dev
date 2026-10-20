@@ -36,6 +36,7 @@ The Window class manages a **window**.
 - [viewportOffsetX](#viewportoffsetx)
 - [viewportOffsetY](#viewportoffsety)
 - [viewportBgColor](#viewportbgcolor)
+- [screenCover](#screencover)
 - [drawDevice](#drawdevice)
 - [borderStyle](#borderstyle)
 - [stayOnTop](#stayontop)
@@ -97,6 +98,7 @@ The Window class manages a **window**.
 - [getMouseVelocity](#getmousevelocity)
 - [getTouchVelocity](#gettouchvelocity)
 - [resetMouseVelocity](#resetmousevelocity)
+- [fadeScreenCover](#fadescreencover)
 - [beginMove](#beginmove)
 - [requestUpdate](#requestupdate)
 - [setLayerPos](#setlayerpos)
@@ -134,6 +136,7 @@ The Window class manages a **window**.
 - [onTextInput](#ontextinput)
 - [onResize](#onresize)
 - [onFileDrop](#onfiledrop)
+- [onScreenCoverDone](#onscreencoverdone)
 - [onCloseQuery](#onclosequery)
 - [onPopupHide](#onpopuphide)
 - [onActivate](#onactivate)
@@ -654,6 +657,43 @@ This property can also be set. If a wallpaper ([Window.setViewportWallpaper](Win
 Available in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17).
 
 **See also:** [Window.setViewportWallpaper](Window.md#setviewportwallpaper) / [Window.setViewport](Window.md#setviewport)
+
+---
+
+### screenCover
+
+Property \ Access: `r/w`
+
+**Description**
+
+Screen cover (a single color laid over the whole screen)
+
+Lays a single color over the whole window. Use it for fades to black or to white when screens open or close.
+It is drawn **in front of the Elements dialogs (overlay)** and behind the debugging displays (the memory and pad
+overlays). It is not a layer, so it covers the whole screen regardless of the stacking order of layers and dialogs.
+It looks the same with every DrawDevice (basic / sdl / sdlogl / ogl).
+
+Reading it returns the dictionary `%[ color, opacity, blockInput, fading ]`. `opacity` is the opacity at that moment
+(the intermediate value during a fade), and `fading` is 1 during a fade.
+
+Setting a dictionary changes **immediately** only the items written (writing `opacity` during a fade cuts the
+fade short).
+
+| Item | Default | Description |
+|---|---|---|
+| `color` | `0x000000` | The color (`0xRRGGBB`) |
+| `opacity` | `0` | The opacity (0 = invisible to 255 = fully covered) |
+| `blockInput` | `false` | When `true`, mouse, key and touch input is not passed to layers, Elements or the Window's events while the cover is shown (the opacity is not 0, or a fade is in progress). Input that releases a button or key (onMouseUp / onKeyUp and so on) still passes, so nothing stays pressed |
+
+```tjs
+window.screenCover = %[ color: 0x000000, opacity: 255 ];   // cover in black right away
+window.fadeScreenCover(0, 500);                             // fade in over 0.5 seconds
+```
+
+It appears in screen captures ([System.captureScreen](System.md#capturescreen)) just as it is seen.
+It does not appear in images taken from layers (such as save thumbnails).
+
+**See also:** [Window.fadeScreenCover](Window.md#fadescreencover) / [Window.onScreenCoverDone](Window.md#onscreencoverdone)
 
 ---
 
@@ -1881,6 +1921,43 @@ Resetting lets you start measuring speed from any point in time.
 
 ---
 
+### fadeScreenCover
+
+Method
+
+**Arguments**
+
+| Arguments | Default | Description |
+| --- | --- | --- |
+| `opacity` | `&nbsp;` | The target opacity (0 to 255). |
+| `ms` | `&nbsp;` | The time the fade takes (milliseconds). |
+| `color` | `void` | The color (`0xRRGGBB`). When omitted, the current color is kept. The new color applies from the start of the fade. |
+| `blockInput` | `void` | Sets at the same time whether input is blocked. When omitted, the current setting is kept. |
+
+**Description**
+
+Fades the screen cover
+
+Changes the opacity of the screen cover ([Window.screenCover](Window.md#screencover)) from its current value to
+`opacity` over `ms` milliseconds. The fade runs on the engine's clock, so each frame is drawn with the opacity of that
+moment even when scripts are busy. When it finishes, [Window.onScreenCoverDone](Window.md#onscreencoverdone) occurs
+(even when `ms` is 0 or less, it switches right away and then occurs). Calling it during a fade starts a new fade from
+the opacity at that moment (the completion event of the previous fade does not occur).
+
+```tjs
+// Opening a screen: fade to black → show the screen → fade in
+window.fadeScreenCover(255, 250);            // onScreenCoverDone when finished
+// (after showing the screen in onScreenCoverDone)
+window.fadeScreenCover(0, 250);
+
+// Cover in white
+window.fadeScreenCover(255, 300, 0xFFFFFF);
+```
+
+**See also:** [Window.screenCover](Window.md#screencover) / [Window.onScreenCoverDone](Window.md#onscreencoverdone)
+
+---
+
 ### beginMove
 
 Method
@@ -2626,6 +2703,28 @@ Fired when files are dropped onto the window from Explorer or the like.
 
 Even when a single file is dropped, an array object is passed as the argument (the first element
 is that file).
+
+---
+
+### onScreenCoverDone
+
+Event
+
+**Arguments**
+
+| Arguments | Default | Description |
+| --- | --- | --- |
+| `opacity` | `&nbsp;` | The opacity (0 to 255) at the end of the fade. |
+
+**Description**
+
+The screen cover fade has finished
+
+Occurs when a fade started with [Window.fadeScreenCover](Window.md#fadescreencover) finishes.
+It does not occur for a fade that was cut short, by calling `fadeScreenCover` again during the fade or by setting
+the opacity with [Window.screenCover](Window.md#screencover).
+
+**See also:** [Window.fadeScreenCover](Window.md#fadescreencover)
 
 ---
 

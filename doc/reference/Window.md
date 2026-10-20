@@ -36,6 +36,7 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [viewportOffsetX](#viewportoffsetx)
 - [viewportOffsetY](#viewportoffsety)
 - [viewportBgColor](#viewportbgcolor)
+- [screenCover](#screencover)
 - [drawDevice](#drawdevice)
 - [borderStyle](#borderstyle)
 - [stayOnTop](#stayontop)
@@ -97,6 +98,7 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [getMouseVelocity](#getmousevelocity)
 - [getTouchVelocity](#gettouchvelocity)
 - [resetMouseVelocity](#resetmousevelocity)
+- [fadeScreenCover](#fadescreencover)
 - [beginMove](#beginmove)
 - [requestUpdate](#requestupdate)
 - [setLayerPos](#setlayerpos)
@@ -134,6 +136,7 @@ Window クラスは、**ウィンドウ**を管理するためのクラスです
 - [onTextInput](#ontextinput)
 - [onResize](#onresize)
 - [onFileDrop](#onfiledrop)
+- [onScreenCoverDone](#onscreencoverdone)
 - [onCloseQuery](#onclosequery)
 - [onPopupHide](#onpopuphide)
 - [onActivate](#onactivate)
@@ -654,6 +657,43 @@ Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方�
 Windows ネイティブ ( WINVER ) ビルドと SDL3 / 汎用ビルドの双方で利用できます ( WINVER 対応は 2026-08-17 )。
 
 **関連:** [Window.setViewportWallpaper](Window.md#setviewportwallpaper) / [Window.setViewport](Window.md#setviewport)
+
+---
+
+### screenCover
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+スクリーンカバー (画面全体に重ねる単色)
+
+ウィンドウ全体に単色を重ねます。画面を開く・閉じるときの暗転 (黒) / 白への転換などに使います。
+重なる位置は **Elements のダイアログ (overlay) より手前**、デバッグ用の表示 (メモリ・パッドの
+オーバーレイ) より奥です。レイヤではないので、レイヤやダイアログの重なり順に関係なく画面全体を覆えます。
+どの DrawDevice (basic / sdl / sdlogl / ogl) でも同じに見えます。
+
+読むと `%[ color, opacity, blockInput, fading ]` の辞書が返ります。`opacity` はその時点の不透明度
+(フェード中なら途中の値)、`fading` はフェード中なら 1 です。
+
+辞書を設定すると、書いた項目だけが**すぐに**変わります (フェード中に `opacity` を書くとフェードを
+打ち切ります)。
+
+| 項目 | 既定 | 内容 |
+|---|---|---|
+| `color` | `0x000000` | 色 (`0xRRGGBB`) |
+| `opacity` | `0` | 不透明度 (0 = 見えない 〜 255 = 完全に覆う) |
+| `blockInput` | `false` | `true` にすると、覆っている間 (不透明度が 0 でないか、フェード中) はマウス・キー・タッチの入力をレイヤ・Elements・Window のイベントへ渡しません。ボタンやキーを離す入力 (onMouseUp / onKeyUp など) は、押したままにならないよう通します |
+
+```tjs
+window.screenCover = %[ color: 0x000000, opacity: 255 ];   // すぐに黒で覆う
+window.fadeScreenCover(0, 500);                             // 0.5 秒で明ける
+```
+
+画面のキャプチャ ([System.captureScreen](System.md#capturescreen)) には見えているとおり入ります。
+レイヤから取る画像 (セーブのサムネイルなど) には入りません。
+
+**関連:** [Window.fadeScreenCover](Window.md#fadescreencover) / [Window.onScreenCoverDone](Window.md#onscreencoverdone)
 
 ---
 
@@ -1889,6 +1929,43 @@ TVP_WM_DETACH と TVP_WM_ATTACH という２つの重要なメッセージもト
 
 ---
 
+### fadeScreenCover
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `opacity` | `&nbsp;` | 目標の不透明度 (0〜255) です。 |
+| `ms` | `&nbsp;` | フェードにかける時間 (ミリ秒) です。 |
+| `color` | `void` | 色 (`0xRRGGBB`) です。省略すると今の色のままです。フェードの初めから新しい色になります。 |
+| `blockInput` | `void` | 入力を止めるかを同時に設定します。省略すると今の設定のままです。 |
+
+**解説**
+
+スクリーンカバーのフェード
+
+スクリーンカバー ([Window.screenCover](Window.md#screencover)) の不透明度を、今の値から `opacity` まで
+`ms` ミリ秒かけて変えます。フェードはエンジンの時計で進むので、スクリプトの処理が重くても描画の
+たびにその時点の不透明度で描かれます。終わると [Window.onScreenCoverDone](Window.md#onscreencoverdone) が
+発生します (`ms` が 0 以下でもすぐに切り替えたうえで発生します)。フェードの途中で呼ぶと、その時点の
+不透明度から新しいフェードを始めます (前のフェードの完了イベントは発生しません)。
+
+```tjs
+// 画面を開く: 暗転 → 画面を出す → 明ける
+window.fadeScreenCover(255, 250);            // 完了で onScreenCoverDone
+// (onScreenCoverDone で画面を出してから)
+window.fadeScreenCover(0, 250);
+
+// 白で覆う
+window.fadeScreenCover(255, 300, 0xFFFFFF);
+```
+
+**関連:** [Window.screenCover](Window.md#screencover) / [Window.onScreenCoverDone](Window.md#onscreencoverdone)
+
+---
+
 ### beginMove
 
 メソッド
@@ -2636,6 +2713,28 @@ Layer 側へは互換のため従来どおり UTF-16 符号単位へ分解した
 
 単一のファイルがドロップされた場合でも引数には配列オブジェクトが渡されます (最初の要素が
 そのファイルになります )。
+
+---
+
+### onScreenCoverDone
+
+イベント
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `opacity` | `&nbsp;` | フェードし終えたときの不透明度 (0〜255) です。 |
+
+**解説**
+
+スクリーンカバーのフェードが終わった
+
+[Window.fadeScreenCover](Window.md#fadescreencover) で始めたフェードが終わったときに発生します。
+フェードの途中で `fadeScreenCover` を呼び直したり、[Window.screenCover](Window.md#screencover) で
+不透明度を設定したりして打ち切ったフェードでは発生しません。
+
+**関連:** [Window.fadeScreenCover](Window.md#fadescreencover)
 
 ---
 

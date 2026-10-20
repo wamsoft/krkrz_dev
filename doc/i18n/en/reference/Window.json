@@ -415,6 +415,23 @@
         }
       }
     },
+    "Window.onScreenCoverDone": {
+      "hash": "7ec8c9cb796e",
+      "ja": {
+        "summary": "スクリーンカバーのフェードが終わった",
+        "description": "[Window.fadeScreenCover](Window.md#fadescreencover) で始めたフェードが終わったときに発生します。\nフェードの途中で `fadeScreenCover` を呼び直したり、[Window.screenCover](Window.md#screencover) で\n不透明度を設定したりして打ち切ったフェードでは発生しません。",
+        "params": {
+          "opacity": "フェードし終えたときの不透明度 (0〜255) です。"
+        }
+      },
+      "tr": {
+        "summary": "The screen cover fade has finished",
+        "description": "Occurs when a fade started with [Window.fadeScreenCover](Window.md#fadescreencover) finishes.\nIt does not occur for a fade that was cut short, by calling `fadeScreenCover` again during the fade or by setting\nthe opacity with [Window.screenCover](Window.md#screencover).",
+        "params": {
+          "opacity": "The opacity (0 to 255) at the end of the fade."
+        }
+      }
+    },
     "Window.onCloseQuery": {
       "hash": "4ea68bb2995e",
       "ja": {
@@ -1232,6 +1249,40 @@
       "tr": {
         "summary": "Background color of viewport margins",
         "description": "The background color used to fill margins created by the viewport, as an integer in `0xAARRGGBB` form (the upper 8 bits are alpha; add `0xff` for an opaque color). The default is `0xff000000` (opaque black).\nThis property can also be set. If a wallpaper ([Window.setViewportWallpaper](Window.md#setviewportwallpaper)) is set, the wallpaper takes priority.\n\nAvailable in both the native Windows (WINVER) build and the SDL3 / generic builds (WINVER support since 2026-08-17)."
+      }
+    },
+    "Window.screenCover": {
+      "hash": "11b36f7fc8da",
+      "ja": {
+        "summary": "スクリーンカバー (画面全体に重ねる単色)",
+        "description": "ウィンドウ全体に単色を重ねます。画面を開く・閉じるときの暗転 (黒) / 白への転換などに使います。\n重なる位置は **Elements のダイアログ (overlay) より手前**、デバッグ用の表示 (メモリ・パッドの\nオーバーレイ) より奥です。レイヤではないので、レイヤやダイアログの重なり順に関係なく画面全体を覆えます。\nどの DrawDevice (basic / sdl / sdlogl / ogl) でも同じに見えます。\n\n読むと `%[ color, opacity, blockInput, fading ]` の辞書が返ります。`opacity` はその時点の不透明度\n(フェード中なら途中の値)、`fading` はフェード中なら 1 です。\n\n辞書を設定すると、書いた項目だけが**すぐに**変わります (フェード中に `opacity` を書くとフェードを\n打ち切ります)。\n\n| 項目 | 既定 | 内容 |\n|---|---|---|\n| `color` | `0x000000` | 色 (`0xRRGGBB`) |\n| `opacity` | `0` | 不透明度 (0 = 見えない 〜 255 = 完全に覆う) |\n| `blockInput` | `false` | `true` にすると、覆っている間 (不透明度が 0 でないか、フェード中) はマウス・キー・タッチの入力をレイヤ・Elements・Window のイベントへ渡しません。ボタンやキーを離す入力 (onMouseUp / onKeyUp など) は、押したままにならないよう通します |\n\n```tjs\nwindow.screenCover = %[ color: 0x000000, opacity: 255 ];   // すぐに黒で覆う\nwindow.fadeScreenCover(0, 500);                             // 0.5 秒で明ける\n```\n\n画面のキャプチャ ([System.captureScreen](System.md#capturescreen)) には見えているとおり入ります。\nレイヤから取る画像 (セーブのサムネイルなど) には入りません。"
+      },
+      "tr": {
+        "summary": "Screen cover (a single color laid over the whole screen)",
+        "description": "Lays a single color over the whole window. Use it for fades to black or to white when screens open or close.\nIt is drawn **in front of the Elements dialogs (overlay)** and behind the debugging displays (the memory and pad\noverlays). It is not a layer, so it covers the whole screen regardless of the stacking order of layers and dialogs.\nIt looks the same with every DrawDevice (basic / sdl / sdlogl / ogl).\n\nReading it returns the dictionary `%[ color, opacity, blockInput, fading ]`. `opacity` is the opacity at that moment\n(the intermediate value during a fade), and `fading` is 1 during a fade.\n\nSetting a dictionary changes **immediately** only the items written (writing `opacity` during a fade cuts the\nfade short).\n\n| Item | Default | Description |\n|---|---|---|\n| `color` | `0x000000` | The color (`0xRRGGBB`) |\n| `opacity` | `0` | The opacity (0 = invisible to 255 = fully covered) |\n| `blockInput` | `false` | When `true`, mouse, key and touch input is not passed to layers, Elements or the Window's events while the cover is shown (the opacity is not 0, or a fade is in progress). Input that releases a button or key (onMouseUp / onKeyUp and so on) still passes, so nothing stays pressed |\n\n```tjs\nwindow.screenCover = %[ color: 0x000000, opacity: 255 ];   // cover in black right away\nwindow.fadeScreenCover(0, 500);                             // fade in over 0.5 seconds\n```\n\nIt appears in screen captures ([System.captureScreen](System.md#capturescreen)) just as it is seen.\nIt does not appear in images taken from layers (such as save thumbnails)."
+      }
+    },
+    "Window.fadeScreenCover": {
+      "hash": "55fa531df62e",
+      "ja": {
+        "summary": "スクリーンカバーのフェード",
+        "description": "スクリーンカバー ([Window.screenCover](Window.md#screencover)) の不透明度を、今の値から `opacity` まで\n`ms` ミリ秒かけて変えます。フェードはエンジンの時計で進むので、スクリプトの処理が重くても描画の\nたびにその時点の不透明度で描かれます。終わると [Window.onScreenCoverDone](Window.md#onscreencoverdone) が\n発生します (`ms` が 0 以下でもすぐに切り替えたうえで発生します)。フェードの途中で呼ぶと、その時点の\n不透明度から新しいフェードを始めます (前のフェードの完了イベントは発生しません)。\n\n```tjs\n// 画面を開く: 暗転 → 画面を出す → 明ける\nwindow.fadeScreenCover(255, 250);            // 完了で onScreenCoverDone\n// (onScreenCoverDone で画面を出してから)\nwindow.fadeScreenCover(0, 250);\n\n// 白で覆う\nwindow.fadeScreenCover(255, 300, 0xFFFFFF);\n```",
+        "params": {
+          "opacity": "目標の不透明度 (0〜255) です。",
+          "ms": "フェードにかける時間 (ミリ秒) です。",
+          "color": "色 (`0xRRGGBB`) です。省略すると今の色のままです。フェードの初めから新しい色になります。",
+          "blockInput": "入力を止めるかを同時に設定します。省略すると今の設定のままです。"
+        }
+      },
+      "tr": {
+        "summary": "Fades the screen cover",
+        "description": "Changes the opacity of the screen cover ([Window.screenCover](Window.md#screencover)) from its current value to\n`opacity` over `ms` milliseconds. The fade runs on the engine's clock, so each frame is drawn with the opacity of that\nmoment even when scripts are busy. When it finishes, [Window.onScreenCoverDone](Window.md#onscreencoverdone) occurs\n(even when `ms` is 0 or less, it switches right away and then occurs). Calling it during a fade starts a new fade from\nthe opacity at that moment (the completion event of the previous fade does not occur).\n\n```tjs\n// Opening a screen: fade to black → show the screen → fade in\nwindow.fadeScreenCover(255, 250);            // onScreenCoverDone when finished\n// (after showing the screen in onScreenCoverDone)\nwindow.fadeScreenCover(0, 250);\n\n// Cover in white\nwindow.fadeScreenCover(255, 300, 0xFFFFFF);\n```",
+        "params": {
+          "opacity": "The target opacity (0 to 255).",
+          "ms": "The time the fade takes (milliseconds).",
+          "color": "The color (`0xRRGGBB`). When omitted, the current color is kept. The new color applies from the start of the fade.",
+          "blockInput": "Sets at the same time whether input is blocked. When omitted, the current setting is kept."
+        }
       }
     },
     "Window.drawDevice": {
