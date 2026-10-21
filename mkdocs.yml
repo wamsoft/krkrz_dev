@@ -191,6 +191,7 @@ plugins:
             "Linux 版の配布パッケージ (krkrz_linux)": "Linux distribution package (krkrz_linux)"
             "外枠リポジトリの共通設定 (cmake / assetPack)": "Shared settings of the platform wrappers (cmake / assetPack)"
             "ゲーム画面の表示画角制御 (ビューポート)": "Viewport control"
+            "画面全体の暗転・クロスフェード (スクリーンカバー)": "Fades and crossfades over the whole screen (screen cover)"
             "ログ出力": "Logging"
             "ライセンス": "License"
 
@@ -448,5 +449,6 @@ nav:
       - Linux 版の配布パッケージ (krkrz_linux): topics/core/linux_package.md
       - 外枠リポジトリの共通設定 (cmake / assetPack): topics/core/platform_config.md
       - ゲーム画面の表示画角制御 (ビューポート): topics/core/viewport.md
+      - 画面全体の暗転・クロスフェード (スクリーンカバー): topics/core/screen_cover.md
       - ログ出力: topics/core/logging.md
     - ライセンス: topics/LICENSE.md

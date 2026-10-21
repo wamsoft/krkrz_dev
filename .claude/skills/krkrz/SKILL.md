@@ -245,6 +245,21 @@ class MyTimer extends Timer {
 }
 ```
 
+### 画面全体の暗転・クロスフェード (スクリーンカバー)
+
+Elements のダイアログより手前に画面全体を覆う単色 / 静止画。レイヤの覆いは Elements の overlay の奥になるので、
+Elements の画面を含めて暗転させたいときはこちら。フェードはエンジンの時計で進み、終わると `onScreenCoverDone(opacity)`。
+
+```tjs
+window.fadeScreenCover(255, 250);            // 黒へ (白は第 3 引数 0xFFFFFF)。終わると onScreenCoverDone(255)
+window.fadeScreenCover(0, 250);              // 明ける
+window.screenCover = %[ color: 0, opacity: 255, blockInput: true ];  // 即時。blockInput で覆う間の入力を止める
+window.snapshotScreenCover();                // 今の画面 (レイヤ + Elements) の静止画で覆う → 下で画面を替えて
+window.fadeScreenCover(0, 500);              //   → 新しい画面へクロスフェード
+```
+
+詳細: [Window.screenCover](doc/reference/Window.md#screencover) / `doc/topics/core/screen_cover.md`
+
 ### DrawDevice 切替で OGL 有効化
 
 ```tjs

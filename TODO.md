@@ -260,6 +260,12 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 
 ## 最近クローズしたもの
 
+- ✅ Elements の overlay より手前に画面全体を覆う「スクリーンカバー」(2026-10-20〜21、src/core `029aa19b` / `6709aff8`)
+  `Window.screenCover` / `fadeScreenCover` / `snapshotScreenCover` / `onScreenCoverDone`。レイヤの覆いでは
+  Elements の画面 (セーブ / ロード / 環境設定など) を覆えず、暗転・白への転換・クロスフェードをかけられなかった。
+  単色と «呼んだ時点の画面の静止画» で覆え、フェードはエンジンの時計で進み、blockInput で覆う間の入力を止められる。
+  WINVER (basic / ogl)・SDL3 (sdl / sdlogl / ogl) で確認。未確認 = SDL_GPU 版・macOS / Linux / 家庭用ゲーム機。
+  使い方 = [screen_cover.md](doc/topics/core/screen_cover.md)、作り = [ScreenCover.md](src/core/doc/ScreenCover.md)
 - ✅ 既定書体 (`Font.face = ""`) が Elements のアイコンフォントで描かれる (2026-10-15、src/core `cf10b113`)
   fonts.json の無いデータ (デモの単独起動等) で `Layer.drawText` の文字が全部矢印などの記号になっていた
   (`data/elements_audit` で発覚)。classic FreeType 経路が既定書体名 (OS のフォント) を遅延ロードせずに
