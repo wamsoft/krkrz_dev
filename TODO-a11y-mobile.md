@@ -194,10 +194,13 @@ C API は 2 系統ある。
 | Android `libkrkrz.so` x86_64 (Release、strip 後) | 16,291,024 B (15.54 MB) | 16,998,864 B (16.21 MB) | +707,840 B (+0.68 MB / +4.3%) |
 | Android APK (arm64-v8a + x86_64、圧縮後) | 76,656,485 B (73.11 MB) | 77,999,973 B (74.39 MB) | +1,343,488 B (+1.28 MB / +1.8%) |
 | Windows `krkrz64.exe` (SDL 版 x64、Release) | 15,248,384 B (14.54 MB) | 15,546,880 B (14.83 MB) | +298,496 B (+0.28 MB / +2.0%) |
-| iOS (実機 arm64、Release) | | | Mac で計測中 |
+| iOS 実行ファイル (実機 arm64、Release、strip 後) | 12,476,464 B (11.90 MB) | 12,833,648 B (12.24 MB) | +357,184 B (+0.34 MB / +2.9%) |
+| iOS .app 全体 | 34,724,451 B | 35,081,635 B | +357,184 B (+1.0%。実行ファイルの差だけ) |
+| iOS .ipa (development export) | 24,122,223 B (23.00 MB) | 24,319,433 B (23.19 MB) | +197,210 B (+0.19 MB / +0.8%) |
 
 - Android: Play のダウンロード (AAB の ABI 分割) では、端末に届くのはその ABI 分だけなので、増分は APK の半分程度の見込み (AAB は作っていない)。armeabi-v7a は外枠が作っておらず、AccessKit も Android の 32bit ARM 版を同梱していない。
 - Windows: ON 側は少し前の同じ系列のビルド (読み上げ以外の差は無い範囲)。Linux / macOS は手元に比べられるビルドが無く未計測。
+- iOS: 同梱の ios-config.json で "a11y" の有無だけを変え、make archive → make ipa まで通した (Mac で計測)。増えるのは実行ファイルの __TEXT だけ。krkrz_ios の既定 ON は e6a2ebd (未 push)。
 - 参考: AccessKit の prebuilt の static ライブラリ自体は Android 15.9 MB / iOS 8.9 MB / Windows (MSVC x64) 8.8 MB / macOS 9.6 MB / Linux x86_64 44.4 MB だが、リンク後に残るのは上の増分だけ。
 
 
