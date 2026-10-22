@@ -184,6 +184,23 @@ C API は 2 系統ある。
 
 1 と 2 は互いに依存しない (Elements の同じファイルを触るので、同時に進めるなら順に取り込む)。
 
+### 段階 3 の判断材料: サイズの増分 (2026-10-22 計測)
+
+`KRKRZ_USE_A11Y` の ON / OFF で同じ版を 2 回ビルドして比べた (計測用の一時設定はコミットしていない)。
+
+| 対象 | OFF | ON | 増分 |
+|---|---|---|---|
+| Android `libkrkrz.so` arm64-v8a (Release、strip 後) | 14,858,680 B (14.17 MB) | 15,495,336 B (14.78 MB) | +636,656 B (+0.61 MB / +4.3%) |
+| Android `libkrkrz.so` x86_64 (Release、strip 後) | 16,291,024 B (15.54 MB) | 16,998,864 B (16.21 MB) | +707,840 B (+0.68 MB / +4.3%) |
+| Android APK (arm64-v8a + x86_64、圧縮後) | 76,656,485 B (73.11 MB) | 77,999,973 B (74.39 MB) | +1,343,488 B (+1.28 MB / +1.8%) |
+| Windows `krkrz64.exe` (SDL 版 x64、Release) | 15,248,384 B (14.54 MB) | 15,546,880 B (14.83 MB) | +298,496 B (+0.28 MB / +2.0%) |
+| iOS (実機 arm64、Release) | | | Mac で計測中 |
+
+- Android: Play のダウンロード (AAB の ABI 分割) では、端末に届くのはその ABI 分だけなので、増分は APK の半分程度の見込み (AAB は作っていない)。armeabi-v7a は外枠が作っておらず、AccessKit も Android の 32bit ARM 版を同梱していない。
+- Windows: ON 側は少し前の同じ系列のビルド (読み上げ以外の差は無い範囲)。Linux / macOS は手元に比べられるビルドが無く未計測。
+- 参考: AccessKit の prebuilt の static ライブラリ自体は Android 15.9 MB / iOS 8.9 MB / Windows (MSVC x64) 8.8 MB / macOS 9.6 MB / Linux x86_64 44.4 MB だが、リンク後に残るのは上の増分だけ。
+
+
 ## 5. 実機での確かめ方
 
 共通の題材はコアデモ `data/a11y` と `data/elements_gallery`。`Agent.a11yTree()` の
