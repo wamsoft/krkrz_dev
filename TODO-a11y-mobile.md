@@ -5,7 +5,7 @@ Android (TalkBack) でも OS へ届くようにする計画。索引は [TODO.md
 今の口と設計は [doc/specification/accessibility.md](doc/specification/accessibility.md)
 (Elements 側は `src/core/external/elements/docs/accessibility.md`、以下「本体設計」)。
 
-状態: **段階 0〜2 を実装 (2026-10-22)**。iOS は Simulator、Android は実機で確認。Android の TalkBack のフォーカス枠が描かれない件が未解決。段階 3 (既定 ON) は未。確認の記録は §7。
+状態: **段階 0〜2 を実装 (2026-10-22)**。iOS は Simulator、Android は実機 2 台で確認 (フォーカス枠・announce の不具合も修正済み)。段階 3 (既定 ON) は未。確認の記録は §7。
 
 ## 0. 結論
 
@@ -235,8 +235,20 @@ Elements なしの試作アプリは作らず、AccessKit の `adapters/ios` / `
 - 確認: 実機 (Android 14)、`uiautomator dump`、REPL (`make repl` と同じ socket)、TalkBack (ユーザーが操作)、Java 側の一時的な記録。
 - 通ったこと: ビルドとリンク (`libkrkrz.so` に JNI の口と AccessKit)。読み上げデモのダイアログ・ゲーム側のノードが名前 / ロール / 値 / 枠付きで出る。TalkBack が繋がると `a11yActive` が 1。タッチで項目が読まれ、TalkBack のフォーカスがその項目へ移る (ACTION_ACCESSIBILITY_FOCUS が届く)。node provider へ直接送った ACTION_CLICK (選択肢の決定 → `onGameA11yAction` の click、ボタン)、SCROLL_FORWARD / BACKWARD (音量 50% → 70% → 60%)、パネルのボタンからの announce が動く。
 - 直したこと: AccessKit のイベントをロックを握ったまま出していたため、TalkBack のタッチで固まった (ANR)。イベントを送ると Android が同じ UI スレッドで node provider を呼び返すため。イベントはロックを放してから出し、krkrz 側のロックは再帰可にした。AccessKit は ACTION_CLICK を付けるが setClickable しないので、Java 側で clickable を立てる。
-- 未解決: TalkBack のフォーカス枠が描かれない (フォーカス自体は移る。ウィンドウごと描き直させても出なかった)。TalkBack のダブルタップはこの端末ではホーム画面でもほとんど効かず、アプリ内のダブルタップ → ACTION_CLICK の経路は実操作では確かめきれていない (ACTION_CLICK を直接送る経路は確認済み)。TalkBack を切ったときに `a11yActive` が 0 へ戻るかは未確認。
+- 未解決 (→ 後述の別の実機で解決): TalkBack のフォーカス枠が描かれない (フォーカス自体は移る。ウィンドウごと描き直させても出なかった)。TalkBack のダブルタップはこの端末ではホーム画面でもほとんど効かず、アプリ内のダブルタップ → ACTION_CLICK の経路は実操作では確かめきれていない (ACTION_CLICK を直接送る経路は確認済み)。TalkBack を切ったときに `a11yActive` が 0 へ戻るかは未確認。
 - 調べるときの注意: この端末は `log.tag=I` で `Log.d` を捨てる (記録は `Log.w` 以上で出す)。socket の REPL はドットコマンド (`.a11y` 等) を受け付けないので `Agent.a11yTree()` 等の式で見る。
+
+### 段階 2 の続き (別の実機、2026-10-22)
+
+最初の端末 (Android 14) はホーム画面でも TalkBack のダブルタップがほとんど効かず、アプリの問題と切り分けられなかったので、別の Android 14 端末 (TalkBack 17) で確かめ直した。
+
+- 通ったこと: タップで読み上げ、ダブルタップで選択肢の決定・ボタン (押されるのは常にフォーカス中の項目。セーブ / ロードの取り違えは無い)、スライダーは 1 本指の上下スワイプで増減 (TalkBack 中の音量キーは端末の音量)、TalkBack のフォーカス枠、ボタンからの announce が最後まで読まれる (1 回確認)。
+- 直したこと:
+  - **フォーカス枠が描かれない**: 枠は Android がウィンドウに描くが、SDL の描画面はウィンドウの背面の SurfaceView で、その範囲はウィンドウ側では透明扱いになり、View でない枠は表示されない。外枠に枠を描く透明な View (A11yFocusOverlay) を足した。起動時に足すと描画面のレイアウトが SDL のウィンドウ生成と重なって固まる / GL の初期化で落ちることがあったので、TalkBack が初めてフォーカスを置いたときに足す。
+  - **announce が読まれない**: 矩形の無い live region は TalkBack が読まない。Android では 1 ピクセルの矩形を与える (Elements)。
+  - **announce が冒頭で切れる**: 押した結果のフォーカス移動と live region の変化が同じ更新で届き、TalkBack はフォーカス移動で読み上げを打ち切る。live region を次の更新に回す (Elements)。最後まで読まれたのは 1 回の確認で、修正後の最初の試行では切れていた (タイミング次第の可能性あり。再現の確認を続ける)。
+- 未確認: TalkBack を切ったときに `a11yActive` が 0 に戻るか (切る操作でアプリが背面に回るため、確認の途中でアプリを再起動して状態が消えた)。
+- 調べるときの注意: 実行中のアプリを外から `am start` / ランチャーで起動し直すと、SDL は既存のインスタンスを終了させる (状態が消える)。画面が消えているときに起動すると、起動時に固まることがある (SDL の起動タイミングの問題。読み上げとは別)。
 
 ### 両 OS で見つかった不具合 (修正済み)
 
@@ -247,4 +259,7 @@ Elements なしの試作アプリは作らず、AccessKit の `adapters/ios` / `
 - krkrz_android の左端スワイプのサイドメニュー: TalkBack 中は 1 本指のスワイプが届かない (2 本指なら開く)。TalkBack 利用者向けに別の入口 (例: TalkBack が有効なときだけ出すメニューボタン) があるとよい。
 
 - elements_gallery: ページ切り替えのタブ列が名前の無い slider として、slide_switch が名前の無い switch として出る。Elements のロールと名前の対応の問題で、デスクトップでも同じはず。
+- コアデモのギャラリー (メニュー) の項目が読み上げツリーに載っていない。TalkBack 中はメニューからデモを開けない (デモのスクリプト側で setGameA11y / a11yLayers に載せる必要がある)。
+- PC (SDL) の読み上げデモ: 音量のスライダーは値が文字列 ("50%") だけで数値が無く、UIA では RangeValue にならない (Value パターンのみ)。Android はスクロールの操作で増減できる。
+- WINVER で Tab を押すとゲーム側とパネルの両方のフォーカスが動いたように見えた、という報告: 実キー入力で確かめた範囲では動くのはパネルだけで、ゲーム側の focusedLayer は変わらない。ただしパネルにフォーカスがある間もゲーム側の選択肢は青い強調のままで、パネルのフォーカス表示は見えにくい (見た目の問題の可能性)。
 
