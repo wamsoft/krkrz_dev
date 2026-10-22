@@ -1,6 +1,6 @@
 # アクセシビリティ (スクリーンリーダー) 対応 設計 — 吉里吉里Z 接続
 
-状態: **Phase A / B 実装済み (2026-10-04)**。入力欄の文字・単語・行単位の読み上げ (Elements 側 Phase 5) も入っている。Windows (SDL3 / WINVER)・macOS・Linux の実機で確認した。下の「使い方」が実際の口。以降の節は設計時の記録で、細部は実装と違うところがある (違いは「使い方」の下に列挙)。Elements 側の設計は `external/elements/docs/accessibility.md` にある (この文書では「本体設計」と呼ぶ)。この文書では、krkrz 側の接続と REPL / Agent の拡張だけを扱う。パスは `src/core/` 起点。
+状態: **Phase A / B 実装済み (2026-10-04)**。入力欄の文字・単語・行単位の読み上げ (Elements 側 Phase 5) も入っている。Windows (SDL3 / WINVER)・macOS・Linux の実機で確認した。iOS / Android (Phase D) は 2026-10-22 に追加 (iOS は Simulator、Android は実機で確認。計画と確認の記録はリポジトリ直下の `TODO-a11y-mobile.md`)。下の「使い方」が実際の口。以降の節は設計時の記録で、細部は実装と違うところがある (違いは「使い方」の下に列挙)。Elements 側の設計は `external/elements/docs/accessibility.md` にある (この文書では「本体設計」と呼ぶ)。この文書では、krkrz 側の接続と REPL / Agent の拡張だけを扱う。パスは `src/core/` 起点。
 
 使い方のガイド: [読み上げ (スクリーンリーダー)](../guide/Accessibility.md)。動く例はコアデモ `data/a11y`。
 
@@ -10,8 +10,8 @@ API リファレンス: [ElementsDialog](../reference/ElementsDialog.md) (`annou
 
 | 口 | 内容 |
 |---|---|
-| ビルド | `KRKRZ_USE_A11Y` (デスクトップ = Windows / macOS / Linux の通常ビルドは既定 ON)。Elements の `elements_a11y_accesskit` をリンクし、`KRKRZ_HAS_A11Y` を立てる。OFF でもツリーの取得 / 操作 / 読み上げログは使える (OS へ出ないだけ) |
-| ウィンドウ | 最初の `PaintOverlay` (メインウィンドウのデバイス) でメインウィンドウに付く。SDL3 版は `accesskit_host::attach_sdl`、WINVER は HWND に `attach` (どちらも `SetWindowSubclass` / 表示後の後付け)。スクリーンリーダーが繋がるまでは何もしない |
+| ビルド | `KRKRZ_USE_A11Y` (デスクトップ = Windows / macOS / Linux の通常ビルドは既定 ON。iOS / Android は外枠の設定で ON: krkrz_ios は `ios-config.json` の `"a11y": true`、krkrz_android は `cmake.plugins` に `"a11y"`)。Elements の `elements_a11y_accesskit` をリンクし、`KRKRZ_HAS_A11Y` を立てる。OFF でもツリーの取得 / 操作 / 読み上げログは使える (OS へ出ないだけ) |
+| ウィンドウ | 最初の `PaintOverlay` (メインウィンドウのデバイス) でメインウィンドウに付く。SDL3 版は `accesskit_host::attach_sdl`、WINVER は HWND に `attach` (どちらも `SetWindowSubclass` / 表示後の後付け)。iOS は SDL のウィンドウの root view に付き、SDL が GL / Metal の view を作って差し替えたら付け直す (`SyncA11y` が毎フレーム `refresh_native_view`)。Android はウィンドウの代わりに外枠の描画面 View が UI スレッドで問い合わせを受け、`sdl3/environ/A11yAndroid.cpp` 経由で渡す。スクリーンリーダーが繋がるまでは何もしない |
 | ゲーム本体の slot | OS への口を開いた時点で置く (常設)。ダイアログより下で、モーダルなダイアログの表示中は隠れる。空の live region (status) を最初から置いておき、`announce` で中身を変える (文字の入った live region が後から現れると、スクリーンリーダーは読まないことがある) |
 | ダイアログ | `ElementsDialogManager` の各インスタンスが slot になる。重なり順・モーダル・位置 (`present_scale` / `present_off_x/y`) は `PaintOverlay` の末尾で同期する。画面 JSON の `"a11y"` (本体設計 §4) がそのまま効く |
 | `ElementsDialog.announce(text[, assertive])` | 読み上げさせる (最前面ダイアログの live region。ダイアログが無ければゲーム本体の slot の live region)。assertive=true は割り込みの指定 (読み上げ側がどう扱うかはスクリーンリーダー次第)。同じ文を続けて渡しても読む。スクリーンリーダーが繋がっていなくても受け付ける (繋がったら最新の状態が渡る) |
@@ -203,5 +203,6 @@ KAG 本体の .tjs は変更しない。拡張 `system/A11yKAG.tjs` を用意し
 | A (済) | SDL3 / WINVER のメインウィンドウへの接続、ElementsDialog の source 化、TJS の口 (`ElementsDialog` の静的メンバ)、REPL の追加 |
 | B (済) | ゲーム本体の source (`setGameA11y` と、Layer フォーカス連鎖 / `hint` / `focusedLayer` / `ElementsPanel` を読む `a11yLayers`)。KAG 拡張スクリプトは行わない |
 | C | `showModalJson` の専用ウィンドウ、複数 Window (macOS / Linux 実機での確認は A / B と一緒に済んだ) |
+| D (済) | iOS (VoiceOver) / Android (TalkBack) への接続 (2026-10-22)。計画と確認の記録はリポジトリ直下の `TODO-a11y-mobile.md` |
 
 入力欄の文字・単語・行単位の読み上げは Elements 側 (本体設計 §6.5) で済んでいる。IME の変換中文字列は扱わない方針 (上の「入力欄」)。残りは Phase C。索引は umbrella の `TODO.md`。
