@@ -289,3 +289,17 @@ Elements なしの試作アプリは作らず、AccessKit の `adapters/ios` / `
 - PC (SDL) の読み上げデモ: 音量のスライダーは値が文字列 ("50%") だけで数値が無く、UIA では RangeValue にならない (Value パターンのみ)。Android はスクロールの操作で増減できる。
 - WINVER で Tab を押すとゲーム側とパネルの両方のフォーカスが動いたように見えた、という報告: 実キー入力で確かめた範囲では動くのはパネルだけで、ゲーム側の focusedLayer は変わらない。ただしパネルにフォーカスがある間もゲーム側の選択肢は青い強調のままで、パネルのフォーカス表示は見えにくい (見た目の問題の可能性)。
 
+## 8. 今後の検討
+
+### 読み上げ中に、ゲーム画面へのタッチを直接届ける (直接操作の領域)
+
+状態: 検討のみ (2026-10-23 記録、コード未着手)。
+
+- 現状: VoiceOver / TalkBack がオンの間は OS がタッチを受け取り (触れたものを読み上げ、ダブルタップで実行)、`setGameA11y` / `a11yLayers` / Elements で載せていない部分へのタップはゲームに届かない (実機 iPhone 11 で確認)。利用者側の操作 (iOS のパススルー = ダブルタップして押し続けたまま操作) なら届く。
+- 一般的な対応: iOS では `UIAccessibilityTraitAllowsDirectInteraction` を付けた範囲だけ、タッチをそのままアプリへ通す (音ゲー・楽器・なぞり操作のゲームの定番)。メニューは読み上げ要素、プレイ画面は直接操作、という組み合わせが多い。
+- 案: `setGameA11y` のノード (またはゲーム全体) に「直接操作」の指定を足し、iOS では allowsDirectInteraction、Android では相当するもの (要調査) に対応させる。
+- 調べること:
+  1. AccessKit の iOS アダプタが allowsDirectInteraction を出せるか。出せなければ AccessKit 側で足すか、こちらの層 (Elements の accesskit_host / 外枠) で補うか。
+  2. Android の TalkBack に相当する仕組みがあるか (無ければ、領域内の hover を AccessKit へ渡さず通常のタッチとして扱う等)。
+  3. TJS からの指定方法: ノードの属性 (例 `states : "direct"`) か、ゲーム全体のフラグか。
+

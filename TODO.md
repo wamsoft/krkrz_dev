@@ -110,6 +110,7 @@ registerHotKey の WINVER 配線)。
 | 優先 | 課題 | 内容 |
 |---|---|---|
 | 中 | 読み上げ: iOS / Android 対応 (Phase D) | **段階 0〜2 実装済み (2026-10-22)**。iOS は Simulator、Android は実機で確認 (フォーカス枠・announce も修正済み)。外枠の設定で ON (krkrz_ios `"a11y": true` / krkrz_android `cmake.plugins` に `"a11y"`)。**段階 3 (iOS / Android でも既定 ON) も実施** (サイズ増は Android の libkrkrz.so が ABI ごとに約 0.6 MB、iOS の実行ファイルが約 0.35 MB)。残り: TalkBack オフで a11yActive が 0 に戻るかの確認のみ (実機 VoiceOver・スワイプ巡回は確認 / 修正済み)。SSOT = [TODO-a11y-mobile.md](TODO-a11y-mobile.md) |
+| 低 | 読み上げ: 読み上げ中にゲーム画面へタッチを直接届ける (直接操作の領域) | VoiceOver / TalkBack 中は、読み上げツリーに載せていない部分へのタップがゲームに届かない。iOS の `UIAccessibilityTraitAllowsDirectInteraction` 相当の「直接操作」指定を `setGameA11y` 等に足す案。検討のみ。SSOT = [TODO-a11y-mobile.md](TODO-a11y-mobile.md) §8 |
 | 低 | 読み上げ: Phase C (`showModalJson` の専用ウィンドウ / 複数 Window) | Phase A / B (ダイアログ・`setGameA11y`・`a11yLayers`・`announce`・REPL の `.a11y` 系) と入力欄の文字単位の読み上げは 2026-10-04 に実装済み。残りは、`showModalJson` が開く専用ウィンドウにスクリーンリーダーの口を付けることと、メインウィンドウ以外の `Window` への対応。SSOT = [accessibility.md](doc/specification/accessibility.md) §7 |
 | ✅ | 読み上げ: IME の変換中文字列 — **扱わない方針に決定 (2026-10-05)** | 変換中の文字や候補は OS の IME 自体がスクリーンリーダーへ伝えるので、アプリ側で重ねて出すと二重に読まれる。入力欄は確定した文字だけを持つ。SSOT = Elements 側 `docs/accessibility.md` §6.5 |
 | ✅ | 読み上げ: 使い方のガイド・デモ・スキル | **2026-10-05 対応**。ガイド [doc/guide/Accessibility.md](doc/guide/Accessibility.md)、コアデモ `src/core/data/a11y` (選択肢を `setGameA11y` / ボタン類を `a11yLayers` / パネルの `"a11y"` キー。SDL3・WINVER で REPL から確認)、スキル elements / krkrz / krkrz-repl に追記。作成中に elements の `"a11y": {hidden}` が TJS 辞書 (true が 1) で効かなかったのを修正 |
