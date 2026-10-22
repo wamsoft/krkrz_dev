@@ -5,7 +5,7 @@ Android (TalkBack) でも OS へ届くようにする計画。索引は [TODO.md
 今の口と設計は [doc/specification/accessibility.md](doc/specification/accessibility.md)
 (Elements 側は `src/core/external/elements/docs/accessibility.md`、以下「本体設計」)。
 
-状態: **段階 0〜2 を実装 (2026-10-22)**。iOS は Simulator、Android は実機 2 台で確認 (フォーカス枠・announce の不具合も修正済み)。段階 3 (既定 ON) も実施 (2026-10-22、サイズの増分は下の表)。確認の記録は §7。
+状態: **段階 0〜3 を実施 (2026-10-22〜23)、全リポジトリ push 済み**。iOS は Simulator と実機 (VoiceOver)、Android は実機 2 台で確認 (フォーカス枠・announce の不具合も修正済み)。段階 3 (既定 ON) も実施 (2026-10-22、サイズの増分は下の表)。確認の記録は §7。
 
 ## 0. 結論
 
@@ -247,7 +247,8 @@ Elements なしの試作アプリは作らず、AccessKit の `adapters/ios` / `
 
 - 確認: Simulator (iPhone 17 / iOS 26.3 / x86_64 / 横向き)、要素は AXe CLI の `axe describe-ui`、操作は macOS 側のアクセシビリティ経由の AXPress / AXIncrement。
 - 通ったこと: ビルドとリンク (`lib/ios-simulator/x86_64/static/libaccesskit.a`)。読み上げデモ・elements_gallery の要素の名前 / ロール / 値 / 枠。Activate (セーブ・オートモード・あいさつ) と Increment / Decrement (音量 50% → 60%)。`a11yActive` が接続で 1。DrawDevice を切り替えても要素が消えない (付け直しが効く)。
-- 未確認: 実機の VoiceOver の読み上げ、announce の通知そのもの (Simulator では取る手段が無い)、選択肢の list item の操作。
+- 未確認 (Simulator): announce の通知そのもの、選択肢の list item の操作。
+- 実機 (2026-10-23): iPhone 11 / iOS 26.5 の VoiceOver で、巡回順・ダブルタップでの決定・音量の上下スワイプ・announce・枠の位置をユーザーが一通り確認 (項目ごとの詳細記録は無し)。krkrz_ios は既定 ON (e6a2ebd) と README の VoiceOver 節 (45e9b21) を push 済み。
 - krkrz_ios: ブランチ `ios-a11y` (origin/main から) にコミット。未 push。
 
 ### 段階 2 (Android)
