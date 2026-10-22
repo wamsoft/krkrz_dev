@@ -252,7 +252,7 @@ dlg.startFlow("ui/menu/app.jsonc");   // 即 return(戻り値=起動成否)
 ---
 
 ## 6.5 読み上げ (スクリーンリーダー)
-表示中の画面は OS のスクリーンリーダー (ナレーター / VoiceOver / Orca) から**何もしなくても読まれる** (名前は text / labeled_row.label / group.title 等から、役割は type から自動。入力欄は文字・単語・行単位)。使い方の全体は umbrella の `doc/guide/Accessibility.md`。
+表示中の画面は OS のスクリーンリーダー (ナレーター / VoiceOver / Orca、iOS の VoiceOver / Android の TalkBack) から**何もしなくても読まれる** (名前は text / labeled_row.label / group.title 等から、役割は type から自動。入力欄は文字・単語・行単位)。使い方の全体は umbrella の `doc/guide/Accessibility.md`。
 - **画面 JSON の `"a11y"` キー** (全ウィジェット共通): 文字列=名前の短縮形、辞書=`label`/`label_id` (名前) / `description`/`description_id` / `role` (`"heading"` 等で上書き) / `value_var` / `live` (`"polite"`/`"assertive"`、text_var の変化を読む) / `hidden` (子ごと外す)。トップレベル `"a11y": {"title"|"title_id"}` = 画面名。**絵だけのボタン (`sprite_button` / `atlas_*`) は文字を持たないので必ず名前を付ける**。TJS 辞書から渡すと true が 1 になるが、bool キーは数値も受ける。
 - **static** (クラス全体): `announce(text[, assertive])` (任意の文を読ませる。AT 未接続でも受け付ける) / `a11yActive` (読み取り専用。Windows は窓が前面になるまで偽) / `onA11yActiveChanged(active)` (クラスへ関数を代入) / `a11yMode` (`"auto"`/`"off"`) / `a11yLabel` (根の名前)。
 - **ゲーム本体 (Layer に描いた UI)**: `setGameA11y(nodes[, focus])` (ノード表を丸ごと渡す。`%[id, role, name, value, states, rect=primary 座標, parent, num_*]`) + `onGameA11yAction(id, action, arg)` (本体はフォーカスを動かさない → 状態を変えて setGameA11y を呼び直す) / `clearGameA11y()` / `a11yLayers = true` (フォーカス連鎖の Layer を自動で載せる。名前=hint、Layer に `a11yName`/`a11yRole`/`a11yValue`/`a11yStates`/`a11yHidden`/`onA11yAction` を生やして補う)。ゲームのノードはダイアログより下・モーダル中は隠れる。

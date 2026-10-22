@@ -8,7 +8,7 @@ source_hash: 9df237092816
 
 Kirikiri Z game screens can be read by the OS screen reader (Narrator on Windows, VoiceOver on macOS, Orca on Linux, and so on). The engine passes the name, role, value, and state of each on-screen element to the OS accessibility API (UI Automation / NSAccessibility / AT-SPI), so blind and low-vision players can play with the keyboard while listening to the screen reader.
 
-This is supported in regular desktop builds (Windows / macOS / Linux), in both the SDL3 build and the native Windows (WINVER) build. The browser (Web) build does not have this interface.
+This is supported in regular builds for Windows / macOS / Linux / iOS / Android. On Windows it works in both the SDL3 build and the native Windows (WINVER) build. iOS exposes it to VoiceOver and Android to TalkBack (ON by default in the krkrz_ios / krkrz_android wrappers, and can be turned off in their settings). The browser (Web) build does not have this interface.
 
 What the screen reader receives comes from three sources:
 
@@ -189,7 +189,9 @@ The screen reader log looks like this:
 - `setGameA11y` / `a11yLayers` / `onGameA11yAction` and similar are settings that **apply to the whole class**. When leaving a scene, reset them with `clearGameA11y()` / `a11yLayers = false`.
 - Only the main window is supported. The dedicated window opened by `showModalJson` and second and later `Window`s are not supported yet.
 - Text still being composed in a text field (before IME confirmation) is not exposed by the application. The OS IME itself conveys composing text and candidates to the screen reader. The text field holds only confirmed text.
-- Turning off the build option `KRKRZ_USE_A11Y` (ON by default in regular desktop builds) stops output to the OS. The REPL inspection interface remains.
+- Turning off the build option `KRKRZ_USE_A11Y` (ON by default in regular builds for Windows / macOS / Linux / iOS / Android) stops output to the OS. The REPL inspection interface remains. In the wrappers, set `"a11y": false` in krkrz_ios's `ios-config.json`, or remove `"a11y"` from krkrz_android's `cmake.plugins`.
+- On smartphones (VoiceOver / TalkBack), while the screen reader runs, touches on the screen become screen reader gestures and do not reach the game directly (tap once to read, double-tap to activate, swipe up / down on a slider). Make the parts played by touch operable through `setGameA11y` / `a11yLayers`.
+- On Android, nodes without a position (`rect`) are left out of swipe navigation (no focus box can be shown for them). Give a position to any node that should be read.
 - To suppress output to the OS at run time, set `ElementsDialog.a11yMode = "off"`.
 
 The full specification and design notes are in [Accessibility (screen reader) support](../specification/accessibility.md).

@@ -5,7 +5,7 @@ Android (TalkBack) でも OS へ届くようにする計画。索引は [TODO.md
 今の口と設計は [doc/specification/accessibility.md](doc/specification/accessibility.md)
 (Elements 側は `src/core/external/elements/docs/accessibility.md`、以下「本体設計」)。
 
-状態: **段階 0〜2 を実装 (2026-10-22)**。iOS は Simulator、Android は実機 2 台で確認 (フォーカス枠・announce の不具合も修正済み)。段階 3 (既定 ON) は未。確認の記録は §7。
+状態: **段階 0〜2 を実装 (2026-10-22)**。iOS は Simulator、Android は実機 2 台で確認 (フォーカス枠・announce の不具合も修正済み)。段階 3 (既定 ON) も実施 (2026-10-22、サイズの増分は下の表)。確認の記録は §7。
 
 ## 0. 結論
 

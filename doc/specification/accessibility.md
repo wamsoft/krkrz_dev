@@ -10,7 +10,7 @@ API リファレンス: [ElementsDialog](../reference/ElementsDialog.md) (`annou
 
 | 口 | 内容 |
 |---|---|
-| ビルド | `KRKRZ_USE_A11Y` (デスクトップ = Windows / macOS / Linux の通常ビルドは既定 ON。iOS / Android は外枠の設定で ON: krkrz_ios は `ios-config.json` の `"a11y": true`、krkrz_android は `cmake.plugins` に `"a11y"`)。Elements の `elements_a11y_accesskit` をリンクし、`KRKRZ_HAS_A11Y` を立てる。OFF でもツリーの取得 / 操作 / 読み上げログは使える (OS へ出ないだけ) |
+| ビルド | `KRKRZ_USE_A11Y` (Windows / macOS / Linux / iOS / Android の通常ビルドは既定 ON。外枠の設定で OFF にできる: krkrz_ios は `ios-config.json` の `"a11y": false`、krkrz_android は `cmake.plugins` から `"a11y"` を外す)。Elements の `elements_a11y_accesskit` をリンクし、`KRKRZ_HAS_A11Y` を立てる。OFF でもツリーの取得 / 操作 / 読み上げログは使える (OS へ出ないだけ) |
 | ウィンドウ | 最初の `PaintOverlay` (メインウィンドウのデバイス) でメインウィンドウに付く。SDL3 版は `accesskit_host::attach_sdl`、WINVER は HWND に `attach` (どちらも `SetWindowSubclass` / 表示後の後付け)。iOS は SDL のウィンドウの root view に付き、SDL が GL / Metal の view を作って差し替えたら付け直す (`SyncA11y` が毎フレーム `refresh_native_view`)。Android はウィンドウの代わりに外枠の描画面 View が UI スレッドで問い合わせを受け、`sdl3/environ/A11yAndroid.cpp` 経由で渡す。スクリーンリーダーが繋がるまでは何もしない |
 | ゲーム本体の slot | OS への口を開いた時点で置く (常設)。ダイアログより下で、モーダルなダイアログの表示中は隠れる。空の live region (status) を最初から置いておき、`announce` で中身を変える (文字の入った live region が後から現れると、スクリーンリーダーは読まないことがある) |
 | ダイアログ | `ElementsDialogManager` の各インスタンスが slot になる。重なり順・モーダル・位置 (`present_scale` / `present_off_x/y`) は `PaintOverlay` の末尾で同期する。画面 JSON の `"a11y"` (本体設計 §4) がそのまま効く |
