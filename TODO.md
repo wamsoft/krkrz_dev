@@ -7,6 +7,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 |---|---|
 | バージョン番号の扱い | [src/core/doc/Versioning.md](src/core/doc/Versioning.md) |
 | 画面転送コスト (計測・読み方) | [src/core/doc/ScreenTransfer.md](src/core/doc/ScreenTransfer.md) |
+| ブラウザ表示 (デスクトップ版の画面・音声・入力をブラウザへ) | [src/core/doc/RemoteDisplay.md](src/core/doc/RemoteDisplay.md) (検討段階・未着手) |
 | Elements (レイアウト/ダイアログ) の要修正 | [TODO-elements.md](TODO-elements.md) |
 | Elements の入力リピート / キャッシュ / 描画の精査 | [src/core/doc/ElementsAudit.md](src/core/doc/ElementsAudit.md) |
 | 仮想カーソル位置 (提案) | [src/core/doc/VirtualCursor.md](src/core/doc/VirtualCursor.md) |
@@ -33,7 +34,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | 区分 | 件数 | 中身 |
 |---|---|---|
 | 予定・未着手 | 21 | Elements/UI 5 / エンジン基盤 12 / ビルド・運用 4 (内訳: 中 11 / 低 9 / 検討中 1)。2026-10-15: 「パネルのパッド操作」を ✅。2026-10-15: 「GPU 版 Canvas の endEffect に opacity 引数が無い」を追加し、同日 ✅。2026-10-12: 「VideoOverlay の再生矩形」を ✅。2026-10-09: 「共通の xp3 作成 CLI」を標準ツール `krkrxp3` で ✅。2026-10-11〜12: 「SDL 版 VideoOverlay の再生矩形」「パネルのパッド操作」を追加 |
-| 将来課題 | 7 | 着手時期未定 (中 4 / 低 3)。2026-10-09 に「GPU モードの確立と描画系プラグインの SDL_GPU 版」を追加 |
+| 将来課題 | 8 | 着手時期未定 (中 4 / 低 3 / 検討中 1)。2026-10-27 に「ブラウザ表示 (リモート画面・音声)」を追加。2026-10-09 に「GPU モードの確立と描画系プラグインの SDL_GPU 版」を追加 |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 11 | 単発の小さいもの。着手順は問わない。2026-10-15: `-timerprec` の残骸を削除して ✅ |
 | デモ整備 | 10 + 1 | 未着手デモは多くが資材待ち |
@@ -194,6 +195,7 @@ registerHotKey の WINVER 配線)。
 | 低 | WINVER に繁体字のメッセージ文字列が無い | `messages.csv` の `cht` 列は SDL3/LIB へ `resource/messages-cht.json` として届くが、WINVER の PE 文字列テーブル (`win32/vcproj/string_table_*.rc`) は jp / en / chs の 3 種のみ。zh-Hant UI では PE リソースの言語解決でフォールバックする。`gen_messages.py` に `string_table_cht.rc` の出力を足し、`tvpwin32.rc` の Chinese (Traditional) ブロックへ `#include` すれば埋まる (設定ダイアログの文字列は既に繁体字あり)。→ `src/core/common/msg/text/README.md` |
 | ✅ | macOS (Retina) の point / pixel の使い分け | **2026-10-13 に対応**: GL コンテキストの `GetSurfaceSize` を `SDL_GetWindowSizeInPixels` (実ピクセル) に、iOS / macOS のウィンドウに `SDL_WINDOW_HIGH_PIXEL_DENSITY` を付けた (サイズ API の単位は論理ポイントのまま、`displayDensity` が 192)。macOS は 4K (2 倍) で描画・マウス・Elements・フルスクリーンを確認。あわせて macOS で枠ドラッグ / フルスクリーン解除時に落ちる件 (縦横比 (0,0)) を修正 (解除が効かない既知の制限あり) → [WindowGeometry.md](src/core/doc/WindowGeometry.md) §8 |
 | 低 | generic フラグの 3 種区別 | `kirikiriz_generic` が導入当時「CS (コンシューマ) 版」の意味だったため、案件スクリプトは generic = プラグイン静的リンク前提で分岐している。PC の SDL ビルドは CS でも WINVER でもない第 3 の形態なのに区別する手段が無い。案件側スクリプトにも影響するため改定は慎重に |
+| 検討中 | ブラウザ表示 (リモート画面・音声) | デスクトップ版をネイティブで動かしたまま本体を Web サーバにし、ブラウザに画面を出して音を鳴らし、操作を本体へ返す形態。2026-10-27 に実現性を検討: 画面は present 直前の最終画面を読み戻してタイル差分で送る方式を本線 (GL / GPU 描画も映る)、音は miniaudio の全ミックスを 1 本のストリームで送る、入力は Agent の注入口を流用、通信は既存 `ReplWebServer` に WebSocket を足す。段階案はミラー → タイル差分 + 音声 → ヘッドレス → 映像コーデック。AudioWorklet / WebCodecs が secure context 必須なので LAN 公開には TLS 等の手当てが要る。SSOT = [RemoteDisplay.md](src/core/doc/RemoteDisplay.md) |
 
 ## 未修正の既知バグ (回避策で運用中)
 
