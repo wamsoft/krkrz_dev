@@ -1,5 +1,5 @@
 ---
-source_hash: f8981ae38180
+source_hash: ea16f5b56e03
 ---
 
 # About Plugins
@@ -132,7 +132,7 @@ Plugins that render with GLES ( ANGLE/glad ). The target GL context is supplied 
 | Plugin | Description |
 |---|---|
 | **krkreffekseer** | Adds the `EffekseerDevice` / `EffekseerEffect` / `EffekseerPlayer` classes, which draw [Effekseer](https://effekseer.github.io/) effects ( .efk / .efkefc / .efkzip ) to a host-supplied GL context. |
-| **krkrlive2d** | Adds the `Live2DDevice` / `Live2DModel` / `Live2DPlayer` / `Live2DMatrix` classes, which play and draw Live2D Cubism models. **Because it requires the Live2D Cubism Core, it is built only when the `CUBISM_SDK` environment variable is set** ( the driver-side CMake refers to `$CUBISM_SDK/Core` ). |
+| **krkrlive2d** | Adds the `Live2DDevice` / `Live2DModel` / `Live2DPlayer` / `Live2DMatrix` classes, which play and draw Live2D Cubism models. **Because it requires the Live2D Cubism Core, it is built only when the `CUBISM_SDK_CORE` environment variable ( the `Core` folder of the Cubism SDK ) is set**. |
 | **krkrgles** | Adds the `GLESAdaptor` / `GLESTexture` classes, which pull the results rendered with OpenGL ES ( via ANGLE/EGL ) into a [Layer](../reference/Layer.md). It includes a post-effect mechanism that runs entirely on the GPU. **It creates the EGL/ANGLE context from `Window.HWND`, so it is Windows only** ( on macOS / Linux, use the engine's `OGLDrawDevice` for the GL context ). |
 
 ### Windows Only ( WINVER Build )
