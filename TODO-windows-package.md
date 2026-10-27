@@ -1,6 +1,6 @@
 # Windows 版の配布パッケージ外枠 (krkrz_windows) 設計
 
-**状態: P1〜P5 済み (2026-10-27、ローカルのリポジトリ `../krkrz_windows`。GitHub への作成・push はまだ)。§10 の決めどころは同日決定済み。対象は x64 だけ (x86 は扱わない、同日決定)。** 公開ドキュメント = [doc/topics/core/windows_package.md](doc/topics/core/windows_package.md)。設定項目と手順の SSOT は krkrz_windows の README (この文書は設計の経緯と段階の記録)。 索引は [TODO.md](TODO.md)。
+**状態: P1〜P5 済み (2026-10-27、リポジトリ = https://github.com/wamsoft/krkrz_windows (public・MIT、2026-10-27 に公開))。§10 の決めどころは同日決定済み。対象は x64 だけ (x86 は扱わない、同日決定)。** 公開ドキュメント = [doc/topics/core/windows_package.md](doc/topics/core/windows_package.md)。設定項目と手順の SSOT は krkrz_windows の README (この文書は設計の経緯と段階の記録)。 索引は [TODO.md](TODO.md)。
 
 吉里吉里Z 本体とタイトルのデータをまとめて、Windows 向けの配布物 (そのまま動くフォルダ / zip /
 任意でインストーラ) を作る外枠リポジトリ **krkrz_windows** を新設する。krkrz_linux
@@ -252,7 +252,7 @@ NSIS や WiX (MSI) は採らない。NSIS は同等のことができるが利�
 
 - [ ] **arm64**: 本体に `arm64-windows(-win)` の preset はあるが、Windows arm64 の実機で確認できていない
   (`TJS_64BIT_OS` が MSVC arm64 で定義されない件も TODO.md にある)。実機が用意できたら対象に加える
-- [ ] **GitHub への公開**: リポジトリはローカルだけ。作成・push は未 (公開リポジトリなので作るときに確認する)
+- [x] **GitHub への公開**: 2026-10-27 に https://github.com/wamsoft/krkrz_windows を public で作成・push
 - [ ] **まだ確かめていないこと**: 正規のコード署名証明書とタイムスタンプでの署名 (自己署名のテスト証明書だけで確認)、
   インストーラの `installMode: admin` / `ask`、上書きインストールでの更新、SDL 版でのインストーラ・署名
   (処理は変種に依らない)、`release.data.mode: bind` と署名・破損チェックの組み合わせ

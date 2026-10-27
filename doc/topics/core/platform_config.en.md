@@ -1,5 +1,5 @@
 ---
-source_hash: 7fda9f92c724
+source_hash: 61de241fec75
 ---
 
 # Shared settings of the platform wrappers (cmake / assetPack)
@@ -38,7 +38,7 @@ mygame/                     ← PROJECT_DIR
 | [krkrz_android](https://github.com/wamsoft/krkrz_android) | `app-config.json` | Yes | `assets/` of the APK | `resOverride` (overriding res), `padPacks` (Play Asset Delivery) |
 | [krkrz_ios](https://github.com/wamsoft/krkrz_ios) | `ios-config.json` | Yes (all plugins linked statically) | Directly under the app bundle | `graphics` (gles / metal), `icon`, `infoPlist` |
 | [krkrz_linux](https://github.com/wamsoft/krkrz_linux) | `linux-config.json` | Yes (plus `buildType` / `options`) | The executable's folder | `exeName`, `orgName` / `appName`, `desktop` |
-| krkrz_windows | `windows-config.json` | Yes (plus `buildType` / `options`) | The executable's folder | `exeName`, `variant` (sdl / win), `release` (the releaser), `saveData`, `checkTool`, `package.installer` |
+| [krkrz_windows](https://github.com/wamsoft/krkrz_windows) | `windows-config.json` | Yes (plus `buildType` / `options`) | The executable's folder | `exeName`, `variant` (sdl / win), `release` (the releaser), `saveData`, `checkTool`, `package.installer` |
 | [krkrz_gdk](https://github.com/wamsoft/krkrz_gdk) | `gdk-config.json` | Yes (all plugins linked statically, plus `options`) | The executable's folder | `targets`, `identity`, `gpuShaderDir` |
 | [krkrz_web](https://github.com/wamsoft/krkrz_web) | `web-config.json` | — (a shared binary, not built per title) | `gamedata/` (served through `web://`) | `sources[].delivery` (prefetch), `lowercase`, `args` |
 

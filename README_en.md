@@ -1,4 +1,4 @@
-<!-- source_hash: 4130d201b41a -->
+<!-- source_hash: 847356b404f6 -->
 # krkrz_dev — Kirikiri Z integrated development repository
 
 [日本語](README.md) | English
@@ -38,6 +38,7 @@ repository. The list of open issues is in [TODO.md](TODO.md) (in Japanese).
 | [krkrz_android](https://github.com/wamsoft/krkrz_android) | Android (Gradle + NDK) | `app-config.json` |
 | [krkrz_ios](https://github.com/wamsoft/krkrz_ios) | iOS / iPadOS (CMake's Xcode generator) | `ios-config.json` |
 | [krkrz_linux](https://github.com/wamsoft/krkrz_linux) | Linux distribution packages (built in the Steam Linux Runtime SDK container) | `linux-config.json` |
+| [krkrz_windows](https://github.com/wamsoft/krkrz_windows) | Windows distribution packages (folder / zip / Inno Setup installer, signing) | `windows-config.json` |
 | [krkrz_gdk](https://github.com/wamsoft/krkrz_gdk) | Microsoft GDK (PC / Xbox) | `gdk-config.json` |
 
 - Clone each one into the same folder as this repository and set the environment variable

@@ -1,11 +1,11 @@
 ---
-source_hash: adce1f034cee
+source_hash: 291419958a82
 ---
 
 # Windows Distribution Packages (krkrz_windows)
 
 This describes how to bundle the Kirikiri Z engine with your game data into a distributable package for Windows.
-The tool is the wrapper repository krkrz_windows. Like krkrz_linux / krkrz_android / krkrz_ios / krkrz_web,
+The tool is the wrapper repository [krkrz_windows](https://github.com/wamsoft/krkrz_windows). Like krkrz_linux / krkrz_android / krkrz_ios / krkrz_web,
 it references krkrz_dev as the engine via `KRKRZ_BASE` and handles only the Windows-specific build and
 packaging. The list of settings and the build steps are in the krkrz_windows README.
 
@@ -126,6 +126,7 @@ In the installer it becomes the optional component "File corruption check".
 
 ## Related
 
+- [krkrz_windows](https://github.com/wamsoft/krkrz_windows) — the README lists the configuration fields
 - [Shared settings of the platform wrappers](platform_config.md) — the `cmake` / `assetPack` / `${...}` expansion formats
 - [Linux distribution packages](linux_package.md) — krkrz_linux
 - [Command-line options](../../guide/CommandLine.md) — `-datapath` / `-printdatapath`

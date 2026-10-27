@@ -32,7 +32,7 @@ mygame/                     ← PROJECT_DIR
 | [krkrz_android](https://github.com/wamsoft/krkrz_android) | `app-config.json` | ○ | APK の `assets/` | `resOverride` (res の上書き)、`padPacks` (Play Asset Delivery) |
 | [krkrz_ios](https://github.com/wamsoft/krkrz_ios) | `ios-config.json` | ○ (全プラグインを静的リンク) | アプリバンドル直下 | `graphics` (gles / metal)、`icon`、`infoPlist` |
 | [krkrz_linux](https://github.com/wamsoft/krkrz_linux) | `linux-config.json` | ○ (+ `buildType` / `options`) | 実行ファイルと同じフォルダ | `exeName`、`orgName` / `appName`、`desktop` |
-| krkrz_windows | `windows-config.json` | ○ (+ `buildType` / `options`) | 実行ファイルと同じフォルダ | `exeName`、`variant` (sdl / win)、`release` (リリーサ)、`saveData`、`checkTool`、`package.installer` |
+| [krkrz_windows](https://github.com/wamsoft/krkrz_windows) | `windows-config.json` | ○ (+ `buildType` / `options`) | 実行ファイルと同じフォルダ | `exeName`、`variant` (sdl / win)、`release` (リリーサ)、`saveData`、`checkTool`、`package.installer` |
 | [krkrz_gdk](https://github.com/wamsoft/krkrz_gdk) | `gdk-config.json` | ○ (全プラグインを静的リンク、+ `options`) | 実行ファイルと同じフォルダ | `targets`、`identity`、`gpuShaderDir` |
 | [krkrz_web](https://github.com/wamsoft/krkrz_web) | `web-config.json` | — (共有バイナリなのでタイトルごとに組まない) | `gamedata/` (`web://` で配信) | `sources[].delivery` (先読み)、`lowercase`、`args` |
 

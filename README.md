@@ -36,6 +36,7 @@ Windows / Linux / macOS のデスクトップ版はこのリポジトリでビ�
 | [krkrz_android](https://github.com/wamsoft/krkrz_android) | Android (Gradle + NDK) | `app-config.json` |
 | [krkrz_ios](https://github.com/wamsoft/krkrz_ios) | iOS / iPadOS (CMake の Xcode ジェネレータ) | `ios-config.json` |
 | [krkrz_linux](https://github.com/wamsoft/krkrz_linux) | Linux の配布パッケージ (Steam Linux Runtime の SDK コンテナでビルド) | `linux-config.json` |
+| [krkrz_windows](https://github.com/wamsoft/krkrz_windows) | Windows の配布パッケージ (フォルダ / zip / Inno Setup のインストーラ、署名) | `windows-config.json` |
 | [krkrz_gdk](https://github.com/wamsoft/krkrz_gdk) | Microsoft GDK (PC / Xbox) | `gdk-config.json` |
 
 - どれもこのリポジトリと同じフォルダに clone し、環境変数 `KRKRZ_BASE` にその親フォルダを指定します

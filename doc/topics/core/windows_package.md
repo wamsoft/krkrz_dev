@@ -1,7 +1,7 @@
 # Windows 版の配布パッケージ ( krkrz_windows )
 
 吉里吉里Z 本体と作品のデータをまとめて、Windows 向けの配布物を作る方法です。
-道具は外枠リポジトリ krkrz_windows。krkrz_linux / krkrz_android / krkrz_ios / krkrz_web と同じく、
+道具は外枠リポジトリ [krkrz_windows](https://github.com/wamsoft/krkrz_windows)。krkrz_linux / krkrz_android / krkrz_ios / krkrz_web と同じく、
 エンジンは `KRKRZ_BASE` 経由で krkrz_dev を参照し、Windows 固有のビルドとパッケージングだけを
 受け持ちます。設定項目の一覧とビルド手順は krkrz_windows の README にあります。
 
@@ -122,6 +122,7 @@ Authenticode は exe を書き換えるので、**Authenticode → `.sig` の作
 
 ## 関連
 
+- [krkrz_windows](https://github.com/wamsoft/krkrz_windows) — README に設定項目の一覧
 - [外枠リポジトリの共通設定](platform_config.md) — `cmake` / `assetPack` / `${...}` 展開の書式
 - [Linux 版の配布パッケージ](linux_package.md) — krkrz_linux
 - [コマンドラインオプション](../../guide/CommandLine.md) — `-datapath` / `-printdatapath`
