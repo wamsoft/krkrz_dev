@@ -1,5 +1,5 @@
 ---
-source_hash: 3b64345ac2fd
+source_hash: acf3168c9a8b
 ---
 
 # Linux Distribution Packages (krkrz_linux)
@@ -98,6 +98,14 @@ Previously everything was exported, so on Linux inline static members with the s
 ncbind plugin stopped during its load (the same happened on macOS). If you build a plugin
 with your own CMake, use the same settings (`C_VISIBILITY_PRESET` / `CXX_VISIBILITY_PRESET hidden`
 and `VISIBILITY_INLINES_HIDDEN`).
+
+Since 2026-10-27, symbols of libraries a plugin links statically (libstdc++ / zlib / expat /
+threepp / Effekseer and so on) are not exported either. The settings above only affect the
+plugin's own code, so the exported names are narrowed to `V2Link` / `V2Unlink` with a version
+script on Linux (only those two are `global`) and with the linker's `-exported_symbol` on macOS.
+If you build with your own CMake, add `-Wl,--version-script=<file>` on Linux (with the content
+`{ global: V2Link; V2Unlink; local: *; };`) or `-Wl,-exported_symbol,_V2Link
+-Wl,-exported_symbol,_V2Unlink` on macOS.
 
 ## Save data location (2026-10 onward)
 

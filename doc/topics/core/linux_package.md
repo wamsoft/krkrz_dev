@@ -88,6 +88,14 @@ DT_RPATH も効かなくなります )。
 同じ設定 ( `C_VISIBILITY_PRESET` / `CXX_VISIBILITY_PRESET hidden` と
 `VISIBILITY_INLINES_HIDDEN` ) にしてください。
 
+2026-10-27 からは、プラグインが静的リンクしたライブラリ ( libstdc++ / zlib / expat / threepp /
+Effekseer など ) のシンボルも公開しません。上の設定はプラグイン自身のコードにしか効かないため、
+Linux はバージョンスクリプト ( `V2Link` / `V2Unlink` だけを global にする )、macOS はリンカの
+`-exported_symbol` で、公開する名前を `V2Link` / `V2Unlink` の 2 つに絞っています。独自の CMake で
+作る場合は、Linux なら `-Wl,--version-script=<ファイル>` ( 中身は
+`{ global: V2Link; V2Unlink; local: *; };` )、macOS なら `-Wl,-exported_symbol,_V2Link
+-Wl,-exported_symbol,_V2Unlink` を足してください。
+
 ## セーブデータの場所 ( 2026-10〜 )
 
 !!! warning "重要 (2026-10 の変更)"
