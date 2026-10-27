@@ -152,6 +152,8 @@ endif()
 # (krkrz_merge_vcpkg_manifest は内容差分が無ければ書き換えない)。
 # ----------------------------------------------------
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/core/cmake/MergeVcpkgManifest.cmake)
+# MSVC の /showIncludes を英語に固定 (project() より前に include する。詳細はファイル先頭)
+include(${CMAKE_CURRENT_SOURCE_DIR}/src/core/cmake/MsvcEnglishOutput.cmake)
 
 set(_KRKRZ_VCPKG_SUBDIRS
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/external/movie-player"
@@ -182,6 +184,7 @@ set(VCPKG_MANIFEST_DIR "${CMAKE_BINARY_DIR}" CACHE PATH
     "vcpkg manifest directory (merged manifest written by krkrz_merge_vcpkg_manifest)" FORCE)
 
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
+krkrz_msvc_english_output()
 
 # macOS: src/core の sdl3/environ/macwindow.mm (Objective-C++)。 enable_language は
 # その言語を使うターゲットに共通する最上位で呼ぶ必要があり、 add_subdirectory 先の
