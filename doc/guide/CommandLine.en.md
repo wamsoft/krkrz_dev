@@ -145,6 +145,8 @@ The following options invoke only specific features of Kirikiri.
   Special strings such as $(exepath) in the data storage location are printed after substitution.
   
   Because the Kirikiri engine is a GUI application, simply running the Kirikiri executable with -printdatapath from the command prompt displays nothing. Use a pipe or redirection to capture the output.
+
+  Available in both the WINVER and SDL builds. The data storage folder is not created. Even if started without a project, the folder selection dialog is not shown. In the SDL build, the startup information log is written to the same standard output first, so take the data storage location from the last line of the output.
 - **-**license** (print the bundled licenses)**  
   Prints the license information held by the engine, plugins, and project data to standard output, and exits.
 
