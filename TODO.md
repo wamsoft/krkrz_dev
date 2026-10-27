@@ -14,7 +14,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | デモ整備 | [data/ROADMAP.md](data/ROADMAP.md) |
 | 多言語化 (デモの i18n / 公開ドキュメントの英語版) | [TODO-i18n.md](TODO-i18n.md) |
 | 標準ツールの改定 (リリーサ / 署名 / 破損チェック / ループチューナ / 画像・音声コンバータ) | [TODO-tools.md](TODO-tools.md) |
-| README の整理と英語版 (krkrz_dev / 外枠リポジトリ / 標準ツール / エンジン) | [TODO-readme.md](TODO-readme.md) |
+| ✅ README の整理と英語版 (krkrz_dev / 外枠リポジトリ / 標準ツール / エンジン) | [TODO-readme.md](TODO-readme.md) (**2026-10-20 に全 8 本完了**。共通構成 + ですます + `README_en.md`、鮮度は `tools/docgen/check_readme_en.py`。README の外の小さな残りは同ファイル «状況» に記載) |
 | 読み上げ (スクリーンリーダー対応) | [doc/specification/accessibility.md](doc/specification/accessibility.md) (Elements 側は `src/core/external/elements/docs/accessibility.md`) |
 | Window のサイズ/位置/ズーム/ビューポート仕様 | [src/core/doc/WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | Layer / Bitmap / ImageFunction の統合 | [src/core/doc/ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
@@ -29,11 +29,11 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 完了したものは末尾の「完了 (記録として残す)」へ移す。
 
-## 現況 (2026-10-15 時点)
+## 現況 (2026-10-27 時点)
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 21 | Elements/UI 5 / エンジン基盤 12 / ビルド・運用 4 (内訳: 中 11 / 低 9 / 検討中 1)。2026-10-15: 「パネルのパッド操作」を ✅。2026-10-15: 「GPU 版 Canvas の endEffect に opacity 引数が無い」を追加し、同日 ✅。2026-10-12: 「VideoOverlay の再生矩形」を ✅。2026-10-09: 「共通の xp3 作成 CLI」を標準ツール `krkrxp3` で ✅。2026-10-11〜12: 「SDL 版 VideoOverlay の再生矩形」「パネルのパッド操作」を追加 |
+| 予定・未着手 | 25 | Elements/UI 7 / エンジン基盤 12 / ビルド・運用 6 (内訳: 中 13 / 低 11 / 検討中 1)。2026-10-27: 項目と照合して数え直し、「多言語化」2 件 (デモ i18n / 公開ドキュメントの英語版) を ✅。2026-10-15: 「パネルのパッド操作」を ✅。2026-10-15: 「GPU 版 Canvas の endEffect に opacity 引数が無い」を追加し、同日 ✅。2026-10-12: 「VideoOverlay の再生矩形」を ✅。2026-10-09: 「共通の xp3 作成 CLI」を標準ツール `krkrxp3` で ✅。2026-10-11〜12: 「SDL 版 VideoOverlay の再生矩形」「パネルのパッド操作」を追加 |
 | 将来課題 | 8 | 着手時期未定 (中 4 / 低 3 / 検討中 1)。2026-10-27 に「ブラウザ表示 (リモート画面・音声)」を追加。2026-10-09 に「GPU モードの確立と描画系プラグインの SDL_GPU 版」を追加 |
 | 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 11 | 単発の小さいもの。着手順は問わない。2026-10-15: `-timerprec` の残骸を削除して ✅ |
@@ -171,8 +171,8 @@ registerHotKey の WINVER 配線)。
 | ✅ | macOS: layerExVector を読むと終了時に abort | exit() の静的破棄で tvg::Inlist<LoadModule> → GwLoader::~GwLoader → GwFontManager::retire が、先に破棄済みの mutex を lock して std::system_error (mutex lock failed)。2026-10-19 に ThorVG (wtnbgo fork) の GwFontManager と mutex を破棄しない形にして解消 (thorvg 1f709928、layerExVector / Elements の両方の ThorVG)。Mac で正常終了・クラッシュレポートなしを確認 |
 | 中 | 日本語版 MSVC でヘッダの依存関係が記録されない (ninja) | ビルドログに「メモ: インクルード ファイル:」がそのまま出る = ninja が /showIncludes の日本語表示を認識できず、ヘッダを変えても依存する cpp が再コンパイルされない。2026-10-19 に elements_modal (parse_from_string) と MsgImpl.cpp (新メッセージ) で古い obj が残りリンクエラーになった。対策候補: ビルド環境で VSLANG=1033 (英語表示) にする / CMAKE_CL_SHOWINCLUDES_PREFIX を合わせる / 再 configure で prefix を検出し直す |
 | 低 | 共有プラグインが静的リンクしたサードパーティのシンボルを公開している | krkreffekseer / minizip / sigcheck (Linux)、krkr_richtext / krkrthreepp / krkreffekseer / clipfile / psdfile 等 (macOS) が静的リンクしたライブラリのシンボルを数十〜数千個公開したまま。同じライブラリを 2 本のプラグインが別々に静的リンクすると同種の衝突が起き得る。対策候補 = `-Wl,--exclude-libs,ALL` (未検証) |
-| 中 | 多言語化: デモ用 i18n 基礎ライブラリ + 実効表示言語の公開 | `demolib/demo_i18n.tjs` (Elements の `strings` と同じ形の表を共用) と `System.uiLanguage` / `uiLanguageCandidates`。当面 ja / en、chs を後から足せる作り。SSOT = [TODO-i18n.md](TODO-i18n.md) A・B |
-| 中 | 多言語化: 公開ドキュメントの英語版 | 公開サイトの範囲のみ。mkdocs-static-i18n (接尾辞方式 `*.en.md`) + reference は JSON の翻訳カタログから生成 + 訳の鮮度チェック。SSOT = [TODO-i18n.md](TODO-i18n.md) C |
+| ✅ | 多言語化: デモ用 i18n 基礎ライブラリ + 実効表示言語の公開 | **2026-10-19 に完了**。`demolib/demo_i18n.tjs` (Elements の `strings` と同じ形の表を共用) と `System.uiLanguage` / `uiLanguageCandidates`。coretest_legacy 以外の全デモを日英対応し、埋め込みデモへ `?language=` を渡すところまで。SSOT = [TODO-i18n.md](TODO-i18n.md) A・B |
+| ✅ | 多言語化: 公開ドキュメントの英語版 | **2026-10-19 に完了** (以後は追従のみ)。mkdocs-static-i18n (接尾辞方式 `*.en.md`) + reference は JSON の翻訳カタログから生成 + 訳の鮮度チェック (`tools/docgen/check_translations.py en`)。2026-10-27 時点で手書き 106 / 106 ページ・reference 3426 / 3426 項目が訳済み。SSOT = [TODO-i18n.md](TODO-i18n.md) C |
 | 中 | krkrlive2d のドライバソースを版固定取得へ | ドライバ側 CMake がローカルパス (`LIVE2DLIB_FOLDER` / `CUBISM_SDK` 等) を直接参照する作りで、そのフォルダの版がずれると **umbrella の configure ごと失敗する** (実例: ドライバが `find_package(minizip)` を要求する版になり、本体 vcpkg マニフェストに minizip が無くて configure 不能)。 版を固定して fetch する形へ直すまで、`CMakeLists.txt` の `CUBISM_SDK` ブロックをコメントアウトしてビルド対象から外してある (2edc380)。 直したら除外を戻す |
 | 中 | リリースのバージョン運用を確定する | **実験中 API の扱いは 2026-09-06 に決定** (安定保証の対象外を `@experimental` で明示し、そこの非互換変更はマイナー。[Versioning.md](src/core/doc/Versioning.md) 「実験中 API」節)。番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する |
 | 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可。✅ どこからも呼ばれていなかった `src/core/generic/base/copy_if_differ.pl` は 2026-10-15 に削除 (src/core `8a5c88f9`) |
@@ -228,6 +228,8 @@ registerHotKey の WINVER 配線)。
 `sound` / `sound_3d` / `video` / `storage` / `ui_flow` /
 `data_parse` / `net_demo` / `movie_alpha` / `archive_demo` / `richtext_demo` の 10 本
 (多くは資材待ち。資材一覧は [data/DEMO-ASSETS.md](data/DEMO-ASSETS.md))。
+ROADMAP にはほかに、複合デモ `gl_plugin_mix` / `kag_mini`、elements_gallery への
+«データ側で完結» 4 点の追加、個別プラグインの sample/ 整理、WIN 専用プラグインのデモ (後回し) が残っている。
 資材不要のデモは全て実装済み (残りは資材待ち)。
 ほかに krkrz_web のランチャ起動トークン (スラッシュ入り) 対応が残っている。
 doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビルド・再ステージングは

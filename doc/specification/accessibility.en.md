@@ -1,5 +1,5 @@
 ---
-source_hash: 483d0edc0871
+source_hash: 0f397dcc6468
 ---
 
 # Accessibility (Screen Reader) Support Design: Kirikiri Z Integration
