@@ -1,5 +1,5 @@
 ---
-source_hash: 6205ab06bac0
+source_hash: 0b3dfec142eb
 ---
 
 # Linux Distribution Packages (krkrz_linux)
@@ -160,11 +160,11 @@ For the full procedure and common pitfalls, see [Steam Deck Hardware Testing](st
 
 - AppImage output (add `AppRun` and package with `appimagetool`)
 - As with krkrz_android, xp3 archives are created beforehand on the project side and imported with `assetPack`'s
-  `flatten` (the wrapper does not create them). A common CLI for creating plain, unencrypted xp3 archives is
-  planned on the krkrz_dev side
+  `flatten` (the wrapper does not create them). Plain, unencrypted xp3 archives can be made with the standard
+  tool `krkrxp3`
 - Flatpak when there is demand
-- macOS (.app) / Windows / Xbox are being investigated, aligning them with wrappers that share the
-  `cmake` / `assetPack` format of `*-config.json`
+- Windows now has its wrapper with the same format, [krkrz_windows](windows_package.md). Xbox / Store are handled
+  by krkrz_gdk. macOS (.app) waits until it can be tested on a real Mac
 
 ## Related
 

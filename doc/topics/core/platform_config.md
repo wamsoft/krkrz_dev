@@ -1,7 +1,7 @@
 # 外枠リポジトリの共通設定 (cmake / assetPack)
 
-ブラウザ / Android / iOS / Linux / Microsoft GDK 向けのビルドは、それぞれ別の「外枠」リポジトリで
-行います (krkrz_web / krkrz_android / krkrz_ios / krkrz_linux / krkrz_gdk)。どの外枠も
+ブラウザ / Android / iOS / Linux / Windows / Microsoft GDK 向けのビルドは、それぞれ別の「外枠」リポジトリで
+行います (krkrz_web / krkrz_android / krkrz_ios / krkrz_linux / krkrz_windows / krkrz_gdk)。どの外枠も
 タイトルごとの設定ファイル (`app-config.json` など) を 1 本持ち、そのうち
 
 - **`cmake`** — どのプラグインを組み込むか
@@ -20,6 +20,7 @@ mygame/                     ← PROJECT_DIR
 ├── app-config.json         ← krkrz_android
 ├── ios-config.json         ← krkrz_ios
 ├── linux-config.json       ← krkrz_linux
+├── windows-config.json     ← krkrz_windows
 ├── gdk-config.json         ← krkrz_gdk
 └── web-config.json         ← krkrz_web
 ```
@@ -31,6 +32,7 @@ mygame/                     ← PROJECT_DIR
 | [krkrz_android](https://github.com/wamsoft/krkrz_android) | `app-config.json` | ○ | APK の `assets/` | `resOverride` (res の上書き)、`padPacks` (Play Asset Delivery) |
 | [krkrz_ios](https://github.com/wamsoft/krkrz_ios) | `ios-config.json` | ○ (全プラグインを静的リンク) | アプリバンドル直下 | `graphics` (gles / metal)、`icon`、`infoPlist` |
 | [krkrz_linux](https://github.com/wamsoft/krkrz_linux) | `linux-config.json` | ○ (+ `buildType` / `options`) | 実行ファイルと同じフォルダ | `exeName`、`orgName` / `appName`、`desktop` |
+| krkrz_windows | `windows-config.json` | ○ (+ `buildType` / `options`) | 実行ファイルと同じフォルダ | `exeName`、`variant` (sdl / win)、`release` (リリーサ)、`saveData`、`checkTool`、`package.installer` |
 | [krkrz_gdk](https://github.com/wamsoft/krkrz_gdk) | `gdk-config.json` | ○ (全プラグインを静的リンク、+ `options`) | 実行ファイルと同じフォルダ | `targets`、`identity`、`gpuShaderDir` |
 | [krkrz_web](https://github.com/wamsoft/krkrz_web) | `web-config.json` | — (共有バイナリなのでタイトルごとに組まない) | `gamedata/` (`web://` で配信) | `sources[].delivery` (先読み)、`lowercase`、`args` |
 
@@ -140,7 +142,7 @@ mygame/                     ← PROJECT_DIR
 
 外枠が自分で置くファイル (エンジン一式・設定から作るファイルなど) との順番は外枠ごとに違います。
 
-- **krkrz_linux / krkrz_gdk** — エンジン一式と生成物を先に置き、そのあとに `assetPack` を処理します。
+- **krkrz_linux / krkrz_windows / krkrz_gdk** — エンジン一式と生成物を先に置き、そのあとに `assetPack` を処理します。
   つまり同じ名前のファイルを `assetPack` で上書きすることはできません
 - **krkrz_android** — エンジンの必須資材 (`src/core/resource`) も `sources` の 1 項目として書きます。
   プロジェクトフォルダの `resource/` をその前に書けば、個別のファイルを差し替えられます
@@ -167,3 +169,4 @@ mygame/                     ← PROJECT_DIR
 
 - 各外枠の README — 機種ごとの項目・ビルド手順
 - [Linux 版の配布パッケージ](linux_package.md) — krkrz_linux の配布形式の考え方
+- [Windows 版の配布パッケージ](windows_package.md) — krkrz_windows の配布形式・セーブの場所・署名

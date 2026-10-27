@@ -1,11 +1,11 @@
 ---
-source_hash: 75511afdf2fa
+source_hash: 7fda9f92c724
 ---
 
 # Shared settings of the platform wrappers (cmake / assetPack)
 
-Builds for the browser, Android, iOS, Linux and Microsoft GDK are done in separate "wrapper"
-repositories (krkrz_web / krkrz_android / krkrz_ios / krkrz_linux / krkrz_gdk). Each wrapper reads
+Builds for the browser, Android, iOS, Linux, Windows and Microsoft GDK are done in separate "wrapper"
+repositories (krkrz_web / krkrz_android / krkrz_ios / krkrz_linux / krkrz_windows / krkrz_gdk). Each wrapper reads
 one settings file per title (`app-config.json` and so on), and the following parts of it have the
 same format and behave the same way in every wrapper:
 
@@ -26,6 +26,7 @@ mygame/                     ← PROJECT_DIR
 ├── app-config.json         ← krkrz_android
 ├── ios-config.json         ← krkrz_ios
 ├── linux-config.json       ← krkrz_linux
+├── windows-config.json     ← krkrz_windows
 ├── gdk-config.json         ← krkrz_gdk
 └── web-config.json         ← krkrz_web
 ```
@@ -37,6 +38,7 @@ mygame/                     ← PROJECT_DIR
 | [krkrz_android](https://github.com/wamsoft/krkrz_android) | `app-config.json` | Yes | `assets/` of the APK | `resOverride` (overriding res), `padPacks` (Play Asset Delivery) |
 | [krkrz_ios](https://github.com/wamsoft/krkrz_ios) | `ios-config.json` | Yes (all plugins linked statically) | Directly under the app bundle | `graphics` (gles / metal), `icon`, `infoPlist` |
 | [krkrz_linux](https://github.com/wamsoft/krkrz_linux) | `linux-config.json` | Yes (plus `buildType` / `options`) | The executable's folder | `exeName`, `orgName` / `appName`, `desktop` |
+| krkrz_windows | `windows-config.json` | Yes (plus `buildType` / `options`) | The executable's folder | `exeName`, `variant` (sdl / win), `release` (the releaser), `saveData`, `checkTool`, `package.installer` |
 | [krkrz_gdk](https://github.com/wamsoft/krkrz_gdk) | `gdk-config.json` | Yes (all plugins linked statically, plus `options`) | The executable's folder | `targets`, `identity`, `gpuShaderDir` |
 | [krkrz_web](https://github.com/wamsoft/krkrz_web) | `web-config.json` | — (a shared binary, not built per title) | `gamedata/` (served through `web://`) | `sources[].delivery` (prefetch), `lowercase`, `args` |
 
@@ -149,7 +151,7 @@ a later source.
 The order relative to the files the wrapper places itself (the engine files, files generated from
 the settings and so on) differs by wrapper.
 
-- **krkrz_linux / krkrz_gdk** — place the engine files and generated files first, and then process
+- **krkrz_linux / krkrz_windows / krkrz_gdk** — place the engine files and generated files first, and then process
   `assetPack`. So a file with the same name cannot be overridden through `assetPack`
 - **krkrz_android** — the engine's required resources (`src/core/resource`) are also written as one
   item of `sources`. Write the `resource/` of your project folder before it to replace individual files
@@ -176,3 +178,4 @@ almost no time.
 
 - The README of each wrapper — platform-specific keys and build steps
 - [Linux distribution package](linux_package.md) — how krkrz_linux's distribution format is designed
+- [Windows distribution package](windows_package.md) — krkrz_windows's distribution formats, save data location and signing

@@ -148,11 +148,11 @@ gameid は英数字・`_`・`.` だけです ( ハイフン不可 )。2026-10-06
 
 - AppImage 出力 ( `AppRun` を足して `appimagetool` で固める )
 - xp3 アーカイブは krkrz_android と同じく案件側で事前に作り、`assetPack` の
-  `flatten` で取り込む ( 外枠では作らない )。暗号化なしの通常の xp3 を作る共通 CLI を
-  krkrz_dev 側に用意する予定
+  `flatten` で取り込む ( 外枠では作らない )。暗号化なしの通常の xp3 は標準ツールの
+  `krkrxp3` で作れる
 - Flatpak は需要が出てから
-- macOS ( .app ) / Windows / Xbox も、`*-config.json` の `cmake` / `assetPack`
-  書式を共通にした外枠で揃える方向で調査中
+- Windows は [krkrz_windows](windows_package.md) で同じ書式の外枠ができた。Xbox / Store は krkrz_gdk。
+  macOS ( .app ) は Mac の実機で確かめられるようになってから
 
 ## 関連
 

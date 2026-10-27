@@ -1,6 +1,6 @@
-# Windows 版の配布パッケージ外枠 (krkrz_windows) 設計案
+# Windows 版の配布パッケージ外枠 (krkrz_windows) 設計
 
-**状態: P1 済み (2026-10-27、ローカルのリポジトリ `../krkrz_windows`。GitHub への作成・push はまだ)。§10 の決めどころは同日決定済み。** 索引は [TODO.md](TODO.md)。
+**状態: P1〜P5 済み (2026-10-27、ローカルのリポジトリ `../krkrz_windows`。GitHub への作成・push はまだ)。§10 の決めどころは同日決定済み。対象は x64 だけ (x86 は扱わない、同日決定)。** 公開ドキュメント = [doc/topics/core/windows_package.md](doc/topics/core/windows_package.md)。設定項目と手順の SSOT は krkrz_windows の README (この文書は設計の経緯と段階の記録)。 索引は [TODO.md](TODO.md)。
 
 吉里吉里Z 本体とタイトルのデータをまとめて、Windows 向けの配布物 (そのまま動くフォルダ / zip /
 任意でインストーラ) を作る外枠リポジトリ **krkrz_windows** を新設する。krkrz_linux
@@ -39,7 +39,7 @@ Microsoft Store / Xbox 向け (msixvc) は krkrz_gdk の担当なので、ここ
 <PROJECT_DIR>/build/windows/
   package/<name>/                    そのまま動くフォルダ (Steam のデポ・itch.io・DLsite などはこれをそのまま使う)
     <exeName>.exe                    リリーサで作った exe (アイコン・版情報・埋め込みオプション入り)
-    plugin64/*.dll  (x86 は plugin/)
+    plugin64/*.dll
     SDL3.dll, d3dcompiler_47.dll, libEGL.dll, libGLESv2.dll   (WINVER 版は SDL3.dll なし)
     data.xp3  または  exe に結合 / data/ フォルダ
     *.sig                            署名するとき
@@ -49,7 +49,8 @@ Microsoft Store / Xbox 向け (msixvc) は krkrz_gdk の担当なので、ここ
   dist/<name>-<version>-windows-<arch>-setup.exe     (installer を選んだとき)
 ```
 
-先勝ちの順は krkrz_linux と同じく «エンジン一式 → 生成物 (リリーサの exe など) → `assetPack`»。
+先勝ちの順は «リリーサの出力 (exe / data.xp3 / `.sig`) → 破損チェックツール → エンジン一式 → ANGLE → `assetPack`»。
+外枠が置くものを `assetPack` で上書きできない点は krkrz_linux と同じ。
 
 ---
 
@@ -57,19 +58,22 @@ Microsoft Store / Xbox 向け (msixvc) は krkrz_gdk の担当なので、ここ
 
 | コマンド | 内容 |
 |---|---|
-| `build` | krkrz_dev を CMake で configure / build / install する。preset は `variant` と `arch` から決める (`x64-windows-win` など)。`cmake.plugins` などは他の外枠と同じく `-D` で渡す。標準ツール (krkrrelease を含む) もここでできる |
+| `build` | 外枠の `CMakeLists.txt` (krkrz_dev のトップと同じ手順) を configure / build / install する。`variant` は `-DKRKRZ_VARIANT=SDL/WIN`、triplet は `x64-windows-static`。プラグイン構成は生成ファイル `myapp.cmake` で渡す (他の外枠と同じ)。標準ツール (krkrrelease / krkrsign / krkrcheck) もここでできる |
 | `stage` | install 先からエンジン一式を `package/<name>/` に写し、`release.json` を生成してリリーサを呼び、`assetPack` を取り込む |
 | `sign` | (任意) Authenticode 署名 → `.sig` の作り直し (§6) |
 | `package` | `package.formats` に従って zip / インストーラを作る |
 | `all` | `build` → `stage` → `sign` → `package` |
 
 ビルドする PC の前提は krkrz_dev と同じ (Visual Studio 2022 v17.14 と同梱 CMake / Ninja、`VCPKG_ROOT`)。
-加えて Python 3 (標準ライブラリのみ)。インストーラを作るときは Inno Setup 6 (`ISCC.exe`)、
+加えて Python 3 (標準ライブラリのみ)。インストーラを作るときは Inno Setup 6.3 以降 (`ISCC.exe`。7 で確認)、
 Authenticode 署名をするときは Windows SDK の `signtool.exe`。
 
 ---
 
-## 4. windows-config.json (案)
+## 4. windows-config.json
+
+設計時の案。実装済みの項目の一覧は krkrz_windows の README が SSOT (`checkTool.caption` / `notice`、
+`package.installer.dirName` / `icon`、`runtime.angleDir` などを足してある)。
 
 ```json
 {
@@ -119,10 +123,10 @@ Authenticode 署名をするときは Windows SDK の `signtool.exe`。
 | `name` / `version` | 表示名 / 版 (zip・インストーラの名前、インストーラの版、版情報の FileVersion / ProductVersion) |
 | `exeName` | 配る exe の名前 (リリーサの出力名) |
 | `variant` | `sdl` (SDL 版の Windows、既定) / `win` (WINVER) (§5) |
-| `arch` | `x64` (既定) / `x86`。`arm64` は課題 (§11) |
+| `arch` | `x64` だけ。x86 は扱わない (2026-10-27 決定)。`arm64` は課題 (§11) |
 | `cmake.*` / `assetPack` | 外枠共通の書式 |
 | `release.*` | リリーサの設定 (`release.json`) にそのまま写す。`version` は `name` / `version` から補う |
-| `runtime.angleDir` | ANGLE (`libEGL.dll` / `libGLESv2.dll` / `d3dcompiler_47.dll`) の置き場所。krkrz_dev の install には入らない (手動配置の DLL) ので外枠が取り込む。空なら環境変数 `KRKRZ_ANGLE_DIR`、それも無ければ krkrz_dev の `plugin64/` (x86 は `plugin/`)。見つからなければ警告して続ける |
+| `runtime.angleDir` | ANGLE (`libEGL.dll` / `libGLESv2.dll` / `d3dcompiler_47.dll`) の置き場所。krkrz_dev の install には入らない (手動配置の DLL) ので外枠が取り込む。空なら環境変数 `KRKRZ_ANGLE_DIR`、それも無ければ krkrz_dev の `plugin64/`。見つからなければ警告して続ける |
 | `saveData.location` | セーブデータの場所 (§7)。`documents` (既定) / `appdata` / `exe`。`-datapath` を作って埋め込みオプションへ足す |
 | `checkTool` | 破損チェックツールの同梱 (§8.1)。`exeName` (配る名前)、`publicKey` (`krkrsign` で作った公開鍵)、任意で画面の文言 |
 | `package.formats` | `dir` / `zip` / `installer` |
@@ -160,6 +164,13 @@ WINVER 版は基本的に**従来のタイトルを続けて使うため**の選
 順序: リリーサ (exe 書き換え・xp3) → Authenticode (exe / DLL) → `.sig` → zip / インストーラ作成 →
 インストーラに Authenticode。
 
+**exe の署名の置き場所に注意** (2026-10-27 に確認): krkrsign は «署名領域を持つ吉里吉里の exe» なら署名を
+exe の中へ書き、それ以外は隣の `.sig` に書く。埋め込みの場合、署名のハッシュは PE ヘッダを含む
+(オプション領域から先だけを除く) ので Authenticode でヘッダが変わると合わなくなり、逆に Authenticode の後で
+埋め込むと今度は Authenticode が壊れる (両立しない)。今の本体の exe (WINVER / SDL とも) は krkrsign が隣の
+`.sig` に出すので問題は起きない。将来 exe に署名を埋め込む形に戻すなら、Authenticode を使うタイトルでは
+exe の署名を隣の `.sig` に出す必要がある。
+
 ---
 
 ## 7. セーブデータの場所
@@ -182,7 +193,8 @@ WINVER 版は基本的に**従来のタイトルを続けて使うため**の選
 
 ## 8. インストーラ (Inno Setup)
 
-外枠に `.iss` のテンプレートを置き、`windows-config.json` から値を埋めて `ISCC.exe` で作る。
+`windows-config.json` から Inno Setup のスクリプト (`generated/installer/setup.iss`、BOM 付き UTF-8) を生成し、
+`ISCC.exe` で作る (テンプレートのファイルは置かず、`tools/krkrz_windows.py` が組み立てる)。
 `ISCC.exe` が見つからないときは `installer` を飛ばして警告する (zip までは作る)。
 
 - **既定は管理者権限なしのユーザごとのインストール** (`PrivilegesRequired=lowest`、`{localappdata}\Programs\<name>`)。
@@ -219,10 +231,10 @@ NSIS や WiX (MSI) は採らない。NSIS は同等のことができるが利�
 | 段階 | 内容 |
 |---|---|
 | ✅ P1 | **2026-10-27 済み**: リポジトリの雛形 (README 日英・LICENSE MIT・Makefile・`tools/krkrz_windows.py`・サンプルの `windows-config.json`)。`build` / `stage` (リリーサ呼び出し・assetPack) / `package` の `dir` と `zip`。サンプルで SDL 版 x64 を確認。**確認**: サンプルを SDL 版 x64 でビルド (本体・プラグイン 26 本・標準ツール) → リリーサで `krkrz-sample.exe` (版情報・`datapath` の埋め込み) → 201 ファイルのフォルダと zip。zip を展開した場所から起動して `-demotest` 全 24 シーン ok、セーブ先がマイドキュメント\krkrz-sample になることを確認。実装中に足したもの: `runtime.angleDir` (ANGLE の取り込み)、umbrella の `cmake/KrkrzTools.cmake` に `KRKRZ_TOOLS_SOURCE_DIR` (外枠から標準ツールをビルドするため)、`tools/docgen/check_readme_en.py` の対象に krkrz_windows |
-| P2 | `saveData` → `-datapath` の埋め込み、`variant: "win"` (WINVER)、`x86` (plugin/ フォルダ、x86 の dev 環境)、破損チェックツールの同梱 (フォルダ / zip) |
-| P3 | Inno Setup のインストーラ (ユーザごと・管理者・選択、日英、ショートカット、更新インストール、破損チェックツールのコンポーネント) |
-| P4 | Authenticode と `.sig` の作り直し (§6) |
-| P5 | 公開ドキュメント (`doc/topics/core/windows_package.md`、日英)、`platform_config.md` に外枠として追記 |
+| ✅ P2 | **2026-10-27 済み**: `saveData` → `-datapath` の埋め込み (P1 で実装済み)、`variant: "win"` (WINVER)、破損チェックツールの同梱 (フォルダ / zip)。**x86 は対象から外した** (2026-10-27 決定。`arch` は x64 だけ)。**確認**: WINVER 版 x64 をビルド〜zip、展開した場所から `-demotest` 全 24 シーン ok、埋め込んだ保存場所 (マイドキュメント)。破損チェックツールを `checkTool.exeName` に改名して同梱し、そのままで全件正常 (終了コード 0)、data.xp3 を 1 バイト変えると «破損» (終了コード 1)。ついでに見つけた本体の不具合: WINVER の `-printdatapath` が日本語のパスを `?` に化けさせていた (`wprintf`) → `TVPWriteStdOutText` に揃えて修正。ほか、`PROJECT_DIR` が深いと FetchContent (HarfBuzz のテスト用ファイル) がパス長の上限で configure に失敗する (README に注意書き)。また、データを xp3 にまとめるとコアデモの webui シーンが例外で止まっていた (`web/` の候補パス `../webui/web/` が xp3 の中では «無い» ではなく例外になる) → 候補を try で調べるよう修正し、xp3 のパッケージから `-demotest` 全 24 シーン ok |
+| ✅ P3 | **2026-10-27 済み**: Inno Setup のインストーラ (`package.formats` の `installer`。`generated/installer/setup.iss` を生成して ISCC)。ユーザごと・管理者・選択、日英、スタートメニュー / デスクトップのショートカット、更新インストール (`appId`)、破損チェックツールのコンポーネント。ISCC が無ければ警告して飛ばす。**確認** (Inno Setup 7、WINVER 版): 無人インストールで `%LOCALAPPDATA%\Programs\<name>` に入り、ショートカット 2 つと «アプリ» の一覧への登録、入った先で破損チェックが正常・起動、アンインストールでアプリ・ショートカット・登録が消えセーブの場所は残る |
+| ✅ P4 | **2026-10-27 済み**: `sign` コマンド (Authenticode → `.sig` の作り直し、§6)。証明書は `KRKRZ_SIGN_CERT` / `KRKRZ_SIGN_PFX` (+ `_PASSWORD`)、`KRKRZ_SIGN_TIMESTAMP_URL`。信頼された署名が既にあるもの (`d3dcompiler_47.dll`) は飛ばす。インストーラにも署名。stage はハードリンクで置くので、書き換える前にリンクを切る。**確認** (openssl で作った自己署名のテスト証明書): exe・DLL・破損チェックツール・インストーラに署名が付き、install 側の exe と ANGLE の元は書き換わらない、作り直した `.sig` で破損チェックが正常、署名した exe が起動 |
+| ✅ P5 | **2026-10-27 済み**: 公開ドキュメント [windows_package.md](doc/topics/core/windows_package.md) (日英)、[platform_config.md](doc/topics/core/platform_config.md) に外枠として追記、linux_package.md の «今後» を更新、mkdocs の nav |
 
 ---
 
@@ -234,8 +246,13 @@ NSIS や WiX (MSI) は採らない。NSIS は同等のことができるが利�
 - [x] **Authenticode 署名を手順に含める** (証明書が無ければ飛ばす) (§6)
 - [x] **破損チェックツール (`krkrcheck`) も一緒に配れる**ようにする (§8.1)
 - [x] リポジトリ名 `krkrz_windows`、他の外枠と同じく public・MIT
+- [x] **対象は x64 だけ**。x86 は扱わない (P2 の途中で決定)
 
 ## 11. 課題
 
 - [ ] **arm64**: 本体に `arm64-windows(-win)` の preset はあるが、Windows arm64 の実機で確認できていない
   (`TJS_64BIT_OS` が MSVC arm64 で定義されない件も TODO.md にある)。実機が用意できたら対象に加える
+- [ ] **GitHub への公開**: リポジトリはローカルだけ。作成・push は未 (公開リポジトリなので作るときに確認する)
+- [ ] **まだ確かめていないこと**: 正規のコード署名証明書とタイムスタンプでの署名 (自己署名のテスト証明書だけで確認)、
+  インストーラの `installMode: admin` / `ask`、上書きインストールでの更新、SDL 版でのインストーラ・署名
+  (処理は変種に依らない)、`release.data.mode: bind` と署名・破損チェックの組み合わせ
