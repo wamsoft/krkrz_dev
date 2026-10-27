@@ -1,5 +1,5 @@
 ---
-source_hash: eb53fe88e869
+source_hash: b806fc4561a6
 ---
 
 # Command-Line Options
@@ -128,9 +128,11 @@ The following options invoke only specific features of Kirikiri.
 - **-**userconf** (launch the end-user configuration tool)**  
   Launches the end-user configuration tool built into the engine ( [Kirikiri Configuration](Configure.md) ). The game does not start; the configuration screen opens in a browser (Windows / Linux / macOS; shared by the native Windows (WINVER) build and the SDL build).
 - **-**userconfbrowser** (how to open the configuration screen)**  
-  Specifies how the -userconf configuration screen is opened. The value is one of **'app' (default; Edge / Chrome app window, or the default browser if neither is available)**, **'default' (the default browser)**, or **'none' (do not open)**. With 'none', the URL of the configuration screen is written to the log; open it in a browser.
+  Specifies how the -userconf configuration screen, and the version information page of -about in the SDL build, are opened. The value is one of **'app' (default; Edge / Chrome app window, or the default browser if neither is available)**, **'default' (the default browser)**, or **'none' (do not open)**. With 'none', the URL of the configuration screen is written to the log; open it in a browser.
 - **-**about** (show the copyright information dialog)**  
   Shows the "Version, copyright, and environment information" dialog. It also shows the list of licenses of the bundled components (the full text can be retrieved with -license=<name>).
+
+  In the SDL build, instead of a dialog, the version information page is opened in a browser (app window), the same way as -userconf, and the engine exits when it is closed. The environment information can be copied with a button. Choose how it is opened with -userconfbrowser. In environments where a browser cannot be opened (such as Steam Deck game mode (gamescope)), the same content is printed to standard output and the engine exits. Even if started without a project, the folder selection dialog is not shown.
 - **-**sel** (show the "Select folder/archive" dialog)**  
   Shows the "Select folder/archive" dialog. Data such as data.xp3 is not detected automatically.
   

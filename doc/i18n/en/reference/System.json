@@ -431,14 +431,14 @@
       }
     },
     "System.showVersion": {
-      "hash": "effa891328fc",
+      "hash": "324aa3c41264",
       "ja": {
         "summary": "aboutダイアログの表示(1.1.0以降)",
-        "description": "aboutダイアログを表示します。"
+        "description": "aboutダイアログを表示します。\n\nWINVER 版は「バージョン・著作権・環境情報」のダイアログを表示し、閉じるまで戻りません。\nSDL 版はブラウザ ( アプリ表示 ) でバージョン情報の画面を開き、すぐに戻ります\n( ゲームは止まりません。もう開いていれば開き直すだけです )。\nブラウザを開けない環境 ( Steam Deck のゲームモード (gamescope) など ) では何も表示せず、ログに出すだけです。\n表示する内容は [System.getAboutString](#getaboutstring) で文字列として取れます。"
       },
       "tr": {
         "summary": "Shows the about dialog (1.1.0 and later)",
-        "description": "Shows the about dialog."
+        "description": "Shows the about dialog.\n\nThe WINVER build shows the “version, copyright, and environment information” dialog and does not return until it is closed.\nThe SDL build opens the version information page in a browser (app window) and returns immediately\n(the game does not stop; if the page is already open, it is just reopened).\nIn environments where a browser cannot be opened (such as Steam Deck game mode (gamescope)), nothing is shown and only a log line is written.\nThe same content can be obtained as a string with [System.getAboutString](#getaboutstring)."
       }
     },
     "System.dumpHeap": {
