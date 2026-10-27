@@ -1,6 +1,6 @@
 # Windows 版の配布パッケージ外枠 (krkrz_windows) 設計案
 
-**状態: 設計案 (2026-10-27)。§10 の決めどころは同日決定済み。未着手。** 索引は [TODO.md](TODO.md)。
+**状態: P1 済み (2026-10-27、ローカルのリポジトリ `../krkrz_windows`。GitHub への作成・push はまだ)。§10 の決めどころは同日決定済み。** 索引は [TODO.md](TODO.md)。
 
 吉里吉里Z 本体とタイトルのデータをまとめて、Windows 向けの配布物 (そのまま動くフォルダ / zip /
 任意でインストーラ) を作る外枠リポジトリ **krkrz_windows** を新設する。krkrz_linux
@@ -122,6 +122,7 @@ Authenticode 署名をするときは Windows SDK の `signtool.exe`。
 | `arch` | `x64` (既定) / `x86`。`arm64` は課題 (§11) |
 | `cmake.*` / `assetPack` | 外枠共通の書式 |
 | `release.*` | リリーサの設定 (`release.json`) にそのまま写す。`version` は `name` / `version` から補う |
+| `runtime.angleDir` | ANGLE (`libEGL.dll` / `libGLESv2.dll` / `d3dcompiler_47.dll`) の置き場所。krkrz_dev の install には入らない (手動配置の DLL) ので外枠が取り込む。空なら環境変数 `KRKRZ_ANGLE_DIR`、それも無ければ krkrz_dev の `plugin64/` (x86 は `plugin/`)。見つからなければ警告して続ける |
 | `saveData.location` | セーブデータの場所 (§7)。`documents` (既定) / `appdata` / `exe`。`-datapath` を作って埋め込みオプションへ足す |
 | `checkTool` | 破損チェックツールの同梱 (§8.1)。`exeName` (配る名前)、`publicKey` (`krkrsign` で作った公開鍵)、任意で画面の文言 |
 | `package.formats` | `dir` / `zip` / `installer` |
@@ -217,7 +218,7 @@ NSIS や WiX (MSI) は採らない。NSIS は同等のことができるが利�
 
 | 段階 | 内容 |
 |---|---|
-| P1 | リポジトリの雛形 (README 日英・LICENSE MIT・Makefile・`tools/krkrz_windows.py`・サンプルの `windows-config.json`)。`build` / `stage` (リリーサ呼び出し・assetPack) / `package` の `dir` と `zip`。サンプルで SDL 版 x64 を確認 |
+| ✅ P1 | **2026-10-27 済み**: リポジトリの雛形 (README 日英・LICENSE MIT・Makefile・`tools/krkrz_windows.py`・サンプルの `windows-config.json`)。`build` / `stage` (リリーサ呼び出し・assetPack) / `package` の `dir` と `zip`。サンプルで SDL 版 x64 を確認。**確認**: サンプルを SDL 版 x64 でビルド (本体・プラグイン 26 本・標準ツール) → リリーサで `krkrz-sample.exe` (版情報・`datapath` の埋め込み) → 201 ファイルのフォルダと zip。zip を展開した場所から起動して `-demotest` 全 24 シーン ok、セーブ先がマイドキュメント\krkrz-sample になることを確認。実装中に足したもの: `runtime.angleDir` (ANGLE の取り込み)、umbrella の `cmake/KrkrzTools.cmake` に `KRKRZ_TOOLS_SOURCE_DIR` (外枠から標準ツールをビルドするため)、`tools/docgen/check_readme_en.py` の対象に krkrz_windows |
 | P2 | `saveData` → `-datapath` の埋め込み、`variant: "win"` (WINVER)、`x86` (plugin/ フォルダ、x86 の dev 環境)、破損チェックツールの同梱 (フォルダ / zip) |
 | P3 | Inno Setup のインストーラ (ユーザごと・管理者・選択、日英、ショートカット、更新インストール、破損チェックツールのコンポーネント) |
 | P4 | Authenticode と `.sig` の作り直し (§6) |

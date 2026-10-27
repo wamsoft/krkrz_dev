@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """README_en.md (英語版 README) の鮮度チェック
 
-krkrz_dev と外枠リポジトリ (krkrz_android / krkrz_ios / krkrz_linux / krkrz_gdk / krkrz_web)、
+krkrz_dev と外枠リポジトリ (krkrz_android / krkrz_ios / krkrz_linux / krkrz_gdk / krkrz_web / krkrz_windows)、
 標準ツール (src/tools/krkrz_tools)、エンジン (src/core) の README_en.md は、先頭行に
 
     <!-- source_hash: 0123456789ab -->
@@ -27,7 +27,7 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-WRAPPERS = ["krkrz_android", "krkrz_ios", "krkrz_linux", "krkrz_gdk", "krkrz_web"]
+WRAPPERS = ["krkrz_android", "krkrz_ios", "krkrz_linux", "krkrz_gdk", "krkrz_web", "krkrz_windows"]
 HASH_RE = re.compile(r"\A<!-- source_hash: ([0-9a-f]{12}|[^>]*?) -->\r?\n")
 
 

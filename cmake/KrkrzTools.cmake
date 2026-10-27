@@ -14,7 +14,12 @@
 # (x64-linux / x64-osx などは vcpkg の既定で静的ライブラリなので、そのまま exe 1 本になる)。
 # 初回は krkrz_tools 用の vcpkg ライブラリ (静的版) のビルドで時間がかかる。
 #---------------------------------------------------------------------------
-set(_KRKRZ_TOOLS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/krkrz_tools")
+# 外枠 (krkrz_windows など) から include するときは KRKRZ_TOOLS_SOURCE_DIR で場所を渡す
+if(DEFINED KRKRZ_TOOLS_SOURCE_DIR)
+    set(_KRKRZ_TOOLS_DIR "${KRKRZ_TOOLS_SOURCE_DIR}")
+else()
+    set(_KRKRZ_TOOLS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/krkrz_tools")
+endif()
 
 if(ANDROID OR IOS OR EMSCRIPTEN)
     set(_krkrz_tools_default OFF)
