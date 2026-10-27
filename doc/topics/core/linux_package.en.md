@@ -1,5 +1,5 @@
 ---
-source_hash: acf3168c9a8b
+source_hash: 6205ab06bac0
 ---
 
 # Linux Distribution Packages (krkrz_linux)
@@ -106,6 +106,16 @@ script on Linux (only those two are `global`) and with the linker's `-exported_s
 If you build with your own CMake, add `-Wl,--version-script=<file>` on Linux (with the content
 `{ global: V2Link; V2Unlink; local: *; };`) or `-Wl,-exported_symbol,_V2Link
 -Wl,-exported_symbol,_V2Unlink` on macOS.
+
+### Exception unwinding (libgcc_s.so.1, 2026-10-27 onward)
+
+The engine and plugins use `libgcc_s.so.1` (a library present on every Linux system). The
+baseline gcc links libgcc statically, so the engine and each plugin used to carry their own copy of
+the exception unwinder, and an error raised inside a plugin (for example a file that
+`Scripts.evalJSONStorage` cannot read) crashed the process before `try` / `catch` could catch it.
+If you build a plugin with your own CMake, add
+`-Wl,--push-state,--no-as-needed -l:libgcc_s.so.1 -Wl,--pop-state` to its link options on Linux
+(`krkrz_plugin()` adds it automatically).
 
 ## Save data location (2026-10 onward)
 
