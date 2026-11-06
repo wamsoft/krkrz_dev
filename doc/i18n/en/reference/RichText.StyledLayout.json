@@ -101,6 +101,39 @@
         "description": "Becomes true after layout() is called."
       }
     },
+    "krkr_richtext:RichText.StyledLayout.breakStrategy": {
+      "hash": "d06e978f85e1",
+      "ja": {
+        "summary": "行分割戦略 (RichText.BREAK_GREEDY / BREAK_HIGH_QUALITY / BREAK_BALANCED)",
+        "description": "layout() の前に設定します。既定は BREAK_HIGH_QUALITY です。"
+      },
+      "tr": {
+        "summary": "Line breaking strategy (RichText.BREAK_GREEDY / BREAK_HIGH_QUALITY / BREAK_BALANCED)",
+        "description": "Set it before layout(). The default is BREAK_HIGH_QUALITY."
+      }
+    },
+    "krkr_richtext:RichText.StyledLayout.writingMode": {
+      "hash": "8b3bf4e23155",
+      "ja": {
+        "summary": "組み方向 (RichText.WRITING_HORIZONTAL / WRITING_VERTICAL_RL / WRITING_VERTICAL_LR)",
+        "description": "layout() の前に設定します。既定は横組みです。\n縦組みでは maxHeight が列の長さ、maxWidth が列を並べる幅になります。\n列の中の揃えには hAlign (HALIGN_LEFT = 行頭 / CENTER / RIGHT = 行末) を使い、vAlign は使いません。\n縦組みの文字の大きさ・太さ・フォントは \"default\" のスタイルで揃い、タグで変えられるのは\n外観 (色・縁取り・影) とルビ (<ruby text=...>)、縦中横 (<tcy>...</tcy>) です。"
+      },
+      "tr": {
+        "summary": "Writing direction (RichText.WRITING_HORIZONTAL / WRITING_VERTICAL_RL / WRITING_VERTICAL_LR)",
+        "description": "Set it before layout(). The default is horizontal.\nIn vertical writing, maxHeight is the length of a column and maxWidth is the width over which columns are laid out.\nUse hAlign (HALIGN_LEFT = line start / CENTER / RIGHT = line end) for alignment within a column; vAlign is not used.\nIn vertical writing, character size, weight and font are unified by the \"default\" style; tags can change\nonly the appearance (color, outline, shadow), ruby (<ruby text=...>) and tate-chu-yoko (<tcy>...</tcy>)."
+      }
+    },
+    "krkr_richtext:RichText.StyledLayout.bounds": {
+      "hash": "dd9b4e724cb3",
+      "ja": {
+        "summary": "描画範囲 [x, y, width, height]（読み取り専用）",
+        "description": "layout() の結果の描画範囲を、描画原点からの位置で返します。\nルビ・縦組みの注記を含み、縁取り・影の分は含みません。"
+      },
+      "tr": {
+        "summary": "Drawing bounds [x, y, width, height] (read-only)",
+        "description": "Returns the drawing bounds of the layout() result, relative to the drawing origin.\nIncludes ruby and vertical-writing annotations, but not outlines or shadows."
+      }
+    },
     "krkr_richtext:RichText.StyledLayout.resolveAllTimings": {
       "hash": "7f1f37db8aed",
       "ja": {

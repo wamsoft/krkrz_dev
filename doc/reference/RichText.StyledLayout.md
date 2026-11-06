@@ -33,6 +33,9 @@ layer.drawStyledLayout(sl, 10, 10);
 - [maxWidth](#maxwidth)
 - [maxHeight](#maxheight)
 - [isValid](#isvalid)
+- [breakStrategy](#breakstrategy)
+- [writingMode](#writingmode)
+- [bounds](#bounds)
 - [totalRenderDelay](#totalrenderdelay)
 
 ### メソッド
@@ -106,6 +109,47 @@ layer.drawStyledLayout(sl, 10, 10);
 レイアウトが有効かどうか（読み取り専用）
 
 layout() 呼び出し後に true になります
+
+---
+
+### breakStrategy
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+行分割戦略 (RichText.BREAK_GREEDY / BREAK_HIGH_QUALITY / BREAK_BALANCED)
+
+layout() の前に設定します。既定は BREAK_HIGH_QUALITY です。
+
+---
+
+### writingMode
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+組み方向 (RichText.WRITING_HORIZONTAL / WRITING_VERTICAL_RL / WRITING_VERTICAL_LR)
+
+layout() の前に設定します。既定は横組みです。
+縦組みでは maxHeight が列の長さ、maxWidth が列を並べる幅になります。
+列の中の揃えには hAlign (HALIGN_LEFT = 行頭 / CENTER / RIGHT = 行末) を使い、vAlign は使いません。
+縦組みの文字の大きさ・太さ・フォントは "default" のスタイルで揃い、タグで変えられるのは
+外観 (色・縁取り・影) とルビ (<ruby text=...>)、縦中横 (<tcy>...</tcy>) です。
+
+---
+
+### bounds
+
+プロパティ \ アクセス: `r/w`
+
+**解説**
+
+描画範囲 [x, y, width, height]（読み取り専用）
+
+layout() の結果の描画範囲を、描画原点からの位置で返します。
+ルビ・縦組みの注記を含み、縁取り・影の分は含みません。
 
 ---
 

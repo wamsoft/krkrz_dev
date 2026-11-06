@@ -1280,47 +1280,109 @@
       }
     },
     "psdfile:PSD.getComposite": {
-      "hash": "1155d49104fa",
+      "hash": "c9282bcad68f",
       "ja": {
         "summary": "レイヤから文書を合成する。",
-        "returns": "再現できなかったものの数\n%[ skipped_adjustments, unsupported_clip_base, unsupported_effects ]",
+        "description": "2 番目の引数に辞書を渡すと、細かく指定できる (省略したキーは既定のまま)。\neffects    : レイヤー効果を描くか (既定 true)\nbackground : 不透明な背景色 0xRRGGBB (void なら透明)\nvisible    : 表示の上書き。レイヤ番号を添字にした配列で、true / false。\nvoid の所と配列の外は PSD のまま。PSD の中身は書き換えない\n(setLayerVisible と違い、同じ PSD を別の表示状態で何度でも合成できる)\nno_effects : 効果を描かないレイヤ番号の配列\ndraft      : 下書き。効果と調整レイヤを省いて速く描く (既定 false)\ncache      : 途中結果を覚えて次の合成で使い回す (既定 false)。表示の切り替えを\n繰り返す画面向け。フォルダの中身と、トップレベルの途中まで描いた画像を\n覚え、切り替えたレイヤより下は描き直さない。通過フォルダの中身を\n使い回したときは、使い回さないときと各チャンネル 1〜2 程度違うことがある。\nPSD を読み直す / 編集系 API を呼ぶと捨てる\n例: 3 番と 10 番を隠して合成する\nvar v = []; v[3] = false; v[10] = false;\npsd.getComposite(layer, %[ visible: v, cache: true ]);",
+        "returns": "数えたものの辞書\n%[ skipped_adjustments, unsupported_clip_base, unsupported_effects,\ndraft_skipped (下書きで省いた数), cache_hits / cache_misses (フォルダの中身を\n使い回した / 描いて覚えた数), reused_top_level (途中の画像を使い回して\n描かずに済んだトップレベルの塊の数) ]",
         "params": {
           "layer": "格納先レイヤ (文書サイズになる)",
-          "effects": "レイヤー効果を描くか (省略時 true)",
-          "background": "不透明な背景色 0xRRGGBB (省略 / void なら透明)"
+          "effects": "レイヤー効果を描くか (省略時 true)、または上の辞書",
+          "background": "不透明な背景色 0xRRGGBB (省略 / void なら透明)。辞書の background より優先"
         }
       },
       "tr": {
-        "summary": "Composites the document from its layers",
-        "returns": "Counts of things that could not be reproduced:\n%[ skipped_adjustments, unsupported_clip_base, unsupported_effects ]",
+        "summary": "Composites the document from its layers.",
+        "description": "Passing a dictionary as the second argument gives finer control (keys you omit keep their defaults).\neffects    : whether to draw layer effects (default true)\nbackground : opaque background color 0xRRGGBB (transparent if void)\nvisible    : overrides visibility. An array indexed by layer number, with true / false.\nEntries that are void and indexes outside the array follow the PSD. The PSD itself is not modified\n(unlike setLayerVisible, the same PSD can be composited any number of times with different visibility)\nno_effects : array of layer numbers whose effects are not drawn\ndraft      : draft mode. Skips effects and adjustment layers to draw faster (default false)\ncache      : remembers intermediate results and reuses them in the next composite (default false). For screens\nthat switch visibility repeatedly. It remembers folder contents and the partially drawn image of the top\nlevel, and does not redraw what lies below the switched layer. When the contents of a pass-through folder\nare reused, each channel may differ by about 1 to 2 from compositing without reuse.\nReloading the PSD or calling an editing API discards it\nExample: composite with layers 3 and 10 hidden\nvar v = []; v[3] = false; v[10] = false;\npsd.getComposite(layer, %[ visible: v, cache: true ]);",
+        "returns": "A dictionary of counts\n%[ skipped_adjustments, unsupported_clip_base, unsupported_effects,\ndraft_skipped (skipped in draft mode), cache_hits / cache_misses (folder contents\nreused / drawn and remembered), reused_top_level (top-level blocks that did not need drawing\nbecause the partial image was reused) ]",
         "params": {
           "layer": "Destination layer (resized to the document size).",
-          "effects": "Whether to draw layer effects (defaults to true).",
-          "background": "Opaque background color 0xRRGGBB (transparent if omitted / void)."
+          "effects": "Whether to draw layer effects (defaults to true), or the dictionary above.",
+          "background": "Opaque background color 0xRRGGBB (transparent if omitted / void). Takes precedence over background in the dictionary."
         }
       }
     },
     "psdfile:PSD.renderLayer": {
-      "hash": "18e92e2e628a",
+      "hash": "fa403f277a1f",
       "ja": {
         "summary": "レイヤ 1 枚を効果込みで透明な面へ描く (下のレイヤとは重ねない)。",
-        "description": "マスク・塗りつぶしやシェイプの中身・不透明度・効果を反映する。\n格納先レイヤの left/top は文書上の位置で、矩形は効果のはみ出し\n(影・光彩・境界線) を含む。",
-        "returns": "描いたら true。グループ / 区切り / 調整レイヤ / 空のレイヤは false",
+        "description": "マスク・塗りつぶしやシェイプの中身・不透明度・効果を反映する。\n格納先レイヤの left/top は文書上の位置で、矩形は効果のはみ出し\n(影・光彩・境界線) を含む。\nフォルダを渡すと、中身を合成してフォルダの不透明度・マスク・効果を掛けた\n1 枚を返す (文書の範囲内で、透明でない部分を囲む矩形)。フォルダ自身の\n表示 / 非表示は見ない (中のレイヤの表示は見る)。",
+        "returns": "描いたら true。区切り / 調整レイヤ / 空のレイヤ・フォルダは false",
         "params": {
           "layer": "格納先レイヤ",
           "no": "レイヤ番号",
-          "effects": "レイヤー効果を描くか (省略時 true)"
+          "effects": "レイヤー効果を描くか (省略時 true)、または getComposite と同じ辞書"
         }
       },
       "tr": {
-        "summary": "Draws a single layer, with effects, onto a transparent surface (not stacked on the layers below)",
-        "description": "Applies the mask, the contents of fill and shape layers, opacity and effects.\nleft/top of the destination layer are its position in the document, and the rectangle includes\nany overflow from effects (shadows, glows, strokes).",
-        "returns": "true if something was drawn. false for groups, dividers, adjustment layers and empty layers.",
+        "summary": "Draws a single layer, with effects, onto a transparent surface (not stacked on the layers below).",
+        "description": "Applies the mask, the contents of fill and shape layers, opacity and effects.\nleft/top of the destination layer are its position in the document, and the rectangle includes\nany overflow from effects (shadows, glows, strokes).\nPassing a folder composites its contents and returns one image with the folder's opacity, mask and effects\napplied (within the document, the rectangle enclosing the non-transparent part). The folder's own\nvisibility is ignored (the visibility of the layers inside it is respected).",
+        "returns": "true if something was drawn. false for dividers, adjustment layers and empty layers / folders.",
         "params": {
           "layer": "Destination layer.",
           "no": "Layer index.",
-          "effects": "Whether to draw layer effects (defaults to true)."
+          "effects": "Whether to draw layer effects (defaults to true), or the same dictionary as getComposite."
         }
+      }
+    },
+    "psdfile:PSD.layerAt": {
+      "hash": "3ceb7a3a8d8f",
+      "ja": {
+        "summary": "文書上の点で、いちばん上に見えている画素レイヤを探す。",
+        "description": "表示は options.visible の上書きを含めて親フォルダまで見る。レイヤのマスク・\n不透明度・塗りの不透明度、親フォルダの不透明度とマスク、クリッピング (下地が\n見えていない所は当たらない) を考える。効果 (影など) の部分は当たらない。\noptions に cache:true を渡すと、レイヤのアルファを覚えて次の呼び出しで使い回す。",
+        "returns": "レイヤ番号。無ければ -1",
+        "params": {
+          "x,": "y     文書上の位置 (ピクセル)",
+          "options": "getComposite と同じ辞書 (visible / cache などを見る。省略可)",
+          "minAlpha": "不透明度を掛けたアルファがこれ以上なら当たり (省略時 1)"
+        }
+      },
+      "tr": {
+        "summary": "Finds the topmost visible pixel layer at a point in the document.",
+        "description": "Visibility is checked up through the parent folders, including the options.visible override. It takes into\naccount the layer's mask, opacity and fill opacity, the parent folders' opacity and masks, and clipping\n(where the base is not visible, nothing is hit). Effects (shadows and so on) are not hit.\nPassing cache:true in options remembers the layers' alpha and reuses it in the next call.",
+        "returns": "The layer number, or -1 if there is none.",
+        "params": {
+          "x,": "y     Position in the document (pixels).",
+          "options": "The same dictionary as getComposite (visible / cache and so on are used; optional).",
+          "minAlpha": "A pixel counts as a hit if its alpha, with opacity applied, is at least this (defaults to 1)."
+        }
+      }
+    },
+    "psdfile:PSD.clearCompositeCache": {
+      "hash": "ecd85e56206a",
+      "ja": {
+        "summary": "合成の途中結果 (cache:true で覚えたもの) を捨てる。"
+      },
+      "tr": {
+        "summary": "Discards the intermediate composite results (those remembered with cache:true)."
+      }
+    },
+    "psdfile:PSD.setCompositeCacheLimit": {
+      "hash": "86f8a464eeba",
+      "ja": {
+        "summary": "合成の途中結果として覚える画素の合計バイト数の上限 (既定 512MB)。",
+        "description": "超えたら古いものから捨てる。",
+        "params": {
+          "bytes": "上限 (バイト)"
+        }
+      },
+      "tr": {
+        "summary": "Upper limit of the total bytes of pixels remembered as intermediate composite results (default 512MB).",
+        "description": "When exceeded, the oldest ones are discarded first.",
+        "params": {
+          "bytes": "Limit (bytes)."
+        }
+      }
+    },
+    "psdfile:PSD.getCompositeCacheInfo": {
+      "hash": "cac35cd5a876",
+      "ja": {
+        "summary": "合成の途中結果の状態。",
+        "returns": "%[ bytes (いま覚えているバイト数), limit (上限), entries (覚えている面の数) ]"
+      },
+      "tr": {
+        "summary": "The state of the intermediate composite results.",
+        "returns": "%[ bytes (bytes remembered now), limit (the limit), entries (number of surfaces remembered) ]"
       }
     },
     "psdfile:PSD.getVectorMask": {

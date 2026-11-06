@@ -96,6 +96,10 @@ psd://PSDfilename/id/layerID.bmp
 - [clearStorageCache](#clearstoragecache)
 - [getComposite](#getcomposite)
 - [renderLayer](#renderlayer)
+- [layerAt](#layerat)
+- [clearCompositeCache](#clearcompositecache)
+- [setCompositeCacheLimit](#setcompositecachelimit)
+- [getCompositeCacheInfo](#getcompositecacheinfo)
 - [getVectorMask](#getvectormask)
 - [getPaths](#getpaths)
 - [getLayerShape](#getlayershape)
@@ -1693,17 +1697,37 @@ Method
 | Arguments | Default | Description |
 | --- | --- | --- |
 | `layer` | `&nbsp;` | Destination layer (resized to the document size). |
-| `effects` | `true` | Whether to draw layer effects (defaults to true). |
-| `background` | `void` | Opaque background color 0xRRGGBB (transparent if omitted / void). |
+| `effects` | `true` | Whether to draw layer effects (defaults to true), or the dictionary above. |
+| `background` | `void` | Opaque background color 0xRRGGBB (transparent if omitted / void). Takes precedence over background in the dictionary. |
 
 **Return value**
 
-Counts of things that could not be reproduced:
-%[ skipped_adjustments, unsupported_clip_base, unsupported_effects ]
+A dictionary of counts
+%[ skipped_adjustments, unsupported_clip_base, unsupported_effects,
+draft_skipped (skipped in draft mode), cache_hits / cache_misses (folder contents
+reused / drawn and remembered), reused_top_level (top-level blocks that did not need drawing
+because the partial image was reused) ]
 
 **Description**
 
-Composites the document from its layers
+Composites the document from its layers.
+
+Passing a dictionary as the second argument gives finer control (keys you omit keep their defaults).
+effects    : whether to draw layer effects (default true)
+background : opaque background color 0xRRGGBB (transparent if void)
+visible    : overrides visibility. An array indexed by layer number, with true / false.
+Entries that are void and indexes outside the array follow the PSD. The PSD itself is not modified
+(unlike setLayerVisible, the same PSD can be composited any number of times with different visibility)
+no_effects : array of layer numbers whose effects are not drawn
+draft      : draft mode. Skips effects and adjustment layers to draw faster (default false)
+cache      : remembers intermediate results and reuses them in the next composite (default false). For screens
+that switch visibility repeatedly. It remembers folder contents and the partially drawn image of the top
+level, and does not redraw what lies below the switched layer. When the contents of a pass-through folder
+are reused, each channel may differ by about 1 to 2 from compositing without reuse.
+Reloading the PSD or calling an editing API discards it
+Example: composite with layers 3 and 10 hidden
+var v = []; v[3] = false; v[10] = false;
+psd.getComposite(layer, %[ visible: v, cache: true ]);
 
 ---
 
@@ -1717,19 +1741,92 @@ Method
 | --- | --- | --- |
 | `layer` | `&nbsp;` | Destination layer. |
 | `no` | `&nbsp;` | Layer index. |
-| `effects` | `true` | Whether to draw layer effects (defaults to true). |
+| `effects` | `true` | Whether to draw layer effects (defaults to true), or the same dictionary as getComposite. |
 
 **Return value**
 
-true if something was drawn. false for groups, dividers, adjustment layers and empty layers.
+true if something was drawn. false for dividers, adjustment layers and empty layers / folders.
 
 **Description**
 
-Draws a single layer, with effects, onto a transparent surface (not stacked on the layers below)
+Draws a single layer, with effects, onto a transparent surface (not stacked on the layers below).
 
 Applies the mask, the contents of fill and shape layers, opacity and effects.
 left/top of the destination layer are its position in the document, and the rectangle includes
 any overflow from effects (shadows, glows, strokes).
+Passing a folder composites its contents and returns one image with the folder's opacity, mask and effects
+applied (within the document, the rectangle enclosing the non-transparent part). The folder's own
+visibility is ignored (the visibility of the layers inside it is respected).
+
+---
+
+### layerAt
+
+Method
+
+**Arguments**
+
+| Arguments | Default | Description |
+| --- | --- | --- |
+| `x` | `&nbsp;` |  |
+| `y` | `&nbsp;` |  |
+| `options` | `void` | The same dictionary as getComposite (visible / cache and so on are used; optional). |
+| `minAlpha` | `1` | A pixel counts as a hit if its alpha, with opacity applied, is at least this (defaults to 1). |
+
+**Return value**
+
+The layer number, or -1 if there is none.
+
+**Description**
+
+Finds the topmost visible pixel layer at a point in the document.
+
+Visibility is checked up through the parent folders, including the options.visible override. It takes into
+account the layer's mask, opacity and fill opacity, the parent folders' opacity and masks, and clipping
+(where the base is not visible, nothing is hit). Effects (shadows and so on) are not hit.
+Passing cache:true in options remembers the layers' alpha and reuses it in the next call.
+
+---
+
+### clearCompositeCache
+
+Method
+
+**Description**
+
+Discards the intermediate composite results (those remembered with cache:true).
+
+---
+
+### setCompositeCacheLimit
+
+Method
+
+**Arguments**
+
+| Arguments | Default | Description |
+| --- | --- | --- |
+| `bytes` | `&nbsp;` | Limit (bytes). |
+
+**Description**
+
+Upper limit of the total bytes of pixels remembered as intermediate composite results (default 512MB).
+
+When exceeded, the oldest ones are discarded first.
+
+---
+
+### getCompositeCacheInfo
+
+Method
+
+**Return value**
+
+%[ bytes (bytes remembered now), limit (the limit), entries (number of surfaces remembered) ]
+
+**Description**
+
+The state of the intermediate composite results.
 
 ---
 
