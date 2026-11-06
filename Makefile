@@ -99,12 +99,12 @@ ifeq (windows,$(findstring windows,$(PRESET)))
 
 ifeq (x64,$(findstring x64,$(PRESET)))
 PLUGINS_SRC_DIR=plugin64
-PLUGINS_DST_DIR=$(BUILD_PATH)/$(BUILD_TYPE)/plugin64
+PLUGINS_DST_DIR=$(BUILD_PATH)/core/$(BUILD_TYPE)/plugin64
 EXEFILE=$(BUILD_PATH)/core/$(BUILD_TYPE)/krkrz64.exe
 else
 ifeq (x86,$(findstring x86,$(PRESET)))
 PLUGINS_SRC_DIR=plugin
-PLUGINS_DST_DIR=$(BUILD_PATH)/$(BUILD_TYPE)/plugin
+PLUGINS_DST_DIR=$(BUILD_PATH)/core/$(BUILD_TYPE)/plugin
 EXEFILE=$(BUILD_PATH)/core/$(BUILD_TYPE)/krkrz.exe
 endif
 endif
