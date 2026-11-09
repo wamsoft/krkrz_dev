@@ -576,6 +576,8 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
   
   これは**起動時の既定**の指定で、実行中に [Window.drawDevice](../reference/Window.md#drawdevice) へ代入して切り替えるのは従来どおり可能です。ただし **SDL3 ビルドを 'sdl' で起動した場合、実行中に OpenGL 系 ( sdlogl / ogl ) へ切り替えることはできません** ( OpenGL の初期化が通りません )。OpenGL 機能 ( Canvas 等 ) を使う場合は最初から 'sdlogl' / 'ogl' で起動してください。
   
+  SDL3 ビルドを 'sdl' で起動すると、ゲームのウィンドウを OpenGL 用にせずに作ります ( `-renderer=opengl` / `opengles` / `opengles2` を併せて指定した場合を除く )。OpenGL 用のウィンドウはその場で OpenGL / OpenGL ES のライブラリを読み込むため、OpenGL を初期化できない環境 ( D3D/GL をフックする常駐オーバーレイが入っている等 ) でも 'sdl' なら起動できます。OpenGL 系で起動した場合も、OpenGL 用のウィンドウが作れなければ OpenGL 無しで作り直してウィンドウだけは出します ( その後の OpenGL の初期化はエラーになります )。
+  
   OpenGL 系の DrawDevice を使うには OpenGL ES が利用できる環境が必要です。WINVER は常に EGL ( ANGLE の libEGL.dll / libGLESv2.dll ) 経由なので DLL の同梱が必須、SDL3 の Windows では OS の OpenGL ドライバの ES プロファイルが優先され、使えない場合に同じ ANGLE DLL へフォールバックします ( 下記 -forceegl も参照 )。
 - **-**renderer** (SDL3 backend の明示指定 / SDL3 ビルド限定)**  
   SDLDrawDevice が利用する SDL_Renderer の backend 名を明示します。
@@ -583,7 +585,20 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
   
   指定しなかった場合は SDL3 の自動選択に任されます。
   
+  指定した backend ( または自動選択 ) で renderer を作れなかったり、作れても描画が通らなかったりした場合は、自動選択 → `direct3d12` → `direct3d11` → `opengl` → `vulkan` → `direct3d` → `software` の順に試し、使えたものを採用します ( 既定以外になったときは WARNING でログに残ります )。どれも使えなかった場合はエラー `E-RENDER-01` を表示して終了します ( 下記 -boottest 参照 )。起動ログの `[renderer] init:` の行に、ビデオドライバ・使える backend の一覧・検出した常駐オーバーレイが出ます。
+  
   SDL3 ビルド + SDLDrawDevice ( = `-drawdevice=sdl` 指定時 ) 使用時のみ意味を持ちます。
+- **-**boottest** (起動失敗の表示の確認 / SDL3 ビルド限定)**  
+  起動時の各段を人工的に失敗させて、利用者に出るエラー表示を確かめるためのオプションです。通常の環境ではまず失敗しないので、実際に起きたときに何が出るかの確認に使います。
+  
+  SDL3 ビルドは、起動時に SDL の初期化やゲームのウィンドウの生成に失敗すると、問い合わせ用のコードを添えたエラーを画面 ( Windows では SDL に頼らない Win32 のメッセージボックス ) とログの両方に出して終了します。
+  
+    - **'sdlinit'**: SDL の初期化の失敗 ( `E-SDLINIT-01` )
+    - **'window'**: ゲームのウィンドウの生成の失敗 ( `E-WINDOW-01` )
+    - **'renderer'**: 使える renderer が一つも無い ( `E-RENDER-01` )
+    - **'windowgl'**: OpenGL 用のウィンドウの生成だけを失敗させる ( OpenGL 無しで作り直す経路の確認。ウィンドウは出て起動は続きます )
+  
+  SDL の初期化より前に効く必要があるため、コマンドラインでのみ指定できます ( `.cf` ファイルからは読みません )。
 - **-**forceegl** (OpenGL ES コンテキストの EGL 強制 / SDL3 ビルド限定)**  
   OpenGL ES コンテキストを、最初から EGL ( Windows では ANGLE の libEGL.dll / libGLESv2.dll ) で作成させます。
   

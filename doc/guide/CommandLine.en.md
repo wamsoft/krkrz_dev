@@ -1,5 +1,5 @@
 ---
-source_hash: b806fc4561a6
+source_hash: 3f8eda2e6d0a
 ---
 
 # Command-Line Options
@@ -580,6 +580,8 @@ A mechanism that **adds gain (volume) in dB** when decoding compressed audio. It
   
   This specifies the **default at startup**; you can still switch at run time by assigning to [Window.drawDevice](../reference/Window.md#drawdevice). However, **if an SDL3 build is started with 'sdl', it cannot switch to the OpenGL-based devices ( sdlogl / ogl ) at run time** (OpenGL initialization fails). If you use OpenGL features (Canvas, etc.), start with 'sdlogl' / 'ogl' from the beginning.
   
+  When an SDL3 build is started with 'sdl', the game window is created without OpenGL support (unless `-renderer=opengl` / `opengles` / `opengles2` is also given). Creating an OpenGL window loads the OpenGL / OpenGL ES libraries on the spot, so with 'sdl' the engine can start even where OpenGL cannot be initialized (for example, with a resident overlay that hooks D3D/GL). When started with an OpenGL-based device and the OpenGL window cannot be created, the window is recreated without OpenGL so that at least the window appears (the OpenGL initialization that follows then reports an error).
+  
   OpenGL-based DrawDevices require an environment where OpenGL ES is available. WINVER always goes through EGL ( ANGLE's libEGL.dll / libGLESv2.dll ), so bundling the DLLs is mandatory. On SDL3 for Windows, the ES profile of the OS OpenGL driver is preferred, and if it is not available, the engine falls back to the same ANGLE DLLs (see also -forceegl below).
 - **-**renderer** (explicit SDL3 backend / SDL3 build only)**  
   Explicitly specifies the SDL_Renderer backend name used by SDLDrawDevice
@@ -587,7 +589,20 @@ A mechanism that **adds gain (volume) in dB** when decoding compressed audio. It
   
   If not specified, the choice is left to SDL3's automatic selection.
   
+  If the renderer cannot be created with the given backend (or the automatic selection), or it is created but cannot draw, the engine tries automatic selection → `direct3d12` → `direct3d11` → `opengl` → `vulkan` → `direct3d` → `software` in that order and uses the first one that works (falling back to a non-default backend is logged as a WARNING). If none works, it shows the error `E-RENDER-01` and exits (see -boottest below). The `[renderer] init:` line in the startup log lists the video driver, the available backends and any resident overlays detected.
+  
   Meaningful only on SDL3 builds when SDLDrawDevice is used ( = when `-drawdevice=sdl` is specified ).
+- **-**boottest** (check the startup failure display / SDL3 build only)**  
+  Forces a startup stage to fail so that you can check the error display users would see. These stages almost never fail in a normal environment, so this is how to see what appears when they actually do.
+  
+  When an SDL3 build fails to initialize SDL or to create the game window at startup, it shows an error with a short code for support inquiries both on screen (on Windows, a Win32 message box that does not depend on SDL) and in the log, then exits.
+  
+    - **'sdlinit'**: SDL initialization fails ( `E-SDLINIT-01` )
+    - **'window'**: creating the game window fails ( `E-WINDOW-01` )
+    - **'renderer'**: no usable renderer ( `E-RENDER-01` )
+    - **'windowgl'**: only creating the OpenGL window fails (checks the path that recreates the window without OpenGL; the window appears and startup continues)
+  
+  It has to take effect before SDL is initialized, so it can only be given on the command line (it is not read from the `.cf` file).
 - **-**forceegl** (force EGL for the OpenGL ES context / SDL3 build only)**  
   Makes the OpenGL ES context be created with EGL from the start ( on Windows, ANGLE's libEGL.dll / libGLESv2.dll ).
   
