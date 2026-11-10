@@ -569,10 +569,10 @@
       }
     },
     "Storages.requestCache": {
-      "hash": "70d4712a9264",
+      "hash": "c734f74f61de",
       "ja": {
         "summary": "ファイルキャッシュへの読み込みリクエスト",
-        "description": "指定したファイルを通常のファイルキャッシュへバックグラウンドで\n読み込みます。\n`Storages.addCacheTargetExtension` で登録された拡張子は file 層の cache に、\n`Storages.addDecodeTargetExtension` で登録された画像拡張子は decode 層の cache\n( デコード結果 ) に載ります。両方該当する拡張子は両層に並行で発火します。",
+        "description": "指定したファイルを通常のファイルキャッシュへバックグラウンドで\n読み込みます。\n`Storages.addCacheTargetExtension` で登録された拡張子は file 層の cache に、\n`Storages.addDecodeTargetExtension` で登録された画像拡張子は decode 層の cache\n( デコード結果 ) に載ります。両方該当する拡張子は両層に並行で発火します。\n\nどちらの層も対象は通常のファイル ( アーカイブ内のファイルを含む ) だけです。\nプラグインが提供するメディアや `user://` などそれ以外のメディアは、\nバックグラウンドで開くと開く途中で実行されるスクリプトがメインスレッドと\n競合するため、要求しても何も行いません ( 使うときに通常どおり読み込まれます )。",
         "params": {
           "path": "読み込み対象のファイルのストレージ名を指定します。",
           "minSize": "この呼び出しに限った最小ファイルサイズ閾値 ( バイト ) を\n指定します。0 ( 既定 ) を指定すると拡張子側の登録設定に従います。"
@@ -580,7 +580,7 @@
       },
       "tr": {
         "summary": "Requests loading into the file cache",
-        "description": "Loads the specified file into the regular file cache in the background.\nExtensions registered with `Storages.addCacheTargetExtension` go into the file-layer cache, and\nimage extensions registered with `Storages.addDecodeTargetExtension` go into the decode-layer cache\n(decoded results). For extensions registered in both, both layers are triggered in parallel.",
+        "description": "Loads the specified file into the regular file cache in the background.\nExtensions registered with `Storages.addCacheTargetExtension` go into the file-layer cache, and\nimage extensions registered with `Storages.addDecodeTargetExtension` go into the decode-layer cache\n(decoded results). For extensions registered in both, both layers are triggered in parallel.\n\nBoth layers only cover ordinary files (including files inside archives).\nOther media, such as media provided by plugins or `user://`, are not loaded when requested,\nbecause opening them in the background would let scripts run during the open in parallel\nwith the main thread (they are loaded normally when used).",
         "params": {
           "path": "Storage name of the file to load.",
           "minSize": "Minimum file size threshold (in bytes) for this call only.\n0 (default) follows the setting registered for the extension."

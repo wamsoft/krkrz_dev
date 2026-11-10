@@ -1,5 +1,5 @@
 ---
-source_hash: cb7ac2883cf7
+source_hash: eaab24f92899
 ---
 
 # Asynchronous Image Loading
@@ -12,6 +12,7 @@ This lets you build programs where the slow process of reading from disk is hard
 * Bitmap.loading tells you whether an asynchronous load is in progress.
 * Accessing other members of the Bitmap during an asynchronous load throws an exception.
 * The filename argument of loadAsync must include the extension. Note that this differs from Layer.loadImages, where it can be omitted.
+* The storage is opened and read in the background only for ordinary files (including files inside archives). For other media, such as media provided by plugins or user://, the read from storage is done on the spot when loadAsync is called (on the main thread) and only the decoding is done in the background (because some media run scripts while being opened).
 
 ### The values received in onLoaded (meta,async,error,message) are as follows.
 * meta : The same as the return value of Layer.loadImages. A dictionary of tag information.

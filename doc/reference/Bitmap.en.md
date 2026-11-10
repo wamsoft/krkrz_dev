@@ -558,6 +558,8 @@ While asynchronous loading is in progress, accessing any member other than [Bitm
 
 See also the description of [Bitmap.onLoaded](Bitmap.md#onloaded).
 
+The storage is opened and read in the background only for ordinary files (including files inside archives). For images on other media, such as media provided by plugins or `user://`, the read from storage is done on the spot (on the main thread), because some media run scripts while being opened, and only the decoding is done in the background. In that case this method does not return until the read has finished.
+
 **See also:** [Bitmap.onLoaded](Bitmap.md#onloaded) / [Bitmap.loading](Bitmap.md#loading) / [Layer.copyFromBitmapToMainImage](Layer.md#copyfrombitmaptomainimage)
 
 ---
