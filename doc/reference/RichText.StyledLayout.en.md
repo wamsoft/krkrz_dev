@@ -33,6 +33,9 @@ layer.drawStyledLayout(sl, 10, 10);
 - [maxWidth](#maxwidth)
 - [maxHeight](#maxheight)
 - [isValid](#isvalid)
+- [breakStrategy](#breakstrategy)
+- [writingMode](#writingmode)
+- [bounds](#bounds)
 - [totalRenderDelay](#totalrenderdelay)
 
 ### Methods
@@ -106,6 +109,47 @@ Property \ Access: `r/w`
 Whether the layout is valid (read-only)
 
 Becomes true after layout() is called.
+
+---
+
+### breakStrategy
+
+Property \ Access: `r/w`
+
+**Description**
+
+Line breaking strategy (RichText.BREAK_GREEDY / BREAK_HIGH_QUALITY / BREAK_BALANCED)
+
+Set it before layout(). The default is BREAK_HIGH_QUALITY.
+
+---
+
+### writingMode
+
+Property \ Access: `r/w`
+
+**Description**
+
+Writing direction (RichText.WRITING_HORIZONTAL / WRITING_VERTICAL_RL / WRITING_VERTICAL_LR)
+
+Set it before layout(). The default is horizontal.
+In vertical writing, maxHeight is the length of a column and maxWidth is the width over which columns are laid out.
+Use hAlign (HALIGN_LEFT = line start / CENTER / RIGHT = line end) for alignment within a column; vAlign is not used.
+In vertical writing, character size, weight and font are unified by the "default" style; tags can change
+only the appearance (color, outline, shadow), ruby (<ruby text=...>) and tate-chu-yoko (<tcy>...</tcy>).
+
+---
+
+### bounds
+
+Property \ Access: `r/w`
+
+**Description**
+
+Drawing bounds [x, y, width, height] (read-only)
+
+Returns the drawing bounds of the layout() result, relative to the drawing origin.
+Includes ruby and vertical-writing annotations, but not outlines or shadows.
 
 ---
 

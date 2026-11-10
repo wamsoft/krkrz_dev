@@ -14,7 +14,12 @@
 # (x64-linux / x64-osx などは vcpkg の既定で静的ライブラリなので、そのまま exe 1 本になる)。
 # 初回は krkrz_tools 用の vcpkg ライブラリ (静的版) のビルドで時間がかかる。
 #---------------------------------------------------------------------------
-set(_KRKRZ_TOOLS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/krkrz_tools")
+# 外枠 (krkrz_windows など) から include するときは KRKRZ_TOOLS_SOURCE_DIR で場所を渡す
+if(DEFINED KRKRZ_TOOLS_SOURCE_DIR)
+    set(_KRKRZ_TOOLS_DIR "${KRKRZ_TOOLS_SOURCE_DIR}")
+else()
+    set(_KRKRZ_TOOLS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/krkrz_tools")
+endif()
 
 if(ANDROID OR IOS OR EMSCRIPTEN)
     set(_krkrz_tools_default OFF)
@@ -58,12 +63,24 @@ endif()
 if(GIT_EXECUTABLE)
     list(APPEND _krkrz_tools_args "-DGIT_EXECUTABLE=${GIT_EXECUTABLE}")
 endif()
+# MSVC の /showIncludes を英語に固定する (本体と同じ。src/core/cmake/MsvcEnglishOutput.cmake)。
+# configure (接頭辞の測定) は VSLANG=1033 を立てた cmake で走らせ、ビルド時はコンパイラを
+# launcher 経由で起動する。launcher のリストは LIST_SEPARATOR の | で渡す
+set(_krkrz_tools_cmake_command "${CMAKE_COMMAND}")
+if(MSVC AND CMAKE_GENERATOR MATCHES "Ninja")
+    set(_krkrz_tools_cmake_command "${CMAKE_COMMAND}" -E env VSLANG=1033 "${CMAKE_COMMAND}")
+    list(APPEND _krkrz_tools_args
+        "-DCMAKE_C_COMPILER_LAUNCHER=${CMAKE_COMMAND}|-E|env|VSLANG=1033"
+        "-DCMAKE_CXX_COMPILER_LAUNCHER=${CMAKE_COMMAND}|-E|env|VSLANG=1033")
+endif()
 
 include(ExternalProject)
 ExternalProject_Add(krkrz_tools
     SOURCE_DIR      "${_KRKRZ_TOOLS_DIR}"
     BINARY_DIR      "${CMAKE_BINARY_DIR}/krkrz_tools"
     INSTALL_DIR     "${_krkrz_tools_stage}"
+    CMAKE_COMMAND   ${_krkrz_tools_cmake_command}
+    LIST_SEPARATOR  |
     CMAKE_ARGS      ${_krkrz_tools_args}
     BUILD_COMMAND   ${CMAKE_COMMAND} --build <BINARY_DIR> --config Release
     INSTALL_COMMAND ${CMAKE_COMMAND} --install <BINARY_DIR> --config Release

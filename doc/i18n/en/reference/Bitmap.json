@@ -266,17 +266,17 @@
       }
     },
     "Bitmap.loadAsync": {
-      "hash": "37a33c61e74c",
+      "hash": "106ca3ea2da5",
       "ja": {
         "summary": "画像の非同期読み込み",
-        "description": "画像を非同期で読み込みます。\n\n読込みの完了は [Bitmap.onLoaded](Bitmap.md#onloaded) で受け取れます。\n\n非同期読込み中か否かは [Bitmap.loading](Bitmap.md#loading) で確認できます。\n\n非同期読込み中は [Bitmap.loading](Bitmap.md#loading) 以外のメンバへアクセスすると例外が発生します。\n\n[Bitmap.onLoaded](Bitmap.md#onloaded) の説明も確認してください。",
+        "description": "画像を非同期で読み込みます。\n\n読込みの完了は [Bitmap.onLoaded](Bitmap.md#onloaded) で受け取れます。\n\n非同期読込み中か否かは [Bitmap.loading](Bitmap.md#loading) で確認できます。\n\n非同期読込み中は [Bitmap.loading](Bitmap.md#loading) 以外のメンバへアクセスすると例外が発生します。\n\n[Bitmap.onLoaded](Bitmap.md#onloaded) の説明も確認してください。\n\nバックグラウンドでストレージを開いて読み込むのは、通常のファイル ( アーカイブ内のファイルを含む ) のときです。プラグインが提供するメディアや `user://` などそれ以外のメディアの画像は、メディアによっては開く途中でスクリプトを実行するため、ストレージからの読み込みを呼び出したその場 ( メインスレッド ) で済ませ、デコードだけをバックグラウンドで行います。この場合は読み込みが終わるまで本メソッドから戻りません。",
         "params": {
           "image": "読み込む画像ストレージを指定します。\n\nここで指定するファイル名は拡張子を含んだものになることに注意してください。\n\n拡張子がないとファイルが見つからずエラーとなります。"
         }
       },
       "tr": {
         "summary": "Loads an image asynchronously",
-        "description": "Loads an image asynchronously.\n\nCompletion is reported via [Bitmap.onLoaded](Bitmap.md#onloaded).\n\nYou can check whether asynchronous loading is in progress with [Bitmap.loading](Bitmap.md#loading).\n\nWhile asynchronous loading is in progress, accessing any member other than [Bitmap.loading](Bitmap.md#loading) throws an exception.\n\nSee also the description of [Bitmap.onLoaded](Bitmap.md#onloaded).",
+        "description": "Loads an image asynchronously.\n\nCompletion is reported via [Bitmap.onLoaded](Bitmap.md#onloaded).\n\nYou can check whether asynchronous loading is in progress with [Bitmap.loading](Bitmap.md#loading).\n\nWhile asynchronous loading is in progress, accessing any member other than [Bitmap.loading](Bitmap.md#loading) throws an exception.\n\nSee also the description of [Bitmap.onLoaded](Bitmap.md#onloaded).\n\nThe storage is opened and read in the background only for ordinary files (including files inside archives). For images on other media, such as media provided by plugins or `user://`, the read from storage is done on the spot (on the main thread), because some media run scripts while being opened, and only the decoding is done in the background. In that case this method does not return until the read has finished.",
         "params": {
           "image": "Image storage to load.\n\nNote that the file name must include the extension.\n\nWithout an extension the file is not found and an error occurs."
         }

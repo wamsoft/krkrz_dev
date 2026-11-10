@@ -569,6 +569,8 @@ name で指定したストレージ (ファイル) に、type で指定した画
 
 [Bitmap.onLoaded](Bitmap.md#onloaded) の説明も確認してください。
 
+バックグラウンドでストレージを開いて読み込むのは、通常のファイル ( アーカイブ内のファイルを含む ) のときです。プラグインが提供するメディアや `user://` などそれ以外のメディアの画像は、メディアによっては開く途中でスクリプトを実行するため、ストレージからの読み込みを呼び出したその場 ( メインスレッド ) で済ませ、デコードだけをバックグラウンドで行います。この場合は読み込みが終わるまで本メソッドから戻りません。
+
 **関連:** [Bitmap.onLoaded](Bitmap.md#onloaded) / [Bitmap.loading](Bitmap.md#loading) / [Layer.copyFromBitmapToMainImage](Layer.md#copyfrombitmaptomainimage)
 
 ---

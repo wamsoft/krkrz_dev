@@ -867,6 +867,11 @@ Extensions registered with `Storages.addCacheTargetExtension` go into the file-l
 image extensions registered with `Storages.addDecodeTargetExtension` go into the decode-layer cache
 (decoded results). For extensions registered in both, both layers are triggered in parallel.
 
+Both layers only cover ordinary files (including files inside archives).
+Other media, such as media provided by plugins or `user://`, are not loaded when requested,
+because opening them in the background would let scripts run during the open in parallel
+with the main thread (they are loaded normally when used).
+
 **See also:** [Storages.clearCache](Storages.md#clearcache) / [Storages.isCacheLoading](Storages.md#iscacheloading) / [Storages.isImagePrefetchLoading](Storages.md#isimageprefetchloading) / [Storages.requestFastCache](Storages.md#requestfastcache)
 
 ---

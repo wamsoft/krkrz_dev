@@ -875,6 +875,11 @@ pin されていない ( transient な ) キャッシュエントリを file 層
 `Storages.addDecodeTargetExtension` で登録された画像拡張子は decode 層の cache
 ( デコード結果 ) に載ります。両方該当する拡張子は両層に並行で発火します。
 
+どちらの層も対象は通常のファイル ( アーカイブ内のファイルを含む ) だけです。
+プラグインが提供するメディアや `user://` などそれ以外のメディアは、
+バックグラウンドで開くと開く途中で実行されるスクリプトがメインスレッドと
+競合するため、要求しても何も行いません ( 使うときに通常どおり読み込まれます )。
+
 **関連:** [Storages.clearCache](Storages.md#clearcache) / [Storages.isCacheLoading](Storages.md#iscacheloading) / [Storages.isImagePrefetchLoading](Storages.md#isimageprefetchloading) / [Storages.requestFastCache](Storages.md#requestfastcache)
 
 ---

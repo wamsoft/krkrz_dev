@@ -106,6 +106,17 @@ function(krkrz_setup_harfbuzz)
         set(_hb_have_icu OFF)
     endif()
 
+    # HarfBuzz は `freetype` ターゲットがあればそれをリンクし、無ければ
+    # include(FindFreetype) で探す。後者は vcpkg の find_package 差し替え (依存の追加) を
+    # 通らないので、libfreetype.a だけが依存 (png / bz2 / brotli / zlib) 抜きで
+    # harfbuzz のリンクに載る。GNU ld (Linux) は静的ライブラリを前から 1 回しか見ないため、
+    # harfbuzz の後ろで取り込まれた FreeType の png 等が未解決のまま共有プラグインに残り、
+    # krkr_richtext が「undefined symbol: png_create_read_struct」で読めなかった。
+    # 先に vcpkg の freetype ターゲット (依存込み) を用意して、HarfBuzz にそれを使わせる。
+    if(NOT TARGET freetype)
+        find_package(freetype CONFIG QUIET)
+    endif()
+
     set(HB_HAVE_FREETYPE ON CACHE BOOL "Enable freetype interop helpers" FORCE)
     set(HB_HAVE_ICU      ${_hb_have_icu} CACHE BOOL "Enable icu unicode functions" FORCE)
     set(HB_BUILD_SUBSET  OFF CACHE BOOL "Build harfbuzz-subset" FORCE)

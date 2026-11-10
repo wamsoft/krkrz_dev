@@ -96,6 +96,10 @@ psd://PSDファイル名/id/レイヤID.bmp
 - [clearStorageCache](#clearstoragecache)
 - [getComposite](#getcomposite)
 - [renderLayer](#renderlayer)
+- [layerAt](#layerat)
+- [clearCompositeCache](#clearcompositecache)
+- [setCompositeCacheLimit](#setcompositecachelimit)
+- [getCompositeCacheInfo](#getcompositecacheinfo)
 - [getVectorMask](#getvectormask)
 - [getPaths](#getpaths)
 - [getLayerShape](#getlayershape)
@@ -1693,17 +1697,37 @@ static メソッド。
 | 引数 | 既定値 | 説明 |
 | --- | --- | --- |
 | `layer` | `&nbsp;` | 格納先レイヤ (文書サイズになる) |
-| `effects` | `true` | レイヤー効果を描くか (省略時 true) |
-| `background` | `void` | 不透明な背景色 0xRRGGBB (省略 / void なら透明) |
+| `effects` | `true` | レイヤー効果を描くか (省略時 true)、または上の辞書 |
+| `background` | `void` | 不透明な背景色 0xRRGGBB (省略 / void なら透明)。辞書の background より優先 |
 
 **戻り値**
 
-再現できなかったものの数
-%[ skipped_adjustments, unsupported_clip_base, unsupported_effects ]
+数えたものの辞書
+%[ skipped_adjustments, unsupported_clip_base, unsupported_effects,
+draft_skipped (下書きで省いた数), cache_hits / cache_misses (フォルダの中身を
+使い回した / 描いて覚えた数), reused_top_level (途中の画像を使い回して
+描かずに済んだトップレベルの塊の数) ]
 
 **解説**
 
 レイヤから文書を合成する。
+
+2 番目の引数に辞書を渡すと、細かく指定できる (省略したキーは既定のまま)。
+effects    : レイヤー効果を描くか (既定 true)
+background : 不透明な背景色 0xRRGGBB (void なら透明)
+visible    : 表示の上書き。レイヤ番号を添字にした配列で、true / false。
+void の所と配列の外は PSD のまま。PSD の中身は書き換えない
+(setLayerVisible と違い、同じ PSD を別の表示状態で何度でも合成できる)
+no_effects : 効果を描かないレイヤ番号の配列
+draft      : 下書き。効果と調整レイヤを省いて速く描く (既定 false)
+cache      : 途中結果を覚えて次の合成で使い回す (既定 false)。表示の切り替えを
+繰り返す画面向け。フォルダの中身と、トップレベルの途中まで描いた画像を
+覚え、切り替えたレイヤより下は描き直さない。通過フォルダの中身を
+使い回したときは、使い回さないときと各チャンネル 1〜2 程度違うことがある。
+PSD を読み直す / 編集系 API を呼ぶと捨てる
+例: 3 番と 10 番を隠して合成する
+var v = []; v[3] = false; v[10] = false;
+psd.getComposite(layer, %[ visible: v, cache: true ]);
 
 ---
 
@@ -1717,11 +1741,11 @@ static メソッド。
 | --- | --- | --- |
 | `layer` | `&nbsp;` | 格納先レイヤ |
 | `no` | `&nbsp;` | レイヤ番号 |
-| `effects` | `true` | レイヤー効果を描くか (省略時 true) |
+| `effects` | `true` | レイヤー効果を描くか (省略時 true)、または getComposite と同じ辞書 |
 
 **戻り値**
 
-描いたら true。グループ / 区切り / 調整レイヤ / 空のレイヤは false
+描いたら true。区切り / 調整レイヤ / 空のレイヤ・フォルダは false
 
 **解説**
 
@@ -1730,6 +1754,79 @@ static メソッド。
 マスク・塗りつぶしやシェイプの中身・不透明度・効果を反映する。
 格納先レイヤの left/top は文書上の位置で、矩形は効果のはみ出し
 (影・光彩・境界線) を含む。
+フォルダを渡すと、中身を合成してフォルダの不透明度・マスク・効果を掛けた
+1 枚を返す (文書の範囲内で、透明でない部分を囲む矩形)。フォルダ自身の
+表示 / 非表示は見ない (中のレイヤの表示は見る)。
+
+---
+
+### layerAt
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `x` | `&nbsp;` |  |
+| `y` | `&nbsp;` |  |
+| `options` | `void` | getComposite と同じ辞書 (visible / cache などを見る。省略可) |
+| `minAlpha` | `1` | 不透明度を掛けたアルファがこれ以上なら当たり (省略時 1) |
+
+**戻り値**
+
+レイヤ番号。無ければ -1
+
+**解説**
+
+文書上の点で、いちばん上に見えている画素レイヤを探す。
+
+表示は options.visible の上書きを含めて親フォルダまで見る。レイヤのマスク・
+不透明度・塗りの不透明度、親フォルダの不透明度とマスク、クリッピング (下地が
+見えていない所は当たらない) を考える。効果 (影など) の部分は当たらない。
+options に cache:true を渡すと、レイヤのアルファを覚えて次の呼び出しで使い回す。
+
+---
+
+### clearCompositeCache
+
+メソッド
+
+**解説**
+
+合成の途中結果 (cache:true で覚えたもの) を捨てる。
+
+---
+
+### setCompositeCacheLimit
+
+メソッド
+
+**引数**
+
+| 引数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `bytes` | `&nbsp;` | 上限 (バイト) |
+
+**解説**
+
+合成の途中結果として覚える画素の合計バイト数の上限 (既定 512MB)。
+
+超えたら古いものから捨てる。
+
+---
+
+### getCompositeCacheInfo
+
+メソッド
+
+**戻り値**
+
+%[ bytes (いま覚えているバイト数), limit (上限), entries (覚えている面の数) ]
+
+**解説**
+
+合成の途中結果の状態。
 
 ---
 

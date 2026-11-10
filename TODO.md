@@ -7,13 +7,15 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 |---|---|
 | バージョン番号の扱い | [src/core/doc/Versioning.md](src/core/doc/Versioning.md) |
 | 画面転送コスト (計測・読み方) | [src/core/doc/ScreenTransfer.md](src/core/doc/ScreenTransfer.md) |
+| ブラウザ表示 (デスクトップ版の画面・音声・入力をブラウザへ) | [src/core/doc/RemoteDisplay.md](src/core/doc/RemoteDisplay.md) (検討段階・未着手) |
 | Elements (レイアウト/ダイアログ) の要修正 | [TODO-elements.md](TODO-elements.md) |
 | Elements の入力リピート / キャッシュ / 描画の精査 | [src/core/doc/ElementsAudit.md](src/core/doc/ElementsAudit.md) |
 | 仮想カーソル位置 (提案) | [src/core/doc/VirtualCursor.md](src/core/doc/VirtualCursor.md) |
 | デモ整備 | [data/ROADMAP.md](data/ROADMAP.md) |
 | 多言語化 (デモの i18n / 公開ドキュメントの英語版) | [TODO-i18n.md](TODO-i18n.md) |
 | 標準ツールの改定 (リリーサ / 署名 / 破損チェック / ループチューナ / 画像・音声コンバータ) | [TODO-tools.md](TODO-tools.md) |
-| README の整理と英語版 (krkrz_dev / 外枠リポジトリ / 標準ツール / エンジン) | [TODO-readme.md](TODO-readme.md) |
+| Windows 版の配布パッケージ外枠 (krkrz_windows) | [TODO-windows-package.md](TODO-windows-package.md) (P1〜P5 済み。公開済み = https://github.com/wamsoft/krkrz_windows) |
+| ✅ README の整理と英語版 (krkrz_dev / 外枠リポジトリ / 標準ツール / エンジン) | [TODO-readme.md](TODO-readme.md) (**2026-10-20 に全 8 本完了**。共通構成 + ですます + `README_en.md`、鮮度は `tools/docgen/check_readme_en.py`。README の外の小さな残りは同ファイル «状況» に記載) |
 | 読み上げ (スクリーンリーダー対応) | [doc/specification/accessibility.md](doc/specification/accessibility.md) (Elements 側は `src/core/external/elements/docs/accessibility.md`) |
 | Window のサイズ/位置/ズーム/ビューポート仕様 | [src/core/doc/WindowGeometry.md](src/core/doc/WindowGeometry.md) |
 | Layer / Bitmap / ImageFunction の統合 | [src/core/doc/ImageBufferUnification.md](src/core/doc/ImageBufferUnification.md) |
@@ -28,13 +30,13 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 完了したものは末尾の「完了 (記録として残す)」へ移す。
 
-## 現況 (2026-10-15 時点)
+## 現況 (2026-10-27 時点)
 
 | 区分 | 件数 | 中身 |
 |---|---|---|
-| 予定・未着手 | 21 | Elements/UI 5 / エンジン基盤 12 / ビルド・運用 4 (内訳: 中 11 / 低 9 / 検討中 1)。2026-10-15: 「パネルのパッド操作」を ✅。2026-10-15: 「GPU 版 Canvas の endEffect に opacity 引数が無い」を追加し、同日 ✅。2026-10-12: 「VideoOverlay の再生矩形」を ✅。2026-10-09: 「共通の xp3 作成 CLI」を標準ツール `krkrxp3` で ✅。2026-10-11〜12: 「SDL 版 VideoOverlay の再生矩形」「パネルのパッド操作」を追加 |
-| 将来課題 | 7 | 着手時期未定 (中 4 / 低 3)。2026-10-09 に「GPU モードの確立と描画系プラグインの SDL_GPU 版」を追加 |
-| 未修正の既知バグ | 2 | いずれもレイヤ合成系。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
+| 予定・未着手 | 20 | Elements/UI 7 / エンジン基盤 12 / ビルド・運用 1 (内訳: 中 9 / 低 10 / 検討中 1)。2026-10-27: krkrz_windows の P2〜P5 を記録 (x86 は対象外に)。2026-10-27: 「SDL 版が -printdatapath に対応していない」を ✅。2026-10-27: krkrz_windows の P1 を記録、「SDL 版が -printdatapath に対応していない」を追加。2026-10-27: 「krkrlive2d のドライバソース」を ✅ (除外を戻した)。2026-10-27: 「リリースのバージョン運用」を ✅ (再パッケージ時のタグ規則を決定)。2026-10-27: 「Linux: krkr_richtext が読めない」を ✅。2026-10-27: 「Linux: プラグインを越える例外で abort」を ✅。2026-10-27: 「共有プラグインのサードパーティシンボル公開」を ✅、その調査で見つけた Linux の既存の問題 2 件 (krkr_richtext が読めない / プラグインを越える例外で abort) を追加。2026-10-27: 「全生成器の Perl 撤去」を ✅。2026-10-27: 「日本語版 MSVC でヘッダの依存関係が記録されない」を ✅。2026-10-27: 項目と照合して数え直し、「多言語化」2 件 (デモ i18n / 公開ドキュメントの英語版) を ✅。2026-10-15: 「パネルのパッド操作」を ✅。2026-10-15: 「GPU 版 Canvas の endEffect に opacity 引数が無い」を追加し、同日 ✅。2026-10-12: 「VideoOverlay の再生矩形」を ✅。2026-10-09: 「共通の xp3 作成 CLI」を標準ツール `krkrxp3` で ✅。2026-10-11〜12: 「SDL 版 VideoOverlay の再生矩形」「パネルのパッド操作」を追加 |
+| 将来課題 | 7 | 着手時期未定 (中 3 / 低 3 / 検討中 1)。2026-10-27 に「SDL 版に -about のダイアログが無い」を ✅。2026-10-27 に「ブラウザ表示 (リモート画面・音声)」を追加。2026-10-09 に「GPU モードの確立と描画系プラグインの SDL_GPU 版」を追加 |
+| 未修正の既知バグ | 3 | レイヤ合成系 2 + `Window.drawDevice` の代入失敗で窓が壊れる 1 (2026-11-09 追加)。回避規約で運用中 (原因確定済みだった 2 件は 2026-09-06 に修正) |
 | 低優先・保留 | 11 | 単発の小さいもの。着手順は問わない。2026-10-15: `-timerprec` の残骸を削除して ✅ |
 | デモ整備 | 10 + 1 | 未着手デモは多くが資材待ち |
 
@@ -109,6 +111,8 @@ registerHotKey の WINVER 配線)。
 
 | 優先 | 課題 | 内容 |
 |---|---|---|
+| 中 | 読み上げ: iOS / Android 対応 (Phase D) | **段階 0〜2 実装済み (2026-10-22)**。iOS は Simulator、Android は実機で確認 (フォーカス枠・announce も修正済み)。外枠の設定で ON (krkrz_ios `"a11y": true` / krkrz_android `cmake.plugins` に `"a11y"`)。**段階 3 (iOS / Android でも既定 ON) も実施** (サイズ増は Android の libkrkrz.so が ABI ごとに約 0.6 MB、iOS の実行ファイルが約 0.35 MB)。残り: TalkBack オフで a11yActive が 0 に戻るかの確認のみ (実機 VoiceOver・スワイプ巡回は確認 / 修正済み)。SSOT = [TODO-a11y-mobile.md](TODO-a11y-mobile.md) |
+| 低 | 読み上げ: 読み上げ中にゲーム画面へタッチを直接届ける (直接操作の領域) | VoiceOver / TalkBack 中は、読み上げツリーに載せていない部分へのタップがゲームに届かない。iOS の `UIAccessibilityTraitAllowsDirectInteraction` 相当の「直接操作」指定を `setGameA11y` 等に足す案。検討のみ。SSOT = [TODO-a11y-mobile.md](TODO-a11y-mobile.md) §8 |
 | 低 | 読み上げ: Phase C (`showModalJson` の専用ウィンドウ / 複数 Window) | Phase A / B (ダイアログ・`setGameA11y`・`a11yLayers`・`announce`・REPL の `.a11y` 系) と入力欄の文字単位の読み上げは 2026-10-04 に実装済み。残りは、`showModalJson` が開く専用ウィンドウにスクリーンリーダーの口を付けることと、メインウィンドウ以外の `Window` への対応。SSOT = [accessibility.md](doc/specification/accessibility.md) §7 |
 | ✅ | 読み上げ: IME の変換中文字列 — **扱わない方針に決定 (2026-10-05)** | 変換中の文字や候補は OS の IME 自体がスクリーンリーダーへ伝えるので、アプリ側で重ねて出すと二重に読まれる。入力欄は確定した文字だけを持つ。SSOT = Elements 側 `docs/accessibility.md` §6.5 |
 | ✅ | 読み上げ: 使い方のガイド・デモ・スキル | **2026-10-05 対応**。ガイド [doc/guide/Accessibility.md](doc/guide/Accessibility.md)、コアデモ `src/core/data/a11y` (選択肢を `setGameA11y` / ボタン類を `a11yLayers` / パネルの `"a11y"` キー。SDL3・WINVER で REPL から確認)、スキル elements / krkrz / krkrz-repl に追記。作成中に elements の `"a11y": {hidden}` が TJS 辞書 (true が 1) で効かなかったのを修正 |
@@ -166,16 +170,19 @@ registerHotKey の WINVER 配線)。
 | ✅ | macOS: Window.width / height (外形) にタイトルバーが含まれない | SDL 3.4 の Cocoa バックエンドは SDL_GetWindowBordersSize が未実装 (Windows / X11 のみ) で、外形 = inner になっていた。2026-10-19 に `sdl3/environ/macwindow.mm` で NSWindow の frame と内容領域の差から求めるようにして解消 (src/core bf80e640。起動ディスプレイの作業領域への寄せも同じ値を使う)。Mac で -dpiscaling=no は差 56 px・yes は 28、setSize / setInnerSize の往復とフルスクリーン中の差 0 を確認。Wayland は引き続き枠 0 |
 | ✅ | macOS: .app 内でプラグインが見つからない | .dylib は `krkrz.app/Contents/MacOS/` に置かれるが、検索先が `Contents/Resources/` (SDL_GetBasePath) だった。2026-10-19 に実行ファイルのパスを `_NSGetExecutablePath` で取り、そのフォルダをプラグインの検索先にして解消 (src/core bf80e640)。Mac で layerExVector / layerExImage / extrans / extNagano が読まれ、demotest 22/22 ok (transition_demo 21 種) |
 | ✅ | macOS: layerExVector を読むと終了時に abort | exit() の静的破棄で tvg::Inlist<LoadModule> → GwLoader::~GwLoader → GwFontManager::retire が、先に破棄済みの mutex を lock して std::system_error (mutex lock failed)。2026-10-19 に ThorVG (wtnbgo fork) の GwFontManager と mutex を破棄しない形にして解消 (thorvg 1f709928、layerExVector / Elements の両方の ThorVG)。Mac で正常終了・クラッシュレポートなしを確認 |
-| 中 | 日本語版 MSVC でヘッダの依存関係が記録されない (ninja) | ビルドログに「メモ: インクルード ファイル:」がそのまま出る = ninja が /showIncludes の日本語表示を認識できず、ヘッダを変えても依存する cpp が再コンパイルされない。2026-10-19 に elements_modal (parse_from_string) と MsgImpl.cpp (新メッセージ) で古い obj が残りリンクエラーになった。対策候補: ビルド環境で VSLANG=1033 (英語表示) にする / CMAKE_CL_SHOWINCLUDES_PREFIX を合わせる / 再 configure で prefix を検出し直す |
-| 低 | 共有プラグインが静的リンクしたサードパーティのシンボルを公開している | krkreffekseer / minizip / sigcheck (Linux)、krkr_richtext / krkrthreepp / krkreffekseer / clipfile / psdfile 等 (macOS) が静的リンクしたライブラリのシンボルを数十〜数千個公開したまま。同じライブラリを 2 本のプラグインが別々に静的リンクすると同種の衝突が起き得る。対策候補 = `-Wl,--exclude-libs,ALL` (未検証) |
-| 中 | 多言語化: デモ用 i18n 基礎ライブラリ + 実効表示言語の公開 | `demolib/demo_i18n.tjs` (Elements の `strings` と同じ形の表を共用) と `System.uiLanguage` / `uiLanguageCandidates`。当面 ja / en、chs を後から足せる作り。SSOT = [TODO-i18n.md](TODO-i18n.md) A・B |
-| 中 | 多言語化: 公開ドキュメントの英語版 | 公開サイトの範囲のみ。mkdocs-static-i18n (接尾辞方式 `*.en.md`) + reference は JSON の翻訳カタログから生成 + 訳の鮮度チェック。SSOT = [TODO-i18n.md](TODO-i18n.md) C |
-| 中 | krkrlive2d のドライバソースを版固定取得へ | ドライバ側 CMake がローカルパス (`LIVE2DLIB_FOLDER` / `CUBISM_SDK` 等) を直接参照する作りで、そのフォルダの版がずれると **umbrella の configure ごと失敗する** (実例: ドライバが `find_package(minizip)` を要求する版になり、本体 vcpkg マニフェストに minizip が無くて configure 不能)。 版を固定して fetch する形へ直すまで、`CMakeLists.txt` の `CUBISM_SDK` ブロックをコメントアウトしてビルド対象から外してある (2edc380)。 直したら除外を戻す |
-| 中 | リリースのバージョン運用を確定する | **実験中 API の扱いは 2026-09-06 に決定** (安定保証の対象外を `@experimental` で明示し、そこの非互換変更はマイナー。[Versioning.md](src/core/doc/Versioning.md) 「実験中 API」節)。番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する |
-| 中 | 全生成器の Perl 撤去 → Python 統一 | 残 = syntax 後処理 5 本 と `gengl.pl` (7519 行 = 最大の山)。バイト一致の差分ゲート方式。他作業と独立に実施可。✅ どこからも呼ばれていなかった `src/core/generic/base/copy_if_differ.pl` は 2026-10-15 に削除 (src/core `8a5c88f9`) |
+| ✅ | 日本語版 MSVC でヘッダの依存関係が記録されない (ninja) | ビルドログに「メモ: インクルード ファイル:」がそのまま出る = ninja が /showIncludes の日本語表示を認識できず、ヘッダを変えても依存する cpp が再コンパイルされない。2026-10-19 に elements_modal (parse_from_string) と MsgImpl.cpp (新メッセージ) で古い obj が残りリンクエラーになった。**2026-10-27 対応**: 接頭辞は configure した環境の言語で焼かれるので、configure とビルドで環境の言語が違うと食い違っていた (2026-09-26 の文書にあった «presets に VSLANG を入れた» は実際には入っておらず、`cmake --build <dir>` には効かない形でもあった)。`src/core/cmake/MsvcEnglishOutput.cmake` で、project() 前に `VSLANG=1033` を立て (測定を英語に)、コンパイラを `cmake -E env VSLANG=1033` 経由で起動する (どの経路のビルドでも英語に)。標準ツールの ExternalProject にも渡す。日本語 (VSLANG=1041) の環境で x64-windows をフルビルドして showIncludes の漏れ 0・`WindowIntf.cpp.obj` の依存 66 件、`WindowIntf.h` を触ると 33 本が再コンパイルされることを確認。以前に日本語で configure した build ディレクトリには configure 時に警告を出す (直し方 = [WindowsBuildDeps.md](src/core/doc/WindowsBuildDeps.md)) |
+| ✅ | 共有プラグインが静的リンクしたサードパーティのシンボルを公開している | krkreffekseer / minizip / sigcheck (Linux)、krkr_richtext / krkrthreepp / krkreffekseer / clipfile / psdfile 等 (macOS) が静的リンクしたライブラリのシンボルを数十〜数千個公開したまま。同じライブラリを 2 本のプラグインが別々に静的リンクすると同種の衝突が起き得る。**2026-10-27 対応**: `krkrz_plugin()` (src/core と plugins の tp_stub の両方の `krkrz.cmake`) で、Linux はバージョンスクリプト (`V2Link` / `V2Unlink` だけ global、`local: *`)、macOS は `-exported_symbol` で公開を 2 つに絞った (`--exclude-libs` より確実に、プラグイン外から来たオブジェクトも含めて絞れる)。sniper SDK でビルドし、26 本すべてで公開シンボルが `V2Link` / `V2Unlink` の 2 個になったこと、コンテナ内で 25 本を読み込めること (読めない krkr_richtext は下の既存の問題) を確認。⚠ **macOS は未確認** (Mac で `nm -gU <dylib>` が 2 個になることと、demotest を見る)。調べる途中で既存の問題を 2 つ見つけたので別項目にした (「Linux: krkr_richtext が png 未解決で読めない」「Linux: プラグインのフレームを越える例外で abort」) |
+| ✅ | Linux: krkr_richtext が読めない (png 等が未解決) | sniper ビルドの `libkrkr_richtext.so` に `png_create_read_struct` ほか png 23 個と bz2 / brotli / zlib の関数が未定義のまま残っており、`Plugins.link` が `undefined symbol` で失敗する。FreeType (静的) が要求するライブラリがリンクされていないと見られる。公開範囲の制限 (2026-10-27) を外してリンクしても同じなので、それ以前からの問題。**2026-10-27 対応**: リンク順の問題だった。HarfBuzz (umbrella の `cmake/CommonExternals.cmake` で FetchContent) は `freetype` ターゲットが無いと `include(FindFreetype)` で探し、vcpkg の差し替えを通らないので libfreetype.a を依存 (png / bz2 / brotli / zlib) 抜きで載せていた。GNU ld は静的ライブラリを前から 1 回しか見ないため、harfbuzz の後ろで取り込まれた FreeType の png 等が未解決で残った。HarfBuzz を取り込む前に vcpkg の `freetype` ターゲット (依存込み) を `find_package` で用意して解消。sniper コンテナで 26 本すべて読み込めることを確認。Windows (x64-windows) のビルドも確認 |
+| ✅ | Linux: プラグインの中から投げられた例外で abort する | 例: `Scripts.evalJSONStorage("無いファイル")` (json プラグインが本体の `TVPThrowExceptionMessage` を呼び、例外がプラグインのフレームを越えて本体へ戻る) を try / catch で囲んでも、catch に届かず `Aborted` で終了する (sniper SDK のビルドで再現)。プラグインを通らない例外 (`Plugins.link` の失敗など) は捕まる。公開範囲の制限 (2026-10-27) を外したリンクでも同じなので、それ以前からの問題。libstdc++ / libgcc を exe とプラグインの両方に静的リンクしている構成 (GLIBCXX 依存を持たないための方針) で、例外の型情報や巻き戻しの仕組みが 2 組あることが疑わしい。プラグインのエラー処理が全部これに当たるので影響が大きい。**2026-10-27 対応**: gdb で見ると、exe の unwinder (`_Unwind_RaiseException_Phase2`) がプラグインの `__gxx_personality_v0` を呼び、それがプラグイン側の複製の `_Unwind_SetGR` で abort していた (unwinder の複製の混在)。sniper の gcc-14 は libgcc を常に静的に使い `-shared-libgcc` も効かないので、本体と `krkrz_plugin()` で `libgcc_s.so.1` を直接リンクして unwinder を一本化 (libstdc++ は静的のまま = GLIBCXX 依存なし、要求は `GCC_4.2.0` まで)。sniper コンテナで例外が catch に届くこと、25 本のプラグインの読み込み、GLIBC ≤ 2.30 の維持、`-demotest` 全 24 シーン ok を確認。Steam Deck 実機 (SteamOS 3.8.16) でも `-demotest -demotestcap` 全 24 シーン ok と例外の捕捉を確認。SSOT = [LinuxBuild.md](src/core/doc/LinuxBuild.md) «libgcc_s.so.1 への依存» |
+| ✅ | 多言語化: デモ用 i18n 基礎ライブラリ + 実効表示言語の公開 | **2026-10-19 に完了**。`demolib/demo_i18n.tjs` (Elements の `strings` と同じ形の表を共用) と `System.uiLanguage` / `uiLanguageCandidates`。coretest_legacy 以外の全デモを日英対応し、埋め込みデモへ `?language=` を渡すところまで。SSOT = [TODO-i18n.md](TODO-i18n.md) A・B |
+| ✅ | 多言語化: 公開ドキュメントの英語版 | **2026-10-19 に完了** (以後は追従のみ)。mkdocs-static-i18n (接尾辞方式 `*.en.md`) + reference は JSON の翻訳カタログから生成 + 訳の鮮度チェック (`tools/docgen/check_translations.py en`)。2026-10-27 時点で手書き 106 / 106 ページ・reference 3426 / 3426 項目が訳済み。SSOT = [TODO-i18n.md](TODO-i18n.md) C |
+| ✅ | krkrlive2d のドライバソースを版固定取得へ | ドライバ側 CMake がローカルパス (`LIVE2DLIB_FOLDER` / `CUBISM_SDK` 等) を直接参照する作りで、そのフォルダの版がずれると **umbrella の configure ごと失敗する** (実例: ドライバが `find_package(minizip)` を要求する版になり、本体 vcpkg マニフェストに minizip が無くて configure 不能)。 版を固定して fetch する形へ直すまで、`CMakeLists.txt` の `CUBISM_SDK` ブロックをコメントアウトしてビルド対象から外してある (2edc380)。 直したら除外を戻す。**2026-10-27 に除外を戻した**: プラグイン側がドライバ (wtnbgo/live2d) を既定で GitHub から取得し、ドライバの依存 (CubismNativeFramework / CubismNativeSamples / KTX-Software) をサブモジュールにした (minizip-ng はタグ指定で取得) ので、ローカルフォルダの版ずれは起きなくなった。外部参照は Cubism Core (環境変数 `CUBISM_SDK_CORE`) だけで、umbrella はこれが設定されているときだけビルドする (旧 `CUBISM_SDK` から変更)。ドライバ本体の取得は `GIT_TAG main` のまま (ユーザ判断)。GitHub から取る経路で x64-windows の configure と krkrlive2d.dll のビルドを確認 |
+| ✅ | リリースのバージョン運用を確定する | **実験中 API の扱いは 2026-09-06 に決定** (安定保証の対象外を `@experimental` で明示し、そこの非互換変更はマイナー。[Versioning.md](src/core/doc/Versioning.md) 「実験中 API」節)。番号の供給元は一本化済み ([Versioning.md](src/core/doc/Versioning.md))。`v2.0.0` は core (krkrz.git) / umbrella (master) 双方に打鍵済み。残りは **再パッケージ時のタグ規則の確定**: core 無変更でプラグインだけ更新する場合に `v2.0.0-2` 等のサフィックスを使うか。既存タグは `1.4.0` (v 無し) と `v1.0.0` (v 有り) が混在しているので、以後は `v` 付きで統一する。**2026-10-27 に決定**: 本体に変更が無い再パッケージでもパッチ番号を上げ、krkrz.git と umbrella の両方に同じ `vMAJOR.MINOR.PATCH` を打つ (`-2` / `+2` / 4 桁は使わない、ドキュメントだけならタグなし、打ち直さない)。規則 = [Versioning.md](src/core/doc/Versioning.md) «タグの規則» |
+| ✅ | 全生成器の Perl 撤去 → Python 統一 | **2026-10-27 に完了** (本体から .pl は 0 本)。syntax の後処理 4 本を Python 化 (`cr.py` / `postbison.py` / `wrap_tjs_ns.py` / `create_word_map.py`)。Perl 版との比較で、bison 3.8.2 で作った 3 文法の後処理と CRLF / CR / LF の改行処理がバイト一致、`tjsDateWordMap.cc` はコミット済みとも一致 (再生成で冒頭の生成元の注記だけ `.py` に変わった)。呼び出し元の無かった `char2wchar_t.pl` は削除。`gengl.pl` (7519 行) は、今の `tvpgl.{c,h}` を生成していなかった (C 版の関数群が `gl/blend_function.cpp` 等へ移り、tvpgl 側は手で保守されていた。実行すると約 6000 行食い違いビルドが壊れる) ので、移植せず `glgen/` ごと撤去 (使われていない `maketab.c` / `tvpps.c` / `tvpps.inc` も)。tvpgl は «手で保守するソース» として CLAUDE.md / README (日英) を更新。✅ どこからも呼ばれていなかった `src/core/generic/base/copy_if_differ.pl` は 2026-10-15 に削除 (src/core `8a5c88f9`) |
 | ✅ | 2026-10-06 の Linux 修正を基準環境で確認する | 相対パス起動の abort / サーバ停止時のハング / GLES 版 / exeBits の修正 (src/core `5016acf1`〜`a86ec6de`) は、ホストの Ubuntu 26.04 (glibc 新・gcc 15・CMake 4.2) で直ビルドして確認しただけ。2026-10-06 に基準環境 (steamdev `deckbuild/` sniper SDK、src/core `051c7691`) で configure〜install が通り、[LinuxBuild.md](src/core/doc/LinuxBuild.md) の合格基準 (GLIBC ≤ 2.31 / GLIBCXX 依存なし) を満たすこと、ホスト (Wayland) で `-demotest -demotestcap` 全 24 シーン ok を確認済み。同日 Steam Deck 実機 (SteamOS 3.8.16、ネイティブ実行) でも `-demotest -demotestcap` 全 24 シーン ok。なお Steam から起動すると同梱 SDL3 (3.4.0) ではなく Steam ランタイム側の SDL3 (3.2.18) が読まれていた (動作は問題なし) (`dc5a3ed`) |
 | ✅ | Steam 起動時に同梱 SDL3 が使われない | Deck で Steam から起動すると `LD_LIBRARY_PATH=.` を付けても Steam ランタイム側の SDL3 (3.2.18) が先に読まれ、ビルドした SDL3 (3.4.0) が使われない。今のところ動作に問題はないが、SDL3 側の修正に依存する不具合が出たら効いてくる。→ exe に `$ORIGIN` を DT_RPATH で埋め込み、soname リンクも install するよう修正。Deck の Steam 起動で同梱 3.4.0 が読まれ `-demotest` 全 24 シーン ok を確認 (src/core `0f54ee4b`) |
-| 中 | 配布パッケージ外枠の整備 (Linux 以外も) | Linux は [krkrz_linux](https://github.com/wamsoft/krkrz_linux) でフォルダ + tar.gz まで (2026-10-06)。残り: AppImage 出力 (`.desktop` / アイコンは生成済み)、Flatpak (AppStream メタデータ) は需要次第。macOS (.app) / Windows (フォルダ・MSIX) / Xbox (GDK) も `*-config.json` の `cmake` / `assetPack` 書式を共通にした外枠で揃える方向で調査 |
+| 中 | 配布パッケージ外枠の整備 (Linux 以外も) | Linux は [krkrz_linux](https://github.com/wamsoft/krkrz_linux) でフォルダ + tar.gz まで (2026-10-06)。残り: AppImage 出力 (`.desktop` / アイコンは生成済み)、Flatpak (AppStream メタデータ) は需要次第。macOS (.app) / Windows / Xbox (GDK) も `*-config.json` の `cmake` / `assetPack` 書式を共通にした外枠で揃える方向。Xbox / Store は krkrz_gdk (msixvc) が済み。**Windows は 2026-10-27 に設計案と決めどころまで**: krkrz_linux と同じ形の krkrz_windows (フォルダ + zip、任意で Inno Setup のインストーラ、exe の書き換えはリリーサ `krkrrelease` を呼ぶ。既定は SDL 版・セーブはマイドキュメント・利用者ごとのインストール・Authenticode あり・破損チェックツールを同梱可、arm64 は課題) → [TODO-windows-package.md](TODO-windows-package.md)。macOS は Mac 実機での確認が要るので後回し。**krkrz_windows は 2026-10-27 に P1〜P5 済み** (フォルダ / zip / Inno Setup のインストーラ / 破損チェックツールの同梱 / Authenticode → `.sig` の作り直し / 公開ドキュメント [windows_package.md](doc/topics/core/windows_package.md)。対象は x64 だけ = x86 は扱わない)。[krkrz_windows](https://github.com/wamsoft/krkrz_windows) として公開済み。残り: AppImage / Flatpak (Linux)、macOS (.app) |
+| ✅ | SDL 版が `-printdatapath` (保存場所を出力して終了) に対応していない | **2026-10-27 対応** (src/core)。WINVER と同じく実際のコマンドラインだけを見て、`TVPNativeDataPath` を標準出力へ出して終了する (`generic/base/SysInitImpl.cpp` の `TVPCheckPrintDataPath`、`SDL_AppInit` で音声初期化より前に判定)。保存先フォルダは作らず、プロジェクト未指定でもフォルダ選択ダイアログを出さない (`-license` と同じ扱い)。x64 SDL 版で 既定 (exe の隣の savedata)・`-datapath=$(personalpath)/…`・相対 `-datapath` を確認。SDL 版は起動ログも同じ標準出力に先に出るので、パスは最終行 ([CommandLine.md](doc/guide/CommandLine.md) に追記)。«出力して終了» 系の残りは `-about` だけで、これは将来課題の「SDL 版に `-about` のダイアログが無い」で管理 |
 | ✅ | 共通の xp3 作成 CLI | **2026-10-09 に標準ツールの `krkrxp3` で対応** (krkrz_tools `3b020ff`、umbrella では `src/tools/krkrz_tools` から `make install` で `tools/` に入る)。暗号化なしの通常の xp3 を作る CLI (pack / list / extract / verify) + 画面。書式は旧 krkrrel と同じで、本体 (`XP3Archive`) で全ファイルを読めることを確認。Windows / Linux (sniper SDK) / macOS (Intel) でビルド・動作確認済み。外枠 (krkrz_android / krkrz_linux / krkrz_ios) や CI からも使える。残り (暗号化の口・Ogg のコードブック共有) は [TODO-tools.md](TODO-tools.md) で管理 |
 
 ## 将来課題
@@ -186,22 +193,24 @@ registerHotKey の WINVER 配線)。
 | ✅ | Elements を WINVER のネイティブ経路へ | **2026-07-31 に完了** (src/core `bc0ab76a` まで)。入力の中立型化 (SDL 依存の剥がし) / テキスト入力・ウィンドウ取得の seam 化 / WndProc → manager 転送 / nested pump の overlay モーダル / 独立ウィンドウ モーダル (`WinElementsModalRunner`) / 描画は host 借用方式で Basic (D3D11) / OGL / SDL / SDLOGL の全 DrawDevice に配線。IME の候補窓追従もその後対応済み。WINVER 実機で SDL 版と同じ表示・操作を確認済み。TODO の更新漏れを 2026-10-08 の棚卸しで確認 |
 | 中 | フォントラスタライザを glyphware へ一本化 | 現状の既定は WINVER=GDI / 非 WINVER=旧 FreeType で、glyphware (`rasterizer=2`) はどちらでも既定ではない。可変軸・シェイピング・BiDi・カラー絵文字・フォールバックが既定で効くようにするには一本化が本筋だが、**全案件の文字描画の見た目が変わりうる**ためパリティ検証が前提。→ [FontEngine.md](src/core/doc/FontEngine.md) |
 | 中 | GPU モードの確立と描画系プラグインの SDL_GPU 版 | Canvas の SDL_GPU 版は 2026-10-09 に master 統合済み・PS5 実機確認済み。残りは、本体の内蔵機能 (~~マスク・ステンシルクリップ / beginEffect / TextureLayerTreeOwner / GLCompositor / 動画テクスチャ~~ 2026-10-13 済・PS5 実機確認済み / drawText) を GPU モードでそろえて PS5 まで動作を確立すること、そのあと GLES 系の描画プラグイン (Live2D / Effekseer / M2 Motion・E-mote) に SDL_GPU 版を足すこと。別途開発中の SDL_GPU ベースのエンジンとコードを参照しあいながら少しずつ進める (すぐには着手しない)。SSOT = [CanvasGPU.md](src/core/doc/CanvasGPU.md) «今後の方向» |
-| 中 | SDL 版に `-about` のダイアログが無い | バージョン情報ダイアログは WINVER だけの実装 (`TVPCheckAbout()` → `TVPShowVersionForm()` = Win32 `DialogBox`)。SDL3 は `-about` を処理しておらず、`System.showVersion()` も WINVER のみ。**表示する文字列は全バリアント共通で用意済み** (`TVPGetAboutString()` = バージョン行 + LICENSE + 収録一覧 + 環境情報。SSOT = [LicenseSystem.md](src/core/doc/LicenseSystem.md)) なので、残るのは表示手段だけ。素直には `-userconf` と同じくゲームウィンドウ生成前の独立 SDL_Window + Elements overlay だが、**gamescope (Steam Deck) はセカンダリウィンドウを出せない**ので、その環境での代替 (標準出力へ落とす等) も併せて決める必要がある。現状の代替手段 = `-license` (標準出力) と `System.licenseText` |
+| ✅ | SDL 版に `-about` のダイアログが無い | **2026-10-27 対応** (src/core)。`-userconf` と同じ appserve でブラウザ (アプリ表示) にバージョン情報の画面 (`common/base/userconf_web/about.html`、版・ライセンス・環境情報、環境情報のコピー) を出す。`-about` は表示して閉じたら終了 (`-license` と同じくプラグイン登録後に判定、プロジェクト未指定でもフォルダ選択を出さない)。`System.showVersion()` も SDL 版に追加し、こちらはゲームを止めないよう別スレッドで開いてすぐ戻る (WINVER のダイアログは従来どおり)。開き方は `-userconfbrowser` を共用。gamescope (`GAMESCOPE_WAYLAND_DISPLAY`) やブラウザ起動に失敗した場合は `-about` は標準出力へ、`System.showVersion()` はログだけ。x64 SDL 版で、`-about` の表示と「閉じる」での終了 (rc=0)、実行中の `showVersion` 2 回呼び (止まらない)・コピー・閉じてもゲーム継続・開いたままの終了 (rc=0) を確認。WINVER x64 のビルドも確認。⚠ gamescope での標準出力への代替と、実際のアプリ表示の窓 (Edge / Chrome) は未確認。SSOT = [LicenseSystem.md](src/core/doc/LicenseSystem.md) «`-about` / `System.licenseText`» |
 | 中 | SDL ビルドの SEH 捕捉 | ゼロ除算・アクセス違反でログを残さず即死する。WINVER は translator + minidump あり |
 | 低 | WINVER モダン化の残 | F-3 (入力)、HW mixer の直描画 |
 | 低 | WINVER に繁体字のメッセージ文字列が無い | `messages.csv` の `cht` 列は SDL3/LIB へ `resource/messages-cht.json` として届くが、WINVER の PE 文字列テーブル (`win32/vcproj/string_table_*.rc`) は jp / en / chs の 3 種のみ。zh-Hant UI では PE リソースの言語解決でフォールバックする。`gen_messages.py` に `string_table_cht.rc` の出力を足し、`tvpwin32.rc` の Chinese (Traditional) ブロックへ `#include` すれば埋まる (設定ダイアログの文字列は既に繁体字あり)。→ `src/core/common/msg/text/README.md` |
 | ✅ | macOS (Retina) の point / pixel の使い分け | **2026-10-13 に対応**: GL コンテキストの `GetSurfaceSize` を `SDL_GetWindowSizeInPixels` (実ピクセル) に、iOS / macOS のウィンドウに `SDL_WINDOW_HIGH_PIXEL_DENSITY` を付けた (サイズ API の単位は論理ポイントのまま、`displayDensity` が 192)。macOS は 4K (2 倍) で描画・マウス・Elements・フルスクリーンを確認。あわせて macOS で枠ドラッグ / フルスクリーン解除時に落ちる件 (縦横比 (0,0)) を修正 (解除が効かない既知の制限あり) → [WindowGeometry.md](src/core/doc/WindowGeometry.md) §8 |
 | 低 | generic フラグの 3 種区別 | `kirikiriz_generic` が導入当時「CS (コンシューマ) 版」の意味だったため、案件スクリプトは generic = プラグイン静的リンク前提で分岐している。PC の SDL ビルドは CS でも WINVER でもない第 3 の形態なのに区別する手段が無い。案件側スクリプトにも影響するため改定は慎重に |
+| 検討中 | ブラウザ表示 (リモート画面・音声) | デスクトップ版をネイティブで動かしたまま本体を Web サーバにし、ブラウザに画面を出して音を鳴らし、操作を本体へ返す形態。2026-10-27 に実現性を検討: 画面は present 直前の最終画面を読み戻してタイル差分で送る方式を本線 (GL / GPU 描画も映る)、音は miniaudio の全ミックスを 1 本のストリームで送る、入力は Agent の注入口を流用、通信は既存 `ReplWebServer` に WebSocket を足す。段階案はミラー → タイル差分 + 音声 → ヘッドレス → 映像コーデック。AudioWorklet / WebCodecs が secure context 必須なので LAN 公開には TLS 等の手当てが要る。SSOT = [RemoteDisplay.md](src/core/doc/RemoteDisplay.md) |
 
 ## 未修正の既知バグ (回避策で運用中)
 
-いずれもレイヤ合成系。回避規約を敷いて運用しているので実害は出ていないが、
+上の 2 件はレイヤ合成系。回避規約を敷いて運用しているので実害は出ていないが、
 **エンジン側のバグの可能性が高く未調査**。直したら回避規約を外せる。
 
 | 課題 | 症状と回避 |
 |---|---|
 | primary レイヤ直描き / primary 直下の非全画面レイヤ | primary へ直接 `drawText` するとグリフが崩れ、primary 直下の半透明 `ltAlpha` レイヤが白帯化する。`Layer.type` を明示設定した後の `drawText` も崩れる。CPU フラグ (`-cpuavx2=no` / `-cpusimd=no`) で症状が変わるが SIMD パリティテストは全合格なので、レイヤ種別ごとの関数選択・dispatch 経路が疑わしい。DrawDevice 非依存。**回避**: 描画は必ず「primary の全画面 opaque 子レイヤ (demolib の `base`/`stage`)」以下で行う。デモ全体に適用済み (`data/demolib/readme.txt` / `data/README.md` に注意書き) |
 | 非全画面の入れ子レイヤの `Layer.type` ブレンド | primary→stage→bg→sp のような**非全画面の孫レイヤ**に `Layer.type` でブレンドを設定すると、多くの型 (`ltOpaque` / `ltAlpha` / `ltMultiplicative` / `ltDodge` / `ltDarken` / `ltLighten`) でそのセルが真っ黒になる (`ltAdditive` / `ltSubtractive` / `ltScreen` は正常)。上と同じ合成器系統の別 facet の可能性。**回避**: ブレンド比較はレイヤツリー合成ではなく `Layer.operateRect` (CPU 合成) を使う。`layer_basic` デモはこの方式 |
+| `Window.drawDevice` の代入が失敗すると窓が壊れる | `tTJSNI_BaseWindow::SetDrawDeviceObject` は古い DrawDevice を先に破棄してから新しい方の `SetWindowInterface` を呼ぶので、そこで例外になると (SDL3 ビルドを `-drawdevice=sdl` で起動して OpenGL 系へ切り替えた等) 戻す先が無く、そのまま続けるとクラッシュする。2026-11-09 に窓を OpenGL 無しで作る構成が Windows にも広がって表に出た (macOS は以前から)。**回避**: 切り替えられない起動のしかたでは代入しない (コアデモの `enableGLMode` は `-drawdevice=sdl` を見て GL シーンを飛ばす)。直すなら、新しい方の初期化が通ってから古い方を破棄する順にする |
 
 ## 低優先・保留
 
@@ -224,6 +233,8 @@ registerHotKey の WINVER 配線)。
 `sound` / `sound_3d` / `video` / `storage` / `ui_flow` /
 `data_parse` / `net_demo` / `movie_alpha` / `archive_demo` / `richtext_demo` の 10 本
 (多くは資材待ち。資材一覧は [data/DEMO-ASSETS.md](data/DEMO-ASSETS.md))。
+ROADMAP にはほかに、複合デモ `gl_plugin_mix` / `kag_mini`、elements_gallery への
+«データ側で完結» 4 点の追加、個別プラグインの sample/ 整理、WIN 専用プラグインのデモ (後回し) が残っている。
 資材不要のデモは全て実装済み (残りは資材待ち)。
 ほかに krkrz_web のランチャ起動トークン (スラッシュ入り) 対応が残っている。
 doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビルド・再ステージングは
@@ -260,6 +271,12 @@ doc のデモ一覧ページ ([doc/demos.md](doc/demos.md)) と wasm 再ビル�
 
 ## 最近クローズしたもの
 
+- ✅ Elements の overlay より手前に画面全体を覆う「スクリーンカバー」(2026-10-20〜21、src/core `029aa19b` / `6709aff8`)
+  `Window.screenCover` / `fadeScreenCover` / `snapshotScreenCover` / `onScreenCoverDone`。レイヤの覆いでは
+  Elements の画面 (セーブ / ロード / 環境設定など) を覆えず、暗転・白への転換・クロスフェードをかけられなかった。
+  単色と «呼んだ時点の画面の静止画» で覆え、フェードはエンジンの時計で進み、blockInput で覆う間の入力を止められる。
+  WINVER (basic / ogl)・SDL3 (sdl / sdlogl / ogl) で確認。未確認 = SDL_GPU 版・macOS / Linux / 家庭用ゲーム機。
+  使い方 = [screen_cover.md](doc/topics/core/screen_cover.md)、作り = [ScreenCover.md](src/core/doc/ScreenCover.md)
 - ✅ 既定書体 (`Font.face = ""`) が Elements のアイコンフォントで描かれる (2026-10-15、src/core `cf10b113`)
   fonts.json の無いデータ (デモの単独起動等) で `Layer.drawText` の文字が全部矢印などの記号になっていた
   (`data/elements_audit` で発覚)。classic FreeType 経路が既定書体名 (OS のフォント) を遅延ロードせずに

@@ -192,19 +192,17 @@ krkrgles
 )
 endif()
 
-# krkrlive2d は上記に加えて Live2D Cubism Core を必要とする。SDK パスは環境変数
-# CUBISM_SDK (ドライバ側 CMake が $ENV{CUBISM_SDK}/Core を参照) で与えられ、未設定では
-# ビルドできないため、設定されているときだけビルド対象に含めていた。
-#
-# ただしドライバ側ソースはローカルパス (環境変数 LIVE2DLIB_FOLDER 等) を直接参照する
-# 作りで、そのフォルダの版がずれると configure が通らなくなる (例: ドライバ側が
-# find_package(minizip) を要求するようになったが本体の vcpkg マニフェストには無い)。
-# 版を固定して取得する形へ直すまで、いったんビルド対象から外す。
-#if(DEFINED ENV{CUBISM_SDK})
-#list(APPEND TVP_PLUGINS
-#krkrlive2d
-#)
-#endif()
+# krkrlive2d は上記に加えて Live2D Cubism Core を必要とする。Core の場所は環境変数
+# CUBISM_SDK_CORE (Cubism SDK の Core フォルダ。ドライバ側 CMake が参照する) で与えられ、
+# 未設定ではビルドできないため、設定されているときだけビルド対象に含める。
+# ドライバ (wtnbgo/live2d) は既定で GitHub から取得し、その依存 (CubismNativeFramework /
+# CubismNativeSamples / KTX-Software) はドライバのサブモジュールとして版ごと決まる
+# (2026-08〜10-26 はローカルのフォルダ直参照が版ずれで configure を止めていたため外していた)。
+if(DEFINED ENV{CUBISM_SDK_CORE} AND NOT "$ENV{CUBISM_SDK_CORE}" STREQUAL "")
+list(APPEND TVP_PLUGINS
+krkrlive2d
+)
+endif()
 
 # 特殊プラグイン
 # STEAMプラグインはSDKパスが環境変数で提供された場合のみビルド
@@ -231,6 +229,8 @@ endif()
 # (krkrz_merge_vcpkg_manifest は内容差分が無ければ書き換えない)。
 # ----------------------------------------------------
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/core/cmake/MergeVcpkgManifest.cmake)
+# MSVC の /showIncludes を英語に固定 (project() より前に include する。詳細はファイル先頭)
+include(${CMAKE_CURRENT_SOURCE_DIR}/src/core/cmake/MsvcEnglishOutput.cmake)
 
 set(_KRKRZ_VCPKG_SUBDIRS
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/external/movie-player"
@@ -261,6 +261,7 @@ set(VCPKG_MANIFEST_DIR "${CMAKE_BINARY_DIR}" CACHE PATH
     "vcpkg manifest directory (merged manifest written by krkrz_merge_vcpkg_manifest)" FORCE)
 
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
+krkrz_msvc_english_output()
 
 # macOS: src/core の sdl3/environ/macwindow.mm (Objective-C++)。 enable_language は
 # その言語を使うターゲットに共通する最上位で呼ぶ必要があり、 add_subdirectory 先の

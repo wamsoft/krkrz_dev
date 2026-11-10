@@ -1063,6 +1063,7 @@
       "bringToFront",
       "clearViewportWallpaper",
       "close",
+      "fadeScreenCover",
       "getClientRect",
       "getCursorPos",
       "getMouseVelocity",
@@ -1093,6 +1094,7 @@
       "onMultiTouch",
       "onPopupHide",
       "onResize",
+      "onScreenCoverDone",
       "onTouchDown",
       "onTouchMove",
       "onTouchRotate",
@@ -1121,6 +1123,7 @@
       "setZoom",
       "showModal",
       "showRestore",
+      "snapshotScreenCover",
       "update"
     ],
     "properties": [
@@ -1163,6 +1166,7 @@
       "mouseCursor",
       "mouseCursorState",
       "primaryLayer",
+      "screenCover",
       "showScrollBars",
       "stayOnTop",
       "top",

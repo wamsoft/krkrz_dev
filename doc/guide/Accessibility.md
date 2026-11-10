@@ -4,7 +4,7 @@
 
 吉里吉里Z のゲーム画面は、OS のスクリーンリーダー ( Windows のナレーター、macOS の VoiceOver、Linux の Orca など ) から読めます。画面の部品の名前・役割・値・状態を OS のアクセシビリティ API ( UI Automation / NSAccessibility / AT-SPI ) へ渡すので、目の見えない人や見えにくい人が、読み上げを聞きながらキーボードで遊べます。
 
-対応しているのはデスクトップ ( Windows / macOS / Linux ) の通常ビルドです。SDL3 版・Windows ネイティブ ( WINVER ) 版のどちらでも動きます。ブラウザ ( Web ) 版にはこの口がありません。
+対応しているのは Windows / macOS / Linux / iOS / Android の通常ビルドです。Windows は SDL3 版・Windows ネイティブ ( WINVER ) 版のどちらでも動きます。iOS は VoiceOver、Android は TalkBack に出ます ( 外枠 krkrz_ios / krkrz_android で既定 ON。設定で OFF にできます )。ブラウザ ( Web ) 版にはこの口がありません。
 
 スクリーンリーダーに渡す内容は、次の 3 つから集まります。
 
@@ -185,7 +185,9 @@ KAG3 には読み上げの拡張を入れていません。KAG 系の作品は�
 - `setGameA11y` / `a11yLayers` / `onGameA11yAction` などは**クラス全体に効く**設定です。場面を抜けるときは `clearGameA11y()` / `a11yLayers = false` で戻してください。
 - 対象はメインウィンドウだけです。`showModalJson` が開く専用ウィンドウと、2 枚目以降の `Window` にはまだ対応していません。
 - 入力欄の変換中 ( IME で確定する前 ) の文字は、アプリ側からは出しません。変換中の文字や候補は OS の IME 自体がスクリーンリーダーへ伝えます。入力欄が持つのは確定した文字だけです。
-- ビルドオプション `KRKRZ_USE_A11Y` ( デスクトップの通常ビルドは既定 ON ) を OFF にすると、OS へは出なくなります。REPL での確認の口は残ります。
+- ビルドオプション `KRKRZ_USE_A11Y` ( Windows / macOS / Linux / iOS / Android の通常ビルドは既定 ON ) を OFF にすると、OS へは出なくなります。REPL での確認の口は残ります。外枠では krkrz_ios の `ios-config.json` の `"a11y": false`、krkrz_android の `cmake.plugins` から `"a11y"` を外すと OFF になります。
+- スマートフォン ( VoiceOver / TalkBack ) では、スクリーンリーダーが動いている間、画面へのタッチはスクリーンリーダーの操作になり、ゲームには直接届きません ( 1 回タップで読み上げ、ダブルタップで決定、スライダーは上下スワイプ )。タッチで遊ぶ部分は `setGameA11y` / `a11yLayers` で操作できるようにしておいてください。
+- 位置 ( `rect` ) を持たないノードは、Android ではスワイプでの巡回から外れます ( 画面に枠が出せないため )。読ませたいノードには位置を付けてください。
 - 実行時に OS へ出したくない場合は `ElementsDialog.a11yMode = "off"` にします。
 
 仕様の全体と設計時の記録は [アクセシビリティ ( スクリーンリーダー ) 対応](../specification/accessibility.md) にあります。

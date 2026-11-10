@@ -245,6 +245,21 @@ class MyTimer extends Timer {
 }
 ```
 
+### 画面全体の暗転・クロスフェード (スクリーンカバー)
+
+Elements のダイアログより手前に画面全体を覆う単色 / 静止画。レイヤの覆いは Elements の overlay の奥になるので、
+Elements の画面を含めて暗転させたいときはこちら。フェードはエンジンの時計で進み、終わると `onScreenCoverDone(opacity)`。
+
+```tjs
+window.fadeScreenCover(255, 250);            // 黒へ (白は第 3 引数 0xFFFFFF)。終わると onScreenCoverDone(255)
+window.fadeScreenCover(0, 250);              // 明ける
+window.screenCover = %[ color: 0, opacity: 255, blockInput: true ];  // 即時。blockInput で覆う間の入力を止める
+window.snapshotScreenCover();                // 今の画面 (レイヤ + Elements) の静止画で覆う → 下で画面を替えて
+window.fadeScreenCover(0, 500);              //   → 新しい画面へクロスフェード
+```
+
+詳細: [Window.screenCover](doc/reference/Window.md#screencover) / `doc/topics/core/screen_cover.md`
+
 ### DrawDevice 切替で OGL 有効化
 
 ```tjs
@@ -257,7 +272,7 @@ var tex = new Texture(window, "image.png");
 ## 関連ドキュメント
 
 - ガイド (概念解説): `doc/guide/EventSystem.md`, `doc/guide/StorageSystem.md`, `doc/guide/GraphicSystem.md`, `doc/guide/SoundSystem.md`, `doc/guide/CommandLine.md`
-- 読み上げ (スクリーンリーダー): `doc/guide/Accessibility.md`。Layer に描いた UI は `ElementsDialog.setGameA11y` (ノード表を渡す) か `ElementsDialog.a11yLayers = true` (フォーカス連鎖の Layer を自動で載せる。Layer に `a11yName` / `a11yRole` / `a11yHidden` / `onA11yAction` などを生やして補う — 一覧は `doc/reference/Layer.md` のクラス説明)。任意の文は `ElementsDialog.announce`
+- 読み上げ (スクリーンリーダー): `doc/guide/Accessibility.md`。Windows / macOS / Linux / iOS (VoiceOver) / Android (TalkBack) で既定 ON (`KRKRZ_USE_A11Y`)。Layer に描いた UI は `ElementsDialog.setGameA11y` (ノード表を渡す) か `ElementsDialog.a11yLayers = true` (フォーカス連鎖の Layer を自動で載せる。Layer に `a11yName` / `a11yRole` / `a11yHidden` / `onA11yAction` などを生やして補う — 一覧は `doc/reference/Layer.md` のクラス説明)。任意の文は `ElementsDialog.announce`
 - 周辺情報: `doc/topics/core/*.md` (gamepad〔刻印/位置 2 系統・padStyle〕, viewport, engine_setting, memory_observation, low_memory, draw_stats, pad_overlay, repl, logging, anti_cracking)
 - TJS2 言語本体は別 skill (`tjs2`)
 

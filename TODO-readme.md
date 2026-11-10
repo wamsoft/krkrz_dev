@@ -73,7 +73,10 @@ vcpkg マニフェストの統合の仕組みなど開発者向けの詳細は�
   - 英語版の鮮度は `tools/docgen/check_readme_en.py` (全 8 本 訳済み)
   - README 以外でも直したもの: 利用者向け docs・サンプル設定の「案件」、krkrz_web の CMakeLists.txt と src/core の
     CMakeLists.txt のコメントにあった非公開リポジトリ名 / 機種名を一般的な書き方に
-  - 残り (README の外・未着手): 外枠の Makefile / スクリプト / CLAUDE.md のコメントの「案件」、krkrz_web の
-    既定リソースフォルダ名 `setup/nxresource` (コードの既定値)
+  - 残り (README の外・未着手): krkrz_web の既定リソースフォルダ名 `setup/nxresource` (コードの既定値)
+  - ⚠ 2026-10-27 訂正: 上で «公開文書の用語の決まり (「案件」は書かない)» としたのは誤解だった。公開文書で避けるのは
+    **個別の案件を特定できる記述** (タイトル名・非公開リポジトリ名・課題キー等) で、「案件」という語そのものは問題ない
+    (ユーザ確認)。既に書き換えた箇所は読みやすさの点でもそのままでよい。外枠の Makefile 等のコメントの「案件」を
+    直す作業は不要になったので残りから外した
 - 2026-10-20: 外枠リポジトリのライセンスを MIT に統一 (ユーザ決定)。android / ios / linux / web に LICENSE
   (krkrz_gdk と同じ MIT、Copyright WAMSOFT) を追加し、README (日英) のライセンス節を gdk と同じ書き方に

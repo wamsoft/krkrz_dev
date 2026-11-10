@@ -88,6 +88,23 @@ DT_RPATH も効かなくなります )。
 同じ設定 ( `C_VISIBILITY_PRESET` / `CXX_VISIBILITY_PRESET hidden` と
 `VISIBILITY_INLINES_HIDDEN` ) にしてください。
 
+2026-10-27 からは、プラグインが静的リンクしたライブラリ ( libstdc++ / zlib / expat / threepp /
+Effekseer など ) のシンボルも公開しません。上の設定はプラグイン自身のコードにしか効かないため、
+Linux はバージョンスクリプト ( `V2Link` / `V2Unlink` だけを global にする )、macOS はリンカの
+`-exported_symbol` で、公開する名前を `V2Link` / `V2Unlink` の 2 つに絞っています。独自の CMake で
+作る場合は、Linux なら `-Wl,--version-script=<ファイル>` ( 中身は
+`{ global: V2Link; V2Unlink; local: *; };` )、macOS なら `-Wl,-exported_symbol,_V2Link
+-Wl,-exported_symbol,_V2Unlink` を足してください。
+
+### 例外の巻き戻し処理 ( libgcc_s.so.1、2026-10-27〜 )
+
+本体とプラグインは `libgcc_s.so.1` ( どの Linux 環境にもあるライブラリ ) を使います。
+基準環境の gcc は libgcc を静的にリンクするため、以前は本体とプラグインがそれぞれ例外の巻き戻し
+処理を持っており、プラグインの中で起きたエラー ( 例: `Scripts.evalJSONStorage` で読めないファイル )
+を `try` / `catch` で捕まえようとしても、捕まえる前に異常終了していました。独自の CMake で
+プラグインを作る場合は、Linux で `-Wl,--push-state,--no-as-needed -l:libgcc_s.so.1 -Wl,--pop-state`
+をリンクの指定に足してください ( `krkrz_plugin()` を使えば自動で付きます )。
+
 ## セーブデータの場所 ( 2026-10〜 )
 
 !!! warning "重要 (2026-10 の変更)"
@@ -131,11 +148,11 @@ gameid は英数字・`_`・`.` だけです ( ハイフン不可 )。2026-10-06
 
 - AppImage 出力 ( `AppRun` を足して `appimagetool` で固める )
 - xp3 アーカイブは krkrz_android と同じく案件側で事前に作り、`assetPack` の
-  `flatten` で取り込む ( 外枠では作らない )。暗号化なしの通常の xp3 を作る共通 CLI を
-  krkrz_dev 側に用意する予定
+  `flatten` で取り込む ( 外枠では作らない )。暗号化なしの通常の xp3 は標準ツールの
+  `krkrxp3` で作れる
 - Flatpak は需要が出てから
-- macOS ( .app ) / Windows / Xbox も、`*-config.json` の `cmake` / `assetPack`
-  書式を共通にした外枠で揃える方向で調査中
+- Windows は [krkrz_windows](windows_package.md) で同じ書式の外枠ができた。Xbox / Store は krkrz_gdk。
+  macOS ( .app ) は Mac の実機で確かめられるようになってから
 
 ## 関連
 

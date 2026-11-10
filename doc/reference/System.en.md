@@ -1865,6 +1865,12 @@ Shows the about dialog (1.1.0 and later)
 
 Shows the about dialog.
 
+The WINVER build shows the “version, copyright, and environment information” dialog and does not return until it is closed.
+The SDL build opens the version information page in a browser (app window) and returns immediately
+(the game does not stop; if the page is already open, it is just reopened).
+In environments where a browser cannot be opened (such as Steam Deck game mode (gamescope)), nothing is shown and only a log line is written.
+The same content can be obtained as a string with [System.getAboutString](#getaboutstring).
+
 ---
 
 ### dumpHeap

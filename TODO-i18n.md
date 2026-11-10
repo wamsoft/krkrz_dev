@@ -109,6 +109,11 @@ guide/BundledLicenses は生成器 (gen_licenses_c.py `--mode table --i18n doc/i
 Steam の DummySteam.tjs も実装の名前 (clearAchievement / cloudFileCount) に合わせた。
 
 残り (判断待ち / 対象外):
-- topics/core/repl: コード例のラベル文字列 (一般的な語へ変えるか)
-- Steam の `isIsSubscribedApp` は実装の名前がこの綴り。現状のまま (ユーザ判断)
+- ✅ topics/core/repl: コード例のラベル文字列。中身は `WebServer.registerPanel("mytool", "案件ツール", "/tool/tool.html")` の
+  タブ名 `"案件ツール"` (日英の repl ページと `src/core/doc/REPL.md` の 3 か所)。**現状のままで確定** (2026-10-27 ユーザ判断:
+  公開文書で避けるのは個別の案件を特定できる記述で、「案件」という語そのものは問題ない)
+- ✅ Steam の `isIsSubscribedApp` は実装の名前がこの綴り。**現状のままで確定** (2026-10-27 ユーザ判断)
+
+2026-10-27: 読み上げの iOS / Android 対応で原文が変わり要再訳になっていた 2 ページ (guide/Accessibility・
+specification/accessibility) は、英訳が既に追従済みで鮮度の印だけが古かったので `--stamp` で更新。要再訳 0。
 

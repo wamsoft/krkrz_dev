@@ -124,9 +124,11 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
 - **-**userconf** (エンドユーザ向け設定ツールの起動)**  
   本体に内蔵されているエンドユーザ向け設定ツール ( [吉里吉里設定](Configure.md) ) を起動します。ゲームは起動せず、設定画面をブラウザで開きます ( Windows / Linux / macOS。Windows ネイティブ ( WINVER ) 版と SDL 版で共通 )。
 - **-**userconfbrowser** (設定画面の開き方)**  
-  -userconf の設定画面をどう開くかを指定します。設定可能な値は **'app' ( 既定。Edge / Chrome のアプリ表示。使えなければ既定のブラウザ )**, **'default' ( 既定のブラウザ )**, **'none' ( 開かない )** のいずれかです。'none' の場合は、設定画面の URL がログに出るので、それをブラウザで開きます。
+  -userconf の設定画面と、SDL 版の -about のバージョン情報画面をどう開くかを指定します。設定可能な値は **'app' ( 既定。Edge / Chrome のアプリ表示。使えなければ既定のブラウザ )**, **'default' ( 既定のブラウザ )**, **'none' ( 開かない )** のいずれかです。'none' の場合は、設定画面の URL がログに出るので、それをブラウザで開きます。
 - **-**about** (著作権情報ダイアログボックスの表示)**  
   「バージョン・著作権・環境情報」のダイアログボックスを表示します。同梱コンポーネントのライセンス一覧も併せて表示されます ( 全文は -license=<名前> で取り出せます )。
+
+  SDL 版では、ダイアログの代わりに -userconf と同じくブラウザ ( アプリ表示 ) でバージョン情報の画面を開き、閉じると終了します。環境情報はボタンでコピーできます。開き方は -userconfbrowser で選べます。ブラウザを開けない環境 ( Steam Deck のゲームモード (gamescope) など ) では、同じ内容を標準出力へ出して終了します。プロジェクトを指定せずに起動した場合でも、フォルダ選択ダイアログは表示されません。
 - **-**sel** (「フォルダ/アーカイブの選択」ダイアログボックスの表示)**  
   「フォルダ/アーカイブの選択」ダイアログボックスを表示します。data.xp3 などのデータは自動検出されません。
   
@@ -141,6 +143,8 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
   データ保存場所のうち、$(exepath) などの特殊な文字列は、置き換えられた後の状態で出力されます。
   
   吉里吉里本体は GUI アプリケーションのため、コマンドプロンプトから単に吉里吉里実行可能ファイルに -printdatapath オプションを指定して起動しても何も表示されません。出力内容を取り込むにはパイプやリダイレクトを用いてください。
+
+  WINVER 版・SDL 版の両方で使えます。データ保存場所のフォルダは作成しません。プロジェクトを指定せずに起動した場合でも、フォルダ選択ダイアログは表示されません。SDL 版では起動時の情報ログも同じ標準出力に先に出るため、データ保存場所は出力の最終行から取り出してください。
 - **-**license** (同梱ライセンスの出力)**  
   本体・プラグイン・プロジェクトデータが持つライセンス情報を標準出力に出力し、終了します。
 
@@ -572,6 +576,8 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
   
   これは**起動時の既定**の指定で、実行中に [Window.drawDevice](../reference/Window.md#drawdevice) へ代入して切り替えるのは従来どおり可能です。ただし **SDL3 ビルドを 'sdl' で起動した場合、実行中に OpenGL 系 ( sdlogl / ogl ) へ切り替えることはできません** ( OpenGL の初期化が通りません )。OpenGL 機能 ( Canvas 等 ) を使う場合は最初から 'sdlogl' / 'ogl' で起動してください。
   
+  SDL3 ビルドを 'sdl' で起動すると、ゲームのウィンドウを OpenGL 用にせずに作ります ( `-renderer=opengl` / `opengles` / `opengles2` を併せて指定した場合を除く )。OpenGL 用のウィンドウはその場で OpenGL / OpenGL ES のライブラリを読み込むため、OpenGL を初期化できない環境 ( D3D/GL をフックする常駐オーバーレイが入っている等 ) でも 'sdl' なら起動できます。OpenGL 系で起動した場合も、OpenGL 用のウィンドウが作れなければ OpenGL 無しで作り直してウィンドウだけは出します ( その後の OpenGL の初期化はエラーになります )。
+  
   OpenGL 系の DrawDevice を使うには OpenGL ES が利用できる環境が必要です。WINVER は常に EGL ( ANGLE の libEGL.dll / libGLESv2.dll ) 経由なので DLL の同梱が必須、SDL3 の Windows では OS の OpenGL ドライバの ES プロファイルが優先され、使えない場合に同じ ANGLE DLL へフォールバックします ( 下記 -forceegl も参照 )。
 - **-**renderer** (SDL3 backend の明示指定 / SDL3 ビルド限定)**  
   SDLDrawDevice が利用する SDL_Renderer の backend 名を明示します。
@@ -579,7 +585,20 @@ tool.exe -replfile=D:/ch -datapath=D:/ch/sd -- -batch a.mmo
   
   指定しなかった場合は SDL3 の自動選択に任されます。
   
+  指定した backend ( または自動選択 ) で renderer を作れなかったり、作れても描画が通らなかったりした場合は、自動選択 → `direct3d12` → `direct3d11` → `opengl` → `vulkan` → `direct3d` → `software` の順に試し、使えたものを採用します ( 既定以外になったときは WARNING でログに残ります )。どれも使えなかった場合はエラー `E-RENDER-01` を表示して終了します ( 下記 -boottest 参照 )。起動ログの `[renderer] init:` の行に、ビデオドライバ・使える backend の一覧・検出した常駐オーバーレイが出ます。
+  
   SDL3 ビルド + SDLDrawDevice ( = `-drawdevice=sdl` 指定時 ) 使用時のみ意味を持ちます。
+- **-**boottest** (起動失敗の表示の確認 / SDL3 ビルド限定)**  
+  起動時の各段を人工的に失敗させて、利用者に出るエラー表示を確かめるためのオプションです。通常の環境ではまず失敗しないので、実際に起きたときに何が出るかの確認に使います。
+  
+  SDL3 ビルドは、起動時に SDL の初期化やゲームのウィンドウの生成に失敗すると、問い合わせ用のコードを添えたエラーを画面 ( Windows では SDL に頼らない Win32 のメッセージボックス ) とログの両方に出して終了します。
+  
+    - **'sdlinit'**: SDL の初期化の失敗 ( `E-SDLINIT-01` )
+    - **'window'**: ゲームのウィンドウの生成の失敗 ( `E-WINDOW-01` )
+    - **'renderer'**: 使える renderer が一つも無い ( `E-RENDER-01` )
+    - **'windowgl'**: OpenGL 用のウィンドウの生成だけを失敗させる ( OpenGL 無しで作り直す経路の確認。ウィンドウは出て起動は続きます )
+  
+  SDL の初期化より前に効く必要があるため、コマンドラインでのみ指定できます ( `.cf` ファイルからは読みません )。
 - **-**forceegl** (OpenGL ES コンテキストの EGL 強制 / SDL3 ビルド限定)**  
   OpenGL ES コンテキストを、最初から EGL ( Windows では ANGLE の libEGL.dll / libGLESv2.dll ) で作成させます。
   

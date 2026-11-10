@@ -1,5 +1,5 @@
 ---
-source_hash: 3b64345ac2fd
+source_hash: 0b3dfec142eb
 ---
 
 # Linux Distribution Packages (krkrz_linux)
@@ -99,6 +99,24 @@ ncbind plugin stopped during its load (the same happened on macOS). If you build
 with your own CMake, use the same settings (`C_VISIBILITY_PRESET` / `CXX_VISIBILITY_PRESET hidden`
 and `VISIBILITY_INLINES_HIDDEN`).
 
+Since 2026-10-27, symbols of libraries a plugin links statically (libstdc++ / zlib / expat /
+threepp / Effekseer and so on) are not exported either. The settings above only affect the
+plugin's own code, so the exported names are narrowed to `V2Link` / `V2Unlink` with a version
+script on Linux (only those two are `global`) and with the linker's `-exported_symbol` on macOS.
+If you build with your own CMake, add `-Wl,--version-script=<file>` on Linux (with the content
+`{ global: V2Link; V2Unlink; local: *; };`) or `-Wl,-exported_symbol,_V2Link
+-Wl,-exported_symbol,_V2Unlink` on macOS.
+
+### Exception unwinding (libgcc_s.so.1, 2026-10-27 onward)
+
+The engine and plugins use `libgcc_s.so.1` (a library present on every Linux system). The
+baseline gcc links libgcc statically, so the engine and each plugin used to carry their own copy of
+the exception unwinder, and an error raised inside a plugin (for example a file that
+`Scripts.evalJSONStorage` cannot read) crashed the process before `try` / `catch` could catch it.
+If you build a plugin with your own CMake, add
+`-Wl,--push-state,--no-as-needed -l:libgcc_s.so.1 -Wl,--pop-state` to its link options on Linux
+(`krkrz_plugin()` adds it automatically).
+
 ## Save data location (2026-10 onward)
 
 !!! warning "Important (changed in 2026-10)"
@@ -142,11 +160,11 @@ For the full procedure and common pitfalls, see [Steam Deck Hardware Testing](st
 
 - AppImage output (add `AppRun` and package with `appimagetool`)
 - As with krkrz_android, xp3 archives are created beforehand on the project side and imported with `assetPack`'s
-  `flatten` (the wrapper does not create them). A common CLI for creating plain, unencrypted xp3 archives is
-  planned on the krkrz_dev side
+  `flatten` (the wrapper does not create them). Plain, unencrypted xp3 archives can be made with the standard
+  tool `krkrxp3`
 - Flatpak when there is demand
-- macOS (.app) / Windows / Xbox are being investigated, aligning them with wrappers that share the
-  `cmake` / `assetPack` format of `*-config.json`
+- Windows now has its wrapper with the same format, [krkrz_windows](windows_package.md). Xbox / Store are handled
+  by krkrz_gdk. macOS (.app) waits until it can be tested on a real Mac
 
 ## Related
 
