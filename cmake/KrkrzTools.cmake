@@ -63,6 +63,20 @@ endif()
 if(GIT_EXECUTABLE)
     list(APPEND _krkrz_tools_args "-DGIT_EXECUTABLE=${GIT_EXECUTABLE}")
 endif()
+# macOS: 作るアーキテクチャを本体に合わせる (osx プリセットが指定する。
+# 無いとホストの既定になり、Intel の Mac で arm64-osx を作るとツールだけ x86_64 になる)。
+# 複数指定 (universal) の ; は LIST_SEPARATOR の | で渡す
+if(APPLE AND CMAKE_OSX_ARCHITECTURES)
+    string(REPLACE ";" "|" _krkrz_tools_osx_archs "${CMAKE_OSX_ARCHITECTURES}")
+    list(APPEND _krkrz_tools_args "-DCMAKE_OSX_ARCHITECTURES=${_krkrz_tools_osx_archs}")
+endif()
+# 本体の overlay port (src/core/cmake/vcpkg-ports。osx プリセットが指定する) をツール側にも
+# 効かせる。ツールの sig / krkrcheck も libtomcrypt を使うので、上流の port のままだと
+# ホストと違うアーキテクチャで作れない
+if(VCPKG_OVERLAY_PORTS)
+    string(REPLACE ";" "|" _krkrz_tools_overlay_ports "${VCPKG_OVERLAY_PORTS}")
+    list(APPEND _krkrz_tools_args "-DVCPKG_OVERLAY_PORTS=${_krkrz_tools_overlay_ports}")
+endif()
 # MSVC の /showIncludes を英語に固定する (本体と同じ。src/core/cmake/MsvcEnglishOutput.cmake)。
 # configure (接頭辞の測定) は VSLANG=1033 を立てた cmake で走らせ、ビルド時はコンパイラを
 # launcher 経由で起動する。launcher のリストは LIST_SEPARATOR の | で渡す
