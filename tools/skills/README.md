@@ -57,9 +57,10 @@ bash tools/skills/install.sh --dist /path/to/dist-repo
 
 `--dry-run` を付けると、何をどこへ書くかだけを表示して終わります。
 
-## ChatGPT で使う (パックを作る)
+## Codex / ChatGPT で使う (パックを作る)
 
-同じスキルとリファレンスを、ChatGPT のカスタム GPT やプロジェクトに入れられる形にまとめます。
+同じスキルとリファレンスを、Codex と ChatGPT (カスタム GPT / プロジェクト) で使える形にまとめます。
+krkrz_dev を持っていない人へは、この zip を渡します。
 
 ```
 bash tools/skills/pack_chatgpt.sh --zip
@@ -71,7 +72,10 @@ bash tools/skills/pack_chatgpt.sh --zip
   正本は `tools/skills/chatgpt/instructions.md` で、手で保守します
 - `knowledge/` — ナレッジとしてアップロードするファイル。スキルと分野ごとに 1 ファイルへ連結し、
   20 ファイルの上限に収めています。`00_INDEX.md` が元のパス → ナレッジファイルの対応表です
-- `skills/` — `install.sh` が組み立てた自己完結形のスキルそのもの (Codex など SKILL.md を読むツール用)
+- `skills/` — `install.sh` が組み立てた自己完結形のスキルそのもの。Codex はこれを
+  `~/.agents/skills/` か `<repo>/.agents/skills/` へ置いて使います
+- `VERSION.md` — 生成日と元にしたコミット (krkrz_dev / src/core)。同じ情報を `00_INDEX.md` と
+  `skills/` の各 SKILL.md の先頭にも入れます
 - `README.md` — 受け取った人向けの導入手順 (正本は `tools/skills/chatgpt/README.md`)
 
 内部では `install.sh --project` で一時フォルダへ組み立ててから `pack_chatgpt.py` で束ね直します。

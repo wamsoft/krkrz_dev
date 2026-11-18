@@ -14,9 +14,11 @@ ChatGPT のナレッジとして上げやすい形へ束ね直す。通常は pa
 使い方: pack_chatgpt.py <組み立て済み skills ディレクトリ> <出力先> [--zip]
 """
 
+import datetime
 import os
 import re
 import shutil
+import subprocess
 import sys
 import zipfile
 
@@ -150,6 +152,31 @@ def adapt_wording(text):
     return text
 
 
+def git_rev(path):
+    """path のリポジトリの短縮コミット。未コミットの変更があれば印を付ける。取れなければ None"""
+    def git(*args):
+        r = subprocess.run(["git", "-C", path] + list(args),
+                           capture_output=True, text=True, encoding="utf-8")
+        return r.stdout.strip() if r.returncode == 0 else None
+    rev = git("rev-parse", "--short", "HEAD")
+    if rev is None:
+        return None
+    if git("status", "--porcelain", "--untracked-files=no"):
+        rev += " (未コミットの変更あり)"
+    return rev
+
+
+def provenance():
+    """INDEX に載せる版情報の行"""
+    repo = os.path.normpath(os.path.join(HERE, "..", ".."))
+    lines = ["- 生成日: {}".format(datetime.date.today().isoformat())]
+    for label, path in (("krkrz_dev", repo), ("src/core", os.path.join(repo, "src", "core"))):
+        rev = git_rev(path)
+        if rev:
+            lines.append("- {} のコミット: {}".format(label, rev))
+    return lines
+
+
 def main(argv):
     args = [a for a in argv[1:] if not a.startswith("--")]
     make_zip = "--zip" in argv
@@ -212,7 +239,9 @@ def main(argv):
         "どのナレッジファイルに入っているかをこの表で引ける。",
         "各ナレッジファイルの中では、元のファイルごとに `[出典: <スキル>/<パス>]` の行で区切ってある。",
         "",
-    ]
+        "## このパックの版",
+        "",
+    ] + provenance() + [""]
     for fname, title, items in groups:
         parts = ["# {}\n\n吉里吉里Z / TJS2 開発ナレッジパックの一部 ({})。".format(title, fname),
                  "元のファイルごとに `[出典: ...]` の行で区切ってある。収録:\n"]
@@ -242,7 +271,24 @@ def main(argv):
     shutil.copy(os.path.join(TEMPLATE_DIR, "README.md"), out)
 
     # SKILL.md を読めるツール向けに、元の自己完結形もそのまま添える
+    # Codex 等ではスキルのフォルダだけを置くので、版情報は各 SKILL.md にも入れる
+    # (frontmatter の直後。スキルの読み込みには影響しない)
     shutil.copytree(skills_dir, os.path.join(out, "skills"))
+    stamp = "> **このパックの版** — " + " / ".join(
+        l[2:] for l in provenance()) + "\n\n"
+    for name in os.listdir(os.path.join(out, "skills")):
+        p = os.path.join(out, "skills", name, "SKILL.md")
+        if not os.path.isfile(p):
+            continue
+        with open(p, encoding="utf-8") as fp:
+            text = fp.read()
+        m = re.match(r"---\n.*?\n---\n", text, re.S)
+        if m:
+            text = text[:m.end()] + stamp + text[m.end():]
+            with open(p, "w", encoding="utf-8", newline="\n") as fp:
+                fp.write(text)
+    with open(os.path.join(out, "VERSION.md"), "w", encoding="utf-8", newline="\n") as fp:
+        fp.write("# このパックの版\n\n" + "\n".join(provenance()) + "\n")
 
     print("ChatGPT パック: {}".format(out))
     print("  instructions.md : {} 文字 (上限 {})".format(len(instr), MAX_INSTRUCTIONS))
