@@ -152,8 +152,12 @@ def adapt_wording(text):
     return text
 
 
-def git_rev(path):
-    """path のリポジトリの短縮コミット。未コミットの変更があれば印を付ける。取れなければ None"""
+def git_rev(path, *paths):
+    """path のリポジトリの短縮コミット。取れなければ None
+
+    パックの元になるパス (paths) に未コミットの変更があれば印を付ける
+    (無関係な作業中ファイルでは付けない)。
+    """
     def git(*args):
         r = subprocess.run(["git", "-C", path] + list(args),
                            capture_output=True, text=True, encoding="utf-8")
@@ -161,7 +165,7 @@ def git_rev(path):
     rev = git("rev-parse", "--short", "HEAD")
     if rev is None:
         return None
-    if git("status", "--porcelain", "--untracked-files=no"):
+    if git("status", "--porcelain", "--untracked-files=no", "--", *paths):
         rev += " (未コミットの変更あり)"
     return rev
 
@@ -170,8 +174,10 @@ def provenance():
     """INDEX に載せる版情報の行"""
     repo = os.path.normpath(os.path.join(HERE, "..", ".."))
     lines = ["- 生成日: {}".format(datetime.date.today().isoformat())]
-    for label, path in (("krkrz_dev", repo), ("src/core", os.path.join(repo, "src", "core"))):
-        rev = git_rev(path)
+    for label, path, srcs in (
+            ("krkrz_dev", repo, (".claude/skills", "doc", "tools/skills")),
+            ("src/core", os.path.join(repo, "src", "core"), ("doc",))):
+        rev = git_rev(path, *srcs)
         if rev:
             lines.append("- {} のコミット: {}".format(label, rev))
     return lines
