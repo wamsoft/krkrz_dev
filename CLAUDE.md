@@ -54,6 +54,10 @@ When you need to modify plugin code itself, remember each `src/plugins/<name>/` 
 
 `TODO.md` at the repo root is the index of open issues across the whole project (priority + one-liner + link to the detailed SSOT). Detailed lists live in their own files — `TODO-elements.md` (Elements layout/dialog bugs), `data/ROADMAP.md` (demos), `src/core/doc/*.md` (engine subsystems) — so keep `TODO.md` thin and link rather than duplicate. When an item is finished, mark it ✅ with the commit hash instead of deleting it.
 
+## Claude Code skills and their distribution
+
+`.claude/skills/` (`krkrz` / `tjs2` / `elements` / `krkrz-repl` / `krkrz-webui`) is the SSOT; the skills point at docs in this tree (`doc/reference`, `doc/guide`, `doc/topics`, `doc/tjs2`, `src/core/doc/{ElementsDialog,Gamepad,REPL}.md`). They are published as a Claude Code plugin in the **public** repo [wamsoft/krkrz-skills](https://github.com/wamsoft/krkrz-skills), which is a generated copy — never edit it directly. It is **not** updated automatically: after a change to the skills or the docs they bundle, commit here first, then run `bash tools/skills/install.sh --dist ../krkrz-skills --force`, grep the output for private repo / client names, and commit + push that repo. `bash tools/skills/pack_chatgpt.sh --zip` builds the Codex / ChatGPT pack. Details: `tools/skills/README.md`.
+
 ## Conventions
 
 **Never put project/client-identifying information in this repository.** This is a
