@@ -2,9 +2,10 @@
 
 `KRKRZ_REPL=ON` でビルドされたバイナリにコマンドライン引数 `-repl`
 ( または `-repl=yes` ) を付けて起動すると、対話型 TJS シェルが有効に
-なります。Windows / macOS / Linux 対応。行編集は
-[icline](https://github.com/deths74r/icline) ( isocline フォーク ) を
-利用しています。
+なります。Windows / macOS / Linux 対応。行編集は icline
+( [isocline](https://github.com/daanx/isocline) のフォーク ) を利用しています。
+icline は上流リポジトリが消失したため、v1.2.0 を src/core の
+`external/icline` に同梱しています ( ビルド時のネットワーク取得はありません )。
 
 詳細な仕様 ( コマンド一覧・編集機能・トラブルシューティング ) は
 src/core 側のガイドを参照:

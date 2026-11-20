@@ -1,5 +1,5 @@
 ---
-source_hash: 3f8eda2e6d0a
+source_hash: 7b464500faf4
 ---
 
 # Command-Line Options
@@ -596,6 +596,8 @@ A mechanism that **adds gain (volume) in dB** when decoding compressed audio. It
   Forces a startup stage to fail so that you can check the error display users would see. These stages almost never fail in a normal environment, so this is how to see what appears when they actually do.
   
   When an SDL3 build fails to initialize SDL or to create the game window at startup, it shows an error with a short code for support inquiries both on screen (on Windows, a Win32 message box that does not depend on SDL) and in the log, then exits.
+  
+  The on-screen wording (title, fixed sentences and the workaround hint) comes from the engine's message resources, so like other engine messages it follows the OS language (or `-language`). An SDL initialization failure happens before the message resources are read, so in that case alone they are read on the spot before the error is shown. If they cannot be read, a built-in text with Japanese and English side by side is used. The one-line description of what failed and the diagnostic details stay in English regardless of language, so they are easy to match in support inquiries.
   
     - **'sdlinit'**: SDL initialization fails ( `E-SDLINIT-01` )
     - **'window'**: creating the game window fails ( `E-WINDOW-01` )
