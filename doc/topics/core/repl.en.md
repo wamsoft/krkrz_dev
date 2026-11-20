@@ -1,13 +1,15 @@
 ---
-source_hash: 2be0e9c2214a
+source_hash: e7bac942c39e
 ---
 
 # REPL (Read-Eval-Print Loop)
 
 Launching a binary built with `KRKRZ_REPL=ON` with the command-line argument `-repl`
 (or `-repl=yes`) enables an interactive TJS shell. Supported on Windows, macOS, and
-Linux. Line editing is provided by
-[icline](https://github.com/deths74r/icline) (a fork of isocline).
+Linux. Line editing is provided by icline (a fork of
+[isocline](https://github.com/daanx/isocline)). Because icline's upstream repository
+has disappeared, v1.2.0 is bundled in src/core under `external/icline` (nothing is
+fetched over the network at build time).
 
 For the full specification (command list, editing features, troubleshooting),
 see the guide in src/core:
