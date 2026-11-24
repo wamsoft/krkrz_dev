@@ -25,6 +25,8 @@ SKILLS=(krkrz tjs2 elements krkrz-repl krkrz-webui)
 
 PLUGIN_NAME="krkrz-skills"
 MARKETPLACE_NAME="krkrz-skills"
+# --dist の出力を置く配布リポジトリ (README / マニフェストの homepage に使う)
+DIST_REPO="wamsoft/krkrz-skills"
 
 MODE=""
 DEST=""
@@ -212,33 +214,63 @@ for s in "${SKILLS[@]}"; do
   say "  ✓ $OUT/$s"
 done
 
-# --dist のときはプラグインとして成立させるマニフェストも出す
+# 元にしたコミット (短縮形)。配布物の元になるパス ($2 以降) に未コミットの
+# 変更があれば印を付ける (無関係な作業中ファイルでは付けない)
+git_rev() {
+  local repo=$1 rev
+  shift
+  rev=$(git -C "$repo" rev-parse --short HEAD 2>/dev/null) || return 0
+  if [ -n "$(git -C "$repo" status --porcelain --untracked-files=no -- "$@" 2>/dev/null)" ]; then
+    rev="$rev (未コミットの変更あり)"
+  fi
+  echo "$rev"
+}
+
+# --dist のときはプラグインとして成立させるマニフェストと、配布リポジトリの
+# README / LICENSE / VERSION.md も出す
 if [ "$MODE" = dist ] && [ "$DRYRUN" = 0 ]; then
+  # プラグインの版は日付から作る (/plugin update は version の変化で更新を検出する)
+  VERSION="0.$(date +%Y%m%d).0"
   mkdir -p "$DEST/.claude-plugin" "$DEST/plugins/$PLUGIN_NAME/.claude-plugin"
   cat > "$DEST/plugins/$PLUGIN_NAME/.claude-plugin/plugin.json" <<JSON
 {
   "name": "$PLUGIN_NAME",
-  "version": "0.1.0",
+  "version": "$VERSION",
   "description": "吉里吉里Z (krkrz) 開発用スキル集 — 本体クラス API / TJS2 言語 / Elements UI / REPL 駆動 / ブラウザ UI",
   "author": { "name": "Go Watanabe" },
+  "homepage": "https://github.com/$DIST_REPO",
   "repository": "https://github.com/wamsoft/krkrz_dev",
   "keywords": ["kirikiri", "krkrz", "tjs2", "game-engine"]
 }
 JSON
   cat > "$DEST/.claude-plugin/marketplace.json" <<JSON
 {
+  "\$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "$MARKETPLACE_NAME",
   "description": "吉里吉里Z (krkrz) 開発用スキルの配布元",
-  "owner": { "name": "Go Watanabe" },
+  "owner": { "name": "wamsoft", "url": "https://github.com/wamsoft" },
   "plugins": [
     {
       "name": "$PLUGIN_NAME",
-      "description": "吉里吉里Z (krkrz) 開発用スキル集",
-      "source": "./plugins/$PLUGIN_NAME"
+      "description": "吉里吉里Z (krkrz) 開発用スキル集 — 本体クラス API / TJS2 言語 / Elements UI / REPL 駆動 / ブラウザ UI",
+      "author": { "name": "Go Watanabe" },
+      "source": "./plugins/$PLUGIN_NAME",
+      "category": "development",
+      "homepage": "https://github.com/$DIST_REPO"
     }
   ]
 }
 JSON
+  cp "$REPO_ROOT/tools/skills/dist/README.md" "$DEST/README.md"
+  cp "$REPO_ROOT/src/core/LICENSE" "$DEST/LICENSE"
+  {
+    echo "# 版"
+    echo ""
+    echo "- プラグインの版: $VERSION"
+    echo "- 生成日: $(date +%Y-%m-%d)"
+    echo "- krkrz_dev のコミット: $(git_rev "$REPO_ROOT" .claude/skills doc tools/skills)"
+    echo "- src/core のコミット: $(git_rev "$REPO_ROOT/src/core" doc LICENSE)"
+  } > "$DEST/VERSION.md"
   say ""
   say "プラグインマニフェストを生成しました:"
   say "  $DEST/.claude-plugin/marketplace.json"

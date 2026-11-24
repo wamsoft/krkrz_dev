@@ -186,9 +186,17 @@ make install
 | `krkrz-repl` | `-repl` / `-replfile` でのエージェントからの操作、Agent API、画面のキャプチャ |
 | `krkrz-webui` | `-replweb` の HTTP + SSE サーバにブラウザの UI を載せる方法 |
 
-正本は `.claude/skills/` にあり、**このリポジトリで作業している間はそのまま有効**です。他のリポジトリで
-使う場合のインストール (`bash tools/skills/install.sh --user` など) と更新・編集の注意は
-[tools/skills/README.md](tools/skills/README.md) にあります。
+正本は `.claude/skills/` にあり、**このリポジトリで作業している間はそのまま有効**です。krkrz_dev を
+持っていなくても、配布リポジトリ [wamsoft/krkrz-skills](https://github.com/wamsoft/krkrz-skills) から
+プラグインとして入れられます。
+
+```
+/plugin marketplace add wamsoft/krkrz-skills
+/plugin install krkrz-skills@krkrz-skills
+```
+
+手元のチェックアウトからのインストール (`bash tools/skills/install.sh --user` など)、Codex / ChatGPT 用の
+パックの作り方、更新・編集の注意は [tools/skills/README.md](tools/skills/README.md) にあります。
 
 ## ライセンス
 

@@ -26,6 +26,7 @@ krkrz_dev 全体の未対応課題をここに集約する。**詳細な SSOT �
 | ✅ 吉里吉里2 デバッグ窓 (監視式/コントローラ/編集パッド) の REPL・Web 復活 | [src/core/doc/DebugToolsRevival.md](src/core/doc/DebugToolsRevival.md) (**2026-09-06 に P1〜P5 完了**。`.watch` / `.event` + Web API + Console/Watch/Pad タブ UI + コントローラ + 永続化。以後は運用しながらの手入れ) |
 | リファレンスとコードの差分 | [doc/_missing.md](doc/_missing.md) (生成物。現在 0 件) |
 | ✅ Claude Code スキルの配布形 (install.sh) | [tools/skills/TODO-skills.md](tools/skills/TODO-skills.md) (切れリンク 0 件に解消済み) |
+| ✅ スキルの配布リポジトリ [wamsoft/krkrz-skills](https://github.com/wamsoft/krkrz-skills) と Codex / ChatGPT 用パック | [tools/skills/README.md](tools/skills/README.md) (3d1f86a / c64a67c。**更新は手動**: スキルや同梱ドキュメントを直したら `install.sh --dist` で書き出して push) |
 
 対応したら項目に ✅ と対応コミットを書き、**消さずに残す** (再発防止の記録)。
 完了したものは末尾の「完了 (記録として残す)」へ移す。

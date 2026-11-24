@@ -47,12 +47,24 @@ bash tools/skills/install.sh --project /path/to/project
 bash tools/skills/install.sh --dist /path/to/dist-repo
 ```
 
-プラグインの構造 (`.claude-plugin/marketplace.json` + `plugins/krkrz-skills/`) で書き出します。これを git
-リポジトリとして push すると、受け取る側は次で入れられます。
+プラグインの構造 (`.claude-plugin/marketplace.json` + `plugins/krkrz-skills/`) で書き出し、配布リポジトリ用の
+`README.md` (正本は `tools/skills/dist/README.md`)・`LICENSE` (`src/core/LICENSE` の写し)・`VERSION.md`
+(生成日と元にしたコミット) も置きます。プラグインの版は生成日から `0.YYYYMMDD.0` の形で付けます
+(`/plugin update` は版の変化で更新を検出するため)。
+
+公開している配布リポジトリは [wamsoft/krkrz-skills](https://github.com/wamsoft/krkrz-skills) です。
+受け取る側は次で入れられます。
 
 ```
-/plugin marketplace add <owner>/<repo>
+/plugin marketplace add wamsoft/krkrz-skills
 /plugin install krkrz-skills@krkrz-skills
+```
+
+配布リポジトリを更新するときは、krkrz_dev の変更をコミットしてから (`VERSION.md` に未コミットと
+出ないように)、配布リポジトリの checkout へ書き出してコミット・push します。
+
+```
+bash tools/skills/install.sh --dist ../krkrz-skills --force
 ```
 
 `--dry-run` を付けると、何をどこへ書くかだけを表示して終わります。
